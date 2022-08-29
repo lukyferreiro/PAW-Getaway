@@ -20,11 +20,13 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
     </dependency>
+    <!--Para el modulo interfaces-->
     <dependency>
       <groupId>ar.edu.itba.getaway</groupId>
       <artifactId>interfaces</artifactId>
       <version>${parent.version}</version>
     </dependency>
+    <!--Para el modulo persistance-->
     <dependency>
       <groupId>ar.edu.itba.getaway</groupId>
       <artifactId>persistence</artifactId>

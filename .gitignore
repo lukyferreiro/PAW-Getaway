@@ -25,6 +25,8 @@ dist/
 
 # JetBrains IDE
 .idea/
+*.iml
+*.iws
 
 # Unit test reports
 TEST*.xml
@@ -47,4 +49,7 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+
+#Another files
+*.ini
 

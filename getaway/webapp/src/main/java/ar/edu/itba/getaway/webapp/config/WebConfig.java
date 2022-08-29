@@ -11,7 +11,6 @@ import org.springframework.web.servlet.view.JstlView;
 
 import javax.sql.DataSource;
 
-
 @EnableWebMvc
 @ComponentScan({"ar.edu.itba.getaway.webapp.controller", "ar.edu.itba.getaway.services",  "ar.edu.itba.getaway.persistence"})
 @Configuration

@@ -16,40 +16,37 @@
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
-
   <dependencies>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-jdbc</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-    </dependency>
-
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
     </dependency>
-
+    <!--Para JDBC-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+    </dependency>
+    <!--Para JETTY-->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
     </dependency>
-
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
     </dependency>
-
+    <!--Para el modulo services-->
     <dependency>
       <groupId>ar.edu.itba.getaway</groupId>
       <artifactId>services</artifactId>
       <version>${parent.version}</version>
       <scope>runtime</scope>
     </dependency>
-
+    <!--Para el modulo interfaces-->
     <dependency>
       <groupId>ar.edu.itba.getaway</groupId>
       <artifactId>interfaces</artifactId>
