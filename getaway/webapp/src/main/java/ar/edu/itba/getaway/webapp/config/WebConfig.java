@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -14,7 +16,7 @@ import javax.sql.DataSource;
 @EnableWebMvc
 @ComponentScan({"ar.edu.itba.getaway.webapp.controller", "ar.edu.itba.getaway.services",  "ar.edu.itba.getaway.persistence"})
 @Configuration
-public class WebConfig {
+public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public ViewResolver viewResolver(){
@@ -39,4 +41,11 @@ public class WebConfig {
 //        return ds;
 //    }
 
+
+    @Override
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        super.addResourceHandlers(registry);
+
+        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
+    }
 }

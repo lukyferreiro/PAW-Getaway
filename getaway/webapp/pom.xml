@@ -52,6 +52,12 @@
       <artifactId>interfaces</artifactId>
       <version>${parent.version}</version>
     </dependency>
+    <!--Para el modulo persistence-->
+    <dependency>
+      <groupId>ar.edu.itba.getaway</groupId>
+      <artifactId>persistence</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
