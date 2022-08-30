@@ -7,31 +7,40 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>ar.edu.itba.getaway</groupId>
   <artifactId>services</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <name>services</name>
-  <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
   <dependencies>
+    <!--Spring-->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
     </dependency>
-    <!--Para el modulo interfaces-->
+    <!--Modulo interfaces-->
     <dependency>
       <groupId>ar.edu.itba.getaway</groupId>
       <artifactId>interfaces</artifactId>
       <version>${parent.version}</version>
     </dependency>
-    <!--Para el modulo persistance-->
+    <!--Modulo persistance-->
     <dependency>
       <groupId>ar.edu.itba.getaway</groupId>
       <artifactId>persistence</artifactId>
       <version>${parent.version}</version>
       <scope>runtime</scope>
+    </dependency>
+    <!--Mockito-->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+    </dependency>
+    <!--JUNIT-->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
     </dependency>
   </dependencies>
 

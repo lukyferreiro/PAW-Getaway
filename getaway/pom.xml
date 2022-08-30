@@ -21,22 +21,34 @@
     <jstl.version>1.2</jstl.version>
     <!--JDBC-->
     <postgresql.version>42.2.5</postgresql.version>
+    <!--Mockito-->
+    <mockito.version>2.25.1</mockito.version>
+    <!--JUNIT-->
+    <junit.version>4.13.2</junit.version>
+    <!--HSQLDB-->
+    <hsqldb.version>2.3.1</hsqldb.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <!--Spring-->
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
         <version>${spring.version}</version>
       </dependency>
-      <!--Para el modulo services-->
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
         <version>${spring.version}</version>
       </dependency>
-      <!--JDBC-->
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
+        <version>${spring.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <!--JDBC y driver-->
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-jdbc</artifactId>
@@ -47,7 +59,7 @@
         <artifactId>postgresql</artifactId>
         <version>${postgresql.version}</version>
       </dependency>
-      <!--JDBC-->
+      <!--JETTY-->
       <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>servlet-api</artifactId>
@@ -58,6 +70,27 @@
         <groupId>javax.servlet</groupId>
         <artifactId>jstl</artifactId>
         <version>${jstl.version}</version>
+      </dependency>
+      <!--Mockito-->
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <!--JUNIT-->
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <!--HSQLDB-->
+      <dependency>
+        <groupId>org.hsqldb</groupId>
+        <artifactId>hsqldb</artifactId>
+        <version>${hsqldb.version}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>

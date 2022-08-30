@@ -7,16 +7,14 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>ar.edu.itba.getaway</groupId>
   <artifactId>interfaces</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <name>interfaces</name>
-  <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
   <dependencies>
-    <!--Para el modulo models-->
+    <!--Modulo models-->
     <dependency>
       <groupId>ar.edu.itba.getaway</groupId>
       <artifactId>models</artifactId>
