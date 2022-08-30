@@ -23,7 +23,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         final InternalResourceViewResolver vr = new InternalResourceViewResolver();
 
         vr.setViewClass(JstlView.class);
-        vr.setPrefix("/WEB-INF/views/");
+        vr.setPrefix("/views/");
         vr.setSuffix(".jsp");
 
         return vr;
@@ -34,7 +34,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 //        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
 //
 //        ds.setDriverClass(org.postgresql.Driver.class);
-//        ds.setUrl("jdbc:postgresql://localhost/paw");
+//        ds.setUrl("jdbc:postgresql://localhost/getaway");
 //        ds.setUsername("root");
 //        ds.setPassword("root");
 //
@@ -45,7 +45,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
-
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
     }
 }
