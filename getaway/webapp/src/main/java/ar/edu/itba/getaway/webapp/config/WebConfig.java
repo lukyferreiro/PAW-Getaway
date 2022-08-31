@@ -35,8 +35,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 //
 //        ds.setDriverClass(org.postgresql.Driver.class);
 //        ds.setUrl("jdbc:postgresql://localhost/getaway");
-//        ds.setUsername("root");
-//        ds.setPassword("root");
+//        ds.setUsername("postgresql");
+//        ds.setPassword("getawaydb");
 //
 //        return ds;
 //    }
