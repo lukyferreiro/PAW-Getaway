@@ -2,19 +2,16 @@
 
 <html>
     <head>
-        <meta charset="UTF-8">
         <title>GetAway</title>
         <%--Bootstrap--%>
+        <link href="<c:url value = "/resources/css/styles.css" />" rel="stylesheet" >
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-        <link href="<c:url value = "/css/styles.css" />" rel="stylesheet" >
     </head>
     <body>
-<%--        <h2>Hello World!</h2>--%>
-<%--        <p> Hello <c:out value="${username}" escapeXml="true"/> </p>--%>
         <div class="navbar">
             <div class="container-header">
                 <a class="logo">
-                    <img class="logo-img" src="getaway-icon.png" alt="Logo">
+                    <img class="logo-img" src="<c:url value = "/resources/images/getaway-icon.png" />"  alt="Logo">
                     <!--                    <img class="logo-img" src="./resources/GETAWAY.svg" alt="Logo">-->
                     GETAWAY
                 </a>
@@ -25,22 +22,22 @@
             </div>
             <div class="container-filters" >
                 <button type="button" class="btn btn-filter">
-                    <img src="./resources/ic_adventure.svg" alt="Logo aventura"/>Aventura
+                    <img src="<c:url value = "/resources/images/ic_adventure.svg" />" alt="Logo aventura"/>Aventura
                 </button>
                 <button type="button" class="btn btn-filter">
-                    <img src="./resources/ic_food.svg" alt="Logo aventura"/>Gastronomia
+                    <img src="<c:url value = "/resources/images/ic_food.svg" />" alt="Logo aventura"/>Gastronomia
                 </button>
                 <button type="button" class="btn btn-filter">
-                    <img src="./resources/ic_hotel.svg"  alt="Logo aventura"/>Hoteleria
+                    <img src="<c:url value = "/resources/images/ic_hotel.svg" />" alt="Logo aventura"/>Hoteleria
                 </button>
                 <button type="button" class="btn btn-filter">
-                    <img src="./resources/ic_relax.svg" alt="Logo aventura"/>Relax
+                    <img src="<c:url value = "/resources/images/ic_relax.svg" />" alt="Logo aventura"/>Relax
                 </button>
                 <button type="button" class="btn btn-filter">
-                    <img src="./resources/ic_nightlife.svg" alt="Logo aventura"/>Vida nocturna
+                    <img src="<c:url value = "/resources/images/ic_nightlife.svg" />" alt="Logo aventura"/>Vida nocturna
                 </button>
                 <button type="button" class="btn btn-filter">
-                    <img src="./resources/ic_museum.svg" alt="Logo aventura"/>Historico
+                    <img src="<c:url value = "/resources/images/ic_museum.svg" />" alt="Logo aventura"/>Historico
                 </button>
             </div>
         </div>

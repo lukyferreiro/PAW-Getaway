@@ -23,7 +23,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         final InternalResourceViewResolver vr = new InternalResourceViewResolver();
 
         vr.setViewClass(JstlView.class);
-        vr.setPrefix("/views/");
+        vr.setPrefix("/WEB-INF/views/");
         vr.setSuffix(".jsp");
 
         return vr;
@@ -45,6 +45,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
-        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
+        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 }
