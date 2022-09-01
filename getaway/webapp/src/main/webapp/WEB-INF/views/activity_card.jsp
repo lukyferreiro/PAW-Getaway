@@ -31,7 +31,7 @@
         <div class="row">
             <div class="col-auto">
                 <div class="card-body">
-                    <img class="rounded" src="<d:url value = "/resources/images/adventure_image.jpg" />" alt="experience.image">
+                    <img class="rounded" src="<d:url value = "/resources/images/adventure_image.jpg" />" alt="experience.image"/>
                 </div>
             </div>
             <div class="col">

@@ -12,7 +12,7 @@ public class HelloWorldController {
 
     @RequestMapping("/")
     public ModelAndView helloWorld(){
-        final ModelAndView mav = new ModelAndView("index");
+        final ModelAndView mav = new ModelAndView("form_activity");
         mav.addObject("username", "GETAWAY");
         return mav;
     }
