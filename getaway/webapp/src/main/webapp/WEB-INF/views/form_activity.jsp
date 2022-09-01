@@ -5,11 +5,12 @@
   Time: 8:56 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ taglib prefix="g"  uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jstl/core_rt"%>
 <html>
 <head>
-    <link href="<g:url value = "/resources/css/styles.css" />" rel="stylesheet" >
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link href="<c:url value = "/resources/css/activity.css" />" rel="stylesheet">
+    <link href="<c:url value = "/resources/css/navbar.css" />" rel="stylesheet">
     <meta charset="UTF-8">
     <title>Activity Form</title>
 </head>
@@ -17,7 +18,7 @@
     <div class="navbar">
         <div class="container-header">
             <a class="logo">
-                <img class="logo-img" src="<g:url value = "/resources/images/getaway-icon.png" />"  alt="Logo">
+                <img class="logo-img" src="<c:url value = "/resources/images/getaway-icon.png" />"  alt="Logo">
                 <!--                    <img class="logo-img" src="./resources/GETAWAY.svg" alt="Logo">-->
                 GETAWAY
             </a>
@@ -28,9 +29,6 @@
         </div>
     </div>
     <div class="form">
-        <div class="buttons">
-            <button type="button" class="btn btn-circle btn-xl"><img src="<g:url value = "/resources/images/go_back.png" />"/></button>
-        </div>
 
         <div class="card">
             <div>
@@ -54,9 +52,6 @@
                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
             </div>
             <div>
-<%--                <select class="form-select" aria-label="Default select example">--%>
-<%--                    --%>
-<%--                </select>--%>
                 <label for="activityTags" class="form-label">Tags</label>
                 <input class="form-control" list="datalistOptions" id="activityTags" placeholder="Escribe para buscar...">
                 <datalist id="datalistOptions">

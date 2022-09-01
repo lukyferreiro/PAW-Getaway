@@ -12,9 +12,19 @@ public class HelloWorldController {
 
     @RequestMapping("/")
     public ModelAndView helloWorld(){
-        final ModelAndView mav = new ModelAndView("form_activity");
+        final ModelAndView mav = new ModelAndView("index");
         mav.addObject("username", "GETAWAY");
         return mav;
+    }
+
+    @RequestMapping("/adventures")
+    public ModelAndView adventures(){
+        return new ModelAndView("adventures");
+    }
+
+    @RequestMapping("/adventures/id")
+    public ModelAndView adventuresView(){
+        return new ModelAndView("activity_card");
     }
 
     @ExceptionHandler(Exception.class)

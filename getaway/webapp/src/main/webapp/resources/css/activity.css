@@ -1,0 +1,33 @@
+
+.card.activity-view{
+    width: 30rem;
+}
+.card{
+    padding: 1%;
+    margin: 1%;
+}
+
+.user_img {
+    width: 80%;
+    height: 80%;
+}
+
+.card.user {
+    width: 40rem;
+}
+
+.activity-info{
+    display: inline-block;
+}
+
+.btn-circle.btn-xl {
+    border-radius: 35px;
+    text-align: center;
+}
+
+.buttons.save{
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1%;
+}
