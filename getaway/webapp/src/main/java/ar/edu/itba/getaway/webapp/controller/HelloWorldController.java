@@ -17,6 +17,11 @@ public class HelloWorldController {
         return mav;
     }
 
+    @RequestMapping("/adventures")
+    public ModelAndView adventures(){
+        return new ModelAndView("adventures");
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView userNotFound(){

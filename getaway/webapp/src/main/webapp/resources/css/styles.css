@@ -2,40 +2,6 @@
     font-family: "Cambria", sans-serif;
 }
 
-/*body{*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    height: 100%;*/
-/*    width: 100%;*/
-/*}*/
-
-/*.navbar{*/
-/*    width: 100%;*/
-/*    display: flex;*/
-/*    flex: 1;*/
-/*    margin: 0;*/
-/*    padding: 0;*/
-/*}*/
-
-/*.container-body{*/
-/*    width: 100%;*/
-/*    display: flex;*/
-/*    flex: 1;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*}*/
-
-/*.footer{*/
-/*    background-color: #ffc584;*/
-/*    flex: 0;*/
-/*    width: 100%;*/
-/*    display: flex;*/
-/*    margin-top: auto;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*}*/
-
-
 body{
     height: 100%;
     width: 100%;
@@ -48,7 +14,7 @@ body{
     padding: 0;
 }
 
-.container-body {
+.container-body-mainpage {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -56,7 +22,7 @@ body{
     margin: 0 50px;
 }
 
-.container-body > div{
+.container-body-mainpage > div{
     font-size: xxx-large;
     text-align: center;
     font-weight: bold;
@@ -83,7 +49,7 @@ body{
     background-color: rgba(255, 197, 132, 0.3);
 }
 
-.container-filters {
+.container-types {
     display: flex;
     width: 100%;
     justify-content: center;
@@ -115,6 +81,13 @@ body{
 
 }
 
+.container-header-btn{
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 30px 15px auto;
+
+}
+
 .btn-header{
     font-size: x-large;
     font-weight: bold;
@@ -124,12 +97,16 @@ body{
     padding: 10px 20px 10px 20px;
     margin-left: 40px;
 }
-
 .btn-header:hover {
     color: white;
     border-color: #F99D32;
     background-color: #F99D32;
     scale: 110%;
+}
+.btn-header:focus{
+    color: white;
+    border-color: #F99D32;
+    background-color: #F99D32;
 }
 
 .btn-filter{
@@ -146,11 +123,15 @@ body{
     height: 30px;
     margin-right: 5px;
 }
-
 .btn-filter:hover{
     border-color: #F99D32;
     background-color: #ffc584;
+    color: black;
     scale: 105%;
+}
+.btn-filter:focus{
+    border-color: #F99D32;
+    color: black;
 }
 
 .separator{
@@ -158,6 +139,9 @@ body{
     border-width: 3px;
     margin: 10px 0;
 }
+
+
+/* ------ AGUS -----*/
 
 .card.activity-view{
     width: 30rem;
@@ -167,7 +151,6 @@ body{
     margin: 1%;
 }
 
-
 .user_img {
     width: 80%;
     height: 80%;
@@ -176,6 +159,7 @@ body{
 .card.user {
     width: 40rem;
 }
+
 .activity-info{
     display: inline-block;
 }
@@ -191,3 +175,105 @@ body{
     right: 0;
     margin: 1%;
 }
+
+
+/*--------- Aventuras  ---------*/
+
+.container-body {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    padding-bottom: 50px;
+}
+
+.container-filters{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: medium;
+    padding: 0 10px;
+    margin: 0 10px;
+}
+.container-filters > p{
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.btn-search{
+    border-color: #F99D32;
+    background-color: transparent;
+    color: black;
+}
+.btn-search:hover{
+    border-color: #F99D32;
+    background-color: #ffc584;
+    color: black;
+}
+.btn-search:focus{
+    border-color: #F99D32;
+    background-color: transparent;
+    color: black;
+    --bs-btn-focus-shadow-rgb: none;
+}
+
+.container-experiences{
+    flex: 5;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /*align-items: center;*/
+    font-size: medium;
+    padding: 0;
+    margin: 0 10px;
+}
+
+.card-container{
+    text-decoration: none;
+    color: black;
+}
+.card-container:hover, .card-container:focus{
+    color: black;
+    scale: 105%;
+}
+
+.card{
+    margin: 10px;
+    width: 15rem;
+    height: 20rem;
+}
+
+.btn-bookmark{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 3px;
+    background-color: transparent;
+    border-color: transparent;
+}
+.btn-bookmark:hover{
+    background-color: #e5dad8;
+    border-color: transparent;
+}
+
+.img-experience{
+    width: 150px;
+    display: flex;
+    align-self: center;
+    margin: 5px;
+}
+
+.rate{
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+.rate-ic{
+    align-self: center;
+}
+.rate-value{
+    align-self: center;
+    margin: 0;
+}
+

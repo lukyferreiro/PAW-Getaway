@@ -1,24 +1,18 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Agustina
-  Date: 8/31/2022
-  Time: 7:26 PM
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ taglib prefix="d"  uri="http://java.sun.com/jstl/core_rt"%>
 <html>
 <head>
-    <link href="<d:url value = "/resources/css/styles.css" />" rel="stylesheet" >
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>Activity</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link href="<d:url value = "/resources/css/styles.css" />" rel="stylesheet">
 </head>
 <body>
     <div class="card">
         <h1 class="card-title">Experience Name</h1>
         <div>
             <div class="activity-info">
-                <p>experience.ranking <img src="<d:url value = "/resources/images/ic_star.svg" />"></p>
+                <p>experience.ranking <img src="<d:url value = "/resources/images/ic_star.svg" />" alt="Icono estrella"></p>
             </div>
             <div class="activity-info">
                 <a href="#">experience.link</a>
