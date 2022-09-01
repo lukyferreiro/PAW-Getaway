@@ -26,12 +26,12 @@ public class ExperienceServiceImpl {
     }
 
     @Override
-    public List<CategoryModel> list() {
+    public List<ExperienceModel> list() {
         return experienceDao.list();
     }
 
     @Override
-    public Optional<CategoryModel> getById (long experienceId){
+    public Optional<ExperienceModel> getById (long experienceId){
         return experienceDao.getByID(experienceId);
     }
 

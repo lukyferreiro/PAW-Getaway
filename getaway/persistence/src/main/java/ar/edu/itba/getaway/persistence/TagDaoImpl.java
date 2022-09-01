@@ -1,0 +1,54 @@
+package Interfaces.Necessary.Tag;
+
+
+import Models.Necessary.TagModel;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Repository
+public class TagDaoImpl implements TagDao {
+    private JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert jdbcInsert;
+    private final SimpleJdbcInsert jdbcInsertCategory;
+
+    private static final RowMapper<TagModel> TAG_MODEL_ROW_MAPPER = (rs, rowNum) -> {
+        return new TagModel(rs.getId(), rs.getName());
+    };
+
+    @Autowired
+    public TagDaoImpl(final DataSource ds) {
+        jdbcTemplate = new JdbcTemplate(ds);
+        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("tags").usingGeneratedKeyColumns("tagId");
+    }
+
+    @Override
+    public TagModel create(TagModel tagModel) {
+        final Map<String, Object> args = new HashMap<>();
+        args.put("tagName", tagModel.getName());
+        final int tagId = jdbcInsert.executeAndReturnKey(args).intValue();
+        return new TagModel(tagId, tagModel.getName());
+    }
+
+    @Override
+    public boolean update(long tagId, TagModel tagModel) {
+        return jdbcTemplate.update("UPDATE tags " +
+                "SET tagName = ?" +
+                "WHERE tagId = ?", new Object[]{tagModel.getName(), tagId}) == 1;
+    }
+
+    @Override
+    public boolean delete(long tagId) {
+        return jdbcTemplate.update("DELETE FROM tags WHERE tagId = ?", new Object[]{tagId}) == 1;
+    }
+
+    @Override
+    public List<TagModel> list() {
+        return new ArrayList<>(jdbcTemplate.query("SELECT tagId,tagName FROM tags", TAG_MODEL_ROW_MAPPER));
+    }
+
+    @Override
+    public Optional<TagModel> getById(long tagId) {
+        return jdbcTemplate.query("SELECT tagId, tagName FROM tags WHERE tagId = ?", new Object[]{tagId}, TAG_MODEL_ROW_MAPPER).stream().findFirst();
+    }
+}
