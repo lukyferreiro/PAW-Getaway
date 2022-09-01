@@ -22,6 +22,11 @@ public class HelloWorldController {
         return new ModelAndView("adventures");
     }
 
+    @RequestMapping("/adventures/id")
+    public ModelAndView adventuresView(){
+        return new ModelAndView("activity_card");
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView userNotFound(){

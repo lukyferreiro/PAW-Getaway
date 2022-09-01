@@ -1,15 +1,15 @@
-<%@ taglib prefix="f"  uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jstl/core_rt"%>
 <html>
 <head>
     <title>Review</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link href="<f:url value = "/resources/css/styles.css" />" rel="stylesheet">
+    <link href="<c:url value = "/resources/css/styles.css" />" rel="stylesheet">
 </head>
 <body>
     <div class="card user">
         <div class="row">
             <div class="col-2">
-                <img class="user_img" src="<f:url value = "/resources/images/ic_user.png" />" alt="User">
+                <img class="user_img" src="<c:url value = "/resources/images/ic_user.png" />" alt="User">
             </div>
             <div class="col">
                 <h2 class="card-title">User name</h2>
