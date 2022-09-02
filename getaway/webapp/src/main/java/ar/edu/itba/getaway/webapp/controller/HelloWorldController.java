@@ -39,12 +39,12 @@ public class HelloWorldController {
         return new ModelAndView("404");
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView createActivityForm(@ModelAttribute("activityForm") final ActivityForm form){
         return new ModelAndView("index");
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     public ModelAndView createActivity(@Valid @ModelAttribute("activityForm") final ActivityForm form, final BindingResult errors){
         if(errors.hasErrors()){
             return createActivityForm(form);

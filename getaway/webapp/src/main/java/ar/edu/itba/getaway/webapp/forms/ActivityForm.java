@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.webapp.forms;
 
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ public class ActivityForm{
     private String activityName;
     private String activityCategory;
     private String activityAddress;
+    @NotEmpty
     @Email
     private String activityMail;
     private String activityImg;
