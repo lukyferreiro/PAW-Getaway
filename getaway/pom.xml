@@ -27,6 +27,9 @@
     <junit.version>4.13.2</junit.version>
     <!--HSQLDB-->
     <hsqldb.version>2.3.1</hsqldb.version>
+    <!--API-->
+    <javax.validation-api.version>1.0.0.GA</javax.validation-api.version>
+    <org.hibernate.validator>4.3.1.Final</org.hibernate.validator>
   </properties>
 
   <dependencyManagement>
@@ -91,6 +94,17 @@
         <artifactId>hsqldb</artifactId>
         <version>${hsqldb.version}</version>
         <scope>test</scope>
+      </dependency>
+      <!--API-->
+      <dependency>
+        <groupId>javax.validation</groupId>
+        <artifactId>validation-api</artifactId>
+        <version>${javax.validation-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>${org.hibernate.validator}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

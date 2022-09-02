@@ -1,5 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="from" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <title>GetAway</title>
@@ -80,30 +81,50 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <c:url value="/create" var="postUrl"/>
+                    <form:form modelAttribute="activityForm" action="${postUrl}" method="post">
                         <div>
-                            <label for="activityName" class="form-label">Nombre</label>
-                            <input type="email" class="form-control" id="activityName">
+                            <form:errors path="activityName" element="p" cssStyle="color: red"/>
+                            <from:label path="activityName" class="form-label">Nombre</from:label>
+                            <from:input type="email" class="form-control" path="activityName"/>
                         </div>
                         <div>
-                            <label for="activityAddress" class="form-label">Direccion</label>
-                            <input type="email" class="form-control" id="activityAddress">
+                            <form:errors path="activityCategory" element="p" cssStyle="color: red"/>
+                            <from:label path="activityCategory" class="form-label">Tags</from:label>
+                            <from:input class="form-control" list="datalistOptions" path="activityCategory" placeholder="Escribe para buscar..."/>
+                            <datalist id="categoryOptions">
+                                <option value="Aventura">
+                                <option value="Gastronomia">
+                                <option value="Hoteleria">
+                                <option value="Relax">
+                                <option value="Vida nocturna">
+                                <option value="Historico">
+                            </datalist>
                         </div>
                         <div>
-                            <label for="activityMail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="activityMail" placeholder="name@example.com">
+                            <form:errors path="activityAddress" element="p" cssStyle="color: red"/>
+                            <from:label path="activityAddress" class="form-label">Direccion</from:label>
+                            <from:input type="email" class="form-control" path="activityAddress"/>
                         </div>
                         <div>
-                            <label for="activityImg" class="form-label">Agregar imagen</label>
-                            <input class="form-control" type="file" id="activityImg">
+                            <form:errors path="activityMail" element="p" cssStyle="color: red"/>
+                            <from:label path="activityMail" class="form-label">Email</from:label>
+                            <from:input type="email" class="form-control" path="activityMail" placeholder="name@example.com"/>
                         </div>
                         <div>
-                            <label for="activityInfo" class="form-label">Descripcion</label>
-                            <textarea class="form-control" id="activityInfo" rows="3"></textarea>
+                            <form:errors path="activityImg" element="p" cssStyle="color: red"/>
+                            <from:label path="activityImg" class="form-label">Agregar imagen</from:label>
+                            <from:input class="form-control" type="file" path="activityImg"/>
                         </div>
                         <div>
-                            <label for="activityTags" class="form-label">Tags</label>
-                            <input class="form-control" list="datalistOptions" id="activityTags" placeholder="Escribe para buscar...">
+                            <form:errors path="activityInfo" element="p" cssStyle="color: red"/>
+                            <from:label path="activityInfo" class="form-label">Descripcion</from:label>
+                            <from:textarea class="form-control" path="activityInfo" rows="3"></from:textarea>
+                        </div>
+                        <div>
+                            <form:errors path="activityTags" element="p" cssStyle="color: red"/>
+                            <from:label path="activityTags" class="form-label">Tags</from:label>
+                            <from:input class="form-control" list="datalistOptions" path="activityTags" placeholder="Escribe para buscar..."/>
                             <datalist id="datalistOptions">
                                 <option value="Paracaidismo">
                                 <option value="Hoteleria">
@@ -112,12 +133,15 @@
                                 <option value="Cerveza">
                             </datalist>
                         </div>
-                    </form>
-                </div>
+                        <div class="modal-footer">
+                            <input class="btn btn-header" type="submit" value="Guardar"></input>
+                        </div>
+                        </form:form>
+                    </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-header">Guardar</button>
+//                    <button type="button" class="btn btn-header">Guardar</button>
                 </div>
             </div>
         </div>

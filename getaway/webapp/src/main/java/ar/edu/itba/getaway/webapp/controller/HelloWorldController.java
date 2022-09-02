@@ -1,15 +1,18 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.webapp.forms.ActivityForm;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Controller
 public class HelloWorldController {
 
+//    ActivityService activity ;
     @RequestMapping("/")
     public ModelAndView helloWorld(){
         final ModelAndView mav = new ModelAndView("index");
@@ -22,9 +25,12 @@ public class HelloWorldController {
         return new ModelAndView("adventures");
     }
 
-    @RequestMapping("/adventures/id")
-    public ModelAndView adventuresView(){
-        return new ModelAndView("activity_card");
+    @RequestMapping("/adventures/{adventureId}")
+    public ModelAndView adventuresView(@PathVariable("adventureId") final long adventureId){
+        final ModelAndView mav = new ModelAndView("activity_card");
+
+//        mav.addObject("activity", activity.getActivityById(adventureId).orElseThrow(Exception::new));
+        return mav;
     }
 
     @ExceptionHandler(Exception.class)
@@ -32,4 +38,21 @@ public class HelloWorldController {
     public ModelAndView userNotFound(){
         return new ModelAndView("404");
     }
+
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    public ModelAndView createActivityForm(@ModelAttribute("activityForm") final ActivityForm form){
+        return new ModelAndView("index");
+    }
+
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public ModelAndView createActivity(@Valid @ModelAttribute("activityForm") final ActivityForm form, final BindingResult errors){
+        if(errors.hasErrors()){
+            return createActivityForm(form);
+        }
+//        final Activity act = activity.create(form.getActivityName(), form.getActivityCategory(),form.getActivityAddress(), form.getActivityMail(), form.getActivityImg(), form.getActivityInfo(), form.getActivityTags());
+
+//        return new ModelAndView("redirect:/" + act.getCategory() + "/" + act.getId());
+            return null;
+    }
+
 }
