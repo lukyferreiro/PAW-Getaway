@@ -1,15 +1,15 @@
-package Interfaces.Necessary.Country;
+package ar.edu.itba.getaway.persistence;
 
-import Models.Necessary.CountryModel;
+import ar.edu.itba.getaway.models.CountryModel;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CountryDao {
     CountryModel create(CountryModel countryModel);
-    boolean update(int countryId, CountryModel countryModel);
-    boolean delete(int countryId);
-    Optional<CountryModel> getById(long countryId);
-    List<CountryModel> list();
+    boolean update(long countryId, CountryModel countryModel);
+    boolean delete(long countryId);
+    Optional<CountryModel> getById (long countryId);
+    List<CountryModel> listAll();
 }
 

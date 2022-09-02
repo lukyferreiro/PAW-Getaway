@@ -1,6 +1,6 @@
-package Interfaces.Necessary.Image;
+package ar.edu.itba.getaway.persistence;
 
-import Models.Necessary.ImageModel;
+import ar.edu.itba.getaway.models.ImageModel;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +9,6 @@ public interface ImageDao {
     ImageModel create (ImageModel imageModel);
     boolean update (long imageId, ImageModel imageModel);
     boolean delete (long imageId);
-    List<ImageModel> list();
-    Optional<ImageModel> getByID (long imageId);
+    List<ImageModel> listAll();
+    Optional<ImageModel> getById (long imageId);
 }

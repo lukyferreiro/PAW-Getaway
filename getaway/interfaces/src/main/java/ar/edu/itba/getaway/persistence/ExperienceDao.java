@@ -1,6 +1,6 @@
-package Interfaces.Necessary.Experience;
+package ar.edu.itba.getaway.persistence;
 
-import Models.Necessary.ExperienceModel;
+import ar.edu.itba.getaway.models.ExperienceModel;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,8 +9,9 @@ public interface ExperienceDao {
     ExperienceModel create (ExperienceModel experienceModel);
     boolean update (long experienceId, ExperienceModel experienceModel);
     boolean delete (long experienceId);
-    List<ExperienceModel> list();
-    Optional<ExperienceModel> getByID (long experienceId);
-    List<ExperienceModel> listByCategory(long categoryId);
-    //List<ExperienceModel> listByTags(long [] tagId);
+    List<ExperienceModel> listAll();
+    Optional<ExperienceModel> getById (long experienceId);
+    List<ExperienceModel> listByCategory (long categoryId);
+    //TODO: agregar metodos para los filtros
+    //List<ExperienceModel> listByTags (long [] tagId);
 }

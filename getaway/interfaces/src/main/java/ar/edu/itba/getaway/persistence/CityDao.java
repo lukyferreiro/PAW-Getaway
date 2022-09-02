@@ -1,14 +1,14 @@
-package Interfaces.Necessary.City;
+package ar.edu.itba.getaway.persistence;
 
-import Models.Necessary.CityModel;
+import ar.edu.itba.getaway.models.CityModel;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CityDao {
     CityModel create(CityModel cityModel);
-    boolean update(int cityId, CityModel cityModel);
-    boolean delete(int cityId);
-    Optional<CityModel> getById(long cityId);
-    List<CityModel> list();
+    boolean update(long cityId, CityModel cityModel);
+    boolean delete(long cityId);
+    Optional<CityModel> getById (long cityId);
+    List<CityModel> listAll();
 }

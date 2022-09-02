@@ -1,6 +1,6 @@
-package Interfaces.Necessary.Tag;
+package ar.edu.itba.getaway.services;
 
-import Models.Necessary.TagModel;
+import ar.edu.itba.getaway.models.TagModel;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +9,6 @@ public interface TagService {
     TagModel create (TagModel tagModel);
     boolean update (long tagId, TagModel tagModel);
     boolean delete (long tagId);
-    List<TagModel> list();
-    Optional<TagModel> getByID (long tagId);
+    List<TagModel> listAll();
+    Optional<TagModel> getById (long tagId);
 }
