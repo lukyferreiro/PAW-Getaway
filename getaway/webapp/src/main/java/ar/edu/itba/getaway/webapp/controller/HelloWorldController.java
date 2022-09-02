@@ -39,12 +39,12 @@ public class HelloWorldController {
         return new ModelAndView("404");
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("activityForm") final ActivityForm form){
         return new ModelAndView("index");
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "/", method = {RequestMethod.POST})
     public ModelAndView createActivity(@Valid @ModelAttribute("activityForm") final ActivityForm form, final BindingResult errors){
         if(errors.hasErrors()){
             return createActivityForm(form);
@@ -52,7 +52,7 @@ public class HelloWorldController {
 //        final Activity act = activity.create(form.getActivityName(), form.getActivityCategory(),form.getActivityAddress(), form.getActivityMail(), form.getActivityImg(), form.getActivityInfo(), form.getActivityTags());
 
 //        return new ModelAndView("redirect:/" + act.getCategory() + "/" + act.getId());
-            return null;
+            return new ModelAndView("redirect:/adventures");
     }
 
 }

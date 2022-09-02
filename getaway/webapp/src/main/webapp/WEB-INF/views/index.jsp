@@ -79,68 +79,68 @@
                     <h5 class="modal-title" id="staticBackdropLabel">Crea tu experiencia</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <div class="modal-body">
-                    <form:form modelAttribute="activityForm" action="/" method="post">
-                        <div>
-                            <form:errors path="activityName" element="p" cssStyle="color: red"/>
-                            <form:label path="activityName" class="form-label">Nombre</form:label>
-                            <form:input type="email" class="form-control" path="activityName"/>
-                        </div>
-                        <div>
-                            <form:errors path="activityCategory" element="p" cssStyle="color: red"/>
-                            <form:label path="activityCategory" class="form-label">Tags</form:label>
-                            <form:input class="form-control" list="datalistOptions" path="activityCategory" placeholder="Escribe para buscar..."/>
-                            <datalist id="categoryOptions">
-                                <option value="Aventura">
-                                <option value="Gastronomia">
-                                <option value="Hoteleria">
-                                <option value="Relax">
-                                <option value="Vida nocturna">
-                                <option value="Historico">
-                            </datalist>
-                        </div>
-                        <div>
-                            <form:errors path="activityAddress" element="p" cssStyle="color: red"/>
-                            <form:label path="activityAddress" class="form-label">Direccion</form:label>
-                            <form:input type="email" class="form-control" path="activityAddress"/>
-                        </div>
-                        <div>
-                            <form:errors path="activityMail" element="p" cssStyle="color: red"/>
-                            <form:label path="activityMail" class="form-label">Email</form:label>
-                            <form:input type="email" class="form-control" path="activityMail" placeholder="name@example.com"/>
-                        </div>
-                        <div>
-                            <form:errors path="activityImg" element="p" cssStyle="color: red"/>
-                            <form:label path="activityImg" class="form-label">Agregar imagen</form:label>
-                            <form:input class="form-control" type="file" path="activityImg"/>
-                        </div>
-                        <div>
-                            <form:errors path="activityInfo" element="p" cssStyle="color: red"/>
-                            <form:label path="activityInfo" class="form-label">Descripcion</form:label>
-                            <form:textarea class="form-control" path="activityInfo" rows="3"/>
-                        </div>
-                        <div>
-                            <form:errors path="activityTags" element="p" cssStyle="color: red"/>
-                            <form:label path="activityTags" class="form-label">Tags</form:label>
-                            <form:input class="form-control" list="datalistOptions" path="activityTags" placeholder="Escribe para buscar..."/>
-                            <datalist id="datalistOptions">
-                                <option value="Paracaidismo">
-                                <option value="Hoteleria">
-                                <option value="Spa">
-                                <option value="Comida">
-                                <option value="Cerveza">
-                            </datalist>
+                <div>
+                    <c:url value="/" var="postPath"/>
+                    <form:form modelAttribute="activityForm" action="${postPath}" method="post">
+                        <div class="modal-body">
+                            <div>
+                                <form:errors path="activityName" element="p" cssStyle="color: red"/>
+                                <form:label path="activityName" class="form-label">Nombre</form:label>
+                                <form:input type="text" class="form-control" path="activityName"/>
+                            </div>
+                            <div>
+                                <form:errors path="activityCategory" element="p" cssStyle="color: red"/>
+                                <form:label path="activityCategory" class="form-label" >Tags</form:label>
+                                <form:input list="datalistOptions" class="form-control" path="activityCategory" placeholder="Escribe para buscar..."/>
+                                <datalist id="categoryOptions">
+                                    <option value="Aventura">
+                                    <option value="Gastronomia">
+                                    <option value="Hoteleria">
+                                    <option value="Relax">
+                                    <option value="Vida nocturna">
+                                    <option value="Historico">
+                                </datalist>
+                            </div>
+                            <div>
+                                <form:errors path="activityAddress" element="p" cssStyle="color: red"/>
+                                <form:label path="activityAddress" class="form-label">Direccion</form:label>
+                                <form:input type="text" class="form-control" path="activityAddress"/>
+                            </div>
+                            <div>
+                                <form:errors path="activityMail" element="p" cssStyle="color: red"/>
+                                <form:label path="activityMail" class="form-label">Email</form:label>
+                                <form:input type="email" class="form-control" path="activityMail" placeholder="name@example.com"/>
+                            </div>
+                            <div>
+                                <form:errors path="activityImg" element="p" cssStyle="color: red"/>
+                                <form:label path="activityImg" class="form-label">Agregar imagen</form:label>
+                                <form:input type="file" class="form-control" path="activityImg"/>
+                            </div>
+                            <div>
+                                <form:errors path="activityInfo" element="p" cssStyle="color: red"/>
+                                <form:label path="activityInfo" class="form-label" >Descripcion</form:label>
+                                <form:textarea path="activityInfo" class="form-control" rows="3"/>
+                            </div>
+                            <div>
+                                <form:errors path="activityTags" element="p" cssStyle="color: red"/>
+                                <form:label path="activityTags" class="form-label">Tags</form:label>
+                                <form:input list="datalistOptions" class="form-control" path="activityTags" placeholder="Escribe para buscar..."/>
+                                <datalist id="datalistOptions">
+                                    <option value="Paracaidismo">
+                                    <option value="Hoteleria">
+                                    <option value="Spa">
+                                    <option value="Comida">
+                                    <option value="Cerveza">
+                                </datalist>
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <input class="btn btn-header" type="submit" value="Guardar"/>
+                            <button class="btn" type="button">Cancelar</button>
+                            <button class="btn" type="submit">Guardar</button>
                         </div>
                         </form:form>
                     </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-<%--                    <button type="button" class="btn btn-header">Guardar</button>--%>
-                </div>
             </div>
         </div>
     </div>
