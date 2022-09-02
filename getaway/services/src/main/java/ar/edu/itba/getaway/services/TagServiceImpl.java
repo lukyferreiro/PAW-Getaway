@@ -1,13 +1,19 @@
-package Interfaces.Necessary.Tag;
+package ar.edu.itba.getaway.services;
 
-import Models.Necessary.TagModel;
+import ar.edu.itba.getaway.models.TagModel;
+import ar.edu.itba.getaway.persistence.TagDao;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
+public class TagServiceImpl implements TagService {
 
-public class TagServiceImpl {
-    @Autowired
     private TagDao tagDao;
+
+    @Autowired
+    public TagServiceImpl(TagDao tagDao){
+        this.tagDao = tagDao;
+    }
 
     @Override
     public TagModel create (TagModel tagModel){
@@ -25,12 +31,12 @@ public class TagServiceImpl {
     }
 
     @Override
-    public List<TagModel> list() {
-        return tagDao.list();
+    public List<TagModel> listAll() {
+        return tagDao.listAll();
     }
 
     @Override
     public Optional<TagModel> getById (long tagId){
-        return tagDao.getByID(tagId);
+        return tagDao.getById(tagId);
     }
 }

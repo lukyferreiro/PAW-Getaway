@@ -1,14 +1,20 @@
-package Interfaces.Necessary.City;
+package ar.edu.itba.getaway.services;
 
-
-import Models.Necessary.CityModel;
+import ar.edu.itba.getaway.models.CityModel;
+import ar.edu.itba.getaway.persistence.CityDao;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
 
-public class CityServiceImpl {
-    @Autowired
+public class CityServiceImpl implements CityService {
+
     private CityDao cityDao;
+
+    @Autowired
+    public CityServiceImpl(CityDao cityDao){
+        this.cityDao = cityDao;
+    }
 
     @Override
     public CityModel create (CityModel cityModel){
@@ -26,8 +32,8 @@ public class CityServiceImpl {
     }
 
     @Override
-    public List<CityModel> list() {
-        return cityDao.list();
+    public List<CityModel> listAll() {
+        return cityDao.listAll();
     }
 
     @Override

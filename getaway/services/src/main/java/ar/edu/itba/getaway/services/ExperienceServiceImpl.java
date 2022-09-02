@@ -1,17 +1,22 @@
-package Interfaces.Necessary.Experience;
+package ar.edu.itba.getaway.services;
 
-import Models.Necessary.CategoryModel;
-import Models.Necessary.ExperienceModel;
+import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.persistence.ExperienceDao;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
+public class ExperienceServiceImpl implements ExperienceService {
 
-public class ExperienceServiceImpl {
-    @Autowired
     private ExperienceDao experienceDao;
 
+    @Autowired
+    public ExperienceServiceImpl(ExperienceDao experienceDao){
+        this.experienceDao = experienceDao;
+    }
+
     @Override
-    public ExperienceDao create (ExperienceModel experienceModel){
+    public ExperienceModel create (ExperienceModel experienceModel){
         return experienceDao.create(experienceModel);
     }
 
@@ -26,18 +31,16 @@ public class ExperienceServiceImpl {
     }
 
     @Override
-    public List<ExperienceModel> list() {
-        return experienceDao.list();
+    public List<ExperienceModel> listAll() {
+        return experienceDao.listAll();
     }
 
     @Override
     public Optional<ExperienceModel> getById (long experienceId){
-        return experienceDao.getByID(experienceId);
+        return experienceDao.getById(experienceId);
     }
 
-    @Override
-    List<ExperienceModel> listByCategory(long categoryId) { return experienceDao.listByCategory(categoryId); }
-
-
+//    @Override
+//    List<ExperienceModel> listByCategory(long categoryId) { return experienceDao.listByCategory(categoryId); }
 
 }

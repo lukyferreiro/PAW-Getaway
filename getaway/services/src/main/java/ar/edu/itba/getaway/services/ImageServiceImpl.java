@@ -1,13 +1,20 @@
-package Interfaces.Necessary.Image;
+package ar.edu.itba.getaway.services;
 
-import Models.Necessary.ImageModel;
+import ar.edu.itba.getaway.models.ImageModel;
+import ar.edu.itba.getaway.persistence.ImageDao;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
+public class ImageServiceImpl implements ImageService {
 
-public class ImageServiceImpl {
-    @Autowired
     private ImageDao imageDao;
+
+    @Autowired
+    public ImageServiceImpl(ImageDao imageDao){
+        this.imageDao = imageDao;
+    }
+
 
     @Override
     public ImageModel create (ImageModel imageModel){
@@ -25,12 +32,12 @@ public class ImageServiceImpl {
     }
 
     @Override
-    public List<ImageModel> list() {
-        return imageDao.list();
+    public List<ImageModel> listAll() {
+        return imageDao.listAll();
     }
 
     @Override
     public Optional<ImageModel> getById (long imageId){
-        return imageDao.getByID(imageId);
+        return imageDao.getById(imageId);
     }
 }

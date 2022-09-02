@@ -1,13 +1,20 @@
-package Interfaces.Necessary.Category;
+package ar.edu.itba.getaway.services;
 
-import Models.Necessary.CategoryModel;
+import ar.edu.itba.getaway.models.CategoryModel;
+import ar.edu.itba.getaway.persistence.CategoryDao;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
 
-public class CategoryServiceImpl {
-    @Autowired
+public class CategoryServiceImpl implements CategoryService {
+
     private CategoryDao categoryDao;
+
+    @Autowired
+    public CategoryServiceImpl(CategoryDao categoryDao){
+        this.categoryDao = categoryDao;
+    }
 
     @Override
     public CategoryModel create (CategoryModel categoryModel){
@@ -25,12 +32,12 @@ public class CategoryServiceImpl {
     }
 
     @Override
-    public List<CategoryModel> list() {
-        return categoryDao.list();
+    public List<CategoryModel> listAll() {
+        return categoryDao.listAll();
     }
 
     @Override
     public Optional<CategoryModel> getById (long categoryId){
-        return categoryDao.getByID(categoryId);
+        return categoryDao.getById(categoryId);
     }
 }

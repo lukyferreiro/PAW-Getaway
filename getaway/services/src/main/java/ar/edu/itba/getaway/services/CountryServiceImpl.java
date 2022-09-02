@@ -1,13 +1,20 @@
-package Interfaces.Necessary.Country;
+package ar.edu.itba.getaway.services;
 
-import Models.Necessary.CountryModel;
+import ar.edu.itba.getaway.models.CountryModel;
+import ar.edu.itba.getaway.persistence.CountryDao;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
 
 public class CountryServiceImpl implements CountryService{
-    @Autowired
+
     private CountryDao countryDao;
+
+    @Autowired
+    public CountryServiceImpl(CountryDao countryDao){
+        this.countryDao = countryDao;
+    }
 
     @Override
     public CountryModel create (CountryModel countryModel){
@@ -25,8 +32,8 @@ public class CountryServiceImpl implements CountryService{
     }
 
     @Override
-    public List<CountryModel> list() {
-        return countryDao.list();
+    public List<CountryModel> listAll() {
+        return countryDao.listAll();
     }
 
     @Override
