@@ -1,11 +1,11 @@
 package ar.edu.itba.getaway.models;
 
-public class ImageModel {
+public class ImageExperienceModel {
     private final long imageId;
     private final long experienceId;
     private boolean isCover;
 
-    public ImageModel(long imageId, long experienceId, boolean isCover ) {
+    public ImageExperienceModel(long imageId, long experienceId, boolean isCover ) {
         this.imageId = imageId;
         this.experienceId = experienceId;
         this.isCover = isCover;
@@ -23,7 +23,7 @@ public class ImageModel {
         return isCover;
     }
 
-    public void setIsCover(booleann isCover) {
+    public void setIsCover(boolean isCover) {
         this.isCover = isCover;
     }
 }
