@@ -2,7 +2,7 @@
 .card.activity-view{
     width: 30rem;
 }
-.card{
+.card.card-view{
     padding: 1%;
     margin: 1%;
 }

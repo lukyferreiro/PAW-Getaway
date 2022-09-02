@@ -5,9 +5,7 @@
     <title>GetAway</title>
     <%--Bootstrap--%>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link href="<c:url value = "/resources/css/styles.css" />" rel="stylesheet">
     <link href="<c:url value = "/resources/css/navbar.css" />" rel="stylesheet">
-
 </head>
 <body>
     <div class="navbar">
@@ -18,7 +16,9 @@
                 GETAWAY
             </a>
             <div class="container-header-btn">
-                <button type="button" class="btn btn-header" data-bs-toggle="modal" data-bs-target="#createExperience">Crear experiencia</button>
+                <a href="<c:url value = "/experience_form"/>" class="link-btn-filter">
+                <button type="button" class="btn btn-header">Crear experiencia</button>
+                </a>
                 <!--                        <button type="button" class="btn btn-header">Iniciar sesion</button>-->
             </div>
         </div>
@@ -60,11 +60,11 @@
 
     <hr class="separator"/>
 
-    <div class="container-body-mainpage">
-        <div>
-            Haz click en algunos de los filtros para buscar por dicho tipo de experiencia
-        </div>
-    </div>
+<%--    <div class="container-body-mainpage">--%>
+<%--        <div>--%>
+<%--            Haz click en algunos de los filtros para buscar por dicho tipo de experiencia--%>
+<%--        </div>--%>
+<%--    </div>--%>
 
     <div class="footer">
         Copyright 2022 - Getaway
@@ -72,78 +72,78 @@
 
 
 <%-- MODAL CREATE EXPERIENCE FORM --%>
-    <div class="modal fade" id="createExperience" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createExperienceLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Crea tu experiencia</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div>
-                    <c:url value="/" var="postPath"/>
-                    <form:form modelAttribute="activityForm" action="${postPath}" method="post">
-                        <div class="modal-body">
-                            <div>
-                                <form:errors path="activityName" element="p" cssStyle="color: red"/>
-                                <form:label path="activityName" class="form-label">Nombre</form:label>
-                                <form:input type="text" class="form-control" path="activityName"/>
-                            </div>
-                            <div>
-                                <form:errors path="activityCategory" element="p" cssStyle="color: red"/>
-                                <form:label path="activityCategory" class="form-label" >Tags</form:label>
-                                <form:input list="datalistOptions" class="form-control" path="activityCategory" placeholder="Escribe para buscar..."/>
-                                <datalist id="categoryOptions">
-                                    <option value="Aventura">
-                                    <option value="Gastronomia">
-                                    <option value="Hoteleria">
-                                    <option value="Relax">
-                                    <option value="Vida nocturna">
-                                    <option value="Historico">
-                                </datalist>
-                            </div>
-                            <div>
-                                <form:errors path="activityAddress" element="p" cssStyle="color: red"/>
-                                <form:label path="activityAddress" class="form-label">Direccion</form:label>
-                                <form:input type="text" class="form-control" path="activityAddress"/>
-                            </div>
-                            <div>
-                                <form:errors path="activityMail" element="p" cssStyle="color: red"/>
-                                <form:label path="activityMail" class="form-label">Email</form:label>
-                                <form:input type="email" class="form-control" path="activityMail" placeholder="name@example.com"/>
-                            </div>
-                            <div>
-                                <form:errors path="activityImg" element="p" cssStyle="color: red"/>
-                                <form:label path="activityImg" class="form-label">Agregar imagen</form:label>
-                                <form:input type="file" class="form-control" path="activityImg"/>
-                            </div>
-                            <div>
-                                <form:errors path="activityInfo" element="p" cssStyle="color: red"/>
-                                <form:label path="activityInfo" class="form-label" >Descripcion</form:label>
-                                <form:textarea path="activityInfo" class="form-control" rows="3"/>
-                            </div>
-                            <div>
-                                <form:errors path="activityTags" element="p" cssStyle="color: red"/>
-                                <form:label path="activityTags" class="form-label">Tags</form:label>
-                                <form:input list="datalistOptions" class="form-control" path="activityTags" placeholder="Escribe para buscar..."/>
-                                <datalist id="datalistOptions">
-                                    <option value="Paracaidismo">
-                                    <option value="Hoteleria">
-                                    <option value="Spa">
-                                    <option value="Comida">
-                                    <option value="Cerveza">
-                                </datalist>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn" type="button">Cancelar</button>
-                            <button class="btn" type="submit">Guardar</button>
-                        </div>
-                        </form:form>
-                    </div>
+<%--    <div class="modal fade" id="createExperience" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createExperienceLabel" aria-hidden="true">--%>
+<%--        <div class="modal-dialog modal-dialog-centered">--%>
+<%--            <div class="modal-content">--%>
+<%--                <div class="modal-header">--%>
+<%--                    <h5 class="modal-title" id="staticBackdropLabel">Crea tu experiencia</h5>--%>
+<%--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>--%>
+<%--                </div>--%>
+<%--                <div>--%>
+<%--                    <c:url value="." var="postPath"/>--%>
+<%--                    <form:form modelAttribute="activityForm" action="${postPath}" method="post">--%>
+<%--                        <div class="modal-body">--%>
+<%--                            <div>--%>
+<%--                                <form:errors path="activityName" element="p" cssStyle="color: red"/>--%>
+<%--                                <form:label path="activityName" class="form-label">Nombre</form:label>--%>
+<%--                                <form:input type="text" class="form-control" path="activityName"/>--%>
+<%--                            </div>--%>
+<%--                            <div>--%>
+<%--                                <form:errors path="activityCategory" element="p" cssStyle="color: red"/>--%>
+<%--                                <form:label path="activityCategory" class="form-label" >Tags</form:label>--%>
+<%--                                <form:input list="datalistOptions" class="form-control" path="activityCategory" placeholder="Escribe para buscar..."/>--%>
+<%--                                <datalist id="categoryOptions">--%>
+<%--                                    <option value="Aventura">--%>
+<%--                                    <option value="Gastronomia">--%>
+<%--                                    <option value="Hoteleria">--%>
+<%--                                    <option value="Relax">--%>
+<%--                                    <option value="Vida nocturna">--%>
+<%--                                    <option value="Historico">--%>
+<%--                                </datalist>--%>
+<%--                            </div>--%>
+<%--                            <div>--%>
+<%--                                <form:errors path="activityAddress" element="p" cssStyle="color: red"/>--%>
+<%--                                <form:label path="activityAddress" class="form-label">Direccion</form:label>--%>
+<%--                                <form:input type="text" class="form-control" path="activityAddress"/>--%>
+<%--                            </div>--%>
+<%--                            <div>--%>
+<%--                                <form:errors path="activityMail" element="p" cssStyle="color: red"/>--%>
+<%--                                <form:label path="activityMail" class="form-label">Email</form:label>--%>
+<%--                                <form:input type="email" class="form-control" path="activityMail" placeholder="name@example.com"/>--%>
+<%--                            </div>--%>
+<%--                            <div>--%>
+<%--                                <form:errors path="activityImg" element="p" cssStyle="color: red"/>--%>
+<%--                                <form:label path="activityImg" class="form-label">Agregar imagen</form:label>--%>
+<%--                                <form:input type="file" class="form-control" path="activityImg"/>--%>
+<%--                            </div>--%>
+<%--                            <div>--%>
+<%--                                <form:errors path="activityInfo" element="p" cssStyle="color: red"/>--%>
+<%--                                <form:label path="activityInfo" class="form-label" >Descripcion</form:label>--%>
+<%--                                <form:textarea path="activityInfo" class="form-control" rows="3"/>--%>
+<%--                            </div>--%>
+<%--                            <div>--%>
+<%--                                <form:errors path="activityTags" element="p" cssStyle="color: red"/>--%>
+<%--                                <form:label path="activityTags" class="form-label">Tags</form:label>--%>
+<%--                                <form:input list="datalistOptions" class="form-control" path="activityTags" placeholder="Escribe para buscar..."/>--%>
+<%--                                <datalist id="datalistOptions">--%>
+<%--                                    <option value="Paracaidismo">--%>
+<%--                                    <option value="Hoteleria">--%>
+<%--                                    <option value="Spa">--%>
+<%--                                    <option value="Comida">--%>
+<%--                                    <option value="Cerveza">--%>
+<%--                                </datalist>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
+<%--                        <div class="modal-footer">--%>
+<%--                            <button class="btn" type="button">Cancelar</button>--%>
+<%--                            <button class="btn" type="submit">Guardar</button>--%>
+<%--                        </div>--%>
+<%--                        </form:form>--%>
+<%--                    </div>--%>
 
-            </div>
-        </div>
-    </div>
+<%--            </div>--%>
+<%--        </div>--%>
+<%--    </div>--%>
     <!-- Bootstrap y Popper -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
