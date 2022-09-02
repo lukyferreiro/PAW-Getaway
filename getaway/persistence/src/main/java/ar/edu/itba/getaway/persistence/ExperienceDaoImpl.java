@@ -1,5 +1,14 @@
-package Interfaces.Necessary.Experience;
-import Models.Necessary.ExperienceModel;
+package ar.edu.itba.getaway.persistence;
+
+import ar.edu.itba.getaway.models.ExperienceModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
+
+import javax.sql.DataSource;
+import java.util.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,16 +17,23 @@ import java.util.Map;
 public class ExperienceDaoImpl implements ExperienceDao {
     private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
-    private final SimpleJdbcInsert jdbcInsertCategory;
 
-    private static final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) -> {
-        return new ExperienceModel(rs.getId(), rs.getName(), rs.getAddress(), rs.getDescription(), rs.getPrice(), rs.getCityId(), rs.getCategoryId(), rs.getUserId());
-    };
+    private static final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER =
+            (rs, rowNum) -> new ExperienceModel(rs.getLong("experienceId"),
+                    rs.getString("experienceId"),
+                    rs.getString("address"),
+                    rs.getString("description"),
+                    rs.getDouble("price"),
+                    rs.getLong("cityId"),
+                    rs.getLong("categoryId"),
+                    rs.getLong("userId"));
 
     @Autowired
     public ExperienceDaoImpl(final DataSource ds) {
         jdbcTemplate = new JdbcTemplate(ds);
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("experiences").usingGeneratedKeyColumns("experienceId");
+        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("experiences")
+                .usingGeneratedKeyColumns("experienceId");
     }
 
     @Override
@@ -30,7 +46,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         args.put("categoryId", experienceModel.getCategoryId());
         args.put("price", experienceModel.getPrice());
         args.put("userId",experienceModel.getUserId());
-        final int experienceId = jdbcInsert.executeAndReturnKey(args).intValue();
+        final long experienceId = jdbcInsert.executeAndReturnKey(args).longValue();
         return new ExperienceModel(experienceId,experienceModel.getName(), experienceModel.getAddress(), experienceModel.getDescription(),  experienceModel.getPrice(),experienceModel.getCityId(), experienceModel.getCategoryId(), experienceModel.getUserId());
     }
 
@@ -53,7 +69,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> list() {
+    public List<ExperienceModel> listAll() {
         return new ArrayList<>(jdbcTemplate.query(
                 "SELECT experienceId, experienceName, address, description, cityId, categoryId, price, userId " +
                         "FROM experiences", EXPERIENCE_MODEL_ROW_MAPPER));
@@ -66,6 +82,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public List<ExperienceModel> listByCategory(long categoryId) {
-        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, cityId, categoryId, price, userId FROM experiences NATURAL JOIN categories WHERE categoryId = ?", new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER).stream().findFirst();
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, cityId, categoryId, price, userId FROM experiences NATURAL JOIN categories WHERE categoryId = ?", new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 }

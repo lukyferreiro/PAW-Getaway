@@ -1,32 +1,36 @@
-package Interfaces.Necessary.Tag;
+package ar.edu.itba.getaway.persistence;
 
+import ar.edu.itba.getaway.models.TagModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 
-import Models.Necessary.TagModel;
-
-import java.util.HashMap;
-import java.util.Map;
+import javax.sql.DataSource;
+import java.util.*;
 
 @Repository
 public class TagDaoImpl implements TagDao {
     private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
-    private final SimpleJdbcInsert jdbcInsertCategory;
 
-    private static final RowMapper<TagModel> TAG_MODEL_ROW_MAPPER = (rs, rowNum) -> {
-        return new TagModel(rs.getId(), rs.getName());
-    };
+    private static final RowMapper<TagModel> TAG_MODEL_ROW_MAPPER =
+            (rs, rowNum) -> new TagModel(rs.getLong("tagId"), rs.getString("tagName"));
 
     @Autowired
     public TagDaoImpl(final DataSource ds) {
         jdbcTemplate = new JdbcTemplate(ds);
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("tags").usingGeneratedKeyColumns("tagId");
+        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("tags")
+                .usingGeneratedKeyColumns("tagId");
     }
 
     @Override
     public TagModel create(TagModel tagModel) {
         final Map<String, Object> args = new HashMap<>();
         args.put("tagName", tagModel.getName());
-        final int tagId = jdbcInsert.executeAndReturnKey(args).intValue();
+        final long tagId = jdbcInsert.executeAndReturnKey(args).longValue();
         return new TagModel(tagId, tagModel.getName());
     }
 
@@ -43,7 +47,7 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public List<TagModel> list() {
+    public List<TagModel> listAll() {
         return new ArrayList<>(jdbcTemplate.query("SELECT tagId,tagName FROM tags", TAG_MODEL_ROW_MAPPER));
     }
 

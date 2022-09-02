@@ -38,6 +38,12 @@
       <artifactId>interfaces</artifactId>
       <version>${parent.version}</version>
     </dependency>
+    <!--Modulo models -->
+    <dependency>
+      <groupId>ar.edu.itba.paw</groupId>
+      <artifactId>models</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
     <!--Mockito-->
     <dependency>
       <groupId>org.mockito</groupId>
