@@ -52,11 +52,16 @@
       <version>${parent.version}</version>
     </dependency>
     <!--Modulo persistence-->
-    <dependency>
-      <groupId>ar.edu.itba.getaway</groupId>
-      <artifactId>persistence</artifactId>
-      <version>${parent.version}</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>ar.edu.itba.getaway</groupId>-->
+<!--      <artifactId>persistence</artifactId>-->
+<!--      <version>${parent.version}</version>-->
+<!--    </dependency>-->
+    <!--JUnit-->
+<!--    <dependency>-->
+<!--      <groupId>junit</groupId>-->
+<!--      <artifactId>junit</artifactId>-->
+<!--    </dependency>-->
     <!--API-->
     <dependency>
       <groupId>javax.validation</groupId>
@@ -66,6 +71,23 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
     </dependency>
+    <!--Mail y Thymeleaf-->
+<!--    <dependency>-->
+<!--      <groupId>org.springframework</groupId>-->
+<!--      <artifactId>spring-context-support</artifactId>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.thymeleaf</groupId>-->
+<!--      <artifactId>thymeleaf</artifactId>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.thymeleaf</groupId>-->
+<!--      <artifactId>thymeleaf-spring5</artifactId>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>javax.mail</groupId>-->
+<!--      <artifactId>mail</artifactId>-->
+<!--    </dependency>-->
   </dependencies>
 
   <build>

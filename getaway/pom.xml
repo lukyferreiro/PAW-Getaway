@@ -32,6 +32,9 @@
     <org.hibernate.validator>4.3.1.Final</org.hibernate.validator>
     <!-- For images upload -->
     <commons-fileupload.version>1.4</commons-fileupload.version>
+    <!--Mail y Thymeleaf-->
+<!--    <mail.version>1.4.7</mail.version>-->
+<!--    <thymeleaf.version>3.0.12.RELEASE</thymeleaf.version>-->
   </properties>
 
   <dependencyManagement>
@@ -83,6 +86,12 @@
         <artifactId>jstl</artifactId>
         <version>${jstl.version}</version>
       </dependency>
+      <!--Tomcat-->
+<!--      <dependency>-->
+<!--        <groupId>org.springframework.boot</groupId>-->
+<!--        <artifactId>spring-boot-starter-tomcat</artifactId>-->
+<!--        <scope>provided</scope>-->
+<!--      </dependency>-->
       <!--Mockito-->
       <dependency>
         <groupId>org.mockito</groupId>
@@ -121,6 +130,29 @@
         <artifactId>commons-fileupload</artifactId>
         <version>${commons-fileupload.version}</version>
       </dependency>
+      <!--Mail y Thymeleaf-->
+<!--      <dependency>-->
+<!--        <groupId>org.springframework</groupId>-->
+<!--        <artifactId>spring-context-support</artifactId>-->
+<!--        <version>${spring.version}</version>-->
+<!--      </dependency>-->
+<!--      <dependency>-->
+<!--        <groupId>org.thymeleaf</groupId>-->
+<!--        <artifactId>thymeleaf</artifactId>-->
+<!--        <version>${thymeleaf.version}</version>-->
+<!--        <scope>compile</scope>-->
+<!--      </dependency>-->
+<!--      <dependency>-->
+<!--        <groupId>org.thymeleaf</groupId>-->
+<!--        <artifactId>thymeleaf-spring5</artifactId>-->
+<!--        <version>${thymeleaf.version}</version>-->
+<!--        <scope>compile</scope>-->
+<!--      </dependency>-->
+<!--      <dependency>-->
+<!--        <groupId>javax.mail</groupId>-->
+<!--        <artifactId>mail</artifactId>-->
+<!--        <version>${mail.version}</version>-->
+<!--      </dependency>-->
     </dependencies>
   </dependencyManagement>
 

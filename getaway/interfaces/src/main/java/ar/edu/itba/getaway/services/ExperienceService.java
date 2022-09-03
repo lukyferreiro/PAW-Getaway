@@ -11,8 +11,8 @@ public interface ExperienceService {
     boolean delete (long experienceId);
     List<ExperienceModel> listAll();
     Optional<ExperienceModel> getById (long experienceId);
-
-    //TODO implementar para ordenar por categoria
-//    List<ExperienceModel> listByCategory (long categoryId);
+    List<ExperienceModel> listByCategory (long categoryId);
+    //TODO: agregar metodos para los filtros
+    //List<ExperienceModel> listByTags (long [] tagId);
 
 }

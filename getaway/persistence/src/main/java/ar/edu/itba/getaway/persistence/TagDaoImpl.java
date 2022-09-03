@@ -12,7 +12,7 @@ import java.util.*;
 
 @Repository
 public class TagDaoImpl implements TagDao {
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
     private static final RowMapper<TagModel> TAG_MODEL_ROW_MAPPER =
@@ -36,23 +36,25 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public boolean update(long tagId, TagModel tagModel) {
-        return jdbcTemplate.update("UPDATE tags " +
-                "SET tagName = ?" +
-                "WHERE tagId = ?", new Object[]{tagModel.getName(), tagId}) == 1;
+        return jdbcTemplate.update("UPDATE tags SET tagName = ? WHERE tagId = ?",
+                tagModel.getName(), tagId) == 1;
     }
 
     @Override
     public boolean delete(long tagId) {
-        return jdbcTemplate.update("DELETE FROM tags WHERE tagId = ?", new Object[]{tagId}) == 1;
+        return jdbcTemplate.update("DELETE FROM tags WHERE tagId = ?",
+                tagId) == 1;
     }
 
     @Override
     public List<TagModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query("SELECT tagId,tagName FROM tags", TAG_MODEL_ROW_MAPPER));
+        return new ArrayList<>(jdbcTemplate.query("SELECT tagId, tagName FROM tags",
+                TAG_MODEL_ROW_MAPPER));
     }
 
     @Override
     public Optional<TagModel> getById(long tagId) {
-        return jdbcTemplate.query("SELECT tagId, tagName FROM tags WHERE tagId = ?", new Object[]{tagId}, TAG_MODEL_ROW_MAPPER).stream().findFirst();
+        return jdbcTemplate.query("SELECT tagId, tagName FROM tags WHERE tagId = ?",
+                new Object[]{tagId}, TAG_MODEL_ROW_MAPPER).stream().findFirst();
     }
 }

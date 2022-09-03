@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Repository
 public class CountryDaoImpl implements CountryDao{
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     private static final RowMapper<CountryModel> COUNTRY_MODEL_ROW_MAPPER =
             (rs, rowNum) -> new CountryModel(rs.getLong("countryId"),rs.getString("countryName"));
@@ -38,24 +38,26 @@ public class CountryDaoImpl implements CountryDao{
 
     @Override
     public boolean update(long countryId, CountryModel countryModel) {
-        return jdbcTemplate.update("UPDATE countries " +
-            "SET countryName = ?" +
-            "WHERE countryId = ?", new Object[]{countryModel.getName(), countryId}) == 1;
+        return jdbcTemplate.update("UPDATE countries SET countryName = ? WHERE countryId = ?",
+                countryModel.getName(), countryId) == 1;
     }
 
     @Override
     public boolean delete(long countryId) {
-        return jdbcTemplate.update("DELETE FROM countries WHERE countryId = ?", new Object[]{countryId}) == 1;
+        return jdbcTemplate.update("DELETE FROM countries WHERE countryId = ?",
+                countryId) == 1;
     }
 
     @Override
     public Optional<CountryModel> getById(long countryId) {
-        return jdbcTemplate.query("SELECT * FROM countries WHERE id = ?",new Object[]{countryId},COUNTRY_MODEL_ROW_MAPPER).stream().findFirst();
+        return jdbcTemplate.query("SELECT * FROM countries WHERE id = ?",
+                new Object[]{countryId},COUNTRY_MODEL_ROW_MAPPER).stream().findFirst();
     }
 
     @Override
     public List<CountryModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM countries", COUNTRY_MODEL_ROW_MAPPER));
+        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM countries",
+                COUNTRY_MODEL_ROW_MAPPER));
     }
 
 }

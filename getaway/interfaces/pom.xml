@@ -20,6 +20,11 @@
       <artifactId>models</artifactId>
       <version>${parent.version}</version>
     </dependency>
+    <!--Mail-->
+<!--    <dependency>-->
+<!--      <groupId>javax.mail</groupId>-->
+<!--      <artifactId>mail</artifactId>-->
+<!--    </dependency>-->
   </dependencies>
 
   <build>

@@ -8,16 +8,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-//@Service
+@Service
 public class ImageServiceImpl implements ImageService {
 
-    private ImageDao imageDao;
+    private final ImageDao imageDao;
 
     @Autowired
     public ImageServiceImpl(ImageDao imageDao){
         this.imageDao = imageDao;
     }
-
 
     @Override
     public ImageModel create (ImageModel imageModel){
