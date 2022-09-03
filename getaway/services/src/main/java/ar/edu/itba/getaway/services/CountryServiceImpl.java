@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class CountryServiceImpl implements CountryService{
 
-    private CountryDao countryDao;
+    private final CountryDao countryDao;
 
     @Autowired
     public CountryServiceImpl(CountryDao countryDao){

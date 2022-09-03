@@ -12,9 +12,9 @@ public class ExperienceModel {
         this.experienceName = experienceName;
         this.address = address;
         this.description = description;
+        this.price = price;
         this.cityId = cityId;
         this.categoryId = categoryId;
-        this.price = price;
         this.userId = userId;
     }
 

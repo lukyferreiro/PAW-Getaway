@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class ExperienceServiceImpl implements ExperienceService {
 
-    private ExperienceDao experienceDao;
+    private final ExperienceDao experienceDao;
 
     @Autowired
     public ExperienceServiceImpl(ExperienceDao experienceDao){
@@ -43,7 +43,9 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getById(experienceId);
     }
 
-//    @Override
-//    List<ExperienceModel> listByCategory(long categoryId) { return experienceDao.listByCategory(categoryId); }
+    @Override
+    public List<ExperienceModel> listByCategory(long categoryId) {
+        return experienceDao.listByCategory(categoryId);
+    }
 
 }

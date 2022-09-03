@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.CityModel;
-import ar.edu.itba.getaway.models.CountryModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,7 +15,7 @@ import java.util.Map;
 
 @Repository
 public class CityDaoImpl implements CityDao {
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     private static final RowMapper<CityModel> CITY_MODEL_ROW_MAPPER =
             (rs, rowNum) -> new CityModel(rs.getLong("cityId"), rs.getLong("countryId"),rs.getString("cityName"));
@@ -40,19 +39,21 @@ public class CityDaoImpl implements CityDao {
 
     @Override
     public boolean update(long cityId, CityModel cityModel) {
-        return jdbcTemplate.update("UPDATE cities " +
-                "SET cityName = ?, countryId = ?" +
-                "WHERE countryId = ?", new Object[]{cityModel.getName(), cityModel.getCountryId(), cityId}) == 1;
+        //TODO check
+        return jdbcTemplate.update("UPDATE cities SET cityName = ?, countryId = ? WHERE countryId = ?",
+                cityModel.getName(), cityModel.getCountryId(), cityId) == 1;
     }
 
     @Override
     public boolean delete(long cityId) {
-        return jdbcTemplate.update("DELETE FROM cities WHERE cityId = ?", new Object[]{cityId}) == 1;
+        return jdbcTemplate.update("DELETE FROM cities WHERE cityId = ?",
+                cityId) == 1;
     }
 
     @Override
     public Optional<CityModel> getById(long cityId) {
-        return jdbcTemplate.query("SELECT * FROM cities WHERE cityId = ?",new Object[]{cityId},CITY_MODEL_ROW_MAPPER).stream().findFirst();
+        return jdbcTemplate.query("SELECT * FROM cities WHERE cityId = ?",
+                new Object[]{cityId},CITY_MODEL_ROW_MAPPER).stream().findFirst();
     }
 
     @Override

@@ -15,12 +15,12 @@ import java.util.Map;
 
 @Repository
 public class ExperienceDaoImpl implements ExperienceDao {
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
     private static final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER =
             (rs, rowNum) -> new ExperienceModel(rs.getLong("experienceId"),
-                    rs.getString("experienceId"),
+                    rs.getString("experienceName"),
                     rs.getString("address"),
                     rs.getString("description"),
                     rs.getDouble("price"),
@@ -60,28 +60,36 @@ public class ExperienceDaoImpl implements ExperienceDao {
                 "categoryId = ?, " +
                 "price = ?, " +
                 "userId = ?" +
-                "WHERE experienceId = ?", new Object[]{experienceModel.getName(), experienceModel.getDescription(), experienceModel.getCityId(), experienceModel.getCategoryId(), experienceModel.getPrice(), experienceModel.getUserId(), experienceId}) == 1;
+                "WHERE experienceId = ?",
+                experienceModel.getName(), experienceModel.getDescription(),
+                experienceModel.getCityId(), experienceModel.getCategoryId(),
+                experienceModel.getPrice(), experienceModel.getUserId(),
+                experienceId) == 1;
     }
 
     @Override
     public boolean delete(long experienceId) {
-        return jdbcTemplate.update("DELETE FROM experiences WHERE experienceId = ?", new Object[]{experienceId}) == 1;
+        return jdbcTemplate.update("DELETE FROM experiences WHERE experienceId = ?",
+                experienceId) == 1;
     }
 
     @Override
     public List<ExperienceModel> listAll() {
         return new ArrayList<>(jdbcTemplate.query(
-                "SELECT experienceId, experienceName, address, description, cityId, categoryId, price, userId " +
-                        "FROM experiences", EXPERIENCE_MODEL_ROW_MAPPER));
+                "SELECT experienceId, experienceName, address, description, cityId, categoryId, price, userId FROM experiences",
+                EXPERIENCE_MODEL_ROW_MAPPER));
     }
 
     @Override
     public Optional<ExperienceModel> getById(long experienceId) {
-        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, cityId, categoryId, price, userId FROM experiences WHERE experienceId = ?", new Object[]{experienceId}, EXPERIENCE_MODEL_ROW_MAPPER).stream().findFirst();
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, cityId, categoryId, price, userId FROM experiences WHERE experienceId = ?",
+                new Object[]{experienceId}, EXPERIENCE_MODEL_ROW_MAPPER).stream().findFirst();
     }
 
     @Override
     public List<ExperienceModel> listByCategory(long categoryId) {
-        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, cityId, categoryId, price, userId FROM experiences NATURAL JOIN categories WHERE categoryId = ?", new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, cityId, categoryId, price, userId FROM experiences NATURAL JOIN categories WHERE categoryId = ?",
+                new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
+
 }
