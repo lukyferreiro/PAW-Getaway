@@ -42,6 +42,23 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
+    <!--Mail y Thymeleaf-->
+<!--    <dependency>-->
+<!--      <groupId>org.springframework</groupId>-->
+<!--      <artifactId>spring-context-support</artifactId>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.thymeleaf</groupId>-->
+<!--      <artifactId>thymeleaf</artifactId>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.thymeleaf</groupId>-->
+<!--      <artifactId>thymeleaf-spring5</artifactId>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>javax.mail</groupId>-->
+<!--      <artifactId>mail</artifactId>-->
+<!--    </dependency>-->
   </dependencies>
 
 
