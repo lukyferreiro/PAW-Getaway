@@ -1,5 +1,7 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.services.ExperienceService;
 import ar.edu.itba.getaway.webapp.forms.ActivityForm;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -8,11 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class HelloWorldController {
 
-//    ActivityService activity ;
+    ExperienceService exp;
+
     @RequestMapping("/")
     public ModelAndView helloWorld(){
         final ModelAndView mav = new ModelAndView("index");
@@ -21,15 +25,23 @@ public class HelloWorldController {
     }
 
     @RequestMapping("/adventures")
-    public ModelAndView adventures(){
-        return new ModelAndView("adventures");
+    public ModelAndView adventures() throws Exception {
+        final ModelAndView mav = new ModelAndView("adventures");
+//        List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
+
+//        if(experienceList == null){
+//            throw new Exception();
+//        }else{
+//            mav.addObject("activities", experienceList);
+//        }
+        return mav;
     }
 
     @RequestMapping("/adventures/{adventureId}")
     public ModelAndView adventuresView(@PathVariable("adventureId") final long adventureId){
         final ModelAndView mav = new ModelAndView("activity_card");
 
-//        mav.addObject("activity", activity.getActivityById(adventureId).orElseThrow(Exception::new));
+//        mav.addObject("activity", exp.getById(adventureId).orElseThrow(Exception::new));
         return mav;
     }
 
@@ -49,7 +61,8 @@ public class HelloWorldController {
         if(errors.hasErrors()){
             return createActivityForm(form);
         }
-//        final Activity act = activity.create(form.getActivityName(), form.getActivityCategory(),form.getActivityAddress(), form.getActivityMail(), form.getActivityImg(), form.getActivityInfo(), form.getActivityTags());
+//        ni idea como pasarle el id
+//        final Activity act = exp.create(form.getActivityName(),form.getActivityAddress(), form.getActivityInfo(), form.getActivityCategory(), form.getActivityMail(), form.getActivityImg(), form.getActivityTags());
 
 //        return new ModelAndView("redirect:/" + act.getCategory() + "/" + act.getId());
             return new ModelAndView("redirect:/adventures");

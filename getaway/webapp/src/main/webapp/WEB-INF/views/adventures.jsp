@@ -22,24 +22,41 @@
 <%--      </div>--%>
 
       <div class="container-experiences">
-        <div>
-          <a href="<c:url value = "/adventures/id" />" class="card-container">
-            <div class="card">
-              <button type="button" class="btn btn-outline-dark btn-bookmark rounded-circle">
-                <img src="<c:url value = "/resources/images/ic_bookmark_white.svg"/>" alt="Bookmark" class="btn-bookmark-img">
-              </button>
-              <img src="<c:url value = "/resources/images/ic_museum.svg"/>" class="card-img-top img-experience" alt="Imagen experiencia">
+        <div class="row row-cols-1 row-cols-md-2 g-2">
+          <c:forEach var="activity" items="${activities}">
+            <a href="<c:url value = "/adventures/${activity.id}"  />" class="card-container">
+            <div class="card activity-view">
+              <img class="card-img-top" src="<c:url value = "/resources/images/adventure_image.jpg" />" alt="Card image cap">
+              <div class="card-img-overlay buttons save">
+                <button type="button" class="btn btn-circle btn-xl ">
+                  <img src="<c:url value = "/resources/images/ic_bookmark_white.svg" />"  alt="Guardar"/>
+                </button>
+              </div>
               <div class="card-body">
-                <h5 class="card-title">Aventura 1</h5>
-  <!--              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
-                <div class="rate">
-                  <img src="<c:url value = "/resources/images/ic_star.svg"/>" alt="Star" class="rate-ic">
-                  <p class="rate-value">4.5</p>
-                </div>
-                <p>Desde $15000 por persona</p>
+                <h2 class="card-title">Experience Name</h2>
+                <p>${activity.address}</p>
+                <p>${activity.ranking}<img src="<c:url value = "/resources/images/ic_star.svg" />"  alt="Icono estrella"></p>
               </div>
             </div>
-          </a>
+            </a>
+          </c:forEach>
+<%--          <a href="<c:url value = "/adventures/id" />" class="card-container">--%>
+<%--            <div class="card">--%>
+<%--              <button type="button" class="btn btn-outline-dark btn-bookmark rounded-circle">--%>
+<%--                <img src="<c:url value = "/resources/images/ic_bookmark_white.svg"/>" alt="Bookmark" class="btn-bookmark-img">--%>
+<%--              </button>--%>
+<%--              <img src="<c:url value = "/resources/images/ic_museum.svg"/>" class="card-img-top img-experience" alt="Imagen experiencia">--%>
+<%--              <div class="card-body">--%>
+<%--                <h5 class="card-title">Aventura 1</h5>--%>
+<%--  <!--              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->--%>
+<%--                <div class="rate">--%>
+<%--                  <img src="<c:url value = "/resources/images/ic_star.svg"/>" alt="Star" class="rate-ic">--%>
+<%--                  <p class="rate-value">4.5</p>--%>
+<%--                </div>--%>
+<%--                <p>Desde $15000 por persona</p>--%>
+<%--              </div>--%>
+<%--            </div>--%>
+<%--          </a>--%>
         </div>
       </div>
   </div>
