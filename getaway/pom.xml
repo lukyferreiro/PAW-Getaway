@@ -30,6 +30,8 @@
     <!--API-->
     <javax.validation-api.version>1.0.0.GA</javax.validation-api.version>
     <org.hibernate.validator>4.3.1.Final</org.hibernate.validator>
+    <!-- For images upload -->
+    <commons-fileupload.version>1.4</commons-fileupload.version>
   </properties>
 
   <dependencyManagement>
@@ -50,6 +52,13 @@
         <artifactId>spring-test</artifactId>
         <version>${spring.version}</version>
         <scope>test</scope>
+      </dependency>
+      <!--For image upload -->
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
+        <version>${spring.version}</version>
+        <scope>compile</scope>
       </dependency>
       <!--JDBC y driver-->
       <dependency>

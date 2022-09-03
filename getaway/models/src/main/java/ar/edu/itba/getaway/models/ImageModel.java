@@ -1,29 +1,21 @@
 package ar.edu.itba.getaway.models;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class ImageModel {
     private final long imageId;
-    private final long experienceId;
-    private boolean isCover;
+    private final MultipartFile image;
 
-    public ImageModel(long imageId, long experienceId, boolean isCover ) {
+    public ImageModel(long imageId, MultipartFile image ) {
         this.imageId = imageId;
-        this.experienceId = experienceId;
-        this.isCover = isCover;
+        this.image = image;
     }
 
     public long getId() {
         return imageId;
     }
 
-    public long getExperienceId() {
-        return experienceId;
-    }
-
-    public boolean isCover() {
-        return isCover;
-    }
-
-    public void setIsCover(boolean isCover) {
-        this.isCover = isCover;
+    public MultipartFile getImage() {
+        return image;
     }
 }
