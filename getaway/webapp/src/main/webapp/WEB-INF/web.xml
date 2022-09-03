@@ -33,6 +33,11 @@
       <param-name>contextClass</param-name>
       <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
     </init-param>
+    <!-- TODO check if it's necessary -->
+<!--    <init-param>-->
+<!--      <param-name>throwExceptionIfNoHandlerFound</param-name>-->
+<!--      <param-value>true</param-value>-->
+<!--    </init-param>-->
     <load-on-startup>1</load-on-startup>
   </servlet>
 
@@ -40,5 +45,20 @@
     <servlet-name>dispatcher</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+
+  <!-- TODO check if it's necessary -->
+<!--  <filter>-->
+<!--    <filter-name>charsetFilter</filter-name>-->
+<!--    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>-->
+<!--    <init-param>-->
+<!--      <param-name>encoding</param-name>-->
+<!--      <param-value>UTF-8</param-value>-->
+<!--    </init-param>-->
+<!--  </filter>-->
+
+<!--  <filter-mapping>-->
+<!--    <filter-name>charsetFilter</filter-name>-->
+<!--    <url-pattern>/*</url-pattern>-->
+<!--  </filter-mapping>-->
 
 </web-app>
