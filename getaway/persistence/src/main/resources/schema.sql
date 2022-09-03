@@ -36,8 +36,7 @@ CREATE TABLE IF NOT EXISTS cities
     cityName VARCHAR(255) NOT NULL,
     countryId INT NOT NULL,
     PRIMARY KEY (cityId),
-    FOREIGN KEY (countryId) REFERENCES countries (countryId) ON DELETE CASCADE,
-    UNIQUE (countryId)
+    FOREIGN KEY (countryId) REFERENCES countries (countryId) ON DELETE CASCADE
     );
 
 CREATE TABLE IF NOT EXISTS images
