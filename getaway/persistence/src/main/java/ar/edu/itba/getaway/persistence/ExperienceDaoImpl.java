@@ -15,6 +15,10 @@ import java.util.Map;
 
 @Repository
 public class ExperienceDaoImpl implements ExperienceDao {
+
+    @Autowired
+    private DataSource ds;
+
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
@@ -23,6 +27,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
                     rs.getString("experienceName"),
                     rs.getString("address"),
                     rs.getString("description"),
+                    rs.getString("siteUrl"),
                     rs.getDouble("price"),
                     rs.getLong("cityId"),
                     rs.getLong("categoryId"),
@@ -42,12 +47,13 @@ public class ExperienceDaoImpl implements ExperienceDao {
         args.put("experienceName", experienceModel.getName());
         args.put("address", experienceModel.getAddress());
         args.put("description", experienceModel.getDescription());
+        args.put("siteUrl", experienceModel.getSiteUrl());
+        args.put("price", experienceModel.getPrice());
         args.put("cityId", experienceModel.getCityId());
         args.put("categoryId", experienceModel.getCategoryId());
-        args.put("price", experienceModel.getPrice());
         args.put("userId",experienceModel.getUserId());
         final long experienceId = jdbcInsert.executeAndReturnKey(args).longValue();
-        return new ExperienceModel(experienceId,experienceModel.getName(), experienceModel.getAddress(), experienceModel.getDescription(),  experienceModel.getPrice(),experienceModel.getCityId(), experienceModel.getCategoryId(), experienceModel.getUserId());
+        return new ExperienceModel(experienceId,experienceModel.getName(), experienceModel.getAddress(), experienceModel.getDescription(), experienceModel.getSiteUrl(), experienceModel.getPrice(), experienceModel.getCityId(), experienceModel.getCategoryId(), experienceModel.getUserId());
     }
 
     @Override
@@ -56,14 +62,17 @@ public class ExperienceDaoImpl implements ExperienceDao {
                 "SET experienceName = ?, " +
                 "address = ?, " +
                 "description = ?, " +
+                "siteUrl = ?, " +
+                "price = ?, " +
                 "cityId = ?, " +
                 "categoryId = ?, " +
-                "price = ?, " +
                 "userId = ?" +
                 "WHERE experienceId = ?",
-                experienceModel.getName(), experienceModel.getDescription(),
+                experienceModel.getName(), experienceModel.getAddress(),
+                experienceModel.getDescription(), experienceModel.getSiteUrl(),
+                experienceModel.getPrice(),
                 experienceModel.getCityId(), experienceModel.getCategoryId(),
-                experienceModel.getPrice(), experienceModel.getUserId(),
+                experienceModel.getUserId(),
                 experienceId) == 1;
     }
 
@@ -76,19 +85,19 @@ public class ExperienceDaoImpl implements ExperienceDao {
     @Override
     public List<ExperienceModel> listAll() {
         return new ArrayList<>(jdbcTemplate.query(
-                "SELECT experienceId, experienceName, address, description, cityId, categoryId, price, userId FROM experiences",
+                "SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId FROM experiences",
                 EXPERIENCE_MODEL_ROW_MAPPER));
     }
 
     @Override
     public Optional<ExperienceModel> getById(long experienceId) {
-        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, cityId, categoryId, price, userId FROM experiences WHERE experienceId = ?",
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId FROM experiences WHERE experienceId = ?",
                 new Object[]{experienceId}, EXPERIENCE_MODEL_ROW_MAPPER).stream().findFirst();
     }
 
     @Override
     public List<ExperienceModel> listByCategory(long categoryId) {
-        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, cityId, categoryId, price, userId FROM experiences NATURAL JOIN categories WHERE categoryId = ?",
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId FROM experiences NATURAL JOIN categories WHERE categoryId = ?",
                 new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 

@@ -10,8 +10,8 @@ import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
-
-    private final CategoryDao categoryDao;
+    @Autowired
+    private CategoryDao categoryDao;
 
     @Autowired
     public CategoryServiceImpl(CategoryDao categoryDao){
@@ -42,4 +42,5 @@ public class CategoryServiceImpl implements CategoryService {
     public Optional<CategoryModel> getById (long categoryId){
         return categoryDao.getById(categoryId);
     }
+
 }

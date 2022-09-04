@@ -13,17 +13,19 @@
             <%@ include file="../components/navbar.jsp" %>
 
             <div class="card card-view">
-                <h1 class="card-title">Experience Name</h1>
+                <h1 class="card-title">${activity.name}</h1>
                 <div>
                     <div class="activity-info">
                         <p>experience.ranking <img src="<c:url value = "/resources/images/ic_star.svg" />" alt="Icono estrella"></p>
                     </div>
                     <div class="activity-info">
-                        <a href="#">experience.link</a>
+        <%--                <a href="#">${activity.link}</a>--%>
                     </div>
                 </div>
-                <div class="buttons save">
-                    <button type="button" class="btn btn-circle btn-xl"><img src="<c:url value = "/resources/images/ic_bookmark_white.svg" />"/></button>
+                <div class="btn-bookmark">
+                    <button type="button" class="btn btn-circle btn-xl">
+                        <img src="<c:url value = "/resources/images/ic_bookmark_white.svg" />" alt="Guardar"/>
+                    </button>
                 </div>
                 <div class="row">
                     <div class="col-auto">
@@ -35,9 +37,10 @@
                         <div>
                             <div class="card-body">
                                 <h5 class="card-title"> Direccion </h5>
-                                <p>experience.address</p>
+                                <p>${activity.address}</p>
+                                <h5 class="card-title"> Precio <p>$ ${activity.address}</p> </h5>
                                 <h5 class="card-title"> Descripcion </h5>
-                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                                <p class="card-text">${activity.description}</p>
                                 <h5 class="card-title"> Tags </h5>
                                 <p><a href="#">#tag1</a>   <a href="#">#tag2</a></p>
                             </div>

@@ -26,8 +26,8 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-//    @Value("classpath:schema.sql")
-//    private Resource schemaSql;
+    @Value("classpath:schema.sql")
+    private Resource schemaSql;
 
     @Bean
     public ViewResolver viewResolver() {
@@ -64,7 +64,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 //        ds.setUrl("jdbc:postgresql://localhost/getaway");
 //        ds.setUsername("postgresql");
 //        ds.setPassword("getawaydb");
-        //Usuario remtoto (para todos los del grupo)
+        //Usuario remooto (para todos los del grupo)
         ds.setUrl("jdbc:postgresql://ec2-54-204-241-136.compute-1.amazonaws.com:5432/d38a8rs1b2dpeh");
         ds.setUsername("adrzztklademib");
         ds.setPassword("580c8ba69151e9ba288d107d1b28f9dfc3706838eccbfb4d4d9ca1cde2f6f86e");
@@ -76,19 +76,19 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return ds;
     }
 
-//
-//    @Bean
-//    public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
-//        final DataSourceInitializer dsi = new DataSourceInitializer();
-//        dsi.setDataSource(ds);
-//        dsi.setDatabasePopulator(databasePopulator());
-//        return dsi;
-//    }
-//
-//    private DatabasePopulator databasePopulator() {
-//        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-//        dbp.addScript(schemaSql);
-//        return dbp;
-//    }
+
+    @Bean
+    public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
+        final DataSourceInitializer dsi = new DataSourceInitializer();
+        dsi.setDataSource(ds);
+        dsi.setDatabasePopulator(databasePopulator());
+        return dsi;
+    }
+
+    private DatabasePopulator databasePopulator() {
+        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
+        dbp.addScript(schemaSql);
+        return dbp;
+    }
 
 }

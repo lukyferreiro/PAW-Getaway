@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS experiences
     price DECIMAL NOT NULL,
     address VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
+    siteUrl TEXT NOT NULL,
     cityId INT NOT NULL,
     categoryId INT NOT NULL,
     userId INT NOT NULL,

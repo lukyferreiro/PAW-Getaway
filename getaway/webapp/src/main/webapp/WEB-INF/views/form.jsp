@@ -7,7 +7,6 @@
   <head>
     <title>Getaway - Create an experience</title>
     <%@ include file="../components/includes/headers.jsp" %>
-    <link href="<c:url value = "/resources/css/form-create-experience.css" />" rel="stylesheet">
   </head>
 
   <body>
@@ -15,10 +14,9 @@
       <%@ include file="../components/navbar.jsp" %>
 
       <div class="card card-form-create-experience">
+        <h2 class="card-title">Crea tu experiencia</h2>
         <div>
-          <h2 class="card-title">Crea tu experiencia</h2>
-  <%--      <div>--%>
-          <c:url value="/experience_form" var="postPath"/>
+          <c:url value="/create_experience" var="postPath"/>
           <form:form modelAttribute="activityForm" action="${postPath}" method="post">
             <div class="modal-body">
               <div>
@@ -28,7 +26,7 @@
               </div>
               <div>
                 <form:errors path="activityCategory" element="p" cssStyle="color: red"/>
-                <form:label path="activityCategory" class="form-label" >Tags</form:label>
+                <form:label path="activityCategory" class="form-label" >Categoria</form:label>
                 <form:input list="datalistOptions" class="form-control" path="activityCategory" placeholder="Escribe para buscar..."/>
                 <datalist id="categoryOptions">
                   <option value="Aventura">
@@ -40,9 +38,19 @@
                 </datalist>
               </div>
               <div>
+                <div>
+                  <form:errors path="activityName" element="p" cssStyle="color: red"/>
+                  <form:label path="activityName" class="form-label">Ciudad</form:label>
+                  <form:input type="text" class="form-control" path="activityCity"/>
+                </div>
                 <form:errors path="activityAddress" element="p" cssStyle="color: red"/>
                 <form:label path="activityAddress" class="form-label">Direccion</form:label>
                 <form:input type="text" class="form-control" path="activityAddress"/>
+              </div>
+              <div>
+                <form:errors path="activityName" element="p" cssStyle="color: red"/>
+                <form:label path="activityName" class="form-label">URL</form:label>
+                <form:input type="text" class="form-control" path="activityUrl"/>
               </div>
               <div>
                 <form:errors path="activityMail" element="p" cssStyle="color: red"/>
@@ -86,6 +94,5 @@
     <!-- Bootstrap y Popper -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
-
   </body>
 </html>

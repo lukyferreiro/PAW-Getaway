@@ -10,4 +10,4 @@
 <link href="<c:url value = "/resources/css/styles.css" />" rel="stylesheet">
 <link href="<c:url value = "/resources/css/navbar.css" />" rel="stylesheet">
 <link href="<c:url value = "/resources/css/footer.css" />" rel="stylesheet">
-<link href="<c:url value = "/resources/css/activity.css" />" rel="stylesheet">
+<link href="<c:url value = "/resources/css/form-create-experience.css" />" rel="stylesheet">

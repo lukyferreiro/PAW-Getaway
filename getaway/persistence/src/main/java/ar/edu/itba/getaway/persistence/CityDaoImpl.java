@@ -15,6 +15,10 @@ import java.util.Map;
 
 @Repository
 public class CityDaoImpl implements CityDao {
+
+    @Autowired
+    private DataSource ds;
+
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     private static final RowMapper<CityModel> CITY_MODEL_ROW_MAPPER =

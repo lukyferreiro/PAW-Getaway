@@ -14,6 +14,9 @@ import java.util.*;
 @Repository
 public class ImageDaoImpl implements ImageDao {
 
+    @Autowired
+    private DataSource ds;
+
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 

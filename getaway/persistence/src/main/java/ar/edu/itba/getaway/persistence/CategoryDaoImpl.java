@@ -12,6 +12,10 @@ import java.util.*;
 
 @Repository
 public class CategoryDaoImpl implements CategoryDao {
+
+    @Autowired
+    private DataSource ds;
+
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
@@ -57,4 +61,6 @@ public class CategoryDaoImpl implements CategoryDao {
         return jdbcTemplate.query("SELECT categoryId, categoryName FROM categories WHERE categoryId = ?",
                 new Object[]{categoryId}, CATEGORY_MODEL_ROW_MAPPER).stream().findFirst();
     }
+
+
 }

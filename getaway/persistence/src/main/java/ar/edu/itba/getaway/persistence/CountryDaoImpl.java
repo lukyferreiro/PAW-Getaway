@@ -15,6 +15,10 @@ import java.util.Map;
 
 @Repository
 public class CountryDaoImpl implements CountryDao{
+
+    @Autowired
+    private DataSource ds;
+
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     private static final RowMapper<CountryModel> COUNTRY_MODEL_ROW_MAPPER =

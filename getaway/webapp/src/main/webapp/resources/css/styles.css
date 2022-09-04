@@ -9,8 +9,6 @@
     flex-direction: column;
 }
 
-
-
 /*------------------------------*/
 /*--------- Main Page  ---------*/
 /*------------------------------*/
@@ -32,7 +30,7 @@
 }
 
 /*------------------------------*/
-/*--------- AVENTURAS  ---------*/
+/*----- Experiences Page  ------*/
 /*------------------------------*/
 
 .container-body {
@@ -91,44 +89,76 @@
 }
 .card-container:hover, .card-container:focus{
     color: black;
-    scale: 105%;
+    scale: 101%;
 }
 
-.card-experience{
-    margin: 10px;
-    width: 15rem;
-    height: 20rem;
+.card.activity-view{
+    margin-top: 2%;
+    width: 30rem;
 }
 
 .btn-bookmark{
     position: absolute;
-    top: 5px;
-    right: 5px;
-    padding: 3px;
-    background-color: transparent;
-    border-color: transparent;
-}
-.btn-bookmark:hover{
-    background-color: #e5dad8;
-    border-color: transparent;
+    top: 0;
+    right: 0;
+    margin: 1%;
 }
 
-.img-experience{
-    width: 150px;
-    display: flex;
-    align-self: center;
-    margin: 5px;
+/*.btn-bookmark{*/
+/*    position: absolute;*/
+/*    top: 5px;*/
+/*    right: 5px;*/
+/*    padding: 3px;*/
+/*    background-color: transparent;*/
+/*    border-color: transparent;*/
+/*    width: auto;*/
+/*    height: auto;*/
+/*}*/
+/*.btn-bookmark:hover{*/
+/*    background-color: #e5dad8;*/
+/*    border-color: transparent;*/
+/*}*/
+
+.btn-circle.btn-xl {
+    border-radius: 35px;
+    text-align: center;
 }
 
-.rate{
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 10px;
+/*.card-experience{*/
+/*    margin: 10px;*/
+/*    width: 15rem;*/
+/*    height: 20rem;*/
+/*}*/
+
+/*.img-experience{*/
+/*    width: 150px;*/
+/*    display: flex;*/
+/*    align-self: center;*/
+/*    margin: 5px;*/
+/*}*/
+
+/*.rate{*/
+/*    display: flex;*/
+/*    justify-content: flex-start;*/
+/*    margin-bottom: 10px;*/
+/*}*/
+/*.rate-ic{*/
+/*    align-self: center;*/
+/*}*/
+/*.rate-value{*/
+/*    align-self: center;*/
+/*    margin: 0;*/
+/*}*/
+
+/*------------------------------*/
+/*------- Activity Page  -------*/
+/*------------------------------*/
+
+.card.card-view{
+    padding: 1%;
+    margin: 1%;
 }
-.rate-ic{
-    align-self: center;
-}
-.rate-value{
-    align-self: center;
-    margin: 0;
+
+.activity-info{
+    display: inline-block;
 }
