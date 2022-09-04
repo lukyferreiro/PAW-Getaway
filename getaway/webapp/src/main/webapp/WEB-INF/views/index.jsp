@@ -30,27 +30,27 @@
                     <img src="<c:url value = "/resources/images/ic_adventure.svg" />" alt="Logo aventura"/>Aventura
                 </button>
             </a>
-            <a href="<c:url value = "/adventures"/>" class="link-btn-filter">
+            <a href="<c:url value = "/gastronomy"/>" class="link-btn-filter">
                 <button type="button" class="btn btn-filter">
                     <img src="<c:url value = "/resources/images/ic_food.svg" />" alt="Logo aventura"/>Gastronomia
                 </button>
             </a>
-            <a href="<c:url value = "/adventures"/>" class="link-btn-filter">
+            <a href="<c:url value = "/hotels"/>" class="link-btn-filter">
                 <button type="button" class="btn btn-filter">
                     <img src="<c:url value = "/resources/images/ic_hotel.svg" />" alt="Logo aventura"/>Hoteleria
                 </button>
             </a>
-            <a href="<c:url value = "/adventures"/>" class="link-btn-filter">
+            <a href="<c:url value = "/relax"/>" class="link-btn-filter">
                 <button type="button" class="btn btn-filter">
                     <img src="<c:url value = "/resources/images/ic_relax.svg" />" alt="Logo aventura"/>Relax
                 </button>
             </a>
-            <a href="<c:url value = "/adventures"/>" class="link-btn-filter">
+            <a href="<c:url value = "/night"/>" class="link-btn-filter">
                 <button type="button" class="btn btn-filter">
                     <img src="<c:url value = "/resources/images/ic_nightlife.svg" />" alt="Logo aventura"/>Vida nocturna
                 </button>
             </a>
-            <a href="<c:url value = "/adventures"/>" class="link-btn-filter">
+            <a href="<c:url value = "/historic"/>" class="link-btn-filter">
                 <button type="button" class="btn btn-filter">
                     <img src="<c:url value = "/resources/images/ic_museum.svg" />" alt="Logo aventura"/>Historico
                 </button>
