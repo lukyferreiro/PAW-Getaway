@@ -1,6 +1,8 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.models.CategoryModel;
 import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.services.CategoryService;
 import ar.edu.itba.getaway.services.ExperienceService;
 import ar.edu.itba.getaway.webapp.forms.ActivityForm;
 import org.springframework.http.HttpStatus;
@@ -11,11 +13,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class HelloWorldController {
 
     ExperienceService exp;
+    CategoryService category;
 
     @RequestMapping("/")
     public ModelAndView helloWorld(){
@@ -27,13 +31,19 @@ public class HelloWorldController {
     @RequestMapping("/adventures")
     public ModelAndView adventures() throws Exception {
         final ModelAndView mav = new ModelAndView("adventures");
-//        List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
+        Optional<CategoryModel> cat =  category.getId("Aventura");
 
-//        if(experienceList == null){
-//            throw new Exception();
-//        }else{
-//            mav.addObject("activities", experienceList);
-//        }
+        if(cat.isPresent()){
+            long id_adventure = cat.get().getId();
+            List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
+
+            if(experienceList == null){
+                throw new Exception();
+            }else{
+                mav.addObject("activities", experienceList);
+            }
+        }
+
         return mav;
     }
 

@@ -24,7 +24,7 @@
       <div class="container-experiences">
         <div class="row row-cols-1 row-cols-md-2 g-2">
           <c:forEach var="activity" items="${activities}">
-            <a href="<c:url value = "/adventures/${activity.id}"  />" class="card-container">
+<%--            <a href="<c:url value = "/adventures/${activity.id}"  />" class="card-container">--%>
             <div class="card activity-view">
               <img class="card-img-top" src="<c:url value = "/resources/images/adventure_image.jpg" />" alt="Card image cap">
               <div class="card-img-overlay buttons save">
@@ -38,7 +38,7 @@
                 <p>${activity.ranking}<img src="<c:url value = "/resources/images/ic_star.svg" />"  alt="Icono estrella"></p>
               </div>
             </div>
-            </a>
+<%--            </a>--%>
           </c:forEach>
 <%--          <a href="<c:url value = "/adventures/id" />" class="card-container">--%>
 <%--            <div class="card">--%>

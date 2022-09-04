@@ -42,4 +42,9 @@ public class CategoryServiceImpl implements CategoryService {
     public Optional<CategoryModel> getById (long categoryId){
         return categoryDao.getById(categoryId);
     }
+
+    @Override
+    public Optional<CategoryModel> getId(String category) {
+        return categoryDao.getId(category);
+    }
 }

@@ -11,4 +11,5 @@ public interface CategoryService {
     boolean delete (long categoryId);
     List<CategoryModel> listAll();
     Optional<CategoryModel> getById (long categoryId);
+    Optional<CategoryModel> getId(String category);
 }
