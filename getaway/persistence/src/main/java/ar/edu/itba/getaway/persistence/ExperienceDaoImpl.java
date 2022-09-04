@@ -15,6 +15,10 @@ import java.util.Map;
 
 @Repository
 public class ExperienceDaoImpl implements ExperienceDao {
+
+    @Autowired
+    private DataSource ds;
+
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 

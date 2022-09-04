@@ -11,7 +11,8 @@ import java.util.Optional;
 @Service
 public class CityServiceImpl implements CityService {
 
-    private final CityDao cityDao;
+    @Autowired
+    private CityDao cityDao;
 
     @Autowired
     public CityServiceImpl(CityDao cityDao){

@@ -11,7 +11,8 @@ import java.util.Optional;
 @Service
 public class ExperienceServiceImpl implements ExperienceService {
 
-    private final ExperienceDao experienceDao;
+    @Autowired
+    private ExperienceDao experienceDao;
 
     @Autowired
     public ExperienceServiceImpl(ExperienceDao experienceDao){

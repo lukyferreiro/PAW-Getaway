@@ -13,6 +13,9 @@ import java.util.*;
 @Repository
 public class ImageExperienceDaoImpl implements ImageExperienceDao {
 
+    @Autowired
+    private DataSource ds;
+
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 

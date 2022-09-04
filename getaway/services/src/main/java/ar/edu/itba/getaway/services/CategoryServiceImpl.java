@@ -10,8 +10,8 @@ import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
-
-    private final CategoryDao categoryDao;
+    @Autowired
+    private CategoryDao categoryDao;
 
     @Autowired
     public CategoryServiceImpl(CategoryDao categoryDao){

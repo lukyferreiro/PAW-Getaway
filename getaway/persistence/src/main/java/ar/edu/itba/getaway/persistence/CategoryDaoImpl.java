@@ -12,6 +12,10 @@ import java.util.*;
 
 @Repository
 public class CategoryDaoImpl implements CategoryDao {
+
+    @Autowired
+    private DataSource ds;
+
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 

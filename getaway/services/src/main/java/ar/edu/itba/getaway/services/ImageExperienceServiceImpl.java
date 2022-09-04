@@ -11,7 +11,8 @@ import java.util.Optional;
 @Service
 public class ImageExperienceServiceImpl implements ImageExperienceService {
 
-    private final ImageExperienceDao imageExperienceDao;
+    @Autowired
+    private ImageExperienceDao imageExperienceDao;
 
     @Autowired
     public ImageExperienceServiceImpl(ImageExperienceDao imageExperienceDao){

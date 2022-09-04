@@ -5,6 +5,7 @@ import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.services.CategoryService;
 import ar.edu.itba.getaway.services.ExperienceService;
 import ar.edu.itba.getaway.webapp.forms.ActivityForm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,7 +19,9 @@ import java.util.Optional;
 @Controller
 public class HelloWorldController {
 
+    @Autowired
     ExperienceService exp;
+    @Autowired
     CategoryService category;
 
     @RequestMapping("/")

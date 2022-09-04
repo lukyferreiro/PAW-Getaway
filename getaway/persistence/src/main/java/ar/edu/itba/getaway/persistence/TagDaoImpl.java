@@ -12,6 +12,10 @@ import java.util.*;
 
 @Repository
 public class TagDaoImpl implements TagDao {
+
+    @Autowired
+    private DataSource ds;
+
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 

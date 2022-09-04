@@ -11,7 +11,8 @@ import java.util.Optional;
 @Service
 public class TagServiceImpl implements TagService {
 
-    private final TagDao tagDao;
+    @Autowired
+    private TagDao tagDao;
 
     @Autowired
     public TagServiceImpl(TagDao tagDao){
