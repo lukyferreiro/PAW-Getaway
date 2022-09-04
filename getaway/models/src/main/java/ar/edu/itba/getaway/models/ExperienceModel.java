@@ -2,7 +2,7 @@ package ar.edu.itba.getaway.models;
 
 public class ExperienceModel {
     private final long experienceId;
-    private String experienceName, address, description, siteUrl;
+    private String experienceName, address, description, siteUrl, categoryName;
     private double price;
     private long cityId, categoryId;
     private final long userId;
@@ -13,6 +13,7 @@ public class ExperienceModel {
         this.address = address;
         this.description = description;
         this.siteUrl = siteUrl;
+        this.categoryName = ExperienceCategory.values()[(int) (categoryId - 1)].name();;
         this.price = price;
         this.cityId = cityId;
         this.categoryId = categoryId;
@@ -76,5 +77,13 @@ public class ExperienceModel {
 
     public void setSiteUrl(String siteUrl) {
         this.siteUrl = siteUrl;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }
