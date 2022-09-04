@@ -5,11 +5,15 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.List;
 
-public class ActivityForm{
+public class ActivityForm {
 
     private String activityName;
     private String activityCategory;
+
+    private String activityCity;
     private String activityAddress;
+
+    private String activityUrl;
     @NotEmpty
     @Email
     private String activityMail;
@@ -19,6 +23,13 @@ public class ActivityForm{
 
     public String getActivityAddress() {
         return activityAddress;
+    }
+
+    public String getActivityCity() {
+        return activityCity;
+    }
+    public String getActivityUrl() {
+        return activityUrl;
     }
 
     public String getActivityCategory() {
@@ -73,4 +84,11 @@ public class ActivityForm{
         this.activityTags = activityTags;
     }
 
+    public void setActivityCity(String activityCity) {
+        this.activityCity = activityCity;
+    }
+
+    public void setActivityUrl(String activityUrl) {
+        this.activityUrl = activityUrl;
+    }
 }

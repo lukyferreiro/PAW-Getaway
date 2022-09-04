@@ -28,7 +28,7 @@
         </div>
         <div>
           <form:errors path="activityCategory" element="p" cssStyle="color: red"/>
-          <form:label path="activityCategory" class="form-label" >Tags</form:label>
+          <form:label path="activityCategory" class="form-label" >Categoria</form:label>
           <form:input list="datalistOptions" class="form-control" path="activityCategory" placeholder="Escribe para buscar..."/>
           <datalist id="categoryOptions">
             <option value="Aventura">
@@ -40,9 +40,19 @@
           </datalist>
         </div>
         <div>
+          <div>
+            <form:errors path="activityName" element="p" cssStyle="color: red"/>
+            <form:label path="activityName" class="form-label">Ciudad</form:label>
+            <form:input type="text" class="form-control" path="activityCity"/>
+          </div>
           <form:errors path="activityAddress" element="p" cssStyle="color: red"/>
           <form:label path="activityAddress" class="form-label">Direccion</form:label>
           <form:input type="text" class="form-control" path="activityAddress"/>
+        </div>
+        <div>
+          <form:errors path="activityName" element="p" cssStyle="color: red"/>
+          <form:label path="activityName" class="form-label">URL</form:label>
+          <form:input type="text" class="form-control" path="activityUrl"/>
         </div>
         <div>
           <form:errors path="activityMail" element="p" cssStyle="color: red"/>
