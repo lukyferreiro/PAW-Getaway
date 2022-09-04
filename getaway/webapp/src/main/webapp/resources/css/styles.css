@@ -1,8 +1,26 @@
-.container-body-mainpage {
+*{
+    font-family: "Cambria", sans-serif;
+}
+
+.container-main{
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
+}
+
+
+
+/*------------------------------*/
+/*--------- Main Page  ---------*/
+/*------------------------------*/
+
+.container-body-mainpage {
+    display: flex;
+    /*flex-direction: column;*/
     justify-content: center;
     align-items: center;
+    /*width: 100%;*/
     margin: 0 50px;
 }
 
@@ -13,15 +31,17 @@
     margin-top: 150px;
 }
 
-/*--------- Aventuras  ---------*/
+/*------------------------------*/
+/*--------- AVENTURAS  ---------*/
+/*------------------------------*/
 
 .container-body {
     display: flex;
-    height: 100%;
     width: 100%;
     padding-bottom: 50px;
 }
 
+/*------ Filters Section -------*/
 .container-filters{
     flex: 1;
     display: flex;
@@ -54,12 +74,12 @@
     --bs-btn-focus-shadow-rgb: none;
 }
 
+/*------ Experiences -------*/
 .container-experiences{
     flex: 5;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    /*align-items: center;*/
     font-size: medium;
     padding: 0;
     margin: 0 10px;
@@ -74,7 +94,7 @@
     scale: 105%;
 }
 
-.card{
+.card-experience{
     margin: 10px;
     width: 15rem;
     height: 20rem;
