@@ -2,20 +2,21 @@ package ar.edu.itba.getaway.models;
 
 public class ExperienceModel {
     private final long experienceId;
-    private String experienceName, address, description, categoryName;
+    private String experienceName, address, description, siteUrl, categoryName;
     private double price;
     private long cityId, categoryId;
     private final long userId;
 
-    public ExperienceModel(long experienceId, String experienceName, String address, String description, double price, long cityId, long categoryId, long userId) {
+    public ExperienceModel(long experienceId, String experienceName, String address, String description, String siteUrl, double price, long cityId, long categoryId, long userId) {
         this.experienceId = experienceId;
         this.experienceName = experienceName;
         this.address = address;
         this.description = description;
+        this.siteUrl = siteUrl;
+        this.categoryName = ExperienceCategory.values()[(int) (categoryId - 1)].name();;
         this.price = price;
         this.cityId = cityId;
         this.categoryId = categoryId;
-        this.categoryName = ExperienceCategory.values()[(int) (categoryId - 1)].name();
         this.userId = userId;
     }
 
@@ -69,11 +70,20 @@ public class ExperienceModel {
         return userId;
     }
 
+
+    public String getSiteUrl() {
+        return siteUrl;
+    }
+
+    public void setSiteUrl(String siteUrl) {
+        this.siteUrl = siteUrl;
+    }
+
     public String getCategoryName() {
         return categoryName;
     }
+
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
-
 }
