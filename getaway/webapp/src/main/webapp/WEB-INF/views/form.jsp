@@ -97,7 +97,7 @@
                     </c:forEach>
                 </datalist>
               </div>
-            </>
+            </div>
             <div class="modal-footer">
               <button class="btn" onclick="history.back()">Cancelar</button>
               <button class="btn" type="submit">Guardar</button>
