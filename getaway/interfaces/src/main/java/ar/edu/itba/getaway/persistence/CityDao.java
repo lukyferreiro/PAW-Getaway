@@ -11,4 +11,5 @@ public interface CityDao {
     boolean delete(long cityId);
     Optional<CityModel> getById (long cityId);
     List<CityModel> listAll();
+    List<CityModel> getByCountryId (long countryId);
 }

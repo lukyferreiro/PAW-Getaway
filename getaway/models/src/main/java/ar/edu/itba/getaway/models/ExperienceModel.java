@@ -20,6 +20,11 @@ public class ExperienceModel {
         this.userId = userId;
     }
 
+    public ExperienceModel() {
+        this.experienceId = 0;
+        this.userId = 0;
+    }
+
     public long getId() {
         return experienceId;
     }

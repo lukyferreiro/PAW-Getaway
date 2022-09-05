@@ -22,7 +22,7 @@ public class CityDaoImpl implements CityDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     private static final RowMapper<CityModel> CITY_MODEL_ROW_MAPPER =
-            (rs, rowNum) -> new CityModel(rs.getLong("cityId"), rs.getLong("countryId"),rs.getString("cityName"));
+            (rs, rowNum) -> new CityModel(rs.getLong("cityId"), rs.getLong("countryId"),rs.getString("cityName"), rs.getString("countryName"));
 
     @Autowired
     public CityDaoImpl(final DataSource ds){
@@ -38,12 +38,11 @@ public class CityDaoImpl implements CityDao {
         args.put("countryId", cityModel.getCountryId());
         args.put("cityName", cityModel.getName());
         final long cityId = jdbcInsert.executeAndReturnKey(args).longValue();
-        return new CityModel(cityId, cityModel.getCountryId(), cityModel.getName());
+        return new CityModel(cityId, cityModel.getCountryId(), cityModel.getName(), cityModel.getCountryName());
     }
 
     @Override
     public boolean update(long cityId, CityModel cityModel) {
-        //TODO check
         return jdbcTemplate.update("UPDATE cities SET cityName = ?, countryId = ? WHERE countryId = ?",
                 cityModel.getName(), cityModel.getCountryId(), cityId) == 1;
     }
@@ -62,6 +61,12 @@ public class CityDaoImpl implements CityDao {
 
     @Override
     public List<CityModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM cities", CITY_MODEL_ROW_MAPPER));
+        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM cities ", CITY_MODEL_ROW_MAPPER));
+    }
+
+    @Override
+    public List<CityModel> getByCountryId(long countryId) {
+        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM cities WHERE countryid = ?",new Object[]{countryId}, CITY_MODEL_ROW_MAPPER));
+
     }
 }

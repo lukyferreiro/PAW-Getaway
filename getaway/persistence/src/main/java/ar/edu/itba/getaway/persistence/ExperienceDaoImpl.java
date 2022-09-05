@@ -23,7 +23,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     private final SimpleJdbcInsert jdbcInsert;
 
     private static final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER =
-            (rs, rowNum) -> new ExperienceModel(rs.getLong("experienceId"),
+            (rs, rowNum) -> new ExperienceModel(rs.getLong("experienceid"),
                     rs.getString("experienceName"),
                     rs.getString("address"),
                     rs.getString("description"),
@@ -38,22 +38,22 @@ public class ExperienceDaoImpl implements ExperienceDao {
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("experiences")
-                .usingGeneratedKeyColumns("experienceId");
+                .usingGeneratedKeyColumns("experienceid");
     }
 
     @Override
-    public ExperienceModel create(ExperienceModel experienceModel) {
+    public ExperienceModel create(String name, String address, String description, String url, long price, long cityId, long categoryId, long userId) {
         final Map<String, Object> args = new HashMap<>();
-        args.put("experienceName", experienceModel.getName());
-        args.put("address", experienceModel.getAddress());
-        args.put("description", experienceModel.getDescription());
-        args.put("siteUrl", experienceModel.getSiteUrl());
-        args.put("price", experienceModel.getPrice());
-        args.put("cityId", experienceModel.getCityId());
-        args.put("categoryId", experienceModel.getCategoryId());
-        args.put("userId",experienceModel.getUserId());
+        args.put("experienceName", name);
+        args.put("address", address);
+        args.put("description", description);
+        args.put("siteUrl", url);
+        args.put("price", price);
+        args.put("cityId", cityId);
+        args.put("categoryId", categoryId);
+        args.put("userId",userId);
         final long experienceId = jdbcInsert.executeAndReturnKey(args).longValue();
-        return new ExperienceModel(experienceId,experienceModel.getName(), experienceModel.getAddress(), experienceModel.getDescription(), experienceModel.getSiteUrl(), experienceModel.getPrice(), experienceModel.getCityId(), experienceModel.getCategoryId(), experienceModel.getUserId());
+        return new ExperienceModel(experienceId, name, address, description,url, price, cityId, categoryId, userId);
     }
 
     @Override

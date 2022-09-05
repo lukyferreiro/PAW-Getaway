@@ -10,6 +10,8 @@
   </head>
 
   <body>
+
+
     <div class="container-main">
       <%@ include file="../components/navbar.jsp" %>
 
@@ -17,7 +19,7 @@
         <h2 class="card-title">Crea tu experiencia</h2>
         <div>
           <c:url value="/create_experience" var="postPath"/>
-          <form:form modelAttribute="activityForm" action="${postPath}" method="post">
+          <form:form modelAttribute="experienceForm" action="${postPath}" method="post">
             <div class="modal-body">
               <div>
                 <form:errors path="activityName" element="p" cssStyle="color: red"/>
@@ -27,29 +29,42 @@
               <div>
                 <form:errors path="activityCategory" element="p" cssStyle="color: red"/>
                 <form:label path="activityCategory" class="form-label" >Categoria</form:label>
-                <form:input list="datalistOptions" class="form-control" path="activityCategory" placeholder="Escribe para buscar..."/>
+                <form:input list="categoryOptions" class="form-control" path="activityCategory" placeholder="Escribe para buscar..."/>
                 <datalist id="categoryOptions">
-                  <option value="Aventura">
-                  <option value="Gastronomia">
-                  <option value="Hoteleria">
-                  <option value="Relax">
-                  <option value="Vida nocturna">
-                  <option value="Historico">
+                  <c:forEach var="category" items="${categories}">
+                    <option value="${category}">
+                  </c:forEach>
                 </datalist>
               </div>
-              <div>
+<%--                <div>--%>
+<%--                  <form:errors path="activityCountry" element="p" cssStyle="color: red"/>--%>
+<%--                  <form:label path="activityCountry" class="form-label">Pais</form:label>--%>
+<%--                  <form:input list="countriesOptions" class="form-control" path="activityCountry" placeholder="Escribe para buscar..."/>--%>
+<%--                  <datalist id="countriesOptions">--%>
+<%--                    <c:forEach var="country" items="${countries}">--%>
+<%--                      <option value="${country.name}">--%>
+<%--                    </c:forEach>--%>
+<%--                  </datalist>--%>
+<%--                </div>--%>
+
                 <div>
-                  <form:errors path="activityName" element="p" cssStyle="color: red"/>
-                  <form:label path="activityName" class="form-label">Ciudad</form:label>
-                  <form:input type="text" class="form-control" path="activityCity"/>
+                  <form:errors path="activityCity" element="p" cssStyle="color: red"/>
+                  <form:label path="activityCity" class="form-label">Ciudad</form:label>
+                  <form:input list="citiesOptions" class="form-control" path="activityCity" placeholder="Escribe para buscar..."/>
+                  <datalist id="citiesOptions">
+                    <c:forEach var="city" items="${cities}">
+                      <option value="${city.name}">
+                    </c:forEach>
+                  </datalist>
                 </div>
+              <div>
                 <form:errors path="activityAddress" element="p" cssStyle="color: red"/>
                 <form:label path="activityAddress" class="form-label">Direccion</form:label>
                 <form:input type="text" class="form-control" path="activityAddress"/>
               </div>
               <div>
-                <form:errors path="activityName" element="p" cssStyle="color: red"/>
-                <form:label path="activityName" class="form-label">URL</form:label>
+                <form:errors path="activityUrl" element="p" cssStyle="color: red"/>
+                <form:label path="activityUrl" class="form-label">URL</form:label>
                 <form:input type="text" class="form-control" path="activityUrl"/>
               </div>
               <div>
@@ -63,6 +78,11 @@
                 <form:input type="file" class="form-control" path="activityImg"/>
               </div>
               <div>
+                <form:errors path="activityPrice" element="p" cssStyle="color: red"/>
+                <form:label path="activityPrice" class="form-label">Precio</form:label>
+                <form:input type="long" class="form-control" path="activityPrice"/>
+              </div>
+              <div>
                 <form:errors path="activityInfo" element="p" cssStyle="color: red"/>
                 <form:label path="activityInfo" class="form-label" >Descripcion</form:label>
                 <form:textarea path="activityInfo" class="form-control" rows="3"/>
@@ -70,18 +90,16 @@
               <div>
                 <form:errors path="activityTags" element="p" cssStyle="color: red"/>
                 <form:label path="activityTags" class="form-label">Tags</form:label>
-                <form:input list="datalistOptions" class="form-control" path="activityTags" placeholder="Escribe para buscar..."/>
-                <datalist id="datalistOptions">
-                  <option value="Paracaidismo">
-                  <option value="Hoteleria">
-                  <option value="Spa">
-                  <option value="Comida">
-                  <option value="Cerveza">
+                <form:input list="tagOptions" class="form-control" path="activityTags" placeholder="Escribe para buscar..."/>
+                <datalist id="tagOptions">
+                  <c:forEach var="tag" items="${tags}">
+                  <option value="${tag.name}">
+                    </c:forEach>
                 </datalist>
               </div>
-            </div>
+            </>
             <div class="modal-footer">
-              <button class="btn" type="button">Cancelar</button>
+              <button class="btn" onclick="history.back()">Cancelar</button>
               <button class="btn" type="submit">Guardar</button>
             </div>
           </form:form>

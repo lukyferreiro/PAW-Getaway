@@ -54,7 +54,7 @@ public class CountryDaoImpl implements CountryDao{
 
     @Override
     public Optional<CountryModel> getById(long countryId) {
-        return jdbcTemplate.query("SELECT * FROM countries WHERE id = ?",
+        return jdbcTemplate.query("SELECT * FROM countries WHERE countryId = ?",
                 new Object[]{countryId},COUNTRY_MODEL_ROW_MAPPER).stream().findFirst();
     }
 
