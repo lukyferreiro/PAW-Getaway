@@ -1,6 +1,46 @@
-.card.card-form-create-experience {
-    display: flex;
-    justify-content: center;
-    margin: 20px;
-    padding: 10px 20px;
+.form-label{
+    font-size: large;
+    font-weight: bold;
+    text-decoration: underline;
 }
+
+/*---------------------------*/
+.btn-submit-form{
+    font-size: large;
+    font-weight: bold;
+    color: white;
+    border-color: #F99D32;
+    background-color: #F99D32;
+}
+.btn-submit-form:hover{
+    color: white;
+    border-color: #F99D32;
+    background-color: #F99D32;
+    transform: scale(1.02);
+}
+.btn-submit-form:focus{
+    color: white;
+    border-color: #F99D32;
+    background-color: #F99D32;
+}
+/*---------------------------*/
+.btn-cancel-form{
+    font-size: large;
+    font-weight: bold;
+    color: white;
+    border-color: #F99D32;
+    background-color: #F99D32;
+}
+.btn-cancel-form:hover{
+    color: white;
+    border-color: #F99D32;
+    background-color: #F99D32;
+    transform: scale(1.02);
+}
+.btn-cancel-form:focus{
+    color: white;
+    border-color: #F99D32;
+    background-color: #F99D32;
+}
+
+

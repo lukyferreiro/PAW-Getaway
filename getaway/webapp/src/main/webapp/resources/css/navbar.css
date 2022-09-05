@@ -35,7 +35,7 @@
     color: white;
     border-color: #F99D32;
     background-color: #F99D32;
-    scale: 110%;
+    transform: scale(1.1);
 }
 .btn-header:focus{
     color: white;
@@ -64,7 +64,7 @@
     border-color: #F99D32;
     background-color: #ffc584;
     color: black;
-    scale: 105%;
+    transform: scale(1.05);
 }
 .btn-filter:focus{
     border-color: #F99D32;

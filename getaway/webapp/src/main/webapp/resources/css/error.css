@@ -11,7 +11,7 @@
     color: white;
     border-color: #F99D32;
     background-color: #F99D32;
-    scale: 105%;
+    transform: scale(1.05);
 }
 .btn-error:focus{
     color: white;
