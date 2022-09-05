@@ -14,34 +14,23 @@
 /*------------------------------*/
 
 .container-mainpage {
-    margin: 0 50px;
+    flex: 1;
 }
-
 .container-mainpage > div{
     font-size: xxx-large;
-    text-align: center;
-    font-weight: bold;
-    margin-top: 150px;
 }
 
 /*------------------------------*/
 /*----- Experiences Page  ------*/
 /*------------------------------*/
 
-.container-body {
-    padding-bottom: 50px;
-}
-
 /*------ Filters Section -------*/
 .container-filters{
     flex: 1;
     font-size: medium;
-    padding: 0 10px;
-    margin: 0 10px;
 }
 .container-filters > p{
     font-size: x-large;
-    font-weight: bold;
 }
 
 .btn-search{
@@ -65,10 +54,9 @@
 .container-experiences{
     flex: 5;
     font-size: medium;
-    margin: 0 10px;
 }
 
-.card-container:hover{
+.card-experience:hover{
     transform: scale(1.02);
 }
 
@@ -98,19 +86,6 @@
     text-align: center;
 }
 
-/*.card-experience{*/
-/*    margin: 10px;*/
-/*    width: 15rem;*/
-/*    height: 20rem;*/
-/*}*/
-
-/*.img-experience{*/
-/*    width: 150px;*/
-/*    display: flex;*/
-/*    align-self: center;*/
-/*    margin: 5px;*/
-/*}*/
-
 /*.rate{*/
 /*    display: flex;*/
 /*    justify-content: flex-start;*/
@@ -127,12 +102,3 @@
 /*------------------------------*/
 /*------- Activity Page  -------*/
 /*------------------------------*/
-
-.card.card-view{
-    padding: 1%;
-    margin: 1%;
-}
-
-.activity-info{
-    display: inline-block;
-}

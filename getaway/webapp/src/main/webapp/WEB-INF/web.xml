@@ -33,7 +33,7 @@
       <param-name>contextClass</param-name>
       <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
     </init-param>
-    <!-- TODO check if it's necessary -->
+    <!-- For NoHandlerFoundException -->
     <init-param>
       <param-name>throwExceptionIfNoHandlerFound</param-name>
       <param-value>true</param-value>

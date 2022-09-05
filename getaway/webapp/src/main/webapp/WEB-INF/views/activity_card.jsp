@@ -12,13 +12,13 @@
         <div class="container-main">
             <%@ include file="../components/navbar.jsp" %>
 
-            <div class="card card-view">
+            <div class="card m-1 p-1">
                 <h1 class="card-title">${activity.name}</h1>
                 <div>
-                    <div class="activity-info">
+                    <div class="d-inline-block">
                         <p>experience.ranking <img src="<c:url value = "/resources/images/ic_star.svg" />" alt="Icono estrella"></p>
                     </div>
-                    <div class="activity-info">
+                    <div class="d-inline-block">
         <%--                <a href="#">${activity.link}</a>--%>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                             <div class="card-body">
                                 <h5 class="card-title"> Direccion </h5>
                                 <p>${activity.address}</p>
-                                <h5 class="card-title"> Precio <p>$ ${activity.address}</p> </h5>
+                                <h5 class="card-title"> Precio <p>$ ${activity.price}</p> </h5>
                                 <h5 class="card-title"> Descripcion </h5>
                                 <p class="card-text">${activity.description}</p>
                                 <h5 class="card-title"> Tags </h5>

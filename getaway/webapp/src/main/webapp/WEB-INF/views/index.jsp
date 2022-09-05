@@ -13,8 +13,8 @@
         <div class="container-main">
             <%@ include file="../components/navbar.jsp" %>
 
-            <div class="container-mainpage d-flex justify-content-center align-items-center">
-                <div class="main-text">
+            <div class="container-mainpage container-fluid d-flex justify-content-center align-items-center">
+                <div class="main-text container-fluid text-center font-weight-bold">
                     Haz click en algunos de los filtros para buscar por dicho tipo de experiencia
                 </div>
             </div>

@@ -2,6 +2,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<div class="footer w-100 mt-auto d-flex justify-content-center align-items-center font-weight-bold">
+<div class="footer container-fluid p-0 mt-auto d-flex justify-content-center align-items-center font-weight-bold">
     Copyright 2022 - Getaway
 </div>

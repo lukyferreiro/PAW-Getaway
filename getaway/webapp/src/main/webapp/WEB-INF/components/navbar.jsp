@@ -2,11 +2,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<div class="navbar p-0 d-flex flex-column">
-    <div class="container-header w-100 d-flex">
+<div class="navbar container-fluid p-0 d-flex flex-column">
+    <div class="container-header container-fluid p-2 d-flex">
         <a href="<c:url value = "/" />" class="logo">
             <img class="logo-img" src="<c:url value = "/resources/images/getaway-icon.png"/>" alt="Logo">
-<%--            <img class="logo-img" src="./resources/GETAWAY.svg" alt="Logo">--%>
             GETAWAY
         </a>
         <div class="container-header-btn d-flex justify-content-between">
@@ -18,7 +17,7 @@
     </div>
 
 
-    <div class="container-types w-100 d-flex justify-content-center m-0">
+    <div class="container-types container-fluid d-flex justify-content-center m-0">
         <a href="<c:url value = "/adventures"/>">
             <button type="button" class="btn btn-filter">
                 <img src="<c:url value = "/resources/images/ic_adventure.svg" />" alt="Logo aventura"/>Aventura

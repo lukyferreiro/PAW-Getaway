@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.webapp.exceptions.ExperienceNotFoundException;
+import org.apache.taglibs.standard.lang.jstl.ELException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.rmi.ServerError;
+import java.rmi.ServerException;
 import java.util.Locale;
 
 @ControllerAdvice
@@ -40,8 +43,8 @@ public class ErrorsController {
      * https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/NoHandlerFoundException.html
      * https://stackoverflow.com/questions/13356549/handle-error-404-with-spring-controller/46704230
      * */
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = NoHandlerFoundException.class)
     public ModelAndView resourceNotFoundException() {
         Locale locale = LocaleContextHolder.getLocale();
         String error = messageSource.getMessage("errors.NotFound.Resource", null, locale);
@@ -52,8 +55,8 @@ public class ErrorsController {
         return mav;
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(TypeMismatchException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = TypeMismatchException.class)
     public ModelAndView badRequestException() {
         Locale locale = LocaleContextHolder.getLocale();
         String error = messageSource.getMessage("errors.BadRequest", null, locale);
@@ -65,8 +68,8 @@ public class ErrorsController {
     }
 
     /*Server error */
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(java.lang.Exception.class)
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = Exception.class)
     public ModelAndView serverException() {
         Locale locale = LocaleContextHolder.getLocale();
         String error = messageSource.getMessage("errors.ServerError", null, locale);

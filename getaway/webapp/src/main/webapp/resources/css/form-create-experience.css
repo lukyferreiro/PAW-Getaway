@@ -1,8 +1,6 @@
 .card.card-form-create-experience {
     display: flex;
     justify-content: center;
-    /*height: 100%;*/
-    /*width: 100%;*/
     margin: 20px;
-    padding: 10px 20px 10px 20px;
+    padding: 10px 20px;
 }
