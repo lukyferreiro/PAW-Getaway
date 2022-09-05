@@ -13,7 +13,7 @@
         <div class="w-100 h-100 d-flex justify-content-center align-items-center">
             <div class="d-flex flex-column justify-content-center align-items-center">
                 <h1 class="font-weight-bold m-0" style="font-size: 15vh;">
-                    <c:out value="${code}"/> :(
+                    <c:out value="${code}"/>
                 </h1>
                 <h1 class="font-weight-bold" style="font-size: 5vh; margin-top: -3%">
                     <spring:message code="serverError.description"/>

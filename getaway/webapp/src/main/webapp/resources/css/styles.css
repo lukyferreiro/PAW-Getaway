@@ -13,16 +13,11 @@
 /*--------- Main Page  ---------*/
 /*------------------------------*/
 
-.container-body-mainpage {
-    display: flex;
-    /*flex-direction: column;*/
-    justify-content: center;
-    align-items: center;
-    /*width: 100%;*/
+.container-mainpage {
     margin: 0 50px;
 }
 
-.container-body-mainpage > div{
+.container-mainpage > div{
     font-size: xxx-large;
     text-align: center;
     font-weight: bold;
@@ -34,18 +29,12 @@
 /*------------------------------*/
 
 .container-body {
-    display: flex;
-    width: 100%;
     padding-bottom: 50px;
 }
 
 /*------ Filters Section -------*/
 .container-filters{
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
     font-size: medium;
     padding: 0 10px;
     margin: 0 10px;
@@ -75,49 +64,34 @@
 /*------ Experiences -------*/
 .container-experiences{
     flex: 5;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     font-size: medium;
-    padding: 0;
     margin: 0 10px;
 }
 
-.card-container{
+.card-container:hover{
+    transform: scale(1.02);
+}
+
+.card-link{
     text-decoration: none;
     color: black;
 }
-.card-container:hover, .card-container:focus{
+.card-link:hover, .card-link:focus{
     color: black;
-    scale: 101%;
-}
-
-.card.activity-view{
-    margin-top: 2%;
-    width: 30rem;
 }
 
 .btn-bookmark{
     position: absolute;
-    top: 0;
-    right: 0;
-    margin: 1%;
+    top: 5px;
+    right: 5px;
+    padding: 3px;
+    background-color: transparent;
+    border-color: transparent;
 }
-
-/*.btn-bookmark{*/
-/*    position: absolute;*/
-/*    top: 5px;*/
-/*    right: 5px;*/
-/*    padding: 3px;*/
-/*    background-color: transparent;*/
-/*    border-color: transparent;*/
-/*    width: auto;*/
-/*    height: auto;*/
-/*}*/
-/*.btn-bookmark:hover{*/
-/*    background-color: #e5dad8;*/
-/*    border-color: transparent;*/
-/*}*/
+.btn-bookmark:hover{
+    background-color: white;
+    border-color: transparent;
+}
 
 .btn-circle.btn-xl {
     border-radius: 35px;

@@ -12,34 +12,34 @@
     <div class="container-main">
       <%@ include file="../components/navbar.jsp" %>
 
-      <div class="container-body">
-  <%--        <div class="container-filters border-end">--%>
-  <%--          <p> Filtros </p>--%>
-  <%--          <form class="d-flex" role="search">--%>
-  <%--            <input class="form-control me-2" type="search" placeholder="¿A donde?" aria-label="Search">--%>
-  <%--            <button class="btn btn-outline-success btn-search" type="submit">Search</button>--%>
-  <%--          </form>--%>
-  <%--        </div>--%>
+      <div class="container-body w-100 d-flex">
+<%--        <div class="container-filters d-flex flex-column justify-content-start align-items-center border-end">--%>
+<%--          <p> Filtros </p>--%>
+<%--          <form class="d-flex" role="search">--%>
+<%--            <input class="form-control me-2" type="search" placeholder="¿A donde?" aria-label="Search">--%>
+<%--            <button class="btn btn-outline-success btn-search" type="submit">Search</button>--%>
+<%--          </form>--%>
+<%--        </div>--%>
 
-        <div class="container-experiences">
+        <div class="container-experiences p-0 d-flex flex-wrap justify-content-center">
           <div class="row row-cols-1 row-cols-md-2 g-2">
             <c:forEach var="activity" items="${activities}">
-              <a href="<c:url value = "${activity.categoryName}/${activity.id}"/>" class="card-container">
-                <div class="card activity-view">
-                  <img class="card-img-top" src="<c:url value = "/resources/images/adventure_image.jpg" />" alt="Card image cap">
-  <%--                <div class="card-img-overlay btn-bookmark">--%>
-  <%--&lt;%&ndash;                <div class="card-img-overlay buttons save">&ndash;%&gt;--%>
-  <%--                  <button type="button" class="btn btn-circle btn-xl ">--%>
-  <%--                    <img src="<c:url value = "/resources/images/ic_bookmark_white.svg" />"  alt="Guardar"/>--%>
-  <%--                  </button>--%>
-  <%--                </div>--%>
+              <div class="card card-container w-30 m-2 p-0">
+                <a class="card-link" href="<c:url value="${activity.categoryName}/${activity.id}"/>">
+                  <img class="card-img-top" src="<c:url value="/resources/images/adventure_image.jpg"/>" alt="Imagen de la experiencia">
+                  <div class="w-auto h-auto">
+                    <button type="button" class="btn btn-bookmark">
+                      <img src="<c:url value="/resources/images/ic_bookmark_white.svg"/>" alt="Guardar"/>
+                    </button>
+                  </div>
                   <div class="card-body">
                     <h2 class="card-title">${activity.name}</h2>
-                    <p>${activity.address}</p>
-                    <p>$ ${activity.price} por persona</p>
+                    <p>${activity.description}</p>
+                    <h5>${activity.address}</h5>
+                    <h6>$ ${activity.price} por persona</h6>
                   </div>
-                </div>
-              </a>
+                </a>
+              </div>
             </c:forEach>
           </div>
         </div>

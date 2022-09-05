@@ -1,12 +1,4 @@
-.navbar{
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-}
-
 .container-header{
-    display: flex;
-    width: 100%;
     padding: 10px;
     background-color: rgba(255, 197, 132, 0.3);
 }
@@ -28,8 +20,6 @@
     cursor: pointer;
 }
 .container-header-btn{
-    display: flex;
-    justify-content: space-between;
     margin: 15px 30px 15px auto;
 
 }
@@ -55,10 +45,6 @@
 }
 
 .container-types {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    margin: 0;
 }
 .btn-filter{
     color: black;
