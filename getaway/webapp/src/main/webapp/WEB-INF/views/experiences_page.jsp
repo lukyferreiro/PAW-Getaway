@@ -4,7 +4,7 @@
 
 <html>
   <head>
-    <title>Getaway - Experiencias</title>
+    <title><spring:message code="pageName"/> - <spring:message code="experiencies.title"/></title>
     <%@ include file="../components/includes/headers.jsp" %>
   </head>
 
@@ -25,23 +25,22 @@
           <div class="row row-cols-1 row-cols-md-2 g-2">
             <c:forEach var="activity" items="${activities}">
               <a href="<c:url value = "${activity.categoryName}/${activity.id}"/>" class="card-container">
-              <div class="card activity-view">
-                <img class="card-img-top" src="<c:url value = "/resources/images/adventure_image.jpg" />" alt="Card image cap">
-                <div class="card-img-overlay btn-bookmark">
-<%--                <div class="card-img-overlay buttons save">--%>
-                  <button type="button" class="btn btn-circle btn-xl ">
-                    <img src="<c:url value = "/resources/images/ic_bookmark_white.svg" />"  alt="Guardar"/>
-                  </button>
+                <div class="card activity-view">
+                  <img class="card-img-top" src="<c:url value = "/resources/images/adventure_image.jpg" />" alt="Card image cap">
+  <%--                <div class="card-img-overlay btn-bookmark">--%>
+  <%--&lt;%&ndash;                <div class="card-img-overlay buttons save">&ndash;%&gt;--%>
+  <%--                  <button type="button" class="btn btn-circle btn-xl ">--%>
+  <%--                    <img src="<c:url value = "/resources/images/ic_bookmark_white.svg" />"  alt="Guardar"/>--%>
+  <%--                  </button>--%>
+  <%--                </div>--%>
+                  <div class="card-body">
+                    <h2 class="card-title">${activity.name}</h2>
+                    <p>${activity.address}</p>
+                    <p>$ ${activity.price} por persona</p>
+                  </div>
                 </div>
-                <div class="card-body">
-                  <h2 class="card-title">${activity.name}</h2>
-                  <p>${activity.address}</p>
-                  <p> $ ${activity.price}</p>
-                </div>
-              </div>
               </a>
             </c:forEach>
-
           </div>
         </div>
       </div>

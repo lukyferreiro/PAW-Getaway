@@ -4,6 +4,7 @@ import ar.edu.itba.getaway.models.ExperienceCategory;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.services.CategoryService;
 import ar.edu.itba.getaway.services.ExperienceService;
+import ar.edu.itba.getaway.webapp.exceptions.ExperienceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +37,8 @@ public class ExperiencesController {
     public ModelAndView adventuresView(@PathVariable("adventureId") final long adventureId){
         final ModelAndView mav = new ModelAndView("activity_card");
 
-        ExperienceModel experience = exp.getById(adventureId).get();
+//        final ExperienceModel experience = exp.getById(adventureId).get();
+        final ExperienceModel experience = exp.getById(adventureId).orElseThrow(ExperienceNotFoundException::new);
 
         mav.addObject("activity", experience);
         return mav;
@@ -58,7 +60,8 @@ public class ExperiencesController {
     public ModelAndView gastronomyView(@PathVariable("gastronomyId") final long gastronomyId){
         final ModelAndView mav = new ModelAndView("activity_card");
 
-        ExperienceModel experience = exp.getById(gastronomyId).get();
+//        ExperienceModel experience = exp.getById(gastronomyId).get();
+        final ExperienceModel experience = exp.getById(gastronomyId).orElseThrow(ExperienceNotFoundException::new);
 
         mav.addObject("activity", experience);
         return mav;
@@ -80,7 +83,8 @@ public class ExperiencesController {
     public ModelAndView hotelsView(@PathVariable("hotelsId") final long hotelsId){
         final ModelAndView mav = new ModelAndView("activity_card");
 
-        ExperienceModel experience = exp.getById(hotelsId).get();
+//        ExperienceModel experience = exp.getById(hotelsId).get();
+        final ExperienceModel experience = exp.getById(hotelsId).orElseThrow(ExperienceNotFoundException::new);
 
         mav.addObject("activity", experience);
         return mav;
@@ -102,7 +106,8 @@ public class ExperiencesController {
     public ModelAndView relaxView(@PathVariable("relaxId") final long relaxId){
         final ModelAndView mav = new ModelAndView("activity_card");
 
-        ExperienceModel experience = exp.getById(relaxId).get();
+//        ExperienceModel experience = exp.getById(relaxId).get();
+        final ExperienceModel experience = exp.getById(relaxId).orElseThrow(ExperienceNotFoundException::new);
 
         mav.addObject("activity", experience);
         return mav;
@@ -124,7 +129,8 @@ public class ExperiencesController {
     public ModelAndView nightView(@PathVariable("nightId") final long nightId){
         final ModelAndView mav = new ModelAndView("activity_card");
 
-        ExperienceModel experience = exp.getById(nightId).get();
+//        ExperienceModel experience = exp.getById(nightId).get();
+        final ExperienceModel experience = exp.getById(nightId).orElseThrow(ExperienceNotFoundException::new);
 
         mav.addObject("activity", experience);
         return mav;

@@ -24,12 +24,6 @@ public class InitPageController {
         return mav;
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ModelAndView userNotFound(){
-        return new ModelAndView("404");
-    }
-
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("activityForm") final ActivityForm form){
         return new ModelAndView("form");

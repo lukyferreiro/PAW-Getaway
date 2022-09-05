@@ -5,7 +5,7 @@
 
 <html>
     <head>
-        <title>Getaway</title>
+        <title><spring:message code="pageName"/></title>
         <%@ include file="../components/includes/headers.jsp" %>
     </head>
 

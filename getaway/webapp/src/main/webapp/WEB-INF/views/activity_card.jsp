@@ -4,7 +4,7 @@
 
 <html>
     <head>
-        <title>Activity</title>
+        <title><spring:message code="pageName"/> - <spring:message code="experienceDetails.title"/></title>
         <%@ include file="../components/includes/headers.jsp" %>
     </head>
 
@@ -22,11 +22,11 @@
         <%--                <a href="#">${activity.link}</a>--%>
                     </div>
                 </div>
-                <div class="btn-bookmark">
-                    <button type="button" class="btn btn-circle btn-xl">
-                        <img src="<c:url value = "/resources/images/ic_bookmark_white.svg" />" alt="Guardar"/>
-                    </button>
-                </div>
+<%--                <div class="btn-bookmark">--%>
+<%--                    <button type="button" class="btn btn-circle btn-xl">--%>
+<%--                        <img src="<c:url value = "/resources/images/ic_bookmark_white.svg" />" alt="Guardar"/>--%>
+<%--                    </button>--%>
+<%--                </div>--%>
                 <div class="row">
                     <div class="col-auto">
                         <div class="card-body">
