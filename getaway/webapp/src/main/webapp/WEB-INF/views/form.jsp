@@ -79,13 +79,11 @@
               <div>
                 <form:errors path="activityTags" element="p" cssStyle="color: red"/>
                 <form:label path="activityTags" class="form-label">Tags</form:label>
-                <form:input list="datalistOptions" class="form-control" path="activityTags" placeholder="Escribe para buscar..."/>
-                <datalist id="datalistOptions">
-                  <option value="Paracaidismo">
-                  <option value="Hoteleria">
-                  <option value="Spa">
-                  <option value="Comida">
-                  <option value="Cerveza">
+                <form:input list="tagOptions" class="form-control" path="activityTags" placeholder="Escribe para buscar..."/>
+                <datalist id="tagOptions">
+                  <c:forEach var="tag" items="${tags}">
+                  <option value="${tag.name}">
+                    </c:forEach>
                 </datalist>
               </div>
             </div>

@@ -1,12 +1,10 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.getaway.models.CategoryModel;
-import ar.edu.itba.getaway.models.CityModel;
-import ar.edu.itba.getaway.models.ExperienceCategory;
-import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.CategoryService;
 import ar.edu.itba.getaway.services.CityService;
 import ar.edu.itba.getaway.services.ExperienceService;
+import ar.edu.itba.getaway.services.TagService;
 import ar.edu.itba.getaway.webapp.forms.ActivityForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +26,8 @@ public class FormController {
     CityService cityService;
     @Autowired
     CategoryService categoryService;
+    @Autowired
+    TagService tagService;
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ActivityForm form){
@@ -37,12 +37,12 @@ public class FormController {
         for (int i = 0 ; i < categoryModels.length ; i++){
             categories.add(categoryModels[i].getName());
         }
-
         List<CityModel> cityModels = cityService.listAll();
+        List<TagModel> tagModels = tagService.listAll();
 
         mav.addObject("categories", categories);
         mav.addObject("cities", cityModels);
-
+        mav.addObject("tags", tagModels);
         return mav;
     }
 
