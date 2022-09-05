@@ -88,7 +88,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" type="button">Cancelar</button>
+              <button class="btn" onclick="history.back()">Cancelar</button>
               <button class="btn" type="submit">Guardar</button>
             </div>
           </form:form>
