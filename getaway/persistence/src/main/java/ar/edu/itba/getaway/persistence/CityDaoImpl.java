@@ -22,7 +22,7 @@ public class CityDaoImpl implements CityDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     private static final RowMapper<CityModel> CITY_MODEL_ROW_MAPPER =
-            (rs, rowNum) -> new CityModel(rs.getLong("cityId"), rs.getLong("countryId"),rs.getString("cityName"), rs.getString("countryName"));
+            (rs, rowNum) -> new CityModel(rs.getLong("cityId"), rs.getLong("countryId"),rs.getString("cityName"));
 
     @Autowired
     public CityDaoImpl(final DataSource ds){
@@ -38,7 +38,7 @@ public class CityDaoImpl implements CityDao {
         args.put("countryId", cityModel.getCountryId());
         args.put("cityName", cityModel.getName());
         final long cityId = jdbcInsert.executeAndReturnKey(args).longValue();
-        return new CityModel(cityId, cityModel.getCountryId(), cityModel.getName(), cityModel.getCountryName());
+        return new CityModel(cityId, cityModel.getCountryId(), cityModel.getName());
     }
 
     @Override

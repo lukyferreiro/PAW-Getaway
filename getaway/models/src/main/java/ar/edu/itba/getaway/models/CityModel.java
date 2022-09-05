@@ -3,13 +3,12 @@ package ar.edu.itba.getaway.models;
 public class CityModel {
     private final long cityId;
     private final long countryId;
-    private final String cityName, countryName;
+    private final String cityName;
 
-    public CityModel(long cityId, long countryId, String cityName, String countryName) {
+    public CityModel(long cityId, long countryId, String cityName) {
         this.cityId = cityId;
         this.countryId = countryId;
         this.cityName = cityName;
-        this.countryName = countryName;
     }
 
     public long getId() {
@@ -24,7 +23,4 @@ public class CityModel {
         return cityName;
     }
 
-    public String getCountryName() {
-        return countryName;
-    }
 }
