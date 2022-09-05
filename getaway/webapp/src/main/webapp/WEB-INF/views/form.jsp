@@ -43,7 +43,7 @@
                   <form:input list="citiesOptions" class="form-control" path="activityCity" placeholder="Escribe para buscar..."/>
                   <datalist id="citiesOptions">
                     <c:forEach var="city" items="${cities}">
-                      <option value="${city.name}">
+                      <option value="${city.name}, ${city.countryName}">
                     </c:forEach>
                   </datalist>
                 </div>

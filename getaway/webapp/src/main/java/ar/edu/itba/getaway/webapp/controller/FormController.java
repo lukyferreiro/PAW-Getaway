@@ -1,10 +1,7 @@
 package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.getaway.services.CategoryService;
-import ar.edu.itba.getaway.services.CityService;
-import ar.edu.itba.getaway.services.ExperienceService;
-import ar.edu.itba.getaway.services.TagService;
+import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
