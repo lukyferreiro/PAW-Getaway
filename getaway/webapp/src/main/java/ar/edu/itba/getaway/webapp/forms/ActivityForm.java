@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.forms;
 
+import ar.edu.itba.getaway.models.ExperienceCategory;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -13,6 +14,7 @@ public class ActivityForm {
     private String activityCity;
     private String activityAddress;
 
+    private long activityPrice;
     private String activityUrl;
     @NotEmpty
     @Email
@@ -36,6 +38,17 @@ public class ActivityForm {
         return activityCategory;
     }
 
+    public long getActivityCategoryId() {
+
+        for (int i = 0; i< ExperienceCategory.values().length ; i++){
+            if(ExperienceCategory.values()[i].getName() == activityCategory){
+                return i + 1;
+            }
+        }
+
+        return -1;
+    }
+
     public String getActivityImg() {
         return activityImg;
     }
@@ -54,6 +67,10 @@ public class ActivityForm {
 
     public List<String> getActivityTags() {
         return activityTags;
+    }
+
+    public long getActivityPrice() {
+        return activityPrice;
     }
 
     public void setActivityAddress(String activityAddress) {
@@ -90,5 +107,9 @@ public class ActivityForm {
 
     public void setActivityUrl(String activityUrl) {
         this.activityUrl = activityUrl;
+    }
+
+    public void setActivityPrice(long activityPrice) {
+        this.activityPrice = activityPrice;
     }
 }

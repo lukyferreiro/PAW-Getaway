@@ -30,21 +30,6 @@ public class InitPageController {
         return new ModelAndView("404");
     }
 
-    @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
-    public ModelAndView createActivityForm(@ModelAttribute("activityForm") final ActivityForm form){
-        return new ModelAndView("form");
-    }
 
-    @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
-    public ModelAndView createActivity(@Valid @ModelAttribute("activityForm") final ActivityForm form, final BindingResult errors){
-        if(errors.hasErrors()){
-            return createActivityForm(form);
-        }
-//        ni idea como pasarle el id
-//        final Activity act = exp.create(form.getActivityName(),form.getActivityAddress(), form.getActivityInfo(), form.getActivityCategory(), form.getActivityMail(), form.getActivityImg(), form.getActivityTags());
-
-//        return new ModelAndView("redirect:/" + act.getCategory() + "/" + act.getId());
-            return new ModelAndView("experiences_page");
-    }
 
 }
