@@ -38,7 +38,7 @@
                             <div class="card-body">
                                 <h5 class="card-title"> Direccion </h5>
                                 <p>${activity.address}</p>
-                                <h5 class="card-title"> Precio <p>$ ${activity.address}</p> </h5>
+                                <h5 class="card-title"> Precio <p>$ ${activity.price}</p> </h5>
                                 <h5 class="card-title"> Descripcion </h5>
                                 <p class="card-text">${activity.description}</p>
                                 <h5 class="card-title"> Tags </h5>

@@ -22,6 +22,8 @@ public class FormController {
     @Autowired
     CityService cityService;
     @Autowired
+    CountryService countryService;
+    @Autowired
     CategoryService categoryService;
     @Autowired
     TagService tagService;
@@ -34,11 +36,13 @@ public class FormController {
         for (int i = 0 ; i < categoryModels.length ; i++){
             categories.add(categoryModels[i].getName());
         }
+//        List<CountryModel> countryModels = countryService.listAll();
         List<CityModel> cityModels = cityService.listAll();
         List<TagModel> tagModels = tagService.listAll();
 
         mav.addObject("categories", categories);
         mav.addObject("cities", cityModels);
+//        mav.addObject("countries", countryModels);
         mav.addObject("tags", tagModels);
         return mav;
     }
@@ -51,7 +55,7 @@ public class FormController {
         }
 
         long categoryId = form.getActivityCategoryId();
-        if(categoryId <= 0){
+        if(categoryId < 0){
             throw new Exception();
         }
 
@@ -67,7 +71,7 @@ public class FormController {
         }
 
         int userId = 1 ; //USUARIO FORZADO
-        final ExperienceModel experienceModel = exp.create(form.getActivityName(),form.getActivityAddress(), form.getActivityInfo(), form.getActivityUrl(), form.getActivityPrice(), cityId , categoryId, userId);
+        final ExperienceModel experienceModel = exp.create(form.getActivityName(),form.getActivityAddress(), form.getActivityInfo(), form.getActivityUrl(), form.getActivityPrice(), cityId + 1 , categoryId + 1, userId);
 
         return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
     }

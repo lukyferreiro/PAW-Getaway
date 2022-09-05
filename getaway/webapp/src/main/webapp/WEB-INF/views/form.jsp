@@ -36,14 +36,25 @@
                   </c:forEach>
                 </datalist>
               </div>
-              <div>
+<%--              <div>--%>
+<%--                <div>--%>
+<%--                  <form:errors path="activityCountry" element="p" cssStyle="color: red"/>--%>
+<%--                  <form:label path="activityCountry" class="form-label">Ciudad</form:label>--%>
+<%--                  <form:input list="countriesOptions" class="form-control" path="activityCountry" placeholder="Escribe para buscar..."/>--%>
+<%--                  <datalist id="countriesOptions">--%>
+<%--                    <c:forEach var="country" items="${countries}">--%>
+<%--                    <option value="${country.name}">--%>
+<%--                      </c:forEach>--%>
+<%--                  </datalist>--%>
+<%--                </div>--%>
+<%--              <div>--%>
                 <div>
                   <form:errors path="activityCity" element="p" cssStyle="color: red"/>
                   <form:label path="activityCity" class="form-label">Ciudad</form:label>
                   <form:input list="citiesOptions" class="form-control" path="activityCity" placeholder="Escribe para buscar..."/>
                   <datalist id="citiesOptions">
                     <c:forEach var="city" items="${cities}">
-                      <option value="${city.name}, ${city.countryName}">
+                      <option value="${city.name}">
                     </c:forEach>
                   </datalist>
                 </div>

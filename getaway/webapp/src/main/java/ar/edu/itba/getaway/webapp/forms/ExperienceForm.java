@@ -11,6 +11,7 @@ public class ExperienceForm {
     private String activityName;
     private String activityCategory;
 
+    private String activityCountry;
     private String activityCity;
     private String activityAddress;
 
@@ -30,6 +31,11 @@ public class ExperienceForm {
     public String getActivityCity() {
         return activityCity;
     }
+
+    public String getActivityCountry() {
+        return activityCountry;
+    }
+
     public String getActivityUrl() {
         return activityUrl;
     }
@@ -40,9 +46,9 @@ public class ExperienceForm {
 
     public long getActivityCategoryId() {
 
-        for (int i = 0; i< ExperienceCategory.values().length ; i++){
-            if(ExperienceCategory.values()[i].getName() == activityCategory){
-                return i + 1;
+        for (int i = 0; i < ExperienceCategory.values().length ; i++){
+            if(ExperienceCategory.values()[i].getName().equals(activityCategory)){
+                return i ;
             }
         }
 
