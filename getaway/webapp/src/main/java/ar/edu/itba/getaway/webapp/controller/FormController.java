@@ -5,7 +5,7 @@ import ar.edu.itba.getaway.services.CategoryService;
 import ar.edu.itba.getaway.services.CityService;
 import ar.edu.itba.getaway.services.ExperienceService;
 import ar.edu.itba.getaway.services.TagService;
-import ar.edu.itba.getaway.webapp.forms.ActivityForm;
+import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -30,7 +30,7 @@ public class FormController {
     TagService tagService;
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
-    public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ActivityForm form){
+    public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form){
         ModelAndView mav = new ModelAndView("form");
         ExperienceCategory[] categoryModels = ExperienceCategory.values();
         List<String> categories = new ArrayList<>();
@@ -47,29 +47,31 @@ public class FormController {
     }
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
-    public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ActivityForm form, final BindingResult errors) throws Exception {
-        ModelAndView mav = new ModelAndView("experiences_page");
+    public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form, final BindingResult errors) throws Exception {
 
         if(errors.hasErrors()){
             return createActivityForm(form);
         }
-//        final ExperienceModel experienceModel = new ExperienceModel();
-//        experienceModel.setName(form.getActivityName());
-//        experienceModel.setAddress(form.getActivityAddress());
-//        long i = form.getActivityCategory();
-//        if(i <= 0){
-//            throw new Exception();
-//        }
-//        experienceModel.setCategoryId(form.getActivityCategoryId());
-//        experienceModel.setDescription(form.getActivityInfo());
-//        experienceModel.setPrice(form.getActivityPrice());
-//        //GET PARA VER Q ID TIENE LA CITY
-//        experienceModel.setCityId(form.getActivityCity());
-//        experienceModel.setSiteUrl(form.getActivityUrl());
-        //        ni idea como pasarle el id
-//        final Activity act = exp.create(form.getActivityName(),form.getActivityAddress(), form.getActivityInfo(), form.getActivityCategory(), form.getActivityMail(), form.getActivityImg(), form.getActivityTags());
 
-//        return new ModelAndView("redirect:/" + act.getCategory() + "/" + act.getId());
-        return mav;
+        long categoryId = form.getActivityCategoryId();
+        if(categoryId <= 0){
+            throw new Exception();
+        }
+
+        List<CityModel> cityModels = cityService.listAll();
+
+        int cityId = 0;
+        boolean flag = true;
+        for (int j = 0; j<cityModels.size() && flag ; j++){
+            if(cityModels.get(j).getName().equals(form.getActivityCity())){
+                cityId = j;
+                flag=false;
+            }
+        }
+
+        int userId = 1 ; //USUARIO FORZADO
+        final ExperienceModel experienceModel = exp.create(form.getActivityName(),form.getActivityAddress(), form.getActivityInfo(), form.getActivityUrl(), form.getActivityPrice(), cityId , categoryId, userId);
+
+        return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
     }
 }

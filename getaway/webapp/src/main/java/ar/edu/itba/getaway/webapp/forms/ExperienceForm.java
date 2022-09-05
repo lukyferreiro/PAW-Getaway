@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.List;
 
-public class ActivityForm {
+public class ExperienceForm {
 
     private String activityName;
     private String activityCategory;
