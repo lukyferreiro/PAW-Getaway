@@ -16,19 +16,21 @@
       <%@ include file="../components/navbar.jsp" %>
 
       <div class="card card-form-create-experience">
-        <h2 class="card-title">Crea tu experiencia</h2>
+        <h2 class="card-title">
+          <spring:message code="createExperience.description"/>
+        </h2>
         <div>
           <c:url value="/create_experience" var="postPath"/>
           <form:form modelAttribute="experienceForm" action="${postPath}" method="post">
             <div class="modal-body">
-              <div>
+              <div> <!--Nombre-->
                 <form:errors path="activityName" element="p" cssStyle="color: red"/>
-                <form:label path="activityName" class="form-label">Nombre</form:label>
+                <form:label path="activityName" class="form-label"><spring:message code="experienceForm.activityName"/></form:label>
                 <form:input type="text" class="form-control" path="activityName"/>
               </div>
-              <div>
+              <div> <!--Categoria-->
                 <form:errors path="activityCategory" element="p" cssStyle="color: red"/>
-                <form:label path="activityCategory" class="form-label" >Categoria</form:label>
+                <form:label path="activityCategory" class="form-label"><spring:message code="experienceForm.activityCategory"/></form:label>
                 <form:input list="categoryOptions" class="form-control" path="activityCategory" placeholder="Escribe para buscar..."/>
                 <datalist id="categoryOptions">
                   <c:forEach var="category" items="${categories}">
@@ -36,9 +38,9 @@
                   </c:forEach>
                 </datalist>
               </div>
-<%--                <div>--%>
+<%--                <div>--%> <!--Pais-->
 <%--                  <form:errors path="activityCountry" element="p" cssStyle="color: red"/>--%>
-<%--                  <form:label path="activityCountry" class="form-label">Pais</form:label>--%>
+<%--                  <form:label path="activityCountry" class="form-label"><spring:message code="experienceForm.activityCountry"/></form:label>--%>
 <%--                  <form:input list="countriesOptions" class="form-control" path="activityCountry" placeholder="Escribe para buscar..."/>--%>
 <%--                  <datalist id="countriesOptions">--%>
 <%--                    <c:forEach var="country" items="${countries}">--%>
@@ -47,9 +49,9 @@
 <%--                  </datalist>--%>
 <%--                </div>--%>
 
-                <div>
+                <div> <!--Ciudad-->
                   <form:errors path="activityCity" element="p" cssStyle="color: red"/>
-                  <form:label path="activityCity" class="form-label">Ciudad</form:label>
+                  <form:label path="activityCity" class="form-label"><spring:message code="experienceForm.activityCity"/></form:label>
                   <form:input list="citiesOptions" class="form-control" path="activityCity" placeholder="Escribe para buscar..."/>
                   <datalist id="citiesOptions">
                     <c:forEach var="city" items="${cities}">
@@ -57,39 +59,39 @@
                     </c:forEach>
                   </datalist>
                 </div>
-              <div>
+              <div> <!--Direccion-->
                 <form:errors path="activityAddress" element="p" cssStyle="color: red"/>
-                <form:label path="activityAddress" class="form-label">Direccion</form:label>
+                <form:label path="activityAddress" class="form-label"><spring:message code="experienceForm.activityAddress"/></form:label>
                 <form:input type="text" class="form-control" path="activityAddress"/>
               </div>
-              <div>
+              <div> <!--Url-->
                 <form:errors path="activityUrl" element="p" cssStyle="color: red"/>
-                <form:label path="activityUrl" class="form-label">URL</form:label>
+                <form:label path="activityUrl" class="form-label"><spring:message code="experienceForm.activityUrl"/></form:label>
                 <form:input type="text" class="form-control" path="activityUrl"/>
               </div>
-              <div>
+              <div> <!--Email-->
                 <form:errors path="activityMail" element="p" cssStyle="color: red"/>
-                <form:label path="activityMail" class="form-label">Email</form:label>
+                <form:label path="activityMail" class="form-label"><spring:message code="experienceForm.activityMail"/></form:label>
                 <form:input type="email" class="form-control" path="activityMail" placeholder="name@example.com"/>
               </div>
-              <div>
+              <div> <!--Imagenes-->
                 <form:errors path="activityImg" element="p" cssStyle="color: red"/>
-                <form:label path="activityImg" class="form-label">Agregar imagen</form:label>
+                <form:label path="activityImg" class="form-label"><spring:message code="experienceForm.activityImg"/></form:label>
                 <form:input type="file" class="form-control" path="activityImg"/>
               </div>
-              <div>
+              <div> <!--Precio-->
                 <form:errors path="activityPrice" element="p" cssStyle="color: red"/>
-                <form:label path="activityPrice" class="form-label">Precio</form:label>
+                <form:label path="activityPrice" class="form-label"><spring:message code="experienceForm.activityPrice"/></form:label>
                 <form:input type="long" class="form-control" path="activityPrice"/>
               </div>
-              <div>
+              <div> <!--Descripcion-->
                 <form:errors path="activityInfo" element="p" cssStyle="color: red"/>
-                <form:label path="activityInfo" class="form-label" >Descripcion</form:label>
+                <form:label path="activityInfo" class="form-label"><spring:message code="experienceForm.activityInfo"/></form:label>
                 <form:textarea path="activityInfo" class="form-control" rows="3"/>
               </div>
-              <div>
+              <div> <!--Tags-->
                 <form:errors path="activityTags" element="p" cssStyle="color: red"/>
-                <form:label path="activityTags" class="form-label">Tags</form:label>
+                <form:label path="activityTags" class="form-label"><spring:message code="experienceForm.activityTags"/></form:label>
                 <form:input list="tagOptions" class="form-control" path="activityTags" placeholder="Escribe para buscar..."/>
                 <datalist id="tagOptions">
                   <c:forEach var="tag" items="${tags}">
@@ -99,8 +101,12 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" onclick="history.back()">Cancelar</button>
-              <button class="btn" type="submit">Guardar</button>
+              <button class="btn" onclick="history.back()">
+                <spring:message code="experienceForm.cancel"/>
+              </button>
+              <button class="btn" type="submit">
+                <spring:message code="experienceForm.submit"/>
+              </button>
             </div>
           </form:form>
         </div>

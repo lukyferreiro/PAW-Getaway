@@ -13,9 +13,9 @@
         <div class="container-main">
             <%@ include file="../components/navbar.jsp" %>
 
-            <div class="container-mainpage container-fluid d-flex justify-content-center align-items-center">
-                <div class="main-text container-fluid text-center font-weight-bold">
-                    Haz click en algunos de los filtros para buscar por dicho tipo de experiencia
+            <div class="container-mainpage container-fluid p-0 d-flex justify-content-center align-items-center">
+                <div class="main-text container-fluid p-0 text-center font-weight-bold">
+                    <spring:message code="mainPage.description"/>
                 </div>
             </div>
 

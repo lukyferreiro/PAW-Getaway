@@ -3,5 +3,5 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <div class="footer container-fluid p-0 mt-auto d-flex justify-content-center align-items-center font-weight-bold">
-    Copyright 2022 - Getaway
+    <spring:message code="copyright"/>
 </div>

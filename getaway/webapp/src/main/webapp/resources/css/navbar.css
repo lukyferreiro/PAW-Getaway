@@ -1,11 +1,10 @@
 .container-header{
-    /*padding: 10px;*/
     background-color: rgba(255, 197, 132, 0.3);
 }
 .logo{
     color: #F99D32;
+    font-family: 'Yeseva One', sans-serif;
     font-size: xxx-large;
-    font-weight: bold;
     text-decoration: none;
     justify-content: center;
     background: linear-gradient(to left, #F87037, #F5C404);
