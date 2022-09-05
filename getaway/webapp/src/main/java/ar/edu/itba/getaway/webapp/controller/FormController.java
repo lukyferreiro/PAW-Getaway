@@ -36,16 +36,26 @@ public class FormController {
         for (int i = 0 ; i < categoryModels.length ; i++){
             categories.add(categoryModels[i].getName());
         }
-//        List<CountryModel> countryModels = countryService.listAll();
-        List<CityModel> cityModels = cityService.listAll();
+        List<CountryModel> countryModels = countryService.listAll();
         List<TagModel> tagModels = tagService.listAll();
+        List<CityModel> cityModels = cityService.listAll();
+
+//        List<CityModel> cityModels = new ArrayList<>();
+//        boolean flag = true;
+//        for (int j = 0; j<countryModels.size() && flag ; j++){
+//            if(countryModels.get(j).getName().equals(form.getActivityCountry())){
+//                cityModels = cityService.getByCountryId(j + 1);
+//                flag=false;
+//            }
+//        }
 
         mav.addObject("categories", categories);
         mav.addObject("cities", cityModels);
-//        mav.addObject("countries", countryModels);
+        mav.addObject("countries", countryModels);
         mav.addObject("tags", tagModels);
         return mav;
     }
+
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
     public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form, final BindingResult errors) throws Exception {

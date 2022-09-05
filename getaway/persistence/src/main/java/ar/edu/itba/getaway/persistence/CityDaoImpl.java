@@ -55,12 +55,18 @@ public class CityDaoImpl implements CityDao {
 
     @Override
     public Optional<CityModel> getById(long cityId) {
-        return jdbcTemplate.query("SELECT * FROM cities NATURAL JOIN countries WHERE cityId = ?",
+        return jdbcTemplate.query("SELECT * FROM cities WHERE cityId = ?",
                 new Object[]{cityId},CITY_MODEL_ROW_MAPPER).stream().findFirst();
     }
 
     @Override
     public List<CityModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM cities NATURAL JOIN countries", CITY_MODEL_ROW_MAPPER));
+        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM cities ", CITY_MODEL_ROW_MAPPER));
+    }
+
+    @Override
+    public List<CityModel> getByCountryId(long countryId) {
+        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM cities WHERE countryid = ?",new Object[]{countryId}, CITY_MODEL_ROW_MAPPER));
+
     }
 }

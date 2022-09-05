@@ -11,4 +11,5 @@ public interface CityService {
     boolean delete (long cityId);
     List<CityModel> listAll();
     Optional<CityModel> getById (long cityId);
+    List<CityModel> getByCountryId (long countryId);
 }

@@ -36,18 +36,17 @@
                   </c:forEach>
                 </datalist>
               </div>
-<%--              <div>--%>
 <%--                <div>--%>
 <%--                  <form:errors path="activityCountry" element="p" cssStyle="color: red"/>--%>
-<%--                  <form:label path="activityCountry" class="form-label">Ciudad</form:label>--%>
+<%--                  <form:label path="activityCountry" class="form-label">Pais</form:label>--%>
 <%--                  <form:input list="countriesOptions" class="form-control" path="activityCountry" placeholder="Escribe para buscar..."/>--%>
 <%--                  <datalist id="countriesOptions">--%>
 <%--                    <c:forEach var="country" items="${countries}">--%>
-<%--                    <option value="${country.name}">--%>
-<%--                      </c:forEach>--%>
+<%--                      <option value="${country.name}">--%>
+<%--                    </c:forEach>--%>
 <%--                  </datalist>--%>
 <%--                </div>--%>
-<%--              <div>--%>
+
                 <div>
                   <form:errors path="activityCity" element="p" cssStyle="color: red"/>
                   <form:label path="activityCity" class="form-label">Ciudad</form:label>
@@ -58,6 +57,7 @@
                     </c:forEach>
                   </datalist>
                 </div>
+              <div>
                 <form:errors path="activityAddress" element="p" cssStyle="color: red"/>
                 <form:label path="activityAddress" class="form-label">Direccion</form:label>
                 <form:input type="text" class="form-control" path="activityAddress"/>
@@ -97,7 +97,7 @@
                     </c:forEach>
                 </datalist>
               </div>
-            </div>
+            </>
             <div class="modal-footer">
               <button class="btn" onclick="history.back()">Cancelar</button>
               <button class="btn" type="submit">Guardar</button>
