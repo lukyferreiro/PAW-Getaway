@@ -6,23 +6,25 @@
     <head>
         <title><spring:message code="pageName"/> - <spring:message code="pageNotFound.title"/></title>
         <%@ include file="../components/includes/headers.jsp" %>
+        <link href="<c:url value = "/resources/css/error.css" />" rel="stylesheet">
     </head>
 
     <body>
-        <div class="container-fluid h-100" id="mainContainer">
-            <div class="row h-100">
-                <div class="col-12 h-25 d-flex justify-content-center align-items-center">
-                    <h1><c:out value="${code}"/>: <c:out value="${errors}"/></h1>
-                </div>
-                <div class="col-12 h-50 d-flex justify-content-center align-items-center">
-<%--                    <img src="<c:url value="/resources/images/pageNotFound.png"/>" alt="not found image"--%>
-<%--                         style="object-fit: contain; width: 700px; height: 700px;">--%>
-                </div>
-                <div class="col-12 h-25 d-flex justify-content-center align-items-center">
-                    <a href="<c:url value='/'/>" style="font-size: 30px;">
-                        Volver
-                    </a>
-                </div>
+        <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <h1 class="font-weight-bold m-0" style="font-size: 15vh;">
+                    <c:out value="${code}"/> :(
+                </h1>
+                <h1 class="font-weight-bold" style="font-size: 5vh; margin-top: -3%">
+                    <spring:message code="pageNotFound.description"/>
+                </h1>
+                <h4>
+                    <span style="color:red;"><spring:message code="error.whoops"/></span>
+                    <c:out value="${errors}"/>
+                </h4>
+                <a href="<c:url value='/'/>">
+                    <button type="button" class="btn btn-error">Volver</button>
+                </a>
             </div>
         </div>
     </body>

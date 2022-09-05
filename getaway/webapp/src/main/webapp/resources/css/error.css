@@ -1,0 +1,20 @@
+.btn-error{
+    font-size: x-large;
+    font-weight: bold;
+    color: white;
+    border-color: #F99D32;
+    background-color: #F99D32;
+    padding: 5px 15px;
+    margin: 10px;
+}
+.btn-error:hover {
+    color: white;
+    border-color: #F99D32;
+    background-color: #F99D32;
+    scale: 105%;
+}
+.btn-error:focus{
+    color: white;
+    border-color: #F99D32;
+    background-color: #F99D32;
+}
