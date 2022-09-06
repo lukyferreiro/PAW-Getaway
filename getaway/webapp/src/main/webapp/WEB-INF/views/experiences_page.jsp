@@ -27,7 +27,7 @@
 
         <div class="container-experiences container-fluid p-0 mx-2 my-0 d-flex flex-wrap justify-content-center">
             <c:forEach var="activity" items="${activities}">
-              <div class="card card-experience w-25 m-2 p-0">
+              <div class="card card-experience w-25 mx-3 my-2 p-0">
                 <a class="card-link" href="<c:url value="${activity.categoryName}/${activity.id}"/>">
                   <img class="card-img-top container-fluid p-0" src="<c:url value="/resources/images/adventure_image.jpg"/>" alt="Imagen de la experiencia">
     <%--                  <div class="">--%>

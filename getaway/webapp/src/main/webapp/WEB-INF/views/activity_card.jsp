@@ -13,6 +13,10 @@
             <%@ include file="../components/navbar.jsp" %>
 
             <div class="card mx-5 my-3 p-4">
+                <button id="goBackButton" class="btn btn-leave-experience-details d-flex">
+                    <img class="go-back-arrow align-self-center" src="<c:url value = "/resources/images/go_back.png"/>" alt="Flecha">
+                    <span><spring:message code="experienceDetail.goBack"/></span>
+                </button>
                 <h1 class="card-title d-flex justify-content-center">
                     ${activity.name}
                 </h1>
@@ -77,5 +81,6 @@
         </div>
 
         <%@ include file="../components/includes/bottomScripts.jsp" %>
+        <script src='<c:url value="/resources/js/experienceDetailsPage.js"/>'></script>
     </body>
 </html>

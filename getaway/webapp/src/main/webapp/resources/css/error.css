@@ -12,6 +12,7 @@
     border-color: #F99D32;
     background-color: #F99D32;
     transform: scale(1.05);
+    transition: 0.3s;
 }
 .btn-error:focus{
     color: white;

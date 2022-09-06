@@ -17,9 +17,11 @@
     border-color: #F99D32;
     background-color: #F99D32;
     transform: scale(1.02);
+    transition: 0.3s;
 }
 .btn-submit-form:hover{
     transform: scale(1.02);
+    transition: 0.3s;
 }
 .btn-submit-form:disabled{
     border-color: #FAB672;
@@ -40,6 +42,7 @@
 }
 .btn-cancel-form:focus{
     transform: scale(1.02);
+    transition: 0.3s;
 }
 .btn-cancel-form:disabled{
     border-color: #FAB672;

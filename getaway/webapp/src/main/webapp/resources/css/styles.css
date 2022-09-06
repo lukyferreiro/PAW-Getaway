@@ -58,6 +58,8 @@
 
 .card-experience:hover{
     transform: scale(1.02);
+    transition: 0.3s;
+    box-shadow: -0.5rem 0 2rem grey;
 }
 
 .card-link{
@@ -102,3 +104,28 @@
 /*------------------------------*/
 /*------- Activity Page  -------*/
 /*------------------------------*/
+
+.btn-leave-experience-details{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: black;
+    font-size: x-large;
+}
+.btn-leave-experience-details:hover, .btn-leave-experience-details:focus{
+    border-color: transparent;
+    color: black;
+}
+.btn-leave-experience-details:hover{
+    background-color: transparent;
+}
+.btn-leave-experience-details:disabled{
+    border-color: transparent;
+}
+
+.go-back-arrow{
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+}
+
