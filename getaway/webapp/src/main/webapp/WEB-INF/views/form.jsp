@@ -68,19 +68,19 @@
             </div>
 
             <div class="p-0 m-0 d-flex">
-<%--              <div class="col m-2"> <!--Pais-->--%>
-<%--                <form:errors path="activityCountry" element="p" cssStyle="color: red"/>--%>
-<%--                <form:label path="activityCountry" class="form-label"><spring:message code="experienceForm.activityCountry"/></form:label>--%>
-<%--                <form:input list="countriesOptions" class="form-control" path="activityCountry" id="experienceFormCountryInput" placeholder="${placeholder}"/>--%>
-<%--                <datalist id="countriesOptions">--%>
-<%--                  <c:forEach var="country" items="${countries}">--%>
-<%--                    <option value="${country.name}">--%>
-<%--                  </c:forEach>--%>
-<%--                </datalist>--%>
-<%--              </div>--%>
+              <div class="col m-2"> <!--Pais-->
+                <form:errors path="activityCountry" element="p" cssStyle="color: red"/>
+                <form:label path="activityCountry" class="form-label"><spring:message code="experienceForm.activityCountry"/></form:label>
+                <form:input list="countriesOptions" class="form-control" path="activityCountry" id="experienceFormCountryInput" placeholder="${placeholder}"/>
+                <datalist id="countriesOptions">
+                  <c:forEach var="country" items="${countries}">
+                    <option value="${country.name}">
+                  </c:forEach>
+                </datalist>
+              </div>
               <div class="col m-2"> <!--Ciudad-->
                 <form:label path="activityCity" class="form-label"><spring:message code="experienceForm.activityCity"/></form:label>
-                <form:input list="citiesOptions" class="form-control" path="activityCity" id="experienceFormCityInput" placeholder="${placeholder}"/>
+                <form:input list="citiesOptions" class="form-control" path="activityCity" id="experienceFormCityInput" placeholder="${placeholder}" disabled="true"/>
                 <datalist id="citiesOptions">
                   <c:forEach var="city" items="${cities}">
                   <option value="${city.name}">

@@ -61,12 +61,12 @@ public class CityDaoImpl implements CityDao {
 
     @Override
     public List<CityModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM cities ", CITY_MODEL_ROW_MAPPER));
+        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM cities ORDER BY cityname ASC ", CITY_MODEL_ROW_MAPPER));
     }
 
     @Override
     public List<CityModel> getByCountryId(long countryId) {
-        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM cities WHERE countryid = ?",new Object[]{countryId}, CITY_MODEL_ROW_MAPPER));
+        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM cities WHERE countryid = ? ORDER BY cityname ASC",new Object[]{countryId}, CITY_MODEL_ROW_MAPPER));
 
     }
 }

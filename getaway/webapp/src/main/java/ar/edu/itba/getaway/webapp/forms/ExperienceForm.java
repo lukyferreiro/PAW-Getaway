@@ -22,8 +22,8 @@ public class ExperienceForm {
     @NotEmpty
     private String activityCategory;
 
-//    @NotEmpty
-//    private String activityCountry;
+    @NotEmpty
+    private String activityCountry;
 
     @NotEmpty
     private String activityCity;
@@ -62,9 +62,9 @@ public class ExperienceForm {
         return activityCity;
     }
 
-//    public String getActivityCountry() {
-//        return activityCountry;
-//    }
+    public String getActivityCountry() {
+        return activityCountry;
+    }
 
     public String getActivityUrl() {
         return activityUrl;

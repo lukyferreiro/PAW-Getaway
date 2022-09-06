@@ -56,6 +56,20 @@ public class FormController {
         return mav;
     }
 
+    public List<CityModel> getCities(String country){
+        List<CountryModel> countryModels = countryService.listAll();
+
+        List<CityModel> cityModels = new ArrayList<>();
+        boolean flag = true;
+        for (int j = 0; j<countryModels.size() && flag ; j++){
+            if(countryModels.get(j).getName().equals(country)){
+                return cityService.getByCountryId(j + 1);
+            }
+        }
+
+        return cityModels;
+    }
+
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
     public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form, final BindingResult errors) throws Exception {

@@ -26,6 +26,9 @@ cancelFormButton.addEventListener("click", () => {
 
 let countryInput = document.getElementById("experienceFormCountryInput");
 let cityInput = document.getElementById("experienceFormCityInput");
+
+
+
 countryInput.addEventListener("keyup", (event) => {
     if(countryInput.value.length === 0){
         cityInput.setAttribute('disabled', 'true');

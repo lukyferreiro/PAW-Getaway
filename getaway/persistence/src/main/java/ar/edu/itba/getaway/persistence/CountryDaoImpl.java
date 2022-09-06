@@ -60,7 +60,7 @@ public class CountryDaoImpl implements CountryDao{
 
     @Override
     public List<CountryModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM countries",
+        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM countries ORDER BY countryname ASC",
                 COUNTRY_MODEL_ROW_MAPPER));
     }
 
