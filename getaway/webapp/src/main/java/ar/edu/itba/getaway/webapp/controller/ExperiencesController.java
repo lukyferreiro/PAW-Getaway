@@ -24,11 +24,13 @@ public class ExperiencesController {
     @RequestMapping("/adventures")
     public ModelAndView adventures() {
         final ModelAndView mav = new ModelAndView("experiences_page");
-//        Ordinal empieza en 0
-        int id_adventure = ExperienceCategory.adventures.ordinal() + 1;
 
+        // Ordinal empieza en 0
+        int id_adventure = ExperienceCategory.adventures.ordinal() + 1;
+        String categoryName = ExperienceCategory.adventures.getName();
         List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
 
+        mav.addObject("categoryName", categoryName);
         mav.addObject("activities", experienceList);
         return mav;
     }
@@ -37,7 +39,6 @@ public class ExperiencesController {
     public ModelAndView adventuresView(@PathVariable("adventureId") final long adventureId){
         final ModelAndView mav = new ModelAndView("activity_card");
 
-//        final ExperienceModel experience = exp.getById(adventureId).get();
         final ExperienceModel experience = exp.getById(adventureId).orElseThrow(ExperienceNotFoundException::new);
 
         mav.addObject("activity", experience);
@@ -47,11 +48,13 @@ public class ExperiencesController {
     @RequestMapping("/gastronomy")
     public ModelAndView gastronomy() {
         final ModelAndView mav = new ModelAndView("experiences_page");
-//        Ordinal empieza en 0
-        int id_adventure = ExperienceCategory.gastronomy.ordinal() + 1;
 
+        // Ordinal empieza en 0
+        int id_adventure = ExperienceCategory.gastronomy.ordinal() + 1;
+        String categoryName = ExperienceCategory.gastronomy.getName();
         List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
 
+        mav.addObject("categoryName", categoryName);
         mav.addObject("activities", experienceList);
         return mav;
     }
@@ -60,7 +63,6 @@ public class ExperiencesController {
     public ModelAndView gastronomyView(@PathVariable("gastronomyId") final long gastronomyId){
         final ModelAndView mav = new ModelAndView("activity_card");
 
-//        ExperienceModel experience = exp.getById(gastronomyId).get();
         final ExperienceModel experience = exp.getById(gastronomyId).orElseThrow(ExperienceNotFoundException::new);
 
         mav.addObject("activity", experience);
@@ -70,11 +72,13 @@ public class ExperiencesController {
     @RequestMapping("/hotels")
     public ModelAndView hotels(){
         final ModelAndView mav = new ModelAndView("experiences_page");
-//        Ordinal empieza en 0
-        int id_adventure = ExperienceCategory.hotels.ordinal() + 1;
 
+        // Ordinal empieza en 0
+        int id_adventure = ExperienceCategory.hotels.ordinal() + 1;
+        String categoryName = ExperienceCategory.hotels.getName();
         List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
 
+        mav.addObject("categoryName", categoryName);
         mav.addObject("activities", experienceList);
         return mav;
     }
@@ -83,7 +87,6 @@ public class ExperiencesController {
     public ModelAndView hotelsView(@PathVariable("hotelsId") final long hotelsId){
         final ModelAndView mav = new ModelAndView("activity_card");
 
-//        ExperienceModel experience = exp.getById(hotelsId).get();
         final ExperienceModel experience = exp.getById(hotelsId).orElseThrow(ExperienceNotFoundException::new);
 
         mav.addObject("activity", experience);
@@ -93,11 +96,13 @@ public class ExperiencesController {
     @RequestMapping("/relax")
     public ModelAndView relax() {
         final ModelAndView mav = new ModelAndView("experiences_page");
-//        Ordinal empieza en 0
-        int id_adventure = ExperienceCategory.relax.ordinal() + 1;
 
+        // Ordinal empieza en 0
+        int id_adventure = ExperienceCategory.relax.ordinal() + 1;
+        String categoryName = ExperienceCategory.relax.getName();
         List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
 
+        mav.addObject("categoryName", categoryName);
         mav.addObject("activities", experienceList);
         return mav;
     }
@@ -106,7 +111,6 @@ public class ExperiencesController {
     public ModelAndView relaxView(@PathVariable("relaxId") final long relaxId){
         final ModelAndView mav = new ModelAndView("activity_card");
 
-//        ExperienceModel experience = exp.getById(relaxId).get();
         final ExperienceModel experience = exp.getById(relaxId).orElseThrow(ExperienceNotFoundException::new);
 
         mav.addObject("activity", experience);
@@ -116,11 +120,13 @@ public class ExperiencesController {
     @RequestMapping("/night")
     public ModelAndView night() {
         final ModelAndView mav = new ModelAndView("experiences_page");
-//        Ordinal empieza en 0
-        int id_adventure = ExperienceCategory.night.ordinal() + 1;
 
+        // Ordinal empieza en 0
+        int id_adventure = ExperienceCategory.night.ordinal() + 1;
+        String categoryName = ExperienceCategory.night.getName();
         List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
 
+        mav.addObject("categoryName", categoryName);
         mav.addObject("activities", experienceList);
         return mav;
     }
@@ -129,7 +135,6 @@ public class ExperiencesController {
     public ModelAndView nightView(@PathVariable("nightId") final long nightId){
         final ModelAndView mav = new ModelAndView("activity_card");
 
-//        ExperienceModel experience = exp.getById(nightId).get();
         final ExperienceModel experience = exp.getById(nightId).orElseThrow(ExperienceNotFoundException::new);
 
         mav.addObject("activity", experience);
@@ -139,11 +144,13 @@ public class ExperiencesController {
     @RequestMapping("/historic")
     public ModelAndView historic() {
         final ModelAndView mav = new ModelAndView("experiences_page");
-//        Ordinal empieza en 0
-        int id_adventure = ExperienceCategory.historic.ordinal() + 1;
 
+        // Ordinal empieza en 0
+        int id_adventure = ExperienceCategory.historic.ordinal() + 1;
+        String categoryName = ExperienceCategory.historic.getName();
         List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
 
+        mav.addObject("categoryName", categoryName);
         mav.addObject("activities", experienceList);
         return mav;
     }
@@ -152,11 +159,10 @@ public class ExperiencesController {
     public ModelAndView historicView(@PathVariable("historicId") final long historicId){
         final ModelAndView mav = new ModelAndView("activity_card");
 
-        ExperienceModel experience = exp.getById(historicId).get();
+        final ExperienceModel experience = exp.getById(historicId).orElseThrow(ExperienceNotFoundException::new);
 
         mav.addObject("activity", experience);
         return mav;
     }
-
 
 }

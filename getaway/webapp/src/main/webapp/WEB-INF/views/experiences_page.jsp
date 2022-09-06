@@ -4,7 +4,7 @@
 
 <html>
 <head>
-    <title><spring:message code="pageName"/> - <spring:message code="experiencies.title"/></title>
+    <title><spring:message code="pageName"/> - <c:url value="${categoryName}"/></title>
     <%@ include file="../components/includes/headers.jsp" %>
 </head>
 
@@ -26,16 +26,15 @@
 <%--        </div>--%>
 
         <div class="container-experiences container-fluid p-0 mx-2 my-0 d-flex flex-wrap justify-content-center">
-<%--          <div class="row row-cols-1 row-cols-md-2 g-2">--%>
             <c:forEach var="activity" items="${activities}">
               <div class="card card-experience w-25 m-2 p-0">
                 <a class="card-link" href="<c:url value="${activity.categoryName}/${activity.id}"/>">
                   <img class="card-img-top container-fluid p-0" src="<c:url value="/resources/images/adventure_image.jpg"/>" alt="Imagen de la experiencia">
-<%--                  <div class="">--%>
-<%--                    <button type="button" class="btn btn-bookmark">--%>
-<%--                      <img src="<c:url value="/resources/images/ic_bookmark_white.svg"/>" alt="Guardar"/>--%>
-<%--                    </button>--%>
-<%--                  </div>--%>
+    <%--                  <div class="">--%>
+    <%--                    <button type="button" class="btn btn-bookmark">--%>
+    <%--                      <img src="<c:url value="/resources/images/ic_bookmark_white.svg"/>" alt="Guardar"/>--%>
+    <%--                    </button>--%>
+    <%--                  </div>--%>
                   <div class="card-body container-fluid p-2">
                     <h2 class="card-title container-fluid p-0">${activity.name}</h2>
                     <div class="card-text container-fluid p-0">
@@ -58,7 +57,6 @@
                 </a>
               </div>
             </c:forEach>
-<%--          </div>--%>
         </div>
       </div>
 
