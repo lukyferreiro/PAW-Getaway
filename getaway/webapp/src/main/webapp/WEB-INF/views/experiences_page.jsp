@@ -36,14 +36,14 @@
     <%--                    </button>--%>
     <%--                  </div>--%>
                   <div class="card-body container-fluid p-2">
-                    <h2 class="card-title container-fluid p-0">${activity.name}</h2>
+                    <h2 class="card-title container-fluid p-0"><c:out value="${activity.name}"/></h2>
                     <div class="card-text container-fluid p-0">
-                        <p>${activity.description}</p>
-                        <h5>${activity.address}</h5>
+                        <p><c:out value="${activity.description}"/></p>
+                        <h5><c:out value="${activity.address}"/></h5>
                         <c:if test="${activity.price > 0}">
                             <h6>
                                 <spring:message code="experience.price.simbol"/>
-                                ${activity.price}
+                                <c:out value="${activity.price}"/>
                                 <spring:message code="experience.price.perPerson"/>
                             </h6>
                         </c:if>

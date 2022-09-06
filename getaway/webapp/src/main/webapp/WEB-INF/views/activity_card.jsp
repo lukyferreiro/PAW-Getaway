@@ -47,13 +47,13 @@
                                 <h5 class="card-title">
                                     <spring:message code="experienceDetail.address"/>
                                 </h5>
-                                <p>${activity.address}</p>
+                                <p><c:out value="${activity.address}"/></p>
                                 <h5 class="card-title">
                                     <spring:message code="experienceDetail.price"/>
                                     <c:if test="${activity.price > 0}">
                                         <p>
                                             <spring:message code="experienceDetail.price.simbol"/>
-                                                ${activity.price}
+                                                <c:out value="${activity.price}"/>
                                             <spring:message code="experienceDetail.price.perPerson"/>
                                         </p>
                                     </c:if>
