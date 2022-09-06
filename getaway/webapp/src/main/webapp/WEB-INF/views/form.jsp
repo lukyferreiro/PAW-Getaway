@@ -23,7 +23,7 @@
         <c:url value="/create_experience" var="postPath"/>
         <spring:message code="experienceForm.inputs.placeholder" var="placeholder"/>
         <spring:message code="experienceForm.activityMail.example" var="mailExample"/>
-        <form:form modelAttribute="experienceForm" action="${postPath}" method="post">
+        <form:form modelAttribute="experienceForm" action="${postPath}" id="createExperienceForm" method="post">
           <div class="container-inputs">
             <div class="p-0 m-0 d-flex">
               <div class="col m-2"> <!--Nombre de la experiencia-->
@@ -71,7 +71,7 @@
               <div class="col m-2"> <!--Pais-->
                 <form:errors path="activityCountry" element="p" cssStyle="color: red"/>
                 <form:label path="activityCountry" class="form-label"><spring:message code="experienceForm.activityCountry"/></form:label>
-                <form:input list="countriesOptions" class="form-control" path="activityCountry" placeholder="${placeholder}"/>
+                <form:input list="countriesOptions" class="form-control" path="activityCountry" id="experienceFormCountryInput" placeholder="${placeholder}"/>
                 <datalist id="countriesOptions">
                   <c:forEach var="country" items="${countries}">
                     <option value="${country.name}">
@@ -81,7 +81,7 @@
               <div class="col m-2"> <!--Ciudad-->
                 <form:errors path="activityCity" element="p" cssStyle="color: red"/>
                 <form:label path="activityCity" class="form-label"><spring:message code="experienceForm.activityCity"/></form:label>
-                <form:input list="citiesOptions" class="form-control" path="activityCity" placeholder="${placeholder}"/>
+                <form:input list="citiesOptions" class="form-control" path="activityCity" id="experienceFormCityInput" placeholder="${placeholder}" disabled="true"/>
                 <datalist id="citiesOptions">
                   <c:forEach var="city" items="${cities}">
                   <option value="${city.name}">
@@ -113,10 +113,10 @@
           </div>
 
           <div class="p-0 mt-3 mb-0 d-flex justify-content-around">
-            <button class="btn btn-cancel-form px-3 py-2" onclick="history.back()">
+            <button class="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
               <spring:message code="experienceForm.cancel"/>
             </button>
-            <button class="btn btn-submit-form px-3 py-2" type="submit">
+            <button class="btn btn-submit-form px-3 py-2" id="createExperienceFormButton" form="createExperienceForm">
               <spring:message code="experienceForm.submit"/>
             </button>
           </div>
@@ -126,6 +126,7 @@
       <%@ include file="../components/footer.jsp" %>
     </div>
 
-    <%@ include file="../components/includes/bottomScripts.jsp" %>
+    <%@ include file="../components/includes/bottomScripts.jsp"%>
+    <script src='<c:url value="/resources/js/createExperience.js"/>'></script>
   </body>
 </html>

@@ -12,16 +12,18 @@
     border-color: #F99D32;
     background-color: #F99D32;
 }
-.btn-submit-form:hover{
+.btn-submit-form:hover, .btn-submit-form:focus{
     color: white;
     border-color: #F99D32;
     background-color: #F99D32;
     transform: scale(1.02);
 }
-.btn-submit-form:focus{
-    color: white;
-    border-color: #F99D32;
-    background-color: #F99D32;
+.btn-submit-form:hover{
+    transform: scale(1.02);
+}
+.btn-submit-form:disabled{
+    border-color: #FAB672;
+    background-color: #FAB672;
 }
 /*---------------------------*/
 .btn-cancel-form{
@@ -31,16 +33,17 @@
     border-color: #F99D32;
     background-color: #F99D32;
 }
-.btn-cancel-form:hover{
+.btn-cancel-form:hover, .btn-cancel-form:focus{
     color: white;
     border-color: #F99D32;
     background-color: #F99D32;
-    transform: scale(1.02);
 }
 .btn-cancel-form:focus{
-    color: white;
-    border-color: #F99D32;
-    background-color: #F99D32;
+    transform: scale(1.02);
+}
+.btn-cancel-form:disabled{
+    border-color: #FAB672;
+    background-color: #FAB672;
 }
 
 
