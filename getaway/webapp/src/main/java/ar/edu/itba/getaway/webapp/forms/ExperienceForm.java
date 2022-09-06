@@ -3,25 +3,52 @@ package ar.edu.itba.getaway.webapp.forms;
 import ar.edu.itba.getaway.models.ExperienceCategory;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 public class ExperienceForm {
 
+    @Size(min=3, max=255)
+    @Pattern(regexp = "^[A-Za-z0-9 ,_.-]+$")
+    @NotEmpty
     private String activityName;
+
+    @NotEmpty
     private String activityCategory;
 
+    @NotEmpty
     private String activityCountry;
+
+    @NotEmpty
     private String activityCity;
+
+    @NotEmpty
+    @Pattern(regexp = "^[A-Za-z0-9 ,_.-]+$")
+    @Size(min=5)
     private String activityAddress;
 
-    private long activityPrice;
+    @NotEmpty
+    @Pattern(regexp = "^(0|[1-9][0-9]*)(.(0|[0-9]*[1-9]))?$")
+    private double activityPrice;
+
+    @NotEmpty
+    @URL
     private String activityUrl;
+
     @NotEmpty
     @Email
     private String activityMail;
+
     private String activityImg;
+
+    @NotEmpty
+    @Size(min=10)
+    @Pattern(regexp = "^[A-Za-z0-9 ,_.-]+$")
     private String activityInfo;
+
     private List<String> activityTags;
 
     public String getActivityAddress() {
@@ -75,7 +102,7 @@ public class ExperienceForm {
         return activityTags;
     }
 
-    public long getActivityPrice() {
+    public double getActivityPrice() {
         return activityPrice;
     }
 
@@ -115,7 +142,7 @@ public class ExperienceForm {
         this.activityUrl = activityUrl;
     }
 
-    public void setActivityPrice(long activityPrice) {
+    public void setActivityPrice(double activityPrice) {
         this.activityPrice = activityPrice;
     }
 }

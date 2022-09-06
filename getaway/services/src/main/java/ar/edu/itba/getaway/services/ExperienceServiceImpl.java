@@ -20,7 +20,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public ExperienceModel create (String name, String address, String description, String url, long price, long cityId, long categoryId, long userId){
+    public ExperienceModel create (String name, String address, String description, String url, double price, long cityId, long categoryId, long userId){
         return experienceDao.create(name, address, description,url, price, cityId, categoryId, userId);
     }
 

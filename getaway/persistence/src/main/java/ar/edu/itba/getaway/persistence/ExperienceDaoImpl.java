@@ -42,7 +42,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public ExperienceModel create(String name, String address, String description, String url, long price, long cityId, long categoryId, long userId) {
+    public ExperienceModel create(String name, String address, String description, String url, double price, long cityId, long categoryId, long userId) {
         final Map<String, Object> args = new HashMap<>();
         args.put("experienceName", name);
         args.put("address", address);

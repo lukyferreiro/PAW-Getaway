@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS experiences
 (
     experienceId SERIAL,
     experienceName VARCHAR(255) NOT NULL,
-    price DECIMAL NOT NULL,
+    price DECIMAL,
     address VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     siteUrl TEXT NOT NULL,
