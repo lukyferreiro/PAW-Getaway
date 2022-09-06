@@ -5,6 +5,9 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
 
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -19,8 +22,8 @@ public class ExperienceForm {
     @NotEmpty
     private String activityCategory;
 
-    @NotEmpty
-    private String activityCountry;
+//    @NotEmpty
+//    private String activityCountry;
 
     @NotEmpty
     private String activityCity;
@@ -30,8 +33,8 @@ public class ExperienceForm {
     @Size(min=5)
     private String activityAddress;
 
-    @NotEmpty
-    @Pattern(regexp = "^(0|[1-9][0-9]*)(.(0|[0-9]*[1-9]))?$")
+    @NotNull
+    @DecimalMin("0.0")
     private double activityPrice;
 
     @NotEmpty
@@ -59,9 +62,9 @@ public class ExperienceForm {
         return activityCity;
     }
 
-    public String getActivityCountry() {
-        return activityCountry;
-    }
+//    public String getActivityCountry() {
+//        return activityCountry;
+//    }
 
     public String getActivityUrl() {
         return activityUrl;
