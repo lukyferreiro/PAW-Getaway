@@ -111,9 +111,11 @@
           </div>
 
           <div class="p-0 mt-3 mb-0 d-flex justify-content-around">
-            <button class="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
-              <spring:message code="experienceForm.cancel"/>
-            </button>
+            <a href="<c:url value = "/"/>">
+              <button class="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
+                <spring:message code="experienceForm.cancel"/>
+              </button>
+            </a>
             <button type="submit" class="btn btn-submit-form px-3 py-2" id="createExperienceFormButton" form="createExperienceForm">
               <spring:message code="experienceForm.submit"/>
             </button>

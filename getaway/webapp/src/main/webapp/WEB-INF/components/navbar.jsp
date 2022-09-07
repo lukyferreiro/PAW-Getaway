@@ -11,7 +11,7 @@
             </span>
         </a>
         <div class="container-header-btn d-flex justify-content-between">
-            <a href="<c:url value = "/create_experience"/>" class="link-btn-filter">
+            <a href="<c:url value = "/create_experience"/>">
                 <button type="button" class="btn btn-header">
                     <spring:message code="navbar.createExperience"/>
                 </button>

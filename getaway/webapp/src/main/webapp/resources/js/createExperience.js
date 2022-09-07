@@ -20,7 +20,6 @@ cancelFormButton.addEventListener("click", () => {
     }
     processingCancel = true;
     cancelFormButton.disabled = true;
-    history.back();
     processingCancel = false;
 })
 
