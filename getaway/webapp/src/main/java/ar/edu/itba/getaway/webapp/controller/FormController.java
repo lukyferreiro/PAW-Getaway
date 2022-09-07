@@ -4,11 +4,10 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -57,9 +56,10 @@ public class FormController {
         return mav;
     }
 
-    public List<CityModel> getCities(String country){
+   @RequestMapping(path = "/create_experience",produces = MediaType.APPLICATION_JSON_VALUE)
+   @ResponseBody
+    public List<CityModel> getCities(@RequestParam String country){
         List<CountryModel> countryModels = countryService.listAll();
-
         List<CityModel> cityModels = new ArrayList<>();
         boolean flag = true;
         for (int j = 0; j<countryModels.size() && flag ; j++){
