@@ -30,6 +30,8 @@
     <!--API-->
     <javax.validation-api.version>1.0.0.GA</javax.validation-api.version>
     <org.hibernate.validator>4.3.1.Final</org.hibernate.validator>
+    <!--Javax XML bind-->
+    <jaxb.version>2.3.1</jaxb.version>
     <!-- For images upload -->
     <commons-fileupload.version>1.4</commons-fileupload.version>
     <!--Mail y Thymeleaf-->
@@ -63,6 +65,11 @@
         <version>${spring.version}</version>
         <scope>compile</scope>
       </dependency>
+      <dependency>
+        <groupId>commons-fileupload</groupId>
+        <artifactId>commons-fileupload</artifactId>
+        <version>${commons-fileupload.version}</version>
+      </dependency>
       <!--JDBC y driver-->
       <dependency>
         <groupId>org.springframework</groupId>
@@ -87,11 +94,11 @@
         <version>${jstl.version}</version>
       </dependency>
       <!--Tomcat-->
-<!--      <dependency>-->
-<!--        <groupId>org.springframework.boot</groupId>-->
-<!--        <artifactId>spring-boot-starter-tomcat</artifactId>-->
-<!--        <scope>provided</scope>-->
-<!--      </dependency>-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-tomcat</artifactId>
+        <scope>provided</scope>
+      </dependency>
       <!--Mockito-->
       <dependency>
         <groupId>org.mockito</groupId>
@@ -124,11 +131,11 @@
         <artifactId>hibernate-validator</artifactId>
         <version>${org.hibernate.validator}</version>
       </dependency>
-      <!--Dependency for images upload-->
+      <!--Javax XML bind-->
       <dependency>
-        <groupId>commons-fileupload</groupId>
-        <artifactId>commons-fileupload</artifactId>
-        <version>${commons-fileupload.version}</version>
+        <groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
+        <version>${jaxb.version}</version>
       </dependency>
       <!--Mail y Thymeleaf-->
       <dependency>

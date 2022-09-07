@@ -52,16 +52,16 @@
       <version>${parent.version}</version>
     </dependency>
     <!--Modulo persistence-->
-<!--    <dependency>-->
-<!--      <groupId>ar.edu.itba.getaway</groupId>-->
-<!--      <artifactId>persistence</artifactId>-->
-<!--      <version>${parent.version}</version>-->
-<!--    </dependency>-->
+    <dependency>
+      <groupId>ar.edu.itba.getaway</groupId>
+      <artifactId>persistence</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
     <!--JUnit-->
-<!--    <dependency>-->
-<!--      <groupId>junit</groupId>-->
-<!--      <artifactId>junit</artifactId>-->
-<!--    </dependency>-->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
     <!--API-->
     <dependency>
       <groupId>javax.validation</groupId>
@@ -70,6 +70,11 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
+    </dependency>
+    <!--Javax XML bind-->
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
     </dependency>
       <!--Mail y Thymeleaf-->
     <dependency>

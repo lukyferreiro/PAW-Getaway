@@ -4,6 +4,12 @@
     text-decoration: underline;
 }
 
+.form-error-label{
+    color: red;
+    margin: 0;
+    padding: 0 4px;
+}
+
 /*---------------------------*/
 .btn-submit-form{
     font-size: large;

@@ -13,7 +13,7 @@ public class ExperienceModel {
         this.address = address;
         this.description = description;
         this.siteUrl = siteUrl;
-        this.categoryName = ExperienceCategory.values()[(int) (categoryId - 1)].name();;
+        this.categoryName = ExperienceCategory.values()[(int) (categoryId - 1)].name();
         this.price = price;
         this.cityId = cityId;
         this.categoryId = categoryId;

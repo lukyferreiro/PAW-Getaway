@@ -32,11 +32,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public ViewResolver viewResolver() {
         final InternalResourceViewResolver vr = new InternalResourceViewResolver();
-
         vr.setViewClass(JstlView.class);
         vr.setPrefix("/WEB-INF/views/");
         vr.setSuffix(".jsp");
-
         return vr;
     }
 
@@ -58,8 +56,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
-
         ds.setDriverClass(org.postgresql.Driver.class);
+
         //Usuario Local
 //        ds.setUrl("jdbc:postgresql://localhost/getaway");
 //        ds.setUsername("postgresql");

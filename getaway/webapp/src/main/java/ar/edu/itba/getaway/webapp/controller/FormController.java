@@ -30,12 +30,13 @@ public class FormController {
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form){
-        ModelAndView mav = new ModelAndView("form");
+        final ModelAndView mav = new ModelAndView("form");
         ExperienceCategory[] categoryModels = ExperienceCategory.values();
         List<String> categories = new ArrayList<>();
         for (ExperienceCategory categoryModel : categoryModels) {
             categories.add(categoryModel.getName());
         }
+
         List<CountryModel> countryModels = countryService.listAll();
         List<TagModel> tagModels = tagService.listAll();
         List<CityModel> cityModels = cityService.listAll();
