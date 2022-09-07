@@ -56,20 +56,20 @@ public class FormController {
         return mav;
     }
 
-   @RequestMapping(path = "/create_experience",produces = MediaType.APPLICATION_JSON_VALUE)
-   @ResponseBody
-    public List<CityModel> getCities(@RequestParam String country){
-        List<CountryModel> countryModels = countryService.listAll();
-        List<CityModel> cityModels = new ArrayList<>();
-        boolean flag = true;
-        for (int j = 0; j<countryModels.size() && flag ; j++){
-            if(countryModels.get(j).getName().equals(country)){
-                return cityService.getByCountryId(j + 1);
-            }
-        }
-
-        return cityModels;
-    }
+//   @RequestMapping(path = "/create_experience",produces = MediaType.APPLICATION_JSON_VALUE)
+//   @ResponseBody
+//    public List<CityModel> getCities(@RequestParam String country){
+//        List<CountryModel> countryModels = countryService.listAll();
+//        List<CityModel> cityModels = new ArrayList<>();
+//        boolean flag = true;
+//        for (int j = 0; j<countryModels.size() && flag ; j++){
+//            if(countryModels.get(j).getName().equals(country)){
+//                return cityService.getByCountryId(j + 1);
+//            }
+//        }
+//
+//        return cityModels;
+//    }
 
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
