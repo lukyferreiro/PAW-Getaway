@@ -27,10 +27,10 @@ createExperienceFormButton.addEventListener("click", () => {
     }
     processing = true;
     createExperienceFormButton.disabled = true;
-    let priceInput = document.getElementById("experienceFormPriceInput");
-    if(priceInput.value.length === 0){
-        priceInput.value = 0;
-    }
+    // let priceInput = document.getElementById("experienceFormPriceInput");
+    // if(priceInput.value.length === 0){
+    //     priceInput.value = 0;
+    // }
     createExperienceForm.submit();
     processing = false;
 })
