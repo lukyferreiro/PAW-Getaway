@@ -9,7 +9,7 @@ public class InitPageController {
 
     @RequestMapping("/")
     public ModelAndView init(){
-        return new ModelAndView("index");
+        return new ModelAndView("mainPage");
     }
 
 }

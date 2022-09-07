@@ -23,7 +23,7 @@ public class ExperiencesController {
 
     @RequestMapping("/adventures")
     public ModelAndView adventures() {
-        final ModelAndView mav = new ModelAndView("experiences_page");
+        final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
         int id_adventure = ExperienceCategory.adventures.ordinal() + 1;
@@ -37,7 +37,7 @@ public class ExperiencesController {
 
     @RequestMapping("/adventures/{adventureId}")
     public ModelAndView adventuresView(@PathVariable("adventureId") final long adventureId){
-        final ModelAndView mav = new ModelAndView("activity_card");
+        final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(adventureId).orElseThrow(ExperienceNotFoundException::new);
 
@@ -47,7 +47,7 @@ public class ExperiencesController {
 
     @RequestMapping("/gastronomy")
     public ModelAndView gastronomy() {
-        final ModelAndView mav = new ModelAndView("experiences_page");
+        final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
         int id_adventure = ExperienceCategory.gastronomy.ordinal() + 1;
@@ -61,7 +61,7 @@ public class ExperiencesController {
 
     @RequestMapping("/gastronomy/{gastronomyId}")
     public ModelAndView gastronomyView(@PathVariable("gastronomyId") final long gastronomyId){
-        final ModelAndView mav = new ModelAndView("activity_card");
+        final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(gastronomyId).orElseThrow(ExperienceNotFoundException::new);
 
@@ -71,7 +71,7 @@ public class ExperiencesController {
 
     @RequestMapping("/hotels")
     public ModelAndView hotels(){
-        final ModelAndView mav = new ModelAndView("experiences_page");
+        final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
         int id_adventure = ExperienceCategory.hotels.ordinal() + 1;
@@ -85,7 +85,7 @@ public class ExperiencesController {
 
     @RequestMapping("/hotels/{hotelsId}")
     public ModelAndView hotelsView(@PathVariable("hotelsId") final long hotelsId){
-        final ModelAndView mav = new ModelAndView("activity_card");
+        final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(hotelsId).orElseThrow(ExperienceNotFoundException::new);
 
@@ -95,7 +95,7 @@ public class ExperiencesController {
 
     @RequestMapping("/relax")
     public ModelAndView relax() {
-        final ModelAndView mav = new ModelAndView("experiences_page");
+        final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
         int id_adventure = ExperienceCategory.relax.ordinal() + 1;
@@ -109,7 +109,7 @@ public class ExperiencesController {
 
     @RequestMapping("/relax/{relaxId}")
     public ModelAndView relaxView(@PathVariable("relaxId") final long relaxId){
-        final ModelAndView mav = new ModelAndView("activity_card");
+        final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(relaxId).orElseThrow(ExperienceNotFoundException::new);
 
@@ -119,7 +119,7 @@ public class ExperiencesController {
 
     @RequestMapping("/night")
     public ModelAndView night() {
-        final ModelAndView mav = new ModelAndView("experiences_page");
+        final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
         int id_adventure = ExperienceCategory.night.ordinal() + 1;
@@ -133,7 +133,7 @@ public class ExperiencesController {
 
     @RequestMapping("/night/{nightId}")
     public ModelAndView nightView(@PathVariable("nightId") final long nightId){
-        final ModelAndView mav = new ModelAndView("activity_card");
+        final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(nightId).orElseThrow(ExperienceNotFoundException::new);
 
@@ -143,7 +143,7 @@ public class ExperiencesController {
 
     @RequestMapping("/historic")
     public ModelAndView historic() {
-        final ModelAndView mav = new ModelAndView("experiences_page");
+        final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
         int id_adventure = ExperienceCategory.historic.ordinal() + 1;
@@ -157,7 +157,7 @@ public class ExperiencesController {
 
     @RequestMapping("/historic/{historicId}")
     public ModelAndView historicView(@PathVariable("historicId") final long historicId){
-        final ModelAndView mav = new ModelAndView("activity_card");
+        final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(historicId).orElseThrow(ExperienceNotFoundException::new);
 

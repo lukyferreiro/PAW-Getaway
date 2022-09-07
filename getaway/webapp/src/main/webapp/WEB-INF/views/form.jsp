@@ -46,6 +46,17 @@
               </div>
             </div>
 
+<%--            <div class="p-0 m-2 d-flex flex-column"> <!--Tags-->--%>
+<%--              <form:label path="activityTags" class="form-label"><spring:message code="experienceForm.activityTags"/></form:label>--%>
+<%--              <form:input list="tagOptions" class="form-control" path="activityTags" placeholder="${placeholder}"/>--%>
+<%--              <datalist id="tagOptions">--%>
+<%--                <c:forEach var="tag" items="${tags}">--%>
+<%--                <option value="${tag.name}">--%>
+<%--                  </c:forEach>--%>
+<%--              </datalist>--%>
+<%--              <form:errors path="activityTags" element="p" cssClass="form-error-label"/>--%>
+<%--            </div>--%>
+
             <div class="p-0 m-2 d-flex flex-column"> <!--Descripcion-->
               <form:label path="activityInfo" class="form-label"><spring:message code="experienceForm.activityInfo"/></form:label>
               <form:textarea path="activityInfo" class="form-control" rows="4"/>
@@ -93,20 +104,10 @@
               </div>
             </div>
 
-            <div class="p-0 m-2 d-flex flex-column"> <!--Imagenes-->
-              <form:label path="activityImg" class="form-label"><spring:message code="experienceForm.activityImg"/></form:label>
-              <form:input path="activityImg" type="file" class="form-control" disabled="true"/>
-              <form:errors path="activityImg" element="p" cssClass="form-error-label"/>
-            </div>
-<%--            <div> <!--Tags-->--%>
-<%--              <form:errors path="activityTags" element="p" cssClass="form-error-label"/>--%>
-<%--              <form:label path="activityTags" class="form-label"><spring:message code="experienceForm.activityTags"/></form:label>--%>
-<%--              <form:input list="tagOptions" class="form-control" path="activityTags" placeholder="${placeholder}"/>--%>
-<%--              <datalist id="tagOptions">--%>
-<%--                <c:forEach var="tag" items="${tags}">--%>
-<%--                <option value="${tag.name}">--%>
-<%--                  </c:forEach>--%>
-<%--              </datalist>--%>
+<%--            <div class="p-0 m-2 d-flex flex-column"> <!--Imagenes-->--%>
+<%--              <form:label path="activityImg" class="form-label"><spring:message code="experienceForm.activityImg"/></form:label>--%>
+<%--              <form:input path="activityImg" type="file" class="form-control" disabled="true"/>--%>
+<%--              <form:errors path="activityImg" element="p" cssClass="form-error-label"/>--%>
 <%--            </div>--%>
           </div>
 
