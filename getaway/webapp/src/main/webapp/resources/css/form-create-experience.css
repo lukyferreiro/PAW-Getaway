@@ -40,21 +40,21 @@ input[type=number]::-webkit-outer-spin-button {
 .btn-cancel-form{
     font-size: large;
     font-weight: bold;
-    color: white;
+    color: #F99D32;
     border-color: #F99D32;
-    background-color: #F99D32;
+    background-color: white;
 }
 .btn-cancel-form:hover, .btn-cancel-form:focus{
-    color: white;
+    color: #F99D32;
     border-color: #F99D32;
-    background-color: #F99D32;
+    background-color: white;
     transform: scale(1.02);
     transition: 0.3s;
 }
 .btn-cancel-form:disabled{
-    color: white;
-    border-color: #FAB672;
-    background-color: #FAB672;
+    color: #F99D32;
+    border-color: #F99D32;
+    background-color: white;
 }
 
 
