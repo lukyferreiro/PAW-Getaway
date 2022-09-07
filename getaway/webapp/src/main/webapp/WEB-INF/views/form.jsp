@@ -41,7 +41,7 @@
               </div>
               <div class="col m-2"> <!--Precio-->
                 <form:label path="activityPrice" class="form-label"><spring:message code="experienceForm.activityPrice"/></form:label>
-                <form:input path="activityPrice" type="long" class="form-control" id="experienceFormPriceInput" placeholder="0"/>
+                <form:input path="activityPrice" type="text" class="form-control" id="experienceFormPriceInput" placeholder="0"/>
                 <form:errors path="activityPrice" element="p" cssClass="form-error-label"/>
               </div>
             </div>

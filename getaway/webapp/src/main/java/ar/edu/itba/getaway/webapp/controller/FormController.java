@@ -97,8 +97,9 @@ public class FormController {
 
         //TODO usuario forzado
         int userId = 1 ;
+        double price = Double.parseDouble(form.getActivityPrice());
         final ExperienceModel experienceModel = exp.create(form.getActivityName(),form.getActivityAddress(),
-                form.getActivityInfo(), form.getActivityUrl(), form.getActivityPrice(), cityId + 1 , categoryId + 1, userId);
+                form.getActivityInfo(), form.getActivityUrl(), price, cityId + 1 , categoryId + 1, userId);
 
         //TODO check pq ahora como agregue la flecha para volver hacias atras en los detalles de la actividad
         //y al terminar el formulario me redigire a los detalles de la actividad, si todo en la flecha de volver
@@ -106,4 +107,5 @@ public class FormController {
 //        return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
         return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/");
     }
+
 }

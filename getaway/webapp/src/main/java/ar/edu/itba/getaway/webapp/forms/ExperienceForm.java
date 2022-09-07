@@ -32,9 +32,9 @@ public class ExperienceForm {
     @Size(min=5)
     private String activityAddress;
 
-    @NotNull
-    @DecimalMin("0.0")
-    private double activityPrice;
+    @NotEmpty
+    @Pattern(regexp = "^(0|([1-9][0-9]*))(\\.[0-9]{1,2})?$")
+    private String activityPrice;
 
     @NotEmpty
     @URL
@@ -91,7 +91,7 @@ public class ExperienceForm {
     public List<String> getActivityTags() {
         return activityTags;
     }
-    public double getActivityPrice() {
+    public String getActivityPrice() {
         return activityPrice;
     }
     public void setActivityAddress(String activityAddress) {
@@ -115,13 +115,16 @@ public class ExperienceForm {
     public void setActivityTags(List<String> activityTags) {
         this.activityTags = activityTags;
     }
+    public void setActivityCountry(String activityCountry){
+        this.activityCountry = activityCountry;
+    }
     public void setActivityCity(String activityCity) {
         this.activityCity = activityCity;
     }
     public void setActivityUrl(String activityUrl) {
         this.activityUrl = activityUrl;
     }
-    public void setActivityPrice(double activityPrice) {
+    public void setActivityPrice(String activityPrice) {
         this.activityPrice = activityPrice;
     }
 }

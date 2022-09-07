@@ -1,3 +1,23 @@
+let countryInput = document.getElementById("experienceFormCountryInput");
+let cityInput = document.getElementById("experienceFormCityInput");
+
+function validateCityIfThereIsACountry(countryInput, cityInput) {
+    if(countryInput.value.length === 0){
+        cityInput.setAttribute('disabled', 'true');
+        cityInput.value = "";
+    } else {
+        cityInput.removeAttribute('disabled');
+    }
+}
+
+window.addEventListener("load", () => {
+    validateCityIfThereIsACountry(countryInput, cityInput);
+});
+
+countryInput.addEventListener("keyup", () => {
+    validateCityIfThereIsACountry(countryInput, cityInput);
+});
+
 let processing = false;
 let createExperienceForm = document.getElementById("createExperienceForm");
 let createExperienceFormButton = document.getElementById("createExperienceFormButton");
@@ -26,13 +46,3 @@ cancelFormButton.addEventListener("click", () => {
     cancelFormButton.disabled = true;
     processingCancel = false;
 })
-
-let countryInput = document.getElementById("experienceFormCountryInput");
-let cityInput = document.getElementById("experienceFormCityInput");
-countryInput.addEventListener("keyup", (event) => {
-    if(countryInput.value.length === 0){
-        cityInput.setAttribute('disabled', 'true');
-    } else {
-        cityInput.removeAttribute('disabled');
-    }
-});
