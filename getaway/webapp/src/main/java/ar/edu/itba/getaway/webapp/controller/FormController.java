@@ -79,27 +79,19 @@ public class FormController {
             return createActivityForm(form);
         }
 
-        long categoryId = form.getActivityCategoryId();
+        long categoryId = form.getActivityCategoryId() ;
         if(categoryId < 0){
             throw new Exception();
         }
 
-        List<CityModel> cityModels = cityService.listAll();
-
-        int cityId = 0;
-        boolean flag = true;
-        for (int j = 0; j<cityModels.size() && flag ; j++){
-            if(cityModels.get(j).getName().equals(form.getActivityCity())){
-                cityId = j;
-                flag=false;
-            }
-        }
+//        long categoryId = categoryService.getByName(form.getActivityCategory()).get().getId();
+        long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
 
         //TODO usuario forzado
         int userId = 1 ;
         double price = Double.parseDouble(form.getActivityPrice());
         final ExperienceModel experienceModel = exp.create(form.getActivityName(),form.getActivityAddress(),
-                form.getActivityInfo(), form.getActivityUrl(), price, cityId + 1 , categoryId + 1, userId);
+                form.getActivityInfo(), form.getActivityUrl(), price, cityId , categoryId + 1, userId);
 
         //TODO check pq ahora como agregue la flecha para volver hacias atras en los detalles de la actividad
         //y al terminar el formulario me redigire a los detalles de la actividad, si todo en la flecha de volver

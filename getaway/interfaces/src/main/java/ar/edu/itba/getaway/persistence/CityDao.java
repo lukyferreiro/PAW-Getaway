@@ -12,4 +12,5 @@ public interface CityDao {
     Optional<CityModel> getById (long cityId);
     List<CityModel> listAll();
     List<CityModel> getByCountryId (long countryId);
+    Optional<CityModel> getIdByName(String cityName);
 }

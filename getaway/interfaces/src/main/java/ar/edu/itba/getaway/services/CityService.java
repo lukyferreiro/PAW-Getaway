@@ -12,4 +12,5 @@ public interface CityService {
     List<CityModel> listAll();
     Optional<CityModel> getById (long cityId);
     List<CityModel> getByCountryId (long countryId);
+    Optional<CityModel> getIdByName(String cityName);
 }

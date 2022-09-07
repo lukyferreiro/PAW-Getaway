@@ -1,9 +1,12 @@
 package ar.edu.itba.getaway.webapp.forms;
 
 import ar.edu.itba.getaway.models.ExperienceCategory;
+import ar.edu.itba.getaway.services.CategoryService;
+import ar.edu.itba.getaway.services.CityService;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -48,10 +51,14 @@ public class ExperienceForm {
 
     @NotEmpty
     @Size(min=10)
-    @Pattern(regexp = "^[A-Za-z0-9 ,_.-]+$")
     private String activityInfo;
 
     private List<String> activityTags;
+
+//    @Autowired
+//    private CityService cityService;
+//    @Autowired
+//    private CategoryService categoryService;
 
     public String getActivityAddress() {
         return activityAddress;
@@ -69,6 +76,7 @@ public class ExperienceForm {
         return activityCategory;
     }
     public long getActivityCategoryId() {
+
         for (int i = 0; i < ExperienceCategory.values().length ; i++){
             if(ExperienceCategory.values()[i].getName().equals(activityCategory)){
                 return i ;

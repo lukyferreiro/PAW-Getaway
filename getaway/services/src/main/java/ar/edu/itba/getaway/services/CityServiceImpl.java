@@ -48,4 +48,9 @@ public class CityServiceImpl implements CityService {
     public List<CityModel> getByCountryId(long countryId) {
         return cityDao.getByCountryId(countryId);
     }
+
+    @Override
+    public Optional<CityModel> getIdByName(String cityName) {
+        return cityDao.getIdByName(cityName);
+    }
 }

@@ -69,4 +69,9 @@ public class CityDaoImpl implements CityDao {
         return new ArrayList<>(jdbcTemplate.query("SELECT * FROM cities WHERE countryid = ? ORDER BY cityname ASC",new Object[]{countryId}, CITY_MODEL_ROW_MAPPER));
 
     }
+
+    @Override
+    public Optional<CityModel> getIdByName(String cityName) {
+        return jdbcTemplate.query("SELECT * FROM cities WHERE cityname = ?", new Object[]{cityName}, CITY_MODEL_ROW_MAPPER).stream().findFirst();
+    }
 }
