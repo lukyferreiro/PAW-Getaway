@@ -56,6 +56,10 @@
     font-size: medium;
 }
 
+.card-experience{
+    max-width: 250px;
+}
+
 .card-experience:hover{
     transform: scale(1.02);
     transition: 0.3s;

@@ -37,24 +37,24 @@
 <%--                </div>--%>
                 <div class="row">
                     <div class="col-auto">
-                        <div class="card-body">
+                        <div class="card-body p-2" style="max-width: 500px; max-height: 400px;">
                             <c:if test="${dbCategoryName == 'adventures'}">
-                                <img class="rounded" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
+                                <img class="rounded mw-100" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
                             </c:if>
                             <c:if test="${dbCategoryName == 'gastronomy'}">
-                                <img class="rounded" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
+                                <img class="rounded mw-100" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
                             </c:if>
                             <c:if test="${dbCategoryName == 'hotels'}">
-                                <img class="rounded" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
+                                <img class="rounded mw-100" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
                             </c:if>
                             <c:if test="${dbCategoryName == 'relax'}">
-                                <img class="rounded" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
+                                <img class="rounded mw-100" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
                             </c:if>
                             <c:if test="${dbCategoryName == 'night'}">
-                                <img class="rounded" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
+                                <img class="rounded mw-100" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
                             </c:if>
                             <c:if test="${dbCategoryName == 'historic'}">
-                                <img class="rounded" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
+                                <img class="rounded mw-100" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
                             </c:if>
                         </div>
                     </div>

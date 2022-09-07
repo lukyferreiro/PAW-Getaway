@@ -27,25 +27,25 @@
 
         <div class="container-experiences container-fluid p-0 mx-2 my-0 d-flex flex-wrap justify-content-center">
             <c:forEach var="activity" items="${activities}">
-              <div class="card card-experience w-25 mx-3 my-2 p-0">
+              <div class="card card-experience mx-3 my-2 p-0">
                 <a class="card-link" href="<c:url value="${activity.categoryName}/${activity.id}"/>">
                     <c:if test="${dbCategoryName == 'adventures'}">
-                        <img class="card-img-top container-fluid p-0"src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
+                        <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
                     </c:if>
                     <c:if test="${dbCategoryName == 'gastronomy'}">
-                        <img class="card-img-top container-fluid p-0" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
+                        <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
                     </c:if>
                     <c:if test="${dbCategoryName == 'hotels'}">
-                        <img class="card-img-top container-fluid p-0" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
+                        <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
                     </c:if>
                     <c:if test="${dbCategoryName == 'relax'}">
-                        <img class="card-img-top container-fluid p-0" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
+                        <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
                     </c:if>
                     <c:if test="${dbCategoryName == 'night'}">
-                        <img class="card-img-top container-fluid p-0" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
+                        <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
                     </c:if>
                     <c:if test="${dbCategoryName == 'historic'}">
-                        <img class="card-img-top container-fluid p-0" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
+                        <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
                     </c:if>
                         <%--                  <div class="">--%>
     <%--                    <button type="button" class="btn btn-bookmark">--%>
