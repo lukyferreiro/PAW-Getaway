@@ -4,7 +4,7 @@
 
 <html>
     <head>
-        <title><spring:message code="pageName"/> - ${activity.name}</title>
+        <title><spring:message code="pageName"/> - <c:out value="${activity.name}"/></title>
         <%@ include file="../components/includes/headers.jsp" %>
     </head>
 
@@ -18,7 +18,7 @@
                     <span><spring:message code="experienceDetail.goBack"/></span>
                 </button>
                 <h1 class="card-title d-flex justify-content-center">
-                    ${activity.name}
+                    <c:out value="${activity.name}"/>
                 </h1>
 <%--                <div>--%>
 <%--                    <div class="d-inline-block">--%>
@@ -27,7 +27,7 @@
 <%--                        </p>--%>
 <%--                    </div>--%>
 <%--                    <div class="d-inline-block">--%>
-<%--                        <a href="#">${activity.siteUrl}</a>--%>
+<%--                        <a href="#"><c:out value="${activity.siteUrl}"/></a>--%>
 <%--                    </div>--%>
 <%--                </div>--%>
 <%--                <div class="">--%>
@@ -66,9 +66,13 @@
                                 <h5 class="card-title">
                                     <spring:message code="experienceDetail.description"/>
                                 </h5>
-                                <p class="card-text">${activity.description}</p>
+                                <p class="card-text">
+                                    <c:out value="${activity.description}"/>
+                                </p>
                                 <h5 class="card-title"> <spring:message code="experienceDetail.url"/> </h5>
-                                <a class="card-text" href="<c:url value="${activity.siteUrl}"/>">${activity.siteUrl}</a>
+                                <a class="card-text" href="<c:url value="${activity.siteUrl}"/>">
+                                    <c:out value="${activity.siteUrl}"/>
+                                </a>
 <%--                                <h5 class="card-title"> <spring:message code="experienceDetail.tags"/> </h5>--%>
 <%--                                <p><a href="#">#tag1</a>   <a href="#">#tag2</a></p>--%>
                             </div>
