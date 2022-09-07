@@ -41,34 +41,34 @@ CREATE TABLE IF NOT EXISTS cities
 
 CREATE TABLE IF NOT EXISTS images
 (
-    imgId SERIAL,
+    imgId SERIAL NOT NULL,
     image BYTEA,
     PRIMARY KEY (imgId)
     );
 
 CREATE TABLE IF NOT EXISTS users
 (
-    userId SERIAL,
+    userId SERIAL NOT NULL,
     userName VARCHAR(50) NOT NULL,
     userSurname VARCHAR(50) NOT NULL,
     email VARCHAR(255) NOT NULL,
     imgId INT,
     roleId INT NOT NULL,
-    password VARCHAR(255),
+    password VARCHAR(255) NOT NULL,
     PRIMARY KEY (userId),
     UNIQUE(email),
     FOREIGN KEY (roleId) REFERENCES roles (roleId) ON DELETE CASCADE,
-    FOREIGN KEY (imgId) REFERENCES images (imgId)
+    FOREIGN KEY (imgId) REFERENCES images (imgId) ON DELETE CASCADE
     );
 
 CREATE TABLE IF NOT EXISTS experiences
 (
-    experienceId SERIAL,
+    experienceId SERIAL NOT NULL,
     experienceName VARCHAR(255) NOT NULL,
     price DECIMAL,
     address VARCHAR(255) NOT NULL,
-    description TEXT NOT NULL,
-    siteUrl TEXT NOT NULL,
+    description TEXT,
+    siteUrl TEXT,
     cityId INT NOT NULL,
     categoryId INT NOT NULL,
     userId INT NOT NULL,
@@ -76,6 +76,14 @@ CREATE TABLE IF NOT EXISTS experiences
     FOREIGN KEY (cityId) REFERENCES cities (cityId) ON DELETE CASCADE,
     FOREIGN KEY (categoryId) REFERENCES categories (categoryId) ON DELETE CASCADE,
     FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE
+    );
+
+CREATE TABLE IF NOT EXISTS views
+(
+    experienceId INT NOT NULL,
+    viewCount INT,
+    PRIMARY KEY (experienceId),
+    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
     );
 
 CREATE TABLE IF NOT EXISTS imagesExperiences
@@ -98,8 +106,9 @@ CREATE TABLE IF NOT EXISTS tagExperience
 
 CREATE TABLE IF NOT EXISTS reviews
 (
-    reviewId SERIAL,
-    description TEXT,
+    reviewId SERIAL NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
     score INT NOT NULL,
     experienceId INT NOT NULL,
     reviewDate DATE NOT NULL,
