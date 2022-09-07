@@ -29,7 +29,9 @@ public class ExperiencesController {
         int id_adventure = ExperienceCategory.adventures.ordinal() + 1;
         String categoryName = ExperienceCategory.adventures.getName();
         List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
+        String dbCategoryName = ExperienceCategory.adventures.getDatabaseName();
 
+        mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
         mav.addObject("activities", experienceList);
         return mav;
@@ -40,7 +42,9 @@ public class ExperiencesController {
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(adventureId).orElseThrow(ExperienceNotFoundException::new);
+        String dbCategoryName = ExperienceCategory.adventures.getDatabaseName();
 
+        mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
         return mav;
     }
@@ -53,7 +57,9 @@ public class ExperiencesController {
         int id_adventure = ExperienceCategory.gastronomy.ordinal() + 1;
         String categoryName = ExperienceCategory.gastronomy.getName();
         List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
+        String dbCategoryName = ExperienceCategory.gastronomy.getDatabaseName();
 
+        mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
         mav.addObject("activities", experienceList);
         return mav;
@@ -64,7 +70,9 @@ public class ExperiencesController {
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(gastronomyId).orElseThrow(ExperienceNotFoundException::new);
+        String dbCategoryName = ExperienceCategory.gastronomy.getDatabaseName();
 
+        mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
         return mav;
     }
@@ -77,7 +85,9 @@ public class ExperiencesController {
         int id_adventure = ExperienceCategory.hotels.ordinal() + 1;
         String categoryName = ExperienceCategory.hotels.getName();
         List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
+        String dbCategoryName = ExperienceCategory.hotels.getDatabaseName();
 
+        mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
         mav.addObject("activities", experienceList);
         return mav;
@@ -88,7 +98,9 @@ public class ExperiencesController {
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(hotelsId).orElseThrow(ExperienceNotFoundException::new);
+        String dbCategoryName = ExperienceCategory.hotels.getDatabaseName();
 
+        mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
         return mav;
     }
@@ -101,7 +113,9 @@ public class ExperiencesController {
         int id_adventure = ExperienceCategory.relax.ordinal() + 1;
         String categoryName = ExperienceCategory.relax.getName();
         List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
+        String dbCategoryName = ExperienceCategory.relax.getDatabaseName();
 
+        mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
         mav.addObject("activities", experienceList);
         return mav;
@@ -112,7 +126,9 @@ public class ExperiencesController {
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(relaxId).orElseThrow(ExperienceNotFoundException::new);
+        String dbCategoryName = ExperienceCategory.relax.getDatabaseName();
 
+        mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
         return mav;
     }
@@ -125,7 +141,9 @@ public class ExperiencesController {
         int id_adventure = ExperienceCategory.night.ordinal() + 1;
         String categoryName = ExperienceCategory.night.getName();
         List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
+        String dbCategoryName = ExperienceCategory.night.getDatabaseName();
 
+        mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
         mav.addObject("activities", experienceList);
         return mav;
@@ -136,7 +154,9 @@ public class ExperiencesController {
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(nightId).orElseThrow(ExperienceNotFoundException::new);
+        String dbCategoryName = ExperienceCategory.night.getDatabaseName();
 
+        mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
         return mav;
     }
@@ -149,7 +169,9 @@ public class ExperiencesController {
         int id_adventure = ExperienceCategory.historic.ordinal() + 1;
         String categoryName = ExperienceCategory.historic.getName();
         List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
+        String dbCategoryName = ExperienceCategory.historic.getDatabaseName();
 
+        mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
         mav.addObject("activities", experienceList);
         return mav;
@@ -160,7 +182,9 @@ public class ExperiencesController {
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(historicId).orElseThrow(ExperienceNotFoundException::new);
+        String dbCategoryName = ExperienceCategory.historic.getDatabaseName();
 
+        mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
         return mav;
     }

@@ -38,7 +38,24 @@
                 <div class="row">
                     <div class="col-auto">
                         <div class="card-body">
-                            <img class="rounded" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="experience.image">
+                            <c:if test="${dbCategoryName == 'adventures'}">
+                                <img class="rounded" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
+                            </c:if>
+                            <c:if test="${dbCategoryName == 'gastronomy'}">
+                                <img class="rounded" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
+                            </c:if>
+                            <c:if test="${dbCategoryName == 'hotels'}">
+                                <img class="rounded" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
+                            </c:if>
+                            <c:if test="${dbCategoryName == 'relax'}">
+                                <img class="rounded" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
+                            </c:if>
+                            <c:if test="${dbCategoryName == 'night'}">
+                                <img class="rounded" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
+                            </c:if>
+                            <c:if test="${dbCategoryName == 'historic'}">
+                                <img class="rounded" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
+                            </c:if>
                         </div>
                     </div>
                     <div class="col">
