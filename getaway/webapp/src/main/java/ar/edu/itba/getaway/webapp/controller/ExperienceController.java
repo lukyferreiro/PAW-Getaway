@@ -33,8 +33,7 @@ public class ExperienceController {
         ExperienceCategory category = ExperienceCategory.valueOf(categoryName);
         int id = category.ordinal() + 1 ;
 
-        List<ExperienceModel> experienceListCity = new ArrayList<>();
-        List<ExperienceModel> experienceListPrice = new ArrayList<>();
+
         List<ExperienceModel> experienceList = new ArrayList<>();
 
         String dbCategoryName = category.getName();
@@ -42,18 +41,16 @@ public class ExperienceController {
         List<CityModel> cityModels = cityService.listAll();
         //Filtros
         if(cityId.isPresent()){
-            experienceListCity = exp.listByCategoryAndCity(id, cityId.get());
+            if(maxPrice.isPresent() && maxPrice.get() > 0){
+                experienceList = exp.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
+            }else{
+                experienceList = exp.listByCategoryAndCity(id, cityId.get());
+            }
+        }else if(maxPrice.isPresent() && maxPrice.get()>0){
+            experienceList = exp.listByCategoryAndPrice(id,maxPrice.get());
         }else{
-            experienceListCity = exp.listByCategory(id);
+            experienceList = exp.listByCategory(id);
         }
-
-        if(maxPrice.isPresent() && maxPrice.get()>0){
-            experienceListPrice = exp.listByCategoryAndPrice(id,maxPrice.get());
-            experienceList = concatLists(experienceListCity, experienceListPrice);
-        }else{
-            experienceList = experienceListCity;
-        }
-
 
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
@@ -62,22 +59,6 @@ public class ExperienceController {
         return mav;
     }
 
-    private List<ExperienceModel> concatLists(List<ExperienceModel> experienceList1, List<ExperienceModel> experienceList2) {
-        List<ExperienceModel> experienceModels = new ArrayList<>();
-
-        boolean flag = true;
-        for(int i=0 ; i<experienceList1.size() ; i++){
-            for(int j=0 ; j<experienceList2.size() && flag ; j++){
-                if(experienceList1.get(i).equals(experienceList2.get(j))){
-                    experienceModels.add(experienceList1.get(i));
-                    flag = false;
-                }
-            }
-            flag=true;
-        }
-
-        return experienceModels;
-    }
 
     @RequestMapping("/{categoryName}/{categoryId}")
     public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName, @PathVariable("categoryId") final long categoryId){
