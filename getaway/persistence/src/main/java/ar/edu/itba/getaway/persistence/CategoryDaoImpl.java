@@ -64,7 +64,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
     @Override
     public Optional<CategoryModel> getByName(String categoryName){
-        return jdbcTemplate.query("SELECT * FROM categories WHERE categoryname = ?", new Object[]{categoryName}, CATEGORY_MODEL_ROW_MAPPER).stream().findFirst();
+        return jdbcTemplate.query("SELECT categoryId, categoryName FROM categories WHERE categoryName = ?", new Object[]{categoryName}, CATEGORY_MODEL_ROW_MAPPER).stream().findFirst();
     }
 
 
