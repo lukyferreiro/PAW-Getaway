@@ -10,7 +10,7 @@ function validateCityIfThereIsACountry(countryInput, cityInput) {
     }
 }
 
-window.addEventListener("load", () => {
+window.addEventListener("change", () => {
     validateCityIfThereIsACountry(countryInput, cityInput);
 });
 

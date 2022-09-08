@@ -31,7 +31,8 @@
               </div>
               <div class="col m-2"> <!--Categoria-->
                 <form:label path="activityCategory" class="form-label"><spring:message code="experienceForm.activityCategory"/></form:label>
-                <form:select path="activityCategory" class="form-select" placeholder="${placeholder}">
+                <form:select path="activityCategory" class="form-select">
+                  <option disabled selected value> <c:out value="${placeholder}"/> </option>
                   <c:forEach var="category" items="${categories}">
                     <option><c:out value="${category}"/></option>
                   </c:forEach>
@@ -78,22 +79,22 @@
             <div class="p-0 m-0 d-flex">
               <div class="col m-2"> <!--Pais-->
                 <form:label path="activityCountry" class="form-label"><spring:message code="experienceForm.activityCountry"/></form:label>
-                <form:input path="activityCountry" list="countriesOptions" class="form-control" id="experienceFormCountryInput" placeholder="${placeholder}"/>
-                <datalist id="countriesOptions">
+                <form:select path="activityCountry" id="experienceFormCountryInput" class="form-select">
+                  <option disabled selected value> <c:out value="${placeholder}"/> </option>
                   <c:forEach var="country" items="${countries}">
-                    <option value="${country.name}">
+                    <option><c:out value="${country.name}"/></option>
                   </c:forEach>
-                </datalist>
+                </form:select>
                 <form:errors path="activityCountry" element="p" cssClass="form-error-label"/>
               </div>
               <div class="col m-2"> <!--Ciudad-->
                 <form:label path="activityCity" class="form-label"><spring:message code="experienceForm.activityCity"/></form:label>
-                <form:input path="activityCity" list="citiesOptions" class="form-control" id="experienceFormCityInput" placeholder="${placeholder}" disabled="true"/>
-                <datalist id="citiesOptions">
+                <form:select path="activityCity" id="experienceFormCityInput" class="form-select" disabled="true">
+                  <option disabled selected value> <c:out value="${placeholder}"/> </option>
                   <c:forEach var="city" items="${cities}">
-                  <option value="${city.name}">
-                    </c:forEach>
-                </datalist>
+                    <option><c:out value="${city.name}"/></option>
+                  </c:forEach>
+                </form:select>
                 <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
               </div>
               <div class="col m-2"> <!--Direccion-->
