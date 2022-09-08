@@ -7,14 +7,12 @@ import ar.edu.itba.getaway.webapp.forms.CityForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ExperienceController {
@@ -27,18 +25,23 @@ public class ExperienceController {
 
 
     @RequestMapping(value = "/{categoryName}", method = {RequestMethod.GET})
-    public ModelAndView experience(@PathVariable("categoryName") final String categoryName, @ModelAttribute("filterForm") final CityForm form) {
+    public ModelAndView experience(@PathVariable("categoryName") final String categoryName, @ModelAttribute("filterForm") final CityForm form,  @RequestParam Optional<Long> cityId) {
         final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
         ExperienceCategory category = ExperienceCategory.valueOf(categoryName);
         int id = category.ordinal() + 1 ;
 
-        List<ExperienceModel> experienceList = exp.listByCategory(id);
+        List<ExperienceModel> experienceList;
         String dbCategoryName = category.getName();
 
-        //Filtros
         List<CityModel> cityModels = cityService.listAll();
+        //Filtros
+        if(cityId.isPresent()){
+            experienceList = exp.listByCategoryAndCity(id, cityId.get());
+        }else{
+            experienceList = exp.listByCategory(id);
+        }
 
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
@@ -59,38 +62,19 @@ public class ExperienceController {
         return mav;
     }
 
-    @RequestMapping(value = "/{categoryName}/city/{cityId}", method = {RequestMethod.GET})
-    public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName, @PathVariable("cityId") final long cityId, @Valid @ModelAttribute("filterForm") final CityForm form){
-        final ModelAndView mav = new ModelAndView("experiences");
-
-        // Ordinal empieza en 0
-        ExperienceCategory category = ExperienceCategory.valueOf(categoryName);
-        int id = category.ordinal()  + 1;
-        String dbCategoryName = category.getName();
-        List<ExperienceModel> experienceList = exp.listByCategoryAndCity(id, cityId);
-
-        //Filtros
-        List<CityModel> cityModels = cityService.listAll();
-
-        mav.addObject("cities", cityModels);
-        mav.addObject("dbCategoryName", dbCategoryName);
-        mav.addObject("categoryName", categoryName);
-        mav.addObject("activities", experienceList);
-        return mav;
-    }
-
 
     @RequestMapping(value = "/{categoryName}", method = {RequestMethod.POST})
     public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName,@Valid @ModelAttribute("filterForm") final CityForm form, final BindingResult errors){
         if(errors.hasErrors()){
-            return experience(categoryName, form);
+            return experience(categoryName, form, null);
         }
-
 
         long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
 
+        final ModelAndView mav = new ModelAndView("redirect:/" + categoryName);
 
-        return new ModelAndView("redirect:/" + categoryName + "/city/" + cityId);
+        mav.addObject("cityId", cityId);
+        return mav;
 
     }
 }

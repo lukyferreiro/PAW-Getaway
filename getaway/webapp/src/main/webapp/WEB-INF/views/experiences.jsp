@@ -19,7 +19,7 @@
               <spring:message code="filters.title"/>
           </p>
             <c:url value="/${categoryName}" var="postPath"/>
-            <form:form modelAttribute="filterForm" action="${postPath}" id="cityForm" method="post">
+            <form:form modelAttribute="filterForm" action="${postPath}" id="cityFilterForm" method="post">
                 <form:label path="activityCity" class="form-label"><spring:message code="experienceForm.activityCity"/></form:label>
                 <form:select path="activityCity" class="form-select">
                     <option disabled selected value>¿A donde?</option>
@@ -29,7 +29,7 @@
                 </form:select>
                 <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
 
-                <button class="btn btn-outline-success btn-search" type="submit" form="filterForm">
+                <button  class="btn btn-submit-form px-3 py-2" type="submit" id="cityFilterFormButton" form="cityFilterForm">
                     <spring:message code="filters.place.submit"/>
                 </button>
             </form:form>
