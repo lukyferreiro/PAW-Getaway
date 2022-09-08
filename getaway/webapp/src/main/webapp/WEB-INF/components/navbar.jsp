@@ -24,37 +24,37 @@
 
 
     <div class="container-types container-fluid p-0 d-flex justify-content-center m-0">
-        <a href="<c:url value = "/adventures"/>">
+        <a href="<c:url value = "/Aventura"/>">
             <button type="button" class="btn btn-filter">
                 <img src="<c:url value="/resources/images/ic_adventure.svg"/>" alt="Logo aventura"/>
                 <spring:message code="navbar.filter.adventure"/>
             </button>
         </a>
-        <a href="<c:url value = "/gastronomy"/>">
+        <a href="<c:url value = "/Gastronomia"/>">
             <button type="button" class="btn btn-filter">
                 <img src="<c:url value="/resources/images/ic_food.svg"/>" alt="Logo aventura"/>
                 <spring:message code="navbar.filter.gastronomy"/>
             </button>
         </a>
-        <a href="<c:url value = "/hotels"/>">
+        <a href="<c:url value = "/Hoteleria"/>">
             <button type="button" class="btn btn-filter">
                 <img src="<c:url value="/resources/images/ic_hotel.svg"/>" alt="Logo aventura"/>
                 <spring:message code="navbar.filter.hotels"/>
             </button>
         </a>
-        <a href="<c:url value = "/relax"/>">
+        <a href="<c:url value = "/Relax"/>">
             <button type="button" class="btn btn-filter">
                 <img src="<c:url value="/resources/images/ic_relax.svg"/>" alt="Logo aventura"/>
                 <spring:message code="navbar.filter.relax"/>
             </button>
         </a>
-        <a href="<c:url value = "/night"/>">
+        <a href="<c:url value = "/Vida_nocturna"/>">
             <button type="button" class="btn btn-filter">
                 <img src="<c:url value="/resources/images/ic_nightlife.svg"/>" alt="Logo aventura"/>
                 <spring:message code="navbar.filter.night"/>
             </button>
         </a>
-        <a href="<c:url value = "/historic"/>">
+        <a href="<c:url value = "/Historico"/>">
             <button type="button" class="btn btn-filter">
                 <img src="<c:url value="/resources/images/ic_museum.svg"/>" alt="Logo aventura"/>
                 <spring:message code="navbar.filter.historic"/>

@@ -3,19 +3,17 @@ package ar.edu.itba.getaway.models;
 import java.util.Arrays;
 
 public enum ExperienceCategory {
-    adventures("Aventura", "adventures"),
-    gastronomy("Gastronomia", "gastronomy"),
-    hotels("Hoteleria", "hotels"),
-    relax("Relax", "relax"),
-    night("Vida nocturna", "night"),
-    historic("Historico", "historic");
+    Aventura("Aventura"),
+    Gastronomia("Gastronomia"),
+    Hoteleria("Hoteleria"),
+    Relax("Relax"),
+    Vida_nocturna("Vida nocturna"),
+    Historico("Historico");
 
     private final String name;
-    private final String databaseName;
 
-    ExperienceCategory(String name, String databaseName){
+    ExperienceCategory(String name){
         this.name = name;
-        this.databaseName = databaseName;
     }
 
     public static boolean contains(String value){
@@ -26,7 +24,4 @@ public enum ExperienceCategory {
         return name;
     }
 
-    public String getDatabaseName() {
-        return databaseName;
-    }
 }
