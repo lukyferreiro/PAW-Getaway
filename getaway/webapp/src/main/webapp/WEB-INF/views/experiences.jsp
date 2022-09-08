@@ -1,6 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
 <head>
@@ -17,12 +18,27 @@
           <p class="font-weight-bold">
               <spring:message code="filters.title"/>
           </p>
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="¿A donde?" aria-label="Search">
-            <button class="btn btn-outline-success btn-search" type="submit">
-                <spring:message code="filters.place.submit"/>
-            </button>
-          </form>
+            <c:url value="/adventures" var="postPath"/>
+            <form:form modelAttribute="cityForm" action="${postPath}" id="filterForm" method="post">
+                <form:label path="activityCity" class="form-label"><spring:message code="experienceForm.activityCity"/></form:label>
+                <form:select path="activityCity" class="form-select">
+                    <option disabled selected value>¿A donde?</option>
+                    <c:forEach var="city" items="${cities}">
+                        <option><c:out value="${city.name}"/></option>
+                    </c:forEach>
+                </form:select>
+                <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
+
+                <button class="btn btn-outline-success btn-search" type="submit" form="filterForm">
+                    <spring:message code="filters.place.submit"/>
+                </button>
+            </form:form>
+<%--            <form class="d-flex" role="search">--%>
+<%--            <input class="form-control me-2" type="search" placeholder="¿A donde?" aria-label="Search">--%>
+<%--            <button class="btn btn-outline-success btn-search" type="submit">--%>
+<%--                <spring:message code="filters.place.submit"/>--%>
+<%--            </button>--%>
+<%--          </form>--%>
         </div>
 
         <div class="container-experiences container-fluid p-0 mx-2 my-0 d-flex flex-wrap justify-content-center">

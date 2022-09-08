@@ -101,4 +101,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
                 new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
+    @Override
+    public List<ExperienceModel> listByCategoryAndCity(long categoryId, long cityId) {
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId FROM experiences NATURAL JOIN categories WHERE categoryId = ? AND cityId = ?",
+                new Object[]{categoryId, cityId}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
 }

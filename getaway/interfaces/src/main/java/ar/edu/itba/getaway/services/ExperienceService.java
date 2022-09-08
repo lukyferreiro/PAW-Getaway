@@ -14,5 +14,6 @@ public interface ExperienceService {
     List<ExperienceModel> listByCategory (long categoryId);
     //TODO: agregar metodos para los filtros
     //List<ExperienceModel> listByTags (long [] tagId);
+    List<ExperienceModel> listByCategoryAndCity(long categoryId, long cityId);
 
 }
