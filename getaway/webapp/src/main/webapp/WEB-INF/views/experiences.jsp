@@ -20,25 +20,24 @@
           </p>
             <c:url value="/${categoryName}" var="postPath"/>
             <form:form modelAttribute="filterForm" action="${postPath}" id="cityFilterForm" method="post">
-                <form:label path="activityCity" class="form-label"><spring:message code="experienceForm.activityCity"/></form:label>
-                <form:select path="activityCity" class="form-select">
-                    <option disabled selected value>¿A donde?</option>
-                    <c:forEach var="city" items="${cities}">
-                        <option><c:out value="${city.name}"/></option>
-                    </c:forEach>
-                </form:select>
-                <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
-
+                <div>
+                    <form:label path="activityCity" class="form-label"><spring:message code="experienceForm.activityCity"/></form:label>
+                    <form:select path="activityCity" class="form-select">
+                        <option disabled selected value>¿A donde?</option>
+                        <c:forEach var="city" items="${cities}">
+                            <option><c:out value="${city.name}"/></option>
+                        </c:forEach>
+                    </form:select>
+                    <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
+                </div>
+                <div>
+                    <form:label path="activityPriceMax" for="customRange" class="form-label" min="0" max="10000"  onchange="updateTextInput(this.value);">Precio maximo:</form:label>
+                    <form:input path="activityPriceMax" type="range" class="form-range" id="customRange" value=""/>
+                </div>
                 <button  class="btn btn-submit-form px-3 py-2" type="submit" id="cityFilterFormButton" form="cityFilterForm">
                     <spring:message code="filters.place.submit"/>
                 </button>
             </form:form>
-<%--            <form class="d-flex" role="search">--%>
-<%--            <input class="form-control me-2" type="search" placeholder="¿A donde?" aria-label="Search">--%>
-<%--            <button class="btn btn-outline-success btn-search" type="submit">--%>
-<%--                <spring:message code="filters.place.submit"/>--%>
-<%--            </button>--%>
-<%--          </form>--%>
         </div>
 
         <div class="container-experiences container-fluid p-0 mx-2 my-0 d-flex flex-wrap justify-content-center">

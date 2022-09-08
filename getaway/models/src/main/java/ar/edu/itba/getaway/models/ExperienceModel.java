@@ -1,5 +1,7 @@
 package ar.edu.itba.getaway.models;
 
+import java.util.Objects;
+
 public class ExperienceModel {
     private final long experienceId;
     private String experienceName, address, description, siteUrl, categoryName;
@@ -90,5 +92,18 @@ public class ExperienceModel {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ExperienceModel)) return false;
+        ExperienceModel that = (ExperienceModel) o;
+        return experienceId == that.experienceId && Double.compare(that.price, price) == 0 && cityId == that.cityId && categoryId == that.categoryId && userId == that.userId && Objects.equals(experienceName, that.experienceName) && Objects.equals(address, that.address) && Objects.equals(description, that.description) && Objects.equals(siteUrl, that.siteUrl) && Objects.equals(categoryName, that.categoryName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(experienceId, experienceName, address, description, siteUrl, categoryName, price, cityId, categoryId, userId);
     }
 }

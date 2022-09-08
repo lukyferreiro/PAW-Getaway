@@ -14,3 +14,7 @@ cityFilterFormButton.addEventListener("click", () => {
     cityFilterForm.submit();
     processing = false;
 })
+
+function updateTextInput(val) {
+    document.getElementById('defaultRange').value=val;
+}
