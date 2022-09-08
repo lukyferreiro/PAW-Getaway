@@ -1,4 +1,4 @@
-package ar.edu.itba.getaway.webapp.controller.experiences;
+package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.ExperienceCategory;
 import ar.edu.itba.getaway.models.ExperienceModel;
@@ -14,23 +14,22 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @Controller
-public class HotelController {
-
+public class ExperienceController {
     @Autowired
     ExperienceService exp;
     @Autowired
     CategoryService category;
 
-
-    @RequestMapping("/hotels")
-    public ModelAndView hotels(){
+    @RequestMapping("/{categoryName}")
+    public ModelAndView experience(@PathVariable("categoryName") final String categoryName) {
         final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
-        int id_adventure = ExperienceCategory.hotels.ordinal() + 1;
-        String categoryName = ExperienceCategory.hotels.getName();
-        List<ExperienceModel> experienceList = exp.listByCategory(id_adventure);
-        String dbCategoryName = ExperienceCategory.hotels.getDatabaseName();
+        ExperienceCategory category = ExperienceCategory.valueOf(categoryName);
+        int id = category.ordinal() + 1 ;
+
+        List<ExperienceModel> experienceList = exp.listByCategory(id);
+        String dbCategoryName = category.getName();
 
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
@@ -38,16 +37,15 @@ public class HotelController {
         return mav;
     }
 
-    @RequestMapping("/hotels/{hotelsId}")
-    public ModelAndView hotelsView(@PathVariable("hotelsId") final long hotelsId){
+    @RequestMapping("/{categoryName}/{categoryId}")
+    public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName, @PathVariable("categoryId") final long categoryId){
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
-        final ExperienceModel experience = exp.getById(hotelsId).orElseThrow(ExperienceNotFoundException::new);
-        String dbCategoryName = ExperienceCategory.hotels.getDatabaseName();
+        final ExperienceModel experience = exp.getById(categoryId).orElseThrow(ExperienceNotFoundException::new);
+        String dbCategoryName = ExperienceCategory.valueOf(categoryName).getName();
 
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
         return mav;
     }
-
 }
