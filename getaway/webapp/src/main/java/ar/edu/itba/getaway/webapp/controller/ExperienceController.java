@@ -47,16 +47,12 @@ public class ExperienceController {
             experienceListCity = exp.listByCategory(id);
         }
 
-        System.out.println(experienceListCity);
         if(maxPrice.isPresent() && maxPrice.get()>0){
             experienceListPrice = exp.listByCategoryAndPrice(id,maxPrice.get());
             experienceList = concatLists(experienceListCity, experienceListPrice);
         }else{
             experienceList = experienceListCity;
         }
-
-
-        System.out.println(experienceList);
 
 
         mav.addObject("cities", cityModels);
