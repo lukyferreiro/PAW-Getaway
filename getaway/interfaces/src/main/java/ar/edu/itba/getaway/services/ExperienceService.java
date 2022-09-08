@@ -16,4 +16,6 @@ public interface ExperienceService {
     //List<ExperienceModel> listByTags (long [] tagId);
     List<ExperienceModel> listByCategoryAndCity(long categoryId, long cityId);
     List<ExperienceModel> listByCategoryAndPrice(long categoryId,long max);
+    List<ExperienceModel> listByCategoryPriceAndCity(long categoryId,long max, long cityId);
+
 }

@@ -15,5 +15,6 @@ public interface ExperienceDao {
     //TODO: agregar metodos para los filtros
     //List<ExperienceModel> listByTags (long [] tagId);
     List<ExperienceModel> listByCategoryAndCity(long categoryId, long cityId);
-    List<ExperienceModel> listByPrice(long categoryId,long max);
+    List<ExperienceModel> listByCategoryAndPrice(long categoryId,long max);
+    List<ExperienceModel> listByCategoryPriceAndCity(long categoryId,long max, long cityId);
 }

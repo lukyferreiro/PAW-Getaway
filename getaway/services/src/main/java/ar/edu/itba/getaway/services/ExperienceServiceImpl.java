@@ -56,7 +56,12 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     public List<ExperienceModel> listByCategoryAndPrice(long categoryId,long max){
-        return experienceDao.listByPrice(categoryId, max);
+        return experienceDao.listByCategoryAndPrice(categoryId, max);
+    }
+
+    @Override
+    public List<ExperienceModel> listByCategoryPriceAndCity(long categoryId, long max, long cityId) {
+        return experienceDao.listByCategoryPriceAndCity(categoryId,max, cityId);
     }
 
 }
