@@ -11,6 +11,7 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -59,17 +60,17 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ds.setDriverClass(org.postgresql.Driver.class);
 
         //Usuario Local
-//        ds.setUrl("jdbc:postgresql://localhost/getaway");
-//        ds.setUsername("postgresql");
-//        ds.setPassword("getawaydb");
+        ds.setUrl("jdbc:postgresql://localhost/postgres");
+        ds.setUsername("postgres");
+        ds.setPassword("getawaydb");
         //Usuario remooto (para todos los del grupo)
 //        ds.setUrl("jdbc:postgresql://ec2-54-204-241-136.compute-1.amazonaws.com:5432/d38a8rs1b2dpeh");
 //        ds.setUsername("adrzztklademib");
 //        ds.setPassword("580c8ba69151e9ba288d107d1b28f9dfc3706838eccbfb4d4d9ca1cde2f6f86e");
         //Usuario PAW
-        ds.setUrl("jdbc:postgresql://10.16.1.110/paw-2022b-1");
-        ds.setUsername("paw-2022b-1");
-        ds.setPassword("qo16kZtyI");
+//        ds.setUrl("jdbc:postgresql://10.16.1.110/paw-2022b-1");
+//        ds.setUsername("paw-2022b-1");
+//        ds.setPassword("qo16kZtyI");
 
         return ds;
     }
@@ -87,6 +88,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
         dbp.addScript(schemaSql);
         return dbp;
+    }
+
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(100000);
+        return multipartResolver;
     }
 
 }

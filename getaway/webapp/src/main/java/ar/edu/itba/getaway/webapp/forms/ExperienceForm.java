@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -54,6 +55,9 @@ public class ExperienceForm {
     private String activityInfo;
 
     private List<String> activityTags;
+
+    @
+    private MultipartFile image;
 
 //    @Autowired
 //    private CityService cityService;
@@ -134,5 +138,11 @@ public class ExperienceForm {
     }
     public void setActivityPrice(String activityPrice) {
         this.activityPrice = activityPrice;
+    }
+    public MultipartFile getImage() {
+        return image;
+    }
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 }

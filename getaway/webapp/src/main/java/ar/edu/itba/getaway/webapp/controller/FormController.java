@@ -27,6 +27,8 @@ public class FormController {
     CategoryService categoryService;
     @Autowired
     TagService tagService;
+    @Autowired
+    ImageService imageService;
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form){
@@ -92,6 +94,8 @@ public class FormController {
         double price = Double.parseDouble(form.getActivityPrice());
         final ExperienceModel experienceModel = exp.create(form.getActivityName(),form.getActivityAddress(),
                 form.getActivityInfo(), form.getActivityUrl(), price, cityId , categoryId + 1, userId);
+
+        final ImageModel imageModel = imageService.create(form.getImage());
 
         //TODO check pq ahora como agregue la flecha para volver hacias atras en los detalles de la actividad
         //y al terminar el formulario me redigire a los detalles de la actividad, si todo en la flecha de volver
