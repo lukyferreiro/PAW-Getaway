@@ -31,12 +31,11 @@
               </div>
               <div class="col m-2"> <!--Categoria-->
                 <form:label path="activityCategory" class="form-label"><spring:message code="experienceForm.activityCategory"/></form:label>
-                <form:input path="activityCategory" list="categoryOptions" class="form-control" placeholder="${placeholder}"/>
-                <datalist id="categoryOptions">
+                <form:select path="activityCategory" class="form-select" placeholder="${placeholder}">
                   <c:forEach var="category" items="${categories}">
-                  <option value="${category}">
-                    </c:forEach>
-                </datalist>
+                    <option><c:out value="${category}"/></option>
+                  </c:forEach>
+                </form:select>
                 <form:errors path="activityCategory" element="p" cssClass="form-error-label"/>
               </div>
               <div class="col m-2"> <!--Precio-->

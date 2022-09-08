@@ -1,6 +1,6 @@
 package ar.edu.itba.getaway.models;
 
-public class CategoryModel {
+public class CategoryModel{
     private final long categoryId;
     private final String categoryName;
 

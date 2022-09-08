@@ -1,20 +1,15 @@
 package ar.edu.itba.getaway.webapp.forms;
 
 import ar.edu.itba.getaway.models.ExperienceCategory;
-import ar.edu.itba.getaway.services.CategoryService;
-import ar.edu.itba.getaway.services.CityService;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotNull;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-public class ExperienceForm {
+public class ExperienceForm{
 
     @Size(min=3, max=255)
     @Pattern(regexp = "^[A-Za-z0-9 ,_.-]+$")
@@ -135,4 +130,5 @@ public class ExperienceForm {
     public void setActivityPrice(String activityPrice) {
         this.activityPrice = activityPrice;
     }
+
 }
