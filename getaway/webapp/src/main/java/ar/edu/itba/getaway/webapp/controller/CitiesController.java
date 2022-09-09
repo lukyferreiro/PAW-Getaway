@@ -1,5 +1,4 @@
 package ar.edu.itba.getaway.webapp.controller;
-
 import ar.edu.itba.getaway.models.CityModel;
 import ar.edu.itba.getaway.models.CountryModel;
 import ar.edu.itba.getaway.services.CityService;
@@ -27,8 +26,16 @@ public class CitiesController {
     
     @RequestMapping(path = "/create_experience",produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
+
+
     public List<CityModel> getCities(@RequestParam String country){
+
+        //long currentCountryId = countryService.getIdByCountryName
+
         List<CountryModel> countryModels = countryService.listAll();
+        //volariamos este, y con el id hariamos un query SQL
+        //List<CityModel> cityModels = cityService.listByCountryId(currentCountryId)
+        // esto de arriba reemplaza la funcion que esta aca abajo
         List<CityModel> cityModels = new ArrayList<>();
         boolean flag = true;
         for (int j = 0; j<countryModels.size() && flag ; j++){
@@ -36,7 +43,6 @@ public class CitiesController {
                 return cityService.getByCountryId(j + 1);
             }
         }
-
         return cityModels;
     }
 

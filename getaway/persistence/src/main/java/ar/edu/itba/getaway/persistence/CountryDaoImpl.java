@@ -64,5 +64,11 @@ public class CountryDaoImpl implements CountryDao{
                 COUNTRY_MODEL_ROW_MAPPER));
     }
 
+    //TODO AGREGAR EL METODO EN TODAS LAS INTERFACES
+   // @Override
+    //public long getIdByCountryName(String country){
+
+    //}
+
 }
 

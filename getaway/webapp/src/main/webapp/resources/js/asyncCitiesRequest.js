@@ -9,4 +9,5 @@ window.onload = function (){
     };
   httpCitiesRequest.open("GET","aca va el path de el json generado por la API(CitiesController)",true);
   httpCitiesRequest.send();
+
 };
