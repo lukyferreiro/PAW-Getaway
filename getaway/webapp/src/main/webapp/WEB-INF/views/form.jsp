@@ -21,6 +21,7 @@
         <c:url value="/create_experience" var="postPath"/>
         <spring:message code="experienceForm.inputs.placeholder" var="placeholder"/>
         <spring:message code="experienceForm.activityMail.example" var="mailExample"/>
+        <spring:message code="experienceForm.activityUrl.example" var="urlExample"/>
         <form:form modelAttribute="experienceForm" action="${postPath}" id="createExperienceForm" method="post">
           <div class="container-inputs">
             <div class="p-0 m-0 d-flex">
@@ -71,7 +72,7 @@
               </div>
               <div class="col m-2"> <!--Url-->
                 <form:label path="activityUrl" class="form-label"><spring:message code="experienceForm.activityUrl"/></form:label>
-                <form:input path="activityUrl" type="text" class="form-control"/>
+                <form:input path="activityUrl" id="experienceFormUrlInput" type="text" class="form-control" placeholder="${urlExample}"/>
                 <form:errors path="activityUrl" element="p" cssClass="form-error-label"/>
               </div>
             </div>

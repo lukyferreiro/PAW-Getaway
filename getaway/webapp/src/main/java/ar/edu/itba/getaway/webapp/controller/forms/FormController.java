@@ -83,19 +83,18 @@ public class FormController {
         if(categoryId < 0){
             throw new Exception();
         }
-    //TODO NO FUNCIONA PQ ESTA BUSCANDO NOMBRES EN CASTELLANO Y ESTAN GUARDADOS EN INGLES
-    // long categoryId = categoryService.getByName(form.getActivityCategory()).get().getId();
+
+        //TODO NO FUNCIONA PQ ESTA BUSCANDO NOMBRES EN CASTELLANO Y ESTAN GUARDADOS EN INGLES
+        // long categoryId = categoryService.getByName(form.getActivityCategory()).get().getId();
         long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
 
         //TODO usuario forzado
         int userId = 1 ;
         double price = Double.parseDouble(form.getActivityPrice());
+        String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
         final ExperienceModel experienceModel = exp.create(form.getActivityName(),form.getActivityAddress(),
-                form.getActivityInfo(), form.getActivityUrl(), price, cityId , categoryId + 1 , userId);
+                form.getActivityInfo(), url, price, cityId , categoryId + 1 , userId);
 
-        //TODO check pq ahora como agregue la flecha para volver hacias atras en los detalles de la actividad
-        // y al terminar el formulario me redigire a los detalles de la actividad, si todo en la flecha de volver
-        // hacia atras me lleva devuelta al formulario
     // return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
         return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/");
     }

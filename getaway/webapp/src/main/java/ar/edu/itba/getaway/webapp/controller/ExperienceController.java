@@ -17,28 +17,28 @@ import java.util.Optional;
 
 @Controller
 public class ExperienceController {
+
     @Autowired
     ExperienceService exp;
-    @Autowired
-    CategoryService category;
+//    @Autowired
+//    CategoryService category;
     @Autowired
     CityService cityService;
 
-
     @RequestMapping(value = "/{categoryName}", method = {RequestMethod.GET})
-    public ModelAndView experience(@PathVariable("categoryName") final String categoryName, @ModelAttribute("filterForm") final FilterForm form, @RequestParam Optional<Long> cityId, @RequestParam Optional<Long> maxPrice) {
+    public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
+                                   @ModelAttribute("filterForm") final FilterForm form,
+                                   @RequestParam Optional<Long> cityId,
+                                   @RequestParam Optional<Long> maxPrice) {
         final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
         ExperienceCategory category = ExperienceCategory.valueOf(categoryName);
-        int id = category.ordinal() + 1 ;
-
-
-        List<ExperienceModel> experienceList = new ArrayList<>();
-
         String dbCategoryName = category.getName();
-
+        int id = category.ordinal() + 1 ;
+        List<ExperienceModel> experienceList;
         List<CityModel> cityModels = cityService.listAll();
+
         //Filtros
         if(cityId.isPresent()){
             if(maxPrice.isPresent() && maxPrice.get() > 0){
@@ -59,9 +59,9 @@ public class ExperienceController {
         return mav;
     }
 
-
     @RequestMapping("/{categoryName}/{categoryId}")
-    public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName, @PathVariable("categoryId") final long categoryId){
+    public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName,
+                                       @PathVariable("categoryId") final long categoryId){
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(categoryId).orElseThrow(ExperienceNotFoundException::new);
@@ -72,13 +72,14 @@ public class ExperienceController {
         return mav;
     }
 
-
     @RequestMapping(value = "/{categoryName}", method = {RequestMethod.POST})
-    public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName, @Valid @ModelAttribute("filterForm") final FilterForm form, final BindingResult errors){
+    public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName,
+                                       @Valid @ModelAttribute("filterForm") final FilterForm form,
+                                       final BindingResult errors){
         final ModelAndView mav = new ModelAndView("redirect:/" + categoryName);
 
         if(errors.hasErrors()){
-            return experience(categoryName, form, null, null);
+            return experience(categoryName, form, Optional.empty(), Optional.empty());
         }
 
         Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
@@ -92,8 +93,6 @@ public class ExperienceController {
             mav.addObject("maxPrice", form.getActivityPriceMax());
 //        }
 
-
         return mav;
-
     }
 }

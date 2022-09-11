@@ -38,22 +38,22 @@
                 <div class="row">
                     <div class="col-auto">
                         <div class="card-body p-2 mw-25">
-                            <c:if test="${dbCategoryName == 'adventures'}">
+                            <c:if test="${dbCategoryName == 'Aventura'}">
                                 <img class="rounded" style="max-width: 400px; max-height: 400px;" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
                             </c:if>
-                            <c:if test="${dbCategoryName == 'gastronomy'}">
+                            <c:if test="${dbCategoryName == 'Gastronomia'}">
                                 <img class="rounded" style="max-width: 400px; max-height: 400px;" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
                             </c:if>
-                            <c:if test="${dbCategoryName == 'hotels'}">
+                            <c:if test="${dbCategoryName == 'Hoteleria'}">
                                 <img class="rounded" style="max-width: 400px; max-height: 400px;" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
                             </c:if>
-                            <c:if test="${dbCategoryName == 'relax'}">
+                            <c:if test="${dbCategoryName == 'Relax'}">
                                 <img class="rounded" style="max-width: 400px; max-height: 400px;" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
                             </c:if>
-                            <c:if test="${dbCategoryName == 'night'}">
+                            <c:if test="${dbCategoryName == 'Vida nocturna'}">
                                 <img class="rounded" style="max-width: 400px; max-height: 400px;" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
                             </c:if>
-                            <c:if test="${dbCategoryName == 'historic'}">
+                            <c:if test="${dbCategoryName == 'Historico'}">
                                 <img class="rounded" style="max-width: 400px; max-height: 400px;" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
                             </c:if>
                         </div>

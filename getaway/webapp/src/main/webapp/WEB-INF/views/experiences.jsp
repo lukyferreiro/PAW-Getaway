@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title><spring:message code="pageName"/> - <c:url value="${categoryName}"/></title>
+    <title><spring:message code="pageName"/> - <c:url value="${dbCategoryName}"/></title>
     <%@ include file="../components/includes/headers.jsp" %>
 </head>
 
@@ -56,7 +56,7 @@
                     <c:if test="${dbCategoryName == 'Relax'}">
                         <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
                     </c:if>
-                    <c:if test="${dbCategoryName == 'Vida_nocturna'}">
+                    <c:if test="${dbCategoryName == 'Vida nocturna'}">
                         <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
                     </c:if>
                     <c:if test="${dbCategoryName == 'Historico'}">

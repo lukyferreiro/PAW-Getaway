@@ -27,10 +27,16 @@ createExperienceFormButton.addEventListener("click", () => {
     }
     processing = true;
     createExperienceFormButton.disabled = true;
-    // let priceInput = document.getElementById("experienceFormPriceInput");
-    // if(priceInput.value.length === 0){
-    //     priceInput.value = 0;
-    // }
+    //If price is empty, it's value is 0
+    let priceInput = document.getElementById("experienceFormPriceInput");
+    if(priceInput.value.length === 0){
+        priceInput.value = 0;
+    }
+    //If URL don't start with HTTP protocol, add it at the beginning
+    let urlInput = document.getElementById("experienceFormUrlInput");
+    if(urlInput.value.length !== 0 && !urlInput.value.startsWith("http://") && !urlInput.value.startsWith("https://")){
+        urlInput.value = "http://" + urlInput.value;
+    }
     createExperienceForm.submit();
     processing = false;
 })
