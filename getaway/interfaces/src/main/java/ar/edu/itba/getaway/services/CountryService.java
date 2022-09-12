@@ -11,4 +11,6 @@ public interface CountryService {
     boolean delete (long countryId);
     Optional<CountryModel> getById (long countryId);
     List<CountryModel> listAll();
+
+    Optional<CountryModel> getIdByCountryName(String country);
 }

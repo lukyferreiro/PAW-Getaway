@@ -9,11 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-@Controller
+@RestController
 public class CitiesController {
 
     @Autowired
@@ -26,23 +29,12 @@ public class CitiesController {
     
     @RequestMapping(path = "/create_experience",produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-
-
     public List<CityModel> getCities(@RequestParam String country){
 
-        //long currentCountryId = countryService.getIdByCountryName
+       Optional<CountryModel> currentCountry = countryService.getIdByCountryName(country);
 
-        List<CountryModel> countryModels = countryService.listAll();
-        //volariamos este, y con el id hariamos un query SQL
-        //List<CityModel> cityModels = cityService.listByCountryId(currentCountryId)
-        // esto de arriba reemplaza la funcion que esta aca abajo
-        List<CityModel> cityModels = new ArrayList<>();
-        boolean flag = true;
-        for (int j = 0; j<countryModels.size() && flag ; j++){
-            if(countryModels.get(j).getName().equals(country)){
-                return cityService.getByCountryId(j + 1);
-            }
-        }
+        List<CityModel> cityModels = cityService.getByCountryId(currentCountry.get().getId());
+
         return cityModels;
     }
 

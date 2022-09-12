@@ -1,5 +1,6 @@
-window.onload = function (){
+var countriesDropdown = document.getElementById("countriesOptions");
 
+countriesDropdown.addEventListener("on",function () {
     var httpCitiesRequest = new XMLHttpRequest();
 
     httpCitiesRequest.onreadystatechange = function(){
@@ -7,7 +8,9 @@ window.onload = function (){
             console.log(JSON.parse(httpCitiesRequest.response));
         }
     };
-  httpCitiesRequest.open("GET","aca va el path de el json generado por la API(CitiesController)",true);
-  httpCitiesRequest.send();
+    httpCitiesRequest.open("GET","aca va el path de el json generado por la API(CitiesController)",true);
+    httpCitiesRequest.send();
+})
 
-};
+
+

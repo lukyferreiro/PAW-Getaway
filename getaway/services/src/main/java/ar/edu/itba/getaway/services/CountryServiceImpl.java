@@ -43,5 +43,8 @@ public class CountryServiceImpl implements CountryService{
     public Optional<CountryModel> getById (long countryId){
         return countryDao.getById(countryId);
     }
+
+    @Override
+   public Optional<CountryModel> getIdByCountryName(String country){return countryDao.getIdByCountryName(country);}
 }
 

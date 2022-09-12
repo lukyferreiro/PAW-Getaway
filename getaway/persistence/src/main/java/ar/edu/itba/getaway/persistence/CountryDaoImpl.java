@@ -65,10 +65,10 @@ public class CountryDaoImpl implements CountryDao{
     }
 
     //TODO AGREGAR EL METODO EN TODAS LAS INTERFACES
-   // @Override
-    //public long getIdByCountryName(String country){
-
-    //}
+    @Override
+    public Optional<CountryModel> getIdByCountryName(String country){
+     return jdbcTemplate.query("SELECT countryId FROM countries WHERE countryName = ?",new Object[]{country},COUNTRY_MODEL_ROW_MAPPER).stream().findFirst();
+    }
 
 }
 
