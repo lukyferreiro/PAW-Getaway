@@ -7,6 +7,7 @@
 <head>
     <title><spring:message code="pageName"/> - <c:url value="${categoryName}"/></title>
     <%@ include file="../components/includes/headers.jsp" %>
+    <link href="<c:url value = "/resources/css/experiences.css" />" rel="stylesheet">
 </head>
 
 <body>
@@ -18,6 +19,8 @@
           <p class="font-weight-bold">
               <spring:message code="filters.title"/>
           </p>
+
+            <%--FILTER--%>
             <c:url value="/${categoryName}" var="postPath"/>
             <form:form modelAttribute="filterForm" action="${postPath}" id="cityFilterForm" method="post">
                 <div>
@@ -31,13 +34,14 @@
                     <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
                 </div>
                 <div>
-                    <form:label path="activityPriceMax" for="customRange" class="form-label" min="0" max="10000"  onchange="updateTextInput(this.value);">Precio maximo:</form:label>
-                    <form:input path="activityPriceMax" type="range" class="form-range" id="customRange" value=""/>
+                    <form:label path="activityPriceMax" class="form-label">Precio maximo:</form:label>
+                    <form:input id="customRange" path="activityPriceMax" type="range" class="slider" min="0" max="10000" value=""/>
                 </div>
                 <button  class="btn btn-submit-form px-3 py-2" type="submit" id="cityFilterFormButton" form="cityFilterForm">
                     <spring:message code="filters.place.submit"/>
                 </button>
             </form:form>
+
         </div>
 
         <div class="container-experiences container-fluid p-0 mx-2 my-0 d-flex flex-wrap justify-content-center">
@@ -96,5 +100,7 @@
     </div>
 
     <%@ include file="../components/includes/bottomScripts.jsp" %>
+    <script src='<c:url value="/resources/js/filter.js"/>'></script>
+
   </body>
 </html>

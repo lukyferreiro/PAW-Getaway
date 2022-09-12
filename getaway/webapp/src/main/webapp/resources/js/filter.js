@@ -15,6 +15,17 @@ cityFilterFormButton.addEventListener("click", () => {
     processing = false;
 })
 
-function updateTextInput(val) {
-    document.getElementById('defaultRange').value=val;
-}
+// let slider = document.getElementById('customRange');
+// noUiSlider.create(slider, {
+//     start: [20, 80],
+//     connect: true,
+//     step: 1,
+//     orientation: 'horizontal', // 'horizontal' or 'vertical'
+//     range: {
+//         'min': 0,
+//         'max': 100
+//     },
+//     format: wNumb({
+//         decimals: 0
+//     })
+// });
