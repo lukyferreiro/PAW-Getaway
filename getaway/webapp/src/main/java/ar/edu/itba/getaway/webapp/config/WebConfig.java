@@ -7,10 +7,16 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -21,6 +27,8 @@ import org.springframework.web.servlet.view.JstlView;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
 
+@EnableTransactionManagement
+//@EnableAsync
 @EnableWebMvc
 @ComponentScan({"ar.edu.itba.getaway.webapp.controller", "ar.edu.itba.getaway.services",  "ar.edu.itba.getaway.persistence"})
 @Configuration
@@ -28,6 +36,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
+
+    private static final int MAX_SIZE_PER_FILE = 5000000;
 
     @Bean
     public ViewResolver viewResolver() {
@@ -40,7 +50,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-        super.addResourceHandlers(registry);
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 
@@ -88,5 +97,27 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         dbp.addScript(schemaSql);
         return dbp;
     }
+
+    //TODO: ver con imagenes muy grandes y archivos que no son imagenes
+    @Bean
+    public MultipartResolver multipartResolver() {
+        final CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSizePerFile(MAX_SIZE_PER_FILE);
+        multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE*6);
+        return multipartResolver;
+    }
+
+    // Con esto podemos anotar nuestras clases y métodos con @Transactional
+    // para que corran dentro de transacciones
+    @Bean
+    public PlatformTransactionManager transactionManager(final DataSource ds) {
+        return new DataSourceTransactionManager(ds);
+    }
+
+//    @Bean(name = "appBaseUrl")
+//    public String appBaseUrl() {
+////        return "localhost";
+//        return "pawserver.it.itba.edu.ar";
+//    }
 
 }
