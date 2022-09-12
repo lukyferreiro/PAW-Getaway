@@ -87,11 +87,6 @@
     border-color: transparent;
 }
 
-.btn-circle.btn-xl {
-    border-radius: 35px;
-    text-align: center;
-}
-
 /*.rate{*/
 /*    display: flex;*/
 /*    justify-content: flex-start;*/
@@ -106,7 +101,7 @@
 /*}*/
 
 /*------------------------------*/
-/*------- Activity Page  -------*/
+/*-- Experience details Page  --*/
 /*------------------------------*/
 
 .btn-leave-experience-details{
@@ -131,5 +126,18 @@
     width: 30px;
     height: 30px;
     margin-right: 5px;
+}
+
+.img-detail{
+    max-width: 500px;
+    max-height: 400px;
+}
+
+.information-title{
+    font-size: x-large;
+}
+
+.information-text{
+    font-size: medium;
 }
 

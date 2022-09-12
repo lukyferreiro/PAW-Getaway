@@ -68,7 +68,7 @@
 <%--            </div>--%>
 
             <div class="p-0 m-2 d-flex flex-column"> <!--Descripcion-->
-              <form:label path="activityInfo" class="form-label d-flex">
+              <form:label path="activityInfo" class="form-label">
                 <spring:message code="experienceForm.activityInfo"/>
                 <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
               </form:label>

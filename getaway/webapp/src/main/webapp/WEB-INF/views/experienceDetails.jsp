@@ -39,71 +39,80 @@
                     <div class="col-auto">
                         <div class="card-body p-2 mw-25">
                             <c:if test="${dbCategoryName == 'Aventura'}">
-                                <img class="rounded" style="max-width: 400px; max-height: 400px;" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
+                                <img class="rounded img-detail" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
                             </c:if>
                             <c:if test="${dbCategoryName == 'Gastronomia'}">
-                                <img class="rounded" style="max-width: 400px; max-height: 400px;" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
+                                <img class="rounded img-detail" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
                             </c:if>
                             <c:if test="${dbCategoryName == 'Hoteleria'}">
-                                <img class="rounded" style="max-width: 400px; max-height: 400px;" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
+                                <img class="rounded img-detail" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
                             </c:if>
                             <c:if test="${dbCategoryName == 'Relax'}">
-                                <img class="rounded" style="max-width: 400px; max-height: 400px;" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
+                                <img class="rounded img-detail" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
                             </c:if>
                             <c:if test="${dbCategoryName == 'Vida nocturna'}">
-                                <img class="rounded" style="max-width: 400px; max-height: 400px;" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
+                                <img class="rounded img-detail" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
                             </c:if>
                             <c:if test="${dbCategoryName == 'Historico'}">
-                                <img class="rounded" style="max-width: 400px; max-height: 400px;" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
+                                <img class="rounded img-detail" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
                             </c:if>
                         </div>
                     </div>
                     <div class="col">
-                        <div>
-                            <div class="card-body">
-                                <h5 class="card-title">
+                        <div class="card-body">
+                            <div>
+                                <h5 class="information-title">
                                     <spring:message code="experienceDetail.address"/>
                                 </h5>
-                                <p><c:out value="${activity.address}"/></p>
-                                <h5 class="card-title">
+                                <p class="information-text"><c:out value="${activity.address}"/></p>
+                            </div>
+                            <div>
+                                <h5 class="information-title">
                                     <spring:message code="experienceDetail.price"/>
+                                </h5>
+                                <p class="information-text">
                                     <c:if test="${activity.price > 0}">
-                                        <p>
-                                            <spring:message code="experienceDetail.price.simbol"/>
-                                                <c:out value="${activity.price}"/>
-                                            <spring:message code="experienceDetail.price.perPerson"/>
-                                        </p>
+                                        <spring:message code="experienceDetail.price.simbol"/>
+                                        <c:out value="${activity.price}"/>
+                                        <spring:message code="experienceDetail.price.perPerson"/>
                                     </c:if>
                                     <c:if test="${activity.price == 0}">
-                                        <p>
-                                            <spring:message code="experienceDetail.price.free"/>
-                                        </p>
+                                        <spring:message code="experienceDetail.price.free"/>
                                     </c:if>
-                                </h5>
-                                <h5 class="card-title">
+                                </p>
+                            </div>
+                            <div>
+                                <h5 class="information-title">
                                     <spring:message code="experienceDetail.description"/>
                                 </h5>
-                                <p class="card-text">
+                                <p class="information-text">
                                     <c:if test="${activity.description != null}">
                                         <c:out value="${activity.description}"/>
                                     </c:if>
-                                    <c:if test="${activity.description != null}">
+                                    <c:if test="${activity.description == null}">
                                         <spring:message code="experienceDetail.noData"/>
                                     </c:if>
                                 </p>
-                                <h5 class="card-title"> <spring:message code="experienceDetail.url"/> </h5>
+                            </div>
+                            <div>
+                                <h5 class="information-title">
+                                    <spring:message code="experienceDetail.url"/>
+                                </h5>
                                 <c:if test="${activity.siteUrl != null}">
-                                    <a class="card-text" href="<c:url value="${activity.siteUrl}"/>">
-                                        <c:out value="${activity.siteUrl}"/>
+                                    <a href="<c:url value="${activity.siteUrl}"/>">
+                                        <p class="information-text">
+                                            <c:out value="${activity.siteUrl}"/>
+                                        </p>
                                     </a>
                                 </c:if>
-                                <c:if test="${activity.siteUrl != null}">
-                                    <spring:message code="experienceDetail.noData"/>
+                                <c:if test="${activity.siteUrl == null}">
+                                    <p class="information-text">
+                                        <spring:message code="experienceDetail.noData"/>
+                                    </p>
                                 </c:if>
-
+                            </div>
 <%--                                <h5 class="card-title"> <spring:message code="experienceDetail.tags"/> </h5>--%>
 <%--                                <p><a href="#">#tag1</a>   <a href="#">#tag2</a></p>--%>
-                            </div>
                         </div>
                     </div>
                 </div>

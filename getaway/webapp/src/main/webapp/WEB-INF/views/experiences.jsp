@@ -62,12 +62,12 @@
                     <c:if test="${dbCategoryName == 'Historico'}">
                         <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
                     </c:if>
-                        <%--                  <div class="">--%>
-    <%--                    <button type="button" class="btn btn-bookmark">--%>
-    <%--                      <img src="<c:url value="/resources/images/ic_bookmark_white.svg"/>" alt="Guardar"/>--%>
-    <%--                    </button>--%>
-    <%--                  </div>--%>
-                  <div class="card-body  container-fluid p-2">
+<%--                    <div class="">--%>
+<%--                        <button type="button" class="btn btn-bookmark">--%>
+<%--                          <img src="<c:url value="/resources/images/ic_bookmark_white.svg"/>" alt="Guardar"/>--%>
+<%--                        </button>--%>
+<%--                    </div>--%>
+                  <div class="card-body container-fluid p-2">
                     <h2 class="card-title container-fluid p-0"><c:out value="${activity.name}"/></h2>
                     <div class="card-text container-fluid p-0">
                         <p class="text-truncate"><c:out value="${activity.description}"/></p>
