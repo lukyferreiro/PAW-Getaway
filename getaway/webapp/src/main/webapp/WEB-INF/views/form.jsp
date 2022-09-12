@@ -21,7 +21,7 @@
         <c:url value="/create_experience" var="postPath"/>
         <spring:message code="experienceForm.inputs.placeholder" var="placeholder"/>
         <spring:message code="experienceForm.activityMail.example" var="mailExample"/>
-        <form:form modelAttribute="experienceForm" action="${postPath}" id="createExperienceForm" method="post">
+        <form:form modelAttribute="experienceForm" action="${postPath}" id="createExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
           <div class="container-inputs">
             <div class="p-0 m-0 d-flex">
               <div class="col m-2"> <!--Nombre de la experiencia-->
@@ -104,7 +104,7 @@
               </div>
             </div>
 
-            <div class="p-0 m-2 d-flex flex-column"> <!--Imagenes-->
+            <div> <!--Imagenes-->
               <form:label path="activityImg" class="form-label"><spring:message code="experienceForm.activityImg"/></form:label>
               <form:input path="activityImg" type="file" class="form-control" />
               <form:errors path="activityImg" element="p" cssClass="form-error-label"/>

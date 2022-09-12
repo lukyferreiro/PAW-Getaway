@@ -48,16 +48,13 @@ public class ExperienceForm {
     @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$")
     private String activityMail;
 
-    private String activityImg;
+    private MultipartFile activityImg;
 
     @NotEmpty
     @Size(min=10)
     private String activityInfo;
 
     private List<String> activityTags;
-
-    @
-    private MultipartFile image;
 
 //    @Autowired
 //    private CityService cityService;
@@ -80,7 +77,6 @@ public class ExperienceForm {
         return activityCategory;
     }
     public long getActivityCategoryId() {
-
         for (int i = 0; i < ExperienceCategory.values().length ; i++){
             if(ExperienceCategory.values()[i].getName().equals(activityCategory)){
                 return i ;
@@ -88,7 +84,7 @@ public class ExperienceForm {
         }
         return -1;
     }
-    public String getActivityImg() {
+    public MultipartFile getActivityImg() {
         return activityImg;
     }
     public String getActivityInfo() {
@@ -112,7 +108,7 @@ public class ExperienceForm {
     public void setActivityCategory(String activityCategory) {
         this.activityCategory = activityCategory;
     }
-    public void setActivityImg(String activityImg) {
+    public void setActivityImg(MultipartFile activityImg) {
         this.activityImg = activityImg;
     }
     public void setActivityInfo(String activityInfo) {
@@ -138,11 +134,5 @@ public class ExperienceForm {
     }
     public void setActivityPrice(String activityPrice) {
         this.activityPrice = activityPrice;
-    }
-    public MultipartFile getImage() {
-        return image;
-    }
-    public void setImage(MultipartFile image) {
-        this.image = image;
     }
 }

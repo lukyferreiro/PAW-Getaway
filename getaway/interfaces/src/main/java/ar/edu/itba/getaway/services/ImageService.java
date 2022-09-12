@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ImageService {
-    ImageModel create (MultipartFile image);
+    ImageModel create (byte[] image);
     boolean update (long imageId, ImageModel imageModel);
     boolean delete (long imageId);
     List<ImageModel> listAll();

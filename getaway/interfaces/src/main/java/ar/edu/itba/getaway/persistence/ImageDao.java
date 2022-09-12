@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ImageDao {
-    ImageModel create (MultipartFile image) throws Exception;
+    ImageModel create (byte[] image);
     boolean update (long imageId, ImageModel imageModel);
     boolean delete (long imageId);
     List<ImageModel> listAll();

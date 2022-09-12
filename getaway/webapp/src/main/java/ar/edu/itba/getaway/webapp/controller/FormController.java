@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.persistence.ImageExperienceDao;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class FormController {
     TagService tagService;
     @Autowired
     ImageService imageService;
+    @Autowired
+    ImageExperienceService imageExperienceService;
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form){
@@ -75,7 +78,7 @@ public class FormController {
 
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
-    public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form, final BindingResult errors) throws Exception {
+    public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,  final BindingResult errors) throws Exception {
 
         if(errors.hasErrors()){
             return createActivityForm(form);
@@ -95,7 +98,13 @@ public class FormController {
         final ExperienceModel experienceModel = exp.create(form.getActivityName(),form.getActivityAddress(),
                 form.getActivityInfo(), form.getActivityUrl(), price, cityId , categoryId + 1, userId);
 
-        final ImageModel imageModel = imageService.create(form.getImage());
+        if(!form.getActivityImg().isEmpty()){
+            final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
+            //Intentar cargar el par imgid, expid a la tabla image experience
+            //imageExperienceService.create(new ImageExperienceModel(imageModel.getId(), experienceModel.getId(), true));
+        }
+
+
 
         //TODO check pq ahora como agregue la flecha para volver hacias atras en los detalles de la actividad
         //y al terminar el formulario me redigire a los detalles de la actividad, si todo en la flecha de volver

@@ -25,7 +25,7 @@ public class ImageDaoImpl implements ImageDao {
 
     private static final RowMapper<ImageModel> IMAGE_MODEL_ROW_MAPPER =
             (rs, rowNum) -> new ImageModel(rs.getLong("imgid"),
-                    (MultipartFile) rs.getObject("image"));
+                    rs.getObject("image", byte[].class));
     //TODO check MultipartFile
 
     @Autowired
@@ -37,24 +37,10 @@ public class ImageDaoImpl implements ImageDao {
     }
 
     @Override
-    public ImageModel create(MultipartFile image) throws Exception {
+    public ImageModel create(byte[] image) {
         final Map<String, Object> args = new HashMap<>();
 
-        byte [] byteArr= new byte[0];
-        try {
-            byteArr = image.getBytes();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        InputStream inputStream = new ByteArrayInputStream(byteArr);
-
-        if (inputStream != null){
-            args.put("image", inputStream);
-        }
-        else{
-            throw new Exception("Fallo carga de imagen");
-        }
-
+        args.put("image", image);
 
         final long imgid = jdbcInsert.executeAndReturnKey(args).longValue();
         return new ImageModel(imgid, image);
