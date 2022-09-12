@@ -20,8 +20,8 @@ public class ImageExperienceServiceImpl implements ImageExperienceService {
     }
 
     @Override
-    public ImageExperienceModel create(ImageExperienceModel imageExperienceModel) {
-        return imageExperienceDao.create(imageExperienceModel);
+    public ImageExperienceModel create(long imageId, long experienceId, boolean isCover) {
+        return imageExperienceDao.create(imageId, experienceId, isCover);
     }
 
     @Override

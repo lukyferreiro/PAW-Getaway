@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ImageExperienceService {
-    ImageExperienceModel create (ImageExperienceModel imageExperienceModel);
+    ImageExperienceModel create (long imageId, long experienceId, boolean isCover);
     boolean update (long imageId, ImageExperienceModel imageExperienceModel);
     boolean delete (long imageId);
     List<ImageExperienceModel> listAll();

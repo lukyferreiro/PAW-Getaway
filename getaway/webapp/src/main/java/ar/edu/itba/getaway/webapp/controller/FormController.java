@@ -101,7 +101,7 @@ public class FormController {
         if(!form.getActivityImg().isEmpty()){
             final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
             //Intentar cargar el par imgid, expid a la tabla image experience
-            //imageExperienceService.create(new ImageExperienceModel(imageModel.getId(), experienceModel.getId(), true));
+            imageExperienceService.create(imageModel.getId(), experienceModel.getId(), true);
         }
 
 
