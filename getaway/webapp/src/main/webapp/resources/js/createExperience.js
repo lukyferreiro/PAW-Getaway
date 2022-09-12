@@ -14,6 +14,10 @@ window.addEventListener("change", () => {
     validateCityIfThereIsACountry(countryInput, cityInput);
 });
 
+window.addEventListener("load", () => {
+    validateCityIfThereIsACountry(countryInput, cityInput);
+});
+
 countryInput.addEventListener("keyup", () => {
     validateCityIfThereIsACountry(countryInput, cityInput);
 });

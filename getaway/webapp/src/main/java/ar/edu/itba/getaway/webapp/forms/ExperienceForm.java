@@ -27,7 +27,7 @@ public class ExperienceForm{
 
     @NotEmpty
     @Pattern(regexp = "^[A-Za-z0-9 ,_.-]+$")
-    @Size(min=5)
+    @Size(min=5, max=200)
     private String activityAddress;
 
     @Pattern(regexp = "^(0|([1-9][0-9]*))(\\.[0-9]{1,2})?$")
@@ -45,8 +45,8 @@ public class ExperienceForm{
 
     private String activityImg;
 
-    @NotEmpty
-    @Size(min=10)
+//    @NotEmpty
+    @Size(max=500)
     private String activityInfo;
 
     private List<String> activityTags;
@@ -72,7 +72,6 @@ public class ExperienceForm{
         return activityCategory;
     }
     public long getActivityCategoryId() {
-
         for (int i = 0; i < ExperienceCategory.values().length ; i++){
             if(ExperienceCategory.values()[i].getName().equals(activityCategory)){
                 return i ;

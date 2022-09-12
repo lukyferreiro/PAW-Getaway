@@ -84,12 +84,23 @@
                                     <spring:message code="experienceDetail.description"/>
                                 </h5>
                                 <p class="card-text">
-                                    <c:out value="${activity.description}"/>
+                                    <c:if test="${activity.description != null}">
+                                        <c:out value="${activity.description}"/>
+                                    </c:if>
+                                    <c:if test="${activity.description != null}">
+                                        <spring:message code="experienceDetail.noData"/>
+                                    </c:if>
                                 </p>
                                 <h5 class="card-title"> <spring:message code="experienceDetail.url"/> </h5>
-                                <a class="card-text" href="<c:url value="${activity.siteUrl}"/>">
-                                    <c:out value="${activity.siteUrl}"/>
-                                </a>
+                                <c:if test="${activity.siteUrl != null}">
+                                    <a class="card-text" href="<c:url value="${activity.siteUrl}"/>">
+                                        <c:out value="${activity.siteUrl}"/>
+                                    </a>
+                                </c:if>
+                                <c:if test="${activity.siteUrl != null}">
+                                    <spring:message code="experienceDetail.noData"/>
+                                </c:if>
+
 <%--                                <h5 class="card-title"> <spring:message code="experienceDetail.tags"/> </h5>--%>
 <%--                                <p><a href="#">#tag1</a>   <a href="#">#tag2</a></p>--%>
                             </div>

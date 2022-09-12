@@ -91,9 +91,10 @@ public class FormController {
         //TODO usuario forzado
         int userId = 1 ;
         double price = Double.parseDouble(form.getActivityPrice());
+        String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
         String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
         final ExperienceModel experienceModel = exp.create(form.getActivityName(),form.getActivityAddress(),
-                form.getActivityInfo(), url, price, cityId , categoryId + 1 , userId);
+                description, url, price, cityId, categoryId + 1, userId);
 
     // return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
         return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/");
