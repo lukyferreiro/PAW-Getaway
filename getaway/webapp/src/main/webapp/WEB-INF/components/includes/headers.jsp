@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+
 
 <!-- Fonts -->
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Yeseva+One"/>

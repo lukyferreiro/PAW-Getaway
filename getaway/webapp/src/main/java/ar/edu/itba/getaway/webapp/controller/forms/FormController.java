@@ -91,9 +91,7 @@ public class FormController {
         //TODO NO FUNCIONA PQ ESTA BUSCANDO NOMBRES EN CASTELLANO Y ESTAN GUARDADOS EN INGLES
         //long categoryId = categoryService.getByName(form.getActivityCategory()).get().getId();
 
-        //TODO a veces falla, no se pq, tira un NoSuchElementException
-        //long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
-        long cityId = 1;
+        long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
 
         //TODO usuario forzado
         int userId = 1 ;
