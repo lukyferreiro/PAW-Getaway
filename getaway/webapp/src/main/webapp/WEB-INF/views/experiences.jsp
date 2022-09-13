@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title><spring:message code="pageName"/> - <c:url value="${categoryName}"/></title>
+    <title><spring:message code="pageName"/> - <c:url value="${dbCategoryName}"/></title>
     <%@ include file="../components/includes/headers.jsp" %>
     <link href="<c:url value = "/resources/css/experiences.css" />" rel="stylesheet">
 </head>
@@ -60,18 +60,18 @@
                     <c:if test="${dbCategoryName == 'Relax'}">
                         <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
                     </c:if>
-                    <c:if test="${dbCategoryName == 'Vida_nocturna'}">
+                    <c:if test="${dbCategoryName == 'Vida nocturna'}">
                         <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
                     </c:if>
                     <c:if test="${dbCategoryName == 'Historico'}">
                         <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
                     </c:if>
-                        <%--                  <div class="">--%>
-    <%--                    <button type="button" class="btn btn-bookmark">--%>
-    <%--                      <img src="<c:url value="/resources/images/ic_bookmark_white.svg"/>" alt="Guardar"/>--%>
-    <%--                    </button>--%>
-    <%--                  </div>--%>
-                  <div class="card-body  container-fluid p-2">
+<%--                    <div class="">--%>
+<%--                        <button type="button" class="btn btn-bookmark">--%>
+<%--                          <img src="<c:url value="/resources/images/ic_bookmark_white.svg"/>" alt="Guardar"/>--%>
+<%--                        </button>--%>
+<%--                    </div>--%>
+                  <div class="card-body container-fluid p-2">
                     <h2 class="card-title container-fluid p-0"><c:out value="${activity.name}"/></h2>
                     <div class="card-text container-fluid p-0">
                         <p class="text-truncate"><c:out value="${activity.description}"/></p>

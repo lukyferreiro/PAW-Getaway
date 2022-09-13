@@ -27,15 +27,16 @@ public class ExperienceForm{
 
     @NotEmpty
     @Pattern(regexp = "^[A-Za-z0-9 ,_.-]+$")
-    @Size(min=5)
+    @Size(min=5, max=200)
     private String activityAddress;
 
-    @NotEmpty
     @Pattern(regexp = "^(0|([1-9][0-9]*))(\\.[0-9]{1,2})?$")
     private String activityPrice;
 
-    @NotEmpty
-    @URL
+    // https://regexr.com/39nr7
+    @Pattern(regexp = "^([(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*))?$")
+    //https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+//    @Pattern(regexp = "^((https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,}))?$")
     private String activityUrl;
 
     @NotEmpty
@@ -44,8 +45,8 @@ public class ExperienceForm{
 
     private String activityImg;
 
-    @NotEmpty
-    @Size(min=10)
+//    @NotEmpty
+    @Size(max=500)
     private String activityInfo;
 
     private List<String> activityTags;
@@ -71,7 +72,6 @@ public class ExperienceForm{
         return activityCategory;
     }
     public long getActivityCategoryId() {
-
         for (int i = 0; i < ExperienceCategory.values().length ; i++){
             if(ExperienceCategory.values()[i].getName().equals(activityCategory)){
                 return i ;
