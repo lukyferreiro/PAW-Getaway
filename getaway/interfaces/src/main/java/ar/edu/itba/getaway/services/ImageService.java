@@ -12,4 +12,5 @@ public interface ImageService {
     boolean delete (long imageId);
     List<ImageModel> listAll();
     Optional<ImageModel> getById (long imageId);
+    Optional<ImageModel> getByExperienceId(long experienceId);
 }

@@ -52,9 +52,9 @@ public class ImageDaoImpl implements ImageDao {
     }
 
     @Override
-    public boolean delete(long imageId) {
+    public boolean delete(long imgid) {
         return jdbcTemplate.update("DELETE FROM images WHERE imgid = ?",
-                imageId) == 1;
+                imgid) == 1;
     }
 
     @Override
@@ -67,5 +67,11 @@ public class ImageDaoImpl implements ImageDao {
     public Optional<ImageModel> getById(long imgid) {
         return jdbcTemplate.query("SELECT imgid, image FROM images WHERE imgid = ?",
                 new Object[]{imgid}, IMAGE_MODEL_ROW_MAPPER).stream().findFirst();
+    }
+
+    @Override
+    public Optional<ImageModel> getByExperienceId(long experienceId){
+        return jdbcTemplate.query("SELECT imgId, image FROM imagesExperiences NATURAL JOIN images WHERE experienceId = ?",
+                new Object[]{experienceId}, IMAGE_MODEL_ROW_MAPPER).stream().findFirst();
     }
 }

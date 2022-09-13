@@ -43,4 +43,7 @@ public class ImageServiceImpl implements ImageService {
     public Optional<ImageModel> getById (long imageId){
         return imageDao.getById(imageId);
     }
+
+    @Override
+    public Optional<ImageModel> getByExperienceId(long experienceId) { return imageDao.getByExperienceId(experienceId); };
 }
