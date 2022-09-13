@@ -27,6 +27,10 @@ public class FormController {
     CategoryService categoryService;
     @Autowired
     TagService tagService;
+    @Autowired
+    ImageService imageService;
+    @Autowired
+    ImageExperienceService imageExperienceService;
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form){
@@ -73,7 +77,7 @@ public class FormController {
 
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
-    public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form, final BindingResult errors) throws Exception {
+    public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,  final BindingResult errors) throws Exception {
 
         if(errors.hasErrors()){
             return createActivityForm(form);
@@ -99,6 +103,15 @@ public class FormController {
         final ExperienceModel experienceModel = exp.create(form.getActivityName(),form.getActivityAddress(),
                 description, url, price, cityId, categoryId + 1, userId);
 
+        if(!form.getActivityImg().isEmpty()){
+            final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
+            //Intentar cargar el par imgid, expid a la tabla image experience
+            imageExperienceService.create(imageModel.getId(), experienceModel.getId(), true);
+        }
+
+        //TODO check pq ahora como agregue la flecha para volver hacias atras en los detalles de la actividad
+        //y al terminar el formulario me redigire a los detalles de la actividad, si todo en la flecha de volver
+        //hacia atras me lleva devuelta al formulario
     // return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
         return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/");
     }

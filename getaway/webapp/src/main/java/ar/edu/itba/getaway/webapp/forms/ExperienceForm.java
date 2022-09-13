@@ -3,6 +3,8 @@ package ar.edu.itba.getaway.webapp.forms;
 import ar.edu.itba.getaway.models.ExperienceCategory;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.validation.constraints.Pattern;
@@ -43,7 +45,7 @@ public class ExperienceForm{
     @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$")
     private String activityMail;
 
-    private String activityImg;
+    private MultipartFile activityImg;
 
 //    @NotEmpty
     @Size(max=500)
@@ -79,7 +81,7 @@ public class ExperienceForm{
         }
         return -1;
     }
-    public String getActivityImg() {
+    public MultipartFile getActivityImg() {
         return activityImg;
     }
     public String getActivityInfo() {
@@ -103,7 +105,7 @@ public class ExperienceForm{
     public void setActivityCategory(String activityCategory) {
         this.activityCategory = activityCategory;
     }
-    public void setActivityImg(String activityImg) {
+    public void setActivityImg(MultipartFile activityImg) {
         this.activityImg = activityImg;
     }
     public void setActivityInfo(String activityInfo) {

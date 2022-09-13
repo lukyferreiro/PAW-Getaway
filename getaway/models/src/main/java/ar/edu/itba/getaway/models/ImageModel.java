@@ -4,9 +4,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ImageModel {
     private final long imageId;
-    private final MultipartFile image;
+    private final byte[] image;
 
-    public ImageModel(long imageId, MultipartFile image ) {
+    public ImageModel(long imageId, byte[] image ) {
         this.imageId = imageId;
         this.image = image;
     }
@@ -15,7 +15,7 @@ public class ImageModel {
         return imageId;
     }
 
-    public MultipartFile getImage() {
+    public byte[] getImage() {
         return image;
     }
 }

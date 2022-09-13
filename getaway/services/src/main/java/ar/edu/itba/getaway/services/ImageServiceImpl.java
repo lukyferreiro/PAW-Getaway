@@ -20,8 +20,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ImageModel create (ImageModel imageModel){
-        return imageDao.create(imageModel);
+    public ImageModel create (byte[] image) {
+        return imageDao.create(image);
     }
 
     @Override
@@ -43,4 +43,7 @@ public class ImageServiceImpl implements ImageService {
     public Optional<ImageModel> getById (long imageId){
         return imageDao.getById(imageId);
     }
+
+    @Override
+    public Optional<ImageModel> getByExperienceId(long experienceId) { return imageDao.getByExperienceId(experienceId); };
 }

@@ -22,7 +22,7 @@
         <spring:message code="experienceForm.inputs.placeholder" var="placeholder"/>
         <spring:message code="experienceForm.activityMail.example" var="mailExample"/>
         <spring:message code="experienceForm.activityUrl.example" var="urlExample"/>
-        <form:form modelAttribute="experienceForm" action="${postPath}" id="createExperienceForm" method="post">
+        <form:form modelAttribute="experienceForm" action="${postPath}" id="createExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
           <div class="container-inputs">
             <div class="p-0 m-0 d-flex">
               <div class="col m-2"> <!--Nombre de la experiencia-->
@@ -137,7 +137,7 @@
                 <spring:message code="experienceForm.activityImg"/>
                 <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
               </form:label>
-              <form:input path="activityImg" type="file" class="form-control" disabled="true"/>
+              <form:input path="activityImg" type="file" class="form-control"/>
               <form:errors path="activityImg" element="p" cssClass="form-error-label"/>
             </div>
           </div>

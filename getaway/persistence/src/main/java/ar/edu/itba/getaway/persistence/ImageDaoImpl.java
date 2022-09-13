@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.DataSource;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 @Repository
@@ -21,8 +24,8 @@ public class ImageDaoImpl implements ImageDao {
     private final SimpleJdbcInsert jdbcInsert;
 
     private static final RowMapper<ImageModel> IMAGE_MODEL_ROW_MAPPER =
-            (rs, rowNum) -> new ImageModel(rs.getLong("imageId"),
-                    (MultipartFile) rs.getObject("image"));
+            (rs, rowNum) -> new ImageModel(rs.getLong("imgid"),
+                    rs.getObject("image", byte[].class));
     //TODO check MultipartFile
 
     @Autowired
@@ -30,37 +33,45 @@ public class ImageDaoImpl implements ImageDao {
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("images")
-                .usingGeneratedKeyColumns("imageId");
+                .usingGeneratedKeyColumns("imgid");
     }
 
     @Override
-    public ImageModel create(ImageModel imageModel) {
+    public ImageModel create(byte[] image) {
         final Map<String, Object> args = new HashMap<>();
-        args.put("image", imageModel.getImage());
-        final long imageId = jdbcInsert.executeAndReturnKey(args).longValue();
-        return new ImageModel(imageId, imageModel.getImage());
+
+        args.put("image", image);
+
+        final long imgid = jdbcInsert.executeAndReturnKey(args).longValue();
+        return new ImageModel(imgid, image);
     }
     @Override
-    public boolean update(long imageId, ImageModel imageModel) {
-        return jdbcTemplate.update("UPDATE images SET image = ? WHERE imageId = ?",
-                imageModel.getImage(), imageId) == 1;
+    public boolean update(long imgid, ImageModel imageModel) {
+        return jdbcTemplate.update("UPDATE images SET image = ? WHERE imgid = ?",
+                imageModel.getImage(), imgid) == 1;
     }
 
     @Override
-    public boolean delete(long imageId) {
-        return jdbcTemplate.update("DELETE FROM images WHERE imageId = ?",
-                imageId) == 1;
+    public boolean delete(long imgid) {
+        return jdbcTemplate.update("DELETE FROM images WHERE imgid = ?",
+                imgid) == 1;
     }
 
     @Override
     public List<ImageModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query("SELECT imageId, image FROM images",
+        return new ArrayList<>(jdbcTemplate.query("SELECT imgid, image FROM images",
                 IMAGE_MODEL_ROW_MAPPER));
     }
 
     @Override
-    public Optional<ImageModel> getById(long imageId) {
-        return jdbcTemplate.query("SELECT imageId, image FROM images WHERE imageId = ?",
-                new Object[]{imageId}, IMAGE_MODEL_ROW_MAPPER).stream().findFirst();
+    public Optional<ImageModel> getById(long imgid) {
+        return jdbcTemplate.query("SELECT imgid, image FROM images WHERE imgid = ?",
+                new Object[]{imgid}, IMAGE_MODEL_ROW_MAPPER).stream().findFirst();
+    }
+
+    @Override
+    public Optional<ImageModel> getByExperienceId(long experienceId){
+        return jdbcTemplate.query("SELECT imgId, image FROM imagesExperiences NATURAL JOIN images WHERE experienceId = ?",
+                new Object[]{experienceId}, IMAGE_MODEL_ROW_MAPPER).stream().findFirst();
     }
 }

@@ -11,7 +11,7 @@ public class ImageExperienceModel {
         this.isCover = isCover;
     }
 
-    public long getId() {
+    public long getImageId() {
         return imageId;
     }
 

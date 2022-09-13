@@ -20,48 +20,47 @@ public class ImageExperienceDaoImpl implements ImageExperienceDao {
     private final SimpleJdbcInsert jdbcInsert;
 
     private static final RowMapper<ImageExperienceModel> IMAGE_EXPERIENCE_MODEL_ROW_MAPPER =
-            (rs, rowNum) -> new ImageExperienceModel(rs.getLong("imageId"),
+            (rs, rowNum) -> new ImageExperienceModel(rs.getLong("imgId"),
                     rs.getLong("experienceId"),
                     rs.getBoolean("isCover"));
 
     @Autowired
     public ImageExperienceDaoImpl(final DataSource ds){
         jdbcTemplate = new JdbcTemplate(ds);
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("imagesExperiences")
-                .usingGeneratedKeyColumns("imageId");
+        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("imagesExperiences");
     }
 
     @Override
-    public ImageExperienceModel create(ImageExperienceModel imageExperienceModel) {
+    public ImageExperienceModel create(long imageId, long experienceId, boolean isCover) {
         final Map<String, Object> args = new HashMap<>();
-        args.put("experienceId", imageExperienceModel.getExperienceId());
-        args.put("isCover", imageExperienceModel.isCover());
-        final long imageId = jdbcInsert.executeAndReturnKey(args).longValue();
-        return new ImageExperienceModel(imageId, imageExperienceModel.getExperienceId(), imageExperienceModel.isCover());
+        args.put("experienceId", experienceId);
+        args.put("isCover", isCover);
+        args.put("imgId", imageId);
+        jdbcInsert.execute(args);
+        return new ImageExperienceModel(imageId, experienceId, isCover);
     }
 
     @Override
     public boolean update(long imageId, ImageExperienceModel imageExperienceModel) {
-        return jdbcTemplate.update("UPDATE imagesExperiences SET experienceId = ?, isCover = ? WHERE imageId = ?",
+        return jdbcTemplate.update("UPDATE imagesExperiences SET experienceId = ?, isCover = ? WHERE imgId = ?",
                 imageExperienceModel.getExperienceId(), imageExperienceModel.isCover(), imageId) == 1;
     }
     @Override
     public boolean delete(long imageId) {
-        return jdbcTemplate.update("DELETE FROM imagesExperiences WHERE imageId = ?",
+        return jdbcTemplate.update("DELETE FROM imagesExperiences WHERE imgId = ?",
                 imageId) == 1;
     }
 
     @Override
     public List<ImageExperienceModel> listAll() {
         return new ArrayList<>(jdbcTemplate.query(
-                "SELECT imageId, experienceId, isCover FROM imagesExperiences",
+                "SELECT imgId, experienceId, isCover FROM imagesExperiences",
                 IMAGE_EXPERIENCE_MODEL_ROW_MAPPER));
     }
 
     @Override
     public Optional<ImageExperienceModel> getById(long imageId) {
-        return jdbcTemplate.query("SELECT imageId, experienceId, isCover FROM imagesExperiences WHERE imageId = ?",
+        return jdbcTemplate.query("SELECT imgId, experienceId, isCover FROM imagesExperiences WHERE imgId = ?",
                 new Object[]{imageId}, IMAGE_EXPERIENCE_MODEL_ROW_MAPPER).stream().findFirst();
     }
 }
