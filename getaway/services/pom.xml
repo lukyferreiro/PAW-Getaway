@@ -69,6 +69,11 @@
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
     </dependency>
+    <!--Logging (Logback)-->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
     <!--AOP-->
     <dependency>
       <groupId>org.springframework</groupId>
