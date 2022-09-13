@@ -71,14 +71,16 @@
                                     <spring:message code="experienceDetail.price"/>
                                 </h5>
                                 <p class="information-text">
-                                    <c:if test="${activity.price > 0}">
-                                        <spring:message code="experienceDetail.price.simbol"/>
-                                        <c:out value="${activity.price}"/>
-                                        <spring:message code="experienceDetail.price.perPerson"/>
-                                    </c:if>
-                                    <c:if test="${activity.price == 0}">
-                                        <spring:message code="experienceDetail.price.free"/>
-                                    </c:if>
+                                    <c:choose>
+                                        <c:when test="${activity.price == 0}">
+                                            <spring:message code="experienceDetail.price.free"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <spring:message code="experienceDetail.price.simbol"/>
+                                            <c:out value="${activity.price}"/>
+                                            <spring:message code="experienceDetail.price.perPerson"/>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </p>
                             </div>
                             <div>
@@ -86,30 +88,34 @@
                                     <spring:message code="experienceDetail.description"/>
                                 </h5>
                                 <p class="information-text">
-                                    <c:if test="${activity.description != null}">
-                                        <c:out value="${activity.description}"/>
-                                    </c:if>
-                                    <c:if test="${activity.description == null}">
-                                        <spring:message code="experienceDetail.noData"/>
-                                    </c:if>
+                                    <c:choose>
+                                        <c:when test="${activity.description == null}">
+                                            <spring:message code="experienceDetail.noData"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:out value="${activity.description}"/>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </p>
                             </div>
                             <div>
                                 <h5 class="information-title">
                                     <spring:message code="experienceDetail.url"/>
                                 </h5>
-                                <c:if test="${activity.siteUrl != null}">
-                                    <a href="<c:url value="${activity.siteUrl}"/>">
+                                <c:choose>
+                                    <c:when test="${activity.siteUrl == null}">
                                         <p class="information-text">
-                                            <c:out value="${activity.siteUrl}"/>
+                                            <spring:message code="experienceDetail.noData"/>
                                         </p>
-                                    </a>
-                                </c:if>
-                                <c:if test="${activity.siteUrl == null}">
-                                    <p class="information-text">
-                                        <spring:message code="experienceDetail.noData"/>
-                                    </p>
-                                </c:if>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="<c:url value="${activity.siteUrl}"/>">
+                                            <p class="information-text">
+                                                <c:out value="${activity.siteUrl}"/>
+                                            </p>
+                                        </a>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
 <%--                                <h5 class="card-title"> <spring:message code="experienceDetail.tags"/> </h5>--%>
 <%--                                <p><a href="#">#tag1</a>   <a href="#">#tag2</a></p>--%>

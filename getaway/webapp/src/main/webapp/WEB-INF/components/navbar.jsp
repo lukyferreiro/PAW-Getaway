@@ -16,9 +16,9 @@
                     <spring:message code="navbar.createExperience"/>
                 </button>
             </a>
-<%--            <button type="button" class="btn btn-header">--%>
-<%--                <spring:message code="navbar.login"/>--%>
-<%--            </button>--%>
+            <button type="button" class="btn btn-header">
+                <spring:message code="navbar.login"/>
+            </button>
         </div>
     </div>
 

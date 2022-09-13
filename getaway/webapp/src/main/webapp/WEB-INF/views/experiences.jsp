@@ -76,18 +76,18 @@
                     <div class="card-text container-fluid p-0">
                         <p class="text-truncate"><c:out value="${activity.description}"/></p>
                         <h5><c:out value="${activity.address}"/></h5>
-                        <c:if test="${activity.price > 0}">
-                            <h6>
-                                <spring:message code="experience.price.simbol"/>
-                                <c:out value="${activity.price}"/>
-                                <spring:message code="experience.price.perPerson"/>
-                            </h6>
-                        </c:if>
-                        <c:if test="${activity.price == 0}">
-                            <h6>
-                                <spring:message code="experience.price.free"/>
-                            </h6>
-                        </c:if>
+                        <h6>
+                            <c:choose>
+                                <c:when test="${activity.price == 0}">
+                                    <spring:message code="experience.price.free"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <spring:message code="experience.price.simbol"/>
+                                    <c:out value="${activity.price}"/>
+                                    <spring:message code="experience.price.perPerson"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </h6>
                     </div>
                   </div>
                 </a>
