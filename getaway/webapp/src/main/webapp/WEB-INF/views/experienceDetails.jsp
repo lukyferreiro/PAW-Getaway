@@ -38,6 +38,9 @@
                 <div class="row">
                     <div class="col-auto">
                         <div class="card-body p-2 mw-25">
+                            <c:if test="/experiences/images/${activity.id} != null">
+                                <img class="rounded img-detail" src="<c:url value="/experiences/images/${activity.id}" />"/>
+                            </c:if>
                             <c:if test="${dbCategoryName == 'Aventura'}">
                                 <img class="rounded img-detail" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
                             </c:if>

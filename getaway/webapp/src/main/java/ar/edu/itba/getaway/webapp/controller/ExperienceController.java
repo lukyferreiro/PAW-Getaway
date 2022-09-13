@@ -2,9 +2,11 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
+import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.exceptions.ExperienceNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,8 @@ public class ExperienceController {
 //    CategoryService category;
     @Autowired
     CityService cityService;
+    @Autowired
+    ImageService imageService;
 
     @RequestMapping(value = "/{categoryName}", method = {RequestMethod.GET})
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
@@ -33,7 +37,12 @@ public class ExperienceController {
         final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
-        ExperienceCategory category = ExperienceCategory.valueOf(categoryName);
+        ExperienceCategory category;
+        try {
+             category = ExperienceCategory.valueOf(categoryName);
+        } catch (Exception e) {
+            throw new CategoryNotFoundException();
+        }
         String dbCategoryName = category.getName();
         int id = category.ordinal() + 1 ;
         List<ExperienceModel> experienceList;
@@ -94,5 +103,18 @@ public class ExperienceController {
 //        }
 
         return mav;
+    }
+
+    @RequestMapping(path = "/experiences/images/{experienceId}",
+            produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE},
+            method = RequestMethod.GET)
+    @ResponseBody
+    public byte[] getProfileImage(@PathVariable("experienceId") long experienceId) {
+        Optional<ImageModel> optImageModel = imageService.getByExperienceId(experienceId);
+        if (optImageModel.isPresent()){
+            ImageModel image = optImageModel.get();
+            return image.getImage();
+        }
+        return null;
     }
 }

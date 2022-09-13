@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.exceptions.ExperienceNotFoundException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,21 @@ public class ErrorsController {
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = ExperienceNotFoundException.class)
-    public ModelAndView userNotFound(){
+    public ModelAndView experienceNotFound(){
         Locale locale = LocaleContextHolder.getLocale();
         String error = messageSource.getMessage("errors.NotFound.Experience", null, locale);
+        String code = HttpStatus.NOT_FOUND.toString();
+        final ModelAndView mav = new ModelAndView(NOT_FOUND_VIEW);
+        mav.addObject("errors", error);
+        mav.addObject("code", code);
+        return mav;
+    }
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = CategoryNotFoundException.class)
+    public ModelAndView categoryNotFound(){
+        Locale locale = LocaleContextHolder.getLocale();
+        String error = messageSource.getMessage("errors.NotFound.Category", null, locale);
         String code = HttpStatus.NOT_FOUND.toString();
         final ModelAndView mav = new ModelAndView(NOT_FOUND_VIEW);
         mav.addObject("errors", error);
