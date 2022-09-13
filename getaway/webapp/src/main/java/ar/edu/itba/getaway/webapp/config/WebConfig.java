@@ -60,9 +60,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ds.setDriverClass(org.postgresql.Driver.class);
 
         //Usuario Local
-        ds.setUrl("jdbc:postgresql://localhost/postgres");
-        ds.setUsername("postgres");
-        ds.setPassword("getawaydb");
+//        ds.setUrl("jdbc:postgresql://localhost/getaway");
+//        ds.setUsername("postgresql");
+//        ds.setPassword("getawaydb");
         //Usuario remooto (para todos los del grupo)
         ds.setUrl("jdbc:postgresql://ec2-54-204-241-136.compute-1.amazonaws.com:5432/d38a8rs1b2dpeh");
         ds.setUsername("adrzztklademib");
