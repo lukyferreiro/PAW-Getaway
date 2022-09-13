@@ -93,12 +93,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-<<<<<<< HEAD
-        multipartResolver.setMaxUploadSize(100000);
+        multipartResolver.setMaxUploadSize(300000);
         multipartResolver.setDefaultEncoding("utf-8");
-=======
-        multipartResolver.setMaxUploadSize(10000000);
->>>>>>> a470733c874ce268d31b05d8cabcd6d8fce0151d
         return multipartResolver;
     }
 
