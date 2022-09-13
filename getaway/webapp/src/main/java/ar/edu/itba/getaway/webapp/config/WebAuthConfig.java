@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.vote.ConsensusBased;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -14,13 +17,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.FileCopyUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 @Configuration
 @EnableWebSecurity
 @ComponentScan("ar.edu.itba.getaway.webapp.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private UserDetailService userDetailsService;
 
@@ -32,6 +43,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+//    @Bean
+//    public AccessDecisionManager decisionManager(){
+//        //TODO
+//        return new ConsensusBased(List.of("decicion boters"));
+//    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
@@ -39,31 +56,34 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     /* Es importante el orden de las reglas escritas, ya que la primera que coincida con
      la url solicitada será aplicada y no se evaluarán las subsiguientes. Es por esto
-      que la regla default antMatchers("/**").authenticated() es la última en aplicarse.
-    */
+      que la regla default antMatchers("/**").authenticated() es la última en aplicarse */
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
-                .invalidSessionUrl("/login")
+//                .invalidSessionUrl("/login")
                 .and().authorizeRequests()
-                .antMatchers("/login").anonymous()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/**").authenticated()
+                    .antMatchers("/**").anonymous()
+//                    .antMatchers("/login").anonymous()
+//                    .antMatchers("/admin/**").hasRole("ADMIN")
+//                    .antMatchers("/**").authenticated()
+//                    .antMatchers(HttpMethod.POST, "/edit").hasAnyRole("EDITOR")
+//                    .antMatchers("/**").permitAll()
+//                    .accessDecisionManager(decisionManager())
                 .and().formLogin()
-                .usernameParameter("j_username")
-                .passwordParameter("j_password")
-                .defaultSuccessUrl("/", false)
-                .loginPage("/login")
+                    .usernameParameter("email")
+                    .passwordParameter("password")
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/", false) //Tras logearme me lleva a /
                 .and().rememberMe()
-                .rememberMeParameter("j_rememberme")
-                .userDetailsService(userDetailsService)
-                .key("mysupersecretketthatnobodyknowsabout") // no hacer esto, crear una aleatoria segura suficientemente grande y colocarla bajo src/main/resources
-                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
+                    .rememberMeParameter("rememberme")
+                    .userDetailsService(userDetailsService)
+                    .key(FileCopyUtils.copyToString(new InputStreamReader(authKey.getInputStream())))
+                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
                 .and().logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/login")
                 .and().exceptionHandling()
-                .accessDeniedPage("/403")
+                    .accessDeniedPage("/403")
                 .and().csrf().disable();
     }
 
@@ -72,5 +92,15 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         web.ignoring()
                 .antMatchers("/css/**", "/js/**", "/images/**", "/403");
     }
+
+//    private String loadRememberMeKey(){
+//        try (Reader reader = new InputStreamReader(getClass().getClassLoader().getResourceAsStream("auth_key.pem"))){
+//            return FileCopyUtils.copyToString(reader);
+//        }
+//        catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//    }
 
 }

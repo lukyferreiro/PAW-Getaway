@@ -12,24 +12,38 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
 public class UserDetailService implements UserDetailsService {
+
+    private final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
+
     @Autowired
     private UserService us;
 
+    @Autowired
+    public UserDetailService(final UserService us){
+        this.us = us;
+    }
+
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-//        final User user = us.getUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("No user by the name" + username));
-//        Collection<? extends GrantedAuthority> authorities = getAuthorities(user.getRoles());
-//        //final Collection<? extends GrantedAuthority> authorities = Arrays.asList(
-//        //        new SimpleGrantedAuthority("ROLE_USER"),
-//        //        new SimpleGrantedAuthority("ROLE_ADMIN")
-//        //);
-//        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);
+//        final User user = us.getByEmail(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("No user with email" + username));
+//        if(!BCRYPT_PATTERN.matcher(user.getPassword()).matches()){
+//            us.changePassword(user.getEmail(), user.getPassword());
+//            return loadUserByUsername(username);
+//        }
+////        Collection<? extends GrantedAuthority> authorities = getAuthorities(user.getRoles());
+//        final Set<GrantedAuthority> authorities = new HashSet<>();
+//        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+//        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+//        return new MyUserDetails(username, user.getPassword(), authorities);
         return null;
     }
 

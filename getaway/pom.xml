@@ -37,8 +37,9 @@
     <!--Mail y Thymeleaf-->
     <mail.version>1.4.7</mail.version>
     <thymeleaf.version>3.0.12.RELEASE</thymeleaf.version>
-    <!--Spring security y logging (Logback) -->
+    <!--Spring security-->
     <spring-security.version>4.0.4.RELEASE</spring-security.version>
+    <!--Logging (Logback)-->
     <org.slf4j.version>1.7.5</org.slf4j.version>
     <logback.version>1.1.2</logback.version>
     <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
@@ -168,7 +169,7 @@
         <artifactId>mail</artifactId>
         <version>${mail.version}</version>
       </dependency>
-      <!--Spring security y logging (Logback) -->
+      <!--Spring security-->
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-core</artifactId>
@@ -184,6 +185,7 @@
         <artifactId>spring-security-config</artifactId>
         <version>${spring-security.version}</version>
       </dependency>
+      <!--Logging (Logback)-->
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
