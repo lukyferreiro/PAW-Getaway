@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS tags
     tagName VARCHAR(30) NOT NULL,
     PRIMARY KEY (tagId),
     UNIQUE (tagName)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS categories
 (
@@ -12,15 +12,7 @@ CREATE TABLE IF NOT EXISTS categories
     categoryName VARCHAR(20) NOT NULL,
     PRIMARY KEY (categoryId),
     UNIQUE (categoryName)
-    );
-
-CREATE TABLE IF NOT EXISTS roles
-(
-    roleId SERIAL NOT NULL,
-    roleName VARCHAR(20) NOT NULL,
-    PRIMARY KEY (roleId),
-    UNIQUE (roleName)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS countries
 (
@@ -28,7 +20,7 @@ CREATE TABLE IF NOT EXISTS countries
     countryName VARCHAR(255) NOT NULL,
     PRIMARY KEY (countryId),
     UNIQUE (countryName)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS cities
 (
@@ -37,14 +29,14 @@ CREATE TABLE IF NOT EXISTS cities
     countryId INT NOT NULL,
     PRIMARY KEY (cityId),
     FOREIGN KEY (countryId) REFERENCES countries (countryId) ON DELETE CASCADE
-    );
+);
 
 CREATE TABLE IF NOT EXISTS images
 (
     imgId SERIAL NOT NULL,
     image BYTEA,
     PRIMARY KEY (imgId)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS users
 (
@@ -53,13 +45,12 @@ CREATE TABLE IF NOT EXISTS users
     userSurname VARCHAR(50) NOT NULL,
     email VARCHAR(255) NOT NULL,
     imgId INT,
-    roleId INT NOT NULL,
     password VARCHAR(255) NOT NULL,
     PRIMARY KEY (userId),
     UNIQUE(email),
     FOREIGN KEY (roleId) REFERENCES roles (roleId) ON DELETE CASCADE,
     FOREIGN KEY (imgId) REFERENCES images (imgId) ON DELETE CASCADE
-    );
+);
 
 CREATE TABLE IF NOT EXISTS experiences
 (
@@ -76,7 +67,7 @@ CREATE TABLE IF NOT EXISTS experiences
     FOREIGN KEY (cityId) REFERENCES cities (cityId) ON DELETE CASCADE,
     FOREIGN KEY (categoryId) REFERENCES categories (categoryId) ON DELETE CASCADE,
     FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE
-    );
+);
 
 CREATE TABLE IF NOT EXISTS views
 (
@@ -84,7 +75,7 @@ CREATE TABLE IF NOT EXISTS views
     viewCount INT,
     PRIMARY KEY (experienceId),
     FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
-    );
+);
 
 CREATE TABLE IF NOT EXISTS imagesExperiences
 (
@@ -94,7 +85,7 @@ CREATE TABLE IF NOT EXISTS imagesExperiences
     PRIMARY KEY (imgId),
     FOREIGN KEY (imgId) REFERENCES images (imgId) ON DELETE CASCADE,
     FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
-    );
+);
 
 CREATE TABLE IF NOT EXISTS tagExperience
 (
@@ -102,7 +93,7 @@ CREATE TABLE IF NOT EXISTS tagExperience
     experienceId INT NOT NULL,
     FOREIGN KEY (tagId) REFERENCES tags (tagId) ON DELETE CASCADE,
     FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
-    );
+);
 
 CREATE TABLE IF NOT EXISTS reviews
 (
@@ -114,4 +105,41 @@ CREATE TABLE IF NOT EXISTS reviews
     reviewDate DATE NOT NULL,
     PRIMARY KEY (reviewId),
     FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
-    );
+);
+
+CREATE TABLE IF NOT EXISTS roles
+(
+    roleId SERIAL NOT NULL,
+    roleName VARCHAR(20) NOT NULL,
+    PRIMARY KEY (roleId),
+    UNIQUE (roleName)
+);
+
+CREATE TABLE IF NOT EXISTS userRoles
+(
+    roleId INT NOT NULL,
+    userId INT NOT NULL,
+    PRIMARY KEY (userId),
+    FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE,
+    FOREIGN KEY (roleId) REFERENCES roles (roleId) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS verificationToken
+(
+    verifId SERIAL,
+    verifUserId INT NOT NULL,
+    verifToken TEXT,
+    verifExpirationDate TIMESTAMP NOT NULL,
+    FOREIGN KEY (verifUserId) REFERENCES USERS (userId) ON DELETE CASCADE,
+    PRIMARY KEY (verifId)
+);
+
+CREATE TABLE IF NOT EXISTS passwordResetToken
+(
+    passTokenId SERIAL,
+    passTokenUserId INT NOT NULL,
+    passToken TEXT,
+    passTokenExpirationDate TIMESTAMP NOT NULL,
+    FOREIGN KEY (passTokenUserId) REFERENCES USERS (userId) ON DELETE CASCADE,
+    PRIMARY KEY (passTokenId)
+);
