@@ -20,21 +20,6 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public CityModel create (CityModel cityModel){
-        return cityDao.create(cityModel);
-    }
-
-    @Override
-    public boolean update(long cityId, CityModel cityModel){
-        return cityDao.update(cityId, cityModel);
-    }
-
-    @Override
-    public boolean delete (long cityId){
-        return cityDao.delete(cityId);
-    }
-
-    @Override
     public List<CityModel> listAll() {
         return cityDao.listAll();
     }

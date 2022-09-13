@@ -10,7 +10,7 @@ public interface ImageService {
     ImageModel create (byte[] image);
     boolean update (long imageId, ImageModel imageModel);
     boolean delete (long imageId);
-    List<ImageModel> listAll();
+    List<ImageModel> listAll ();
     Optional<ImageModel> getById (long imageId);
-    Optional<ImageModel> getByExperienceId(long experienceId);
+    Optional<ImageModel> getByExperienceId (long experienceId);
 }

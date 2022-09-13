@@ -23,10 +23,9 @@ public class ImageDaoImpl implements ImageDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
-    private static final RowMapper<ImageModel> IMAGE_MODEL_ROW_MAPPER =
-            (rs, rowNum) -> new ImageModel(rs.getLong("imgid"),
+    private static final RowMapper<ImageModel> IMAGE_MODEL_ROW_MAPPER = (rs, rowNum) ->
+            new ImageModel(rs.getLong("imgid"),
                     rs.getObject("image", byte[].class));
-    //TODO check MultipartFile
 
     @Autowired
     public ImageDaoImpl(final DataSource ds){

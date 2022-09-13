@@ -20,21 +20,6 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagModel create (TagModel tagModel){
-        return tagDao.create(tagModel);
-    }
-
-    @Override
-    public boolean update(long tagId, TagModel tagModel){
-        return tagDao.update(tagId, tagModel);
-    }
-
-    @Override
-    public boolean delete (long tagId){
-        return tagDao.delete(tagId);
-    }
-
-    @Override
     public List<TagModel> listAll() {
         return tagDao.listAll();
     }

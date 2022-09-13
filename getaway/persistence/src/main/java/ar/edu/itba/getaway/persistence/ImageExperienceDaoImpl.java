@@ -19,15 +19,16 @@ public class ImageExperienceDaoImpl implements ImageExperienceDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
-    private static final RowMapper<ImageExperienceModel> IMAGE_EXPERIENCE_MODEL_ROW_MAPPER =
-            (rs, rowNum) -> new ImageExperienceModel(rs.getLong("imgId"),
+    private static final RowMapper<ImageExperienceModel> IMAGE_EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
+            new ImageExperienceModel(rs.getLong("imgId"),
                     rs.getLong("experienceId"),
                     rs.getBoolean("isCover"));
 
     @Autowired
     public ImageExperienceDaoImpl(final DataSource ds){
         jdbcTemplate = new JdbcTemplate(ds);
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("imagesExperiences");
+        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("imagesExperiences");
     }
 
     @Override

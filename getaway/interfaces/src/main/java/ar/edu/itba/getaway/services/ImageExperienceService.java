@@ -9,7 +9,7 @@ public interface ImageExperienceService {
     ImageExperienceModel create (long imageId, long experienceId, boolean isCover);
     boolean update (long imageId, ImageExperienceModel imageExperienceModel);
     boolean delete (long imageId);
-    List<ImageExperienceModel> listAll();
+    List<ImageExperienceModel> listAll ();
     Optional<ImageExperienceModel> getById (long imageId);
 
 }

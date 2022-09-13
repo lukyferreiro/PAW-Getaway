@@ -19,8 +19,9 @@ public class CategoryDaoImpl implements CategoryDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
-    private static final RowMapper<CategoryModel> CATEGORY_MODEL_ROW_MAPPER =
-            (rs, rowNum) -> new CategoryModel(rs.getLong("categoryId"), rs.getString("categoryName"));
+    private static final RowMapper<CategoryModel> CATEGORY_MODEL_ROW_MAPPER = (rs, rowNum) ->
+            new CategoryModel(rs.getLong("categoryId"),
+                    rs.getString("categoryName"));
 
     @Autowired
     public CategoryDaoImpl(final DataSource ds) {
@@ -28,26 +29,6 @@ public class CategoryDaoImpl implements CategoryDao {
         this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("categories")
                 .usingGeneratedKeyColumns("categoryId");
-    }
-
-    @Override
-    public CategoryModel create(CategoryModel categoryModel) {
-        final Map<String, Object> args = new HashMap<>();
-        args.put("categoryName", categoryModel.getName());
-        final long categoryId = jdbcInsert.executeAndReturnKey(args).longValue();
-        return new CategoryModel(categoryId, categoryModel.getName());
-    }
-
-    @Override
-    public boolean update(long categoryId, CategoryModel categoryModel) {
-        return jdbcTemplate.update("UPDATE categories SET categoryName = ? WHERE categoryId = ?",
-                categoryModel.getName(), categoryId) == 1;
-    }
-
-    @Override
-    public boolean delete(long categoryId) {
-        return jdbcTemplate.update("DELETE FROM categories WHERE categoryId = ?",
-                categoryId) == 1;
     }
 
     @Override
