@@ -22,8 +22,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
-    private static final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER =
-            (rs, rowNum) -> new ExperienceModel(rs.getLong("experienceid"),
+    private static final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
+            new ExperienceModel(rs.getLong("experienceid"),
                     rs.getString("experienceName"),
                     rs.getString("address"),
                     rs.getString("description"),

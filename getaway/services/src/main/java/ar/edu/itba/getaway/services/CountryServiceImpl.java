@@ -20,21 +20,6 @@ public class CountryServiceImpl implements CountryService{
     }
 
     @Override
-    public CountryModel create (CountryModel countryModel){
-        return countryDao.create(countryModel);
-    }
-
-    @Override
-    public boolean update(long countryId, CountryModel countryModel){
-        return countryDao.update(countryId, countryModel);
-    }
-
-    @Override
-    public boolean delete (long countryId){
-        return countryDao.delete(countryId);
-    }
-
-    @Override
     public List<CountryModel> listAll() {
         return countryDao.listAll();
     }

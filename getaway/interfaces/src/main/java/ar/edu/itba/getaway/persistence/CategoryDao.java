@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CategoryDao {
-    CategoryModel create (CategoryModel categoryModel);
-    boolean update (long categoryId, CategoryModel categoryModel);
-    boolean delete (long categoryId);
-    List<CategoryModel> listAll();
+    List<CategoryModel> listAll ();
     Optional<CategoryModel> getById (long categoryId);
-    Optional<CategoryModel> getByName(String categoryName);
+    Optional<CategoryModel> getByName (String categoryName);
 }

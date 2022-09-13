@@ -19,21 +19,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryModel create (CategoryModel categoryModel){
-        return categoryDao.create(categoryModel);
-    }
-
-    @Override
-    public boolean update(long categoryId, CategoryModel categoryModel){
-        return categoryDao.update(categoryId, categoryModel);
-    }
-
-    @Override
-    public boolean delete (long categoryId){
-        return categoryDao.delete(categoryId);
-    }
-
-    @Override
     public List<CategoryModel> listAll() {
         return categoryDao.listAll();
     }

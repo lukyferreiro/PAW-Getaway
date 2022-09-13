@@ -6,11 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CityDao {
-    CityModel create(CityModel cityModel);
-    boolean update(long cityId, CityModel cityModel);
-    boolean delete(long cityId);
+    List<CityModel> listAll ();
     Optional<CityModel> getById (long cityId);
-    List<CityModel> listAll();
     List<CityModel> getByCountryId (long countryId);
-    Optional<CityModel> getIdByName(String cityName);
+    Optional<CityModel> getIdByName (String cityName);
 }
