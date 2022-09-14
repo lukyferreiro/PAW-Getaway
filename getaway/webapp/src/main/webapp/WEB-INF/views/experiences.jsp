@@ -22,7 +22,7 @@
 
             <%--FILTER--%>
             <c:url value="/${categoryName}" var="postPath"/>
-            <form:form modelAttribute="filterForm" action="${postPath}" id="cityFilterForm" method="post">
+            <form:form modelAttribute="filterForm" action="${postPath}" id="cityFilterForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
                 <div>
                     <form:label path="activityCity" class="form-label"><spring:message code="experienceForm.activityCity"/></form:label>
                     <form:select path="activityCity" class="form-select">

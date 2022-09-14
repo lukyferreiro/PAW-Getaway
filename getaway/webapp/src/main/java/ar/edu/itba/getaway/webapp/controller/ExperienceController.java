@@ -33,7 +33,7 @@ public class ExperienceController {
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,
                                    @RequestParam Optional<Long> cityId,
-                                   @RequestParam Optional<Long> maxPrice) {
+                                   @RequestParam Optional<Double> maxPrice) {
         final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
@@ -93,15 +93,17 @@ public class ExperienceController {
         }
 
         Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
+        System.out.println(form.getActivityCity());
 //        List<ExperienceModel> experienceModel = exp.listByCategoryAndPrice(form.getActivityPriceMax());
         if(cityModel.isPresent()){
             long cityId = cityModel.get().getId();
             mav.addObject("cityId", cityId);
         }
 
-//        if (!experienceModel.isEmpty()){
-            mav.addObject("maxPrice", form.getActivityPriceMax());
-//        }
+        Double priceMax = form.getActivityPriceMax();
+        if (priceMax!=null){
+            mav.addObject("maxPrice", priceMax);
+        }
 
         return mav;
     }
