@@ -43,6 +43,7 @@ public class ExperienceController {
         } catch (Exception e) {
             throw new CategoryNotFoundException();
         }
+
         String dbCategoryName = category.getName();
         int id = category.ordinal() + 1 ;
         List<ExperienceModel> experienceList;
@@ -52,12 +53,12 @@ public class ExperienceController {
         if(cityId.isPresent()){
             if(maxPrice.isPresent() && maxPrice.get() > 0){
                 experienceList = exp.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
-            }else{
+            } else {
                 experienceList = exp.listByCategoryAndCity(id, cityId.get());
             }
-        }else if(maxPrice.isPresent() && maxPrice.get()>0){
+        } else if (maxPrice.isPresent() && maxPrice.get() > 0){
             experienceList = exp.listByCategoryAndPrice(id,maxPrice.get());
-        }else{
+        } else {
             experienceList = exp.listByCategory(id);
         }
 

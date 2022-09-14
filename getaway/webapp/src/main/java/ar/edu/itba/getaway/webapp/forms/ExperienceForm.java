@@ -13,9 +13,9 @@ import java.util.List;
 
 public class ExperienceForm{
 
-    @Size(min=3, max=255)
-    @Pattern(regexp = "^[A-Za-z0-9 ,_.-]+$")
     @NotEmpty
+    @Size(min=3, max=255)
+    @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'·#$%&=:¿?!¡/.-]*$")
     private String activityName;
 
     @NotEmpty
@@ -28,8 +28,8 @@ public class ExperienceForm{
     private String activityCity;
 
     @NotEmpty
-    @Pattern(regexp = "^[A-Za-z0-9 ,_.-]+$")
     @Size(min=5, max=200)
+    @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ,'_.-]*$")
     private String activityAddress;
 
     @Pattern(regexp = "^(0|([1-9][0-9]*))(\\.[0-9]{1,2})?$")
@@ -37,8 +37,6 @@ public class ExperienceForm{
 
     // https://regexr.com/39nr7
     @Pattern(regexp = "^([(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*))?$")
-    //https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
-//    @Pattern(regexp = "^((https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,}))?$")
     private String activityUrl;
 
     @NotEmpty
@@ -47,16 +45,11 @@ public class ExperienceForm{
 
     private MultipartFile activityImg;
 
-//    @NotEmpty
     @Size(max=500)
+    @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'$%#&=:¿?!¡/.-]+$")
     private String activityInfo;
 
     private List<String> activityTags;
-
-//    @Autowired
-//    private CityService cityService;
-//    @Autowired
-//    private CategoryService categoryService;
 
     public String getActivityAddress() {
         return activityAddress;
@@ -74,7 +67,7 @@ public class ExperienceForm{
         return activityCategory;
     }
     public long getActivityCategoryId() {
-        for (int i = 0; i < ExperienceCategory.values().length ; i++){
+        for(int i = 0; i < ExperienceCategory.values().length ; i++){
             if(ExperienceCategory.values()[i].getName().equals(activityCategory)){
                 return i ;
             }

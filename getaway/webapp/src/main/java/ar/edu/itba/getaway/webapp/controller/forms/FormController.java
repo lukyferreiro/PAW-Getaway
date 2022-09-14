@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.webapp.controller.forms;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
+import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -77,7 +78,8 @@ public class FormController {
 
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
-    public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,  final BindingResult errors) throws Exception {
+    public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,
+                                       final BindingResult errors) throws Exception {
 
         if(errors.hasErrors()){
             return createActivityForm(form);
@@ -85,7 +87,7 @@ public class FormController {
 
         long categoryId = form.getActivityCategoryId() ;
         if(categoryId < 0){
-            throw new Exception();
+            throw new CategoryNotFoundException();
         }
 
         //TODO NO FUNCIONA PQ ESTA BUSCANDO NOMBRES EN CASTELLANO Y ESTAN GUARDADOS EN INGLES
