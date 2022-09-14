@@ -3,9 +3,9 @@ package ar.edu.itba.getaway.webapp.forms;
 public class FilterForm {
 
     private String activityCity;
-    private long activityPriceMax;
+    private Double activityPriceMax;
 
-    public long getActivityPriceMax() {
+    public Double getActivityPriceMax() {
         return activityPriceMax;
     }
 
@@ -13,7 +13,7 @@ public class FilterForm {
         return activityCity;
     }
 
-    public void setActivityPriceMax(long activityPriceMax) {
+    public void setActivityPriceMax(Double activityPriceMax) {
         this.activityPriceMax = activityPriceMax;
     }
 

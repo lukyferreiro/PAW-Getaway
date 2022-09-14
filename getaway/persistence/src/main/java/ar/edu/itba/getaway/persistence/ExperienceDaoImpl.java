@@ -108,12 +108,12 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listByCategoryAndPrice(long categoryId,long max){
+    public List<ExperienceModel> listByCategoryAndPrice(long categoryId,Double max){
         return jdbcTemplate.query("SELECT * FROM experiences WHERE categoryid = ? AND price <= ? ", new Object[]{categoryId,max}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public List<ExperienceModel> listByCategoryPriceAndCity(long categoryId, long max, long cityId) {
+    public List<ExperienceModel> listByCategoryPriceAndCity(long categoryId, Double max, long cityId) {
         return jdbcTemplate.query("SELECT * FROM experiences WHERE categoryid = ? AND price <= ? AND cityid = ?", new Object[]{categoryId,max, cityId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 

@@ -2,8 +2,6 @@ package ar.edu.itba.getaway.webapp.forms;
 
 import ar.edu.itba.getaway.models.ExperienceCategory;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.hibernate.validator.constraints.URL;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 
