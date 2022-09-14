@@ -20,7 +20,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public ExperienceModel create (String name, String address, String description, String url, double price, long cityId, long categoryId, long userId){
+    public ExperienceModel create (String name, String address, String description, String url, Double price, long cityId, long categoryId, long userId){
         return experienceDao.create(name, address, description,url, price, cityId, categoryId, userId);
     }
 
@@ -55,13 +55,13 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<ExperienceModel> listByCategoryAndPrice(long categoryId,long max){
+    public List<ExperienceModel> listByCategoryAndPrice(long categoryId, long max){
         return experienceDao.listByCategoryAndPrice(categoryId, max);
     }
 
     @Override
     public List<ExperienceModel> listByCategoryPriceAndCity(long categoryId, long max, long cityId) {
-        return experienceDao.listByCategoryPriceAndCity(categoryId,max, cityId);
+        return experienceDao.listByCategoryPriceAndCity(categoryId, max, cityId);
     }
 
 }

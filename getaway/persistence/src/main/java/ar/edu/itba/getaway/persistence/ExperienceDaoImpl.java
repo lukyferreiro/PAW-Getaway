@@ -28,7 +28,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
                     rs.getString("address"),
                     rs.getString("description"),
                     rs.getString("siteUrl"),
-                    rs.getDouble("price"),
+                    (rs.getObject("price")==null) ? null : rs.getBigDecimal("price").doubleValue(),
                     rs.getLong("cityId"),
                     rs.getLong("categoryId"),
                     rs.getLong("userId"));
@@ -42,7 +42,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public ExperienceModel create(String name, String address, String description, String url, double price, long cityId, long categoryId, long userId) {
+    public ExperienceModel create(String name, String address, String description, String url, Double price, long cityId, long categoryId, long userId) {
         final Map<String, Object> args = new HashMap<>();
         args.put("experienceName", name);
         args.put("address", address);
@@ -108,7 +108,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listByCategoryAndPrice(long categoryId,long max){
+    public List<ExperienceModel> listByCategoryAndPrice(long categoryId, long max){
         return jdbcTemplate.query("SELECT * FROM experiences WHERE categoryid = ? AND price <= ? ", new Object[]{categoryId,max}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 

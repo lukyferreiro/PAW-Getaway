@@ -32,7 +32,7 @@ public class ExperienceForm{
     @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ,'_.-]*$")
     private String activityAddress;
 
-    @Pattern(regexp = "^(0|([1-9][0-9]*))(\\.[0-9]{1,2})?$")
+    @Pattern(regexp = "^((0|([1-9][0-9]*))(\\.[0-9]{1,2})?)?$")
     private String activityPrice;
 
     // https://regexr.com/39nr7
@@ -46,7 +46,7 @@ public class ExperienceForm{
     private MultipartFile activityImg;
 
     @Size(max=500)
-    @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'$%#&=:¿?!¡/.-]+$")
+    @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'$%#&=:¿?!¡/.-])*$")
     private String activityInfo;
 
     private List<String> activityTags;
