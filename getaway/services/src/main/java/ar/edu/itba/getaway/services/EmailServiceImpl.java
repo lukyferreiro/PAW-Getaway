@@ -14,7 +14,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @Service
-public class EmailServiceImpl implements EmailService{
+public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private JavaMailSender mailSender;

@@ -27,7 +27,7 @@ public class UserDetailService implements UserDetailsService {
     private UserService us;
 
     @Autowired
-    public UserDetailService(final UserService us){
+    public UserDetailService(final UserService us) {
         this.us = us;
     }
 
@@ -48,9 +48,6 @@ public class UserDetailService implements UserDetailsService {
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Collection<Roles> roles) {
-        return roles.
-                stream()
-                .map((role) -> new SimpleGrantedAuthority("ROLE_" + role.name()))
-                .collect(Collectors.toList());
+        return roles.stream().map((role) -> new SimpleGrantedAuthority("ROLE_" + role.name())).collect(Collectors.toList());
     }
 }

@@ -15,7 +15,7 @@ public class TagServiceImpl implements TagService {
     private TagDao tagDao;
 
     @Autowired
-    public TagServiceImpl(TagDao tagDao){
+    public TagServiceImpl(TagDao tagDao) {
         this.tagDao = tagDao;
     }
 
@@ -25,7 +25,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Optional<TagModel> getById (long tagId){
+    public Optional<TagModel> getById(long tagId) {
         return tagDao.getById(tagId);
     }
 }

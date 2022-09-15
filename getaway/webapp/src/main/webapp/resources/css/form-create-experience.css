@@ -1,57 +1,61 @@
-.form-label{
+.form-label {
     font-size: large;
     font-weight: bold;
 }
 
-.required-optional-text{
+.required-optional-text {
     font-size: small;
     padding-left: 5px;
     font-weight: normal;
 }
 
-
-.form-error-label{
+.form-error-label {
     color: red;
     margin: 0;
     padding: 0 4px;
 }
 
 /*---------------------------*/
-.btn-submit-form{
+.btn-submit-form {
     font-size: large;
     font-weight: bold;
     color: white;
     border-color: #F99D32;
     background-color: #F99D32;
 }
-.btn-submit-form:hover, .btn-submit-form:focus{
+
+.btn-submit-form:hover, .btn-submit-form:focus {
     color: white;
     border-color: #F99D32;
     background-color: #F99D32;
     transform: scale(1.02);
     transition: 0.3s;
 }
-.btn-submit-form:disabled{
+
+.btn-submit-form:disabled {
     color: white;
     border-color: #FAB672;
     background-color: #FAB672;
 }
+
 /*---------------------------*/
-.btn-cancel-form{
+.btn-cancel-form {
     font-size: large;
     font-weight: bold;
     color: #F99D32;
     border-color: #F99D32;
     background-color: white;
 }
-.btn-cancel-form:hover, .btn-cancel-form:focus{
+
+.btn-cancel-form:hover, .btn-cancel-form:focus {
     color: #F99D32;
     border-color: #F99D32;
     background-color: white;
     transform: scale(1.02);
     transition: 0.3s;
 }
-.btn-cancel-form:disabled{
+
+.btn-cancel-form:disabled {
     color: #F99D32;
     border-color: #F99D32;
     background-color: white;

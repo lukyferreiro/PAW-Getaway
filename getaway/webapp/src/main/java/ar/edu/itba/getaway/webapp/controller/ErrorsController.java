@@ -27,7 +27,7 @@ public class ErrorsController {
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = ExperienceNotFoundException.class)
-    public ModelAndView experienceNotFound(){
+    public ModelAndView experienceNotFound() {
         Locale locale = LocaleContextHolder.getLocale();
         String error = messageSource.getMessage("errors.NotFound.Experience", null, locale);
         String code = HttpStatus.NOT_FOUND.toString();
@@ -39,7 +39,7 @@ public class ErrorsController {
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = CategoryNotFoundException.class)
-    public ModelAndView categoryNotFound(){
+    public ModelAndView categoryNotFound() {
         Locale locale = LocaleContextHolder.getLocale();
         String error = messageSource.getMessage("errors.NotFound.Category", null, locale);
         String code = HttpStatus.NOT_FOUND.toString();

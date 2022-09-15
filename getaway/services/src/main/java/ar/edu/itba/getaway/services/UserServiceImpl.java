@@ -38,8 +38,7 @@ public class UserServiceImpl implements UserService {
     private MessageSource messageSource;
 
     private final Locale locale = LocaleContextHolder.getLocale();
-    private final Collection<Roles> DEFAULT_ROLES = Collections
-            .unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
+    private final Collection<Roles> DEFAULT_ROLES = Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     @Override
     public Optional<UserModel> getUserById(long id) {
@@ -130,8 +129,9 @@ public class UserServiceImpl implements UserService {
         if (imageId == 0) {
             imageId = imageService.create(imageDto.getImage()).getId();
             userDao.updateProfileImage(imageId, userModel);
-        } else
+        } else {
             imageService.update(imageId, imageDto);
+        }
     }
 
 

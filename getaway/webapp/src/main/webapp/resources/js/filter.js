@@ -2,7 +2,7 @@ let processing = false;
 let cityFilterForm = document.getElementById("cityFilterForm");
 let cityFilterFormButton = document.getElementById("cityFilterFormButton");
 cityFilterFormButton.addEventListener("click", () => {
-    if(processing){
+    if (processing) {
         return;
     }
     processing = true;

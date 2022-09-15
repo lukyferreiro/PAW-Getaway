@@ -29,7 +29,7 @@ import java.nio.charset.StandardCharsets;
 @EnableTransactionManagement
 //@EnableAsync
 @EnableWebMvc
-@ComponentScan({"ar.edu.itba.getaway.webapp.controller", "ar.edu.itba.getaway.services",  "ar.edu.itba.getaway.persistence"})
+@ComponentScan({"ar.edu.itba.getaway.webapp.controller", "ar.edu.itba.getaway.services", "ar.edu.itba.getaway.persistence"})
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
@@ -62,7 +62,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
 
@@ -102,7 +102,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         multipartResolver.setMaxUploadSize(300000);
         multipartResolver.setMaxUploadSizePerFile(MAX_SIZE_PER_FILE);
-        multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE*6);
+        multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE * 6);
         multipartResolver.setDefaultEncoding("utf-8");
         return multipartResolver;
     }

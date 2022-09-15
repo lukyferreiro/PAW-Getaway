@@ -1,18 +1,21 @@
-.container-header{
+.container-header {
     background-color: rgba(255, 197, 132, 0.3);
 }
 
-.logo{
+.logo {
     text-decoration: none;
 }
-.logo:hover{
+
+.logo:hover {
     color: #F99D32;
     cursor: pointer;
 }
-.logo-img{
+
+.logo-img {
     max-height: 80px;
 }
-.logo-text{
+
+.logo-text {
     padding-left: 15px;
     font-family: 'Yeseva One', sans-serif;
     font-size: xxx-large;
@@ -21,11 +24,12 @@
     -webkit-background-clip: text;
 }
 
-.container-header-btn{
+.container-header-btn {
     margin: 15px 30px 15px auto;
 
 }
-.btn-header{
+
+.btn-header {
     font-size: x-large;
     font-weight: bold;
     color: white;
@@ -34,6 +38,7 @@
     padding: 10px 20px 10px 20px;
     margin-left: 40px;
 }
+
 .btn-header:hover {
     color: white;
     border-color: #F99D32;
@@ -41,7 +46,8 @@
     transform: scale(1.1);
     transition: 0.3s;
 }
-.btn-header:focus{
+
+.btn-header:focus {
     color: white;
     border-color: #F99D32;
     background-color: #F99D32;
@@ -50,7 +56,7 @@
 /*.container-types {*/
 /*    */
 /*}*/
-.btn-filter{
+.btn-filter {
     color: black;
     font-size: x-large;
     border-color: #F99D32;
@@ -58,24 +64,27 @@
     padding: 5px 20px 10px 15px;
     border-radius: 15px;
 }
+
 .btn-filter > img {
     width: 30px;
     height: 30px;
     margin-right: 5px;
 }
-.btn-filter:hover{
+
+.btn-filter:hover {
     border-color: #F99D32;
     background-color: #ffc584;
     color: black;
     transform: scale(1.05);
     transition: 0.3s;
 }
-.btn-filter:focus{
+
+.btn-filter:focus {
     border-color: #F99D32;
     color: black;
 }
 
-.separator{
+.separator {
     color: #fd9715;
     border-width: 3px;
     margin: 10px 0;

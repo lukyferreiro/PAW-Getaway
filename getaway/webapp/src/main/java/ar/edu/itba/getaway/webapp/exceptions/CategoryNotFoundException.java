@@ -1,4 +1,4 @@
 package ar.edu.itba.getaway.webapp.exceptions;
 
-public class CategoryNotFoundException extends RuntimeException{
+public class CategoryNotFoundException extends RuntimeException {
 }

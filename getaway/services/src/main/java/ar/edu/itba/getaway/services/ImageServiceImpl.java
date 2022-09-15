@@ -15,22 +15,22 @@ public class ImageServiceImpl implements ImageService {
     private ImageDao imageDao;
 
     @Autowired
-    public ImageServiceImpl(ImageDao imageDao){
+    public ImageServiceImpl(ImageDao imageDao) {
         this.imageDao = imageDao;
     }
 
     @Override
-    public ImageModel create (byte[] image) {
+    public ImageModel create(byte[] image) {
         return imageDao.create(image);
     }
 
     @Override
-    public boolean update(long imageId, ImageModel imageModel){
+    public boolean update(long imageId, ImageModel imageModel) {
         return imageDao.update(imageId, imageModel);
     }
 
     @Override
-    public boolean delete (long imageId){
+    public boolean delete(long imageId) {
         return imageDao.delete(imageId);
     }
 
@@ -40,10 +40,14 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Optional<ImageModel> getById (long imageId){
+    public Optional<ImageModel> getById(long imageId) {
         return imageDao.getById(imageId);
     }
 
     @Override
-    public Optional<ImageModel> getByExperienceId(long experienceId) { return imageDao.getByExperienceId(experienceId); };
+    public Optional<ImageModel> getByExperienceId(long experienceId) {
+        return imageDao.getByExperienceId(experienceId);
+    }
+
+    ;
 }

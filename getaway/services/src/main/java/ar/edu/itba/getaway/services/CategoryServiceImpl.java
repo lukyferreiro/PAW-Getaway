@@ -14,7 +14,7 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryDao categoryDao;
 
     @Autowired
-    public CategoryServiceImpl(CategoryDao categoryDao){
+    public CategoryServiceImpl(CategoryDao categoryDao) {
         this.categoryDao = categoryDao;
     }
 
@@ -24,10 +24,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<CategoryModel> getById (long categoryId){
+    public Optional<CategoryModel> getById(long categoryId) {
         return categoryDao.getById(categoryId);
     }
 
     @Override
-    public Optional<CategoryModel> getByName(String categoryName) { return categoryDao.getByName(categoryName);}
+    public Optional<CategoryModel> getByName(String categoryName) {
+        return categoryDao.getByName(categoryName);
+    }
 }

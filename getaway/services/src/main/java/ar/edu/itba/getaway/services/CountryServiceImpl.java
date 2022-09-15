@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CountryServiceImpl implements CountryService{
+public class CountryServiceImpl implements CountryService {
 
     @Autowired
     private CountryDao countryDao;
 
     @Autowired
-    public CountryServiceImpl(CountryDao countryDao){
+    public CountryServiceImpl(CountryDao countryDao) {
         this.countryDao = countryDao;
     }
 
@@ -25,11 +25,13 @@ public class CountryServiceImpl implements CountryService{
     }
 
     @Override
-    public Optional<CountryModel> getById (long countryId){
+    public Optional<CountryModel> getById(long countryId) {
         return countryDao.getById(countryId);
     }
 
     @Override
-   public Optional<CountryModel> getIdByCountryName(String country){return countryDao.getIdByCountryName(country);}
+    public Optional<CountryModel> getIdByCountryName(String country) {
+        return countryDao.getIdByCountryName(country);
+    }
 }
 

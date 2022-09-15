@@ -22,7 +22,7 @@ public class ExperienceController {
 
     @Autowired
     ExperienceService exp;
-//    @Autowired
+    //    @Autowired
 //    CategoryService category;
     @Autowired
     CityService cityService;
@@ -39,25 +39,25 @@ public class ExperienceController {
         // Ordinal empieza en 0
         ExperienceCategory category;
         try {
-             category = ExperienceCategory.valueOf(categoryName);
+            category = ExperienceCategory.valueOf(categoryName);
         } catch (Exception e) {
             throw new CategoryNotFoundException();
         }
 
         String dbCategoryName = category.getName();
-        int id = category.ordinal() + 1 ;
+        int id = category.ordinal() + 1;
         List<ExperienceModel> experienceList;
         List<CityModel> cityModels = cityService.listAll();
 
         //Filtros
-        if(cityId.isPresent()){
-            if(maxPrice.isPresent() && maxPrice.get() > 0){
+        if (cityId.isPresent()) {
+            if (maxPrice.isPresent() && maxPrice.get() > 0) {
                 experienceList = exp.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
             } else {
                 experienceList = exp.listByCategoryAndCity(id, cityId.get());
             }
-        } else if (maxPrice.isPresent() && maxPrice.get() > 0){
-            experienceList = exp.listByCategoryAndPrice(id,maxPrice.get());
+        } else if (maxPrice.isPresent() && maxPrice.get() > 0) {
+            experienceList = exp.listByCategoryAndPrice(id, maxPrice.get());
         } else {
             experienceList = exp.listByCategory(id);
         }
@@ -71,7 +71,7 @@ public class ExperienceController {
 
     @RequestMapping("/{categoryName}/{categoryId}")
     public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName,
-                                       @PathVariable("categoryId") final long categoryId){
+                                       @PathVariable("categoryId") final long categoryId) {
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(categoryId).orElseThrow(ExperienceNotFoundException::new);
@@ -85,22 +85,22 @@ public class ExperienceController {
     @RequestMapping(value = "/{categoryName}", method = {RequestMethod.POST})
     public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName,
                                        @Valid @ModelAttribute("filterForm") final FilterForm form,
-                                       final BindingResult errors){
+                                       final BindingResult errors) {
         final ModelAndView mav = new ModelAndView("redirect:/" + categoryName);
 
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             return experience(categoryName, form, Optional.empty(), Optional.empty());
         }
 
         Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
 
-        if(cityModel.isPresent()){
+        if (cityModel.isPresent()) {
             long cityId = cityModel.get().getId();
             mav.addObject("cityId", cityId);
         }
 
         Double priceMax = form.getActivityPriceMax();
-        if (priceMax != null){
+        if (priceMax != null) {
             mav.addObject("maxPrice", priceMax);
         }
 
@@ -108,12 +108,12 @@ public class ExperienceController {
     }
 
     @RequestMapping(path = "/experiences/images/{experienceId}",
-            produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE},
-            method = RequestMethod.GET)
+                    produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE},
+                    method = RequestMethod.GET)
     @ResponseBody
     public byte[] getProfileImage(@PathVariable("experienceId") long experienceId) {
         Optional<ImageModel> optImageModel = imageService.getByExperienceId(experienceId);
-        if (optImageModel.isPresent()){
+        if (optImageModel.isPresent()) {
             ImageModel image = optImageModel.get();
             return image.getImage();
         }

@@ -33,7 +33,7 @@ public class FormController {
     ImageExperienceService imageExperienceService;
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
-    public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form){
+    public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form) {
         final ModelAndView mav = new ModelAndView("form");
         ExperienceCategory[] categoryModels = ExperienceCategory.values();
         List<String> categories = new ArrayList<>();
@@ -81,12 +81,12 @@ public class FormController {
     public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,
                                        final BindingResult errors) throws Exception {
 
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             return createActivityForm(form);
         }
 
-        long categoryId = form.getActivityCategoryId() ;
-        if(categoryId < 0){
+        long categoryId = form.getActivityCategoryId();
+        if (categoryId < 0) {
             throw new CategoryNotFoundException();
         }
 
@@ -96,14 +96,13 @@ public class FormController {
         long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
 
         //TODO usuario forzado
-        int userId = 1 ;
+        int userId = 1;
         Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
         String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
         String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
-        final ExperienceModel experienceModel = exp.create(form.getActivityName(),form.getActivityAddress(),
-                description, url, price, cityId, categoryId + 1, userId);
+        final ExperienceModel experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(), description, url, price, cityId, categoryId + 1, userId);
 
-        if(!form.getActivityImg().isEmpty()){
+        if (!form.getActivityImg().isEmpty()) {
             final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
             //Intentar cargar el par imgid, expid a la tabla image experience
             imageExperienceService.create(imageModel.getId(), experienceModel.getId(), true);
@@ -112,7 +111,7 @@ public class FormController {
         //TODO check pq ahora como agregue la flecha para volver hacias atras en los detalles de la actividad
         //y al terminar el formulario me redigire a los detalles de la actividad, si todo en la flecha de volver
         //hacia atras me lleva devuelta al formulario
-    // return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
+        // return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
         return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/");
     }
 

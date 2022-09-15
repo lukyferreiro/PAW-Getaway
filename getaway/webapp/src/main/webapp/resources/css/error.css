@@ -1,4 +1,4 @@
-.btn-error{
+.btn-error {
     font-size: x-large;
     font-weight: bold;
     color: white;
@@ -7,6 +7,7 @@
     padding: 5px 15px;
     margin: 10px;
 }
+
 .btn-error:hover {
     color: white;
     border-color: #F99D32;
@@ -14,7 +15,8 @@
     transform: scale(1.05);
     transition: 0.3s;
 }
-.btn-error:focus{
+
+.btn-error:focus {
     color: white;
     border-color: #F99D32;
     background-color: #F99D32;

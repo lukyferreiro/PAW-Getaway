@@ -1,7 +1,7 @@
 let processingBack = false;
 let goBackButton = document.getElementById("goBackButton");
 goBackButton.addEventListener("click", () => {
-    if(processingBack){
+    if (processingBack) {
         return;
     }
     processingBack = true;

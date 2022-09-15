@@ -62,7 +62,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
 //                .invalidSessionUrl("/login")
                 .and().authorizeRequests()
-                    //Session routes
+                //Session routes
 
 //                    .antMatchers("/login", "/register").anonymous()
 //                    .antMatchers(HttpMethod.POST, "/user/verifyAccount/resend").hasRole("NOT_VERIFIED")
@@ -70,37 +70,22 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 //                    .antMatchers("/user/verifyAccount").hasRole("USER")
 //                    .antMatchers("/logout").authenticated()
 
-                    //Profile routes
+                //Profile routes
 //                    .antMatchers("/user/account").hasRole("USER")
 //                    .antMatchers("/user/account/search", "/user/account/update",
 //                            "/user/account/updateCoverImage", "/user/account/updateInfo",
 //                            "/user/account/updateProfileImage").hasRole("VERIFIED")
-                    //else
-                    .antMatchers("/**").permitAll()
+                //else
+                .antMatchers("/**").permitAll()
 
-                .and().formLogin()
-                    .loginPage("/login")
-                    .usernameParameter("email")
-                    .passwordParameter("password")
-                    .defaultSuccessUrl("/", false) //Tras logearme me lleva a /
-                    .failureUrl("/login?error=true")
-                .and().rememberMe()
-                    .rememberMeParameter("rememberMe")
-                    .userDetailsService(userDetailsService)
-                    .key(FileCopyUtils.copyToString(new InputStreamReader(authKey.getInputStream())))
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                .and().logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login")
-                .and().exceptionHandling()
-                    .accessDeniedPage("/403")   //TODO change
+                .and().formLogin().loginPage("/login").usernameParameter("email").passwordParameter("password").defaultSuccessUrl("/", false) //Tras logearme me lleva a /
+                .failureUrl("/login?error=true").and().rememberMe().rememberMeParameter("rememberMe").userDetailsService(userDetailsService).key(FileCopyUtils.copyToString(new InputStreamReader(authKey.getInputStream()))).tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30)).and().logout().logoutUrl("/logout").logoutSuccessUrl("/login").and().exceptionHandling().accessDeniedPage("/403")   //TODO change
                 .and().csrf().disable();
     }
 
     @Override
     public void configure(final WebSecurity web) {
-        web.ignoring()
-                .antMatchers("/css/**", "/js/**", "/images/**", "/403");
+        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/403");
     }
 
 }

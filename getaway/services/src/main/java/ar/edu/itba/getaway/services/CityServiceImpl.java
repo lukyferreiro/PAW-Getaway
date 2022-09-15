@@ -21,7 +21,7 @@ public class CityServiceImpl implements CityService {
     private CityDao cityDao;
 
     @Autowired
-    public CityServiceImpl(CityDao cityDao){
+    public CityServiceImpl(CityDao cityDao) {
         this.cityDao = cityDao;
     }
 
@@ -31,7 +31,7 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public Optional<CityModel> getById (long cityId){
+    public Optional<CityModel> getById(long cityId) {
         return cityDao.getById(cityId);
     }
 
@@ -48,15 +48,15 @@ public class CityServiceImpl implements CityService {
     @Autowired
     CountryService countryService;
 
-    @RequestMapping(path = "/create_experience",produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/create_experience", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Override
-    public List<CityModel> getByCountryName(@RequestParam String country){
+    public List<CityModel> getByCountryName(@RequestParam String country) {
         List<CountryModel> countryModels = countryService.listAll();
         List<CityModel> cityModels = new ArrayList<>();
         boolean flag = true;
-        for (int j = 0; j<countryModels.size() && flag ; j++){
-            if(countryModels.get(j).getName().equals(country)){
+        for (int j = 0; j < countryModels.size() && flag; j++) {
+            if (countryModels.get(j).getName().equals(country)) {
                 return this.getByCountryId(j + 1);
             }
         }

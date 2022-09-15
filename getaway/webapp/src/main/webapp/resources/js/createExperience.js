@@ -7,7 +7,7 @@ let countryInput = document.getElementById("experienceFormCountryInput");
 let cityInput = document.getElementById("experienceFormCityInput");
 
 function validateCityIfThereIsACountry(countryInput, cityInput) {
-    if(countryInput.value.length === 0){
+    if (countryInput.value.length === 0) {
         cityInput.setAttribute('disabled', 'true');
         cityInput.value = "";
     } else {
@@ -28,14 +28,14 @@ countryInput.addEventListener("keyup", () => {
 });
 
 createExperienceFormButton.addEventListener("click", () => {
-    if(processing){
+    if (processing) {
         return;
     }
     processing = true;
     createExperienceFormButton.disabled = true;
     //If URL don't start with HTTP protocol, add it at the beginning
     let urlInput = document.getElementById("experienceFormUrlInput");
-    if(urlInput.value.length !== 0 && !urlInput.value.startsWith("http://") && !urlInput.value.startsWith("https://")){
+    if (urlInput.value.length !== 0 && !urlInput.value.startsWith("http://") && !urlInput.value.startsWith("https://")) {
         urlInput.value = "http://" + urlInput.value;
     }
     createExperienceForm.submit();
@@ -43,7 +43,7 @@ createExperienceFormButton.addEventListener("click", () => {
 })
 
 cancelFormButton.addEventListener("click", () => {
-    if(processingCancel){
+    if (processingCancel) {
         return;
     }
     processingCancel = true;
@@ -74,7 +74,7 @@ cancelFormButton.addEventListener("click", () => {
 
 
 countryInput.addEventListener("keyup", (event) => {
-    if(countryInput.value.length === 0){
+    if (countryInput.value.length === 0) {
         cityInput.setAttribute('disabled', 'true');
     } else {
 

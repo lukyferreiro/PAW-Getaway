@@ -1,8 +1,8 @@
-*{
+* {
     font-family: "Cambria", sans-serif;
 }
 
-.container-main{
+.container-main {
     height: 100%;
     width: 100%;
     display: flex;
@@ -16,7 +16,8 @@
 .container-mainpage {
     flex: 1;
 }
-.container-mainpage > div{
+
+.container-mainpage > div {
     font-size: xxx-large;
 }
 
@@ -25,25 +26,28 @@
 /*------------------------------*/
 
 /*------ Filters Section -------*/
-.container-filters{
+.container-filters {
     flex: 1;
     font-size: medium;
 }
-.container-filters > p{
+
+.container-filters > p {
     font-size: x-large;
 }
 
-.btn-search{
+.btn-search {
     border-color: #F99D32;
     background-color: transparent;
     color: black;
 }
-.btn-search:hover{
+
+.btn-search:hover {
     border-color: #F99D32;
     background-color: #ffc584;
     color: black;
 }
-.btn-search:focus{
+
+.btn-search:focus {
     border-color: #F99D32;
     background-color: transparent;
     color: black;
@@ -51,30 +55,31 @@
 }
 
 /*------ Experiences -------*/
-.container-experiences{
+.container-experiences {
     flex: 5;
     font-size: medium;
 }
 
-.card-experience{
+.card-experience {
     width: 20%;
 }
 
-.card-experience:hover{
+.card-experience:hover {
     transform: scale(1.02);
     transition: 0.3s;
     box-shadow: -0.5rem 0 2rem grey;
 }
 
-.card-link{
+.card-link {
     text-decoration: none;
     color: black;
 }
-.card-link:hover, .card-link:focus{
+
+.card-link:hover, .card-link:focus {
     color: black;
 }
 
-.btn-bookmark{
+.btn-bookmark {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -82,7 +87,8 @@
     background-color: transparent;
     border-color: transparent;
 }
-.btn-bookmark:hover{
+
+.btn-bookmark:hover {
     background-color: white;
     border-color: transparent;
 }
@@ -104,40 +110,43 @@
 /*-- Experience details Page  --*/
 /*------------------------------*/
 
-.btn-leave-experience-details{
+.btn-leave-experience-details {
     position: absolute;
     top: 20px;
     left: 20px;
     color: black;
     font-size: x-large;
 }
-.btn-leave-experience-details:hover, .btn-leave-experience-details:focus{
+
+.btn-leave-experience-details:hover, .btn-leave-experience-details:focus {
     border-color: transparent;
     color: black;
 }
-.btn-leave-experience-details:hover{
+
+.btn-leave-experience-details:hover {
     background-color: transparent;
 }
-.btn-leave-experience-details:disabled{
+
+.btn-leave-experience-details:disabled {
     border-color: transparent;
 }
 
-.go-back-arrow{
+.go-back-arrow {
     width: 30px;
     height: 30px;
     margin-right: 5px;
 }
 
-.img-detail{
+.img-detail {
     max-width: 500px;
     max-height: 400px;
 }
 
-.information-title{
+.information-title {
     font-size: x-large;
 }
 
-.information-text{
+.information-text {
     font-size: medium;
 }
 
