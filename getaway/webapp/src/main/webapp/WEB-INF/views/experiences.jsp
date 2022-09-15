@@ -22,7 +22,7 @@
 
             <%--FILTER--%>
             <c:url value="/${categoryName}" var="postPath"/>
-            <form:form modelAttribute="filterForm" action="${postPath}" id="cityFilterForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
+            <form:form modelAttribute="filterForm" action="${postPath}" id="cityFilterForm" method="post" acceptCharset="UTF-8">
                 <div>
                     <form:label path="activityCity" class="form-label"><spring:message code="experienceForm.activityCity"/></form:label>
                     <form:select path="activityCity" class="form-select">
@@ -35,7 +35,8 @@
                 </div>
                 <div>
                     <form:label path="activityPriceMax" class="form-label">Precio maximo:</form:label>
-                    <form:input id="customRange" path="activityPriceMax" type="range" class="slider" min="0" max="10000" value=""/>
+                    <form:input id="customRange" path="activityPriceMax" type="range" class="range" min="0" max="10000" value="0" oninput="this.nextElementSibling.value = this.value"/>
+                    <output>0</output>
                 </div>
                 <button  class="btn btn-submit-form px-3 py-2" type="submit" id="cityFilterFormButton" form="cityFilterForm">
                     <spring:message code="filters.place.submit"/>
