@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface CountryService {
     Optional<CountryModel> getById (long countryId);
     List<CountryModel> listAll ();
+    Optional<CountryModel> getIdByCountryName(String country);
 }

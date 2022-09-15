@@ -3,8 +3,6 @@ package ar.edu.itba.getaway.webapp.forms;
 import ar.edu.itba.getaway.models.ExperienceCategory;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
-
-
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -123,5 +121,4 @@ public class ExperienceForm{
     public void setActivityPrice(String activityPrice) {
         this.activityPrice = activityPrice;
     }
-
 }
