@@ -2,12 +2,12 @@ package ar.edu.itba.getaway.models;
 
 import java.util.Collection;
 
-public class User {
-    private String name, password,surname,email;
+public class UserModel {
+    private String name, password, surname, email;
     private Long id, profileImageId;
     private Collection<Roles> roles;
 
-    public User(Long id, String password, String name, String surname, String email, Collection<Roles> roles, Long profileImageId) {
+    public UserModel(Long id, String password, String name, String surname, String email, Collection<Roles> roles, Long profileImageId) {
         this.id = id;
         this.password = password;
         this.name = name;

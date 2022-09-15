@@ -42,27 +42,27 @@ public class UserServiceImpl implements UserService {
             .unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     @Override
-    public Optional<User> getUserById(long id) {
+    public Optional<UserModel> getUserById(long id) {
         return userDao.getUserById(id);
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) {
+    public Optional<UserModel> getUserByEmail(String email) {
         return userDao.getUserByEmail(email);
     }
 
     @Transactional
     @Override
-    public User createUser(String password, String name, String surname, String email) throws DuplicateUserException {
-        User user = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES);
-        VerificationToken token = generateVerificationToken(user.getId());
-        sendVerificationToken(user, token);
-        return user;
+    public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException {
+        UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES);
+        VerificationToken token = generateVerificationToken(userModel.getId());
+        sendVerificationToken(userModel, token);
+        return userModel;
     }
 
     @Transactional
     @Override
-    public Optional<User> verifyAccount(String token) {
+    public Optional<UserModel> verifyAccount(String token) {
         Optional<VerificationToken> vtokenOpt = verificationTokenDao.getTokenByValue(token);
 
         if (!vtokenOpt.isPresent()) {
@@ -81,10 +81,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void resendVerificationToken(User user) {
-        verificationTokenDao.removeTokenByUserId(user.getId());
-        VerificationToken token = generateVerificationToken(user.getId());
-        sendVerificationToken(user, token);
+    public void resendVerificationToken(UserModel userModel) {
+        verificationTokenDao.removeTokenByUserId(userModel.getId());
+        VerificationToken token = generateVerificationToken(userModel.getId());
+        sendVerificationToken(userModel, token);
     }
 
     @Override
@@ -95,15 +95,15 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void generateNewPassword(User user) {
-        passwordResetTokenDao.removeTokenByUserId(user.getId());
-        PasswordResetToken token = generatePasswordResetToken(user.getId());
-        sendPasswordResetToken(user, token);
+    public void generateNewPassword(UserModel userModel) {
+        passwordResetTokenDao.removeTokenByUserId(userModel.getId());
+        PasswordResetToken token = generatePasswordResetToken(userModel.getId());
+        sendPasswordResetToken(userModel, token);
     }
 
     @Transactional
     @Override
-    public Optional<User> updatePassword(String token, String password) {
+    public Optional<UserModel> updatePassword(String token, String password) {
         Optional<PasswordResetToken> prtokenOpt = passwordResetTokenDao.getTokenByValue(token);
 
         if (!prtokenOpt.isPresent()) {
@@ -120,39 +120,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserInfo(UserInfo userInfo, User user) {
-        userDao.updateUserInfo(userInfo, user);
+    public void updateUserInfo(UserInfo userInfo, UserModel userModel) {
+        userDao.updateUserInfo(userInfo, userModel);
     }
 
     @Override
-    public void updateProfileImage(ImageModel imageDto, User user) {
-        Long imageId = user.getProfileImageId();
+    public void updateProfileImage(ImageModel imageDto, UserModel userModel) {
+        Long imageId = userModel.getProfileImageId();
         if (imageId == 0) {
-            imageId = imageService.create(imageDto).getId();
-            userDao.updateProfileImage(imageId, user);
+            imageId = imageService.create(imageDto.getImage()).getId();
+            userDao.updateProfileImage(imageId, userModel);
         } else
             imageService.update(imageId, imageDto);
     }
 
 
-    private void sendVerificationToken(User user, VerificationToken token) {
+    private void sendVerificationToken(UserModel userModel, VerificationToken token) {
         try {
             String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount?token=" + token.getValue()).toString();
             Map<String, Object> mailAttrs = new HashMap<>();
             mailAttrs.put("confirmationURL", url);
-            mailAttrs.put("to", user.getEmail());
+            mailAttrs.put("to", userModel.getEmail());
             emailService.sendMail("verification", messageSource.getMessage("email.verifyAccount", new Object[]{}, locale), mailAttrs, locale);
         } catch (MessagingException | MalformedURLException e) {
             e.printStackTrace();
         }
     }
 
-    private void sendPasswordResetToken(User user, PasswordResetToken token) {
+    private void sendPasswordResetToken(UserModel userModel, PasswordResetToken token) {
         try {
             String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/resetPassword?token=" + token.getValue()).toString();
             Map<String, Object> mailAttrs = new HashMap<>();
             mailAttrs.put("confirmationURL", url);
-            mailAttrs.put("to", user.getEmail());
+            mailAttrs.put("to", userModel.getEmail());
             emailService.sendMail("passwordReset", messageSource.getMessage("email.resetPassword", new Object[]{}, locale), mailAttrs, locale);
         } catch (MessagingException | MalformedURLException e) {
             e.printStackTrace();

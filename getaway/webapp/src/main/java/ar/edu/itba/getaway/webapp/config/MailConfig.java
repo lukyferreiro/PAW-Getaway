@@ -33,8 +33,6 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
     private static final String PROTOCOL = "mail.server.protocol";
     private static final String USERNAME = "mail.server.username";
     private static final String PASSWORD = "mail.server.password";
-
-
     private ApplicationContext applicationContext;
     private Environment environment;
 

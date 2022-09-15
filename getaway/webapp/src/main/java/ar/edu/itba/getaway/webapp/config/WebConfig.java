@@ -82,7 +82,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return ds;
     }
 
-
     @Bean
     public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
         final DataSourceInitializer dsi = new DataSourceInitializer();

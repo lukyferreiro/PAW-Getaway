@@ -11,7 +11,7 @@
 <%--    <body>--%>
 <%--        <%@ include file="../components/navbar.jsp" %>--%>
 
-<%--        <div class="card user">--%>
+<%--        <div class="card userModel">--%>
 <%--            <div class="row">--%>
 <%--                <div class="col-2">--%>
 <%--                    <img class="user_img" src="<c:url value = "/resources/images/ic_user.png" />" alt="User">--%>

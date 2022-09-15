@@ -62,20 +62,30 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
 //                .invalidSessionUrl("/login")
                 .and().authorizeRequests()
-                    .antMatchers("/**").anonymous()
-//                    .antMatchers("/login").anonymous()
-//                    .antMatchers("/admin/**").hasRole("ADMIN")
-//                    .antMatchers("/**").authenticated()
-//                    .antMatchers(HttpMethod.POST, "/edit").hasAnyRole("EDITOR")
-//                    .antMatchers("/**").permitAll()
-//                    .accessDecisionManager(decisionManager())
+                    //Session routes
+
+//                    .antMatchers("/login", "/register").anonymous()
+//                    .antMatchers(HttpMethod.POST, "/user/verifyAccount/resend").hasRole("NOT_VERIFIED")
+//                    .antMatchers("/user/verifyAccount/resendConfirmation").hasRole("NOT_VERIFIED")
+//                    .antMatchers("/user/verifyAccount").hasRole("USER")
+//                    .antMatchers("/logout").authenticated()
+
+                    //Profile routes
+//                    .antMatchers("/user/account").hasRole("USER")
+//                    .antMatchers("/user/account/search", "/user/account/update",
+//                            "/user/account/updateCoverImage", "/user/account/updateInfo",
+//                            "/user/account/updateProfileImage").hasRole("VERIFIED")
+                    //else
+                    .antMatchers("/**").permitAll()
+
                 .and().formLogin()
+                    .loginPage("/login")
                     .usernameParameter("email")
                     .passwordParameter("password")
-                    .loginPage("/login")
                     .defaultSuccessUrl("/", false) //Tras logearme me lleva a /
+                    .failureUrl("/login?error=true")
                 .and().rememberMe()
-                    .rememberMeParameter("rememberme")
+                    .rememberMeParameter("rememberMe")
                     .userDetailsService(userDetailsService)
                     .key(FileCopyUtils.copyToString(new InputStreamReader(authKey.getInputStream())))
                     .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
@@ -83,7 +93,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/login")
                 .and().exceptionHandling()
-                    .accessDeniedPage("/403")
+                    .accessDeniedPage("/403")   //TODO change
                 .and().csrf().disable();
     }
 
@@ -92,15 +102,5 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         web.ignoring()
                 .antMatchers("/css/**", "/js/**", "/images/**", "/403");
     }
-
-//    private String loadRememberMeKey(){
-//        try (Reader reader = new InputStreamReader(getClass().getClassLoader().getResourceAsStream("auth_key.pem"))){
-//            return FileCopyUtils.copyToString(reader);
-//        }
-//        catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//    }
 
 }

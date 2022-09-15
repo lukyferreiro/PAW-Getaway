@@ -18,7 +18,7 @@
             <input id="password" name="password" type="password"/>
         </div>
         <div>
-            <label><input name="rememberme" type="checkbox"/> Recordarme</label>
+            <label><input name="rememberMe" type="checkbox"/> Recordarme</label>
         </div>
         <div>
             <button type="submit" value="Login!"></button>
