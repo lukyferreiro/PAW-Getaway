@@ -33,6 +33,18 @@ countryInput.addEventListener("keyup", (event) => {
     if(countryInput.value.length === 0){
         cityInput.setAttribute('disabled', 'true');
     } else {
+
+        // const httpCitiesRequest = new XMLHttpRequest();
+        //
+        // httpCitiesRequest.onreadystatechange = function(){
+        //     if(httpCitiesRequest.readyState === 4 && httpCitiesRequest.status === 200){
+        //         console.log(JSON.parse(httpCitiesRequest.response));
+        //     }
+        // };
+        //
+        // httpCitiesRequest.open("GET","http://localhost:8080/webapp_war/create_experience/get_cities",true);
+        // httpCitiesRequest.send();
+
         cityInput.removeAttribute('disabled');
     }
 });

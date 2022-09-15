@@ -18,24 +18,17 @@ import java.util.Optional;
 
 @RestController
 public class CitiesController {
-
     @Autowired
     CityService cityService;
-
 
     @Autowired
     CountryService countryService;
 
-    
-    @RequestMapping(path = "/create_experience",produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/create_experience/get_cities",produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<CityModel> getCities(@RequestParam String country){
+        Optional<CountryModel> currentCountry = countryService.getIdByCountryName(country);
 
-       Optional<CountryModel> currentCountry = countryService.getIdByCountryName(country);
-
-        List<CityModel> cityModels = cityService.getByCountryId(currentCountry.get().getId());
-
-        return cityModels;
+        return cityService.getByCountryId(currentCountry.get().getId());
     }
-
 }

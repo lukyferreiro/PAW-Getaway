@@ -92,8 +92,8 @@
                 <form:input path="activityCity" list="citiesOptions" class="form-control" id="experienceFormCityInput" placeholder="${placeholder}" disabled="true"/>
                 <datalist id="citiesOptions">
                   <c:forEach var="city" items="${cities}">
-                  <option value="${city.name}">
-                    </c:forEach>
+                    <option value="${city.name}">
+                  </c:forEach>
                 </datalist>
                 <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
               </div>
