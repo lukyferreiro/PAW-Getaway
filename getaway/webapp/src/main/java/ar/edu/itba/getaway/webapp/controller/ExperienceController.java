@@ -101,7 +101,7 @@ public class ExperienceController {
         }
 
         Double priceMax = form.getActivityPriceMax();
-        if (priceMax!=null){
+        if (priceMax != null){
             mav.addObject("maxPrice", priceMax);
         }
 

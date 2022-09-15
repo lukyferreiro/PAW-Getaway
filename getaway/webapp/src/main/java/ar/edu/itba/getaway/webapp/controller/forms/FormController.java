@@ -97,7 +97,7 @@ public class FormController {
 
         //TODO usuario forzado
         int userId = 1 ;
-        double price = Double.parseDouble(form.getActivityPrice());
+        Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
         String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
         String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
         final ExperienceModel experienceModel = exp.create(form.getActivityName(),form.getActivityAddress(),

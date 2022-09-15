@@ -79,11 +79,14 @@
                         <h5><c:out value="${activity.address}"/></h5>
                         <h6>
                             <c:choose>
+                                <c:when test="${activity.price == null}">
+                                    <spring:message code="experience.noPrice"/>
+                                </c:when>
                                 <c:when test="${activity.price == 0}">
                                     <spring:message code="experience.price.free"/>
                                 </c:when>
                                 <c:otherwise>
-                                    <spring:message code="experience.price.simbol"/>
+                                    <spring:message code="experience.price.symbol"/>
                                     <c:out value="${activity.price}"/>
                                     <spring:message code="experience.price.perPerson"/>
                                 </c:otherwise>

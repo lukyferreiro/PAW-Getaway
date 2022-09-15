@@ -75,11 +75,14 @@
                                 </h5>
                                 <p class="information-text">
                                     <c:choose>
+                                        <c:when test="${activity.price == null}">
+                                            <spring:message code="experienceDetail.noData"/>
+                                        </c:when>
                                         <c:when test="${activity.price == 0}">
                                             <spring:message code="experienceDetail.price.free"/>
                                         </c:when>
                                         <c:otherwise>
-                                            <spring:message code="experienceDetail.price.simbol"/>
+                                            <spring:message code="experienceDetail.price.symbol"/>
                                             <c:out value="${activity.price}"/>
                                             <spring:message code="experienceDetail.price.perPerson"/>
                                         </c:otherwise>
