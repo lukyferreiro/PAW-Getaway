@@ -93,8 +93,7 @@ public class ExperienceController {
         }
 
         Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
-        System.out.println(form.getActivityCity());
-//        List<ExperienceModel> experienceModel = exp.listByCategoryAndPrice(form.getActivityPriceMax());
+
         if(cityModel.isPresent()){
             long cityId = cityModel.get().getId();
             mav.addObject("cityId", cityId);
