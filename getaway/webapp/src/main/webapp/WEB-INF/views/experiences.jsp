@@ -33,10 +33,14 @@
                     </form:select>
                     <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
                 </div>
+<%--                <div class="form-check form-switch">--%>
+<%--                    <form:input path="enablePrice" class="form-check-input" type="checkbox" />--%>
+<%--                    <form:label path="enablePrice" class="form-check-label">Habilitar busqueda por precio</form:label>--%>
+<%--                </div>--%>
                 <div>
                     <form:label path="activityPriceMax" class="form-label">Precio maximo:</form:label>
-                    <form:input id="customRange" path="activityPriceMax" type="range" class="range" min="0" max="10000" value="0" oninput="this.nextElementSibling.value = this.value"/>
-                    <output>0</output>
+                    <output id="priceRange" name="priceRange" for="customRange">0</output>
+                    <form:input path="activityPriceMax" type="range" class="range" min="0" max="10000" value="0" oninput="this.previousElementSibling.value = this.value"/>
                 </div>
                 <button  class="btn btn-submit-form px-3 py-2" type="submit" id="cityFilterFormButton" form="cityFilterForm">
                     <spring:message code="filters.place.submit"/>

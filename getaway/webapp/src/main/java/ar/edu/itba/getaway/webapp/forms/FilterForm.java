@@ -4,6 +4,7 @@ public class FilterForm {
 
     private String activityCity;
     private Double activityPriceMax;
+//    private Boolean enablePrice;
 
     public Double getActivityPriceMax() {
         return activityPriceMax;
@@ -20,4 +21,12 @@ public class FilterForm {
     public void setActivityCity(String activityCity) {
         this.activityCity = activityCity;
     }
+//
+//    public Boolean getEnablePrice() {
+//        return enablePrice;
+//    }
+//
+//    public void setEnablePrice(Boolean enablePrice) {
+//        this.enablePrice = enablePrice;
+//    }
 }
