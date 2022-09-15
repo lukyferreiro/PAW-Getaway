@@ -1,3 +1,8 @@
+let processing = false;
+let processingCancel = false;
+let createExperienceForm = document.getElementById("createExperienceForm");
+let createExperienceFormButton = document.getElementById("createExperienceFormButton");
+let cancelFormButton = document.getElementById("cancelFormButton");
 let countryInput = document.getElementById("experienceFormCountryInput");
 let cityInput = document.getElementById("experienceFormCityInput");
 
@@ -22,9 +27,6 @@ countryInput.addEventListener("keyup", () => {
     validateCityIfThereIsACountry(countryInput, cityInput);
 });
 
-let processing = false;
-let createExperienceForm = document.getElementById("createExperienceForm");
-let createExperienceFormButton = document.getElementById("createExperienceFormButton");
 createExperienceFormButton.addEventListener("click", () => {
     if(processing){
         return;
@@ -40,9 +42,6 @@ createExperienceFormButton.addEventListener("click", () => {
     processing = false;
 })
 
-
-let processingCancel = false;
-let cancelFormButton = document.getElementById("cancelFormButton");
 cancelFormButton.addEventListener("click", () => {
     if(processingCancel){
         return;
@@ -74,9 +73,6 @@ cancelFormButton.addEventListener("click", () => {
 // }
 
 
-
-let countryInput = document.getElementById("experienceFormCountryInput");
-let cityInput = document.getElementById("experienceFormCityInput");
 countryInput.addEventListener("keyup", (event) => {
     if(countryInput.value.length === 0){
         cityInput.setAttribute('disabled', 'true');
