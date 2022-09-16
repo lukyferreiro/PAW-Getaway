@@ -5,6 +5,7 @@
 <html>
    <head>
       <title><spring:message code="pageName"/> - <c:out value="${activity.name}"/></title>
+      <link href="<c:url value = "/resources/css/experiences.css" />" rel="stylesheet">
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 
@@ -20,21 +21,7 @@
             <h1 class="card-title d-flex justify-content-center">
                <c:out value="${activity.name}"/>
             </h1>
-<%--            <div>--%>
-<%--               <div class="d-inline-block">--%>
-<%--                  <p>--%>
-<%--                     experience.ranking <img src="<c:url value = "/resources/images/ic_star.svg" />" alt="Icono estrella">--%>
-<%--                  </p>--%>
-<%--                  </div>--%>
-<%--                  <div class="d-inline-block">--%>
-<%--                     <a href="#"><c:out value="${activity.siteUrl}"/></a>--%>
-<%--                  </div>--%>
-<%--            </div>--%>
-<%--            <div class="">--%>
-<%--               <button type="button" class="btn btn-bookmark">--%>
-<%--                  <img src="<c:url value="/resources/images/ic_bookmark_white.svg"/>" alt="Guardar"/>--%>
-<%--               </button>--%>
-<%--            </div>--%>
+
             <div class="row">
                <div class="col-auto">
                   <div class="card-body p-2 mw-25">
@@ -123,11 +110,25 @@
                            </c:otherwise>
                         </c:choose>
                      </div>
-<%--                     <h5 class="card-title"> <spring:message code="experienceDetail.tags"/> </h5>--%>
-<%--                     <p><a href="#">#tag1</a>   <a href="#">#tag2</a></p>--%>
                   </div>
                </div>
             </div>
+         </div>
+
+         <div>
+            <c:forEach var="review" items="${reviews}">
+               <div class="card card-review mx-3 my-2 p-0">
+                  <img class="user-img" src="<c:url value = "/resources/images/ic_user.png" />" alt="User"> User name</div>
+                  <div class="card-body container-fluid p-2">
+                        <h2 class="card-title container-fluid p-0"><c:out value="${review.title}"/></h2>
+                        <div class="card-text container-fluid p-0">
+                           <h5 class="text-truncate"><c:out value="${review.description}"/></h5>
+                           <h7>Rating: <c:out value="${review.score}"/></h7>
+                           <h7><c:out value="${review.reviewDate}"/></h7>
+                        </div>
+                  </div>
+               </div>
+            </c:forEach>
          </div>
 
          <%@ include file="../components/footer.jsp" %>

@@ -28,6 +28,8 @@ public class ExperienceController {
     CityService cityService;
     @Autowired
     ImageService imageService;
+    @Autowired
+    ReviewService reviewService;
 
     @RequestMapping(value = "/{categoryName}", method = {RequestMethod.GET})
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
@@ -69,16 +71,18 @@ public class ExperienceController {
         return mav;
     }
 
-    @RequestMapping("/{categoryName}/{categoryId}")
+    @RequestMapping("/{categoryName}/{experienceId}")
     public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName,
-                                       @PathVariable("categoryId") final long categoryId) {
+                                       @PathVariable("experienceId") final long experienceId) {
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
-        final ExperienceModel experience = exp.getById(categoryId).orElseThrow(ExperienceNotFoundException::new);
+        final ExperienceModel experience = exp.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         String dbCategoryName = ExperienceCategory.valueOf(categoryName).getName();
+        final List<ReviewModel> reviews = reviewService.getReviewsFromId(experienceId);
 
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
+        mav.addObject("reviews", reviews);
         return mav;
     }
 
