@@ -48,6 +48,16 @@
                      </c:if>
                   </div>
                </div>
+               <div class="container-header-btn d-flex justify-content-between">
+                  <a href="<c:url value = "/${activity.categoryName}/${activity.id}/create_review"/>">
+                     <button type="button" class="btn btn-header">
+                        <spring:message code="review.createReview"/>
+                     </button>
+                  </a>
+                  <button type="button" class="btn btn-header">
+                     <spring:message code="navbar.login"/>
+                  </button>
+               </div>
                <div class="col">
                   <div class="card-body">
                      <div>
@@ -123,7 +133,7 @@
                         <h2 class="card-title container-fluid p-0"><c:out value="${review.title}"/></h2>
                         <div class="card-text container-fluid p-0">
                            <h5 class="text-truncate"><c:out value="${review.description}"/></h5>
-                           <h7>Rating: <c:out value="${review.score}"/></h7>
+                           <h7> <spring:message code="review.score"/> <c:out value="${review.score}"/></h7>
                            <h7><c:out value="${review.reviewDate}"/></h7>
                         </div>
                   </div>

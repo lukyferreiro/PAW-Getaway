@@ -12,4 +12,4 @@
 <link href="<c:url value = "/resources/css/styles.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/navbar.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/footer.css"/>" rel="stylesheet" type="text/css">
-<link href="<c:url value = "/resources/css/form-create-experience.css"/>" rel="stylesheet" type="text/css">
+<link href="<c:url value = "/resources/css/form.css"/>" rel="stylesheet" type="text/css">
