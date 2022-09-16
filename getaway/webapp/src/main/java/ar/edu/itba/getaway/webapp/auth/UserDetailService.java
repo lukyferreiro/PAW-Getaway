@@ -3,7 +3,6 @@ package ar.edu.itba.getaway.webapp.auth;
 
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.services.UserService;
-import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

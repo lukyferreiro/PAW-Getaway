@@ -31,6 +31,15 @@ CREATE TABLE IF NOT EXISTS cities
     FOREIGN KEY (countryId) REFERENCES countries (countryId) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS argentinaCities
+(
+    cityId SERIAL NOT NULL,
+    cityName VARCHAR(255) NOT NULL,
+    countryId INT NOT NULL,
+    PRIMARY KEY (cityId),
+    FOREIGN KEY (countryId) REFERENCES countries (countryId) ON DELETE CASCADE
+    );
+
 CREATE TABLE IF NOT EXISTS images
 (
     imgId SERIAL NOT NULL,
