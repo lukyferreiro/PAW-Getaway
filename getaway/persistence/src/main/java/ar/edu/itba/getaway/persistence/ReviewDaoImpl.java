@@ -28,7 +28,8 @@ public class ReviewDaoImpl implements ReviewDao{
                     rs.getString("description"),
                     rs.getLong("score"),
                     rs.getLong("experienceid"),
-                    rs.getDate("reviewdate"));
+                    rs.getDate("reviewdate"),
+                    rs.getLong("userid"));
 
     @Autowired
     public ReviewDaoImpl(final DataSource ds) {
@@ -39,15 +40,16 @@ public class ReviewDaoImpl implements ReviewDao{
     }
 
     @Override
-    public ReviewModel create(String title, String description, long score, long experienceId, Date reviewDate) {
+    public ReviewModel create(String title, String description, long score, long experienceId, Date reviewDate, long userId) {
         final Map<String, Object> args = new HashMap<>();
         args.put("title", title);
         args.put("description", description);
         args.put("score", score);
         args.put("experienceId", experienceId);
         args.put("reviewDate", reviewDate);
+        args.put("userId", userId);
         final long reviewid = jdbcInsert.executeAndReturnKey(args).longValue();
-        return new ReviewModel(reviewid, title, description,score, experienceId, reviewDate);
+        return new ReviewModel(reviewid, title, description,score, experienceId, reviewDate, userId);
     }
 
     @Override

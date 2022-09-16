@@ -21,7 +21,13 @@
             <h1 class="card-title d-flex justify-content-center">
                <c:out value="${activity.name}"/>
             </h1>
-
+            <div class="container-header-btn">
+               <a href="<c:url value = "/${activity.categoryName}/${activity.id}/create_review"/>">
+                  <button type="button" class="btn btn-header">
+                     <spring:message code="review.createReview"/>
+                  </button>
+               </a>
+            </div>
             <div class="row">
                <div class="col-auto">
                   <div class="card-body p-2 mw-25">
@@ -47,16 +53,6 @@
                         <img class="rounded img-detail" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
                      </c:if>
                   </div>
-               </div>
-               <div class="container-header-btn d-flex justify-content-between">
-                  <a href="<c:url value = "/${activity.categoryName}/${activity.id}/create_review"/>">
-                     <button type="button" class="btn btn-header">
-                        <spring:message code="review.createReview"/>
-                     </button>
-                  </a>
-                  <button type="button" class="btn btn-header">
-                     <spring:message code="navbar.login"/>
-                  </button>
                </div>
                <div class="col">
                   <div class="card-body">

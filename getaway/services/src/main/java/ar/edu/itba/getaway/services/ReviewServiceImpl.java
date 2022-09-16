@@ -15,8 +15,8 @@ public class ReviewServiceImpl implements ReviewService{
 
 
     @Override
-    public ReviewModel create(String title, String description, long score, long experienceId, Date reviewDate) {
-        return reviewDao.create(title,description,score,experienceId,reviewDate);
+    public ReviewModel create(String title, String description, long score, long experienceId, Date reviewDate, long userId) {
+        return reviewDao.create(title,description,score,experienceId,reviewDate, userId);
     }
 
     @Override
