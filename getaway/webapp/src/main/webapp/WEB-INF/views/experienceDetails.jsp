@@ -39,27 +39,31 @@
                <div class="col-auto">
                   <div class="card-body p-2 mw-25">
 <%--                     replace with conditional to check if experience has image associated--%>
-                     <c:if test="">
-                        <img class="rounded img-detail" src="<c:url value='/${activity.id}/image'/>"/>
-                     </c:if>
-                     <c:if test="${dbCategoryName == 'Aventura'}">
-                        <img class="rounded img-detail" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
-                     </c:if>
-                     <c:if test="${dbCategoryName == 'Gastronomia'}">
-                        <img class="rounded img-detail" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
-                     </c:if>
-                     <c:if test="${dbCategoryName == 'Hoteleria'}">
-                        <img class="rounded img-detail" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
-                     </c:if>
-                     <c:if test="${dbCategoryName == 'Relax'}">
-                        <img class="rounded img-detail" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
-                     </c:if>
-                     <c:if test="${dbCategoryName == 'Vida nocturna'}">
-                        <img class="rounded img-detail" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
-                     </c:if>
-                     <c:if test="${dbCategoryName == 'Historico'}">
-                        <img class="rounded img-detail" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
-                     </c:if>
+                    <c:choose>
+                        <c:when test="${activity.hasImage == false}">
+                            <c:if test="${dbCategoryName == 'Aventura'}">
+                                <img class="rounded img-detail" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
+                            </c:if>
+                            <c:if test="${dbCategoryName == 'Gastronomia'}">
+                                <img class="rounded img-detail" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
+                            </c:if>
+                            <c:if test="${dbCategoryName == 'Hoteleria'}">
+                                <img class="rounded img-detail" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
+                            </c:if>
+                            <c:if test="${dbCategoryName == 'Relax'}">
+                                <img class="rounded img-detail" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
+                            </c:if>
+                            <c:if test="${dbCategoryName == 'Vida nocturna'}">
+                                <img class="rounded img-detail" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
+                            </c:if>
+                            <c:if test="${dbCategoryName == 'Historico'}">
+                                <img class="rounded img-detail" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
+                            </c:if>
+                        </c:when>
+                        <c:otherwise>
+                            <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/${activity.id}/image'/>"/>
+                        </c:otherwise>
+                    </c:choose>
                   </div>
                </div>
                <div class="col">

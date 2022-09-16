@@ -31,7 +31,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
                     (rs.getObject("price")==null) ? null : rs.getBigDecimal("price").doubleValue(),
                     rs.getLong("cityId"),
                     rs.getLong("categoryId"),
-                    rs.getLong("userId"));
+                    rs.getLong("userId"),
+                    rs.getBoolean("hasImage"));
 
     @Autowired
     public ExperienceDaoImpl(final DataSource ds) {
@@ -42,7 +43,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public ExperienceModel create(String name, String address, String description, String url, Double price, long cityId, long categoryId, long userId) {
+    public ExperienceModel create(String name, String address, String description, String url, Double price, long cityId, long categoryId, long userId, boolean hasImage) {
         final Map<String, Object> args = new HashMap<>();
         args.put("experienceName", name);
         args.put("address", address);
@@ -52,8 +53,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
         args.put("cityId", cityId);
         args.put("categoryId", categoryId);
         args.put("userId",userId);
+        args.put("hasImage", hasImage);
         final long experienceId = jdbcInsert.executeAndReturnKey(args).longValue();
-        return new ExperienceModel(experienceId, name, address, description,url, price, cityId, categoryId, userId);
+        return new ExperienceModel(experienceId, name, address, description,url, price, cityId, categoryId, userId, hasImage);
     }
 
     @Override
@@ -67,12 +69,13 @@ public class ExperienceDaoImpl implements ExperienceDao {
                 "cityId = ?, " +
                 "categoryId = ?, " +
                 "userId = ?" +
+                "hasImage = ?" +
                 "WHERE experienceId = ?",
                 experienceModel.getName(), experienceModel.getAddress(),
                 experienceModel.getDescription(), experienceModel.getSiteUrl(),
                 experienceModel.getPrice(),
                 experienceModel.getCityId(), experienceModel.getCategoryId(),
-                experienceModel.getUserId(),
+                experienceModel.getUserId(), experienceModel.isHasImage(),
                 experienceId) == 1;
     }
 
@@ -85,25 +88,25 @@ public class ExperienceDaoImpl implements ExperienceDao {
     @Override
     public List<ExperienceModel> listAll() {
         return new ArrayList<>(jdbcTemplate.query(
-                "SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId FROM experiences",
+                "SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences",
                 EXPERIENCE_MODEL_ROW_MAPPER));
     }
 
     @Override
     public Optional<ExperienceModel> getById(long experienceId) {
-        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId FROM experiences WHERE experienceId = ?",
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences WHERE experienceId = ?",
                 new Object[]{experienceId}, EXPERIENCE_MODEL_ROW_MAPPER).stream().findFirst();
     }
 
     @Override
     public List<ExperienceModel> listByCategory(long categoryId) {
-        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId FROM experiences NATURAL JOIN categories WHERE categoryId = ?",
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences NATURAL JOIN categories WHERE categoryId = ?",
                 new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
     public List<ExperienceModel> listByCategoryAndCity(long categoryId, long cityId) {
-        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId FROM experiences NATURAL JOIN categories WHERE categoryId = ? AND cityId = ?",
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences NATURAL JOIN categories WHERE categoryId = ? AND cityId = ?",
                 new Object[]{categoryId, cityId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 

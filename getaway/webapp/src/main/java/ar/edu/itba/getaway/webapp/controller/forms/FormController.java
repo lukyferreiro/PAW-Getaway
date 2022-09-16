@@ -100,14 +100,16 @@ public class FormController {
         Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
         String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
         String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
-        final ExperienceModel experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(), description, url, price, cityId, categoryId + 1, userId);
+        final ExperienceModel experienceModel;
 
         if (!form.getActivityImg().isEmpty()) {
+            experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(), description, url, price, cityId, categoryId + 1, userId, true);
             final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
-            //Intentar cargar el par imgid, expid a la tabla image experience
             imageExperienceService.create(imageModel.getId(), experienceModel.getId(), true);
         }
-
+        else {
+            experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(), description, url, price, cityId, categoryId + 1, userId, false);
+        }
         //TODO check pq ahora como agregue la flecha para volver hacias atras en los detalles de la actividad
         //y al terminar el formulario me redigire a los detalles de la actividad, si todo en la flecha de volver
         //hacia atras me lleva devuelta al formulario

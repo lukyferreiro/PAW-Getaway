@@ -50,6 +50,8 @@ public class ExperienceController {
         List<ExperienceModel> experienceList;
         List<CityModel> cityModels = cityService.listAll();
 
+
+
         //Filtros
         if (cityId.isPresent()) {
             if (maxPrice.isPresent() && maxPrice.get() > 0) {
@@ -76,14 +78,11 @@ public class ExperienceController {
     @ResponseBody
     public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
         Optional<ImageModel> optionalImageModel = imageService.getByExperienceId(experienceId);
-        final ModelAndView mav = new ModelAndView("experiences");
 
         if(optionalImageModel.isPresent()){
-            mav.addObject("expImage", "true");
             return optionalImageModel.get().getImage();
         }
 
-        mav.addObject("expImage", "false");
         return null;
     }
 

@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS experiences
     experienceName VARCHAR(255) NOT NULL,
     price DECIMAL,
     address VARCHAR(255) NOT NULL,
+    hasImage BOOLEAN NOT NULL,
     description TEXT,
     siteUrl TEXT,
     cityId INT NOT NULL,
@@ -110,11 +111,13 @@ CREATE TABLE IF NOT EXISTS reviews
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     score INT NOT NULL,
-    experienceId INT NOT NULL,
     reviewDate DATE NOT NULL,
+    experienceId INT NOT NULL,
+    userId INT NOT NULL,
     PRIMARY KEY (reviewId),
-    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
-);
+    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE
+    );
 
 CREATE TABLE IF NOT EXISTS roles
 (

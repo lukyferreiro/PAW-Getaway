@@ -8,8 +8,9 @@ public class ExperienceModel {
     private Double price;
     private long cityId, categoryId;
     private final long userId;
+    private boolean hasImage;
 
-    public ExperienceModel(long experienceId, String experienceName, String address, String description, String siteUrl, Double price, long cityId, long categoryId, long userId) {
+    public ExperienceModel(long experienceId, String experienceName, String address, String description, String siteUrl, Double price, long cityId, long categoryId, long userId, boolean hasImage) {
         this.experienceId = experienceId;
         this.experienceName = experienceName;
         this.address = address;
@@ -20,6 +21,7 @@ public class ExperienceModel {
         this.cityId = cityId;
         this.categoryId = categoryId;
         this.userId = userId;
+        this.hasImage = hasImage;
     }
 
     public long getId() {
@@ -88,5 +90,13 @@ public class ExperienceModel {
     @Override
     public int hashCode() {
         return Objects.hash(experienceId, experienceName, address, description, siteUrl, categoryName, price, cityId, categoryId, userId);
+    }
+
+    public boolean isHasImage() {
+        return hasImage;
+    }
+
+    public void setHasImage(boolean hasImage) {
+        this.hasImage = hasImage;
     }
 }

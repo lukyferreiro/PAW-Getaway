@@ -73,9 +73,8 @@
                <c:forEach var="activity" items="${activities}">
                   <div class="card card-experience mx-3 my-2 p-0">
                      <a class="card-link" href="<c:url value="${activity.categoryName}/${activity.id}"/>">
-                           <c:choose>
-                              <%--                     replace with conditional to check if experience has image associated--%>
-                              <c:when test="${expImage == 'false'}">
+                        <c:choose>
+                              <c:when test="${activity.hasImage == false}">
                                  <c:if test="${dbCategoryName == 'Aventura'}">
                                     <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
                                  </c:if>
