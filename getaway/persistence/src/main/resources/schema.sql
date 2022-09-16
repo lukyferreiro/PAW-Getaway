@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS argentinaCities
 CREATE TABLE IF NOT EXISTS images
 (
     imgId SERIAL NOT NULL,
-    image BYTEA,
+    imageObject BYTEA,
     PRIMARY KEY (imgId)
 );
 

@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,9 +70,26 @@ public class ExperienceController {
         return mav;
     }
 
-    @RequestMapping("/{categoryName}/{categoryId}")
+    @RequestMapping(path = "/{experienceId}/image",
+            produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE},
+            method = RequestMethod.GET)
+    @ResponseBody
+    public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
+        Optional<ImageModel> optionalImageModel = imageService.getByExperienceId(experienceId);
+        final ModelAndView mav = new ModelAndView("experiences");
+
+        if(optionalImageModel.isPresent()){
+            mav.addObject("expImage", "true");
+            return optionalImageModel.get().getImage();
+        }
+
+        mav.addObject("expImage", "false");
+        return null;
+    }
+
+    @RequestMapping("/{categoryName}/{experienceId}")
     public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName,
-                                       @PathVariable("categoryId") final long categoryId) {
+                                       @PathVariable("experienceId") final long categoryId) {
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = exp.getById(categoryId).orElseThrow(ExperienceNotFoundException::new);
@@ -107,16 +125,4 @@ public class ExperienceController {
         return mav;
     }
 
-    @RequestMapping(path = "/experiences/images/{experienceId}",
-                    produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE},
-                    method = RequestMethod.GET)
-    @ResponseBody
-    public byte[] getExperienceImage(@PathVariable("experienceId") long experienceId) {
-        Optional<ImageModel> optImageModel = imageService.getByExperienceId(experienceId);
-        if (optImageModel.isPresent()) {
-            ImageModel image = optImageModel.get();
-            return image.getImage();
-        }
-        return null;
-    }
 }

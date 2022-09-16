@@ -38,8 +38,9 @@
             <div class="row">
                <div class="col-auto">
                   <div class="card-body p-2 mw-25">
-                     <c:if test="/experiences/images/${activity.id} != null">
-                        <img class="rounded img-detail" src="<c:url value="/experiences/images/${activity.id}" />"/>
+<%--                     replace with conditional to check if experience has image associated--%>
+                     <c:if test="">
+                        <img class="rounded img-detail" src="<c:url value='/${activity.id}/image'/>"/>
                      </c:if>
                      <c:if test="${dbCategoryName == 'Aventura'}">
                         <img class="rounded img-detail" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">

@@ -25,7 +25,7 @@ public class ImageDaoImpl implements ImageDao {
 
     private static final RowMapper<ImageModel> IMAGE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new ImageModel(rs.getLong("imgid"),
-                    rs.getObject("image", byte[].class));
+                    rs.getBytes("imageObject"));
 
     @Autowired
     public ImageDaoImpl(final DataSource ds){
@@ -39,14 +39,14 @@ public class ImageDaoImpl implements ImageDao {
     public ImageModel create(byte[] image) {
         final Map<String, Object> args = new HashMap<>();
 
-        args.put("image", image);
+        args.put("imageObject", image);
 
         final long imgid = jdbcInsert.executeAndReturnKey(args).longValue();
         return new ImageModel(imgid, image);
     }
     @Override
     public boolean update(long imgid, ImageModel imageModel) {
-        return jdbcTemplate.update("UPDATE images SET image = ? WHERE imgid = ?",
+        return jdbcTemplate.update("UPDATE images SET imageObject = ? WHERE imgid = ?",
                 imageModel.getImage(), imgid) == 1;
     }
 
@@ -58,19 +58,19 @@ public class ImageDaoImpl implements ImageDao {
 
     @Override
     public List<ImageModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query("SELECT imgid, image FROM images",
+        return new ArrayList<>(jdbcTemplate.query("SELECT imgid, imageObject FROM images",
                 IMAGE_MODEL_ROW_MAPPER));
     }
 
     @Override
     public Optional<ImageModel> getById(long imgid) {
-        return jdbcTemplate.query("SELECT imgid, image FROM images WHERE imgid = ?",
+        return jdbcTemplate.query("SELECT imgid, imageObject FROM images WHERE imgid = ?",
                 new Object[]{imgid}, IMAGE_MODEL_ROW_MAPPER).stream().findFirst();
     }
 
     @Override
     public Optional<ImageModel> getByExperienceId(long experienceId){
-        return jdbcTemplate.query("SELECT imgId, image FROM imagesExperiences NATURAL JOIN images WHERE experienceId = ?",
+        return jdbcTemplate.query("SELECT imgId, imageObject FROM imagesExperiences NATURAL JOIN images WHERE experienceId = ?",
                 new Object[]{experienceId}, IMAGE_MODEL_ROW_MAPPER).stream().findFirst();
     }
 }
