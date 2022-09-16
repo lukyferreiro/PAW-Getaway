@@ -25,7 +25,7 @@
                   <div>
                      <form:label path="activityCity" class="form-label"><spring:message code="filters.city"/></form:label>
                      <form:select path="activityCity" class="form-select">
-                        <option disabled selected value><spring:message code="filters.city"/></option>
+                        <option disabled selected value><spring:message code="filters.city.placeholder"/></option>
                         <c:forEach var="city" items="${cities}">
                            <option><c:out value="${city.name}"/></option>
                         </c:forEach>
