@@ -115,7 +115,7 @@ public class ExperienceController {
                     produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE},
                     method = RequestMethod.GET)
     @ResponseBody
-    public byte[] getProfileImage(@PathVariable("experienceId") long experienceId) {
+    public byte[] getExperienceImage(@PathVariable("experienceId") long experienceId) {
         Optional<ImageModel> optImageModel = imageService.getByExperienceId(experienceId);
         if (optImageModel.isPresent()) {
             ImageModel image = optImageModel.get();

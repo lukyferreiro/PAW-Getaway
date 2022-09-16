@@ -134,7 +134,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
     private void sendVerificationToken(UserModel userModel, VerificationToken token) {
         try {
             String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount?token=" + token.getValue()).toString();

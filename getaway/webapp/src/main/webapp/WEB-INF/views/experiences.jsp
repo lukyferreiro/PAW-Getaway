@@ -33,17 +33,35 @@
                      <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
                   </div>
 
-                  <div class="form-check form-switch my-3 d-flex justify-content-start align-items-center">
+                  <div class="form-check form-switch mt-3 d-flex justify-content-start align-items-center" style="margin-bottom: 30px;">
                      <input id="enablePrice" class="form-check-input checkbox-price" type="checkbox"
                             onchange="document.getElementById('customRange').disabled = !this.checked;"/>
                      <label for="enablePrice" class="form-check-label"><spring:message code="filters.price.checkbox"/></label>
                   </div>
-                  <div>
-                     <form:label path="activityPriceMax" class="form-label"><spring:message code="filters.price.title"/></form:label>
-                     <output id="priceRange" name="priceRange" for="customRange">0</output>
-                     <form:input disabled="true" id="customRange" path="activityPriceMax" type="range"
-                                 class="range" min="0" max="10000" value="0"
-                                 oninput="this.previousElementSibling.value = this.value"/>
+<%--                  <div>--%>
+<%--                     <form:label path="activityPriceMax" class="form-label"><spring:message code="filters.price.title"/></form:label>--%>
+<%--                     <output id="priceRange" name="priceRange" for="customRange">0</output>--%>
+<%--                     <form:input disabled="true" id="customRange" path="activityPriceMax" type="range"--%>
+<%--                                 class="range" min="0" max="10000" value="0"--%>
+<%--                                 oninput="this.previousElementSibling.value = this.value"/>--%>
+<%--                  </div>--%>
+                  <div class="range">
+                     <div class="sliderValue">
+                        <span id="sliderValue">100</span>
+                     </div>
+                     <div class="field">
+                        <div class="value left">0</div>
+                        <form:input disabled="true" id="customRange" path="activityPriceMax"
+                                    type="range" min="0" max="10000" value="0"
+                           oninput="let sliderValue = document.getElementById('sliderValue');
+                                    let value = this.value;
+                                    sliderValue.textContent = value;
+                                    sliderValue.style.left = (value / 101) + '%';
+                                    sliderValue.classList.add('show');"
+                           onblur="let sliderValue = document.getElementById('sliderValue');
+                                   sliderValue.classList.remove('show');"/>
+                        <div class="value right">10000</div>
+                     </div>
                   </div>
                </form:form>
                <button class="btn btn-submit-form px-3 py-2" type="submit" id="cityFilterFormButton" form="cityFilterForm">
