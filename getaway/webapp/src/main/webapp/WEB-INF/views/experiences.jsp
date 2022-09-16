@@ -14,41 +14,44 @@
       <div class="container-main">
          <%@ include file="../components/navbar.jsp" %>
 
-         <div class="container-body container-fluid p-0 d-flex">
+         <div class="container-fluid h-100 p-0 d-flex">
             <div class="container-filters container-fluid px-2 py-0 mx-2 my-0 d-flex flex-column justify-content-start align-items-center border-end">
-               <p class="font-weight-bold">
+               <p class="filters-title m-0">
                   <spring:message code="filters.title"/>
                </p>
                <%--FILTER--%>
                <c:url value="/${categoryName}" var="postPath"/>
-               <form:form modelAttribute="filterForm" action="${postPath}" id="cityFilterForm" method="post" acceptCharset="UTF-8">
+               <form:form modelAttribute="filterForm" action="${postPath}" cssClass="filter-form" id="cityFilterForm" method="post" acceptCharset="UTF-8">
                   <div>
-                     <form:label path="activityCity" class="form-label"><spring:message code="experienceForm.activityCity"/></form:label>
+                     <form:label path="activityCity" class="form-label"><spring:message code="filters.city"/></form:label>
                      <form:select path="activityCity" class="form-select">
-                        <option disabled selected value>¿A donde?</option>
+                        <option disabled selected value><spring:message code="filters.city"/></option>
                         <c:forEach var="city" items="${cities}">
                            <option><c:out value="${city.name}"/></option>
                         </c:forEach>
                      </form:select>
                      <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
                   </div>
-                  <div class="form-check form-switch">
-                     <input id="enablePrice" class="form-check-input" type="checkbox" onchange="document.getElementById('customRange').disabled = !this.checked;"/>
-                     <label for="enablePrice" class="form-check-label">Habilitar busqueda por precio</label>
+
+                  <div class="form-check form-switch my-3 d-flex justify-content-start align-items-center">
+                     <input id="enablePrice" class="form-check-input checkbox-price" type="checkbox"
+                            onchange="document.getElementById('customRange').disabled = !this.checked;"/>
+                     <label for="enablePrice" class="form-check-label"><spring:message code="filters.price.checkbox"/></label>
                   </div>
                   <div>
-                     <form:label path="activityPriceMax" class="form-label">Precio maximo:</form:label>
+                     <form:label path="activityPriceMax" class="form-label"><spring:message code="filters.price.title"/></form:label>
                      <output id="priceRange" name="priceRange" for="customRange">0</output>
-                     <form:input disabled="true" id="customRange" path="activityPriceMax" type="range" class="range" min="0" max="10000" value="0" oninput="this.previousElementSibling.value = this.value"/>
+                     <form:input disabled="true" id="customRange" path="activityPriceMax" type="range"
+                                 class="range" min="0" max="10000" value="0"
+                                 oninput="this.previousElementSibling.value = this.value"/>
                   </div>
-                  <button class="btn btn-submit-form px-3 py-2" type="submit" id="cityFilterFormButton" form="cityFilterForm">
-                     <spring:message code="filters.place.submit"/>
-                  </button>
                </form:form>
-
+               <button class="btn btn-submit-form px-3 py-2" type="submit" id="cityFilterFormButton" form="cityFilterForm">
+                  <spring:message code="filters.place.submit"/>
+               </button>
             </div>
 
-            <div class="container-experiences container-fluid p-0 mx-2 my-0 d-flex flex-wrap justify-content-center">
+            <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
                <c:forEach var="activity" items="${activities}">
                   <div class="card card-experience mx-3 my-2 p-0">
                      <a class="card-link" href="<c:url value="${activity.categoryName}/${activity.id}"/>">
@@ -70,11 +73,11 @@
                         <c:if test="${dbCategoryName == 'Historico'}">
                            <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
                         </c:if>
-<%--                        <div class="">--%>
-<%--                            <button type="button" class="btn btn-bookmark">--%>
-<%--                                <img src="<c:url value="/resources/images/ic_bookmark_white.svg"/>" alt="Guardar"/>--%>
-<%--                            </button>--%>
-<%--                        </div>--%>
+                           <%--                        <div class="">--%>
+                           <%--                            <button type="button" class="btn btn-bookmark">--%>
+                           <%--                                <img src="<c:url value="/resources/images/ic_bookmark_white.svg"/>" alt="Guardar"/>--%>
+                           <%--                            </button>--%>
+                           <%--                        </div>--%>
                         <div class="card-body container-fluid p-2">
                            <h2 class="card-title container-fluid p-0"><c:out value="${activity.name}"/></h2>
                            <div class="card-text container-fluid p-0">
