@@ -44,20 +44,24 @@
 
                   <div class="container-slider-price">
                      <form:label path="activityPriceMax" class="form-label"><spring:message code="filters.price.title"/></form:label>
-                     <output id="priceRange" name="priceRange" for="customRange">0</output>
+                     <output id="priceRange" name="priceRange" for="customRange"><spring:message code="filters.price.min"/></output>
                      <div class="slider-price">
-                        <div class="value left">0</div>
+                        <div class="value left">
+                           <spring:message code="filters.price.min"/>
+                        </div>
                         <div class="slider">
                            <form:input disabled="true" id="customRange" path="activityPriceMax"
                                        type="range" min="0" max="10000" value="0"
                                        oninput="document.getElementById('priceRange').value = this.value"/>
                         </div>
-                        <div class="value right">10000</div>
+                        <div class="value right">
+                           <spring:message code="filters.price.max"/>
+                        </div>
                      </div>
                   </div>
                </form:form>
                <button class="btn btn-submit-form px-3 py-2" type="submit" id="cityFilterFormButton" form="cityFilterForm">
-                  <spring:message code="filters.place.submit"/>
+                  <spring:message code="filters.btn.submit"/>
                </button>
             </div>
 
@@ -87,7 +91,7 @@
                                  </c:if>
                               </c:when>
                               <c:otherwise>
-                                 <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/${activity.id}/image'/>"/>
+                                 <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/${activity.id}/image'/>" alt="Imagen"/>
                               </c:otherwise>
                            </c:choose>
 <%--                                       <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/${activity.id}/image'/>"/>--%>
