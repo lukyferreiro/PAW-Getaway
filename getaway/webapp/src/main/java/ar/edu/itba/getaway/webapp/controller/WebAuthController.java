@@ -6,6 +6,8 @@ import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.services.ImageService;
 import ar.edu.itba.getaway.services.UserService;
 import ar.edu.itba.getaway.webapp.forms.RegisterForm;
+import ar.edu.itba.getaway.webapp.forms.ResetPasswordEmailForm;
+import ar.edu.itba.getaway.webapp.forms.ResetPasswordForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
