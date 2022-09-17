@@ -7,10 +7,6 @@ cityFilterFormButton.addEventListener("click", () => {
     }
     processing = true;
     cityFilterFormButton.disabled = true;
-    // let priceInput = document.getElementById("experienceFormPriceInput");
-    // if(priceInput.value.length === 0){
-    //     priceInput.value = 0;
-    // }
     cityFilterForm.submit();
     processing = false;
 })

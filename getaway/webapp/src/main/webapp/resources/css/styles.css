@@ -66,74 +66,34 @@
     background-color: rgba(249, 157, 50, 0.5);
 }
 
-/*#customRange {*/
-/*    width: 100%;*/
-/*}*/
 
 /*-----------------SLIDER RANGE ------------------*/
-.range {
-    height: 80px;
-    width: 100%;
-    padding: 0 50px 0 20px;
-}
-
-.range .sliderValue {
-    position: relative;
+.container-slider-price {
     width: 100%;
 }
 
-.range .sliderValue span {
-    position: absolute;
-    color: white;
-    font-weight: 500;
-    font-size: small;
-    top: -30px;
-    transform: translateX(-50%) scale(0);
-    transform-origin: bottom;
-    transition: transform 0.3s ease-in-out;
-    line-height: 45px;
-    z-index: 2;
-}
-
-.range .sliderValue span.show {
-    transform: translateX(-50%) scale(1);
-}
-
-.range .sliderValue span:after {
-    position: absolute;
-    content: "";
-    height: 45px;
-    width: 45px;
-    background: #F99D32;
-    left: 50%;
-    transform: translateX(-50%) rotate(45deg);
-    border: 3px solid #fff;
-    z-index: -1;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
-    border-bottom-left-radius: 50%;
-}
-
-.range .field {
-    position: relative;
+.slider-price {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    margin-top: 10px;
 }
 
-.range .field .value {
-    position: absolute;
+.slider {
+    flex: 4;
+}
+
+.slider-price .value {
     font-size: small;
     font-weight: 500;
 }
 
-.range .field .value.left {
-    left: -22px;
+.slider-price .value.left {
+    margin-right: 5px;
 }
 
-.range .field .value.right {
-    right: -43px;
+.slider-price .value.right {
+    margin-left: 5px;
 }
 
 #customRange {
@@ -153,7 +113,6 @@
     background: #F99D32;
     border-radius: 50%;
     border: 1px solid #F99D32;
-    cursor: pointer;
 }
 
 #customRange::-moz-range-progress {
