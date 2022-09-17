@@ -34,37 +34,34 @@ public class WebAuthController {
     @Autowired
     private ImageService imageService;
 
-
     @RequestMapping(path = "/register")
     public ModelAndView register(@ModelAttribute("registerForm") final RegisterForm form) {
         return new ModelAndView("register");
     }
     @RequestMapping(path = "/register", method = RequestMethod.POST)
     public ModelAndView registerPost(@Valid @ModelAttribute("registerForm") final RegisterForm form,
-                                     final BindingResult errors, final HttpServletRequest request) {
+                                     final BindingResult errors,
+                                     final HttpServletRequest request) {
         if (errors.hasErrors())
             return register(form);
 
 
-        if (!form.getPassword().equals(form.getConfirmPassword())) {
-            //Global error, that's why it has "".
-            errors.rejectValue("", "validation.user.passwordsDontMatch");
-            return register(form);
-        }
+//        if (!form.getPassword().equals(form.getConfirmPassword())) {
+//            errors.rejectValue("", "validation.user.passwordsDontMatch");
+//            return register(form);
+//        }
 
         UserModel user;
-        final ModelAndView mav = new ModelAndView("redirect:/");
         try {
             user = userService.createUser(form.getPassword(), form.getName(),
-                    form.getSurname(), form.getMail());
-            forceLogin(user, request);
-            mav.addObject("loggedUser", user);
+                    form.getSurname(), form.getEmail());
+//            forceLogin(user, request);
         } catch (DuplicateUserException e) {
-            errors.rejectValue("email", "validation.user.DuplicateEmail");
+//            errors.rejectValue("email", "validation.user.DuplicateEmail");
             return register(form);
         }
 
-        return mav;
+        return new ModelAndView("redirect:/");
     }
 
     private void forceLogin(UserModel user, HttpServletRequest request) {

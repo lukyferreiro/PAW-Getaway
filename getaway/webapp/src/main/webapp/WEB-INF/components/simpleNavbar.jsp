@@ -13,5 +13,3 @@
    </div>
 </div>
 
-<hr class="separator"/>
-

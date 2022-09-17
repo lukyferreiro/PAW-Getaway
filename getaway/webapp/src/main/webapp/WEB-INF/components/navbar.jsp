@@ -16,9 +16,11 @@
                <spring:message code="navbar.createExperience"/>
             </button>
          </a>
-         <button type="button" class="btn btn-header">
-            <spring:message code="navbar.login"/>
-         </button>
+         <a href="<c:url value = "/register"/>">
+            <button type="button" class="btn btn-header">
+               <spring:message code="navbar.login"/>
+            </button>
+         </a>
       </div>
    </div>
 
