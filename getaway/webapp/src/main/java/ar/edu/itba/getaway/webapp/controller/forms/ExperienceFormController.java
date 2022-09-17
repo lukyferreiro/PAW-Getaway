@@ -5,7 +5,6 @@ import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +33,7 @@ public class ExperienceFormController {
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form) {
-        final ModelAndView mav = new ModelAndView("form");
+        final ModelAndView mav = new ModelAndView("createExperience");
         ExperienceCategory[] categoryModels = ExperienceCategory.values();
         List<String> categories = new ArrayList<>();
         for (ExperienceCategory categoryModel : categoryModels) {
@@ -90,9 +89,6 @@ public class ExperienceFormController {
             throw new CategoryNotFoundException();
         }
 
-        //TODO NO FUNCIONA PQ ESTA BUSCANDO NOMBRES EN CASTELLANO Y ESTAN GUARDADOS EN INGLES
-        //long categoryId = categoryService.getByName(form.getActivityCategory()).get().getId();
-
         long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
 
         //TODO usuario forzado
@@ -110,10 +106,7 @@ public class ExperienceFormController {
         else {
             experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(), description, url, price, cityId, categoryId + 1, userId, false);
         }
-        //TODO check pq ahora como agregue la flecha para volver hacias atras en los detalles de la actividad
-        //y al terminar el formulario me redigire a los detalles de la actividad, si todo en la flecha de volver
-        //hacia atras me lleva devuelta al formulario
-        // return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
+
         return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/");
     }
 

@@ -34,7 +34,7 @@
                      <c:otherwise>
                         <div class="col-12">
                            <h1 class="text-center title">
-                              Ha ocurrido un error al cambiar tu contraseñaa!
+                              Ha ocurrido un error al cambiar tu contraseña!
                            </h1>
                            <p class="subtitle text-center mb-4">
                               Checkea tus datos y solicita un nuevo enlace de recupero.
