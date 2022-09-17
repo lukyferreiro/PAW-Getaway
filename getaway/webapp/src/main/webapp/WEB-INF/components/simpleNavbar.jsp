@@ -10,6 +10,13 @@
                 <spring:message code="pageName"/>
             </span>
       </a>
+      <div class="container-header-btn d-flex justify-content-between">
+         <a href="<c:url value = "/login"/>">
+            <button type="button" class="btn btn-header">
+               <spring:message code="navbar.login"/>
+            </button>
+         </a>
+      </div>
    </div>
 </div>
 

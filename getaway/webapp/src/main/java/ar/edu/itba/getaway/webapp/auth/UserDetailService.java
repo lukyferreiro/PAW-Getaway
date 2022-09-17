@@ -1,7 +1,7 @@
 package ar.edu.itba.getaway.webapp.auth;
 
-
 import ar.edu.itba.getaway.models.Roles;
+import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,18 +32,14 @@ public class UserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-//        final User user = us.getByEmail(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("No user with email" + username));
+        final UserModel user = us.getUserByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("No user with email" + username));
 //        if(!BCRYPT_PATTERN.matcher(user.getPassword()).matches()){
 //            us.changePassword(user.getEmail(), user.getPassword());
 //            return loadUserByUsername(username);
 //        }
-////        Collection<? extends GrantedAuthority> authorities = getAuthorities(user.getRoles());
-//        final Set<GrantedAuthority> authorities = new HashSet<>();
-//        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-//        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-//        return new MyUserDetails(username, user.getPassword(), authorities);
-        return null;
+        Collection<? extends GrantedAuthority> authorities = getAuthorities(user.getRoles());
+        return new MyUserDetails(username, user.getPassword(), authorities);
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Collection<Roles> roles) {

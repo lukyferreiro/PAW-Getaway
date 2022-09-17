@@ -113,8 +113,8 @@ public class ExperienceFormController {
         //TODO check pq ahora como agregue la flecha para volver hacias atras en los detalles de la actividad
         //y al terminar el formulario me redigire a los detalles de la actividad, si todo en la flecha de volver
         //hacia atras me lleva devuelta al formulario
-        // return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
-        return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/");
+        // return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
+        return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/");
     }
 
 }

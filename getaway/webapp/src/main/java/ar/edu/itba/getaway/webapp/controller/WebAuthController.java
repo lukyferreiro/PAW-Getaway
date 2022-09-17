@@ -19,11 +19,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -42,8 +44,9 @@ public class WebAuthController {
     public ModelAndView registerPost(@Valid @ModelAttribute("registerForm") final RegisterForm form,
                                      final BindingResult errors,
                                      final HttpServletRequest request) {
-        if (errors.hasErrors())
+        if (errors.hasErrors()) {
             return register(form);
+        }
 
 
         if (!form.getPassword().equals(form.getConfirmPassword())) {
@@ -55,7 +58,7 @@ public class WebAuthController {
         try {
             user = userService.createUser(form.getPassword(), form.getName(),
                     form.getSurname(), form.getEmail());
-//            forceLogin(user, request);
+            forceLogin(user, request);
         } catch (DuplicateUserException e) {
             errors.rejectValue("email", "validation.user.DuplicateEmail");
             return register(form);
@@ -63,6 +66,83 @@ public class WebAuthController {
 
         return new ModelAndView("redirect:/");
     }
+
+    @RequestMapping("/login")
+    public ModelAndView login(@RequestParam(value = "error", defaultValue = "false") boolean error) {
+        final ModelAndView mav = new ModelAndView("login");
+        mav.addObject("error", error);
+        return mav;
+    }
+
+    /*-----------------------------------------------------
+    --------------------Reset Password---------------------
+     -----------------------------------------------------*/
+    @RequestMapping(path = "/user/resetPasswordRequest")
+    public ModelAndView resetPasswordRequest(@ModelAttribute("resetPasswordEmailForm") final ResetPasswordEmailForm form) {
+        return new ModelAndView("/resetPasswordRequest");
+    }
+
+    @RequestMapping(path = "/user/resetPasswordRequest", method = RequestMethod.POST)
+    public ModelAndView sendPasswordReset(@Valid @ModelAttribute("resetPasswordEmailForm") final ResetPasswordEmailForm form,
+                                          final BindingResult errors) {
+
+        if (errors.hasErrors()) {
+            return resetPasswordRequest(form);
+        }
+
+        final Optional<UserModel> user = userService.getUserByEmail(form.getEmail());
+        if (!user.isPresent()) {
+            errors.rejectValue("email", "error.invalidEmail");
+            return resetPasswordRequest(form);
+        }
+
+        userService.generateNewPassword(user.get());
+
+        return new ModelAndView("/resetEmailConfirmation");
+    }
+
+    @RequestMapping(path = "/user/resetPassword")
+    public ModelAndView resetPassword(@RequestParam(defaultValue = "") String token,
+                                      @ModelAttribute("resetPasswordForm") final ResetPasswordForm form) {
+        if (userService.validatePasswordReset(token)) {
+            final ModelAndView mav = new ModelAndView("reset");
+            mav.addObject("token", token);
+            return mav;
+        }
+        return new ModelAndView("redirect:/");
+    }
+
+    @RequestMapping(path = "/user/resetPassword", method = RequestMethod.POST)
+    public ModelAndView resetPassword(HttpServletRequest request,
+                                      @Valid @ModelAttribute("resetPasswordForm") final ResetPasswordForm form,
+                                      BindingResult errors) {
+
+        if (errors.hasErrors()) {
+            return new ModelAndView("reset");
+        }
+
+        if (!form.getPassword().equals(form.getConfirmPassword())) {
+            errors.rejectValue("", "validation.user.passwordsDontMatch");
+            return new ModelAndView("reset");
+        }
+
+        final ModelAndView mav = new ModelAndView("resetResult");
+        final Optional<UserModel> userOptional = userService.updatePassword(form.getToken(), form.getPassword());
+        boolean success = false;
+
+        if (userOptional.isPresent()) {
+            success = true;
+            UserModel user = userOptional.get();
+            forceLogin(user, request);
+            mav.addObject("loggedUser", user);
+        }
+        mav.addObject("success", success);
+        return mav;
+    }
+
+    /*-----------------------------------------------------
+    -------------------------------------------------------
+     -----------------------------------------------------*/
 
     private void forceLogin(UserModel user, HttpServletRequest request) {
         //generate authentication
@@ -79,13 +159,9 @@ public class WebAuthController {
 
     private Collection<? extends GrantedAuthority> getAuthorities(Collection<Roles> roles) {
         return roles.stream()
-                .map((role) -> new SimpleGrantedAuthority("ROLE" + role.name()))
+                .map((role) -> new SimpleGrantedAuthority("ROLE_" + role.name()))
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping("/login")
-    public ModelAndView login() {
-        return new ModelAndView("login");
-    }
 
 }

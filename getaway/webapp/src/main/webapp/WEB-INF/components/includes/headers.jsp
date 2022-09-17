@@ -17,6 +17,7 @@
 <link href="<c:url value = "/resources/css/footer.css"/>" rel="stylesheet" type="text/css"/>
 <link href="<c:url value = "/resources/css/experiences.css"/>" rel="stylesheet" type="text/css"/>
 <link href="<c:url value = "/resources/css/experienceDetail.css"/>" rel="stylesheet" type="text/css"/>
+<link href="<c:url value = "/resources/css/login&register.css"/>" rel="stylesheet" type="text/css"/>
 <link href="<c:url value = "/resources/css/form-create-experience.css"/>" rel="stylesheet" type="text/css"/>
 
 <script src="https://kit.fontawesome.com/a4ef34ae89.js" crossorigin="anonymous"></script>

@@ -16,7 +16,7 @@
                <spring:message code="navbar.createExperience"/>
             </button>
          </a>
-         <a href="<c:url value = "/register"/>">
+         <a href="<c:url value = "/login"/>">
             <button type="button" class="btn btn-header">
                <spring:message code="navbar.login"/>
             </button>
@@ -26,37 +26,37 @@
 
 
    <div class="container-types container-fluid p-0 d-flex justify-content-center m-0">
-      <a href="<c:url value = "/Aventura"/>">
+      <a href="<c:url value = "/experiences/Aventura"/>">
          <button type="button" class="btn btn-filter">
             <img src="<c:url value="/resources/images/ic_adventure.svg"/>" alt="Logo aventura"/>
             <spring:message code="navbar.filter.adventure"/>
          </button>
       </a>
-      <a href="<c:url value = "/Gastronomia"/>">
+      <a href="<c:url value = "/experiences/Gastronomia"/>">
          <button type="button" class="btn btn-filter">
             <img src="<c:url value="/resources/images/ic_food.svg"/>" alt="Logo aventura"/>
             <spring:message code="navbar.filter.gastronomy"/>
          </button>
       </a>
-      <a href="<c:url value = "/Hoteleria"/>">
+      <a href="<c:url value = "/experiences/Hoteleria"/>">
          <button type="button" class="btn btn-filter">
             <img src="<c:url value="/resources/images/ic_hotel.svg"/>" alt="Logo aventura"/>
             <spring:message code="navbar.filter.hotels"/>
          </button>
       </a>
-      <a href="<c:url value = "/Relax"/>">
+      <a href="<c:url value = "/experiences/Relax"/>">
          <button type="button" class="btn btn-filter">
             <img src="<c:url value="/resources/images/ic_relax.svg"/>" alt="Logo aventura"/>
             <spring:message code="navbar.filter.relax"/>
          </button>
       </a>
-      <a href="<c:url value = "/Vida_nocturna"/>">
+      <a href="<c:url value = "/experiences/Vida_nocturna"/>">
          <button type="button" class="btn btn-filter">
             <img src="<c:url value="/resources/images/ic_nightlife.svg"/>" alt="Logo aventura"/>
             <spring:message code="navbar.filter.night"/>
          </button>
       </a>
-      <a href="<c:url value = "/Historico"/>">
+      <a href="<c:url value = "/experiences/Historico"/>">
          <button type="button" class="btn btn-filter">
             <img src="<c:url value="/resources/images/ic_museum.svg"/>" alt="Logo aventura"/>
             <spring:message code="navbar.filter.historic"/>

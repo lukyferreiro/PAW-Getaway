@@ -62,8 +62,18 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
         mailSender.setPassword(this.environment.getProperty(PASSWORD));
 
         // JavaMail-specific mail sender configuration, based on javamail.properties
+        // https://stackoverflow.com/questions/16115453/javamail-could-not-convert-socket-to-tls-gmail
         final Properties javaMailProperties = new Properties();
-        javaMailProperties.load(this.applicationContext.getResource(JAVA_MAIL_FILE).getInputStream());
+        javaMailProperties.put("mail.smtp.host", "smtp.gmail.com");
+        javaMailProperties.put("mail.smtp.port", "587");
+        javaMailProperties.put("mail.smtp.auth", "true");
+        javaMailProperties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        javaMailProperties.put("mail.smtp.starttls.enable", "true");
+        javaMailProperties.put("mail.smtp.starttls.required", "true");
+        javaMailProperties.put("mail.smtp.quitwait", "false");
+        javaMailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+
+//        javaMailProperties.load(this.applicationContext.getResource(JAVA_MAIL_FILE).getInputStream());
         mailSender.setJavaMailProperties(javaMailProperties);
 
         return mailSender;

@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/></title>
+      <title><spring:message code="pageName"/> | <spring:message code="register.title"/> </title>
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 
