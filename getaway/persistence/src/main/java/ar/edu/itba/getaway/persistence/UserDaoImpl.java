@@ -8,6 +8,7 @@ import ar.edu.itba.getaway.models.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -48,7 +49,7 @@ public class UserDaoImpl implements UserDao {
 //    };
 
     private static final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
-            new UserModel(rs.getLong("userId"),
+            new UserModel(rs.getLong("userid"),
                     rs.getString("password"),
                     rs.getString("userName"),
                     rs.getString("userSurname"),
@@ -66,7 +67,7 @@ public class UserDaoImpl implements UserDao {
         jdbcTemplate = new JdbcTemplate(ds);
         userSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("users")
-                .usingGeneratedKeyColumns("userId");
+                .usingGeneratedKeyColumns("userid");
         roleSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("roles");
         userRolesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
@@ -95,7 +96,6 @@ public class UserDaoImpl implements UserDao {
         userInfo.put("password", password);
 
         final long userId;
-
         try {
             userId = userSimpleJdbcInsert.executeAndReturnKey(userInfo).longValue();
         } catch (DuplicateKeyException e) {

@@ -54,8 +54,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException {
         UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES);
-        VerificationToken token = generateVerificationToken(userModel.getId());
-        sendVerificationToken(userModel, token);
+//        VerificationToken token = generateVerificationToken(userModel.getId());
+//        sendVerificationToken(userModel, token);
         return userModel;
     }
 

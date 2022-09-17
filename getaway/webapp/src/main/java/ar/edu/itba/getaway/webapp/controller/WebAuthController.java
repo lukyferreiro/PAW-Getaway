@@ -46,10 +46,10 @@ public class WebAuthController {
             return register(form);
 
 
-//        if (!form.getPassword().equals(form.getConfirmPassword())) {
-//            errors.rejectValue("", "validation.user.passwordsDontMatch");
-//            return register(form);
-//        }
+        if (!form.getPassword().equals(form.getConfirmPassword())) {
+            errors.rejectValue("password", "validation.user.passwordsDontMatch");
+            return register(form);
+        }
 
         UserModel user;
         try {
@@ -57,7 +57,7 @@ public class WebAuthController {
                     form.getSurname(), form.getEmail());
 //            forceLogin(user, request);
         } catch (DuplicateUserException e) {
-//            errors.rejectValue("email", "validation.user.DuplicateEmail");
+            errors.rejectValue("email", "validation.user.DuplicateEmail");
             return register(form);
         }
 
