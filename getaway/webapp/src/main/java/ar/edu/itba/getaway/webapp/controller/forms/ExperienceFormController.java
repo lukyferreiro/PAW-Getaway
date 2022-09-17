@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class FormController {
+public class ExperienceFormController {
     @Autowired
     ExperienceService exp;
     @Autowired
