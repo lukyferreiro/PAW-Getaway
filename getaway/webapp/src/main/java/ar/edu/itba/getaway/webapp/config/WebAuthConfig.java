@@ -77,7 +77,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET,"/experiences/{categoryName}/{experienceId}").permitAll()
                     .antMatchers(HttpMethod.GET,"/experiences/{categoryName}").permitAll()
                     .antMatchers(HttpMethod.POST,"/experiences/{categoryName}").permitAll()
-                    .antMatchers(HttpMethod.GET,"/{experienceId}/image").hasAuthority("USER")
+                    .antMatchers(HttpMethod.GET,"/{experienceId}/image").permitAll()
 
                     //else
                     .antMatchers("/**").permitAll()

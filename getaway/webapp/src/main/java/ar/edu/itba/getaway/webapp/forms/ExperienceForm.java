@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.webapp.forms;
 
 import ar.edu.itba.getaway.models.ExperienceCategory;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Pattern;

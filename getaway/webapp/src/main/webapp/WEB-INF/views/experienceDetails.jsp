@@ -15,14 +15,14 @@
 
          <div class="card mx-5 my-3 p-4">
             <div class="card-title d-flex justify-content-between">
-               <div>
-                   <a href="<c:url value = "/experiences/${activity.categoryName}"/>">
-                       <button id="goBackButton" class="btn btn-leave-experience-details">
-                         <img class="go-back-arrow align-self-center" src="<c:url value = "/resources/images/go_back.png"/>" alt="Flecha">
-                         <span><spring:message code="experienceDetail.goBack"/></span>
-                      </button>
-                   </a>
-               </div>
+<%--               <div>--%>
+<%--                   <a href="<c:url value = "/experiences/${activity.categoryName}"/>">--%>
+<%--                       <button id="goBackButton" class="btn btn-leave-experience-details">--%>
+<%--                         <img class="go-back-arrow align-self-center" src="<c:url value = "/resources/images/go_back.png"/>" alt="Flecha">--%>
+<%--                         <span><spring:message code="experienceDetail.goBack"/></span>--%>
+<%--                      </button>--%>
+<%--                   </a>--%>
+<%--               </div>--%>
 
                <h1>
                   <c:out value="${activity.name}"/>

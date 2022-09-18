@@ -7,6 +7,7 @@
    <head>
       <title><spring:message code="pageName"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
+      <link href="<c:url value = "/resources/css/experiences.css" />" rel="stylesheet">
    </head>
 
    <body>
@@ -28,26 +29,26 @@
                      <c:choose>
                         <c:when test="${activity.hasImage == false}">
                            <c:if test="${activity.categoryId == 1}">
-                              <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
+                              <img class="card-img-top container-fluid p-0" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
                            </c:if>
                            <c:if test="${activity.categoryId == 2}">
-                              <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
+                              <img class="card-img-top container-fluid p-0" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
                            </c:if>
                            <c:if test="${activity.categoryId == 3}">
-                              <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
+                              <img class="card-img-top container-fluid p-0" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
                            </c:if>
                            <c:if test="${activity.categoryId == 4}">
-                              <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
+                              <img class="card-img-top container-fluid p-0" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
                            </c:if>
                            <c:if test="${activity.categoryId == 5}">
-                              <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
+                              <img class="card-img-top container-fluid p-0" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
                            </c:if>
                            <c:if test="${activity.categoryId == 6}">
-                              <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
+                              <img class="card-img-top container-fluid p-0" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
                            </c:if>
                         </c:when>
                         <c:otherwise>
-                           <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/${activity.id}/image'/>" alt="Imagen"/>
+                           <img class="card-img-top container-fluid p-0" src="<c:url value='/${activity.id}/image'/>" alt="Imagen"/>
                         </c:otherwise>
                      </c:choose>
                         <%--                                       <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/${activity.id}/image'/>"/>--%>

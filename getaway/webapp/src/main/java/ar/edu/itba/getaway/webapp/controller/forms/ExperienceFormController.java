@@ -12,10 +12,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -36,6 +38,8 @@ public class ExperienceFormController {
     ImageExperienceService imageExperienceService;
     @Autowired
     UserService userService;
+
+    private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif");
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form) {
@@ -91,16 +95,25 @@ public class ExperienceFormController {
         String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
         final ExperienceModel experienceModel;
 
-        if (!form.getActivityImg().isEmpty()) {
-            experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(), description, url, price, cityId, categoryId + 1, userId, true);
-            final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
-            imageExperienceService.create(imageModel.getId(), experienceModel.getId(), true);
+        MultipartFile activityImg=form.getActivityImg();
+
+        if (!activityImg.isEmpty()) {
+
+            if( contentTypes.contains(activityImg.getContentType() )){
+                experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(), description, url, price, cityId, categoryId + 1, userId, true);
+                final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
+                imageExperienceService.create(imageModel.getId(), experienceModel.getId(), true);
+            }
+            else {
+                return createActivityForm(form);
+            }
+
         }
         else {
             experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(), description, url, price, cityId, categoryId + 1, userId, false);
         }
 
-        return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
+        return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
     }
 
 }
