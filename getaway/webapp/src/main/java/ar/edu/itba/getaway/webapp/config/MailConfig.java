@@ -18,6 +18,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Properties;
 
 @Configuration
@@ -25,8 +26,7 @@ import java.util.Properties;
 public class MailConfig implements ApplicationContextAware, EnvironmentAware {
 
     public static final String EMAIL_TEMPLATE_ENCODING = "UTF-8";
-
-    private static final String JAVA_MAIL_FILE = "classpath:mail/javaMail.properties";
+//    private static final String JAVA_MAIL_FILE = "classpath:mail/javaMail.properties";
 
     private static final String HOST = "mail.server.host";
     private static final String PORT = "mail.server.port";
@@ -47,8 +47,6 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
         this.environment = environment;
     }
 
-
-    //SPRING + JAVAMAIL: JavaMailSender instance, configured via .properties files.
     @Bean
     public JavaMailSender mailSender() throws IOException {
 
@@ -62,8 +60,18 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
         mailSender.setPassword(this.environment.getProperty(PASSWORD));
 
         // JavaMail-specific mail sender configuration, based on javamail.properties
+        // https://stackoverflow.com/questions/16115453/javamail-could-not-convert-socket-to-tls-gmail
         final Properties javaMailProperties = new Properties();
-        javaMailProperties.load(this.applicationContext.getResource(JAVA_MAIL_FILE).getInputStream());
+        javaMailProperties.put("mail.smtp.host", "smtp.gmail.com");
+        javaMailProperties.put("mail.smtp.port", "587");
+        javaMailProperties.put("mail.smtp.auth", "true");
+        javaMailProperties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        javaMailProperties.put("mail.smtp.starttls.enable", "true");
+        javaMailProperties.put("mail.smtp.starttls.required", "true");
+        javaMailProperties.put("mail.smtp.quitwait", "false");
+        javaMailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+
+//        javaMailProperties.load(this.applicationContext.getResource(JAVA_MAIL_FILE).getInputStream());
         mailSender.setJavaMailProperties(javaMailProperties);
 
         return mailSender;

@@ -12,6 +12,7 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -116,8 +117,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean(name = "appBaseUrl")
     public String appBaseUrl() {
-//        return "localhost";
-        return "pawserver.it.itba.edu.ar";
+        return "localhost";
+//        return "pawserver.it.itba.edu.ar";
     }
 
 }

@@ -1,0 +1,55 @@
+.required-field {
+    color: red;
+}
+
+.smallContentContainer {
+    border-radius: 20px;
+    border-color: var(--primary-color);
+    max-width: 40%;
+}
+
+.title {
+    font-size: xxx-large;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: x-large;
+    margin: 0;
+}
+
+.form-group {
+    margin: 10px 0;
+}
+
+.btn-eye {
+    border-radius: 0 8px 8px 0 !important;
+    background-color: rgba(128, 128, 128, 0.4);
+    border-color: rgba(128, 128, 128, 0.8);
+    color: black;
+}
+
+.btn-eye:hover, .btn-eye:focus {
+    transition: 150ms linear;
+    background-color: rgba(128, 128, 128, 0.4);
+    border-color: rgba(128, 128, 128, 0.8);
+    color: black;
+}
+
+.btn-create-account, .btn-login {
+    font-size: large;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    box-shadow: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-weight: bold;
+}
+
+
+.form-control:focus, .form-control:active {
+    border-color: var(--primary-color) !important;
+    box-shadow: none !important;
+}

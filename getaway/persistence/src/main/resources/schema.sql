@@ -74,7 +74,8 @@ CREATE TABLE IF NOT EXISTS experiences
     categoryId INT NOT NULL,
     userId INT NOT NULL,
     PRIMARY KEY (experienceId),
-    FOREIGN KEY (cityId) REFERENCES cities (cityId) ON DELETE CASCADE,
+    UNIQUE(experienceName, address, cityId),
+    FOREIGN KEY (cityId) REFERENCES argentinaCities (cityId) ON DELETE CASCADE,
     FOREIGN KEY (categoryId) REFERENCES categories (categoryId) ON DELETE CASCADE,
     FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE
 );
@@ -131,7 +132,7 @@ CREATE TABLE IF NOT EXISTS userRoles
 (
     roleId INT NOT NULL,
     userId INT NOT NULL,
-    PRIMARY KEY (userId),
+    PRIMARY KEY (userId, roleId),
     FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE,
     FOREIGN KEY (roleId) REFERENCES roles (roleId) ON DELETE CASCADE
 );

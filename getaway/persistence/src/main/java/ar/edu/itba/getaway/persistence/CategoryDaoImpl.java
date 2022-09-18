@@ -15,7 +15,6 @@ public class CategoryDaoImpl implements CategoryDao {
 
     @Autowired
     private DataSource ds;
-
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
@@ -45,7 +44,8 @@ public class CategoryDaoImpl implements CategoryDao {
 
     @Override
     public Optional<CategoryModel> getByName(String categoryName){
-        return jdbcTemplate.query("SELECT categoryId, categoryName FROM categories WHERE categoryName = ?", new Object[]{categoryName}, CATEGORY_MODEL_ROW_MAPPER).stream().findFirst();
+        return jdbcTemplate.query("SELECT categoryId, categoryName FROM categories WHERE categoryName = ?",
+                new Object[]{categoryName}, CATEGORY_MODEL_ROW_MAPPER).stream().findFirst();
     }
 
 

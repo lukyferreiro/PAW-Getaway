@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
-import ar.edu.itba.getaway.webapp.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.webapp.exceptions.*;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -10,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
@@ -18,8 +18,7 @@ import java.util.Locale;
 @ControllerAdvice
 public class ErrorsController {
 
-    public static final String NOT_FOUND_VIEW = "4XXerror";  //Page Not Found
-    public static final String ERROR_VIEW = "5XXerror";   //Server error
+    public static final String ERROR_VIEW = "errors";   //Server error
 
     @Autowired
     private MessageSource messageSource;
@@ -30,8 +29,8 @@ public class ErrorsController {
     public ModelAndView experienceNotFound() {
         Locale locale = LocaleContextHolder.getLocale();
         String error = messageSource.getMessage("errors.NotFound.Experience", null, locale);
-        String code = HttpStatus.NOT_FOUND.toString();
-        final ModelAndView mav = new ModelAndView(NOT_FOUND_VIEW);
+        Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
         mav.addObject("errors", error);
         mav.addObject("code", code);
         return mav;
@@ -42,10 +41,59 @@ public class ErrorsController {
     public ModelAndView categoryNotFound() {
         Locale locale = LocaleContextHolder.getLocale();
         String error = messageSource.getMessage("errors.NotFound.Category", null, locale);
-        String code = HttpStatus.NOT_FOUND.toString();
-        final ModelAndView mav = new ModelAndView(NOT_FOUND_VIEW);
+        Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
         mav.addObject("errors", error);
         mav.addObject("code", code);
+        return mav;
+    }
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = ImageNotFoundException.class)
+    public ModelAndView imageNotFound() {
+        Locale locale = LocaleContextHolder.getLocale();
+        String error = messageSource.getMessage("errors.NotFound.image", null, locale);
+        Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
+        mav.addObject("errors", error);
+        mav.addObject("code", code);
+        return mav;
+    }
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = UserNotFoundException.class)
+    public ModelAndView userNotFound() {
+        Locale locale = LocaleContextHolder.getLocale();
+        String error = messageSource.getMessage("errors.NotFound.user", null, locale);
+        Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
+        mav.addObject("errors", error);
+        mav.addObject("code", code);
+        return mav;
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = IllegalContentTypeException.class)
+    public ModelAndView illegalContentTypeException() {
+        Locale locale = LocaleContextHolder.getLocale();
+        String error = messageSource.getMessage("errors.IllegalContentTypeException", null, locale);
+        Long code = Long.valueOf(HttpStatus.BAD_REQUEST.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
+        mav.addObject("errors", error);
+        mav.addObject("code", code);
+        return mav;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = MultipartException.class)
+    public ModelAndView maxUploadSizeException() {
+        Locale locale = LocaleContextHolder.getLocale();
+        String error = messageSource.getMessage("errors.MaxUploadSizeException", null, locale);
+        Long code = Long.valueOf(HttpStatus.BAD_REQUEST.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
+        mav.addObject("errors", error);
+        mav.addObject("code", code);
+
         return mav;
     }
 
@@ -60,8 +108,8 @@ public class ErrorsController {
     public ModelAndView resourceNotFoundException() {
         Locale locale = LocaleContextHolder.getLocale();
         String error = messageSource.getMessage("errors.NotFound.Resource", null, locale);
-        String code = HttpStatus.NOT_FOUND.toString();
-        final ModelAndView mav = new ModelAndView(NOT_FOUND_VIEW);
+        Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
         mav.addObject("errors", error);
         mav.addObject("code", code);
         return mav;
@@ -72,8 +120,20 @@ public class ErrorsController {
     public ModelAndView badRequestException() {
         Locale locale = LocaleContextHolder.getLocale();
         String error = messageSource.getMessage("errors.BadRequest", null, locale);
-        String code = HttpStatus.BAD_REQUEST.toString();
-        final ModelAndView mav = new ModelAndView(NOT_FOUND_VIEW);
+        Long code = Long.valueOf(HttpStatus.BAD_REQUEST.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
+        mav.addObject("errors", error);
+        mav.addObject("code", code);
+        return mav;
+    }
+
+    @ResponseStatus(code = HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ModelAndView accessDeniedException() {
+        Locale locale = LocaleContextHolder.getLocale();
+        String error = messageSource.getMessage("errors.accessDenied", null, locale);
+        Long code = Long.valueOf(HttpStatus.FORBIDDEN.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
         mav.addObject("errors", error);
         mav.addObject("code", code);
         return mav;
@@ -85,7 +145,7 @@ public class ErrorsController {
 //    public ModelAndView serverException() {
 //        Locale locale = LocaleContextHolder.getLocale();
 //        String error = messageSource.getMessage("errors.ServerError", null, locale);
-//        String code = HttpStatus.INTERNAL_SERVER_ERROR.toString();
+//        Long code = Long.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.toString());
 //        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
 //        mav.addObject("errors", error);
 //        mav.addObject("code", code);

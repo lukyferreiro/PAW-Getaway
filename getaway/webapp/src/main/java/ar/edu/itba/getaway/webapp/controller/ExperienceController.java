@@ -34,17 +34,11 @@ public class ExperienceController {
         final ModelAndView mav = new ModelAndView("mainPage");
         List<ExperienceModel> experienceList = exp.getRandom();
 
-        for (ExperienceModel experience: experienceList) {
-            System.out.println(experience.getName());
-        }
-
-
-
         mav.addObject("activities", experienceList);
         return mav;
     }
 
-    @RequestMapping(value = "/{categoryName}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.GET})
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,
                                    @RequestParam Optional<Long> cityId,
@@ -101,7 +95,7 @@ public class ExperienceController {
         return null;
     }
 
-    @RequestMapping("/{categoryName}/{experienceId}")
+    @RequestMapping("/experiences/{categoryName}/{experienceId}")
     public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName,
                                        @PathVariable("experienceId") final long experienceId) {
         final ModelAndView mav = new ModelAndView("experienceDetails");
@@ -122,11 +116,11 @@ public class ExperienceController {
         return mav;
     }
 
-    @RequestMapping(value = "/{categoryName}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.POST})
     public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName,
                                        @Valid @ModelAttribute("filterForm") final FilterForm form,
                                        final BindingResult errors) {
-        final ModelAndView mav = new ModelAndView("redirect:/" + categoryName);
+        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
             return experience(categoryName, form, Optional.empty(), Optional.empty());

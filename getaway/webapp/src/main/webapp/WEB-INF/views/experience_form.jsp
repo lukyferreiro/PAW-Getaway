@@ -28,17 +28,17 @@
                      <div class="col m-2"> <!--Nombre de la experiencia-->
                         <form:label path="activityName" class="form-label">
                            <spring:message code="experienceForm.activityName"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
-                        <form:input path="activityName" type="text" class="form-control"/>
+                        <form:input path="activityName" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
                         <form:errors path="activityName" element="p" cssClass="form-error-label"/>
                      </div>
                      <div class="col m-2"> <!--Categoria-->
                         <form:label path="activityCategory" class="form-label">
                            <spring:message code="experienceForm.activityCategory"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
-                        <form:select path="activityCategory" class="form-select">
+                        <form:select path="activityCategory" class="form-select" cssErrorClass="form-control is-invalid">
                            <option disabled selected value><c:out value="${placeholder}"/></option>
                            <c:forEach var="category" items="${categories}">
                               <option><c:out value="${category}"/></option>
@@ -51,28 +51,29 @@
                            <spring:message code="experienceForm.activityPrice"/>
                            <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
                         </form:label>
-                        <form:input path="activityPrice" type="text" class="form-control" id="experienceFormPriceInput" placeholder="0"/>
+                        <form:input path="activityPrice" type="text" class="form-control" id="experienceFormPriceInput"
+                                    cssErrorClass="form-control is-invalid" placeholder="0"/>
                         <form:errors path="activityPrice" element="p" cssClass="form-error-label"/>
                      </div>
                   </div>
 
-                     <%--            <div class="p-0 m-2 d-flex flex-column"> <!--Tags-->--%>
-                     <%--              <form:label path="activityTags" class="form-label"><spring:message code="experienceForm.activityTags"/></form:label>--%>
-                     <%--              <form:input list="tagOptions" class="form-control" path="activityTags" placeholder="${placeholder}"/>--%>
-                     <%--              <datalist id="tagOptions">--%>
-                     <%--                <c:forEach var="tag" items="${tags}">--%>
-                     <%--                <option value="${tag.name}">--%>
-                     <%--                  </c:forEach>--%>
-                     <%--              </datalist>--%>
-                     <%--              <form:errors path="activityTags" element="p" cssClass="form-error-label"/>--%>
-                     <%--            </div>--%>
+<%--                                 <div class="p-0 m-2 d-flex flex-column"> <!--Tags-->--%>
+<%--                                   <form:label path="activityTags" class="form-label"><spring:message code="experienceForm.activityTags"/></form:label>--%>
+<%--                                   <form:input list="tagOptions" class="form-control" path="activityTags" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>--%>
+<%--                                   <datalist id="tagOptions">--%>
+<%--                                     <c:forEach var="tag" items="${tags}">--%>
+<%--                                     <option value="${tag.name}">--%>
+<%--                                       </c:forEach>--%>
+<%--                                   </datalist>--%>
+<%--                                   <form:errors path="activityTags" element="p" cssClass="form-error-label"/>--%>
+<%--                                 </div>--%>
 
                   <div class="p-0 m-2 d-flex flex-column"> <!--Descripcion-->
                      <form:label path="activityInfo" class="form-label">
                         <spring:message code="experienceForm.activityInfo"/>
                         <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
                      </form:label>
-                     <form:textarea path="activityInfo" class="form-control" rows="4"/>
+                     <form:textarea path="activityInfo" class="form-control" cssErrorClass="form-control is-invalid" rows="4"/>
                      <form:errors path="activityInfo" element="p" cssClass="form-error-label"/>
                   </div>
 
@@ -80,9 +81,10 @@
                      <div class="col m-2"> <!--Email de contacto-->
                         <form:label path="activityMail" class="form-label">
                            <spring:message code="experienceForm.activityMail"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
-                        <form:input path="activityMail" type="email" class="form-control" placeholder="${mailExample}"/>
+                        <form:input path="activityMail" type="email" class="form-control"
+                                    cssErrorClass="form-control is-invalid" placeholder="${mailExample}"/>
                         <form:errors path="activityMail" element="p" cssClass="form-error-label"/>
                      </div>
                      <div class="col m-2"> <!--Url-->
@@ -90,7 +92,8 @@
                            <spring:message code="experienceForm.activityUrl"/>
                            <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
                         </form:label>
-                        <form:input path="activityUrl" id="experienceFormUrlInput" type="text" class="form-control" placeholder="${urlExample}"/>
+                        <form:input path="activityUrl" id="experienceFormUrlInput" type="text"
+                                    cssErrorClass="form-control is-invalid" class="form-control" placeholder="${urlExample}"/>
                         <form:errors path="activityUrl" element="p" cssClass="form-error-label"/>
                      </div>
                   </div>
@@ -99,9 +102,9 @@
                      <div class="col m-2"> <!--Pais-->
                         <form:label path="activityCountry" class="form-label">
                            <spring:message code="experienceForm.activityCountry"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
-                        <form:select path="activityCountry" id="experienceFormCountryInput" class="form-select">
+                        <form:select path="activityCountry" id="experienceFormCountryInput" class="form-select" cssErrorClass="form-control is-invalid">
                            <option disabled selected value><c:out value="${placeholder}"/></option>
                            <option><c:out value="Argentina"/></option>
 <%--                           <c:forEach var="country" items="${countries}">--%>
@@ -113,9 +116,10 @@
                      <div class="col m-2"> <!--Ciudad-->
                         <form:label path="activityCity" class="form-label">
                            <spring:message code="experienceForm.activityCity"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
-                        <form:select path="activityCity" id="experienceFormCityInput" class="form-select" disabled="true">
+                        <form:select path="activityCity" id="experienceFormCityInput" class="form-select"
+                                     cssErrorClass="form-control is-invalid" disabled="true">
                            <option disabled selected value><c:out value="${placeholder}"/></option>
                            <c:forEach var="city" items="${cities}">
                               <option><c:out value="${city.name}"/></option>
@@ -126,9 +130,9 @@
                      <div class="col m-2"> <!--Direccion-->
                         <form:label path="activityAddress" class="form-label">
                            <spring:message code="experienceForm.activityAddress"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
-                        <form:input path="activityAddress" type="text" class="form-control"/>
+                        <form:input path="activityAddress" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
                         <form:errors path="activityAddress" element="p" cssClass="form-error-label"/>
                      </div>
                   </div>
@@ -138,7 +142,7 @@
                         <spring:message code="experienceForm.activityImg"/>
                         <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
                      </form:label>
-                     <form:input path="activityImg" type="file" class="form-control"/>
+                     <form:input path="activityImg" type="file" class="form-control" cssErrorClass="form-control is-invalid"/>
                      <form:errors path="activityImg" element="p" cssClass="form-error-label"/>
                   </div>
                </div>

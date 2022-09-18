@@ -8,6 +8,7 @@ import ar.edu.itba.getaway.models.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -20,7 +21,6 @@ public class UserDaoImpl implements UserDao {
 
     @Autowired
     private DataSource ds;
-
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert userSimpleJdbcInsert;
     private final SimpleJdbcInsert roleSimpleJdbcInsert;
@@ -47,14 +47,17 @@ public class UserDaoImpl implements UserDao {
 //        return userMap.values();
 //    };
 
-    private static final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
-            new UserModel(rs.getLong("userId"),
+    private final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
+            new UserModel(rs.getLong("userid"),
                     rs.getString("password"),
                     rs.getString("userName"),
                     rs.getString("userSurname"),
                     rs.getString("email"),
-                    new ArrayList<>(),
+                    getUserRoles(),
                     rs.getLong("imgId"));
+
+    private static final RowMapper<RoleModel> USER_ROLES_ROW_MAPPER = (rs, rowNum) ->
+            new RoleModel(rs.getLong("roleid"),Roles.valueOf(rs.getString("rolename")));
 
     private static final RowMapper<RoleModel> ROLE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new RoleModel(rs.getLong("roleId"),
@@ -63,14 +66,19 @@ public class UserDaoImpl implements UserDao {
 
     @Autowired
     public UserDaoImpl(final DataSource ds) {
-        jdbcTemplate = new JdbcTemplate(ds);
-        userSimpleJdbcInsert = new SimpleJdbcInsert(ds)
+        this.jdbcTemplate = new JdbcTemplate(ds);
+        this.userSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("users")
-                .usingGeneratedKeyColumns("userId");
-        roleSimpleJdbcInsert = new SimpleJdbcInsert(ds)
+                .usingGeneratedKeyColumns("userid");
+        this.roleSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("roles");
-        userRolesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
+        this.userRolesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("userRoles");
+    }
+
+    @Override
+    public Collection<RoleModel> getUserRoles(long userId){
+        return jdbcTemplate.query("SELECT roleid, rolename FROM users NATURAL JOIN userroles NATURAL JOIN roles WHERE userid=?", new Object[]{userId}, USER_ROLES_ROW_MAPPER);
     }
 
     @Override
@@ -86,7 +94,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UserModel createUser(String password, String name, String surname, String email, Collection<Roles> roles) throws DuplicateUserException {
+    public UserModel createUser(String password, String name, String surname, String email,
+                                Collection<Roles> roles) throws DuplicateUserException {
         final Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("userName", name);
         userInfo.put("userSurname", surname);
@@ -95,7 +104,6 @@ public class UserDaoImpl implements UserDao {
         userInfo.put("password", password);
 
         final long userId;
-
         try {
             userId = userSimpleJdbcInsert.executeAndReturnKey(userInfo).longValue();
         } catch (DuplicateKeyException e) {

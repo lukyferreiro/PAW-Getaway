@@ -7,9 +7,11 @@ import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.UserInfo;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface UserDao {
+    Collection<RoleModel> getUserRoles(long userId);
     Optional<UserModel> getUserById (long userId);
     Optional<UserModel> getUserByEmail (String email);
     UserModel createUser (String password, String name, String surname, String email, Collection<Roles> roles) throws DuplicateUserException;

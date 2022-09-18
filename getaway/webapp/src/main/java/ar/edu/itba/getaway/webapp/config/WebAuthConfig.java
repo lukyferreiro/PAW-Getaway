@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.webapp.config;
 
 import ar.edu.itba.getaway.webapp.auth.UserDetailService;
+import ar.edu.itba.getaway.webapp.exceptions.AccessDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -8,8 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.access.AccessDecisionManager;
-import org.springframework.security.access.vote.ConsensusBased;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -17,15 +16,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.util.FileCopyUtils;
-
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 @Configuration
 @EnableWebSecurity
@@ -62,24 +56,47 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
 //                .invalidSessionUrl("/login")
                 .and().authorizeRequests()
-                //Session routes
-
-//                    .antMatchers("/login", "/register").anonymous()
-//                    .antMatchers(HttpMethod.POST, "/user/verifyAccount/resend").hasRole("NOT_VERIFIED")
-//                    .antMatchers("/user/verifyAccount/resendConfirmation").hasRole("NOT_VERIFIED")
-//                    .antMatchers("/user/verifyAccount").hasRole("USER")
-//                    .antMatchers("/logout").authenticated()
-
-                //Profile routes
+                    //Session routes
+                    .antMatchers("/login", "/register").anonymous()
+                    .antMatchers("/user/verifyAccount/send").hasRole("NOT_VERIFIED")
+                    .antMatchers("/user/verifyAccount/resend").hasRole("NOT_VERIFIED")
+                    .antMatchers("/user/verifyAccount").hasRole("NOT_VERIFIED")
+                    .antMatchers("/user/verifyAccount/unsuccessfull").hasRole("NOT_VERIFIED")
+                    .antMatchers("/user/verifyAccount/successfull").hasRole("VERIFIED")
+                    .antMatchers("/logout").authenticated()
+                    //Profile routes
 //                    .antMatchers("/user/account").hasRole("USER")
 //                    .antMatchers("/user/account/search", "/user/account/update",
 //                            "/user/account/updateCoverImage", "/user/account/updateInfo",
 //                            "/user/account/updateProfileImage").hasRole("VERIFIED")
-                //else
-                .antMatchers("/**").permitAll()
+                    //Experiences
+                    .antMatchers(HttpMethod.GET,"/create_experience").hasRole("VERIFIED")
+                    .antMatchers(HttpMethod.POST,"/create_experience").hasRole("VERIFIED")
+                    .antMatchers(HttpMethod.GET,"/experiences/{categoryName}").permitAll()
+                    .antMatchers(HttpMethod.POST,"/experiences/{categoryName}").permitAll()
+                    .antMatchers(HttpMethod.GET,"/experiences/{categoryName}/{experienceId}").permitAll()
+                    .antMatchers(HttpMethod.GET,"/{experienceId}/image").hasAuthority("USER")
 
-                .and().formLogin().loginPage("/login").usernameParameter("email").passwordParameter("password").defaultSuccessUrl("/", false) //Tras logearme me lleva a /
-                .failureUrl("/login?error=true").and().rememberMe().rememberMeParameter("rememberMe").userDetailsService(userDetailsService).key(FileCopyUtils.copyToString(new InputStreamReader(authKey.getInputStream()))).tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30)).and().logout().logoutUrl("/logout").logoutSuccessUrl("/login").and().exceptionHandling().accessDeniedPage("/403")   //TODO change
+                    //else
+                    .antMatchers("/**").permitAll()
+
+                .and().formLogin()
+                    .loginPage("/login")
+                    .usernameParameter("email")
+                    .passwordParameter("password")
+                    .defaultSuccessUrl("/", false) //Tras logearme me lleva a /
+                    .failureUrl("/login?error=true")
+                .and().rememberMe()
+                    .rememberMeParameter("rememberMe")
+                    .userDetailsService(userDetailsService)
+                    .key(FileCopyUtils.copyToString(new InputStreamReader(authKey.getInputStream())))
+                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
+                .and().logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/")
+                .and().exceptionHandling()
+//                    .accessDeniedHandler(accessDeniedHandler())
+                    .accessDeniedPage("/errors")
                 .and().csrf().disable();
     }
 
@@ -87,5 +104,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public void configure(final WebSecurity web) {
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/403");
     }
+
+//    @Bean
+//    public AccessDeniedHandler accessDeniedHandler() {
+//        return (httpServletRequest, httpServletResponse, e) -> {
+//            throw new AccessDeniedException();
+//        };
+//    }
 
 }

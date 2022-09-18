@@ -1,5 +1,5 @@
 .footer {
-    background-color: #ffc584;
+    background-color: var(--secondary-color);
     height: 3rem;
     font-size: large;
 }

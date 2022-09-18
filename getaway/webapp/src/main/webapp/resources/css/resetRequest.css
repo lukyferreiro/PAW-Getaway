@@ -1,0 +1,45 @@
+.title {
+    font-size: xxx-large;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: x-large;
+    margin: 0;
+}
+
+.input {
+    font-weight: 500;
+    font-size: 16px;
+    color: #282827;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+#success {
+    color: rgb(130,201,30);
+}
+
+.btn-continue {
+    font-size: x-large;
+    font-weight: bold;
+    color: white;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    padding: 10px 20px 10px 20px;
+}
+
+.btn-continue:hover {
+    color: white;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+
+.btn-continue:focus {
+    color: white;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+}

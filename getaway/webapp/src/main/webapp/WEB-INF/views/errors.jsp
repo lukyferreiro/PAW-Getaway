@@ -4,7 +4,16 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> - <spring:message code="serverError.title"/></title>
+      <title><spring:message code="pageName"/> -
+         <c:choose>
+            <c:when test="${code < 500}">
+               <spring:message code="pageNotFound.title"/>
+            </c:when>
+            <c:otherwise>
+               <spring:message code="serverError.title"/>
+            </c:otherwise>
+         </c:choose>
+      </title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href="<c:url value = "/resources/css/error.css" />" rel="stylesheet">
    </head>
@@ -16,16 +25,23 @@
                <c:out value="${code}"/>
             </h1>
             <h1 class="font-weight-bold text-center" style="font-size: 5vh;">
-               <spring:message code="serverError.description"/>
+               <c:choose>
+                  <c:when test="${code < 500}">
+                     <spring:message code="pageNotFound.description"/>
+                  </c:when>
+                  <c:otherwise>
+                     <spring:message code="serverError.description"/>
+                  </c:otherwise>
+               </c:choose>
             </h1>
             <h4 class="text-center">
                <span style="color:red;"><spring:message code="error.whoops"/></span>
-               <c:if test="${errors != null}">
-                  <c:out value="${errors}"/>
-               </c:if>
+               <c:out value="${errors}"/>
             </h4>
             <a href="<c:url value='/'/>">
-               <button type="button" class="btn btn-error">Volver</button>
+               <button type="button" class="btn btn-error">
+                  <spring:message code="error.btn"/>
+               </button>
             </a>
          </div>
       </div>

@@ -20,7 +20,7 @@
                   <spring:message code="filters.title"/>
                </p>
                <%--FILTER--%>
-               <c:url value="/${categoryName}" var="postPath"/>
+               <c:url value="/experiences/${categoryName}" var="postPath"/>
                <form:form modelAttribute="filterForm" action="${postPath}" cssClass="filter-form" id="cityFilterForm" method="post" acceptCharset="UTF-8">
                   <div>
                      <form:label path="activityCity" class="form-label"><spring:message code="filters.city"/></form:label>

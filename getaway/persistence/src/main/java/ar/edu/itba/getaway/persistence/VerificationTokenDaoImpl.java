@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -20,46 +22,55 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
     private final SimpleJdbcInsert simpleJdbcInsert;
 
     private static final RowMapper<VerificationToken> VERIFICATION_TOKEN_ROW_MAPPER =
-            (rs, rowNum) -> new VerificationToken(rs.getLong("verifId"),
+            (rs, rowNum) -> new VerificationToken(rs.getLong("verifid"),
                     rs.getString("verifToken"),
                     rs.getLong("verifUserId"),
                     rs.getTimestamp("verifExpirationDate").toLocalDateTime());
 
     @Autowired
     public VerificationTokenDaoImpl(final DataSource ds) {
-        jdbcTemplate = new JdbcTemplate(ds);
-        simpleJdbcInsert = new SimpleJdbcInsert(ds).
+        this.jdbcTemplate = new JdbcTemplate(ds);
+        this.simpleJdbcInsert = new SimpleJdbcInsert(ds).
                 withTableName("verificationToken").
-                usingGeneratedKeyColumns("verifId");
+                usingGeneratedKeyColumns("verifid");
     }
 
     @Override
     public Optional<VerificationToken> getVerificationToken(long id) {
-        return Optional.empty();
+        return jdbcTemplate.query("SELECT * FROM verificationToken WHERE verifId = ?",
+                new Object[]{id}, VERIFICATION_TOKEN_ROW_MAPPER).stream().findFirst();
     }
 
     @Override
     public VerificationToken createVerificationToken(long userId, String token, LocalDateTime expirationDate) {
-        return null;
+        Map<String, Object> values = new HashMap<>();
+        values.put("verifUserId", userId);
+        values.put("verifToken", token);
+        values.put("verifExpirationDate", expirationDate);
+        final long tokenId = simpleJdbcInsert.executeAndReturnKey(values).longValue();
+        //Nunca retorna null
+        return new VerificationToken(tokenId, token, userId, expirationDate);
     }
 
     @Override
     public Optional<VerificationToken> getTokenByValue(String token) {
-        return Optional.empty();
+        return jdbcTemplate.query("SELECT * FROM verificationToken WHERE verifToken=?",
+                new Object[]{token}, VERIFICATION_TOKEN_ROW_MAPPER).stream().findFirst();
     }
 
     @Override
     public void removeTokenById(long id) {
-
+        jdbcTemplate.update("DELETE from verificationToken where verifId = ?", id);
     }
 
     @Override
     public void removeTokenByUserId(long userId) {
-
+        jdbcTemplate.update("DELETE from verificationToken where verifUserId = ?", userId);
     }
 
     @Override
     public Optional<VerificationToken> getTokenByUserId(long userId) {
-        return Optional.empty();
+        return jdbcTemplate.query("SELECT * FROM verificationToken WHERE verifUserId=?",
+                new Object[]{userId}, VERIFICATION_TOKEN_ROW_MAPPER).stream().findFirst();
     }
 }
