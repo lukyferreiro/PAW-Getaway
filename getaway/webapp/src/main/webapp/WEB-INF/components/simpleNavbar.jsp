@@ -10,9 +10,9 @@
                 <spring:message code="pageName"/>
             </span>
       </a>
-      <a href="<c:url value = "/"/>" class="link-home" >
-         <spring:message code="navbar.home"/>
-      </a>
+<%--      <a href="<c:url value = "/"/>" class="link-home" >--%>
+<%--         <spring:message code="navbar.home"/>--%>
+<%--      </a>--%>
       <div class="container-header-btn d-flex justify-content-between">
          <a href="<c:url value = "/login"/>">
             <button type="button" class="btn btn-header">

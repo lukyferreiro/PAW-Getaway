@@ -14,7 +14,6 @@
          <jsp:include page="/WEB-INF/components/navbar.jsp">
             <jsp:param name="hasSign" value="${hasSign}"/>
          </jsp:include>
-<%--         <%@ include file="../components/navbar.jsp" %>--%>
 
          <div class="container-mainpage container-fluid p-0 d-flex justify-content-center align-items-center">
             <div class="main-text container-fluid p-0 text-center font-weight-bold">

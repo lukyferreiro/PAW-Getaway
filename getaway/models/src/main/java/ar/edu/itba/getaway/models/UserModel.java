@@ -24,7 +24,6 @@ public class UserModel {
         this.profileImageId = profileImageId;
     }
     public boolean hasRole(Roles role) {
-//        return roles.stream().anyMatch(p->p.name().equals(role));
         return roles.contains(role);
     }
     public String getName() {

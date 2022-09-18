@@ -127,6 +127,18 @@ public class ErrorsController {
         return mav;
     }
 
+    @ResponseStatus(code = HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ModelAndView accessDeniedException() {
+        Locale locale = LocaleContextHolder.getLocale();
+        String error = messageSource.getMessage("errors.accessDenied", null, locale);
+        Long code = Long.valueOf(HttpStatus.FORBIDDEN.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
+        mav.addObject("errors", error);
+        mav.addObject("code", code);
+        return mav;
+    }
+
     /*Server error */
 //    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
 //    @ExceptionHandler(value = Exception.class)
