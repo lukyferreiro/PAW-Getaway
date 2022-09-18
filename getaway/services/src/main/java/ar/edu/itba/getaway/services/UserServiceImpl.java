@@ -169,4 +169,9 @@ public class UserServiceImpl implements UserService {
         String token = UUID.randomUUID().toString();
         return passwordResetTokenDao.createToken(userId, token, PasswordResetToken.generateTokenExpirationDate());
     }
+
+    @Override
+    public Collection<RoleModel> getUserRoles(long userId) {
+        return  userDao.getUserRoles(userId);
+    }
 }

@@ -47,14 +47,17 @@ public class UserDaoImpl implements UserDao {
 //        return userMap.values();
 //    };
 
-    private static final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
+    private final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new UserModel(rs.getLong("userid"),
                     rs.getString("password"),
                     rs.getString("userName"),
                     rs.getString("userSurname"),
                     rs.getString("email"),
-                    new ArrayList<>(),
+                    getUserRoles(),
                     rs.getLong("imgId"));
+
+    private static final RowMapper<RoleModel> USER_ROLES_ROW_MAPPER = (rs, rowNum) ->
+            new RoleModel(rs.getLong("roleid"),Roles.valueOf(rs.getString("rolename")));
 
     private static final RowMapper<RoleModel> ROLE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new RoleModel(rs.getLong("roleId"),
@@ -71,6 +74,11 @@ public class UserDaoImpl implements UserDao {
                 .withTableName("roles");
         this.userRolesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("userRoles");
+    }
+
+    @Override
+    public Collection<RoleModel> getUserRoles(long userId){
+        return jdbcTemplate.query("SELECT roleid, rolename FROM users NATURAL JOIN userroles NATURAL JOIN roles WHERE userid=?", new Object[]{userId}, USER_ROLES_ROW_MAPPER);
     }
 
     @Override

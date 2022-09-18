@@ -107,7 +107,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return multipartResolver;
     }
 
-    // Para anotar clases y métodos con @Transactional
+    // Con esto podemos anotar nuestras clases y métodos con @Transactional
+    // para que corran dentro de transacciones
     @Bean
     public PlatformTransactionManager transactionManager(final DataSource ds) {
         return new DataSourceTransactionManager(ds);
