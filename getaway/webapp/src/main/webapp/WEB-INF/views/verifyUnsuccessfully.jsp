@@ -39,24 +39,24 @@
 <%--                        </div>--%>
 <%--                     </c:when>--%>
 <%--                     <c:otherwise>--%>
-                        <div class="col-12">
-                           <h1 class="text-center title">
-                              Ha ocurrido un error al verificar tu cuenta
-                           </h1>
-                           <p class="subtitle text-center mb-4">
-                              Checkea tus datos y solicita un nuevo enlace de confirmacion.
-                           </p>
-                        </div>
-                        <div class="col-12 d-flex align-items-center justify-content-center">
-                           <i class="fas fa-exclamation-circle fa-7x" id="error"></i>
-                        </div>
-                        <div class="col-12 px-0 d-flex align-items-center justify-content-center">
-                           <a href="<c:url value = "/user/verifyAccount/resend"/>">
-                              <button type="button" class="btn btn-header">
-                                 Volver a enviar
-                              </button>
-                           </a>
-                        </div>
+                  <div class="col-12">
+                     <h1 class="text-center title">
+                        Ha ocurrido un error al verificar tu cuenta
+                     </h1>
+                     <p class="subtitle text-center mb-4">
+                        Checkea tus datos y solicita un nuevo enlace de confirmacion.
+                     </p>
+                  </div>
+                  <div class="col-12 d-flex align-items-center justify-content-center">
+                     <i class="fas fa-exclamation-circle fa-7x" id="error"></i>
+                  </div>
+                  <div class="col-12 px-0 d-flex align-items-center justify-content-center">
+                     <a href="<c:url value = "/user/verifyAccount/resend"/>">
+                        <button type="button" class="btn btn-continue">
+                           Volver a enviar
+                        </button>
+                     </a>
+                  </div>
 <%--                     </c:otherwise>--%>
 <%--                  </c:choose>--%>
 

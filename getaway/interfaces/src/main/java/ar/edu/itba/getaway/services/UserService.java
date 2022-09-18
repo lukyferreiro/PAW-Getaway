@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.ImageModel;
+import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.UserInfo;
 

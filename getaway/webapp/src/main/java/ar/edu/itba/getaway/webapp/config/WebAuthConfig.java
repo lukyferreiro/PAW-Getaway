@@ -77,9 +77,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 //                            "/user/account/updateCoverImage", "/user/account/updateInfo",
 //                            "/user/account/updateProfileImage").hasRole("VERIFIED")
                     //Experiences
-                    .antMatchers("/create_experience").authenticated()
-//                    .antMatchers("/experiences/{categoryName}").permitAll()
-//                    .antMatchers("/create_experience").hasRole("VERIFIED")
+//                    .antMatchers("/create_experience").authenticated()
+                    .antMatchers("/experiences/{categoryName}").hasAuthority("USER")
+                    .antMatchers("/create_experience").hasRole("VERIFIED")
                     //else
                     .antMatchers("/**").permitAll()
 

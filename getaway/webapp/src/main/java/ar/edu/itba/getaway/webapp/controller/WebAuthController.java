@@ -51,7 +51,6 @@ public class WebAuthController {
             return register(form);
         }
 
-
         if (!form.getPassword().equals(form.getConfirmPassword())) {
             errors.rejectValue("password", "validation.user.passwordsDontMatch");
             return register(form);
@@ -70,7 +69,7 @@ public class WebAuthController {
         return new ModelAndView("redirect:/user/verifyAccount/send");
     }
 
-    @RequestMapping("/login")
+    @RequestMapping(path ="/login")
     public ModelAndView login(@RequestParam(value = "error", defaultValue = "false") boolean error) {
         final ModelAndView mav = new ModelAndView("login");
         mav.addObject("error", error);
@@ -88,7 +87,7 @@ public class WebAuthController {
 
     @RequestMapping(path = "/user/verifyAccount")
     public ModelAndView verifyAccount(HttpServletRequest request,
-                                      @RequestParam(defaultValue = "") String token) {
+                                      @RequestParam String token) {
 
         final Optional<UserModel> userOptional = userService.verifyAccount(token);
 //        boolean success = false;

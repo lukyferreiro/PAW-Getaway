@@ -30,7 +30,7 @@
                   </div>
                   <div class="col-12 px-0 d-flex align-items-center justify-content-center">
                      <a href="<c:url value = "/"/>">
-                        <button type="button" class="btn btn-header">
+                        <button type="button" class="btn btn-continue">
                            Inicio
                         </button>
                      </a>

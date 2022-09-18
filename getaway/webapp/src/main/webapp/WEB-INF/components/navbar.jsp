@@ -19,11 +19,22 @@
                <spring:message code="navbar.createExperience"/>
             </button>
          </a>
-         <a href="<c:url value = "/login"/>">
-            <button type="button" class="btn btn-header">
-               <spring:message code="navbar.login"/>
-            </button>
-         </a>
+         <c:choose>
+            <c:when test="${!hasSign}">
+               <a href="<c:url value = "/login"/>">
+                  <button type="button" class="btn btn-header">
+                     <spring:message code="navbar.login"/>
+                  </button>
+               </a>
+            </c:when>
+            <c:otherwise>
+               <a href="<c:url value = "/logout"/>">
+                  <button type="button" class="btn btn-header">
+                     Cerrar sesion
+                  </button>
+               </a>
+            </c:otherwise>
+         </c:choose>
       </div>
    </div>
 

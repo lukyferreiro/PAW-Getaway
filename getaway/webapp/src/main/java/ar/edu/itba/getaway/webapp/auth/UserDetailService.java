@@ -39,13 +39,13 @@ public class UserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         String message = messageSource.getMessage("error.invalidEmail2", new Object[]{}, locale);
-        final UserModel user = us.getUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(message + email));
+        final UserModel userModel = us.getUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(message + email));
 //        if(!BCRYPT_PATTERN.matcher(user.getPassword()).matches()){
 //            us.changePassword(user.getEmail(), user.getPassword());
 //            return loadUserByUsername(username);
 //        }
-        Collection<? extends GrantedAuthority> authorities = getAuthorities(user.getRoles());
-        return new MyUserDetails(email, user.getPassword(), authorities);
+        Collection<? extends GrantedAuthority> authorities = getAuthorities(userModel.getRoles());
+        return new MyUserDetails(email, userModel.getPassword(), authorities);
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Collection<Roles> roles) {

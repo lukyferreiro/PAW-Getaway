@@ -68,7 +68,7 @@
                            </form:form>
                         </div>
                         <div class="col-12 mt-2 d-flex align-items-center justify-content-center">
-                           <button form="passReset" id="sumbitBtn" type="submit" class="w-100 submitBtn my-2">
+                           <button form="passReset" id="sumbitBtn" type="submit" class="w-100 btn-continue my-2">
                               Aplicar
                            </button>
                         </div>
