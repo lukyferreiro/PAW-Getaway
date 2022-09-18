@@ -120,4 +120,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
         return jdbcTemplate.query("SELECT * FROM experiences WHERE categoryid = ? AND price <= ? AND cityid = ?", new Object[]{categoryId,max, cityId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
+    @Override
+    public List<ExperienceModel> getRandom(){
+        return jdbcTemplate.query("SELECT * FROM experiences ORDER BY RANDOM() LIMIT 5", EXPERIENCE_MODEL_ROW_MAPPER);
+    }
 }

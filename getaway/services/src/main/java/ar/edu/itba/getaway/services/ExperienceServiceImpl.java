@@ -64,4 +64,8 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.listByCategoryPriceAndCity(categoryId, max, cityId);
     }
 
+    @Override
+    public List<ExperienceModel> getRandom(){
+        return experienceDao.getRandom();
+    }
 }

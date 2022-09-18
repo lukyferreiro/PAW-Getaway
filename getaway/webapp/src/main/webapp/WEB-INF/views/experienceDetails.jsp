@@ -41,23 +41,23 @@
 <%--                     replace with conditional to check if experience has image associated--%>
                     <c:choose>
                         <c:when test="${activity.hasImage == false}">
-                            <c:if test="${dbCategoryName == 'Aventura'}">
-                                <img class="rounded img-detail" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
+                            <c:if test="${activity.categoryId == 1}">
+                                <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
                             </c:if>
-                            <c:if test="${dbCategoryName == 'Gastronomia'}">
-                                <img class="rounded img-detail" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
+                            <c:if test="${activity.categoryId == 2}">
+                                <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
                             </c:if>
-                            <c:if test="${dbCategoryName == 'Hoteleria'}">
-                                <img class="rounded img-detail" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
+                            <c:if test="${activity.categoryId == 3}">
+                                <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
                             </c:if>
-                            <c:if test="${dbCategoryName == 'Relax'}">
-                                <img class="rounded img-detail" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
+                            <c:if test="${activity.categoryId == 4}">
+                                <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
                             </c:if>
-                            <c:if test="${dbCategoryName == 'Vida nocturna'}">
-                                <img class="rounded img-detail" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
+                            <c:if test="${activity.categoryId == 5}">
+                                <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
                             </c:if>
-                            <c:if test="${dbCategoryName == 'Historico'}">
-                                <img class="rounded img-detail" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
+                            <c:if test="${activity.categoryId == 6}">
+                                <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
                             </c:if>
                         </c:when>
                         <c:otherwise>

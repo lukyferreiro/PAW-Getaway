@@ -30,6 +30,21 @@ public class ExperienceController {
     @Autowired
     ImageService imageService;
 
+    @RequestMapping(value = "/", method = {RequestMethod.GET})
+    public ModelAndView mainPage(){
+        final ModelAndView mav = new ModelAndView("mainPage");
+        List<ExperienceModel> experienceList = exp.getRandom();
+
+        for (ExperienceModel experience: experienceList) {
+            System.out.println(experience.getName());
+        }
+
+
+
+        mav.addObject("activities", experienceList);
+        return mav;
+    }
+
     @RequestMapping(value = "/{categoryName}", method = {RequestMethod.GET})
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,

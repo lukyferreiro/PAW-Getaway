@@ -17,5 +17,5 @@ public interface ExperienceService {
     List<ExperienceModel> listByCategoryAndCity (long categoryId, long cityId);
     List<ExperienceModel> listByCategoryAndPrice (long categoryId, Double max);
     List<ExperienceModel> listByCategoryPriceAndCity (long categoryId, Double max, long cityId);
-
+    List<ExperienceModel> getRandom();
 }
