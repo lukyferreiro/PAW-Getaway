@@ -4,6 +4,7 @@ import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -54,6 +55,16 @@ public class ReviewDaoImpl implements ReviewDao{
 
     @Override
     public List<ReviewModel> getReviewsFromId(long experienceId) {
-        return jdbcTemplate.query("SELECT * FROM reviews WHERE experienceId = ?",
-                new Object[]{experienceId}, REVIEW_MODEL_ROW_MAPPER);    }
+        return jdbcTemplate.query("SELECT * FROM reviews WHERE experienceId = ?", new Object[]{experienceId}, REVIEW_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public Double getAverageScore(long experienceId){
+        return jdbcTemplate.queryForObject("SELECT AVG(score) FROM reviews WHERE experienceId = ?", new Object[] { experienceId }, Double.class);
+    }
+
+    @Override
+    public Integer getReviewCount(long experienceId) {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM reviews WHERE experienceId = ?", new Object[] { experienceId }, Integer.class);
+    }
 }

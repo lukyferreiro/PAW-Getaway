@@ -18,4 +18,5 @@ public interface ExperienceDao {
     List<ExperienceModel> listByCategoryAndPrice (long categoryId, Double max);
     List<ExperienceModel> listByCategoryPriceAndCity (long categoryId, Double max, long cityId);
     List<ExperienceModel> getRandom();
+    String getCountryCity(long experienceId);
 }

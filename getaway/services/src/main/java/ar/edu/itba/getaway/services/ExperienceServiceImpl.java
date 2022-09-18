@@ -65,7 +65,12 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<ExperienceModel> getRandom(){
+    public List<ExperienceModel> getRandom() {
         return experienceDao.getRandom();
+    }
+
+    @Override
+    public String getCountryCity(long experienceId) {
+        return experienceDao.getCountryCity(experienceId);
     }
 }

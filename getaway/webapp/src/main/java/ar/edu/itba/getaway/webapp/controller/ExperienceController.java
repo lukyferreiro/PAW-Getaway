@@ -109,10 +109,16 @@ public class ExperienceController {
         final ExperienceModel experience = exp.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         String dbCategoryName = ExperienceCategory.valueOf(categoryName).getName();
         final List<ReviewModel> reviews = reviewService.getReviewsFromId(experienceId);
+        final Double avgScore = reviewService.getAverageScore(experienceId);
+        final Integer reviewCount = reviewService.getReviewCount(experienceId);
+        final String countryCity = exp.getCountryCity(experienceId);
 
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
         mav.addObject("reviews", reviews);
+        mav.addObject("avgScore", avgScore);
+        mav.addObject("reviewCount", reviewCount);
+        mav.addObject("countryCity", countryCity);
         return mav;
     }
 

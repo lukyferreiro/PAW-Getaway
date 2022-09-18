@@ -23,4 +23,15 @@ public class ReviewServiceImpl implements ReviewService{
     public List<ReviewModel> getReviewsFromId(long experienceId) {
         return reviewDao.getReviewsFromId(experienceId);
     }
+
+    @Override
+    public Double getAverageScore(long experienceId) {
+        return reviewDao.getAverageScore(experienceId);
+    }
+
+    @Override
+    public Integer getReviewCount(long experienceId) {
+        return reviewDao.getReviewCount(experienceId);
+    }
+
 }
