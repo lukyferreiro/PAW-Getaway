@@ -15,7 +15,7 @@
         <div class="justify-content-center">
             <form:form modelAttribute="reviewForm" action="${postPath}" id="createReviewForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
                 <div class="container-inputs">
-                    <div class="p-0 m-0">
+                    <div class="p-4 m-4">
                         <div class="col m-2"> <!--Titulo de la review-->
                             <form:label path="title" class="form-label">
                                 <spring:message code="review.title"/>
