@@ -15,7 +15,6 @@ public class TagDaoImpl implements TagDao {
 
     @Autowired
     private DataSource ds;
-
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
@@ -25,8 +24,8 @@ public class TagDaoImpl implements TagDao {
 
     @Autowired
     public TagDaoImpl(final DataSource ds) {
-        jdbcTemplate = new JdbcTemplate(ds);
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+        this.jdbcTemplate = new JdbcTemplate(ds);
+        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("tags")
                 .usingGeneratedKeyColumns("tagId");
     }

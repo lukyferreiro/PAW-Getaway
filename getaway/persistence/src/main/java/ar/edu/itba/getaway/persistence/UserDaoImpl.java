@@ -21,7 +21,6 @@ public class UserDaoImpl implements UserDao {
 
     @Autowired
     private DataSource ds;
-
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert userSimpleJdbcInsert;
     private final SimpleJdbcInsert roleSimpleJdbcInsert;
@@ -64,13 +63,13 @@ public class UserDaoImpl implements UserDao {
 
     @Autowired
     public UserDaoImpl(final DataSource ds) {
-        jdbcTemplate = new JdbcTemplate(ds);
-        userSimpleJdbcInsert = new SimpleJdbcInsert(ds)
+        this.jdbcTemplate = new JdbcTemplate(ds);
+        this.userSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("userid");
-        roleSimpleJdbcInsert = new SimpleJdbcInsert(ds)
+        this.roleSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("roles");
-        userRolesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
+        this.userRolesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("userRoles");
     }
 
@@ -87,7 +86,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UserModel createUser(String password, String name, String surname, String email, Collection<Roles> roles) throws DuplicateUserException {
+    public UserModel createUser(String password, String name, String surname, String email,
+                                Collection<Roles> roles) throws DuplicateUserException {
         final Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("userName", name);
         userInfo.put("userSurname", surname);

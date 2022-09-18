@@ -4,6 +4,8 @@ import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -24,6 +27,9 @@ public class UserDetailService implements UserDetailsService {
 
     @Autowired
     private UserService us;
+    @Autowired
+    private MessageSource messageSource;
+    private final Locale locale = LocaleContextHolder.getLocale();
 
     @Autowired
     public UserDetailService(final UserService us) {
@@ -31,15 +37,15 @@ public class UserDetailService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final UserModel user = us.getUserByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("No user with email" + username));
+    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
+        String message = messageSource.getMessage("error.invalidEmail2", new Object[]{}, locale);
+        final UserModel user = us.getUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(message + email));
 //        if(!BCRYPT_PATTERN.matcher(user.getPassword()).matches()){
 //            us.changePassword(user.getEmail(), user.getPassword());
 //            return loadUserByUsername(username);
 //        }
         Collection<? extends GrantedAuthority> authorities = getAuthorities(user.getRoles());
-        return new MyUserDetails(username, user.getPassword(), authorities);
+        return new MyUserDetails(email, user.getPassword(), authorities);
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Collection<Roles> roles) {

@@ -29,8 +29,8 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao{
 
     @Autowired
     public PasswordResetTokenDaoImpl(final DataSource ds) {
-        jdbcTemplate = new JdbcTemplate(ds);
-        simpleJdbcInsert = new SimpleJdbcInsert(ds).
+        this.jdbcTemplate = new JdbcTemplate(ds);
+        this.simpleJdbcInsert = new SimpleJdbcInsert(ds).
                 withTableName("passwordResetToken").
                 usingGeneratedKeyColumns("passtokenid");
     }
@@ -49,8 +49,8 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao{
         args.put("passToken", token);
         args.put("passTokenExpirationDate", expirationDate);
         final long tokenId = simpleJdbcInsert.executeAndReturnKey(args).longValue();;
-
-        return new PasswordResetToken(tokenId, token, userId, expirationDate);//never returns null
+        //Nunca retorna null
+        return new PasswordResetToken(tokenId, token, userId, expirationDate);
     }
 
     @Override

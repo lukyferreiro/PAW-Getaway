@@ -18,17 +18,17 @@ public class CountryDaoImpl implements CountryDao{
 
     @Autowired
     private DataSource ds;
-
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+
     private static final RowMapper<CountryModel> COUNTRY_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new CountryModel(rs.getLong("countryId"),
                     rs.getString("countryName"));
 
     @Autowired
     public CountryDaoImpl(final DataSource ds){
-        jdbcTemplate = new JdbcTemplate(ds);
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+        this.jdbcTemplate = new JdbcTemplate(ds);
+        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("countries")
                 .usingGeneratedKeyColumns("countryId");
     }
@@ -48,7 +48,8 @@ public class CountryDaoImpl implements CountryDao{
     //TODO AGREGAR EL METODO EN TODAS LAS INTERFACES
     @Override
     public Optional<CountryModel> getIdByCountryName(String country){
-     return jdbcTemplate.query("SELECT countryId FROM countries WHERE countryName = ?",new Object[]{country},COUNTRY_MODEL_ROW_MAPPER).stream().findFirst();
+     return jdbcTemplate.query("SELECT countryId FROM countries WHERE countryName = ?",
+             new Object[]{country},COUNTRY_MODEL_ROW_MAPPER).stream().findFirst();
     }
 
 }

@@ -15,7 +15,6 @@ public class ImageExperienceDaoImpl implements ImageExperienceDao {
 
     @Autowired
     private DataSource ds;
-
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
@@ -26,8 +25,8 @@ public class ImageExperienceDaoImpl implements ImageExperienceDao {
 
     @Autowired
     public ImageExperienceDaoImpl(final DataSource ds){
-        jdbcTemplate = new JdbcTemplate(ds);
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+        this.jdbcTemplate = new JdbcTemplate(ds);
+        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("imagesExperiences");
     }
 

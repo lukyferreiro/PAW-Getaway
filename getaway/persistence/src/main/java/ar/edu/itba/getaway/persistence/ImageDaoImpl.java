@@ -19,7 +19,6 @@ public class ImageDaoImpl implements ImageDao {
 
     @Autowired
     private DataSource ds;
-
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
@@ -29,8 +28,8 @@ public class ImageDaoImpl implements ImageDao {
 
     @Autowired
     public ImageDaoImpl(final DataSource ds){
-        jdbcTemplate = new JdbcTemplate(ds);
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+        this.jdbcTemplate = new JdbcTemplate(ds);
+        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("images")
                 .usingGeneratedKeyColumns("imgid");
     }
@@ -38,9 +37,7 @@ public class ImageDaoImpl implements ImageDao {
     @Override
     public ImageModel create(byte[] image) {
         final Map<String, Object> args = new HashMap<>();
-
         args.put("imageObject", image);
-
         final long imgid = jdbcInsert.executeAndReturnKey(args).longValue();
         return new ImageModel(imgid, image);
     }

@@ -38,7 +38,8 @@ public class UserServiceImpl implements UserService {
     private MessageSource messageSource;
 
     private final Locale locale = LocaleContextHolder.getLocale();
-    private final Collection<Roles> DEFAULT_ROLES = Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
+    private final Collection<Roles> DEFAULT_ROLES =
+            Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     @Override
     public Optional<UserModel> getUserById(long id) {
@@ -62,60 +63,59 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public Optional<UserModel> verifyAccount(String token) {
-        Optional<VerificationToken> vtokenOpt = verificationTokenDao.getTokenByValue(token);
-
-        if (!vtokenOpt.isPresent()) {
+        Optional<VerificationToken> verificationTokenOptional = verificationTokenDao.getTokenByValue(token);
+        if (!verificationTokenOptional.isPresent()) {
             return Optional.empty();
         }
 
-        VerificationToken vtoken = vtokenOpt.get();
-        verificationTokenDao.removeTokenById(vtoken.getId());//remove always, either token is valid or not
-
-        if (!vtoken.isValid()) {
+        VerificationToken verificationToken = verificationTokenOptional.get();
+        //Eliminamos el token siempre, ya sea valido o no
+        verificationTokenDao.removeTokenById(verificationToken.getId());
+        if (!verificationToken.isValid()) {
             return Optional.empty();
         }
 
-        return userDao.updateRoles(vtoken.getUserId(), Roles.NOT_VERIFIED, Roles.VERIFIED);
+        return userDao.updateRoles(verificationToken.getUserId(), Roles.NOT_VERIFIED, Roles.VERIFIED);
     }
 
     @Transactional
     @Override
     public void resendVerificationToken(UserModel userModel) {
         verificationTokenDao.removeTokenByUserId(userModel.getId());
-        VerificationToken token = generateVerificationToken(userModel.getId());
-        sendVerificationToken(userModel, token);
+        VerificationToken verificationToken = generateVerificationToken(userModel.getId());
+        sendVerificationToken(userModel, verificationToken);
     }
 
     @Override
     public boolean validatePasswordReset(String token) {
-        Optional<PasswordResetToken> prtokenOpt = passwordResetTokenDao.getTokenByValue(token);
-        return prtokenOpt.isPresent() && prtokenOpt.get().isValid();
+        Optional<PasswordResetToken> passwordResetTokenOptional = passwordResetTokenDao.getTokenByValue(token);
+        return passwordResetTokenOptional.isPresent() && passwordResetTokenOptional.get().isValid();
     }
 
     @Transactional
     @Override
     public void generateNewPassword(UserModel userModel) {
         passwordResetTokenDao.removeTokenByUserId(userModel.getId());
-        PasswordResetToken token = generatePasswordResetToken(userModel.getId());
-        sendPasswordResetToken(userModel, token);
+        PasswordResetToken passwordResetToken = generatePasswordResetToken(userModel.getId());
+        sendPasswordResetToken(userModel, passwordResetToken);
     }
 
     @Transactional
     @Override
     public Optional<UserModel> updatePassword(String token, String password) {
-        Optional<PasswordResetToken> prtokenOpt = passwordResetTokenDao.getTokenByValue(token);
-
-        if (!prtokenOpt.isPresent()) {
+        Optional<PasswordResetToken> passwordResetTokenOptional = passwordResetTokenDao.getTokenByValue(token);
+        if (!passwordResetTokenOptional.isPresent()) {
             return Optional.empty();
         }
 
-        PasswordResetToken prtoken = prtokenOpt.get();
-        passwordResetTokenDao.removeTokenById(prtoken.getId()); //remove always, either token is valid or not
-        if (!prtoken.isValid()) {
+        PasswordResetToken passwordResetToken = passwordResetTokenOptional.get();
+        //Eliminamos el token siempre, ya sea valido o no
+        passwordResetTokenDao.removeTokenById(passwordResetToken.getId());
+        if (!passwordResetToken.isValid()) {
             return Optional.empty();
         }
 
-        return userDao.updatePassword(prtoken.getUserId(), passwordEncoder.encode(password));
+        return userDao.updatePassword(passwordResetToken.getUserId(), passwordEncoder.encode(password));
     }
 
     @Override
@@ -124,13 +124,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateProfileImage(ImageModel imageDto, UserModel userModel) {
+    public void updateProfileImage(ImageModel imageModel, UserModel userModel) {
         Long imageId = userModel.getProfileImageId();
         if (imageId == 0) {
-            imageId = imageService.create(imageDto.getImage()).getId();
+            imageId = imageService.create(imageModel.getImage()).getId();
             userDao.updateProfileImage(imageId, userModel);
         } else {
-            imageService.update(imageId, imageDto);
+            imageService.update(imageId, imageModel);
         }
     }
 
@@ -167,6 +167,6 @@ public class UserServiceImpl implements UserService {
 
     private PasswordResetToken generatePasswordResetToken(long userId) {
         String token = UUID.randomUUID().toString();
-        return passwordResetTokenDao.createToken(userId, token, VerificationToken.generateTokenExpirationDate());
+        return passwordResetTokenDao.createToken(userId, token, PasswordResetToken.generateTokenExpirationDate());
     }
 }

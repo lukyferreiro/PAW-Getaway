@@ -18,7 +18,6 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
-
     @Autowired
     private TemplateEngine htmlTemplateEngine;
 
@@ -33,12 +32,12 @@ public class EmailServiceImpl implements EmailService {
         final MimeMessage mimeMessage = mailSender.createMimeMessage();
         final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
         message.setSubject(subject);
-        message.setFrom("getawaycompany@gmail.com");
+        message.setFrom("getawaypaw@gmail.com");
         message.setTo((String) variables.get("to"));
 
         // Create the HTML body using Thymeleaf
         final String htmlContent = htmlTemplateEngine.process(template, ctx);
-        message.setText(htmlContent, true /* isHtml */);
+        message.setText(htmlContent, true);
 
         // Send email
         mailSender.send(mimeMessage);

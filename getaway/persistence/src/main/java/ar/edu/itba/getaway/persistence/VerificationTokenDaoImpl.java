@@ -29,8 +29,8 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
 
     @Autowired
     public VerificationTokenDaoImpl(final DataSource ds) {
-        jdbcTemplate = new JdbcTemplate(ds);
-        simpleJdbcInsert = new SimpleJdbcInsert(ds).
+        this.jdbcTemplate = new JdbcTemplate(ds);
+        this.simpleJdbcInsert = new SimpleJdbcInsert(ds).
                 withTableName("verificationToken").
                 usingGeneratedKeyColumns("verifid");
     }
@@ -48,8 +48,8 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
         values.put("verifToken", token);
         values.put("verifExpirationDate", expirationDate);
         final long tokenId = simpleJdbcInsert.executeAndReturnKey(values).longValue();
-
-        return new VerificationToken(tokenId,token,userId,expirationDate);//never returns null
+        //Nunca retorna null
+        return new VerificationToken(tokenId, token, userId, expirationDate);
     }
 
     @Override

@@ -54,13 +54,11 @@ public class CityServiceImpl implements CityService {
     public List<CityModel> getByCountryName(@RequestParam String country) {
         List<CountryModel> countryModels = countryService.listAll();
         List<CityModel> cityModels = new ArrayList<>();
-        boolean flag = true;
-        for (int j = 0; j < countryModels.size() && flag; j++) {
+        for (int j = 0; j < countryModels.size(); j++) {
             if (countryModels.get(j).getName().equals(country)) {
                 return this.getByCountryId(j + 1);
             }
         }
-
         return cityModels;
     }
 }

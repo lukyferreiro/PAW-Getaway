@@ -18,6 +18,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Properties;
 
 @Configuration
@@ -25,8 +26,7 @@ import java.util.Properties;
 public class MailConfig implements ApplicationContextAware, EnvironmentAware {
 
     public static final String EMAIL_TEMPLATE_ENCODING = "UTF-8";
-
-    private static final String JAVA_MAIL_FILE = "classpath:mail/javaMail.properties";
+//    private static final String JAVA_MAIL_FILE = "classpath:mail/javaMail.properties";
 
     private static final String HOST = "mail.server.host";
     private static final String PORT = "mail.server.port";
@@ -47,8 +47,6 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
         this.environment = environment;
     }
 
-
-    //SPRING + JAVAMAIL: JavaMailSender instance, configured via .properties files.
     @Bean
     public JavaMailSender mailSender() throws IOException {
 
