@@ -20,23 +20,13 @@ import java.util.Optional;
 public class ExperienceController {
 
     @Autowired
-    ExperienceService exp;
-
+    ExperienceService experienceService;
     @Autowired
     CityService cityService;
     @Autowired
     ImageService imageService;
     @Autowired
     ReviewService reviewService;
-
-    @RequestMapping(value = "/", method = {RequestMethod.GET})
-    public ModelAndView mainPage(){
-        final ModelAndView mav = new ModelAndView("mainPage");
-        List<ExperienceModel> experienceList = exp.getRandom();
-
-        mav.addObject("activities", experienceList);
-        return mav;
-    }
 
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.GET})
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
@@ -63,14 +53,14 @@ public class ExperienceController {
         //Filtros
         if (cityId.isPresent()) {
             if (maxPrice.isPresent() && maxPrice.get() > 0) {
-                experienceList = exp.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
+                experienceList = experienceService.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
             } else {
-                experienceList = exp.listByCategoryAndCity(id, cityId.get());
+                experienceList = experienceService.listByCategoryAndCity(id, cityId.get());
             }
         } else if (maxPrice.isPresent() && maxPrice.get() > 0) {
-            experienceList = exp.listByCategoryAndPrice(id, maxPrice.get());
+            experienceList = experienceService.listByCategoryAndPrice(id, maxPrice.get());
         } else {
-            experienceList = exp.listByCategory(id);
+            experienceList = experienceService.listByCategory(id);
         }
 
         mav.addObject("cities", cityModels);
@@ -100,12 +90,12 @@ public class ExperienceController {
                                        @PathVariable("experienceId") final long experienceId) {
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
-        final ExperienceModel experience = exp.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
+        final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         String dbCategoryName = ExperienceCategory.valueOf(categoryName).getName();
         final List<ReviewModel> reviews = reviewService.getReviewsFromId(experienceId);
         final Double avgScore = reviewService.getAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
-        final String countryCity = exp.getCountryCity(experienceId);
+        final String countryCity = experienceService.getCountryCity(experienceId);
 
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
