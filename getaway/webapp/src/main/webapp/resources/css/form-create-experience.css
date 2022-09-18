@@ -3,6 +3,11 @@
     font-weight: bold;
 }
 
+.form-control:focus, .form-control:active {
+    border-color: var(--primary-color) !important;
+    box-shadow: none !important;
+}
+
 .required-optional-text {
     font-size: small;
     padding-left: 5px;
