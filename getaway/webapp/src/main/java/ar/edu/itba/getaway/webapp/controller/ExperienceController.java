@@ -12,9 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.swing.text.html.Option;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,12 +21,13 @@ public class ExperienceController {
 
     @Autowired
     ExperienceService exp;
-    //    @Autowired
-//    CategoryService category;
+
     @Autowired
     CityService cityService;
     @Autowired
     ImageService imageService;
+    @Autowired
+    ReviewService reviewService;
 
     @RequestMapping(value = "/", method = {RequestMethod.GET})
     public ModelAndView mainPage(){
@@ -87,6 +86,7 @@ public class ExperienceController {
         return mav;
     }
 
+
     @RequestMapping(path = "/{experienceId}/image",
             produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE},
             method = RequestMethod.GET)
@@ -103,14 +103,16 @@ public class ExperienceController {
 
     @RequestMapping("/{categoryName}/{experienceId}")
     public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName,
-                                       @PathVariable("experienceId") final long categoryId) {
+                                       @PathVariable("experienceId") final long experienceId) {
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
-        final ExperienceModel experience = exp.getById(categoryId).orElseThrow(ExperienceNotFoundException::new);
+        final ExperienceModel experience = exp.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         String dbCategoryName = ExperienceCategory.valueOf(categoryName).getName();
+        final List<ReviewModel> reviews = reviewService.getReviewsFromId(experienceId);
 
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
+        mav.addObject("reviews", reviews);
         return mav;
     }
 

@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.ImageModel;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;

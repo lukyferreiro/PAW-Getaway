@@ -5,7 +5,6 @@ import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +33,7 @@ public class ExperienceFormController {
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form) {
-        final ModelAndView mav = new ModelAndView("form");
+        final ModelAndView mav = new ModelAndView("experience_form");
         ExperienceCategory[] categoryModels = ExperienceCategory.values();
         List<String> categories = new ArrayList<>();
         for (ExperienceCategory categoryModel : categoryModels) {
@@ -45,36 +44,12 @@ public class ExperienceFormController {
         List<TagModel> tagModels = tagService.listAll();
         List<CityModel> cityModels = cityService.listAll();
 
-//        List<CityModel> cityModels = new ArrayList<>();
-//        boolean flag = true;
-//        for (int j = 0; j<countryModels.size() && flag ; j++){
-//            if(countryModels.get(j).getName().equals(form.getActivityCountry())){
-//                cityModels = cityService.getByCountryId(j + 1);
-//                flag=false;
-//            }
-//        }
-
         mav.addObject("categories", categories);
         mav.addObject("cities", cityModels);
         mav.addObject("countries", countryModels);
         mav.addObject("tags", tagModels);
         return mav;
     }
-
-//   @RequestMapping(path = "/create_experience",produces = MediaType.APPLICATION_JSON_VALUE)
-//   @ResponseBody
-//    public List<CityModel> getCities(@RequestParam String country){
-//        List<CountryModel> countryModels = countryService.listAll();
-//        List<CityModel> cityModels = new ArrayList<>();
-//        boolean flag = true;
-//        for (int j = 0; j<countryModels.size() && flag ; j++){
-//            if(countryModels.get(j).getName().equals(country)){
-//                return cityService.getByCountryId(j + 1);
-//            }
-//        }
-//
-//        return cityModels;
-//    }
 
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})

@@ -14,4 +14,5 @@
 <link href="<c:url value = "/resources/css/footer.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/experiences.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/experienceDetail.css"/>" rel="stylesheet" type="text/css">
-<link href="<c:url value = "/resources/css/form-create-experience.css"/>" rel="stylesheet" type="text/css">
+<link href="<c:url value = "/resources/css/form.css"/>" rel="stylesheet" type="text/css">
+
