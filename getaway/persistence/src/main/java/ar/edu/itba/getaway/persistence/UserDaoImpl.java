@@ -75,13 +75,13 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<UserModel> getUserById(long userId) {
-        return jdbcTemplate.query("SELECT userId, userName, userSurname, email, imgId, password FROM users WHERE userId = ?",
+        return jdbcTemplate.query("SELECT * FROM users WHERE userId = ?",
                 new Object[]{userId}, USER_MODEL_ROW_MAPPER).stream().findFirst();
     }
 
     @Override
     public Optional<UserModel> getUserByEmail(String email) {
-        return jdbcTemplate.query("SELECT userId, userName, userSurname, email, imgId, password FROM users WHERE email = ?",
+        return jdbcTemplate.query("SELECT * FROM users WHERE email = ?",
                 new Object[]{email}, USER_MODEL_ROW_MAPPER).stream().findFirst();
     }
 

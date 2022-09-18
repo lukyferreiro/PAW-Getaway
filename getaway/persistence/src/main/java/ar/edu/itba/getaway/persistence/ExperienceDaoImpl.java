@@ -88,25 +88,25 @@ public class ExperienceDaoImpl implements ExperienceDao {
     @Override
     public List<ExperienceModel> listAll() {
         return new ArrayList<>(jdbcTemplate.query(
-                "SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences",
+                "SELECT * FROM experiences",
                 EXPERIENCE_MODEL_ROW_MAPPER));
     }
 
     @Override
     public Optional<ExperienceModel> getById(long experienceId) {
-        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences WHERE experienceId = ?",
+        return jdbcTemplate.query("SELECT * FROM experiences WHERE experienceId = ?",
                 new Object[]{experienceId}, EXPERIENCE_MODEL_ROW_MAPPER).stream().findFirst();
     }
 
     @Override
     public List<ExperienceModel> listByCategory(long categoryId) {
-        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences NATURAL JOIN categories WHERE categoryId = ?",
+        return jdbcTemplate.query("SELECT * FROM experiences NATURAL JOIN categories WHERE categoryId = ?",
                 new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
     public List<ExperienceModel> listByCategoryAndCity(long categoryId, long cityId) {
-        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences NATURAL JOIN categories WHERE categoryId = ? AND cityId = ?",
+        return jdbcTemplate.query("SELECT * FROM experiences NATURAL JOIN categories WHERE categoryId = ? AND cityId = ?",
                 new Object[]{categoryId, cityId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
