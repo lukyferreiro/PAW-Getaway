@@ -27,7 +27,7 @@
                <h1>
                   <c:out value="${activity.name}"/>
                </h1>
-               <a href="<c:url value = "/${activity.categoryName}/${activity.id}/create_review"/>">
+               <a href="<c:url value = "/experiences/${activity.categoryName}/${activity.id}/create_review"/>">
                   <button type="button" class="btn btn-header">
                      <spring:message code="review.createReview"/>
                   </button>

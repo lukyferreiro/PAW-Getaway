@@ -35,7 +35,7 @@ public class ReviewFormController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "/{categoryName}/{experienceId}/create_review", method = {RequestMethod.GET})
+    @RequestMapping(value = "/experiences/{categoryName}/{experienceId}/create_review", method = {RequestMethod.GET})
     public ModelAndView createReviewForm(@PathVariable("categoryName") final String categoryName,
                                          @PathVariable("experienceId") final long experienceId,
                                          @ModelAttribute("reviewForm") final ReviewForm form) {
@@ -47,7 +47,7 @@ public class ReviewFormController {
         return mav;
     }
 
-    @RequestMapping(value = "/{categoryName}/{experienceId}/create_review", method = {RequestMethod.POST})
+    @RequestMapping(value = "/experiences/{categoryName}/{experienceId}/create_review", method = {RequestMethod.POST})
     public ModelAndView experienceWithReview(@PathVariable("categoryName") final String categoryName,
                                              @PathVariable("experienceId") final long experienceId,
                                              @Valid @ModelAttribute("reviewForm") final ReviewForm form,
@@ -70,6 +70,6 @@ public class ReviewFormController {
 
         final ReviewModel reviewModel = reviewService.create(form.getTitle(), form.getDescription(), form.getLongScore(), experienceId ,date, userId);
 
-        return new ModelAndView("redirect:/" + categoryName + "/" + experienceId);
+        return new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
     }
 }
