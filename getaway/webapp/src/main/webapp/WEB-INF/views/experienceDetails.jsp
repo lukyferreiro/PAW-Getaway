@@ -14,20 +14,24 @@
          <%@ include file="../components/navbar.jsp" %>
 
          <div class="card mx-5 my-3 p-4">
-            <button id="goBackButton" class="btn btn-leave-experience-details d-flex">
-               <img class="go-back-arrow align-self-center" src="<c:url value = "/resources/images/go_back.png"/>" alt="Flecha">
-               <span><spring:message code="experienceDetail.goBack"/></span>
-            </button>
-            <h1 class="card-title d-flex justify-content-center">
-               <c:out value="${activity.name}"/>
-            </h1>
-            <div class="container-header-btn">
+            <div class="card-title d-flex justify-content-between">
+               <div>
+                  <button id="goBackButton" class="btn btn-leave-experience-details">
+                     <img class="go-back-arrow align-self-center" src="<c:url value = "/resources/images/go_back.png"/>" alt="Flecha">
+                     <span><spring:message code="experienceDetail.goBack"/></span>
+                  </button>
+               </div>
+
+               <h1>
+                  <c:out value="${activity.name}"/>
+               </h1>
                <a href="<c:url value = "/${activity.categoryName}/${activity.id}/create_review"/>">
                   <button type="button" class="btn btn-header">
                      <spring:message code="review.createReview"/>
                   </button>
                </a>
             </div>
+
             <div class="row">
                <div class="col-auto">
                   <div class="card-body p-2 mw-25">
@@ -121,17 +125,23 @@
             </div>
          </div>
 
-         <div>
+         <div class="mx-5 my-3">
+            <h2> <spring:message code="review.start"/></h2>
             <c:forEach var="review" items="${reviews}">
-               <div class="card card-review mx-3 my-2 p-0">
-                  <img class="user-img" src="<c:url value = "/resources/images/ic_user.png" />" alt="User"> User name</div>
-                  <div class="card-body p-2">
-                        <h2 class="card-title container-fluid p-0"><c:out value="${review.title}"/></h2>
-                        <div class="card-text container-fluid p-0">
-                           <h5 class="text-truncate"><c:out value="${review.description}"/></h5>
-                           <h7> <spring:message code="review.score"/> <c:out value="${review.score}"/></h7>
-                           <h7><c:out value="${review.reviewDate}"/></h7>
-                        </div>
+               <div class="card mx-5 my-3 p-4">
+                  <div class="card-title d-flex">
+                     <div class="col m-2">
+                        <img class="user-img" src="<c:url value = "/resources/images/ic_user.png" />" alt="User"/>
+                        <h5><c:out value="User name"/></h5>
+                     </div>
+                     <h2 class="col m-2"><c:out value="${review.title}"/></h2>
+                  </div>
+                  <div class="col card-body p-2 mw-25">
+                     <div class="card-text">
+                        <h5 class="text-truncate"><c:out value="${review.description}"/></h5>
+                        <h7> <spring:message code="review.score"/> <c:out value="${review.score}"/></h7>
+                        <h7><spring:message code="review.date"/> <c:out value="${review.reviewDate}"/></h7>
+                     </div>
                   </div>
                </div>
             </c:forEach>

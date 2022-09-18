@@ -12,46 +12,49 @@
 <body>
     <div class="container-main">
         <%@ include file="../components/navbar.jsp" %>
-        <form:form modelAttribute="reviewForm" action="${postPath}" id="createReviewForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
-            <div class="container-inputs">
-                <div class="p-0 m-0 d-flex">
-                    <div class="col m-2"> <!--Titulo de la review-->
-                        <form:label path="title" class="form-label">
-                            <spring:message code="review.title"/>
-                            <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
-                        </form:label>
-                        <form:input path="title" type="text" class="form-control"/>
-                        <form:errors path="title" element="p" cssClass="form-error-label"/>
-                    </div>
-                    <div class="col m-2"> <!--Descripcion de la review-->
-                        <form:label path="description" class="form-label">
-                            <spring:message code="review.description"/>
-                            <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
-                        </form:label>
-                        <form:input path="description" type="text" class="form-control"/>
-                        <form:errors path="description" element="p" cssClass="form-error-label"/>
-                    </div>
-                    <div class="col m-2"> <!--Rating-->
-                        <form:label path="score" class="form-label">
-                            <spring:message code="review.scoreAssign"/>
-                            <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
-                        </form:label>
-                        <form:input path="score" type="text" class="form-control" id="reviewFormScoreInput" placeholder="0"/>
-                        <form:errors path="score" element="p" cssClass="form-error-label"/>
+        <div class="justify-content-center">
+            <form:form modelAttribute="reviewForm" action="${postPath}" id="createReviewForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
+                <div class="container-inputs">
+                    <div class="p-0 m-0">
+                        <div class="col m-2"> <!--Titulo de la review-->
+                            <form:label path="title" class="form-label">
+                                <spring:message code="review.title"/>
+                                <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                            </form:label>
+                            <form:input path="title" type="text" class="form-control"/>
+                            <form:errors path="title" element="p" cssClass="form-error-label"/>
+                        </div>
+                        <div class="col m-2"> <!--Descripcion de la review-->
+                            <form:label path="description" class="form-label">
+                                <spring:message code="review.description"/>
+                                <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                            </form:label>
+                            <form:textarea path="description" class="form-control" rows="4"/>
+                            <form:errors path="description" element="p" cssClass="form-error-label"/>
+                        </div>
+                        <div class="col m-2"> <!--Rating-->
+                            <form:label path="score" class="form-label">
+                                <spring:message code="review.scoreAssign"/>
+                                <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                            </form:label>
+                            <form:input path="score" type="text" class="form-control" id="reviewFormScoreInput" placeholder="0"/>
+                            <form:errors path="score" element="p" cssClass="form-error-label"/>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="p-0 mt-3 mb-0 d-flex justify-content-around">
-                <a href="<c:url value = "/"/>">
-                    <button class="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
-                        <spring:message code="experienceForm.cancel"/>
+                <div class="p-0 mt-3 mb-0 d-flex justify-content-around">
+                    <a href="<c:url value = "/"/>">
+                        <button class="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
+                            <spring:message code="experienceForm.cancel"/>
+                        </button>
+                    </a>
+                    <button type="submit" class="btn btn-submit-form px-3 py-2" id="createReviewFormButton" form="createReviewForm">
+                        <spring:message code="experienceForm.submit"/>
                     </button>
-                </a>
-                <button type="submit" class="btn btn-submit-form px-3 py-2" id="createReviewFormButton" form="createReviewForm">
-                    <spring:message code="experienceForm.submit"/>
-                </button>
-            </div>
-        </form:form>
+                </div>
+            </form:form>
+        </div>
+
         <%@ include file="../components/footer.jsp" %>
     </div>
     <%@ include file="../components/includes/bottomScripts.jsp" %>
