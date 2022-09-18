@@ -28,7 +28,7 @@
                      <div class="col m-2"> <!--Nombre de la experiencia-->
                         <form:label path="activityName" class="form-label">
                            <spring:message code="experienceForm.activityName"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
                         <form:input path="activityName" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
                         <form:errors path="activityName" element="p" cssClass="form-error-label"/>
@@ -36,7 +36,7 @@
                      <div class="col m-2"> <!--Categoria-->
                         <form:label path="activityCategory" class="form-label">
                            <spring:message code="experienceForm.activityCategory"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
                         <form:select path="activityCategory" class="form-select" cssErrorClass="form-control is-invalid">
                            <option disabled selected value><c:out value="${placeholder}"/></option>
@@ -81,7 +81,7 @@
                      <div class="col m-2"> <!--Email de contacto-->
                         <form:label path="activityMail" class="form-label">
                            <spring:message code="experienceForm.activityMail"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
                         <form:input path="activityMail" type="email" class="form-control"
                                     cssErrorClass="form-control is-invalid" placeholder="${mailExample}"/>
@@ -102,7 +102,7 @@
                      <div class="col m-2"> <!--Pais-->
                         <form:label path="activityCountry" class="form-label">
                            <spring:message code="experienceForm.activityCountry"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
                         <form:select path="activityCountry" id="experienceFormCountryInput" class="form-select" cssErrorClass="form-control is-invalid">
                            <option disabled selected value><c:out value="${placeholder}"/></option>
@@ -116,7 +116,7 @@
                      <div class="col m-2"> <!--Ciudad-->
                         <form:label path="activityCity" class="form-label">
                            <spring:message code="experienceForm.activityCity"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
                         <form:select path="activityCity" id="experienceFormCityInput" class="form-select"
                                      cssErrorClass="form-control is-invalid" disabled="true">
@@ -130,7 +130,7 @@
                      <div class="col m-2"> <!--Direccion-->
                         <form:label path="activityAddress" class="form-label">
                            <spring:message code="experienceForm.activityAddress"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
                         <form:input path="activityAddress" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
                         <form:errors path="activityAddress" element="p" cssClass="form-error-label"/>

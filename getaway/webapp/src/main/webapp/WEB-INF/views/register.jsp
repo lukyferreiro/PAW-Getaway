@@ -17,7 +17,7 @@
                <div class="row w-100 m-0 align-items-center justify-content-center">
                   <div class="col-12">
                      <h1 class="text-center title"><spring:message code="registerForm.title"/></h1>
-                     <p class="subtitle text-center mb-4">
+                     <p class="subtitle text-center">
                         <span class="font-weight-bold"><spring:message code="registerForm.description.bold"/></span>
                         <spring:message code="registerForm.description"/>
                      </p>

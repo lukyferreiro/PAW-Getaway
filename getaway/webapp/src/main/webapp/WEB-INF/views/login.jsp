@@ -17,7 +17,7 @@
                <div class="row w-100 m-0 align-items-center justify-content-center">
                   <div class="col-12">
                      <h1 class="text-center title"><spring:message code="loginForm.title"/></h1>
-                     <p class="subtitle text-center mb-4">
+                     <p class="subtitle text-center">
                         <spring:message code="loginForm.description"/>
                      </p>
                   </div>
