@@ -7,7 +7,7 @@
 }
 
 .logo:hover {
-    color: #F99D32;
+    color: var(--primary-color);
     cursor: pointer;
 }
 
@@ -33,24 +33,24 @@
     font-size: x-large;
     font-weight: bold;
     color: white;
-    border-color: #F99D32;
-    background-color: #F99D32;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
     padding: 10px 20px 10px 20px;
     margin-left: 40px;
 }
 
 .btn-header:hover {
     color: white;
-    border-color: #F99D32;
-    background-color: #F99D32;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
     transform: scale(1.1);
     transition: 0.3s;
 }
 
 .btn-header:focus {
     color: white;
-    border-color: #F99D32;
-    background-color: #F99D32;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
 }
 
 /*.container-types {*/
@@ -59,7 +59,7 @@
 .btn-filter {
     color: black;
     font-size: x-large;
-    border-color: #F99D32;
+    border-color: var(--primary-color);
     margin: 10px 20px 0 20px;
     padding: 5px 20px 10px 15px;
     border-radius: 15px;
@@ -72,20 +72,20 @@
 }
 
 .btn-filter:hover {
-    border-color: #F99D32;
-    background-color: #ffc584;
+    border-color: var(--primary-color);
+    background-color: var(--secondary-color);
     color: black;
     transform: scale(1.05);
     transition: 0.3s;
 }
 
 .btn-filter:focus {
-    border-color: #F99D32;
+    border-color: var(--primary-color);
     color: black;
 }
 
 .separator {
-    color: #fd9715;
+    color: var(--primary-color);
     border-width: 3px;
     margin: 10px 0;
 }

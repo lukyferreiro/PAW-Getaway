@@ -22,7 +22,7 @@
 
 .submitBtn {
     font-size: 0.8em;
-    background-color: #F99D32;
+    background-color: var(--primary-color);
     color: #fff;
     border: none;
     box-shadow: none;

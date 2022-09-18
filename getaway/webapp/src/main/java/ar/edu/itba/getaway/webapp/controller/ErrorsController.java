@@ -74,7 +74,7 @@ public class ErrorsController {
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = IllegalContentTypeException.class)
-    public ModelAndView illegalContent() {
+    public ModelAndView illegalContentTypeException() {
         Locale locale = LocaleContextHolder.getLocale();
         String error = messageSource.getMessage("errors.IllegalContentTypeException", null, locale);
         Long code = Long.valueOf(HttpStatus.BAD_REQUEST.toString());

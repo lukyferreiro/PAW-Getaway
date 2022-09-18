@@ -20,44 +20,44 @@
     font-size: large;
     font-weight: bold;
     color: white;
-    border-color: #F99D32;
-    background-color: #F99D32;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
 }
 
 .btn-submit-form:hover, .btn-submit-form:focus {
     color: white;
-    border-color: #F99D32;
-    background-color: #F99D32;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
     transform: scale(1.02);
     transition: 0.3s;
 }
 
 .btn-submit-form:disabled {
     color: white;
-    border-color: #FAB672;
-    background-color: #FAB672;
+    border-color: var(--third-color);
+    background-color: var(--third-color);
 }
 
 /*---------------------------*/
 .btn-cancel-form {
     font-size: large;
     font-weight: bold;
-    color: #F99D32;
-    border-color: #F99D32;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
     background-color: white;
 }
 
 .btn-cancel-form:hover, .btn-cancel-form:focus {
-    color: #F99D32;
-    border-color: #F99D32;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
     background-color: white;
     transform: scale(1.02);
     transition: 0.3s;
 }
 
 .btn-cancel-form:disabled {
-    color: #F99D32;
-    border-color: #F99D32;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
     background-color: white;
 }
 

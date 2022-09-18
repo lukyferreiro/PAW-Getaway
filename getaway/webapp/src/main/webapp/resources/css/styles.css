@@ -1,7 +1,12 @@
+/*------------------------------*/
+/*--------- Global CSS  --------*/
+/*------------------------------*/
+
 * {
     font-family: "Cambria", sans-serif;
     --primary-color: #F99D32;
     --secondary-color: #FFC584;
+    --third-color: #FAB672;
 }
 
 .container-main {
@@ -9,6 +14,11 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+}
+
+.required-field {
+    color: red;
+    margin-left: 5px;
 }
 
 /*------------------------------*/
@@ -22,7 +32,3 @@
 .container-mainpage > div {
     font-size: xxx-large;
 }
-
-/*------------------------------*/
-/*--------- Global CSS  ---------*/
-/*------------------------------*/
