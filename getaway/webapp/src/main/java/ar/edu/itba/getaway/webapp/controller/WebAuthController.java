@@ -1,16 +1,19 @@
 package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
+import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.getaway.services.ImageService;
+import ar.edu.itba.getaway.services.ExperienceService;
 import ar.edu.itba.getaway.services.UserService;
+import ar.edu.itba.getaway.webapp.auth.MyUserDetails;
 import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.RegisterForm;
 import ar.edu.itba.getaway.webapp.forms.ResetPasswordEmailForm;
 import ar.edu.itba.getaway.webapp.forms.ResetPasswordForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -37,7 +41,7 @@ public class WebAuthController {
     @Autowired
     private UserService userService;
     @Autowired
-    private ImageService imageService;
+    private ExperienceService experienceService;
 
     @RequestMapping(path = "/register")
     public ModelAndView register(@ModelAttribute("registerForm") final RegisterForm form) {
@@ -216,5 +220,22 @@ public class WebAuthController {
                 .collect(Collectors.toList());
     }
 
+    @RequestMapping(value = "/user/experiences", method = {RequestMethod.GET})
+    public ModelAndView experience(@AuthenticationPrincipal MyUserDetails userDetails) {
+        final ModelAndView mav = new ModelAndView("userExperiences");
+
+        try {
+            String email = userDetails.getUsername();
+            UserModel userModel = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
+            List<ExperienceModel> experienceList = experienceService.getByUserId(userModel.getId());
+            mav.addObject("activities", experienceList);
+            mav.addObject("hasSign", userModel.hasRole(Roles.USER));
+        } catch (NullPointerException e) {
+            mav.addObject("hasSign", false);
+        }
+
+
+        return mav;
+    }
 
 }
