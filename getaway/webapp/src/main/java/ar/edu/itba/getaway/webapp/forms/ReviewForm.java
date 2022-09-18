@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.forms;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Pattern;
@@ -16,7 +17,7 @@ public class ReviewForm {
 
     @NotEmpty
     @Pattern(regexp = "^([0-5])$")
-    long score;
+    String score;
 
     public String getTitle() {
         return title;
@@ -26,8 +27,12 @@ public class ReviewForm {
         return description;
     }
 
-    public long getScore() {
+    public String getScore() {
         return score;
+    }
+
+    public Long getLongScore(){
+        return Long.parseLong(score);
     }
 
     public void setTitle(String title) {
@@ -38,7 +43,7 @@ public class ReviewForm {
         this.description = description;
     }
 
-    public void setScore(long score) {
+    public void setScore(String score) {
         this.score = score;
     }
 }

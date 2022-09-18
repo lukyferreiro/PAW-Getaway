@@ -34,15 +34,27 @@
                     <div class="col m-2"> <!--Rating-->
                         <form:label path="score" class="form-label">
                             <spring:message code="review.scoreAssign"/>
-                            <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
+                            <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
                         </form:label>
                         <form:input path="score" type="text" class="form-control" id="reviewFormScoreInput" placeholder="0"/>
                         <form:errors path="score" element="p" cssClass="form-error-label"/>
                     </div>
                 </div>
             </div>
+            <div class="p-0 mt-3 mb-0 d-flex justify-content-around">
+                <a href="<c:url value = "/"/>">
+                    <button class="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
+                        <spring:message code="experienceForm.cancel"/>
+                    </button>
+                </a>
+                <button type="submit" class="btn btn-submit-form px-3 py-2" id="createReviewFormButton" form="createReviewForm">
+                    <spring:message code="experienceForm.submit"/>
+                </button>
+            </div>
         </form:form>
         <%@ include file="../components/footer.jsp" %>
     </div>
     <%@ include file="../components/includes/bottomScripts.jsp" %>
+    <script src='<c:url value="/resources/js/createReview.js"/>'></script>
+
 </body>

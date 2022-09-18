@@ -1,6 +1,9 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
+import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.services.ExperienceService;
+import ar.edu.itba.getaway.services.ReviewService;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,9 @@ import java.util.Date;
 public class ReviewFormController {
     @Autowired
     ExperienceService experienceService;
+
+    @Autowired
+    ReviewService reviewService;
 
     @RequestMapping(value = "/{categoryName}/{experienceId}/create_review", method = {RequestMethod.GET})
     public ModelAndView createReviewForm(@PathVariable("categoryName") final String categoryName,
@@ -41,9 +47,12 @@ public class ReviewFormController {
             return createReviewForm(categoryName, experienceId, form);
         }
 
-
         Date date = Date.from(Instant.now());
-        System.out.println(date);
+
+        //TODO usuario forzado
+        long userId = 1;
+        final ReviewModel reviewModel = reviewService.create(form.getTitle(), form.getDescription(), form.getLongScore(), experienceId ,date, userId);
+
         return new ModelAndView("redirect:/" + categoryName + "/" + experienceId);
     }
 }

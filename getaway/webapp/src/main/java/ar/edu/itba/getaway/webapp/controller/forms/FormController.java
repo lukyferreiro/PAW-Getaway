@@ -5,7 +5,6 @@ import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +33,7 @@ public class FormController {
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form) {
-        final ModelAndView mav = new ModelAndView("form");
+        final ModelAndView mav = new ModelAndView("experience_form");
         ExperienceCategory[] categoryModels = ExperienceCategory.values();
         List<String> categories = new ArrayList<>();
         for (ExperienceCategory categoryModel : categoryModels) {

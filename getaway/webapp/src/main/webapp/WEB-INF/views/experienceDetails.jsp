@@ -125,7 +125,7 @@
             <c:forEach var="review" items="${reviews}">
                <div class="card card-review mx-3 my-2 p-0">
                   <img class="user-img" src="<c:url value = "/resources/images/ic_user.png" />" alt="User"> User name</div>
-                  <div class="card-body container-fluid p-2">
+                  <div class="card-body p-2">
                         <h2 class="card-title container-fluid p-0"><c:out value="${review.title}"/></h2>
                         <div class="card-text container-fluid p-0">
                            <h5 class="text-truncate"><c:out value="${review.description}"/></h5>
