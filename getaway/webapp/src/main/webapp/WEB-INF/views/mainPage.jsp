@@ -24,7 +24,7 @@
          <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
             <c:forEach var="activity" items="${activities}">
                <div class="card card-experience mx-3 my-2 p-0">
-                  <a class="card-link" href="<c:url value="${activity.categoryName}/${activity.id}"/>">
+                  <a class="card-link" href="<c:url value="/experiences/${activity.categoryName}/${activity.id}"/>">
                      <c:choose>
                         <c:when test="${activity.hasImage == false}">
                            <c:if test="${activity.categoryId == 1}">

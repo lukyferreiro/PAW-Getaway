@@ -2,9 +2,13 @@ package ar.edu.itba.getaway.webapp.controller.forms;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
+import ar.edu.itba.getaway.webapp.auth.MyUserDetails;
+import ar.edu.itba.getaway.webapp.exceptions.AccessDeniedException;
 import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +34,8 @@ public class ExperienceFormController {
     ImageService imageService;
     @Autowired
     ImageExperienceService imageExperienceService;
+    @Autowired
+    UserService userService;
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form) {
@@ -54,7 +60,8 @@ public class ExperienceFormController {
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
     public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,
-                                       final BindingResult errors) throws Exception {
+                                       final BindingResult errors,
+                                       @AuthenticationPrincipal MyUserDetails userDetails) throws Exception {
 
         if (errors.hasErrors()) {
             return createActivityForm(form);
@@ -70,8 +77,15 @@ public class ExperienceFormController {
 
         long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
 
-        //TODO usuario forzado
-        int userId = 1;
+        long userId;
+        try {
+            String email = userDetails.getUsername();
+            UserModel userModel = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
+            userId = userModel.getId();
+        }catch (NullPointerException e){
+            throw new AccessDeniedException();
+        }
+
         Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
         String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
         String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
@@ -85,11 +99,8 @@ public class ExperienceFormController {
         else {
             experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(), description, url, price, cityId, categoryId + 1, userId, false);
         }
-        //TODO check pq ahora como agregue la flecha para volver hacias atras en los detalles de la actividad
-        //y al terminar el formulario me redigire a los detalles de la actividad, si todo en la flecha de volver
-        //hacia atras me lleva devuelta al formulario
-        // return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
-        return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/");
+
+        return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
     }
 
 }
