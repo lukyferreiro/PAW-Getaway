@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
 
     private void sendVerificationToken(UserModel userModel, VerificationToken token) {
         try {
-            String url = new URL("http", appBaseUrl, "/user/resetPassword?token=" + token.getValue()).toString();
+            String url = new URL("http", appBaseUrl, "/user/verifyAccount?token=" + token.getValue()).toString();
 //            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount?token=" + token.getValue()).toString();
             Map<String, Object> mailAttrs = new HashMap<>();
             mailAttrs.put("confirmationURL", url);

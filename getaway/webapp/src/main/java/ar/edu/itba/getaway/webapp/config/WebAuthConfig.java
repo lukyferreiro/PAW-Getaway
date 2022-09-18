@@ -64,10 +64,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                     //Session routes
                     .antMatchers("/login", "/register").anonymous()
-//                    .antMatchers(HttpMethod.POST, "/user/verifyAccount/resend").hasRole("NOT_VERIFIED")
-//                    .antMatchers("/user/verifyAccount/resendConfirmation").hasRole("NOT_VERIFIED")
-//                    .antMatchers("/user/verifyAccount").hasRole("USER")
-//                    .antMatchers("/logout").authenticated()
+                    .antMatchers("/user/verifyAccount/send").hasRole("NOT_VERIFIED")
+                    .antMatchers("/user/verifyAccount/resend").hasRole("NOT_VERIFIED")
+                    .antMatchers("/user/verifyAccount").hasRole("NOT_VERIFIED")
+                    .antMatchers("/user/verifyAccount/unsuccessfull").hasRole("NOT_VERIFIED")
+                    .antMatchers("/user/verifyAccount/successfull").hasRole("VERIFIED")
+                    .antMatchers("/logout").authenticated()
 
                     //Profile routes
 //                    .antMatchers("/user/account").hasRole("USER")
@@ -75,7 +77,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 //                            "/user/account/updateCoverImage", "/user/account/updateInfo",
 //                            "/user/account/updateProfileImage").hasRole("VERIFIED")
                     //Experiences
-                    .antMatchers("/create_experience").hasRole("USER")
+                    .antMatchers("/create_experience").authenticated()
 //                    .antMatchers("/experiences/{categoryName}").permitAll()
 //                    .antMatchers("/create_experience").hasRole("VERIFIED")
                     //else
@@ -96,7 +98,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/")
                 .and().exceptionHandling()
-                    .accessDeniedPage("/403")   //TODO change
+                    .accessDeniedPage("/")
                 .and().csrf().disable();
     }
 

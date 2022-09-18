@@ -5,6 +5,7 @@ import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.services.ImageService;
 import ar.edu.itba.getaway.services.UserService;
+import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.RegisterForm;
 import ar.edu.itba.getaway.webapp.forms.ResetPasswordEmailForm;
 import ar.edu.itba.getaway.webapp.forms.ResetPasswordForm;
@@ -66,7 +67,7 @@ public class WebAuthController {
             return register(form);
         }
 
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/user/verifyAccount/send");
     }
 
     @RequestMapping("/login")
@@ -75,6 +76,57 @@ public class WebAuthController {
         mav.addObject("error", error);
         return mav;
     }
+
+    /*-----------------------------------------------------
+    --------------------Verify Account---------------------
+     -----------------------------------------------------*/
+
+    @RequestMapping(path = "/user/verifyAccount/send")
+    public ModelAndView sendAccountVerification() {
+        return new ModelAndView("verifySended");
+    }
+
+    @RequestMapping(path = "/user/verifyAccount")
+    public ModelAndView verifyAccount(HttpServletRequest request,
+                                      @RequestParam(defaultValue = "") String token) {
+
+        final Optional<UserModel> userOptional = userService.verifyAccount(token);
+//        boolean success = false;
+
+//        final ModelAndView mav = new ModelAndView("verifyUnseccesfully");
+        if (userOptional.isPresent()) {
+//            success = true;
+            UserModel user = userOptional.get();
+            forceLogin(user, request);
+//            mav.addObject("loggedUser", user);
+            return new ModelAndView("redirect:/user/verifyAccount/succesfull");
+        }
+//        mav.addObject("success", success);
+        return new ModelAndView("redirect:/user/verifyAccount/unsuccesfull");
+    }
+
+    @RequestMapping(path = "/user/verifyAccount/resend")
+    public ModelAndView resendAccountVerification() {
+        final UserModel user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
+                .orElseThrow(UserNotFoundException::new);
+        userService.resendVerificationToken(user);
+
+//        final ModelAndView mav = new ModelAndView("redirect:/user/verifyAccount/send");
+//        mav.addObject("loggedUser", user);
+
+        return new ModelAndView("redirect:/user/verifyAccount/send");
+    }
+
+    @RequestMapping(path = "/user/verifyAccount/unsuccessfull")
+    public ModelAndView unsuccesfullyAccountVerification() {
+        return new ModelAndView("verifyUnsuccefully");
+    }
+
+    @RequestMapping(path = "/user/verifyAccount/successfull")
+    public ModelAndView succesfullyAccountVerification() {
+        return new ModelAndView("verifySuccefully");
+    }
+
 
     /*-----------------------------------------------------
     --------------------Reset Password---------------------
