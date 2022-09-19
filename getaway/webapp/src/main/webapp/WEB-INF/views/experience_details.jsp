@@ -6,6 +6,7 @@
    <head>
       <title><spring:message code="pageName"/> - <c:out value="${activity.name}"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
+      <link href="<c:url value = "/resources/css/start_rating.css" />" rel="stylesheet">
    </head>
 
    <body>
@@ -104,6 +105,13 @@
                   </div>
                </div>
             </div>
+            <div class="mx-5 my-3">
+               <a href="<c:url value = "/experiences/${activity.categoryName}/${activity.id}/create_review"/>">
+                  <button type="button" class="btn btn-create-review">
+                     <spring:message code="review.createReview"/>
+                  </button>
+               </a>
+            </div>
 
             <!-- --------------RESEÑAS-------------- -->
             <c:choose>
@@ -113,12 +121,6 @@
                         <h2 class="align-self-center">
                            <spring:message code="review.start"/>
                         </h2>
-
-                        <a href="<c:url value = "/experiences/${activity.categoryName}/${activity.id}/create_review"/>">
-                           <button type="button" class="btn btn-create-review">
-                              <spring:message code="review.createReview"/>
-                           </button>
-                        </a>
                      </div>
 
                      <c:forEach var="review" items="${reviews}">
@@ -126,15 +128,54 @@
                            <div class="card-title d-flex">
                               <div class="col m-2">
                                  <img class="user-img" src="<c:url value = "/resources/images/ic_user.png" />" alt="User"/>
-                                 <h5><c:out value="User name"/></h5>
+                                 <h5><c:out value="${review.userName}"/> <c:out value="${review.userSurname}"/></h5>
                               </div>
                               <h2 class="col m-2"><c:out value="${review.title}"/></h2>
                            </div>
                            <div class="col card-body p-2 mw-25">
                               <div class="card-text">
                                  <h5 class="text-truncate"><c:out value="${review.description}"/></h5>
-                                 <h6><spring:message code="review.score"/> <c:out value="${review.score}"/></h6>
                                  <h6><spring:message code="review.date"/> <c:out value="${review.reviewDate}"/></h6>
+                                 <h6><spring:message code="review.score"/></h6>
+                                 <div class="star-rating">
+                                    <c:choose>
+                                       <c:when test="${review.score == 1}">
+                                          <i class="fas fa-star"></i>
+                                          <i class="fas fa-star"></i>
+                                          <i class="fas fa-star"></i>
+                                          <i class="fas fa-star"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                       </c:when>
+                                       <c:when test="${review.score == 2}">
+                                          <i class="fas fa-star"></i>
+                                          <i class="fas fa-star"></i>
+                                          <i class="fas fa-star"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                       </c:when>
+                                       <c:when test="${review.score == 3}">
+                                          <i class="fas fa-star"></i>
+                                          <i class="fas fa-star"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                       </c:when>
+                                       <c:when test="${review.score == 4}">
+                                          <i class="fas fa-star"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                       </c:when>
+                                       <c:when test="${review.score == 5}">
+                                          <i class="fas fa-star star-color"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                          <i class="fas fa-star star-color"></i>
+                                       </c:when>
+                                    </c:choose>
+                                 </div>
                               </div>
                            </div>
                         </div>

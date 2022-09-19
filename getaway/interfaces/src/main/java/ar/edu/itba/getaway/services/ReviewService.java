@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.ReviewModel;
+import ar.edu.itba.getaway.models.ReviewUserModel;
 
 import java.util.Date;
 import java.util.List;
@@ -10,4 +11,5 @@ public interface ReviewService {
     List<ReviewModel> getReviewsFromId(long experienceId);
     Double getAverageScore(long experienceId);
     Integer getReviewCount(long experienceId);
+    List<ReviewUserModel> getReviewAndUser(long experienceId);
 }
