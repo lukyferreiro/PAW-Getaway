@@ -48,8 +48,6 @@ public class ExperienceController {
         List<ExperienceModel> experienceList;
         List<CityModel> cityModels = cityService.listAll();
 
-
-
         //Filtros
         if (cityId.isPresent()) {
             if (maxPrice.isPresent() && maxPrice.get() > 0) {
@@ -78,11 +76,7 @@ public class ExperienceController {
     public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
         Optional<ImageModel> optionalImageModel = imageService.getByExperienceId(experienceId);
 
-        if(optionalImageModel.isPresent()){
-            return optionalImageModel.get().getImage();
-        }
-
-        return null;
+        return optionalImageModel.map(ImageModel::getImage).orElse(null);
     }
 
     @RequestMapping("/experiences/{categoryName}/{experienceId}")

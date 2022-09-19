@@ -44,6 +44,7 @@ public class ExperienceFormController {
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form) {
         final ModelAndView mav = new ModelAndView("experience_form");
+
         ExperienceCategory[] categoryModels = ExperienceCategory.values();
         List<String> categories = new ArrayList<>();
         for (ExperienceCategory categoryModel : categoryModels) {
@@ -76,9 +77,6 @@ public class ExperienceFormController {
             throw new CategoryNotFoundException();
         }
 
-        //TODO NO FUNCIONA PQ ESTA BUSCANDO NOMBRES EN CASTELLANO Y ESTAN GUARDADOS EN INGLES
-        //long categoryId = categoryService.getByName(form.getActivityCategory()).get().getId();
-
         long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
 
         long userId;
@@ -86,7 +84,7 @@ public class ExperienceFormController {
             String email = userDetails.getUsername();
             UserModel userModel = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
             userId = userModel.getId();
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             throw new AccessDeniedException();
         }
 
@@ -95,22 +93,21 @@ public class ExperienceFormController {
         String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
         final ExperienceModel experienceModel;
 
-        MultipartFile activityImg=form.getActivityImg();
+        MultipartFile activityImg = form.getActivityImg();
 
         if (!activityImg.isEmpty()) {
 
-            if( contentTypes.contains(activityImg.getContentType() )){
-                experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(), description, url, price, cityId, categoryId + 1, userId, true);
+            if (contentTypes.contains(activityImg.getContentType())) {
+                experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(),
+                        description, url, price, cityId, categoryId + 1, userId, true);
                 final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
                 imageExperienceService.create(imageModel.getId(), experienceModel.getId(), true);
-            }
-            else {
+            } else {
                 return createActivityForm(form);
             }
-
-        }
-        else {
-            experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(), description, url, price, cityId, categoryId + 1, userId, false);
+        } else {
+            experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(),
+                    description, url, price, cityId, categoryId + 1, userId, false);
         }
 
         return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());

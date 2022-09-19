@@ -73,16 +73,16 @@ cancelFormButton.addEventListener("click", () => {
 // }
 
 
-countryInput.addEventListener("keyup", (event) => {
-    if (countryInput.value.length === 0) {
-        cityInput.setAttribute('disabled', 'true');
-    } else {
-
-        // getCities(countryInput.value);
-
-        // httpCitiesRequest.open("GET","http://localhost:8080/webapp_war/create_experience/get_cities/",true);
-        // httpCitiesRequest.send();
-
-        cityInput.removeAttribute('disabled');
-    }
-});
+// countryInput.addEventListener("keyup", (event) => {
+//     if (countryInput.value.length === 0) {
+//         cityInput.setAttribute('disabled', 'true');
+//     } else {
+//
+//         getCities(countryInput.value);
+//
+//         httpCitiesRequest.open("GET","http://localhost:8080/webapp_war/create_experience/get_cities/",true);
+//         httpCitiesRequest.send();
+//
+//         cityInput.removeAttribute('disabled');
+//     }
+// });

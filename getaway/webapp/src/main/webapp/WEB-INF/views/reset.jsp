@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> | Recuperar contraseña</title>
+      <title><spring:message code="pageName"/> | <spring:message code="reset.newPassword.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
    </head>
@@ -18,7 +18,7 @@
             <div class="row w-100 h-100 m-0 align-items-center justify-content-center">
                <div class="col-12">
                   <h1 class="text-center title">
-                     Ingresa tu nueva contraseña
+                     <spring:message code="reset.newPassword.description"/>
                   </h1>
                </div>
                <div class="col-12">
@@ -32,7 +32,7 @@
                               <form:input type="hidden" path="token" name="token" value="${token}"/>
                               <div class="form-group">
                                  <form:label path="password" for="password">
-                                    Nueva contraseña
+                                    <spring:message code="reset.newPassword.input"/>
                                  </form:label>
                                  <div class="input-group d-flex justify-content-start align-items-center">
                                     <form:input type="password" path="password" cssClass="form-control input"
@@ -49,7 +49,7 @@
                               </div>
                               <div class="form-group">
                                  <form:label path="confirmPassword" cssClass="mt-2" for="confirmPassword">
-                                    Confirmar contrase\u00F1a
+                                    <spring:message code="reset.newPassword.input2"/>
                                  </form:label>
                                  <div class="input-group d-flex justify-content-start align-items-center">
                                     <form:input type="text" path="confirmPassword" cssClass="form-control input"
@@ -69,7 +69,7 @@
                         </div>
                         <div class="col-12 mt-2 d-flex align-items-center justify-content-center">
                            <button form="passReset" id="sumbitBtn" type="submit" class="w-100 btn-continue my-2">
-                              Aplicar
+                              <spring:message code="reset.newPassword.applyBtn"/>
                            </button>
                         </div>
                      </div>

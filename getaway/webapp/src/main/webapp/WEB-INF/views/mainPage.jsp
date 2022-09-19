@@ -16,12 +16,6 @@
             <jsp:param name="hasSign" value="${hasSign}"/>
          </jsp:include>
 
-<%--         <div class="container-mainpage container-fluid p-0 d-flex justify-content-center align-items-center">--%>
-<%--            <div class="main-text container-fluid p-0 text-center font-weight-bold">--%>
-<%--               <spring:message code="mainPage.description"/>--%>
-<%--            </div>--%>
-<%--         </div>--%>
-
          <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
             <c:forEach var="activity" items="${activities}">
                <div class="card card-experience mx-3 my-2 p-0">

@@ -1,11 +1,11 @@
-<%--<%@ page contentType="text/html;charset=UTF-8" language="java" %>--%>
-<%--<%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>--%>
-<%--<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>--%>
-<%--<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<%--<html>--%>
-<%--   <head>--%>
-<%--      <title><spring:message code="pageName"/> | Verificar cuenta</title>--%>
+<html>
+   <head>
+      <title><spring:message code="pageName"/> | <spring:message code="verifySuccessfully.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
    </head>
@@ -19,10 +19,10 @@
                <div class="row w-100 h-100 m-0 align-items-center justify-content-center">
                   <div class="col-12">
                      <h1 class="text-center title">
-                        Tu cuenta se ha verificado con exito
+                        <spring:message code="verifySuccessfully.success"/>
                      </h1>
                      <p class="subtitle text-center mb-4">
-                        Comienza a disfrutar de los beneficios que Getaway tiene para ofrecerte.
+                        <spring:message code="verifySuccessfully.success.description"/>
                      </p>
                   </div>
                   <div class="col-12 d-flex align-items-center justify-content-center">
@@ -31,7 +31,7 @@
                   <div class="col-12 px-0 d-flex align-items-center justify-content-center">
                      <a href="<c:url value = "/"/>">
                         <button type="button" class="btn btn-continue">
-                           Inicio
+                           <spring:message code="verifySuccessfully.homeBtn"/>
                         </button>
                      </a>
                   </div>

@@ -12,7 +12,6 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -28,7 +27,7 @@ import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
 
 @EnableTransactionManagement
-//@EnableAsync
+@EnableAsync
 @EnableWebMvc
 @ComponentScan({"ar.edu.itba.getaway.webapp.controller", "ar.edu.itba.getaway.services", "ar.edu.itba.getaway.persistence"})
 @Configuration
@@ -108,8 +107,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return multipartResolver;
     }
 
-    // Con esto podemos anotar nuestras clases y métodos con @Transactional
-    // para que corran dentro de transacciones
+    // Para anotar clases y métodos con @Transactional
     @Bean
     public PlatformTransactionManager transactionManager(final DataSource ds) {
         return new DataSourceTransactionManager(ds);
@@ -118,6 +116,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean(name = "appBaseUrl")
     public String appBaseUrl() {
         return "localhost";
+//        return "localhost:8080/webapp_war_exploded";
 //        return "pawserver.it.itba.edu.ar";
     }
 

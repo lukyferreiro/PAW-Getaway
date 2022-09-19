@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> | Recuperar contraseña</title>
+      <title><spring:message code="pageName"/> | <spring:message code="resetPasswordResult.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
    </head>
@@ -21,10 +21,10 @@
                      <c:when test="${success}">
                         <div class="col-12">
                            <h1 class="text-center title">
-                              Tu contraseña ha sido cambiada con exito!
+                              <spring:message code="resetPasswordResult.successfull"/>
                            </h1>
                            <p class="subtitle text-center mb-4">
-                              Comienza a disfrutar de los beneficios que Getaway tiene para ofrecerte.
+                              <spring:message code="resetPasswordResult.successfull.description"/>
                            </p>
                         </div>
                         <div class="col-12 d-flex align-items-center justify-content-center">
@@ -34,10 +34,10 @@
                      <c:otherwise>
                         <div class="col-12">
                            <h1 class="text-center title">
-                              Ha ocurrido un error al cambiar tu contraseña!
+                              <spring:message code="resetPasswordResult.error"/>
                            </h1>
                            <p class="subtitle text-center mb-4">
-                              Checkea tus datos y solicita un nuevo enlace de recupero.
+                              <spring:message code="resetPasswordResult.error.description"/>
                            </p>
                         </div>
                         <div class="col-12 d-flex align-items-center justify-content-center">

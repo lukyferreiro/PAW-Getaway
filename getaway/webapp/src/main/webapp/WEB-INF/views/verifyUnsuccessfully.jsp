@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> | Verificar cuenta</title>
+      <title><spring:message code="pageName"/> | <spring:message code="verifyUnsuccessfully.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
    </head>
@@ -41,10 +41,10 @@
 <%--                     <c:otherwise>--%>
                   <div class="col-12">
                      <h1 class="text-center title">
-                        Ha ocurrido un error al verificar tu cuenta
+                        <spring:message code="verifyUnsuccessfully.unsuccess"/>
                      </h1>
                      <p class="subtitle text-center mb-4">
-                        Checkea tus datos y solicita un nuevo enlace de confirmacion.
+                        <spring:message code="verifyUnsuccessfully.unsuccess.description"/>
                      </p>
                   </div>
                   <div class="col-12 d-flex align-items-center justify-content-center">
@@ -53,7 +53,7 @@
                   <div class="col-12 px-0 d-flex align-items-center justify-content-center">
                      <a href="<c:url value = "/user/verifyAccount/resend"/>">
                         <button type="button" class="btn btn-continue">
-                           Volver a enviar
+                           <spring:message code="verifyUnsuccessfully.sentAgain"/>
                         </button>
                      </a>
                   </div>

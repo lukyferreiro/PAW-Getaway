@@ -19,10 +19,7 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -85,18 +82,17 @@ public class WebAuthController {
         return new ModelAndView("verifySended");
     }
 
-    @RequestMapping(path = "/user/verifyAccount")
+    @RequestMapping(path = "/user/verifyAccount/{token}")
     public ModelAndView verifyAccount(HttpServletRequest request,
-                                      @RequestParam String token) {
+                                      @PathVariable("token") final String token) {
 
         final Optional<UserModel> userOptional = userService.verifyAccount(token);
 //        boolean success = false;
 
-//        final ModelAndView mav = new ModelAndView("verifyUnseccesfully");
         if (userOptional.isPresent()) {
 //            success = true;
-            UserModel user = userOptional.get();
-            forceLogin(user, request);
+//            UserModel user = userOptional.get();
+//            forceLogin(user, request);
 //            mav.addObject("loggedUser", user);
             return new ModelAndView("redirect:/user/verifyAccount/succesfull");
         }
@@ -110,10 +106,10 @@ public class WebAuthController {
                 .orElseThrow(UserNotFoundException::new);
         userService.resendVerificationToken(user);
 
-//        final ModelAndView mav = new ModelAndView("redirect:/user/verifyAccount/send");
-//        mav.addObject("loggedUser", user);
+        final ModelAndView mav = new ModelAndView("redirect:/user/verifyAccount/send");
+        mav.addObject("loggedUser", user);
 
-        return new ModelAndView("redirect:/user/verifyAccount/send");
+        return mav;
     }
 
     @RequestMapping(path = "/user/verifyAccount/unsuccessfull")
@@ -154,8 +150,8 @@ public class WebAuthController {
         return new ModelAndView("/resetEmailConfirmation");
     }
 
-    @RequestMapping(path = "/user/resetPassword")
-    public ModelAndView resetPassword(@RequestParam(defaultValue = "") String token,
+    @RequestMapping(path = "/user/resetPassword/{token}")
+    public ModelAndView resetPassword(@PathVariable("token") String token,
                                       @ModelAttribute("resetPasswordForm") final ResetPasswordForm form) {
         if (userService.validatePasswordReset(token)) {
             final ModelAndView mav = new ModelAndView("reset");
@@ -215,6 +211,5 @@ public class WebAuthController {
                 .map((role) -> new SimpleGrantedAuthority("ROLE_" + role.name()))
                 .collect(Collectors.toList());
     }
-
 
 }

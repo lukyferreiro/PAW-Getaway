@@ -18,11 +18,10 @@ import java.util.Locale;
 @ControllerAdvice
 public class ErrorsController {
 
-    public static final String ERROR_VIEW = "errors";   //Server error
+    public static final String ERROR_VIEW = "errors";
 
     @Autowired
     private MessageSource messageSource;
-
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = ExperienceNotFoundException.class)

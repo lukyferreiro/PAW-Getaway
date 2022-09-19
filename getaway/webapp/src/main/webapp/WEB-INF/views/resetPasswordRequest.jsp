@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> | Recupera tu contraseña</title>
+      <title><spring:message code="pageName"/> | <spring:message code="resetPassword.emailConfirmation.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
    </head>
@@ -18,7 +18,7 @@
             <div class="row w-100 h-100 m-0 align-items-center justify-content-center">
                <div class="col-12">
                   <h1 class="text-center title">
-                    Ingresa tu email para recibir un enlace de recuperacion
+                     <spring:message code="resetPassword.emailConfirmation.description"/>
                   </h1>
                </div>
                <div class="col-12">
@@ -28,7 +28,7 @@
                            <c:url var="postUrl" value='/user/resetPasswordRequest'/>
                            <form:form id="passResetRequest" modelAttribute="resetPasswordEmailForm" action="${postUrl}" method="POST">
                               <form:label path="email" for="email">
-                                 Email
+                                 <spring:message code="resetPassword.emailConfirmation.email"/>
                               </form:label>
                               <form:input path="email" type="text" class="form-control input"
                                           id="email" name="email"/>
@@ -37,7 +37,7 @@
                         </div>
                         <div class="col-12 mt-2 d-flex align-items-center justify-content-center">
                            <button form="passResetRequest" type="submit" class="w-100 btn-continue my-2">
-                              Enviar
+                              <spring:message code="resetPassword.emailConfirmation.applyBtn"/>
                            </button>
                         </div>
                      </div>

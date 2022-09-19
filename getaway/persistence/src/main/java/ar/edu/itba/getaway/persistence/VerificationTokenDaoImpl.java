@@ -21,8 +21,8 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
 
-    private static final RowMapper<VerificationToken> VERIFICATION_TOKEN_ROW_MAPPER =
-            (rs, rowNum) -> new VerificationToken(rs.getLong("verifid"),
+    private static final RowMapper<VerificationToken> VERIFICATION_TOKEN_ROW_MAPPER = (rs, rowNum) ->
+            new VerificationToken(rs.getLong("verifid"),
                     rs.getString("verifToken"),
                     rs.getLong("verifUserId"),
                     rs.getTimestamp("verifExpirationDate").toLocalDateTime());
@@ -60,7 +60,7 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
 
     @Override
     public void removeTokenById(long id) {
-        jdbcTemplate.update("DELETE from verificationToken where verifId = ?", id);
+        jdbcTemplate.update("DELETE FROM verificationToken WHERE verifId = ?", id);
     }
 
     @Override

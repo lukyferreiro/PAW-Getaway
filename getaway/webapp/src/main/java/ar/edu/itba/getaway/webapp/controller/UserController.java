@@ -19,20 +19,20 @@ public class UserController {
     @ModelAttribute("loggedUser")
     public UserModel loggedUser(Model model) {
 
-        if (model.containsAttribute("loggedUser"))
+        if (model.containsAttribute("loggedUser")) {
             return (UserModel) model.asMap().get("loggedUser");
+        }
 
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (!isAnonymous(auth))
+        if (!isAnonymous(auth)) {
             return userService.getUserByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
-
+        }
         return null;
     }
 
     private boolean isAnonymous(Authentication auth) {
         return auth.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ANONYMOUS"));
     }
-
 
 }

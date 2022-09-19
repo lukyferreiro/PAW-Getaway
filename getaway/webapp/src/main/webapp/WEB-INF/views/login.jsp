@@ -76,7 +76,7 @@
 
                            <div class="col-12 mt-3 d-flex justify-content-start align-items-center">
                               <input type="checkbox" id="rememberMe" name="rememberMe"/>
-                              <label class="mb-0 mx-2" style="font-size: medium">
+                              <label class="mb-0 mx-2" for="rememberMe" style="font-size: medium">
                                  <spring:message code="loginForm.rememberme"/>
                               </label>
                            </div>

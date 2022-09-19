@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> | Enlace enviado </title>
+      <title><spring:message code="pageName"/> | <spring:message code="verifySent.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
    </head>
@@ -19,10 +19,10 @@
                <div class="row w-100 h-100 m-0 align-items-center justify-content-center">
                   <div class="col-12">
                      <h1 class="text-center title">
-                        Se te ha enviando un enlace de verificacion
+                        <spring:message code="verifySent.sent"/>
                      </h1>
                      <p class="subtitle text-center mb-4">
-                        Revisa tu direccion de correo y verifica tu cuenta.
+                        <spring:message code="verifySent.revise"/>
                      </p>
                   </div>
                   <div class="col-12 d-flex align-items-center justify-content-center">
@@ -31,7 +31,7 @@
                   <div class="col-12 px-0 d-flex align-items-center justify-content-center">
                      <a href="<c:url value = "/"/>">
                         <button type="button" class="btn btn-continue">
-                           Inicio
+                           <spring:message code="verifySent.homeBtn"/>
                         </button>
                      </a>
                   </div>

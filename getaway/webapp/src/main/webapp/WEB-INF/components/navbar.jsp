@@ -10,9 +10,9 @@
                 <spring:message code="pageName"/>
             </span>
       </a>
-<%--      <a href="<c:url value = "/"/>" class="link-home" >--%>
-<%--         <spring:message code="navbar.home"/>--%>
-<%--      </a>--%>
+      <%--      <a href="<c:url value = "/"/>" class="link-home" >--%>
+      <%--         <spring:message code="navbar.home"/>--%>
+      <%--      </a>--%>
       <div class="container-header-btn d-flex justify-content-between">
          <a href="<c:url value = "/create_experience"/>">
             <button type="button" class="btn btn-header">
@@ -28,7 +28,7 @@
                </a>
             </c:when>
             <c:otherwise>
-               <div  class="dropdown">
+               <div class="dropdown">
                   <button class="btn btn-header dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                      <spring:message code="navbar.user"/>
                   </button>
@@ -50,8 +50,6 @@
                      </a>
                   </ul>
                </div>
-
-
             </c:otherwise>
          </c:choose>
       </div>

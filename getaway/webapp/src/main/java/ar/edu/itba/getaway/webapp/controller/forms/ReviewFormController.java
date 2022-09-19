@@ -26,12 +26,11 @@ import java.util.Date;
 
 @Controller
 public class ReviewFormController {
+
     @Autowired
     ExperienceService experienceService;
-
     @Autowired
     ReviewService reviewService;
-
     @Autowired
     UserService userService;
 
@@ -39,12 +38,7 @@ public class ReviewFormController {
     public ModelAndView createReviewForm(@PathVariable("categoryName") final String categoryName,
                                          @PathVariable("experienceId") final long experienceId,
                                          @ModelAttribute("reviewForm") final ReviewForm form) {
-        final ModelAndView mav = new ModelAndView("review_form");
-
-        String dbCategoryName = "Crear Reseña";
-        mav.addObject("dbCategoryName", dbCategoryName);
-
-        return mav;
+        return new ModelAndView("review_form");
     }
 
     @RequestMapping(value = "/experiences/{categoryName}/{experienceId}/create_review", method = {RequestMethod.POST})
@@ -68,7 +62,8 @@ public class ReviewFormController {
             throw new AccessDeniedException();
         }
 
-        final ReviewModel reviewModel = reviewService.create(form.getTitle(), form.getDescription(), form.getLongScore(), experienceId ,date, userId);
+        final ReviewModel reviewModel = reviewService.create(form.getTitle(), form.getDescription(),
+                form.getLongScore(), experienceId ,date, userId);
 
         return new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
     }
