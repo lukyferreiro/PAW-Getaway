@@ -12,7 +12,7 @@
    <body>
       <div class="container-main">
          <jsp:include page="/WEB-INF/components/navbar.jsp">
-            <jsp:param name="hasSign" value="${hasSign}"/>
+            <jsp:param name="loggedUser" value="${loggedUser}"/>
          </jsp:include>
 <%--         <%@ include file="../components/navbar.jsp" %>--%>
 

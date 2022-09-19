@@ -12,10 +12,12 @@
 
    <body>
       <div class="container-main">
-         <%@ include file="../components/simpleNavbar.jsp" %>
+         <jsp:include page="/WEB-INF/components/simpleNavbar.jsp">
+            <jsp:param name="loggedUser" value="${loggedUser}"/>
+         </jsp:include>
 
-         <div class="container-lg p-5 mt-5 smallContentContainer">
-            <div class="row w-100 h-100 m-0 align-items-center justify-content-center">
+         <div class="container-lg h-100 smallContentContainer d-flex align-items-center justify-content-center">
+            <div class="row w-75 m-0 align-items-center justify-content-center">
                <div class="col-12">
                   <h1 class="text-center title">
                      <spring:message code="resetPassword.emailConfirmation.description"/>
@@ -26,17 +28,19 @@
                      <div class="row">
                         <div class="col-12 mt-4">
                            <c:url var="postUrl" value='/user/resetPasswordRequest'/>
-                           <form:form id="passResetRequest" modelAttribute="resetPasswordEmailForm" action="${postUrl}" method="POST">
-                              <form:label path="email" for="email">
+                           <form:form id="passResetRequest" modelAttribute="resetPasswordEmailForm" action="${postUrl}" method="POST" acceptCharset="UTF-8">
+                              <form:label path="email" for="email" class="form-label">
                                  <spring:message code="resetPassword.emailConfirmation.email"/>
+                                 <span class="required-field">*</span>
                               </form:label>
-                              <form:input path="email" type="text" class="form-control input"
-                                          id="email" name="email"/>
-                              <form:errors path="email" cssClass="formError" element="p"/>
+                              <spring:message code="resetPasswordEmailForm.email.placeholder" var="placeholder"/>
+                              <form:input path="email" type="text" class="form-control input" placeholder="${placeholder}"
+                                          id="email" name="email" cssErrorClass="form-control is-invalid"/>
+                              <form:errors path="email" cssClass="form-error-label" element="p"/>
                            </form:form>
                         </div>
                         <div class="col-12 mt-2 d-flex align-items-center justify-content-center">
-                           <button form="passResetRequest" type="submit" class="w-100 btn-continue my-2">
+                           <button form="passResetRequest" type="submit" class="btn btn-continue">
                               <spring:message code="resetPassword.emailConfirmation.applyBtn"/>
                            </button>
                         </div>

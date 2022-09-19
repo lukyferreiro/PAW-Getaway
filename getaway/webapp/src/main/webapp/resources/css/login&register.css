@@ -48,6 +48,21 @@
     font-weight: bold;
 }
 
+.btn-create-account:hover, .btn-login:hover,
+.btn-create-account:focus, .btn-login:focus {
+    color: white;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+
+
+.btn-login:disabled, .btn-create-account:disabled {
+    color: white;
+    border-color: var(--third-color);
+    background-color: var(--third-color);
+}
 
 .form-control:focus, .form-control:active {
     border-color: var(--primary-color) !important;

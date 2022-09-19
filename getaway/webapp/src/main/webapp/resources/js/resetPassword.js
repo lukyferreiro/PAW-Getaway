@@ -2,13 +2,13 @@ let resetForm = document.getElementById("passReset")
 let processing = false;
 let resetBtn = document.getElementById("sumbitBtn");
 resetBtn.addEventListener("click", () => {
-    if(processing){
+    if (processing) {
         return;
     }
-    processing=true;
+    processing = true;
     resetBtn.disabled = true;
     resetForm.submit();
-    processing=false;
+    processing = false;
 })
 
 let eyeBtn1 = document.getElementById("passwordEye1");

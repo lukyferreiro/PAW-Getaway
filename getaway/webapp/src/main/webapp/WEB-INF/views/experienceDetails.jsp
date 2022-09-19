@@ -12,9 +12,8 @@
    <body>
       <div class="container-main">
          <jsp:include page="/WEB-INF/components/navbar.jsp">
-            <jsp:param name="hasSign" value="${hasSign}"/>
+            <jsp:param name="loggedUser" value="${loggedUser}"/>
          </jsp:include>
-<%--         <%@ include file="../components/navbar.jsp" %>--%>
 
          <div class="card mx-5 my-3 p-4">
             <div class="card-title d-flex justify-content-between">

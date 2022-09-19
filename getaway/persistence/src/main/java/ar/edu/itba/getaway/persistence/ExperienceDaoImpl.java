@@ -131,10 +131,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
     @Override
     public String getCountryCity(long experienceId){
         return jdbcTemplate.queryForObject("WITH country_city_name AS (" +
-                "SELECT cityname AS city_name, countryname AS country_name, cityid FROM argentinacities, countries" +
-                "WHERE argentinacities.countryid = countries.countryid )" +
-                "SELECT CONCAT(country_name, ', ', city_name) FROM country_city_name WHERE cityid =" +
-                "(SELECT cityid FROM experiences WHERE experienceid = ?)",
+                " SELECT cityname AS city_name, countryname AS country_name, cityid FROM argentinacities, countries" +
+                " WHERE argentinacities.countryid = countries.countryid )" +
+                " SELECT CONCAT(country_name, ', ', city_name) FROM country_city_name WHERE cityid =" +
+                " (SELECT cityid FROM experiences WHERE experienceid = ?)",
                 new Object[] {experienceId}, String.class);
     }
 

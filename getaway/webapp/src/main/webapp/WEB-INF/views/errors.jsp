@@ -24,8 +24,9 @@
    <body>
       <div class="container-main">
          <jsp:include page="/WEB-INF/components/navbar.jsp">
-            <jsp:param name="hasSign" value="${hasSign}"/>
+            <jsp:param name="loggedUser" value="${loggedUser}"/>
          </jsp:include>
+
          <div class="container-fluid p-0 h-100 d-flex justify-content-center align-items-center">
             <div class="container-fluid p-0 d-flex flex-column justify-content-center align-items-center" style="width: 60%">
                <h1 class="font-weight-bold m-0" style="font-size: 15vh;">

@@ -11,7 +11,10 @@
 
    <body>
       <div class="container-main">
-         <%@ include file="../components/navbar.jsp" %>
+         <jsp:include page="/WEB-INF/components/navbar.jsp">
+            <jsp:param name="loggedUser" value="${loggedUser}"/>
+         </jsp:include>
+
          <div class="justify-content-center">
             <form:form modelAttribute="reviewForm" action="${postPath}" id="createReviewForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
                <div class="container-inputs">
@@ -37,7 +40,8 @@
                            <spring:message code="review.scoreAssign"/>
                            <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
                         </form:label>
-                        <form:input path="score" type="text" class="form-control" id="reviewFormScoreInput" placeholder="0"/>
+                        <spring:message code="reviewForm.score.placeholder" var="placeholder"/>
+                        <form:input path="score" type="text" class="form-control" id="reviewFormScoreInput" placeholder="${placeholder}"/>
                         <form:errors path="score" element="p" cssClass="form-error-label"/>
                      </div>
                   </div>

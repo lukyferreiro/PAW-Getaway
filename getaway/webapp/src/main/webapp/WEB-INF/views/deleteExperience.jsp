@@ -12,7 +12,9 @@
 
    <body>
       <div class="container-main">
-         <%@ include file="../components/simpleNavbar.jsp" %>
+         <jsp:include page="/WEB-INF/components/simpleNavbar.jsp">
+            <jsp:param name="loggedUser" value="${loggedUser}"/>
+         </jsp:include>
 
          <div class="container-fluid py-4 px-0 d-flex align-items-center">
             <div class="container-lg p-5 mt-5 smallContentContainer">

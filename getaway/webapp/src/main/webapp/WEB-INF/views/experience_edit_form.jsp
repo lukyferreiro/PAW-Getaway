@@ -11,7 +11,9 @@
 
    <body>
       <div class="container-main">
-         <%@ include file="../components/navbar.jsp" %>
+         <jsp:include page="/WEB-INF/components/navbar.jsp">
+            <jsp:param name="loggedUser" value="${loggedUser}"/>
+         </jsp:include>
 
          <div class="d-flex flex-column justify-content-center mx-5 my-2 p-0">
             <h2 class="text-center font-weight-bold">

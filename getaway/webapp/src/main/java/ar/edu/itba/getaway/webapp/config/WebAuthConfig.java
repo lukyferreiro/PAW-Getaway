@@ -65,7 +65,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/user/verifyAccount/successfull").hasRole("VERIFIED")
                     .antMatchers("/logout").authenticated()
                     //Profile routes
-//                    .antMatchers("/user/account").hasRole("USER")
+                    .antMatchers("/user/experiences").authenticated()
 //                    .antMatchers("/user/account/search", "/user/account/update",
 //                            "/user/account/updateCoverImage", "/user/account/updateInfo",
 //                            "/user/account/updateProfileImage").hasRole("VERIFIED")
