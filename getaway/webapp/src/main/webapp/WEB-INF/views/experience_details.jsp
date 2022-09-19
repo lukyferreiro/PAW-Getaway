@@ -104,6 +104,13 @@
                   </div>
                </div>
             </div>
+            <div class="mx-5 my-3">
+               <a href="<c:url value = "/experiences/${activity.categoryName}/${activity.id}/create_review"/>">
+                  <button type="button" class="btn btn-create-review">
+                     <spring:message code="review.createReview"/>
+                  </button>
+               </a>
+            </div>
 
             <!-- --------------RESEÑAS-------------- -->
             <c:choose>
@@ -113,12 +120,6 @@
                         <h2 class="align-self-center">
                            <spring:message code="review.start"/>
                         </h2>
-
-                        <a href="<c:url value = "/experiences/${activity.categoryName}/${activity.id}/create_review"/>">
-                           <button type="button" class="btn btn-create-review">
-                              <spring:message code="review.createReview"/>
-                           </button>
-                        </a>
                      </div>
 
                      <c:forEach var="review" items="${reviews}">

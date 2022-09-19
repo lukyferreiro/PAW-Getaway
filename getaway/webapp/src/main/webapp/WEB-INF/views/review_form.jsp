@@ -7,6 +7,8 @@
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="review.titlePage"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
+      <link href="<c:url value = "/resources/css/start_rating.css" />" rel="stylesheet">
+
    </head>
 
    <body>
@@ -41,7 +43,19 @@
                            <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
                         </form:label>
                         <spring:message code="reviewForm.score.placeholder" var="placeholder"/>
-                        <form:input path="score" type="text" class="form-control" id="reviewFormScoreInput" placeholder="${placeholder}"/>
+                        <div class="star-rating">
+                           <input type="radio" id="star5" name="rating" value="5" />
+                           <label for="star5" class="fas fa-star"></label>
+                           <input type="radio" id="star4" name="rating" value="4" />
+                           <label for="star4" class="fas fa-star"></label>
+                           <input type="radio" id="star3" name="rating" value="3" />
+                           <label for="star3" class="fas fa-star"></label>
+                           <input type="radio" id="star2" name="rating" value="2" />
+                           <label for="star2" class="fas fa-star"></label>
+                           <input type="radio" id="star1" name="rating" value="1" />
+                           <label for="star1" class="fas fa-star"></label>
+                        </div>
+                        <form:input path="score" type="hidden" class="form-control" id="reviewFormScoreInput"/>
                         <form:errors path="score" element="p" cssClass="form-error-label"/>
                      </div>
                   </div>
@@ -63,5 +77,5 @@
       </div>
       <%@ include file="../components/includes/bottomScripts.jsp" %>
       <script src='<c:url value="/resources/js/createReview.js"/>'></script>
-
+      <script src="https://kit.fontawesome.com/5ea815c1d0.js"></script>
    </body>
