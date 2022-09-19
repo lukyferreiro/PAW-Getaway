@@ -89,7 +89,7 @@ public class ExperienceController {
     public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName,
                                        @PathVariable("experienceId") final long experienceId,
                                        @ModelAttribute("loggedUser") final UserModel loggedUser) {
-        final ModelAndView mav = new ModelAndView("experienceDetails");
+        final ModelAndView mav = new ModelAndView("experience_details");
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         String dbCategoryName = ExperienceCategory.valueOf(categoryName).getName();
