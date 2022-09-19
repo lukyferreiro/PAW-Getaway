@@ -73,4 +73,9 @@ public class ExperienceServiceImpl implements ExperienceService {
     public String getCountryCity(long experienceId) {
         return experienceDao.getCountryCity(experienceId);
     }
+
+    @Override
+    public List<ExperienceModel> getByUserId(long userId) {
+        return experienceDao.getByUserId(userId);
+    }
 }

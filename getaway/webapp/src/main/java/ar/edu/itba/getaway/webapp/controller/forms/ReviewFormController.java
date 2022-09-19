@@ -1,7 +1,7 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
-import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
+import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.services.ExperienceService;
 import ar.edu.itba.getaway.services.ReviewService;
@@ -28,16 +28,17 @@ import java.util.Date;
 public class ReviewFormController {
 
     @Autowired
-    ExperienceService experienceService;
+    private ExperienceService experienceService;
     @Autowired
-    ReviewService reviewService;
+    private ReviewService reviewService;
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @RequestMapping(value = "/experiences/{categoryName}/{experienceId}/create_review", method = {RequestMethod.GET})
     public ModelAndView createReviewForm(@PathVariable("categoryName") final String categoryName,
                                          @PathVariable("experienceId") final long experienceId,
-                                         @ModelAttribute("reviewForm") final ReviewForm form) {
+                                         @ModelAttribute("reviewForm") final ReviewForm form,
+                                         @AuthenticationPrincipal MyUserDetails userDetails) {
         return new ModelAndView("review_form");
     }
 
@@ -47,24 +48,27 @@ public class ReviewFormController {
                                              @Valid @ModelAttribute("reviewForm") final ReviewForm form,
                                              final BindingResult errors,
                                              @AuthenticationPrincipal MyUserDetails userDetails) {
+        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
+
         if (errors.hasErrors()) {
-            return createReviewForm(categoryName, experienceId, form);
+            return createReviewForm(categoryName, experienceId, form, userDetails);
         }
 
         Date date = Date.from(Instant.now());
-
         long userId;
         try {
             String email = userDetails.getUsername();
             UserModel userModel = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
             userId = userModel.getId();
+            mav.addObject("hasSign", userModel.hasRole(Roles.USER));
         }catch (NullPointerException e){
+            mav.addObject("hasSign", false);
             throw new AccessDeniedException();
         }
 
         final ReviewModel reviewModel = reviewService.create(form.getTitle(), form.getDescription(),
                 form.getLongScore(), experienceId ,date, userId);
 
-        return new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
+        return mav;
     }
 }

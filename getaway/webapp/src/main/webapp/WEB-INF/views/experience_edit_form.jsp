@@ -11,21 +11,18 @@
 
    <body>
       <div class="container-main">
-         <jsp:include page="/WEB-INF/components/navbar.jsp">
-            <jsp:param name="hasSign" value="${hasSign}"/>
-         </jsp:include>
-<%--         <%@ include file="../components/navbar.jsp" %>--%>
+         <%@ include file="../components/navbar.jsp" %>
 
          <div class="d-flex flex-column justify-content-center mx-5 my-2 p-0">
             <h2 class="text-center font-weight-bold">
                <spring:message code="createExperience.description"/>
             </h2>
 
-            <c:url value="/create_experience" var="postPath"/>
+            <c:url value="/edit/${experience.id}" var="postPath"/>
             <spring:message code="experienceForm.inputs.placeholder" var="placeholder"/>
             <spring:message code="experienceForm.activityMail.example" var="mailExample"/>
             <spring:message code="experienceForm.activityUrl.example" var="urlExample"/>
-            <form:form modelAttribute="experienceForm" action="${postPath}" id="createExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
+            <form:form modelAttribute="experienceForm" action="${postPath}" id="editExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
                <div class="container-inputs">
                   <div class="p-0 m-0 d-flex">
                      <div class="col m-2"> <!--Nombre de la experiencia-->
@@ -44,7 +41,14 @@
                         <form:select path="activityCategory" class="form-select" cssErrorClass="form-control is-invalid">
                            <option disabled selected value><c:out value="${placeholder}"/></option>
                            <c:forEach var="category" items="${categories}">
-                              <option><c:out value="${category}"/></option>
+                              <c:choose>
+                                 <c:when test="${category == experience.categoryName}">
+                                    <option selected><c:out value="${category}"/></option>
+                                 </c:when>
+                                 <c:otherwise>
+                                    <option><c:out value="${category}"/></option>
+                                 </c:otherwise>
+                              </c:choose>
                            </c:forEach>
                         </form:select>
                         <form:errors path="activityCategory" element="p" cssClass="form-error-label"/>
@@ -60,16 +64,16 @@
                      </div>
                   </div>
 
-<%--                                 <div class="p-0 m-2 d-flex flex-column"> <!--Tags-->--%>
-<%--                                   <form:label path="activityTags" class="form-label"><spring:message code="experienceForm.activityTags"/></form:label>--%>
-<%--                                   <form:input list="tagOptions" class="form-control" path="activityTags" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>--%>
-<%--                                   <datalist id="tagOptions">--%>
-<%--                                     <c:forEach var="tag" items="${tags}">--%>
-<%--                                     <option value="${tag.name}">--%>
-<%--                                       </c:forEach>--%>
-<%--                                   </datalist>--%>
-<%--                                   <form:errors path="activityTags" element="p" cssClass="form-error-label"/>--%>
-<%--                                 </div>--%>
+                     <%--                                 <div class="p-0 m-2 d-flex flex-column"> <!--Tags-->--%>
+                     <%--                                   <form:label path="activityTags" class="form-label"><spring:message code="experienceForm.activityTags"/></form:label>--%>
+                     <%--                                   <form:input list="tagOptions" class="form-control" path="activityTags" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>--%>
+                     <%--                                   <datalist id="tagOptions">--%>
+                     <%--                                     <c:forEach var="tag" items="${tags}">--%>
+                     <%--                                     <option value="${tag.name}">--%>
+                     <%--                                       </c:forEach>--%>
+                     <%--                                   </datalist>--%>
+                     <%--                                   <form:errors path="activityTags" element="p" cssClass="form-error-label"/>--%>
+                     <%--                                 </div>--%>
 
                   <div class="p-0 m-2 d-flex flex-column"> <!--Descripcion-->
                      <form:label path="activityInfo" class="form-label">
@@ -109,10 +113,10 @@
                         </form:label>
                         <form:select path="activityCountry" id="experienceFormCountryInput" class="form-select" cssErrorClass="form-control is-invalid">
                            <option disabled selected value><c:out value="${placeholder}"/></option>
-                           <option><c:out value="Argentina"/></option>
-<%--                           <c:forEach var="country" items="${countries}">--%>
-<%--                              <option><c:out value="${country.name}"/></option>--%>
-<%--                           </c:forEach>--%>
+                           <option selected><c:out value="Argentina"/></option>
+                           <%--                           <c:forEach var="country" items="${countries}">--%>
+                           <%--                              <option><c:out value="${country.name}"/></option>--%>
+                           <%--                           </c:forEach>--%>
                         </form:select>
                         <form:errors path="activityCountry" element="p" cssClass="form-error-label"/>
                      </div>
@@ -125,7 +129,14 @@
                                      cssErrorClass="form-control is-invalid" disabled="true">
                            <option disabled selected value><c:out value="${placeholder}"/></option>
                            <c:forEach var="city" items="${cities}">
-                              <option><c:out value="${city.name}"/></option>
+                              <c:choose>
+                                 <c:when test="${city.id == formCity}">
+                                    <option selected><c:out value="${city.name}"/></option>
+                                 </c:when>
+                                 <c:otherwise>
+                                    <option><c:out value="${city.name}"/></option>
+                                 </c:otherwise>
+                              </c:choose>
                            </c:forEach>
                         </form:select>
                         <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
@@ -156,7 +167,7 @@
                         <spring:message code="experienceForm.cancel"/>
                      </button>
                   </a>
-                  <button type="submit" class="btn btn-submit-form px-3 py-2" id="createExperienceFormButton" form="createExperienceForm">
+                  <button type="submit" class="btn btn-submit-form px-3 py-2" id="editExperienceFormButton" form="editExperienceForm">
                      <spring:message code="experienceForm.submit"/>
                   </button>
                </div>
@@ -167,6 +178,6 @@
       </div>
 
       <%@ include file="../components/includes/bottomScripts.jsp" %>
-      <script src='<c:url value="/resources/js/createExperience.js"/>'></script>
+      <script src='<c:url value="/resources/js/editExperience.js"/>'></script>
    </body>
 </html>

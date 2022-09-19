@@ -21,7 +21,7 @@ public class InitPageController {
     @Autowired
     private UserService userService;
     @Autowired
-    ExperienceService experienceService;
+    private ExperienceService experienceService;
 
     @RequestMapping(value = "/", method = {RequestMethod.GET})
     public ModelAndView init(@AuthenticationPrincipal MyUserDetails userDetails) {

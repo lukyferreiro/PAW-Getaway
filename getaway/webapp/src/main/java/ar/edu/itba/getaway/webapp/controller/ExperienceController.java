@@ -2,11 +2,14 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
+import ar.edu.itba.getaway.webapp.auth.MyUserDetails;
 import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -20,17 +23,20 @@ import java.util.Optional;
 public class ExperienceController {
 
     @Autowired
-    ExperienceService experienceService;
+    private UserService userService;
     @Autowired
-    CityService cityService;
+    private ExperienceService experienceService;
     @Autowired
-    ImageService imageService;
+    private CityService cityService;
     @Autowired
-    ReviewService reviewService;
+    private ImageService imageService;
+    @Autowired
+    private ReviewService reviewService;
 
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.GET})
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,
+                                   @AuthenticationPrincipal MyUserDetails userDetails,
                                    @RequestParam Optional<Long> cityId,
                                    @RequestParam Optional<Double> maxPrice) {
         final ModelAndView mav = new ModelAndView("experiences");
@@ -47,6 +53,14 @@ public class ExperienceController {
         int id = category.ordinal() + 1;
         List<ExperienceModel> experienceList;
         List<CityModel> cityModels = cityService.listAll();
+
+        try {
+            String email = userDetails.getUsername();
+            UserModel userModel = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
+            mav.addObject("hasSign", userModel.hasRole(Roles.USER));
+        } catch (NullPointerException e) {
+            mav.addObject("hasSign", false);
+        }
 
         //Filtros
         if (cityId.isPresent()) {
@@ -81,7 +95,8 @@ public class ExperienceController {
 
     @RequestMapping("/experiences/{categoryName}/{experienceId}")
     public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName,
-                                       @PathVariable("experienceId") final long experienceId) {
+                                       @PathVariable("experienceId") final long experienceId,
+                                       @AuthenticationPrincipal MyUserDetails userDetails) {
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
@@ -90,6 +105,14 @@ public class ExperienceController {
         final Double avgScore = reviewService.getAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
         final String countryCity = experienceService.getCountryCity(experienceId);
+
+        try {
+            String email = userDetails.getUsername();
+            UserModel userModel = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
+            mav.addObject("hasSign", userModel.hasRole(Roles.USER));
+        } catch (NullPointerException e) {
+            mav.addObject("hasSign", false);
+        }
 
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
@@ -103,11 +126,12 @@ public class ExperienceController {
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.POST})
     public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName,
                                        @Valid @ModelAttribute("filterForm") final FilterForm form,
+                                       @AuthenticationPrincipal MyUserDetails userDetails,
                                        final BindingResult errors) {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
-            return experience(categoryName, form, Optional.empty(), Optional.empty());
+            return experience(categoryName, form, userDetails, Optional.empty(), Optional.empty());
         }
 
         Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());

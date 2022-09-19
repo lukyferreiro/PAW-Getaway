@@ -23,32 +23,41 @@ import java.util.List;
 @Controller
 public class ExperienceFormController {
     @Autowired
-    ExperienceService exp;
+    private ExperienceService exp;
     @Autowired
-    CityService cityService;
+    private CityService cityService;
     @Autowired
-    CountryService countryService;
+    private CountryService countryService;
     @Autowired
-    CategoryService categoryService;
+    private CategoryService categoryService;
     @Autowired
-    TagService tagService;
+    private TagService tagService;
     @Autowired
-    ImageService imageService;
+    private ImageService imageService;
     @Autowired
-    ImageExperienceService imageExperienceService;
+    private ImageExperienceService imageExperienceService;
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif");
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
-    public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form) {
+    public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form,
+                                           @AuthenticationPrincipal MyUserDetails userDetails) {
         final ModelAndView mav = new ModelAndView("experience_form");
 
         ExperienceCategory[] categoryModels = ExperienceCategory.values();
         List<String> categories = new ArrayList<>();
         for (ExperienceCategory categoryModel : categoryModels) {
             categories.add(categoryModel.getName());
+        }
+
+        try {
+            String email = userDetails.getUsername();
+            UserModel userModel = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
+            mav.addObject("hasSign", userModel.hasRole(Roles.USER));
+        } catch (NullPointerException e) {
+            mav.addObject("hasSign", false);
         }
 
         List<CountryModel> countryModels = countryService.listAll();
@@ -69,7 +78,7 @@ public class ExperienceFormController {
                                        @AuthenticationPrincipal MyUserDetails userDetails) throws Exception {
 
         if (errors.hasErrors()) {
-            return createActivityForm(form);
+            return createActivityForm(form, userDetails);
         }
 
         long categoryId = form.getActivityCategoryId();
@@ -103,7 +112,7 @@ public class ExperienceFormController {
                 final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
                 imageExperienceService.create(imageModel.getId(), experienceModel.getId(), true);
             } else {
-                return createActivityForm(form);
+                return createActivityForm(form, userDetails);
             }
         } else {
             experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(),
