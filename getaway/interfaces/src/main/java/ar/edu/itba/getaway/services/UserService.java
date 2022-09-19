@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface UserService {
-    Collection<RoleModel> getUserRoles(long userId);
+    Collection<RoleModel> getUserRolesModels(long userId);
     Optional<UserModel> getUserById (long userId);
     Optional<UserModel> getUserByEmail (String email);
     UserModel createUser (String password, String name, String surname, String email) throws DuplicateUserException;

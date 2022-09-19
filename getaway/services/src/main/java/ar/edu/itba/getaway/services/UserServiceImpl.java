@@ -42,8 +42,8 @@ public class UserServiceImpl implements UserService {
             Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     @Override
-    public Collection<RoleModel> getUserRoles(long userId) {
-        return userDao.getUserRoles(userId);
+    public Collection<RoleModel> getUserRolesModels(long userId) {
+        return userDao.getUserRolesModels(userId);
     }
 
     @Override
@@ -72,7 +72,6 @@ public class UserServiceImpl implements UserService {
         if (!verificationTokenOptional.isPresent()) {
             return Optional.empty();
         }
-
         VerificationToken verificationToken = verificationTokenOptional.get();
         //Eliminamos el token siempre, ya sea valido o no
         verificationTokenDao.removeTokenById(verificationToken.getId());
@@ -80,7 +79,6 @@ public class UserServiceImpl implements UserService {
         if (!verificationToken.isValid()) {
             return Optional.empty();
         }
-
         return userDao.updateRoles(verificationToken.getUserId(), Roles.NOT_VERIFIED, Roles.VERIFIED);
     }
 
@@ -143,7 +141,7 @@ public class UserServiceImpl implements UserService {
 
     private void sendVerificationToken(UserModel userModel, VerificationToken token) {
         try {
-            String url = new URL("http", appBaseUrl, "/user/verifyAccount/" + token.getValue()).toString();
+            String url = new URL("http", appBaseUrl, "/webapp_war_exploded/user/verifyAccount/" + token.getValue()).toString();
 //            String url = new URL("http", appBaseUrl, "/user/verifyAccount?token=" + token.getValue()).toString();
 //            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount/" + token.getValue()).toString();
 //            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount?token=" + token.getValue()).toString();
@@ -158,7 +156,7 @@ public class UserServiceImpl implements UserService {
 
     private void sendPasswordResetToken(UserModel userModel, PasswordResetToken token) {
         try {
-            String url = new URL("http", appBaseUrl, "/user/resetPassword/" + token.getValue()).toString();
+            String url = new URL("http", appBaseUrl, "/webapp_war_exploded/user/resetPassword/" + token.getValue()).toString();
 //            String url = new URL("http", appBaseUrl, "/user/resetPassword?token=" + token.getValue()).toString();
 //            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/resetPassword/" + token.getValue()).toString();
 //            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/resetPassword?token=" + token.getValue()).toString();

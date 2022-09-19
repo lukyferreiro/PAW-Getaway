@@ -25,20 +25,18 @@ public class UserDaoImpl implements UserDao {
     private final SimpleJdbcInsert roleSimpleJdbcInsert;
     private final SimpleJdbcInsert userRolesSimpleJdbcInsert;
 
-    private final Collection<Roles> roles = Arrays.asList(Roles.values().clone());
-
     private final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new UserModel(rs.getLong("userid"),
                     rs.getString("password"),
                     rs.getString("userName"),
                     rs.getString("userSurname"),
                     rs.getString("email"),
-                    getUserRoles(),
+                    getUserRoles(rs.getLong("userid")),
                     rs.getLong("imgId"));
 
     private static final RowMapper<RoleModel> USER_ROLES_ROW_MAPPER = (rs, rowNum) ->
             new RoleModel(rs.getLong("roleid"),
-                    Roles.valueOf(rs.getString("rolename")));
+                    Roles.valueOf(rs.getString("roleName")));
 
     private static final RowMapper<RoleModel> ROLE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new RoleModel(rs.getLong("roleid"),
@@ -58,9 +56,20 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Collection<RoleModel> getUserRoles(long userId){
+    public Collection<RoleModel> getUserRolesModels(long userId){
         return jdbcTemplate.query("SELECT roleid, rolename FROM users NATURAL JOIN userroles NATURAL JOIN roles WHERE userid=?",
                 new Object[]{userId}, USER_ROLES_ROW_MAPPER);
+    }
+
+    @Override
+    public Collection<Roles> getUserRoles(long userId) {
+        Collection<RoleModel> rolesModel = getUserRolesModels(userId);
+        Collection<Roles> rolesCollection = new ArrayList<>();
+        for(RoleModel roleModel : rolesModel){
+            rolesCollection.add(roleModel.getRoleName());
+        }
+        return rolesCollection;
+
     }
 
     @Override
@@ -106,11 +115,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Collection<Roles> getUserRoles() {
-        return roles;
-    }
-
-    @Override
     public Optional<RoleModel> getRoleByName(Roles role) {
         String roleName = role.name();
         return jdbcTemplate.query("SELECT * FROM roles WHERE roleName = ?",
@@ -121,8 +125,8 @@ public class UserDaoImpl implements UserDao {
     public Optional<UserModel> updateRoles(long userId, Roles oldVal, Roles newVal) {
         Long oldValueID = getRoleByName(oldVal).get().getRoleId();
         Long newValueID = getRoleByName(newVal).get().getRoleId();
-        if (jdbcTemplate.update("UPDATE userRoles SET roleId = ? WHERE userId = ? AND roleId = ?",
-                oldValueID, userId, newValueID) == 1) {
+        if (jdbcTemplate.update("UPDATE userroles SET roleid = ? WHERE userid = ? AND roleid = ?",
+                newValueID, userId, oldValueID) == 1) {
             return getUserById(userId);
         }
         return Optional.empty();

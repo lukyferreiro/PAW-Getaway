@@ -53,7 +53,7 @@
                      <i class="fas fa-exclamation-circle fa-7x" id="error"></i>
                   </div>
                   <div class="col-12 px-0 d-flex align-items-center justify-content-center">
-                     <a href="<c:url value = "/user/verifyAccount/resend"/>">
+                     <a href="<c:url value = "/user/verifyAccount/status/resend"/>">
                         <button type="button" class="btn btn-continue">
                            <spring:message code="verifyUnsuccessfully.sentAgain"/>
                         </button>

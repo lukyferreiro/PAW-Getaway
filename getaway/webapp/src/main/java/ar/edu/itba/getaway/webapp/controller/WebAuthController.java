@@ -82,7 +82,7 @@ public class WebAuthController {
             return register(form);
         }
 
-        return new ModelAndView("redirect:/user/verifyAccount/send");
+        return new ModelAndView("redirect:/user/verifyAccount/status/send");
     }
 
     @RequestMapping(path ="/login")
@@ -96,18 +96,6 @@ public class WebAuthController {
     --------------------Verify Account---------------------
      -----------------------------------------------------*/
 
-    @RequestMapping(path = "/user/verifyAccount/send")
-    public ModelAndView sendAccountVerification(@ModelAttribute("loggedUser") final UserModel loggedUser) {
-        final ModelAndView mav = new ModelAndView("verifySended");
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-        return mav;
-    }
-
     @RequestMapping(path = "/user/verifyAccount/{token}")
     public ModelAndView verifyAccount(HttpServletRequest request,
                                       @PathVariable("token") final String token,
@@ -115,14 +103,9 @@ public class WebAuthController {
         final ModelAndView mav;
 
         final Optional<UserModel> userOptional = userService.verifyAccount(token);
-//        boolean success = false;
-
         if (userOptional.isPresent()) {
-//            success = true;
-//            UserModel user = userOptional.get();
-//            forceLogin(user, request);
-//            mav.addObject("loggedUser", user);
-            mav = new ModelAndView("redirect:/user/verifyAccount/succesfull");
+            forceLogin(loggedUser, request);
+            mav = new ModelAndView("redirect:/user/verifyAccount/result/successfully");
 
             try {
                 mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
@@ -132,26 +115,37 @@ public class WebAuthController {
 
             return mav ;
         }
-//        mav.addObject("success", success);
-        mav = new ModelAndView("redirect:/user/verifyAccount/succesfull");
+        mav = new ModelAndView("redirect:/user/verifyAccount/result/unsuccessfully");
         return mav;
     }
 
-    @RequestMapping(path = "/user/verifyAccount/resend")
+    @RequestMapping(path = "/user/verifyAccount/status/send")
+    public ModelAndView sendAccountVerification(@ModelAttribute("loggedUser") final UserModel loggedUser) {
+        final ModelAndView mav = new ModelAndView("verifySent");
+
+        try {
+            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
+        } catch (NullPointerException e) {
+            mav.addObject("loggedUser", false);
+        }
+        return mav;
+    }
+
+    @RequestMapping(path = "/user/verifyAccount/status/resend")
     public ModelAndView resendAccountVerification() {
         final UserModel user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
                 .orElseThrow(UserNotFoundException::new);
         userService.resendVerificationToken(user);
 
-        final ModelAndView mav = new ModelAndView("redirect:/user/verifyAccount/send");
+        final ModelAndView mav = new ModelAndView("redirect:/user/verifyAccount/status/send");
         mav.addObject("loggedUser", user);
 
         return mav;
     }
 
-    @RequestMapping(path = "/user/verifyAccount/unsuccessfull")
+    @RequestMapping(path = "/user/verifyAccount/result/unsuccessfully")
     public ModelAndView unsuccesfullyAccountVerification(@ModelAttribute("loggedUser") final UserModel loggedUser) {
-        final ModelAndView mav = new ModelAndView("verifyUnsuccefully");
+        final ModelAndView mav = new ModelAndView("verifyUnsuccessfully");
 
         try {
             mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
@@ -162,9 +156,9 @@ public class WebAuthController {
         return mav;
     }
 
-    @RequestMapping(path = "/user/verifyAccount/successfull")
+    @RequestMapping(path = "/user/verifyAccount/result/successfully")
     public ModelAndView succesfullyAccountVerification(@ModelAttribute("loggedUser") final UserModel loggedUser) {
-        final ModelAndView mav = new ModelAndView("verifySuccefully");
+        final ModelAndView mav = new ModelAndView("verifySuccessfully");
 
         try {
             mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));

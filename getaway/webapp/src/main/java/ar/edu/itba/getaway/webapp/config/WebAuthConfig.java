@@ -58,11 +58,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                     //Session routes
                     .antMatchers("/login", "/register").anonymous()
-                    .antMatchers("/user/verifyAccount/send").hasRole("NOT_VERIFIED")
-                    .antMatchers("/user/verifyAccount/resend").hasRole("NOT_VERIFIED")
-                    .antMatchers("/user/verifyAccount").hasRole("NOT_VERIFIED")
-                    .antMatchers("/user/verifyAccount/unsuccessfull").hasRole("NOT_VERIFIED")
-                    .antMatchers("/user/verifyAccount/successfull").hasRole("VERIFIED")
+                    .antMatchers("/user/verifyAccount/{token}").hasRole("NOT_VERIFIED")
+                    .antMatchers("/user/verifyAccount/status/send").hasRole("NOT_VERIFIED")
+                    .antMatchers("/user/verifyAccount/status/resend").hasRole("NOT_VERIFIED")
+                    .antMatchers("/user/verifyAccount/result/unsuccessfully").hasRole("NOT_VERIFIED")
+                    .antMatchers("/user/verifyAccount/result/successfully").hasRole("NOT_VERIFIED")
+                .antMatchers("/user/verifyAccount/result/successfully").hasRole("VERIFIED")
                     .antMatchers("/logout").authenticated()
                     //Profile routes
                     .antMatchers("/user/experiences").authenticated()
@@ -70,10 +71,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 //                            "/user/account/updateCoverImage", "/user/account/updateInfo",
 //                            "/user/account/updateProfileImage").hasRole("VERIFIED")
                     //Experiences
-                    .antMatchers(HttpMethod.GET,"/create_experience").hasRole("VERIFIED")
-                    .antMatchers(HttpMethod.POST,"/create_experience").hasRole("VERIFIED")
-                    .antMatchers(HttpMethod.GET,"/experiences/{categoryName}/{id}/create_review").hasRole("VERIFIED")
-                    .antMatchers(HttpMethod.POST,"/experiences/{categoryName}/{id}/create_review").hasRole("VERIFIED")
+                    .antMatchers(HttpMethod.GET,"/create_experience").hasAuthority("VERIFIED")
+                    .antMatchers(HttpMethod.POST,"/create_experience").hasAuthority("VERIFIED")
+                    .antMatchers(HttpMethod.GET,"/experiences/{categoryName}/{id}/create_review").hasAuthority("VERIFIED")
+                    .antMatchers(HttpMethod.POST,"/experiences/{categoryName}/{id}/create_review").hasAuthority("VERIFIED")
                     .antMatchers(HttpMethod.GET,"/experiences/{categoryName}/{experienceId}").permitAll()
                     .antMatchers(HttpMethod.GET,"/experiences/{categoryName}").permitAll()
                     .antMatchers(HttpMethod.POST,"/experiences/{categoryName}").permitAll()

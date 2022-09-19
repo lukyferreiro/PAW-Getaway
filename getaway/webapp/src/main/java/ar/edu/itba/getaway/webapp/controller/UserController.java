@@ -26,6 +26,11 @@ public class UserController {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (!isAnonymous(auth)) {
+            //TODO CHECK
+            //Cuando me verifico, no se me actualiza el auth.getAuthorities()
+            //me sigue diciendo que sigo sin estar verificado
+            //no se esta actualizando el SecurityContextHolder.getContext().getAuthentication();
+            //Para logrrar que fumciones hay que cerrar el servidor y vorlo a abrir
             return userService.getUserByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
         }
         return null;
