@@ -107,11 +107,13 @@
                                     <i class="bi bi-pencil"></i>
                                 </button>
                             </a>
-                            <button type="button" class="btn btn-circle">
+                            <a href="<c:url value="/delete/${activity.id}"/>">
+                                <button type="button" class="btn btn-circle">
+                                        <%--                            <button type="button" class="btn btn-circle" data-toggle="modal" data-target="#deleteModal">--%>
+                                    <i class="bi bi-trash"></i>
+                                </button>
 
-                            <%--                            <button type="button" class="btn btn-circle" data-toggle="modal" data-target="#deleteModal">--%>
-                                <i class="bi bi-trash"></i>
-                            </button>
+                            </a>
                         </div>
 <%--                        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">--%>
 <%--                            <div class="modal-dialog" role="document">--%>

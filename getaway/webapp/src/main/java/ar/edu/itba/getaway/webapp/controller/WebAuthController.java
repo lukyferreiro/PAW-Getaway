@@ -7,10 +7,7 @@ import ar.edu.itba.getaway.webapp.auth.MyUserDetails;
 import ar.edu.itba.getaway.webapp.exceptions.AccessDeniedException;
 import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
-import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
-import ar.edu.itba.getaway.webapp.forms.RegisterForm;
-import ar.edu.itba.getaway.webapp.forms.ResetPasswordEmailForm;
-import ar.edu.itba.getaway.webapp.forms.ResetPasswordForm;
+import ar.edu.itba.getaway.webapp.forms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -229,6 +226,8 @@ public class WebAuthController {
                 .collect(Collectors.toList());
     }
 
+//    EDICION Y ELIMINACION DE EXPERIENCIAS -> RECOMIENDO PASARLO A OTRO CONTROLLER
+
     @RequestMapping(value = "/user/experiences", method = {RequestMethod.GET})
     public ModelAndView experience(@AuthenticationPrincipal MyUserDetails userDetails) {
         final ModelAndView mav = new ModelAndView("userExperiences");
@@ -245,12 +244,32 @@ public class WebAuthController {
 
         return mav;
     }
-    @RequestMapping(value = "/user/experiences/{experienceId}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/delete/{experienceId}", method = {RequestMethod.GET})
     public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
-                                       @ModelAttribute("experienceForm") final ExperienceForm form,
+                                       @ModelAttribute("deleteForm") final DeleteForm form,
                                        @AuthenticationPrincipal MyUserDetails userDetails) {
+        final ModelAndView mav = new ModelAndView("deleteExperience");
+        ExperienceModel experience = experienceService.getById(experienceId).get();
+        mav.addObject("experience",experience);
+
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/delete/{experienceId}", method = {RequestMethod.POST})
+    public ModelAndView experienceDeletePost(@PathVariable(value = "experienceId") final long experienceId,
+                                             @ModelAttribute("deleteForm") final DeleteForm form,
+                                           @AuthenticationPrincipal MyUserDetails userDetails,
+                                           final BindingResult errors) throws IOException {
+        if (errors.hasErrors()) {
+            return experienceDelete(experienceId, form, userDetails);
+        }
+
         experienceService.delete(experienceId);
-        return experience(userDetails);
+
+        return new ModelAndView("redirect:/" );
+
+
     }
 
     @RequestMapping(value = "/edit/{experienceId}", method = {RequestMethod.GET})
