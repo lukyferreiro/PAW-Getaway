@@ -64,12 +64,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/user/verifyAccount/result/unsuccessfully").hasRole("NOT_VERIFIED")
                     .antMatchers("/user/verifyAccount/result/successfully").hasRole("NOT_VERIFIED")
                     .antMatchers("/user/verifyAccount/result/successfully").hasRole("VERIFIED")
+                    .antMatchers("/user/resetPasswordRequest").authenticated()
+                    .antMatchers(HttpMethod.POST,"/user/resetPasswordRequest").authenticated()
+                    .antMatchers(HttpMethod.POST,"/user/resetPassword").authenticated()
+                    .antMatchers("/user/resetPassword/{token}").authenticated()
                     .antMatchers("/logout").authenticated()
                     //Profile routes
                     .antMatchers("/user/experiences").authenticated()
-//                    .antMatchers("/user/account/search", "/user/account/update",
-//                            "/user/account/updateCoverImage", "/user/account/updateInfo",
-//                            "/user/account/updateProfileImage").hasRole("VERIFIED")
                     //Experiences
                     .antMatchers(HttpMethod.GET,"/create_experience").hasRole("VERIFIED")
                     .antMatchers(HttpMethod.POST,"/create_experience").hasRole("VERIFIED")
@@ -79,7 +80,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET,"/experiences/{categoryName}").permitAll()
                     .antMatchers(HttpMethod.POST,"/experiences/{categoryName}").permitAll()
                     .antMatchers(HttpMethod.GET,"/{experienceId}/image").permitAll()
-
                     //else
                     .antMatchers("/**").permitAll()
 

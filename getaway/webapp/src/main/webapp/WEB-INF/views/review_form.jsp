@@ -24,23 +24,23 @@
                      <div class="col m-2"> <!--Titulo de la review-->
                         <form:label path="title" class="form-label">
                            <spring:message code="review.title"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
-                        <form:input path="title" type="text" class="form-control"/>
+                        <form:input path="title" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
                         <form:errors path="title" element="p" cssClass="form-error-label"/>
                      </div>
                      <div class="col m-2"> <!--Descripcion de la review-->
                         <form:label path="description" class="form-label">
                            <spring:message code="review.description"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
-                        <form:textarea path="description" class="form-control" rows="4"/>
+                        <form:textarea path="description" class="form-control" cssErrorClass="form-control is-invalid" rows="4"/>
                         <form:errors path="description" element="p" cssClass="form-error-label"/>
                      </div>
                      <div class="col m-2"> <!--Rating-->
                         <form:label path="score" class="form-label">
                            <spring:message code="review.scoreAssign"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.required"/></span>
+                           <span class="required-field">*</span>
                         </form:label>
                         <spring:message code="reviewForm.score.placeholder" var="placeholder"/>
                         <div class="star-rating">
@@ -55,7 +55,7 @@
                            <input type="radio" id="star1" name="rating" value="1" />
                            <label for="star1" class="fas fa-star"></label>
                         </div>
-                        <form:input path="score" type="hidden" class="form-control" id="reviewFormScoreInput"/>
+                        <form:input path="score" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="reviewFormScoreInput"/>
                         <form:errors path="score" element="p" cssClass="form-error-label"/>
                      </div>
                   </div>

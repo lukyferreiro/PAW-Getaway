@@ -38,7 +38,7 @@
                   <div style="flex:5; min-width: 350px;">
                      <div class="row">
                         <div class="col-3 p-0"></div>
-                        <div class="card-body col-6 h-100">
+                        <div class="card-body col-7 h-100">
                            <div> <!-- Direccion y ciudad -->
                               <h5 class="information-title">
                                  <spring:message code="experienceDetail.address"/>
@@ -102,7 +102,7 @@
                               </c:choose>
                            </div>
                         </div>
-                        <div class="col-3 p-0"></div>
+                        <div class="col-2 p-0"></div>
                      </div>
                   </div>
                </div>
