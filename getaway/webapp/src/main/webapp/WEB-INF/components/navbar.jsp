@@ -8,7 +8,7 @@
          <img class="logo-img" src="<c:url value = "/resources/images/getaway-icon.png"/>" alt="Logo">
          <span class="logo-text align-self-center text-uppercase font-weight-bold">
                 <spring:message code="pageName"/>
-            </span>
+         </span>
       </a>
       <%--      <a href="<c:url value = "/"/>" class="link-home" >--%>
       <%--         <spring:message code="navbar.home"/>--%>
@@ -35,19 +35,13 @@
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                      <a class="dropdown-item" href="<c:url value = "/"/>">
-                        <button type="button" class="btn">
                            <spring:message code="navbar.profile"/>
-                        </button>
                      </a>
                      <a class="dropdown-item" href="<c:url value = "/user/experiences"/>">
-                        <button type="button" class="btn">
                            <spring:message code="navbar.experiencies"/>
-                        </button>
                      </a>
                      <a class="dropdown-item" href="<c:url value = "/logout"/>">
-                        <button type="button" class="btn">
                            <spring:message code="navbar.logout"/>
-                        </button>
                      </a>
                   </ul>
                </div>

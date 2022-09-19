@@ -102,3 +102,7 @@
     border-width: 3px;
     margin: 10px 0;
 }
+
+.dropdown-item::selection, .dropdown-item:focus{
+    background-color: #FAB672;
+}

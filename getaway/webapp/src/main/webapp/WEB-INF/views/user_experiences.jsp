@@ -7,6 +7,7 @@
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="experience.title"/></title>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+      <link href='<c:url value="/resources/css/user_experiences.css"/>' rel="stylesheet">
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 
@@ -70,39 +71,17 @@
                         </a>
                         <div class="btn-group" role="group">
                            <a href="<c:url value="/edit/${activity.id}"/>">
-                              <button type="button" class="btn btn-circle">
+                              <button type="button" class="btn btn-circle btn-exp">
                                  <i class="bi bi-pencil"></i>
                               </button>
                            </a>
                            <a href="<c:url value="/delete/${activity.id}"/>">
-                              <button type="button" class="btn btn-circle">
-                                    <%--                            <button type="button" class="btn btn-circle" data-toggle="modal" data-target="#deleteModal">--%>
+                              <button type="button" class="btn btn-circle btn-exp">
                                  <i class="bi bi-trash"></i>
                               </button>
 
                            </a>
                         </div>
-                           <%--                        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">--%>
-                           <%--                            <div class="modal-dialog" role="document">--%>
-                           <%--                                <div class="modal-content">--%>
-                           <%--                                    <div class="modal-header">--%>
-                           <%--                                        <h5 class="modal-title" id="exampleModalLabel"><spring:message code="experience.delete" /></h5>--%>
-                           <%--                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">--%>
-                           <%--                                            <span aria-hidden="true">&times;</span>--%>
-                           <%--                                        </button>--%>
-                           <%--                                    </div>--%>
-                           <%--                                    <div class="modal-body">--%>
-                           <%--                                        <spring:message code="experience.deleteQuestion"/>--%>
-                           <%--                                    </div>--%>
-                           <%--                                    <div class="modal-footer">--%>
-                           <%--                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><spring:message code="experienceForm.cancel"/></button>--%>
-                           <%--                                        <a href="<c:url value="/user/experiences/${activity.id}"/>">--%>
-                           <%--                                            <button type="button" class="btn btn-primary"><spring:message code="experience.deleteFinal"/></button>--%>
-                           <%--                                        </a>--%>
-                           <%--                                    </div>--%>
-                           <%--                                </div>--%>
-                           <%--                            </div>--%>
-                           <%--                        </div>--%>
 
                      </div>
                   </c:forEach>

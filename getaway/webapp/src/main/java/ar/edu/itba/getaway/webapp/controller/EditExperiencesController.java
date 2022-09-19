@@ -2,14 +2,11 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.webapp.auth.MyUserDetails;
 import ar.edu.itba.getaway.webapp.exceptions.AccessDeniedException;
 import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
-import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,7 +38,7 @@ public class EditExperiencesController {
 
     @RequestMapping(value = "/user/experiences", method = {RequestMethod.GET})
     public ModelAndView experience(@ModelAttribute("loggedUser") final UserModel loggedUser) {
-        final ModelAndView mav = new ModelAndView("userExperiences");
+        final ModelAndView mav = new ModelAndView("user_experiences");
 
         try {
             List<ExperienceModel> experienceList = experienceService.getByUserId(loggedUser.getId());
@@ -102,7 +99,9 @@ public class EditExperiencesController {
         form.setActivityName(experience.getName());
         form.setActivityAddress(experience.getAddress());
         form.setActivityInfo(experience.getDescription());
-        form.setActivityPrice(experience.getPrice().toString());
+        if(experience.getPrice()!=null){
+            form.setActivityPrice(experience.getPrice().toString());
+        }
         form.setActivityUrl(experience.getSiteUrl());
 
         try {
