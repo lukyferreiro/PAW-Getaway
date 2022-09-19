@@ -25,7 +25,7 @@
                      </h1>
                   </div>
                   <div class="col-12 px-0 d-flex align-items-center justify-content-center">
-                     <c:url value="/delete/${experience.id}" var="postPath"/>
+                     <c:url value="/user/experiences/delete/${experience.id}" var="postPath"/>
                      <form:form modelAttribute="deleteForm" action="${postPath}" id="deleteExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
                         <div class="buttons">
                            <a href="<c:url value = "/"/>">
