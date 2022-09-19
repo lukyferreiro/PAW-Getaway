@@ -26,24 +26,8 @@
                   <div class="p-2" style="width: 600px;">
                      <c:choose>
                         <c:when test="${activity.hasImage == false}">
-                           <c:if test="${activity.categoryId == 1}">
-                              <img class="container-fluid p-0" style="height: fit-content" src="<c:url value="/resources/images/adventure_image.jpg" />" alt="Imagen Aventura">
-                           </c:if>
-                           <c:if test="${activity.categoryId == 2}">
-                              <img class="container-fluid p-0" style="height: fit-content" src="<c:url value="/resources/images/gastronomy_image.jpg" />" alt="Imagen Gastronomia">
-                           </c:if>
-                           <c:if test="${activity.categoryId == 3}">
-                              <img class="container-fluid p-0" style="height: fit-content" src="<c:url value="/resources/images/hotels_image.jpeg" />" alt="Imagen Hoteles">
-                           </c:if>
-                           <c:if test="${activity.categoryId == 4}">
-                              <img class="container-fluid p-0" style="height: fit-content" src="<c:url value="/resources/images/relax_image.jpg" />" alt="Imagen Relax">
-                           </c:if>
-                           <c:if test="${activity.categoryId == 5}">
-                              <img class="container-fluid p-0" style="height: fit-content" src="<c:url value="/resources/images/night_image.jpg" />" alt="Imagen Vida Nocturna">
-                           </c:if>
-                           <c:if test="${activity.categoryId == 6}">
-                              <img class="container-fluid p-0" style="height: fit-content" src="<c:url value="/resources/images/historic_image.jpg" />" alt="Imagen Historico">
-                           </c:if>
+                           <img class="container-fluid p-0" style="height: fit-content" alt="Imagen ${activity.categoryName}"
+                                src="<c:url value="/resources/images/${activity.categoryName}.jpg" />" >
                         </c:when>
                         <c:otherwise>
                            <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/${activity.id}/image'/>" alt="Imagen"/>
