@@ -10,3 +10,4 @@ cityFilterFormButton.addEventListener("click", () => {
     cityFilterForm.submit();
     processing = false;
 })
+

@@ -110,6 +110,27 @@
     --bs-btn-focus-shadow-rgb: none;
 }
 
+.btn-clean-filter {
+    border-color: var(--primary-color);
+    background-color: transparent;
+    color: black;
+}
+
+.btn-clean-filter:hover {
+    border-color: var(--primary-color);
+    background-color: var(--secondary-color);
+    color: black;
+}
+
+.btn-clean-filter:focus {
+    border-color: var(--primary-color);
+    background-color: transparent;
+    color: black;
+    --bs-btn-focus-shadow-rgb: none;
+}
+
+
+
 /*------ Experiences -------*/
 .container-experiences {
     flex: 5;

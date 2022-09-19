@@ -15,13 +15,6 @@ deleteExperienceFormButton.addEventListener("click", () => {
     processing = false;
 })
 
-cancelFormButton.addEventListener("click", () => {
-    if (processingCancel) {
-        return;
-    }
-    processingCancel = true;
-    cancelFormButton.disabled = true;
-    processingCancel = false;
-})
+
 
 
