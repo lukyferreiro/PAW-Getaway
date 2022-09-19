@@ -104,8 +104,6 @@ public class ExperienceController {
             mav.addObject("loggedUser", false);
         }
 
-
-
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
         mav.addObject("reviews", reviews);

@@ -32,6 +32,13 @@
                         <div class="col-12 d-flex align-items-center justify-content-center">
                            <i class="far fa-check-circle fa-7x" id="success"></i>
                         </div>
+                        <div class="col-12 px-0 d-flex align-items-center justify-content-center">
+                           <a href="<c:url value = "/"/>">
+                              <button type="button" class="btn btn-continue">
+                                 <spring:message code="resetPasswordResult.homeBtn"/>
+                              </button>
+                           </a>
+                        </div>
                      </c:when>
                      <c:otherwise>
                         <div class="col-12">

@@ -39,11 +39,13 @@
                      <div class="row">
                         <div class="col-3 p-0"></div>
                         <div class="card-body col-6 h-100">
-                           <div>
+                           <div> <!-- Direccion y ciudad -->
                               <h5 class="information-title">
                                  <spring:message code="experienceDetail.address"/>
                               </h5>
-                              <p class="information-text"><c:out value="${activity.address}"/></p>
+                              <p class="information-text">
+                                 <c:out value="${activity.address}"/>, <c:out value="${countryCity}"/>
+                              </p>
                            </div>
                            <div>
                               <h5 class="information-title">
@@ -106,23 +108,22 @@
                </div>
             </div>
             <div class="mx-5 my-3">
-               <a href="<c:url value = "/experiences/${activity.categoryName}/${activity.id}/create_review"/>">
-                  <button type="button" class="btn btn-create-review">
-                     <spring:message code="review.createReview"/>
-                  </button>
-               </a>
+               <div class="d-flex justify-content-between align-content-center">
+                  <h2 class="align-self-center">
+                     <spring:message code="review.start"/>
+                  </h2>
+                  <a href="<c:url value = "/experiences/${activity.categoryName}/${activity.id}/create_review"/>">
+                     <button type="button" class="btn btn-create-review">
+                        <spring:message code="review.createReview"/>
+                     </button>
+                  </a>
+               </div>
             </div>
 
             <!-- --------------RESEÑAS-------------- -->
-            <c:choose>
-               <c:when test="${reviews.size()!=0}">
-                  <div class="mx-5 my-3">
-                     <div class="d-flex mb-2 justify-content-between align-content-center">
-                        <h2 class="align-self-center">
-                           <spring:message code="review.start"/>
-                        </h2>
-                     </div>
-
+            <div class="mx-5 my-2">
+               <c:choose>
+                  <c:when test="${reviews.size()!=0}">
                      <c:forEach var="review" items="${reviews}">
                         <div class="card mx-5 my-3 p-4">
                            <div class="card-title d-flex">
@@ -180,9 +181,14 @@
                            </div>
                         </div>
                      </c:forEach>
-                  </div>
-               </c:when>
-            </c:choose>
+                  </c:when>
+                  <c:otherwise>
+                     <div class="d-flex justify-content-center mb-2" style="font-size: x-large;">
+                        <spring:message code="review.noReviews"/>
+                     </div>
+                  </c:otherwise>
+               </c:choose>
+            </div>
 
          </div>
 

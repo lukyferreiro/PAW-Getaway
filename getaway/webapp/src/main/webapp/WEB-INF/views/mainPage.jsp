@@ -16,7 +16,7 @@
             <jsp:param name="loggedUser" value="${loggedUser}"/>
          </jsp:include>
 
-         <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
+         <div class="container-experiences container-fluid overflow-auto p-0 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
             <c:forEach var="activity" items="${activities}">
                <div class="card card-experience mx-3 my-2 p-0">
                   <a class="card-link" href="<c:url value="/experiences/${activity.categoryName}/${activity.id}"/>">

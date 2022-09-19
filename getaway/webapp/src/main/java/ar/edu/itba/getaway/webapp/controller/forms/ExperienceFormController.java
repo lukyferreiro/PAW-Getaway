@@ -62,7 +62,6 @@ public class ExperienceFormController {
         return mav;
     }
 
-
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
     public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,
                                        final BindingResult errors,

@@ -62,10 +62,19 @@
                      </div>
                   </div>
                </form:form>
+
                <button class="btn btn-submit-form px-3 py-2" type="submit" id="cityFilterFormButton" form="cityFilterForm">
                   <spring:message code="filters.btn.submit"/>
                </button>
+               <a href="<c:url value = "/experiences/${categoryName}"/>">
+               <button class="btn btn-clean-filter px-3 py-2 m-2" type="button" id="cleanFilterFormButton" form="cityFilterForm">
+                  <spring:message code="filters.btn.clear"/>
+               </button>
+
+               </a>
+
             </div>
+
 
             <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
                <c:forEach var="activity" items="${activities}">
