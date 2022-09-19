@@ -128,7 +128,7 @@
                            <div class="card-title d-flex">
                               <div class="col m-2">
                                  <img class="user-img" src="<c:url value = "/resources/images/ic_user.png" />" alt="User"/>
-                                 <h5><c:out value="User name"/></h5>
+                                 <h5><c:out value="${review.userName}"/> <c:out value="${review.userSurname}"/></h5>
                               </div>
                               <h2 class="col m-2"><c:out value="${review.title}"/></h2>
                            </div>
