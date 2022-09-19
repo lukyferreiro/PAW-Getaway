@@ -32,11 +32,11 @@ public class ImageExperienceDaoImpl implements ImageExperienceDao {
 
     @Override
     public ImageExperienceModel create(long imageId, long experienceId, boolean isCover) {
-        final Map<String, Object> args = new HashMap<>();
-        args.put("experienceId", experienceId);
-        args.put("isCover", isCover);
-        args.put("imgId", imageId);
-        jdbcInsert.execute(args);
+        final Map<String, Object> imageExperienceData = new HashMap<>();
+        imageExperienceData.put("experienceId", experienceId);
+        imageExperienceData.put("isCover", isCover);
+        imageExperienceData.put("imgId", imageId);
+        jdbcInsert.execute(imageExperienceData);
         return new ImageExperienceModel(imageId, experienceId, isCover);
     }
 
@@ -53,8 +53,7 @@ public class ImageExperienceDaoImpl implements ImageExperienceDao {
 
     @Override
     public List<ImageExperienceModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query(
-                "SELECT imgId, experienceId, isCover FROM imagesExperiences",
+        return new ArrayList<>(jdbcTemplate.query("SELECT imgId, experienceId, isCover FROM imagesExperiences",
                 IMAGE_EXPERIENCE_MODEL_ROW_MAPPER));
     }
 

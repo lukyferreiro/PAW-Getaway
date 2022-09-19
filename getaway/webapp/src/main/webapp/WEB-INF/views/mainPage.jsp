@@ -13,7 +13,7 @@
    <body>
       <div class="container-main">
          <jsp:include page="/WEB-INF/components/navbar.jsp">
-            <jsp:param name="hasSign" value="${hasSign}"/>
+            <jsp:param name="loggedUser" value="${loggedUser}"/>
          </jsp:include>
 
          <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">

@@ -10,9 +10,9 @@ import java.util.List;
 
 @Service
 public class ReviewServiceImpl implements ReviewService{
+
     @Autowired
     private ReviewDao reviewDao;
-
 
     @Override
     public ReviewModel create(String title, String description, long score, long experienceId, Date reviewDate, long userId) {

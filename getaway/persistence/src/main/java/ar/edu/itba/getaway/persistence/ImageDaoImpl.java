@@ -6,12 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.DataSource;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 @Repository
@@ -36,11 +32,12 @@ public class ImageDaoImpl implements ImageDao {
 
     @Override
     public ImageModel create(byte[] image) {
-        final Map<String, Object> args = new HashMap<>();
-        args.put("imageObject", image);
-        final long imgid = jdbcInsert.executeAndReturnKey(args).longValue();
+        final Map<String, Object> imageData = new HashMap<>();
+        imageData.put("imageObject", image);
+        final long imgid = jdbcInsert.executeAndReturnKey(imageData).longValue();
         return new ImageModel(imgid, image);
     }
+
     @Override
     public boolean update(long imgid, ImageModel imageModel) {
         return jdbcTemplate.update("UPDATE images SET imageObject = ? WHERE imgid = ?",

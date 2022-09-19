@@ -44,17 +44,17 @@ public class ExperienceDaoImpl implements ExperienceDao {
     @Override
     public ExperienceModel create(String name, String address, String description, String url,
                                   Double price, long cityId, long categoryId, long userId, boolean hasImage) {
-        final Map<String, Object> args = new HashMap<>();
-        args.put("experienceName", name);
-        args.put("address", address);
-        args.put("description", description);
-        args.put("siteUrl", url);
-        args.put("price", price);
-        args.put("cityId", cityId);
-        args.put("categoryId", categoryId);
-        args.put("userId",userId);
-        args.put("hasImage", hasImage);
-        final long experienceId = jdbcInsert.executeAndReturnKey(args).longValue();
+        final Map<String, Object> experienceData = new HashMap<>();
+        experienceData.put("experienceName", name);
+        experienceData.put("address", address);
+        experienceData.put("description", description);
+        experienceData.put("siteUrl", url);
+        experienceData.put("price", price);
+        experienceData.put("cityId", cityId);
+        experienceData.put("categoryId", categoryId);
+        experienceData.put("userId",userId);
+        experienceData.put("hasImage", hasImage);
+        final long experienceId = jdbcInsert.executeAndReturnKey(experienceData).longValue();
         return new ExperienceModel(experienceId, name, address, description,url, price, cityId, categoryId, userId, hasImage);
     }
 
@@ -130,12 +130,17 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public String getCountryCity(long experienceId){
-        return jdbcTemplate.queryForObject("WITH country_city_name AS ( SELECT cityname AS city_name, countryname AS country_name, cityid FROM argentinacities, countries WHERE argentinacities.countryid = countries.countryid )" +
-                "SELECT CONCAT(country_name, ', ', city_name) FROM country_city_name WHERE cityid = (SELECT cityid FROM experiences WHERE experienceid = ?)", new Object[] {experienceId}, String.class);
+        return jdbcTemplate.queryForObject("WITH country_city_name AS (" +
+                "SELECT cityname AS city_name, countryname AS country_name, cityid FROM argentinacities, countries" +
+                "WHERE argentinacities.countryid = countries.countryid )" +
+                "SELECT CONCAT(country_name, ', ', city_name) FROM country_city_name WHERE cityid =" +
+                "(SELECT cityid FROM experiences WHERE experienceid = ?)",
+                new Object[] {experienceId}, String.class);
     }
 
     @Override
     public List<ExperienceModel> getByUserId(long userId) {
-        return jdbcTemplate.query("SELECT * FROM experiences WHERE userid=?", new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM experiences WHERE userid = ?",
+                new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 }

@@ -8,7 +8,6 @@ import ar.edu.itba.getaway.models.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -28,25 +27,6 @@ public class UserDaoImpl implements UserDao {
 
     private final Collection<Roles> roles = Arrays.asList(Roles.values().clone());
 
-//    private static final ResultSetExtractor<Collection<UserModel>> USER_ROW_MAPPER = rs -> {
-//        Map<Long, UserModel> userMap = new HashMap<>();
-//        long userId;
-//        while (rs.next()) {
-//            userId = rs.getLong("userId");
-//            if (!userMap.containsKey(userId)) {
-//                userMap.put(userId, new UserModel(userId,
-//                        rs.getString("password"),
-//                        rs.getString("userName"),
-//                        rs.getString("userSurname"),
-//                        rs.getString("email"),
-//                        new ArrayList<>(),
-//                        rs.getLong("imgId")));
-//            }
-//            userMap.get(userId).addRole(Roles.valueOf(rs.getString("roleName")));
-//        }
-//        return userMap.values();
-//    };
-
     private final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new UserModel(rs.getLong("userid"),
                     rs.getString("password"),
@@ -57,10 +37,11 @@ public class UserDaoImpl implements UserDao {
                     rs.getLong("imgId"));
 
     private static final RowMapper<RoleModel> USER_ROLES_ROW_MAPPER = (rs, rowNum) ->
-            new RoleModel(rs.getLong("roleid"),Roles.valueOf(rs.getString("rolename")));
+            new RoleModel(rs.getLong("roleid"),
+                    Roles.valueOf(rs.getString("rolename")));
 
     private static final RowMapper<RoleModel> ROLE_MODEL_ROW_MAPPER = (rs, rowNum) ->
-            new RoleModel(rs.getLong("roleId"),
+            new RoleModel(rs.getLong("roleid"),
                     Roles.valueOf(rs.getString("roleName")));
 
 
@@ -78,7 +59,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Collection<RoleModel> getUserRoles(long userId){
-        return jdbcTemplate.query("SELECT roleid, rolename FROM users NATURAL JOIN userroles NATURAL JOIN roles WHERE userid=?", new Object[]{userId}, USER_ROLES_ROW_MAPPER);
+        return jdbcTemplate.query("SELECT roleid, rolename FROM users NATURAL JOIN userroles NATURAL JOIN roles WHERE userid=?",
+                new Object[]{userId}, USER_ROLES_ROW_MAPPER);
     }
 
     @Override
@@ -96,28 +78,28 @@ public class UserDaoImpl implements UserDao {
     @Override
     public UserModel createUser(String password, String name, String surname, String email,
                                 Collection<Roles> roles) throws DuplicateUserException {
-        final Map<String, Object> userInfo = new HashMap<>();
-        userInfo.put("userName", name);
-        userInfo.put("userSurname", surname);
-        userInfo.put("email", email);
-        userInfo.put("imgId", null);
-        userInfo.put("password", password);
+        final Map<String, Object> userData = new HashMap<>();
+        userData.put("userName", name);
+        userData.put("userSurname", surname);
+        userData.put("email", email);
+        userData.put("imgId", null);
+        userData.put("password", password);
 
         final long userId;
         try {
-            userId = userSimpleJdbcInsert.executeAndReturnKey(userInfo).longValue();
+            userId = userSimpleJdbcInsert.executeAndReturnKey(userData).longValue();
         } catch (DuplicateKeyException e) {
             throw new DuplicateUserException();
         }
 
-        Map<String, Object> userRoles = new HashMap<>();
-        userRoles.put("userId", userId);
+        Map<String, Object> userRolesData = new HashMap<>();
+        userRolesData.put("userId", userId);
 
         Optional<RoleModel> roleModel;
         for (Roles role : roles) {
             roleModel = getRoleByName(role);
-            userRoles.put("roleId", roleModel.get().getRoleId());
-            userRolesSimpleJdbcInsert.execute(userRoles);
+            userRolesData.put("roleId", roleModel.get().getRoleId());
+            userRolesSimpleJdbcInsert.execute(userRolesData);
         }
 
         return new UserModel(userId, password, name, surname, email, roles, null);
@@ -163,15 +145,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void addRole(long userId, Roles newRole) {
-        Map<String, Object> userRoles = new HashMap<>();
-        userRoles.put("roleId", userId);
-        userRoles.put("roleName", newRole.name());
-        roleSimpleJdbcInsert.execute(userRoles);
+        Map<String, Object> userRolesData = new HashMap<>();
+        userRolesData.put("roleId", userId);
+        userRolesData.put("roleName", newRole.name());
+        roleSimpleJdbcInsert.execute(userRolesData);
     }
 
     @Override
     public void updateProfileImage(Long imageId, UserModel userModel) {
-        jdbcTemplate.update("UPDATE users SET imgId = ? where userId = ?",
+        jdbcTemplate.update("UPDATE users SET imgId = ? WHERE userId = ?",
                 imageId, userModel.getId());
     }
 }

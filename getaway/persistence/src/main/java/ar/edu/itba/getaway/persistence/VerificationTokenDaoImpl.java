@@ -43,11 +43,11 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
 
     @Override
     public VerificationToken createVerificationToken(long userId, String token, LocalDateTime expirationDate) {
-        Map<String, Object> values = new HashMap<>();
-        values.put("verifUserId", userId);
-        values.put("verifToken", token);
-        values.put("verifExpirationDate", expirationDate);
-        final long tokenId = simpleJdbcInsert.executeAndReturnKey(values).longValue();
+        Map<String, Object> verifTokenData = new HashMap<>();
+        verifTokenData.put("verifUserId", userId);
+        verifTokenData.put("verifToken", token);
+        verifTokenData.put("verifExpirationDate", expirationDate);
+        final long tokenId = simpleJdbcInsert.executeAndReturnKey(verifTokenData).longValue();
         //Nunca retorna null
         return new VerificationToken(tokenId, token, userId, expirationDate);
     }
@@ -65,7 +65,7 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
 
     @Override
     public void removeTokenByUserId(long userId) {
-        jdbcTemplate.update("DELETE from verificationToken where verifUserId = ?", userId);
+        jdbcTemplate.update("DELETE FROM verificationToken WHERE verifUserId = ?", userId);
     }
 
     @Override

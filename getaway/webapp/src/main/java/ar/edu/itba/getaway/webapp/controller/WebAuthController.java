@@ -9,6 +9,9 @@ import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,10 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -46,6 +46,30 @@ public class WebAuthController {
     private ImageService imageService;
     @Autowired
     private ImageExperienceService imageExperienceService;
+    @Autowired
+    private MessageSource messageSource;
+
+    @RequestMapping(path = "/access-denied")
+    @ResponseStatus(code = HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ModelAndView accessDenied(@AuthenticationPrincipal MyUserDetails userDetails) {
+        Locale locale = LocaleContextHolder.getLocale();
+        String error = messageSource.getMessage("errors.accessDenied", null, locale);
+        Long code = Long.valueOf(HttpStatus.FORBIDDEN.toString());
+        final ModelAndView mav = new ModelAndView("errors");
+
+        try {
+            String email = userDetails.getUsername();
+            UserModel userModel = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
+            mav.addObject("hasSign", userModel.hasRole(Roles.USER));
+        } catch (NullPointerException e) {
+            mav.addObject("hasSign", false);
+        }
+
+        mav.addObject("errors", error);
+        mav.addObject("code", code);
+        return mav;
+    }
 
     @RequestMapping(path = "/register")
     public ModelAndView register(@ModelAttribute("registerForm") final RegisterForm form) {

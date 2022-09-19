@@ -42,6 +42,11 @@ public class UserServiceImpl implements UserService {
             Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     @Override
+    public Collection<RoleModel> getUserRoles(long userId) {
+        return userDao.getUserRoles(userId);
+    }
+
+    @Override
     public Optional<UserModel> getUserById(long id) {
         return userDao.getUserById(id);
     }
@@ -69,12 +74,13 @@ public class UserServiceImpl implements UserService {
         }
 
         VerificationToken verificationToken = verificationTokenOptional.get();
+        //Eliminamos el token siempre, ya sea valido o no
+        verificationTokenDao.removeTokenById(verificationToken.getId());
+
         if (!verificationToken.isValid()) {
             return Optional.empty();
         }
 
-        //Eliminamos el token siempre, ya sea valido o no
-        verificationTokenDao.removeTokenById(verificationToken.getId());
         return userDao.updateRoles(verificationToken.getUserId(), Roles.NOT_VERIFIED, Roles.VERIFIED);
     }
 
@@ -109,12 +115,13 @@ public class UserServiceImpl implements UserService {
         }
 
         PasswordResetToken passwordResetToken = passwordResetTokenOptional.get();
+        //Eliminamos el token siempre, ya sea valido o no
+        passwordResetTokenDao.removeTokenById(passwordResetToken.getId());
+
         if (!passwordResetToken.isValid()) {
             return Optional.empty();
         }
 
-        //Eliminamos el token siempre, ya sea valido o no
-        passwordResetTokenDao.removeTokenById(passwordResetToken.getId());
         return userDao.updatePassword(passwordResetToken.getUserId(), passwordEncoder.encode(password));
     }
 
@@ -174,8 +181,4 @@ public class UserServiceImpl implements UserService {
         return passwordResetTokenDao.createToken(userId, token, PasswordResetToken.generateTokenExpirationDate());
     }
 
-    @Override
-    public Collection<RoleModel> getUserRoles(long userId) {
-        return  userDao.getUserRoles(userId);
-    }
 }

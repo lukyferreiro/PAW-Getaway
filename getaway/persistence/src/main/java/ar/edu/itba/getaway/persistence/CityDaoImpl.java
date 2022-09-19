@@ -10,9 +10,6 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Repository
 public class CityDaoImpl implements CityDao {
 

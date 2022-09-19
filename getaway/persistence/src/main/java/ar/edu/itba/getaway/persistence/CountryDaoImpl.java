@@ -10,8 +10,6 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.*;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @Repository
 public class CountryDaoImpl implements CountryDao{
@@ -45,7 +43,6 @@ public class CountryDaoImpl implements CountryDao{
                 COUNTRY_MODEL_ROW_MAPPER));
     }
 
-    //TODO AGREGAR EL METODO EN TODAS LAS INTERFACES
     @Override
     public Optional<CountryModel> getIdByCountryName(String country){
      return jdbcTemplate.query("SELECT countryId FROM countries WHERE countryName = ?",

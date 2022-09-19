@@ -24,16 +24,23 @@ public class InitPageController {
     private ExperienceService experienceService;
 
     @RequestMapping(value = "/", method = {RequestMethod.GET})
-    public ModelAndView init(@AuthenticationPrincipal MyUserDetails userDetails) {
+    public ModelAndView init(@AuthenticationPrincipal MyUserDetails userDetails,
+                            @ModelAttribute("loggedUser") final UserModel loggedUser) {
         final ModelAndView mav = new ModelAndView("mainPage");
-
         try {
-            String email = userDetails.getUsername();
-            UserModel userModel = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
-            mav.addObject("hasSign", userModel.hasRole(Roles.USER));
+            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
         } catch (NullPointerException e) {
-            mav.addObject("hasSign", false);
+            mav.addObject("loggedUser", false);
         }
+
+
+//        try {
+//            String email = userDetails.getUsername();
+//            UserModel userModel = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
+//            mav.addObject("hasSign", userModel.hasRole(Roles.USER));
+//        } catch (NullPointerException e) {
+//            mav.addObject("hasSign", false);
+//        }
 
         List<ExperienceModel> experienceList = experienceService.getRandom();
 

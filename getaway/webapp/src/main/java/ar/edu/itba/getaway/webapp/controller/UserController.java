@@ -16,7 +16,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @ModelAttribute("loggedUser")
+    @ModelAttribute("loggedUser") 
     public UserModel loggedUser(Model model) {
 
         if (model.containsAttribute("loggedUser")) {

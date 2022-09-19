@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.webapp.config;
 
 import ar.edu.itba.getaway.webapp.auth.UserDetailService;
-import ar.edu.itba.getaway.webapp.exceptions.AccessDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.util.FileCopyUtils;
+
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
@@ -97,8 +97,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/")
                 .and().exceptionHandling()
-//                    .accessDeniedHandler(accessDeniedHandler())
-                    .accessDeniedPage("/errors")
+                    .accessDeniedHandler(accessDeniedHandler())
+//                    .accessDeniedPage("/errors")
                 .and().csrf().disable();
     }
 
@@ -107,11 +107,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/403");
     }
 
-//    @Bean
-//    public AccessDeniedHandler accessDeniedHandler() {
-//        return (httpServletRequest, httpServletResponse, e) -> {
-//            throw new AccessDeniedException();
-//        };
-//    }
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return (httpServletRequest, httpServletResponse, e) ->
+                httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/access-denied");
+    }
 
 }

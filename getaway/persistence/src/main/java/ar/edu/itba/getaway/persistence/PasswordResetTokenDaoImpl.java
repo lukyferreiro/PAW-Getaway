@@ -44,11 +44,11 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao{
 
     @Override
     public PasswordResetToken createToken(long userId, String token, LocalDateTime expirationDate) {
-        Map<String, Object> args = new HashMap<>();
-        args.put("passTokenUserId", userId);
-        args.put("passToken", token);
-        args.put("passTokenExpirationDate", expirationDate);
-        final long tokenId = simpleJdbcInsert.executeAndReturnKey(args).longValue();;
+        Map<String, Object> passTokenData = new HashMap<>();
+        passTokenData.put("passTokenUserId", userId);
+        passTokenData.put("passToken", token);
+        passTokenData.put("passTokenExpirationDate", expirationDate);
+        final long tokenId = simpleJdbcInsert.executeAndReturnKey(passTokenData).longValue();;
         //Nunca retorna null
         return new PasswordResetToken(tokenId, token, userId, expirationDate);
     }
@@ -61,12 +61,12 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao{
 
     @Override
     public void removeTokenById(long id) {
-        jdbcTemplate.update("DELETE from passwordResetToken where passTokenId = ?", id);
+        jdbcTemplate.update("DELETE FROM passwordResetToken WHERE passTokenId = ?", id);
     }
 
     @Override
     public void removeTokenByUserId(long userId) {
-        jdbcTemplate.update("DELETE from passwordResetToken where passTokenUserId = ?", userId);
+        jdbcTemplate.update("DELETE FROM passwordResetToken WHERE passTokenUserId = ?", userId);
     }
 
     @Override
