@@ -57,7 +57,6 @@ CREATE TABLE IF NOT EXISTS users
     password VARCHAR(255) NOT NULL,
     PRIMARY KEY (userId),
     UNIQUE(email),
-    FOREIGN KEY (roleId) REFERENCES roles (roleId) ON DELETE CASCADE,
     FOREIGN KEY (imgId) REFERENCES images (imgId) ON DELETE CASCADE
 );
 
