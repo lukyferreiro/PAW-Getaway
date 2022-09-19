@@ -7,7 +7,7 @@
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="experience.deleteQuestion"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
-      <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
+      <link href='<c:url value="/resources/css/delete.css"/>' rel="stylesheet">
    </head>
 
    <body>
@@ -27,13 +27,13 @@
                   <div class="col-12 px-0 d-flex align-items-center justify-content-center">
                      <c:url value="/delete/${experience.id}" var="postPath"/>
                      <form:form modelAttribute="deleteForm" action="${postPath}" id="deleteExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
-                        <div class="p-0 mt-3 mb-0 d-flex justify-content-around">
+                        <div class="buttons">
                            <a href="<c:url value = "/"/>">
-                              <button class="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
+                              <button class="btn btn-cancel-form m-3 px-3 py-2" id="cancelFormButton">
                                  <spring:message code="experienceForm.cancel"/>
                               </button>
                            </a>
-                           <button type="submit" class="btn btn-submit-form px-3 py-2" id="deleteExperienceFormButton" form="deleteExperienceForm">
+                           <button type="submit" class="btn btn-submit-form m-3 px-3 py-2" id="deleteExperienceFormButton" form="deleteExperienceForm">
                               <spring:message code="experience.delete"/>
                            </button>
                         </div>

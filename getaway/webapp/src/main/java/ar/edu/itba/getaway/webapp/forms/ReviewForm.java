@@ -17,7 +17,7 @@ public class ReviewForm {
     String description;
 
     @NotEmpty
-    @Pattern(regexp = "^([0-5])$")
+    @Pattern(regexp = "^([1-5])$")
     String score;
 
     public String getTitle() {
