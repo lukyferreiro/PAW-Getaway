@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> | <spring:message code="resetPasswordResult.title"/></title>
+      <title><spring:message code="pageName"/> - <spring:message code="resetPasswordResult.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
    </head>

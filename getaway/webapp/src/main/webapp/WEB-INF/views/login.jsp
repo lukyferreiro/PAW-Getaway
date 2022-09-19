@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> | <spring:message code="login.title"/></title>
+      <title><spring:message code="pageName"/> - <spring:message code="login.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href="<c:url value = "/resources/css/login&register.css"/>" rel="stylesheet" type="text/css"/>
    </head>

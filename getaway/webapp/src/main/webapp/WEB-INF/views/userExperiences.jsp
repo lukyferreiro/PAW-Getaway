@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/></title>
+      <title><spring:message code="pageName"/> - <spring:message code="experience.title"/></title>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
