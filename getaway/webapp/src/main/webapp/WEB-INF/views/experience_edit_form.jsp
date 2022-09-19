@@ -20,7 +20,7 @@
                <spring:message code="createExperience.description"/>
             </h2>
 
-            <c:url value="/edit/${experience.id}" var="postPath"/>
+            <c:url value="/user/experiences/edit/${experience.id}" var="postPath"/>
             <spring:message code="experienceForm.inputs.placeholder" var="placeholder"/>
             <spring:message code="experienceForm.activityMail.example" var="mailExample"/>
             <spring:message code="experienceForm.activityUrl.example" var="urlExample"/>
