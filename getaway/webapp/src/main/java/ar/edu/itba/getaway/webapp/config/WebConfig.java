@@ -75,7 +75,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 //        ds.setUsername("adrzztklademib");
 //        ds.setPassword("580c8ba69151e9ba288d107d1b28f9dfc3706838eccbfb4d4d9ca1cde2f6f86e");
         //Usuario PAW
-        ds.setUrl("jdbc:postgresql://10.16.1.110/paw-2022b-1");
+        ds.setUrl("jdbc:postgresql://10.16.1.110:5432/paw-2022b-1");
         ds.setUsername("paw-2022b-1");
         ds.setPassword("qo16kZtyI");
 
@@ -100,7 +100,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(300000);
+        multipartResolver.setMaxUploadSize(10000000);
         multipartResolver.setMaxUploadSizePerFile(MAX_SIZE_PER_FILE);
         multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE * 6);
         multipartResolver.setDefaultEncoding("utf-8");
