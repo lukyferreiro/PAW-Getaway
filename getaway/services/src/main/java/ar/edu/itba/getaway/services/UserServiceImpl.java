@@ -141,9 +141,9 @@ public class UserServiceImpl implements UserService {
 
     private void sendVerificationToken(UserModel userModel, VerificationToken token) {
         try {
-            String url = new URL("http", appBaseUrl, "/webapp_war_exploded/user/verifyAccount/" + token.getValue()).toString();
+//            String url = new URL("http", appBaseUrl, "/webapp_war_exploded/user/verifyAccount/" + token.getValue()).toString();
 //            String url = new URL("http", appBaseUrl, "/user/verifyAccount?token=" + token.getValue()).toString();
-//            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount/" + token.getValue()).toString();
+            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount/" + token.getValue()).toString();
 //            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount?token=" + token.getValue()).toString();
             Map<String, Object> mailAttrs = new HashMap<>();
             mailAttrs.put("confirmationURL", url);
@@ -156,9 +156,9 @@ public class UserServiceImpl implements UserService {
 
     private void sendPasswordResetToken(UserModel userModel, PasswordResetToken token) {
         try {
-            String url = new URL("http", appBaseUrl, "/webapp_war_exploded/user/resetPassword/" + token.getValue()).toString();
+//            String url = new URL("http", appBaseUrl, "/webapp_war_exploded/user/resetPassword/" + token.getValue()).toString();
 //            String url = new URL("http", appBaseUrl, "/user/resetPassword?token=" + token.getValue()).toString();
-//            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/resetPassword/" + token.getValue()).toString();
+            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/resetPassword/" + token.getValue()).toString();
 //            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/resetPassword?token=" + token.getValue()).toString();
             Map<String, Object> mailAttrs = new HashMap<>();
             mailAttrs.put("confirmationURL", url);
