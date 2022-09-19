@@ -66,6 +66,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/user/verifyAccount/result/successfully").hasRole("VERIFIED")
                     .antMatchers("/user/resetPasswordRequest").authenticated()
                     .antMatchers(HttpMethod.POST,"/user/resetPasswordRequest").authenticated()
+                    .antMatchers(HttpMethod.GET,"/user/resetPassword").authenticated()
                     .antMatchers(HttpMethod.POST,"/user/resetPassword").authenticated()
                     .antMatchers("/user/resetPassword/{token}").authenticated()
                     .antMatchers("/logout").authenticated()
