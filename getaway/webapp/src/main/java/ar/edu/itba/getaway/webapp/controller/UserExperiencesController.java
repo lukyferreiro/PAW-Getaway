@@ -157,7 +157,7 @@ public class UserExperiencesController {
                 description, url, price, cityId, categoryId + 1, userId, hasImg);
         experienceService.update(experienceId, experienceModel);
 
-        final ModelAndView mav = new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
+        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
 
         //No hace falta meterlo en un try catch porque ya me fije que loggedUser no sea null
         mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
