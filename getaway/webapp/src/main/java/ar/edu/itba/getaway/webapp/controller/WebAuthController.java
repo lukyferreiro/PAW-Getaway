@@ -289,8 +289,6 @@ public class WebAuthController {
                                        @ModelAttribute("experienceForm") final ExperienceForm form,
                                        @AuthenticationPrincipal MyUserDetails userDetails,
                                        final BindingResult errors) throws IOException {
-        final ModelAndView mav = new ModelAndView("redirect:/users/experiences");
-
         if (errors.hasErrors()) {
             return experienceEdit(experienceId, form, userDetails);
         }
@@ -324,7 +322,7 @@ public class WebAuthController {
         experienceService.update(experienceId,experienceModel);
 
 
-        return mav;
+        return new ModelAndView("redirect:/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
     }
 
 
