@@ -106,38 +106,43 @@
             </div>
 
             <!-- --------------RESEÑAS-------------- -->
-            <div class="mx-5 my-3">
-               <div class="d-flex mb-2 justify-content-between align-content-center">
-                  <h2 class="align-self-center">
-                     <spring:message code="review.start"/>
-                  </h2>
+            <c:choose>
+               <c:when test="${reviews.size()!=0}">
+                  <div class="mx-5 my-3">
+                     <div class="d-flex mb-2 justify-content-between align-content-center">
+                        <h2 class="align-self-center">
+                           <spring:message code="review.start"/>
+                        </h2>
 
-                  <a href="<c:url value = "/experiences/${activity.categoryName}/${activity.id}/create_review"/>">
-                     <button type="button" class="btn btn-create-review">
-                        <spring:message code="review.createReview"/>
-                     </button>
-                  </a>
-               </div>
+                        <a href="<c:url value = "/experiences/${activity.categoryName}/${activity.id}/create_review"/>">
+                           <button type="button" class="btn btn-create-review">
+                              <spring:message code="review.createReview"/>
+                           </button>
+                        </a>
+                     </div>
 
-               <c:forEach var="review" items="${reviews}">
-                  <div class="card mx-5 my-3 p-4">
-                     <div class="card-title d-flex">
-                        <div class="col m-2">
-                           <img class="user-img" src="<c:url value = "/resources/images/ic_user.png" />" alt="User"/>
-                           <h5><c:out value="User name"/></h5>
+                     <c:forEach var="review" items="${reviews}">
+                        <div class="card mx-5 my-3 p-4">
+                           <div class="card-title d-flex">
+                              <div class="col m-2">
+                                 <img class="user-img" src="<c:url value = "/resources/images/ic_user.png" />" alt="User"/>
+                                 <h5><c:out value="User name"/></h5>
+                              </div>
+                              <h2 class="col m-2"><c:out value="${review.title}"/></h2>
+                           </div>
+                           <div class="col card-body p-2 mw-25">
+                              <div class="card-text">
+                                 <h5 class="text-truncate"><c:out value="${review.description}"/></h5>
+                                 <h6><spring:message code="review.score"/> <c:out value="${review.score}"/></h6>
+                                 <h6><spring:message code="review.date"/> <c:out value="${review.reviewDate}"/></h6>
+                              </div>
+                           </div>
                         </div>
-                        <h2 class="col m-2"><c:out value="${review.title}"/></h2>
-                     </div>
-                     <div class="col card-body p-2 mw-25">
-                        <div class="card-text">
-                           <h5 class="text-truncate"><c:out value="${review.description}"/></h5>
-                           <h6><spring:message code="review.score"/> <c:out value="${review.score}"/></h6>
-                           <h6><spring:message code="review.date"/> <c:out value="${review.reviewDate}"/></h6>
-                        </div>
-                     </div>
+                     </c:forEach>
                   </div>
-               </c:forEach>
-            </div>
+               </c:when>
+            </c:choose>
+
          </div>
 
          <%@ include file="../components/footer.jsp" %>

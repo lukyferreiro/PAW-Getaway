@@ -18,12 +18,12 @@
          </jsp:include>
 
          <c:choose>
-            <c:when test="${!loggedUser}">
-               <h2><spring:message code="experience.notExist"/></h2>
+            <c:when test="${activities.size() == 0}">
+               <h2 class="title"><spring:message code="experience.notExist"/></h2>
             </c:when>
             <c:otherwise>
-               <h2><spring:message code="experience.myExperiences"/></h2>
-               <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
+               <h2 class="title"><spring:message code="experience.title"/></h2>
+               <div class="cards container-experiences container-fluid">
                   <c:forEach var="activity" items="${activities}">
                      <div class="card card-experience mx-3 my-2 p-0">
                         <a class="card-link"
@@ -39,13 +39,7 @@
                                       src="<c:url value='/${activity.id}/image'/>" alt="Imagen"/>
                               </c:otherwise>
                            </c:choose>
-                              <%--                                       <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/${activity.id}/image'/>"/>--%>
 
-                              <%--                        <div class="">--%>
-                              <%--                            <button type="button" class="btn btn-bookmark">--%>
-                              <%--                                <img src="<c:url value="/resources/images/ic_bookmark_white.svg"/>" alt="Guardar"/>--%>
-                              <%--                            </button>--%>
-                              <%--                        </div>--%>
                            <div class="card-body container-fluid p-2">
                               <h2 class="card-title container-fluid p-0"><c:out value="${activity.name}"/></h2>
                               <div class="card-text container-fluid p-0">
@@ -70,16 +64,15 @@
                            </div>
                         </a>
                         <div class="btn-group" role="group">
-                           <a href="<c:url value="/edit/${activity.id}"/>">
-                              <button type="button" class="btn btn-circle btn-exp">
+                           <a href="<c:url value="/user/experiences/edit/${activity.id}"/>" class="btn-exp">
+                              <button type="button" class="btn btn-circle">
                                  <i class="bi bi-pencil"></i>
                               </button>
                            </a>
-                           <a href="<c:url value="/delete/${activity.id}"/>">
-                              <button type="button" class="btn btn-circle btn-exp">
+                           <a href="<c:url value="/user/experiences/delete/${activity.id}"/>" class="btn-exp">
+                              <button type="button" class="btn btn-circle">
                                  <i class="bi bi-trash"></i>
                               </button>
-
                            </a>
                         </div>
 

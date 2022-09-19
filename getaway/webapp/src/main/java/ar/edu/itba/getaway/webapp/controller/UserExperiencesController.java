@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class EditExperiencesController {
+public class UserExperiencesController {
 
     @Autowired
     private UserService userService;
@@ -50,7 +50,7 @@ public class EditExperiencesController {
 
         return mav;
     }
-    @RequestMapping(value = "/delete/{experienceId}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.GET})
     public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
                                          @ModelAttribute("deleteForm") final DeleteForm form,
                                          @ModelAttribute("loggedUser") final UserModel loggedUser) {
@@ -67,7 +67,7 @@ public class EditExperiencesController {
         return mav;
     }
 
-    @RequestMapping(value = "/delete/{experienceId}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.POST})
     public ModelAndView experienceDeletePost(@PathVariable(value = "experienceId") final long experienceId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,
                                              @ModelAttribute("loggedUser") final UserModel loggedUser,
@@ -77,10 +77,10 @@ public class EditExperiencesController {
         }
 
         experienceService.delete(experienceId);
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/user/experiences");
     }
 
-    @RequestMapping(value = "/edit/{experienceId}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/user/experiences/edit/{experienceId}", method = {RequestMethod.GET})
     public ModelAndView experienceEdit(@PathVariable("experienceId") final long experienceId,
                                        @ModelAttribute("experienceForm") final ExperienceForm form,
                                        @ModelAttribute("loggedUser") final UserModel loggedUser) {
@@ -120,7 +120,7 @@ public class EditExperiencesController {
         return mav;
     }
 
-    @RequestMapping(value = "/edit/{experienceId}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/user/experiences/edit/{experienceId}", method = {RequestMethod.POST})
     public ModelAndView experienceEditPost(@PathVariable(value = "experienceId") final long experienceId,
                                            @ModelAttribute("experienceForm") final ExperienceForm form,
                                            @ModelAttribute("loggedUser") final UserModel loggedUser,
