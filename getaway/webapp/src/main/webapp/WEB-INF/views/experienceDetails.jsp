@@ -158,6 +158,5 @@
       </div>
 
       <%@ include file="../components/includes/bottomScripts.jsp" %>
-      <script src='<c:url value="/resources/js/experienceDetailsPage.js"/>'></script>
    </body>
 </html>

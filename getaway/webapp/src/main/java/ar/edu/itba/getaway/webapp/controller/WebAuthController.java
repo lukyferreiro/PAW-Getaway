@@ -1,13 +1,13 @@
 package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
-import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.Roles;
-import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.getaway.services.ExperienceService;
-import ar.edu.itba.getaway.services.UserService;
+import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.webapp.auth.MyUserDetails;
+import ar.edu.itba.getaway.webapp.exceptions.AccessDeniedException;
+import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import ar.edu.itba.getaway.webapp.forms.RegisterForm;
 import ar.edu.itba.getaway.webapp.forms.ResetPasswordEmailForm;
 import ar.edu.itba.getaway.webapp.forms.ResetPasswordForm;
@@ -22,14 +22,13 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +41,16 @@ public class WebAuthController {
     private UserService userService;
     @Autowired
     private ExperienceService experienceService;
+
+    @Autowired
+    CityService cityService;
+
+    @Autowired
+    CountryService countryService;
+    @Autowired
+    ImageService imageService;
+    @Autowired
+    ImageExperienceService imageExperienceService;
 
     @RequestMapping(path = "/register")
     public ModelAndView register(@ModelAttribute("registerForm") final RegisterForm form) {
@@ -223,7 +232,6 @@ public class WebAuthController {
     @RequestMapping(value = "/user/experiences", method = {RequestMethod.GET})
     public ModelAndView experience(@AuthenticationPrincipal MyUserDetails userDetails) {
         final ModelAndView mav = new ModelAndView("userExperiences");
-
         try {
             String email = userDetails.getUsername();
             UserModel userModel = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
@@ -237,5 +245,87 @@ public class WebAuthController {
 
         return mav;
     }
+    @RequestMapping(value = "/user/experiences/{experienceId}", method = {RequestMethod.GET})
+    public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
+                                       @ModelAttribute("experienceForm") final ExperienceForm form,
+                                       @AuthenticationPrincipal MyUserDetails userDetails) {
+        experienceService.delete(experienceId);
+        return experience(userDetails);
+    }
+
+    @RequestMapping(value = "/edit/{experienceId}", method = {RequestMethod.GET})
+    public ModelAndView experienceEdit(@PathVariable("experienceId") final long experienceId,
+                                       @ModelAttribute("experienceForm") final ExperienceForm form,
+                                   @AuthenticationPrincipal MyUserDetails userDetails) {
+        final ModelAndView mav = new ModelAndView("experience_edit_form");
+        ExperienceCategory[] categoryModels = ExperienceCategory.values();
+        List<String> categories = new ArrayList<>();
+        for (ExperienceCategory categoryModel : categoryModels) {
+            categories.add(categoryModel.getName());
+        }
+
+        List<CountryModel> countryModels = countryService.listAll();
+        List<CityModel> cityModels = cityService.listAll();
+        ExperienceModel experience = experienceService.getById(experienceId).get();
+
+        form.setActivityName(experience.getName());
+        form.setActivityAddress(experience.getAddress());
+        form.setActivityInfo(experience.getDescription());
+        form.setActivityPrice(experience.getPrice().toString());
+        form.setActivityUrl(experience.getSiteUrl());
+//form.setImg();
+        mav.addObject("categories", categories);
+        mav.addObject("cities", cityModels);
+        mav.addObject("countries", countryModels);
+        mav.addObject("experience",experience);
+        mav.addObject("formCountry","Argentina");
+        mav.addObject("formCity", cityService.getById(experience.getCityId()).get().getId());
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/edit/{experienceId}", method = {RequestMethod.POST})
+    public ModelAndView experienceEditPost(@PathVariable(value = "experienceId") final long experienceId,
+                                       @ModelAttribute("experienceForm") final ExperienceForm form,
+                                       @AuthenticationPrincipal MyUserDetails userDetails,
+                                       final BindingResult errors) throws IOException {
+        final ModelAndView mav = new ModelAndView("redirect:/users/experiences");
+
+        if (errors.hasErrors()) {
+            return experienceEdit(experienceId, form, userDetails);
+        }
+
+        long categoryId = form.getActivityCategoryId();
+        if (categoryId < 0) {
+            throw new CategoryNotFoundException();
+        }
+
+        long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
+
+        long userId;
+        try {
+            String email = userDetails.getUsername();
+            UserModel userModel = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
+            userId = userModel.getId();
+        }catch (NullPointerException e){
+            throw new AccessDeniedException();
+        }
+        boolean hasImg=false;
+        if (!form.getActivityImg().isEmpty()) {
+            hasImg = true;
+            final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
+            imageExperienceService.create(imageModel.getId(), experienceId, true);
+        }
+        Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
+        String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
+        String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
+
+        ExperienceModel experienceModel = new ExperienceModel(experienceId, form.getActivityName(), form.getActivityAddress(), description, url, price, cityId, categoryId + 1, userId, hasImg);
+        experienceService.update(experienceId,experienceModel);
+
+
+        return mav;
+    }
+
 
 }

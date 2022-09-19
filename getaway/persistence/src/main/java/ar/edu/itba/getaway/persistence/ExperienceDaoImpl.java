@@ -68,7 +68,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
                 "price = ?, " +
                 "cityId = ?, " +
                 "categoryId = ?, " +
-                "userId = ?" +
+                "userId = ?," +
                 "hasImage = ?" +
                 "WHERE experienceId = ?",
                 experienceModel.getName(), experienceModel.getAddress(),
