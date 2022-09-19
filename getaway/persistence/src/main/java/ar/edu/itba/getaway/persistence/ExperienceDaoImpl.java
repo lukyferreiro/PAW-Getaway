@@ -125,7 +125,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public List<ExperienceModel> getRandom(){
-        return jdbcTemplate.query("SELECT * FROM experiences ORDER BY RANDOM() LIMIT 5", EXPERIENCE_MODEL_ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM experiences ORDER BY RANDOM() LIMIT 10", EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override

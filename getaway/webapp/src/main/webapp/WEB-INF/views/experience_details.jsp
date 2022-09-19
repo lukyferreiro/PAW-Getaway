@@ -39,11 +39,13 @@
                      <div class="row">
                         <div class="col-3 p-0"></div>
                         <div class="card-body col-6 h-100">
-                           <div>
+                           <div> <!-- Direccion y ciudad -->
                               <h5 class="information-title">
                                  <spring:message code="experienceDetail.address"/>
                               </h5>
-                              <p class="information-text"><c:out value="${activity.address}"/></p>
+                              <p class="information-text">
+                                 <c:out value="${activity.address}"/>, <c:out value="${countryCity}"/>
+                              </p>
                            </div>
                            <div>
                               <h5 class="information-title">

@@ -116,6 +116,13 @@ public class WebAuthController {
             return mav ;
         }
         mav = new ModelAndView("redirect:/user/verifyAccount/result/unsuccessfully");
+
+        try {
+            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
+        } catch (NullPointerException e) {
+            mav.addObject("loggedUser", false);
+        }
+
         return mav;
     }
 
@@ -260,12 +267,14 @@ public class WebAuthController {
             success = true;
             UserModel user = userOptional.get();
             forceLogin(user, request);
-            try {
-                mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-            } catch (NullPointerException e) {
-                mav.addObject("loggedUser", false);
-            }
         }
+
+        try {
+            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
+        } catch (NullPointerException e) {
+            mav.addObject("loggedUser", false);
+        }
+
         mav.addObject("success", success);
         return mav;
     }

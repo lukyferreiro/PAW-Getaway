@@ -19,28 +19,6 @@
          <div class="container-fluid py-4 px-0 d-flex align-items-center">
             <div class="container-lg p-5 mt-5 smallContentContainer">
                <div class="row w-100 h-100 m-0 align-items-center justify-content-center">
-<%--                  <c:choose>--%>
-<%--                     <c:when test="${success}">--%>
-<%--                        <div class="col-12">--%>
-<%--                           <h1 class="text-center title">--%>
-<%--                              Tu cuenta se ha verificado con exito--%>
-<%--                           </h1>--%>
-<%--                           <p class="subtitle text-center mb-4">--%>
-<%--                              Comienza a disfrutar de los beneficios que Getaway tiene para ofrecerte.--%>
-<%--                           </p>--%>
-<%--                        </div>--%>
-<%--                        <div class="col-12 d-flex align-items-center justify-content-center">--%>
-<%--                           <i class="far fa-check-circle fa-7x" id="success"></i>--%>
-<%--                        </div>--%>
-<%--                        <div class="col-12 px-0 d-flex align-items-center justify-content-center">--%>
-<%--                           <a href="<c:url value = "/"/>">--%>
-<%--                              <button type="button" class="btn btn-header">--%>
-<%--                                 Inicio--%>
-<%--                              </button>--%>
-<%--                           </a>--%>
-<%--                        </div>--%>
-<%--                     </c:when>--%>
-<%--                     <c:otherwise>--%>
                   <div class="col-12">
                      <h1 class="text-center title">
                         <spring:message code="verifyUnsuccessfully.unsuccess"/>
@@ -59,9 +37,6 @@
                         </button>
                      </a>
                   </div>
-<%--                     </c:otherwise>--%>
-<%--                  </c:choose>--%>
-
                </div>
             </div>
          </div>
