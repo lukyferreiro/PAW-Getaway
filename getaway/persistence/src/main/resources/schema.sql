@@ -1,11 +1,3 @@
-CREATE TABLE IF NOT EXISTS tags
-(
-    tagId SERIAL NOT NULL,
-    tagName VARCHAR(30) NOT NULL,
-    PRIMARY KEY (tagId),
-    UNIQUE (tagName)
-);
-
 CREATE TABLE IF NOT EXISTS categories
 (
     categoryId SERIAL NOT NULL,
@@ -94,14 +86,6 @@ CREATE TABLE IF NOT EXISTS imagesExperiences
     isCover BOOLEAN NOT NULL,
     PRIMARY KEY (imgId),
     FOREIGN KEY (imgId) REFERENCES images (imgId) ON DELETE CASCADE,
-    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS tagExperience
-(
-    tagId INT NOT NULL,
-    experienceId INT NOT NULL,
-    FOREIGN KEY (tagId) REFERENCES tags (tagId) ON DELETE CASCADE,
     FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
 );
 

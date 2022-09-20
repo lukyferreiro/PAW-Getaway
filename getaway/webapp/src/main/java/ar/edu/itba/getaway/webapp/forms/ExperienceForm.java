@@ -2,12 +2,10 @@ package ar.edu.itba.getaway.webapp.forms;
 
 import ar.edu.itba.getaway.models.ExperienceCategory;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 public class  ExperienceForm {
 
@@ -47,7 +45,6 @@ public class  ExperienceForm {
     @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,';$%#&=:¿?!¡\n/.-])*$")
     private String activityInfo;
 
-    private List<String> activityTags;
 
     public String getActivityAddress() {
         return activityAddress;
@@ -84,9 +81,7 @@ public class  ExperienceForm {
     public String getActivityName() {
         return activityName;
     }
-    public List<String> getActivityTags() {
-        return activityTags;
-    }
+
     public String getActivityPrice() {
         return activityPrice;
     }
@@ -108,9 +103,7 @@ public class  ExperienceForm {
     public void setActivityName(String activityName) {
         this.activityName = activityName;
     }
-    public void setActivityTags(List<String> activityTags) {
-        this.activityTags = activityTags;
-    }
+
     public void setActivityCountry(String activityCountry) {
         this.activityCountry = activityCountry;
     }

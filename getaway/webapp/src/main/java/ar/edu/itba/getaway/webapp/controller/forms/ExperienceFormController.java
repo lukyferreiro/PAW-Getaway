@@ -25,8 +25,7 @@ public class ExperienceFormController {
     private CityService cityService;
     @Autowired
     private CountryService countryService;;
-    @Autowired
-    private TagService tagService;
+
     @Autowired
     private ImageService imageService;
     @Autowired
@@ -46,7 +45,6 @@ public class ExperienceFormController {
         }
 
         List<CountryModel> countryModels = countryService.listAll();
-        List<TagModel> tagModels = tagService.listAll();
         List<CityModel> cityModels = cityService.listAll();
 
         try {
@@ -58,7 +56,6 @@ public class ExperienceFormController {
         mav.addObject("categories", categories);
         mav.addObject("cities", cityModels);
         mav.addObject("countries", countryModels);
-        mav.addObject("tags", tagModels);
         return mav;
     }
 
