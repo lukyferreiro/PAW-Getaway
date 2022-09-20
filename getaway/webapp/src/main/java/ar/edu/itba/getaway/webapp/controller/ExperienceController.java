@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,10 +69,17 @@ public class ExperienceController {
             mav.addObject("loggedUser", false);
         }
 
+        List<Long> avgReviews = new ArrayList<>();
+        for(ExperienceModel experience : experienceList){
+            avgReviews.add(experienceService.getAvgReviews(experience.getId()).get());
+        }
+
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
         mav.addObject("activities", experienceList);
+        mav.addObject("avgReviews", avgReviews);
+
         return mav;
     }
 

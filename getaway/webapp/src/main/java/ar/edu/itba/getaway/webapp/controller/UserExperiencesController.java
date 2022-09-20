@@ -44,6 +44,11 @@ public class UserExperiencesController {
             List<ExperienceModel> experienceList = experienceService.getByUserId(loggedUser.getId());
             mav.addObject("activities", experienceList);
             mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
+            List<Long> avgReviews = new ArrayList<>();
+            for(ExperienceModel experience : experienceList){
+                avgReviews.add(experienceService.getAvgReviews(experience.getId()).get());
+            }
+            mav.addObject("avgReviews", avgReviews);
         } catch (NullPointerException e) {
             mav.addObject("loggedUser", false);
         }

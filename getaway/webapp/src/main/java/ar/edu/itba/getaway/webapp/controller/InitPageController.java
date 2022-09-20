@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -29,7 +30,14 @@ public class InitPageController {
 
         List<ExperienceModel> experienceList = experienceService.getRandom();
 
+        List<Long> avgReviews = new ArrayList<>();
+        for(ExperienceModel experience : experienceList){
+            avgReviews.add(experienceService.getAvgReviews(experience.getId()).get());
+        }
+
         mav.addObject("activities", experienceList);
+        mav.addObject("avgReviews", avgReviews);
+
         return mav;
     }
 

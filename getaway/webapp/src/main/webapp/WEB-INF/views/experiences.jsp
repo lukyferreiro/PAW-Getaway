@@ -8,6 +8,8 @@
       <title><spring:message code="pageName"/> - <c:url value="${dbCategoryName}"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href="<c:url value = "/resources/css/experiences.css" />" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+      <link href="<c:url value = "/resources/css/start_rating.css" />" rel="stylesheet">
    </head>
 
    <body>
@@ -77,7 +79,7 @@
 
 
             <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
-               <c:forEach var="activity" items="${activities}">
+               <c:forEach var="activity" varStatus="myIndex" items="${activities}">
                   <div class="card card-experience mx-3 my-2 p-0">
                      <a class="card-link" href="<c:url value="${activity.categoryName}/${activity.id}"/>">
                         <c:choose>
@@ -116,6 +118,56 @@
                                     </c:otherwise>
                                  </c:choose>
                               </h6>
+
+                              <c:choose>
+                                 <c:when test="${avgReviews[myIndex.index]!=0}">
+                                    <div class="information-title">
+                                       <h6 class="information-title">
+                                          <spring:message code="experienceDetail.review"/>
+                                       </h6>
+                                    </div>
+                                    <div class="star-rating">
+                                       <c:choose>
+                                          <c:when test="${avgReviews[myIndex.index] == 1 }">
+                                             <i class="fas fa-star"></i>
+                                             <i class="fas fa-star"></i>
+                                             <i class="fas fa-star"></i>
+                                             <i class="fas fa-star"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                          </c:when>
+                                          <c:when test="${avgReviews[myIndex.index] == 2 }">
+                                             <i class="fas fa-star"></i>
+                                             <i class="fas fa-star"></i>
+                                             <i class="fas fa-star"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                          </c:when>
+                                          <c:when test="${avgReviews[myIndex.index] == 3 }">
+                                             <i class="fas fa-star"></i>
+                                             <i class="fas fa-star"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                          </c:when>
+                                          <c:when test="${avgReviews[myIndex.index] == 4 }">
+                                             <i class="fas fa-star"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                          </c:when>
+                                          <c:when test="${avgReviews[myIndex.index] == 5}">
+                                             <i class="fas fa-star star-color"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                             <i class="fas fa-star star-color"></i>
+                                          </c:when>
+                                       </c:choose>
+                                    </div>
+
+                                 </c:when>
+                              </c:choose>
                            </div>
                         </div>
                      </a>

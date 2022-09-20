@@ -139,7 +139,7 @@
                                           <i class="fas fa-star star-color"></i>
                                           <i class="fas fa-star star-color"></i>
                                        </c:when>
-                                       <c:when test="${review.score == 5}">
+                                       <c:when test="${reviewAvg == 5}">
                                           <i class="fas fa-star star-color"></i>
                                           <i class="fas fa-star star-color"></i>
                                           <i class="fas fa-star star-color"></i>
