@@ -34,7 +34,8 @@ public class ExperienceController {
                                    @ModelAttribute("filterForm") final FilterForm form,
                                    @ModelAttribute("loggedUser") final UserModel loggedUser,
                                    @RequestParam Optional<Long> cityId,
-                                   @RequestParam Optional<Double> maxPrice) {
+                                   @RequestParam Optional<Double> maxPrice,
+                                   @RequestParam Optional<Long> score) {
         final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
@@ -53,12 +54,26 @@ public class ExperienceController {
         //Filtros
         if (cityId.isPresent()) {
             if (maxPrice.isPresent() && maxPrice.get() > 0) {
-                experienceList = experienceService.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
+                if(score.isPresent()){
+                    experienceList = experienceService.listByCategoryPriceCityAndScore(id, maxPrice.get(), cityId.get(), score.get());
+                }else{
+                    experienceList = experienceService.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
+                }
             } else {
-                experienceList = experienceService.listByCategoryAndCity(id, cityId.get());
+                if(score.isPresent()){
+                    experienceList = experienceService.listByCategoryCityAndScore(id, cityId.get(), score.get());
+                }else {
+                    experienceList = experienceService.listByCategoryAndCity(id, cityId.get());
+                }
             }
         } else if (maxPrice.isPresent() && maxPrice.get() > 0) {
-            experienceList = experienceService.listByCategoryAndPrice(id, maxPrice.get());
+            if(score.isPresent()){
+                experienceList = experienceService.listByCategoryPriceAndScore(id, maxPrice.get(), score.get());
+            }else{
+                experienceList = experienceService.listByCategoryAndPrice(id, maxPrice.get());
+            }
+        } else if(score.isPresent()){
+            experienceList = experienceService.listByCategoryAndScore(id, score.get());
         } else {
             experienceList = experienceService.listByCategory(id);
         }
@@ -134,7 +149,7 @@ public class ExperienceController {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
-            return experience(categoryName, form, loggedUser, Optional.empty(), Optional.empty());
+            return experience(categoryName, form, loggedUser, Optional.empty(),Optional.empty(), Optional.empty());
         }
 
         Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
@@ -149,6 +164,10 @@ public class ExperienceController {
             mav.addObject("maxPrice", priceMax);
         }
 
+        Long score = form.getScore();
+        if(score != null){
+            mav.addObject("score", score);
+        }
         try {
             mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
         } catch (NullPointerException e) {

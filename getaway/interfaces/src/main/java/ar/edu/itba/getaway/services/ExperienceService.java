@@ -19,4 +19,9 @@ public interface ExperienceService {
     String getCountryCity(long experienceId);
     List<ExperienceModel> getByUserId(long userId);
     Optional<Long> getAvgReviews(long experienceId);
+    List<ExperienceModel> listByCategoryPriceCityAndScore (long categoryId, Double max, long cityId, long score);
+    List<ExperienceModel> listByCategoryCityAndScore (long categoryId, long cityId, long score);
+    List<ExperienceModel> listByCategoryPriceAndScore (long categoryId, Double max, long score);
+    List<ExperienceModel> listByCategoryAndScore (long categoryId, long score);
+
 }

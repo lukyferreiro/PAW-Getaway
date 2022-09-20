@@ -83,4 +83,24 @@ public class ExperienceServiceImpl implements ExperienceService {
     public Optional<Long> getAvgReviews(long experienceId) {
         return experienceDao.getAvgReviews(experienceId);
     }
+
+    @Override
+    public List<ExperienceModel> listByCategoryPriceCityAndScore(long categoryId, Double max, long cityId, long score) {
+        return experienceDao.listByCategoryPriceCityAndScore( categoryId,  max,  cityId,  score);
+    }
+
+    @Override
+    public List<ExperienceModel> listByCategoryCityAndScore(long categoryId, long cityId, long score) {
+        return experienceDao.listByCategoryCityAndScore( categoryId,  cityId,  score);
+    }
+
+    @Override
+    public List<ExperienceModel> listByCategoryPriceAndScore(long categoryId, Double max, long score) {
+        return experienceDao.listByCategoryPriceAndScore( categoryId,  max,  score);
+    }
+
+    @Override
+    public List<ExperienceModel> listByCategoryAndScore(long categoryId, long score) {
+        return experienceDao.listByCategoryAndScore( categoryId,  score);
+    }
 }
