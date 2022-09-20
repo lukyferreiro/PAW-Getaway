@@ -102,55 +102,9 @@
                                  </c:otherwise>
                               </c:choose>
                            </div>
-                           <c:choose>
-                              <c:when test="${reviewAvg!=0}">
-                                 <div class="information-title">
-                                    <h5 class="information-title">
-                                       <spring:message code="experienceDetail.review"/>
-                                    </h5>
-                                 </div>
-                                 <div class="star-rating">
-                                    <c:choose>
-                                       <c:when test="${reviewAvg == 1 }">
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                       </c:when>
-                                       <c:when test="${reviewAvg == 2 }">
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                       </c:when>
-                                       <c:when test="${reviewAvg == 3 }">
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                       </c:when>
-                                       <c:when test="${reviewAvg == 4 }">
-                                          <i class="fas fa-star"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                       </c:when>
-                                       <c:when test="${reviewAvg == 5}">
-                                          <i class="fas fa-star star-color"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                          <i class="fas fa-star star-color"></i>
-                                       </c:when>
-                                    </c:choose>
-                                 </div>
-
-                              </c:when>
-                           </c:choose>
+                           <jsp:include page="/WEB-INF/views/star_avg.jsp">
+                              <jsp:param name="avgReview" value="${reviewAvg}"/>
+                           </jsp:include>
                         </div>
                         <div class="col-2 p-0"></div>
                      </div>
