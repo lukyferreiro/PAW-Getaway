@@ -9,6 +9,30 @@ let star3 = document.getElementById("star3");
 let star4 = document.getElementById("star4");
 let star5 = document.getElementById("star5");
 
+window.addEventListener("load", ()=>{
+    let score = document.getElementById("reviewFormScoreInput");
+    if(score.value === "1"){
+        star1.click();
+    }else if(score.value === "2"){
+        star1.click();
+        star2.click();
+    }else if(score.value === "3"){
+        star1.click();
+        star2.click();
+        star3.click();
+    }else if(score.value === "4"){
+        star1.click();
+        star2.click();
+        star3.click();
+        star4.click();
+    }else if(score.value === "5"){
+        star1.click();
+        star2.click();
+        star3.click();
+        star5.click();
+    }
+})
+
 star1.addEventListener("click", () => {
     let score = document.getElementById("reviewFormScoreInput");
     score.value = "1";
@@ -29,6 +53,7 @@ star5.addEventListener("click", () => {
     let score = document.getElementById("reviewFormScoreInput");
     score.value = "5";
 })
+
 
 editReviewFormButton.addEventListener("click", () => {
     if (processing) {

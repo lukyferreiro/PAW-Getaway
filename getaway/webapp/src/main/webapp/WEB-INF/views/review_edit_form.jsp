@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> - <spring:message code="createExperience.title"/></title>
+      <title><spring:message code="pageName"/> - <spring:message code="editReview.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href="<c:url value = "/resources/css/start_rating.css" />" rel="stylesheet">
 
@@ -44,73 +44,18 @@
                         </form:label>
                         <spring:message code="reviewForm.score.placeholder" var="placeholder"/>
                         <div class="star-rating">
-
-                           <c:choose>
-                              <c:when test="${review.score == 1}">
-                                 <input type="radio" id="star5" name="rating" value="5" />
-                                 <label for="star5" class="fas fa-star"></label>
-                                 <input type="radio" id="star4" name="rating" value="4" />
-                                 <label for="star4" class="fas fa-star"></label>
-                                 <input type="radio" id="star3" name="rating" value="3" />
-                                 <label for="star3" class="fas fa-star"></label>
-                                 <input type="radio" id="star2" name="rating" value="2" />
-                                 <label for="star2" class="fas fa-star"></label>
-                                 <input type="radio" id="star1" name="rating" value="1" />
-                                 <label for="star1" class="fas fa-star star-color"></label>
-                              </c:when>
-                              <c:when test="${review.score == 2}">
-                                 <input type="radio" id="star5" name="rating" value="5" />
-                                 <label for="star5" class="fas fa-star"></label>
-                                 <input type="radio" id="star4" name="rating" value="4" />
-                                 <label for="star4" class="fas fa-star"></label>
-                                 <input type="radio" id="star3" name="rating" value="3" />
-                                 <label for="star3" class="fas fa-star"></label>
-                                 <input type="radio" id="star2" name="rating" value="2" />
-                                 <label for="star2" class="fas fa-star star-color"></label>
-                                 <input type="radio" id="star1" name="rating" value="1" />
-                                 <label for="star1" class="fas fa-star star-color"></label>
-                              </c:when>
-                              <c:when test="${review.score == 3}">
-                                 <input type="radio" id="star5" name="rating" value="5" />
-                                 <label for="star5" class="fas fa-star"></label>
-                                 <input type="radio" id="star4" name="rating" value="4" />
-                                 <label for="star4" class="fas fa-star"></label>
-                                 <input type="radio" id="star3" name="rating" value="3" />
-                                 <label for="star3" class="fas fa-star star-color"></label>
-                                 <input type="radio" id="star2" name="rating" value="2" />
-                                 <label for="star2" class="fas fa-star star-color"></label>
-                                 <input type="radio" id="star1" name="rating" value="1" />
-                                 <label for="star1" class="fas fa-star star-color"></label>
-                              </c:when>
-                              <c:when test="${review.score == 4}">
-                                 <input type="radio" id="star5" name="rating" value="5" />
-                                 <label for="star5" class="fas fa-star"></label>
-                                 <input type="radio" id="star4" name="rating" value="4" />
-                                 <label for="star4" class="fas fa-star star-color"></label>
-                                 <input type="radio" id="star3" name="rating" value="3" />
-                                 <label for="star3" class="fas fa-star star-color"></label>
-                                 <input type="radio" id="star2" name="rating" value="2" />
-                                 <label for="star2" class="fas fa-star star-color"></label>
-                                 <input type="radio" id="star1" name="rating" value="1" />
-                                 <label for="star1" class="fas fa-star star-color"></label>
-                              </c:when>
-                              <c:when test="${review.score == 5}">
-                                 <input type="radio" id="star5" name="rating" value="5" />
-                                 <label for="star5" class="fas fa-star star-color"></label>
-                                 <input type="radio" id="star4" name="rating" value="4" />
-                                 <label for="star4" class="fas fa-star star-color"></label>
-                                 <input type="radio" id="star3" name="rating" value="3" />
-                                 <label for="star3" class="fas fa-star star-color"></label>
-                                 <input type="radio" id="star2" name="rating" value="2" />
-                                 <label for="star2" class="fas fa-star star-color"></label>
-                                 <input type="radio" id="star1" name="rating" value="1" />
-                                 <label for="star1" class="fas fa-star star-color"></label>
-                              </c:when>
-                           </c:choose>
-
-
+                           <input type="radio" id="star5" name="rating" value="5" />
+                           <label for="star5" class="fas fa-star"></label>
+                           <input type="radio" id="star4" name="rating" value="4" />
+                           <label for="star4" class="fas fa-star"></label>
+                           <input type="radio" id="star3" name="rating" value="3" />
+                           <label for="star3" class="fas fa-star"></label>
+                           <input type="radio" id="star2" name="rating" value="2" />
+                           <label for="star2" class="fas fa-star"></label>
+                           <input type="radio" id="star1" name="rating" value="1" />
+                           <label for="star1" class="fas fa-star"></label>
                         </div>
-                        <form:input path="score" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="reviewFormScoreInput"/>
+                        <form:input value="${review.score}" path="score" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="reviewFormScoreInput"/>
                         <form:errors path="score" element="p" cssClass="form-error-label"/>
                      </div>
                   </div>

@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> - <spring:message code="createExperience.title"/></title>
+      <title><spring:message code="pageName"/> - <spring:message code="editExperience.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 
