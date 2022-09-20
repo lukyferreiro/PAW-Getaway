@@ -38,6 +38,11 @@ public class ReviewModel {
         return score;
     }
 
+    public String getStringScore() {
+        return String.valueOf(score);
+    }
+
+
     public long getExperienceId() {
         return experienceId;
     }

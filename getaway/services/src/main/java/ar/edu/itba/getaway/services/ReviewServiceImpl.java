@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewServiceImpl implements ReviewService{
@@ -38,6 +39,26 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public List<ReviewUserModel> getReviewAndUser(long experienceId) {
         return reviewDao.getReviewAndUser(experienceId);
+    }
+
+    @Override
+    public Optional<ReviewModel> getById(long reviewId) {
+        return reviewDao.getById(reviewId);
+    }
+
+    @Override
+    public List<ReviewUserModel> getByUserId(long userId) {
+        return reviewDao.getByUserId(userId);
+    }
+
+    @Override
+    public boolean delete(long reviewId) {
+        return reviewDao.delete(reviewId);
+    }
+
+    @Override
+    public boolean update(long reviewId, ReviewModel reviewModel) {
+        return reviewDao.update(reviewId, reviewModel);
     }
 
 }

@@ -40,6 +40,9 @@
                      <a class="dropdown-item" href="<c:url value = "/user/experiences"/>">
                            <spring:message code="navbar.experiencies"/>
                      </a>
+                     <a class="dropdown-item" href="<c:url value = "/user/reviews"/>">
+                        <spring:message code="navbar.reviews"/>
+                     </a>
                      <a class="dropdown-item" href="<c:url value = "/logout"/>">
                            <spring:message code="navbar.logout"/>
                      </a>

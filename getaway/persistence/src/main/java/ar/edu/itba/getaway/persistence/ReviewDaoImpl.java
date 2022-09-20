@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.persistence;
 
+import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class ReviewDaoImpl implements ReviewDao{
@@ -87,5 +85,40 @@ public class ReviewDaoImpl implements ReviewDao{
     public List<ReviewUserModel> getReviewAndUser(long experienceId){
         return jdbcTemplate.query("SELECT * FROM reviews NATURAL JOIN users WHERE experienceId = ?",
                 new Object[]{experienceId}, REVIEW_USER_ROW_MAPPER);
+    }
+
+    @Override
+    public Optional<ReviewModel> getById(long reviewId) {
+        return jdbcTemplate.query("SELECT * FROM reviews WHERE reviewId = ?",
+                new Object[]{reviewId}, REVIEW_MODEL_ROW_MAPPER).stream().findFirst();
+    }
+
+    @Override
+    public List<ReviewUserModel> getByUserId(long userId) {
+        return jdbcTemplate.query("SELECT * FROM reviews  NATURAL JOIN users WHERE userid = ?",
+                new Object[]{userId}, REVIEW_USER_ROW_MAPPER);
+    }
+
+    @Override
+    public boolean delete(long reviewId) {
+        return jdbcTemplate.update("DELETE FROM reviews WHERE reviewId = ?",
+                reviewId) == 1;
+    }
+
+    @Override
+    public boolean update(long reviewId, ReviewModel reviewModel) {
+        return jdbcTemplate.update("UPDATE reviews " +
+                        "SET title = ?, " +
+                        "description = ?, " +
+                        "score = ?, " +
+                        "experienceid = ?, " +
+                        "reviewdate = ?, " +
+                        "userid = ? " +
+                        "WHERE reviewId = ?",
+                reviewModel.getTitle(), reviewModel.getDescription(),
+                reviewModel.getScore(), reviewModel.getExperienceId(),
+                reviewModel.getReviewDate(),
+                reviewModel.getUserId(),
+                reviewId) == 1;
     }
 }

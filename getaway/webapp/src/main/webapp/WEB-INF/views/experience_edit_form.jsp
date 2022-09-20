@@ -164,7 +164,7 @@
                </div>
 
                <div class="p-0 mt-3 mb-0 d-flex justify-content-around">
-                  <a href="<c:url value = "/"/>">
+                  <a href="<c:url value = "/user/experiences"/>">
                      <button class="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
                         <spring:message code="experienceForm.cancel"/>
                      </button>
