@@ -155,3 +155,11 @@ CREATE TABLE IF NOT EXISTS passwordResetToken
     FOREIGN KEY (passTokenUserId) REFERENCES USERS (userId) ON DELETE CASCADE,
     PRIMARY KEY (passTokenId)
 );
+
+CREATE TABLE IF NOT EXISTS favuserexperience(
+    userId INT NOT NULL,
+    experienceId INT NOT NULL,
+    PRIMARY KEY (userId, experienceId),
+    FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE,
+    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
+);
