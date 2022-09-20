@@ -96,6 +96,7 @@ public class WebAuthController {
     --------------------Verify Account---------------------
      -----------------------------------------------------*/
 
+    //This is the endpoint that I call from the email
     @RequestMapping(path = "/user/verifyAccount/{token}")
     public ModelAndView verifyAccount(HttpServletRequest request,
                                       @PathVariable("token") final String token,
@@ -220,6 +221,7 @@ public class WebAuthController {
         return mav;
     }
 
+    //This is the endpoint that I call from the email
     @RequestMapping(path = "/user/resetPassword/{token}")
     public ModelAndView resetPassword(@PathVariable("token") String token,
                                       @ModelAttribute("resetPasswordForm") final ResetPasswordForm form,

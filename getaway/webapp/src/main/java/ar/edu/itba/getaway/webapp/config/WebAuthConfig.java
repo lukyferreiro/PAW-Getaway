@@ -58,18 +58,20 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                     //Session routes
                     .antMatchers("/login", "/register").anonymous()
+                    .antMatchers("/logout").authenticated()
+                    //Verify Account
                     .antMatchers("/user/verifyAccount/{token}").hasRole("NOT_VERIFIED")
                     .antMatchers("/user/verifyAccount/status/send").hasRole("NOT_VERIFIED")
                     .antMatchers("/user/verifyAccount/status/resend").hasRole("NOT_VERIFIED")
                     .antMatchers("/user/verifyAccount/result/unsuccessfully").hasRole("NOT_VERIFIED")
-                    .antMatchers("/user/verifyAccount/result/successfully").hasRole("NOT_VERIFIED")
+//                    .antMatchers("/user/verifyAccount/result/successfully").hasRole("NOT_VERIFIED")
                     .antMatchers("/user/verifyAccount/result/successfully").hasRole("VERIFIED")
-//                    .antMatchers("/user/resetPasswordRequest").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/user/resetPasswordRequest").authenticated()
+                    //Reset Password
+                    .antMatchers("/user/resetPasswordRequest").authenticated()
+                    .antMatchers(HttpMethod.POST,"/user/resetPasswordRequest").authenticated()
                     .antMatchers(HttpMethod.POST,"/user/resetPassword").authenticated()
                     .antMatchers("/user/resetPassword/{token}").authenticated()
-                    .antMatchers("/logout").authenticated()
-                    //Profile routes
+                    //User routes
                     .antMatchers("/user/experiences").authenticated()
                     //Experiences
                     .antMatchers(HttpMethod.GET,"/create_experience").hasRole("VERIFIED")
