@@ -20,4 +20,5 @@ public interface ExperienceService {
     List<ExperienceModel> getRandom();
     String getCountryCity(long experienceId);
     List<ExperienceModel> getByUserId(long userId);
+    Optional<Long> getAvgReviews(long experienceId);
 }

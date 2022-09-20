@@ -78,4 +78,9 @@ public class ExperienceServiceImpl implements ExperienceService {
     public List<ExperienceModel> getByUserId(long userId) {
         return experienceDao.getByUserId(userId);
     }
+
+    @Override
+    public Optional<Long> getAvgReviews(long experienceId) {
+        return experienceDao.getAvgReviews(experienceId);
+    }
 }

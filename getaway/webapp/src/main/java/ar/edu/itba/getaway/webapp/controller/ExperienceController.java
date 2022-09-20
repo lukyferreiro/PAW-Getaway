@@ -97,6 +97,11 @@ public class ExperienceController {
         final Double avgScore = reviewService.getAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
         final String countryCity = experienceService.getCountryCity(experienceId);
+        final Optional<Long> experienceAvgReview = experienceService.getAvgReviews(experienceId);
+
+        if(experienceAvgReview.isPresent()){
+            mav.addObject("reviewAvg", experienceAvgReview.get());
+        }
 
         try {
             mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));

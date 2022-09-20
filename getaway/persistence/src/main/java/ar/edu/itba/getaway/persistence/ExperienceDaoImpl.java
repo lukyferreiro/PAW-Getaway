@@ -21,6 +21,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
+    private static final RowMapper<Long> REVIEWS_EXPERIENCE_ROW_MAPPER = (rs,rowNum) -> rs.getLong("avg");
+
     private static final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new ExperienceModel(rs.getLong("experienceid"),
                     rs.getString("experienceName"),
@@ -142,5 +144,11 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public List<ExperienceModel> getByUserId(long userId) {
         return jdbcTemplate.query("SELECT * FROM experiences WHERE userid = ?",
                 new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public Optional<Long> getAvgReviews(long experienceId){
+        return jdbcTemplate.query("SELECT avg(score) FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.experienceid = ?",
+                new Object[]{experienceId}, REVIEWS_EXPERIENCE_ROW_MAPPER).stream().findFirst();
     }
 }
