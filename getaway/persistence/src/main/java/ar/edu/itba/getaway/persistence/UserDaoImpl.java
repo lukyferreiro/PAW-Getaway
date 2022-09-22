@@ -58,7 +58,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Collection<RoleModel> getUserRolesModels(long userId){
-        return jdbcTemplate.query("SELECT roleid, rolename FROM users NATURAL JOIN userroles NATURAL JOIN roles WHERE userid=?",
+        final String query = "SELECT roleid, rolename FROM users NATURAL JOIN userroles NATURAL JOIN roles WHERE userid=?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query,
                 new Object[]{userId}, USER_ROLES_ROW_MAPPER);
     }
 
@@ -69,20 +71,25 @@ public class UserDaoImpl implements UserDao {
         for(RoleModel roleModel : rolesModel){
             rolesCollection.add(roleModel.getRoleName());
         }
+        LOGGER.debug("Executing query to get roles of user with id: {}", userId);
         return rolesCollection;
 
     }
 
     @Override
     public Optional<UserModel> getUserById(long userId) {
-        return jdbcTemplate.query("SELECT * FROM users WHERE userId = ?",
-                new Object[]{userId}, USER_MODEL_ROW_MAPPER).stream().findFirst();
+        final String query = "SELECT * FROM users WHERE userId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{userId}, USER_MODEL_ROW_MAPPER)
+                .stream().findFirst();
     }
 
     @Override
     public Optional<UserModel> getUserByEmail(String email) {
-        return jdbcTemplate.query("SELECT * FROM users WHERE email = ?",
-                new Object[]{email}, USER_MODEL_ROW_MAPPER).stream().findFirst();
+        final String query = "SELECT * FROM users WHERE email = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{email}, USER_MODEL_ROW_MAPPER)
+                .stream().findFirst();
     }
 
     @Override
@@ -98,6 +105,7 @@ public class UserDaoImpl implements UserDao {
         final long userId;
         try {
             userId = userSimpleJdbcInsert.executeAndReturnKey(userData).longValue();
+            LOGGER.info("Created user with id {}", userId);
         } catch (DuplicateKeyException e) {
             throw new DuplicateUserException();
         }
@@ -110,6 +118,7 @@ public class UserDaoImpl implements UserDao {
             roleModel = getRoleByName(role);
             userRolesData.put("roleId", roleModel.get().getRoleId());
             userRolesSimpleJdbcInsert.execute(userRolesData);
+            LOGGER.info("Added role {} to user {}", roleModel.get().getRoleName().name() , userId);
         }
 
         return new UserModel(userId, password, name, surname, email, roles, null);
@@ -117,48 +126,69 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<RoleModel> getRoleByName(Roles role) {
+        final String query = "SELECT * FROM roles WHERE roleName = ?";
+        LOGGER.debug("Executing query: {}", query);
         String roleName = role.name();
-        return jdbcTemplate.query("SELECT * FROM roles WHERE roleName = ?",
-                new Object[]{roleName}, ROLE_MODEL_ROW_MAPPER).stream().findFirst();
+        return jdbcTemplate.query(query, new Object[]{roleName}, ROLE_MODEL_ROW_MAPPER)
+                .stream().findFirst();
     }
 
     @Override
     public Optional<UserModel> updateRoles(long userId, Roles oldVal, Roles newVal) {
+        final String query = "UPDATE userroles SET roleid = ? WHERE userid = ? AND roleid = ?";
+        LOGGER.debug("Executing query: {}", query);
         Long oldValueID = getRoleByName(oldVal).get().getRoleId();
         Long newValueID = getRoleByName(newVal).get().getRoleId();
-        if (jdbcTemplate.update("UPDATE userroles SET roleid = ? WHERE userid = ? AND roleid = ?",
-                newValueID, userId, oldValueID) == 1) {
+        if (jdbcTemplate.update(query, newValueID, userId, oldValueID) == 1) {
+            LOGGER.debug("Roles updated");
             return getUserById(userId);
         }
+        LOGGER.debug("Roles not updated");
         return Optional.empty();
     }
 
     @Override
     public Optional<UserModel> updatePassword(long userId, String password) {
-        if (jdbcTemplate.update("UPDATE users SET password = ? WHERE userId = ?",
-                password, userId) == 1) {
+        final String query = "UPDATE users SET password = ? WHERE userId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        if (jdbcTemplate.update(query, password, userId) == 1) {
+            LOGGER.debug("Password updated");
             return getUserById(userId);
         }
+        LOGGER.debug("Password not updated");
         return Optional.empty();
     }
 
     @Override
     public void updateUserInfo(UserInfo userInfo, UserModel userModel) {
-        jdbcTemplate.update("UPDATE users SET userName = ?, userSurname = ? WHERE userId = ?",
-                userInfo.getName(), userInfo.getSurname(), userModel.getId());
+        final String query = "UPDATE users SET userName = ?, userSurname = ? WHERE userId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        if (jdbcTemplate.update(query, userInfo.getName(), userInfo.getSurname(), userModel.getId()) == 1) {
+            LOGGER.debug("User info updated");
+        }
+        else {
+            LOGGER.debug("User info not updated");
+        }
     }
 
     @Override
     public void addRole(long userId, Roles newRole) {
         Map<String, Object> userRolesData = new HashMap<>();
-        userRolesData.put("roleId", userId);
+        userRolesData.put("userId", userId);
         userRolesData.put("roleName", newRole.name());
-        roleSimpleJdbcInsert.execute(userRolesData);
+        userRolesSimpleJdbcInsert.execute(userRolesData);
+        LOGGER.info("Added role {} to user {}", newRole.name(), userId);
     }
 
     @Override
     public void updateProfileImage(Long imageId, UserModel userModel) {
-        jdbcTemplate.update("UPDATE users SET imgId = ? WHERE userId = ?",
-                imageId, userModel.getId());
+        final String query = "UPDATE users SET imgId = ? WHERE userId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        if (jdbcTemplate.update(query, imageId, userModel.getId()) == 1) {
+            LOGGER.debug("Profile picture of user {} updated", userModel.getId());
+        }
+        else {
+            LOGGER.debug("Profile picture of user {} not updated", userModel.getId());
+        }
     }
 }

@@ -34,26 +34,32 @@ public class CityDaoImpl implements CityDao {
 
     @Override
     public Optional<CityModel> getById(long cityId) {
-        return jdbcTemplate.query("SELECT * FROM argentinaCities WHERE cityId = ?",
-                new Object[]{cityId},CITY_MODEL_ROW_MAPPER).stream().findFirst();
+        final String query = "SELECT * FROM argentinaCities WHERE cityId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{cityId}, CITY_MODEL_ROW_MAPPER)
+                .stream().findFirst();
     }
 
     @Override
     public List<CityModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM argentinaCities ORDER BY cityname ASC ",
-                CITY_MODEL_ROW_MAPPER));
+        final String query = "SELECT * FROM argentinaCities ORDER BY cityname ASC";
+        LOGGER.debug("Executing query: {}", query);
+        return new ArrayList<>(jdbcTemplate.query(query, CITY_MODEL_ROW_MAPPER));
     }
 
     @Override
     public List<CityModel> getByCountryId(long countryId) {
-        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM argentinaCities WHERE countryid = ? ORDER BY cityname ASC",
-                new Object[]{countryId}, CITY_MODEL_ROW_MAPPER));
+        final String query = "SELECT * FROM argentinaCities WHERE countryid = ? ORDER BY cityname ASC";
+        LOGGER.debug("Executing query: {}", query);
+        return new ArrayList<>(jdbcTemplate.query(query, new Object[]{countryId}, CITY_MODEL_ROW_MAPPER));
 
     }
 
     @Override
     public Optional<CityModel> getIdByName(String cityName) {
-        return jdbcTemplate.query("SELECT * FROM argentinaCities WHERE cityname = ?",
-                new Object[]{cityName}, CITY_MODEL_ROW_MAPPER).stream().findFirst();
+        final String query = "SELECT * FROM argentinaCities WHERE cityname = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{cityName}, CITY_MODEL_ROW_MAPPER)
+                .stream().findFirst();
     }
 }

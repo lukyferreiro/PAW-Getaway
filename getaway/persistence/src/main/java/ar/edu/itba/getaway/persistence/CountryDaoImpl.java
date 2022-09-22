@@ -34,20 +34,25 @@ public class CountryDaoImpl implements CountryDao{
 
     @Override
     public Optional<CountryModel> getById(long countryId) {
-        return jdbcTemplate.query("SELECT * FROM countries WHERE countryId = ?",
-                new Object[]{countryId},COUNTRY_MODEL_ROW_MAPPER).stream().findFirst();
+        final String query = "SELECT * FROM countries WHERE countryId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{countryId}, COUNTRY_MODEL_ROW_MAPPER)
+                .stream().findFirst();
     }
 
     @Override
     public List<CountryModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM countries ORDER BY countryname ASC",
-                COUNTRY_MODEL_ROW_MAPPER));
+        final String query = "SELECT * FROM countries ORDER BY countryname ASC";
+        LOGGER.debug("Executing query: {}", query);
+        return new ArrayList<>(jdbcTemplate.query(query, COUNTRY_MODEL_ROW_MAPPER));
     }
 
     @Override
-    public Optional<CountryModel> getIdByCountryName(String country){
-     return jdbcTemplate.query("SELECT countryId FROM countries WHERE countryName = ?",
-             new Object[]{country},COUNTRY_MODEL_ROW_MAPPER).stream().findFirst();
+    public Optional<CountryModel> getIdByCountryName(String country) {
+        final String query = "SELECT countryId FROM countries WHERE countryName = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{country}, COUNTRY_MODEL_ROW_MAPPER)
+                .stream().findFirst();
     }
 
 }

@@ -33,20 +33,25 @@ public class CategoryDaoImpl implements CategoryDao {
 
     @Override
     public List<CategoryModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query("SELECT categoryId, categoryName FROM categories",
-                CATEGORY_MODEL_ROW_MAPPER));
+        final String query = "SELECT categoryId, categoryName FROM categories";
+        LOGGER.debug("Executing query: {}", query);
+        return new ArrayList<>(jdbcTemplate.query(query, CATEGORY_MODEL_ROW_MAPPER));
     }
 
     @Override
     public Optional<CategoryModel> getById(long categoryId) {
-        return jdbcTemplate.query("SELECT categoryId, categoryName FROM categories WHERE categoryId = ?",
-                new Object[]{categoryId}, CATEGORY_MODEL_ROW_MAPPER).stream().findFirst();
+        final String query = "SELECT categoryId, categoryName FROM categories WHERE categoryId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{categoryId}, CATEGORY_MODEL_ROW_MAPPER)
+                .stream().findFirst();
     }
 
     @Override
     public Optional<CategoryModel> getByName(String categoryName){
-        return jdbcTemplate.query("SELECT categoryId, categoryName FROM categories WHERE categoryName = ?",
-                new Object[]{categoryName}, CATEGORY_MODEL_ROW_MAPPER).stream().findFirst();
+        final String query = "SELECT categoryId, categoryName FROM categories WHERE categoryName = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{categoryName}, CATEGORY_MODEL_ROW_MAPPER)
+                .stream().findFirst();
     }
 
 

@@ -22,7 +22,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
     private final SimpleJdbcInsert jdbcInsert;
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
 
-    private static final RowMapper<Long> REVIEWS_EXPERIENCE_ROW_MAPPER = (rs,rowNum) -> rs.getLong("avg");
+    private static final RowMapper<Long> REVIEWS_EXPERIENCE_ROW_MAPPER = (rs,rowNum) ->
+            rs.getLong("avg");
 
     private static final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new ExperienceModel(rs.getLong("experienceid"),
@@ -30,7 +31,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
                     rs.getString("address"),
                     rs.getString("description"),
                     rs.getString("siteUrl"),
-                    (rs.getObject("price")==null) ? null : rs.getBigDecimal("price").doubleValue(),
+                    (rs.getObject("price") == null) ? null : rs.getBigDecimal("price").doubleValue(),
                     rs.getLong("cityId"),
                     rs.getLong("categoryId"),
                     rs.getLong("userId"),
@@ -58,11 +59,15 @@ public class ExperienceDaoImpl implements ExperienceDao {
         experienceData.put("userId",userId);
         experienceData.put("hasImage", hasImage);
         final long experienceId = jdbcInsert.executeAndReturnKey(experienceData).longValue();
+
+        LOGGER.info("Created new experience with id {}", experienceId);
+
         return new ExperienceModel(experienceId, name, address, description,url, price, cityId, categoryId, userId, hasImage);
     }
 
     @Override
     public boolean update(long experienceId, ExperienceModel experienceModel) {
+        LOGGER.debug("Executing query to update experience with id: {}", experienceId);
         return jdbcTemplate.update("UPDATE experiences " +
                 "SET experienceName = ?, " +
                 "address = ?, " +
@@ -84,55 +89,64 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public boolean delete(long experienceId) {
-        return jdbcTemplate.update("DELETE FROM experiences WHERE experienceId = ?",
-                experienceId) == 1;
+        final String query = "DELETE FROM experiences WHERE experienceId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.update(query, experienceId) == 1;
     }
 
     @Override
     public List<ExperienceModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query("SELECT * FROM experiences",
-                EXPERIENCE_MODEL_ROW_MAPPER));
+        final String query = "SELECT * FROM experiences";
+        LOGGER.debug("Executing query: {}", query);
+        return new ArrayList<>(jdbcTemplate.query(query, EXPERIENCE_MODEL_ROW_MAPPER));
     }
 
     @Override
     public Optional<ExperienceModel> getById(long experienceId) {
-
-        return jdbcTemplate.query("SELECT * FROM experiences WHERE experienceId = ?",
-                new Object[]{experienceId}, EXPERIENCE_MODEL_ROW_MAPPER).stream().findFirst();
+        final String query = "SELECT * FROM experiences WHERE experienceId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{experienceId}, EXPERIENCE_MODEL_ROW_MAPPER)
+                .stream().findFirst();
     }
 
     @Override
     public List<ExperienceModel> listByCategory(long categoryId) {
-        return jdbcTemplate.query("SELECT * FROM experiences NATURAL JOIN categories WHERE categoryId = ?",
-                new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
+        final String query = "SELECT * FROM experiences NATURAL JOIN categories WHERE categoryId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
     public List<ExperienceModel> listByCategoryAndCity(long categoryId, long cityId) {
-
-        return jdbcTemplate.query("SELECT * FROM experiences NATURAL JOIN categories WHERE categoryId = ? AND cityId = ?",
-                new Object[]{categoryId, cityId}, EXPERIENCE_MODEL_ROW_MAPPER);
+        final String query = "SELECT * FROM experiences NATURAL JOIN categories WHERE categoryId = ? AND cityId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{categoryId, cityId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public List<ExperienceModel> listByCategoryAndPrice(long categoryId,Double max){
-        return jdbcTemplate.query("SELECT * FROM experiences WHERE categoryid = ? AND price <= ? ",
-                new Object[]{categoryId,max}, EXPERIENCE_MODEL_ROW_MAPPER);
+    public List<ExperienceModel> listByCategoryAndPrice(long categoryId, Double max) {
+        final String query = "SELECT * FROM experiences WHERE categoryid = ? AND price <= ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{categoryId, max}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
     public List<ExperienceModel> listByCategoryPriceAndCity(long categoryId, Double max, long cityId) {
-        return jdbcTemplate.query("SELECT * FROM experiences WHERE categoryid = ? AND price <= ? AND cityid = ?",
-                new Object[]{categoryId,max, cityId}, EXPERIENCE_MODEL_ROW_MAPPER);
+        final String query = "SELECT * FROM experiences WHERE categoryid = ? AND price <= ? AND cityid = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{categoryId, max, cityId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public List<ExperienceModel> getRandom(){
-        return jdbcTemplate.query("SELECT * FROM experiences ORDER BY RANDOM() LIMIT 10", EXPERIENCE_MODEL_ROW_MAPPER);
+    public List<ExperienceModel> getRandom() {
+        final String query = "SELECT * FROM experiences ORDER BY RANDOM() LIMIT 10";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
     public String getCountryCity(long experienceId){
+        LOGGER.debug("Executing query to getCountryCity of experience with id: {}", experienceId);
         return jdbcTemplate.queryForObject("WITH country_city_name AS (" +
                 " SELECT cityname AS city_name, countryname AS country_name, cityid FROM argentinacities, countries" +
                 " WHERE argentinacities.countryid = countries.countryid )" +
@@ -143,13 +157,16 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public List<ExperienceModel> getByUserId(long userId) {
-        return jdbcTemplate.query("SELECT * FROM experiences WHERE userid = ?",
-                new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
+        final String query = "SELECT * FROM experiences WHERE userid = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public Optional<Long> getAvgReviews(long experienceId){
-        return jdbcTemplate.query("SELECT avg(score) FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.experienceid = ?",
-                new Object[]{experienceId}, REVIEWS_EXPERIENCE_ROW_MAPPER).stream().findFirst();
+    public Optional<Long> getAvgReviews(long experienceId) {
+        final String query = "SELECT avg(score) FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.experienceid = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{experienceId}, REVIEWS_EXPERIENCE_ROW_MAPPER)
+                .stream().findFirst();
     }
 }

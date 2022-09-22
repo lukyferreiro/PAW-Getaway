@@ -60,53 +60,65 @@ public class ReviewDaoImpl implements ReviewDao{
         reviewData.put("reviewDate", reviewDate);
         reviewData.put("userId", userId);
         final long reviewId = jdbcInsert.executeAndReturnKey(reviewData).longValue();
+
+        LOGGER.debug("Created new review with id {} of user with id {}", reviewId, userId);
+
         return new ReviewModel(reviewId, title, description,score, experienceId, reviewDate, userId);
     }
 
     @Override
     public List<ReviewModel> getReviewsFromId(long experienceId) {
-        return jdbcTemplate.query("SELECT * FROM reviews WHERE experienceId = ?",
-                new Object[]{experienceId}, REVIEW_MODEL_ROW_MAPPER);
+        final String query = "SELECT * FROM reviews WHERE experienceId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{experienceId}, REVIEW_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public Double getAverageScore(long experienceId){
-        return jdbcTemplate.queryForObject("SELECT AVG(score) FROM reviews WHERE experienceId = ?",
-                new Object[] { experienceId }, Double.class);
+    public Double getAverageScore(long experienceId) {
+        final String query = "SELECT AVG(score) FROM reviews WHERE experienceId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.queryForObject(query, new Object[]{experienceId}, Double.class);
     }
 
     @Override
     public Integer getReviewCount(long experienceId) {
-        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM reviews WHERE experienceId = ?",
-                new Object[] { experienceId }, Integer.class);
+        final String query = "SELECT COUNT(*) FROM reviews WHERE experienceId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.queryForObject(query, new Object[]{experienceId}, Integer.class);
     }
 
     @Override
-    public List<ReviewUserModel> getReviewAndUser(long experienceId){
-        return jdbcTemplate.query("SELECT * FROM reviews NATURAL JOIN users WHERE experienceId = ?",
-                new Object[]{experienceId}, REVIEW_USER_ROW_MAPPER);
+    public List<ReviewUserModel> getReviewAndUser(long experienceId) {
+        final String query = "SELECT * FROM reviews NATURAL JOIN users WHERE experienceId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{experienceId}, REVIEW_USER_ROW_MAPPER);
     }
 
     @Override
     public Optional<ReviewModel> getById(long reviewId) {
-        return jdbcTemplate.query("SELECT * FROM reviews WHERE reviewId = ?",
-                new Object[]{reviewId}, REVIEW_MODEL_ROW_MAPPER).stream().findFirst();
+        final String query = "SELECT * FROM reviews WHERE reviewId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{reviewId}, REVIEW_MODEL_ROW_MAPPER)
+                .stream().findFirst();
     }
 
     @Override
     public List<ReviewUserModel> getByUserId(long userId) {
-        return jdbcTemplate.query("SELECT * FROM reviews  NATURAL JOIN users WHERE userid = ?",
-                new Object[]{userId}, REVIEW_USER_ROW_MAPPER);
+        final String query = "SELECT * FROM reviews  NATURAL JOIN users WHERE userid = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{userId}, REVIEW_USER_ROW_MAPPER);
     }
 
     @Override
     public boolean delete(long reviewId) {
-        return jdbcTemplate.update("DELETE FROM reviews WHERE reviewId = ?",
-                reviewId) == 1;
+        final String query = "DELETE FROM reviews WHERE reviewId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.update(query, reviewId) == 1;
     }
 
     @Override
     public boolean update(long reviewId, ReviewModel reviewModel) {
+        LOGGER.debug("Executing query to update review with id: {}", reviewId);
         return jdbcTemplate.update("UPDATE reviews " +
                         "SET title = ?, " +
                         "description = ?, " +
