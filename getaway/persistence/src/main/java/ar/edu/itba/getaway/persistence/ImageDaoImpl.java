@@ -1,6 +1,8 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.ImageModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,10 +15,9 @@ import java.util.*;
 @Repository
 public class ImageDaoImpl implements ImageDao {
 
-    @Autowired
-    private DataSource ds;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageDaoImpl.class);
 
     private static final RowMapper<ImageModel> IMAGE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new ImageModel(rs.getLong("imgid"),

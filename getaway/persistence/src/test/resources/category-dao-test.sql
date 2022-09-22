@@ -1,0 +1,4 @@
+-- TODO
+-- TRUNCATE TABLE ... RESTART IDENTITY AND COMMIT NO CHECK;
+
+-- Hacer inserts ...

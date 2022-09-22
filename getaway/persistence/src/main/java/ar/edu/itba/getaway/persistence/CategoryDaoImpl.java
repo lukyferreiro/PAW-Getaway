@@ -1,6 +1,8 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.CategoryModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,10 +15,9 @@ import java.util.*;
 @Repository
 public class CategoryDaoImpl implements CategoryDao {
 
-    @Autowired
-    private DataSource ds;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CategoryDaoImpl.class);
 
     private static final RowMapper<CategoryModel> CATEGORY_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new CategoryModel(rs.getLong("categoryId"),

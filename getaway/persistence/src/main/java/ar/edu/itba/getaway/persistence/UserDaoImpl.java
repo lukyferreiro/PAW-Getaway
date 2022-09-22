@@ -5,6 +5,8 @@ import ar.edu.itba.getaway.models.RoleModel;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.UserInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,12 +20,11 @@ import java.util.*;
 @Repository
 public class UserDaoImpl implements UserDao {
 
-    @Autowired
-    private DataSource ds;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert userSimpleJdbcInsert;
     private final SimpleJdbcInsert roleSimpleJdbcInsert;
     private final SimpleJdbcInsert userRolesSimpleJdbcInsert;
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
 
     private final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new UserModel(rs.getLong("userid"),

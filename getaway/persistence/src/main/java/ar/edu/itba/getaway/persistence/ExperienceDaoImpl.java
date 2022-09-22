@@ -1,6 +1,8 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,10 +18,9 @@ import java.util.Map;
 @Repository
 public class ExperienceDaoImpl implements ExperienceDao {
 
-    @Autowired
-    private DataSource ds;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
 
     private static final RowMapper<Long> REVIEWS_EXPERIENCE_ROW_MAPPER = (rs,rowNum) -> rs.getLong("avg");
 

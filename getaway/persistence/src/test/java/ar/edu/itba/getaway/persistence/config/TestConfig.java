@@ -12,10 +12,12 @@ import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @ComponentScan({ "ar.edu.itba.getaway.persistence" })
+@EnableTransactionManagement
 @Configuration
 public class TestConfig {
 
@@ -23,14 +25,12 @@ public class TestConfig {
     private Resource hsqldbSql;
     @Value("classpath:schema.sql")
     private Resource schemaSql;
-//    @Value("classpath:populators/init.sql")
-//    private Resource initSql;
 
     @Bean
     public DataSource dataSource() {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(JDBCDriver.class);
-        //Corre en memoria y la bd se llama paw
+        //Corre en memoria y la bd se llama getaway
         ds.setUrl("jdbc:hsqldb:mem:getaway");
         ds.setUsername("ha");
         ds.setPassword("");
@@ -52,9 +52,7 @@ public class TestConfig {
 
     private DatabasePopulator dataSourcePopulator(){
         final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-        dbp.addScript(hsqldbSql);
-        dbp.addScript(schemaSql);
-//        dbp.addScript(initSql);
+        dbp.addScripts(hsqldbSql, schemaSql);//Esto lo que hace es que setee el modo compatibilidad con postgres.
         return dbp;
     }
 }

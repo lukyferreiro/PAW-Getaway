@@ -1,6 +1,8 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.PasswordResetToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,10 +18,9 @@ import java.util.Optional;
 @Repository
 public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao{
 
-    @Autowired
-    private DataSource ds;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
+    private static final Logger LOGGER = LoggerFactory.getLogger(PasswordResetTokenDaoImpl.class);
 
     private static final RowMapper<PasswordResetToken> PASSWORD_RESET_TOKEN_ROW_MAPPER =
             (rs, rowNum) -> new PasswordResetToken(rs.getLong("passtokenid"),
@@ -49,29 +50,39 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao{
         passTokenData.put("passToken", token);
         passTokenData.put("passTokenExpirationDate", expirationDate);
         final long tokenId = simpleJdbcInsert.executeAndReturnKey(passTokenData).longValue();;
-        //Nunca retorna null
+
+        LOGGER.debug("Created new password reset token with id {}", tokenId);
+
         return new PasswordResetToken(tokenId, token, userId, expirationDate);
     }
 
     @Override
     public Optional<PasswordResetToken> getTokenByValue(String token) {
-        return jdbcTemplate.query("SELECT * FROM passwordResetToken WHERE passToken = ?",
-                new Object[]{token}, PASSWORD_RESET_TOKEN_ROW_MAPPER).stream().findFirst();
+        final String query = "SELECT * FROM passwordResetToken WHERE passToken = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{token}, PASSWORD_RESET_TOKEN_ROW_MAPPER)
+                .stream().findFirst();
     }
 
     @Override
     public void removeTokenById(long id) {
-        jdbcTemplate.update("DELETE FROM passwordResetToken WHERE passTokenId = ?", id);
+        final String query = "DELETE FROM passwordResetToken WHERE passTokenId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        jdbcTemplate.update(query, id);
     }
 
     @Override
     public void removeTokenByUserId(long userId) {
-        jdbcTemplate.update("DELETE FROM passwordResetToken WHERE passTokenUserId = ?", userId);
+        final String query = "DELETE FROM passwordResetToken WHERE passTokenUserId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        jdbcTemplate.update(query, userId);
     }
 
     @Override
     public Optional<PasswordResetToken> getTokenByUserId(long userId) {
-        return jdbcTemplate.query("SELECT * FROM passwordResetToken WHERE passTokenUserId = ?",
-                new Object[]{userId}, PASSWORD_RESET_TOKEN_ROW_MAPPER).stream().findFirst();
+        final String query = "SELECT * FROM passwordResetToken WHERE passTokenUserId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{userId}, PASSWORD_RESET_TOKEN_ROW_MAPPER)
+                .stream().findFirst();
     }
 }

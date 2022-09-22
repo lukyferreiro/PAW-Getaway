@@ -3,6 +3,8 @@ package ar.edu.itba.getaway.persistence;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,11 +17,9 @@ import java.util.*;
 @Repository
 public class ReviewDaoImpl implements ReviewDao{
 
-    @Autowired
-    private DataSource ds;
-
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReviewDaoImpl.class);
 
     private static final RowMapper<ReviewModel> REVIEW_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new ReviewModel(rs.getLong("reviewid"),

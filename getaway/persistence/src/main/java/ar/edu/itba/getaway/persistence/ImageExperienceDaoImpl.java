@@ -1,6 +1,8 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.ImageExperienceModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,10 +15,9 @@ import java.util.*;
 @Repository
 public class ImageExperienceDaoImpl implements ImageExperienceDao {
 
-    @Autowired
-    private DataSource ds;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageExperienceDaoImpl.class);
 
     private static final RowMapper<ImageExperienceModel> IMAGE_EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new ImageExperienceModel(rs.getLong("imgId"),
