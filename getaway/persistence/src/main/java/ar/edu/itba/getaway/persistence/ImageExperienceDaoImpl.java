@@ -1,6 +1,8 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.ImageExperienceModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,10 +15,9 @@ import java.util.*;
 @Repository
 public class ImageExperienceDaoImpl implements ImageExperienceDao {
 
-    @Autowired
-    private DataSource ds;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageExperienceDaoImpl.class);
 
     private static final RowMapper<ImageExperienceModel> IMAGE_EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new ImageExperienceModel(rs.getLong("imgId"),
@@ -37,29 +38,38 @@ public class ImageExperienceDaoImpl implements ImageExperienceDao {
         imageExperienceData.put("isCover", isCover);
         imageExperienceData.put("imgId", imageId);
         jdbcInsert.execute(imageExperienceData);
+
+        LOGGER.info("Created new image experience with id {}", imageId);
+
         return new ImageExperienceModel(imageId, experienceId, isCover);
     }
 
     @Override
     public boolean update(long imageId, ImageExperienceModel imageExperienceModel) {
-        return jdbcTemplate.update("UPDATE imagesExperiences SET experienceId = ?, isCover = ? WHERE imgId = ?",
-                imageExperienceModel.getExperienceId(), imageExperienceModel.isCover(), imageId) == 1;
+        final String query = "UPDATE imagesExperiences SET experienceId = ?, isCover = ? WHERE imgId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.update(query, imageExperienceModel.getExperienceId(), imageExperienceModel.isCover(), imageId) == 1;
     }
+
     @Override
     public boolean delete(long imageId) {
-        return jdbcTemplate.update("DELETE FROM imagesExperiences WHERE imgId = ?",
-                imageId) == 1;
+        final String query = "DELETE FROM imagesExperiences WHERE imgId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.update(query, imageId) == 1;
     }
 
     @Override
     public List<ImageExperienceModel> listAll() {
-        return new ArrayList<>(jdbcTemplate.query("SELECT imgId, experienceId, isCover FROM imagesExperiences",
-                IMAGE_EXPERIENCE_MODEL_ROW_MAPPER));
+        final String query = "SELECT imgId, experienceId, isCover FROM imagesExperiences";
+        LOGGER.debug("Executing query: {}", query);
+        return new ArrayList<>(jdbcTemplate.query(query, IMAGE_EXPERIENCE_MODEL_ROW_MAPPER));
     }
 
     @Override
     public Optional<ImageExperienceModel> getById(long imageId) {
-        return jdbcTemplate.query("SELECT imgId, experienceId, isCover FROM imagesExperiences WHERE imgId = ?",
-                new Object[]{imageId}, IMAGE_EXPERIENCE_MODEL_ROW_MAPPER).stream().findFirst();
+        final String query = "SELECT imgId, experienceId, isCover FROM imagesExperiences WHERE imgId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{imageId}, IMAGE_EXPERIENCE_MODEL_ROW_MAPPER)
+                .stream().findFirst();
     }
 }
