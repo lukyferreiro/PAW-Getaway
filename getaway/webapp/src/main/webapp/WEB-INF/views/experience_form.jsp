@@ -168,5 +168,7 @@
 
       <%@ include file="../components/includes/bottomScripts.jsp" %>
       <script src='<c:url value="/resources/js/createExperience.js"/>'></script>
+      <script src='<c:url value="/resources/js/cancelButton.js"/>'></script>
+
    </body>
 </html>

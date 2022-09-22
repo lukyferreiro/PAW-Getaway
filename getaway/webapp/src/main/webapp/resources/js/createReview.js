@@ -1,8 +1,8 @@
 let processing = false;
-let processingCancel = false;
+// let processingCancel = false;
 let createReviewForm = document.getElementById("createReviewForm");
 let createReviewFormButton = document.getElementById("createReviewFormButton");
-let cancelFormButton = document.getElementById("cancelFormButton");
+// let cancelFormButton = document.getElementById("cancelFormButton");
 
 createReviewFormButton.addEventListener("click", () => {
     if (processing) {
@@ -14,11 +14,11 @@ createReviewFormButton.addEventListener("click", () => {
     processing = false;
 })
 
-cancelFormButton.addEventListener("click", () => {
-    if (processingCancel) {
-        return;
-    }
-    processingCancel = true;
-    cancelFormButton.disabled = true;
-    processingCancel = false;
-})
+// cancelFormButton.addEventListener("click", () => {
+//     if (processingCancel) {
+//         return;
+//     }
+//     processingCancel = true;
+//     cancelFormButton.disabled = true;
+//     processingCancel = false;
+// })

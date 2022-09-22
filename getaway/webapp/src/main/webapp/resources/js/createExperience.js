@@ -1,8 +1,8 @@
 let processing = false;
-let processingCancel = false;
+// let processingCancel = false;
 let createExperienceForm = document.getElementById("createExperienceForm");
 let createExperienceFormButton = document.getElementById("createExperienceFormButton");
-let cancelFormButton = document.getElementById("cancelFormButton");
+// let cancelFormButton = document.getElementById("cancelFormButton");
 let countryInput = document.getElementById("experienceFormCountryInput");
 let cityInput = document.getElementById("experienceFormCityInput");
 
@@ -42,14 +42,14 @@ createExperienceFormButton.addEventListener("click", () => {
     processing = false;
 })
 
-cancelFormButton.addEventListener("click", () => {
-    if (processingCancel) {
-        return;
-    }
-    processingCancel = true;
-    cancelFormButton.disabled = true;
-    processingCancel = false;
-})
+// cancelFormButton.addEventListener("click", () => {
+//     if (processingCancel) {
+//         return;
+//     }
+//     processingCancel = true;
+//     cancelFormButton.disabled = true;
+//     processingCancel = false;
+// })
 
 
 // async function getCities(country = ''){
