@@ -33,27 +33,6 @@ window.addEventListener("load", ()=>{
     }
 })
 
-star1.addEventListener("click", () => {
-    let score = document.getElementById("reviewFormScoreInput");
-    score.value = "1";
-})
-star2.addEventListener("click", () => {
-    let score = document.getElementById("reviewFormScoreInput");
-    score.value = "2";
-})
-star3.addEventListener("click", () => {
-    let score = document.getElementById("reviewFormScoreInput");
-    score.value = "3";
-})
-star4.addEventListener("click", () => {
-    let score = document.getElementById("reviewFormScoreInput");
-    score.value = "4";
-})
-star5.addEventListener("click", () => {
-    let score = document.getElementById("reviewFormScoreInput");
-    score.value = "5";
-})
-
 
 editReviewFormButton.addEventListener("click", () => {
     if (processing) {

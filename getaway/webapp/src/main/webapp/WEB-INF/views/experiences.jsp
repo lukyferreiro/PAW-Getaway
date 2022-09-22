@@ -141,6 +141,7 @@
 
       <%@ include file="../components/includes/bottomScripts.jsp" %>
       <script src='<c:url value="/resources/js/filter.js"/>'></script>
+      <script src='<c:url value="/resources/js/ratingScore.js"/>'></script>
 
    </body>
 </html>

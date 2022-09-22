@@ -44,7 +44,7 @@
                         </form:label>
                         <spring:message code="reviewForm.score.placeholder" var="placeholder"/>
                         <jsp:include page="/WEB-INF/views/star_form.jsp"/>
-                        <form:input value="${review.score}" path="score" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="reviewFormScoreInput"/>
+                        <form:input value="${review.score}" path="score" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="scoreInput"/>
                         <form:errors path="score" element="p" cssClass="form-error-label"/>
                      </div>
                   </div>
@@ -68,6 +68,7 @@
 
       <%@ include file="../components/includes/bottomScripts.jsp" %>
       <script src='<c:url value="/resources/js/editReview.js"/>'></script>
+      <script src='<c:url value="/resources/js/ratingScore.js"/>'></script>
       <script src="https://kit.fontawesome.com/5ea815c1d0.js"></script>
 
    </body>
