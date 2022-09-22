@@ -1,5 +1,7 @@
 package ar.edu.itba.getaway.webapp.config;
 
+import ar.edu.itba.getaway.webapp.auth.CustomAccessDeniedHandler;
+import ar.edu.itba.getaway.webapp.auth.RefererRedirectionAuthenticationSuccessHandler;
 import ar.edu.itba.getaway.webapp.auth.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.InputStreamReader;
@@ -33,6 +36,18 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     private Resource authKey;
 
     @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return (httpServletRequest, httpServletResponse, e) ->
+                httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/access-denied");
+//        return new CustomAccessDeniedHandler();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new RefererRedirectionAuthenticationSuccessHandler();
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -48,72 +63,63 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
-    /* Es importante el orden de las reglas escritas, ya que la primera que coincida con
-     la url solicitada será aplicada y no se evaluarán las subsiguientes. Es por esto
-      que la regla default antMatchers("/**").authenticated() es la última en aplicarse */
+    /* Es importante el orden de las reglas */
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
-//                .invalidSessionUrl("/login")
-                .and().authorizeRequests()
-                    //Session routes
-                    .antMatchers("/login", "/register").anonymous()
-                    .antMatchers("/logout").authenticated()
-                    //Verify Account
-                    .antMatchers("/user/verifyAccount/{token}").hasRole("NOT_VERIFIED")
-                    .antMatchers("/user/verifyAccount/status/send").hasRole("NOT_VERIFIED")
-                    .antMatchers("/user/verifyAccount/status/resend").hasRole("NOT_VERIFIED")
-                    .antMatchers("/user/verifyAccount/result/unsuccessfully").hasRole("NOT_VERIFIED")
+            .and().authorizeRequests()
+                //Session routes
+                .antMatchers("/login", "/register").anonymous()
+                .antMatchers("/logout").authenticated()
+                //Verify Account
+                .antMatchers("/user/verifyAccount/{token}").hasRole("NOT_VERIFIED")
+                .antMatchers("/user/verifyAccount/status/send").hasRole("NOT_VERIFIED")
+                .antMatchers("/user/verifyAccount/status/resend").hasRole("NOT_VERIFIED")
+                .antMatchers("/user/verifyAccount/result/unsuccessfully").hasRole("NOT_VERIFIED")
 //                    .antMatchers("/user/verifyAccount/result/successfully").hasRole("NOT_VERIFIED")
-                    .antMatchers("/user/verifyAccount/result/successfully").hasRole("VERIFIED")
-                    //Reset Password
-                    .antMatchers("/user/resetPasswordRequest").authenticated()
-                    .antMatchers(HttpMethod.POST,"/user/resetPasswordRequest").authenticated()
-                    .antMatchers(HttpMethod.POST,"/user/resetPassword").authenticated()
-                    .antMatchers("/user/resetPassword/{token}").authenticated()
-                    //User routes
-                    .antMatchers("/user/experiences").authenticated()
-                    //Experiences
-                    .antMatchers(HttpMethod.GET,"/create_experience").hasRole("VERIFIED")
-                    .antMatchers(HttpMethod.POST,"/create_experience").hasRole("VERIFIED")
-                    .antMatchers(HttpMethod.GET,"/experiences/{categoryName}/{id}/create_review").hasRole("VERIFIED")
-                    .antMatchers(HttpMethod.POST,"/experiences/{categoryName}/{id}/create_review").hasRole("VERIFIED")
-                    .antMatchers(HttpMethod.GET,"/experiences/{categoryName}/{experienceId}").permitAll()
-                    .antMatchers(HttpMethod.GET,"/experiences/{categoryName}").permitAll()
-                    .antMatchers(HttpMethod.POST,"/experiences/{categoryName}").permitAll()
-                    .antMatchers(HttpMethod.GET,"/{experienceId}/image").permitAll()
-                    //else
-                    .antMatchers("/**").permitAll()
+                .antMatchers("/user/verifyAccount/result/successfully").hasRole("VERIFIED")
+                //Reset Password
+                .antMatchers("/user/resetPasswordRequest").authenticated()
+                .antMatchers(HttpMethod.POST,"/user/resetPasswordRequest").authenticated()
+                .antMatchers(HttpMethod.POST,"/user/resetPassword").authenticated()
+                .antMatchers("/user/resetPassword/{token}").authenticated()
+                //User routes
+                .antMatchers("/user/experiences").authenticated()
+                //Experiences
+                .antMatchers(HttpMethod.GET,"/create_experience").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.POST,"/create_experience").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.GET,"/experiences/{categoryName}/{id}/create_review").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.POST,"/experiences/{categoryName}/{id}/create_review").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.GET,"/experiences/{categoryName}/{experienceId}").permitAll()
+                .antMatchers(HttpMethod.GET,"/experiences/{categoryName}").permitAll()
+                .antMatchers(HttpMethod.POST,"/experiences/{categoryName}").permitAll()
+                .antMatchers(HttpMethod.GET,"/{experienceId}/image").permitAll()
+                //else
+                .antMatchers("/**").permitAll()
 
-                .and().formLogin()
-                    .loginPage("/login")
-                    .usernameParameter("email")
-                    .passwordParameter("password")
-                    .defaultSuccessUrl("/", false) //Tras logearme me lleva a /
-                    .failureUrl("/login?error=true")
-                .and().rememberMe()
-                    .rememberMeParameter("rememberMe")
-                    .userDetailsService(userDetailsService)
-                    .key(FileCopyUtils.copyToString(new InputStreamReader(authKey.getInputStream())))
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                .and().logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/")
-                .and().exceptionHandling()
-                    .accessDeniedHandler(accessDeniedHandler())
+            .and().formLogin()
+                .loginPage("/login")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/", false) //Tras logearme me lleva a /
+                .failureUrl("/login?error=true")
+            .and().rememberMe()
+                .rememberMeParameter("rememberMe")
+                .userDetailsService(userDetailsService)
+                .key(FileCopyUtils.copyToString(new InputStreamReader(authKey.getInputStream())))
+                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
+            .and().logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+            .and().exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler())
 //                    .accessDeniedPage("/errors")
-                .and().csrf().disable();
+            .and().csrf().disable();
     }
 
     @Override
     public void configure(final WebSecurity web) {
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/403");
-    }
-
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return (httpServletRequest, httpServletResponse, e) ->
-                httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/access-denied");
     }
 
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <property name="defaultPattern"
-              value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
+              value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+
     <appender name="root-appender"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -14,6 +15,7 @@
             <pattern>${defaultPattern:-}</pattern>
         </encoder>
     </appender>
+
     <appender name="paw-appender"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -26,10 +28,20 @@
             <pattern>${defaultPattern:-}</pattern>
         </encoder>
     </appender>
+
     <root level="WARN">
-        <appender-ref ref="root-appender" />
+        <appender-ref ref="root-appender"/>
     </root>
+
     <logger name="ar.edu.itba.getaway" level="DEBUG" additivity="false">
+        <appender-ref ref="paw-appender"/>
+    </logger>
+
+    <logger name="ar.edu.itba.getaway" level="INFO" additivity="false">
+        <appender-ref ref="paw-appender"/>
+    </logger>
+
+    <logger name="org.springframework.security" level="DEBUG" additivity="false">
         <appender-ref ref="paw-appender"/>
     </logger>
 </configuration>
