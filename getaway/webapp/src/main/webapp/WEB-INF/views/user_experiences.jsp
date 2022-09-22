@@ -40,10 +40,9 @@
                               <jsp:param name="myIndex" value="${myIndex.index}"/>
                            </jsp:include>
                            <div class="card-body container-fluid p-2">
-                                 <jsp:include page="/WEB-INF/views/star_avg.jsp">
-                                    <jsp:param name="avgReview" value="${avgReviews[myIndex.index]}"/>
-                                 </jsp:include>
-                              </div>
+                              <jsp:include page="/WEB-INF/views/star_avg.jsp">
+                                 <jsp:param name="avgReview" value="${avgReviews[myIndex.index]}"/>
+                              </jsp:include>
                            </div>
                         </a>
                         <div class="btn-group" role="group">
