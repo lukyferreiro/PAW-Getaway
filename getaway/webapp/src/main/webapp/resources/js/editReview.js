@@ -1,8 +1,6 @@
 let processing = false;
-// let processingCancel = false;
 let editReviewForm = document.getElementById("editReviewForm");
 let editReviewFormButton = document.getElementById("editReviewFormButton");
-// let cancelFormButton = document.getElementById("cancelFormButton");
 let star1 = document.getElementById("star1");
 let star2 = document.getElementById("star2");
 let star3 = document.getElementById("star3");
@@ -43,12 +41,3 @@ editReviewFormButton.addEventListener("click", () => {
     editReviewForm.submit();
     processing = false;
 })
-
-// cancelFormButton.addEventListener("click", () => {
-//     if (processingCancel) {
-//         return;
-//     }
-//     processingCancel = true;
-//     cancelFormButton.disabled = true;
-//     processingCancel = false;
-// })

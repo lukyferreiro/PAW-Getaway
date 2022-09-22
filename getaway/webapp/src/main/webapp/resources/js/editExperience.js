@@ -1,8 +1,6 @@
 let processing = false;
-// let processingCancel = false;
 let editExperienceForm = document.getElementById("editExperienceForm");
 let editExperienceFormButton = document.getElementById("editExperienceFormButton");
-// let cancelFormButton = document.getElementById("cancelFormButton");
 let countryInput = document.getElementById("experienceFormCountryInput");
 let cityInput = document.getElementById("experienceFormCityInput");
 
@@ -41,17 +39,6 @@ editExperienceFormButton.addEventListener("click", () => {
     editExperienceForm.submit();
     processing = false;
 })
-
-// cancelFormButton.addEventListener("click", () => {
-//     if (processingCancel) {
-//         return;
-//     }
-//     processingCancel = true;
-//     cancelFormButton.disabled = true;
-//     processingCancel = false;
-// })
-
-
 
 countryInput.addEventListener("keyup", (event) => {
     if (countryInput.value.length === 0) {
