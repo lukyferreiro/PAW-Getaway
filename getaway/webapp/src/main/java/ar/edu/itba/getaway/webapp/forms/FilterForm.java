@@ -17,7 +17,9 @@ public class FilterForm {
         return activityReview;
     }
     public Long getScore(){
-        return Long.valueOf(activityReview);
+        if(activityReview == null || activityReview.equals(""))
+            return Long.valueOf(-1);
+        return Long.parseLong(activityReview);
     }
     public void setActivityPriceMax(Double activityPriceMax) {
         this.activityPriceMax = activityPriceMax;

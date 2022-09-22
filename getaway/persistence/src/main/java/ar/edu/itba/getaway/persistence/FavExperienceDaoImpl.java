@@ -1,0 +1,48 @@
+package ar.edu.itba.getaway.persistence;
+
+import ar.edu.itba.getaway.models.FavExperienceModel;
+import ar.edu.itba.getaway.services.FavExperienceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
+
+import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
+
+@Repository
+public class FavExperienceDaoImpl implements FavExperienceDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FavExperienceDaoImpl.class);
+    private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert jdbcInsert;
+
+    @Autowired
+    public FavExperienceDaoImpl(final DataSource ds) {
+        this.jdbcTemplate = new JdbcTemplate(ds);
+        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("experiences")
+                .usingGeneratedKeyColumns("experienceid");
+    }
+
+    @Override
+    public FavExperienceModel create(long userId, long experienceId) {
+        final Map<String, Object> experienceData = new HashMap<>();
+        experienceData.put("userId", userId);
+        experienceData.put("experienceId", experienceId);
+
+        LOGGER.info("Setting experience as fav");
+
+        return new FavExperienceModel(userId, experienceId);
+    }
+
+    @Override
+    public boolean delete(long userId, long experienceId){
+        final String query = "DELETE FROM favuserexperience WHERE experienceId = ? AND userid = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.update(query, experienceId, userId) == 1;
+    }
+}

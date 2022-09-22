@@ -10,6 +10,7 @@
       <link href="<c:url value = "/resources/css/experiences.css" />" rel="stylesheet">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
       <link href="<c:url value = "/resources/css/start_rating.css" />" rel="stylesheet">
+
    </head>
 
    <body>
@@ -88,6 +89,7 @@
             <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
                <c:forEach var="activity" varStatus="myIndex" items="${activities}">
                   <div class="card card-experience mx-3 my-2 p-0">
+
                      <a class="card-link" href="<c:url value="${activity.categoryName}/${activity.id}"/>">
                         <c:choose>
                               <c:when test="${activity.hasImage == false}">
@@ -142,6 +144,7 @@
       <%@ include file="../components/includes/bottomScripts.jsp" %>
       <script src='<c:url value="/resources/js/filter.js"/>'></script>
       <script src='<c:url value="/resources/js/ratingScore.js"/>'></script>
+      <script src="https://kit.fontawesome.com/5ea815c1d0.js"></script>
 
    </body>
 </html>
