@@ -20,66 +20,93 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     public ExperienceModel create(String name, String address, String description, String url, Double price, long cityId, long categoryId, long userId, boolean hasImage) {
-        return experienceDao.create(name, address, description, url, price, cityId, categoryId, userId, hasImage);
+        LOGGER.debug("Creating experience with name {}", name);
+        ExperienceModel experienceModel = experienceDao.create(name, address, description, url, price, cityId, categoryId, userId, hasImage);
+        LOGGER.debug("Created experience with id {}", experienceModel.getId());
+        return experienceModel;
     }
 
     @Override
     public boolean update(long experienceId, ExperienceModel experienceModel) {
-        return experienceDao.update(experienceId, experienceModel);
+        LOGGER.debug("Updating experience with id {}", experienceId);
+        if(experienceDao.update(experienceId, experienceModel)){
+            LOGGER.debug("Experience {} updated", experienceId);
+            return true;
+        } else {
+            LOGGER.warn("Experience {} NOT updated", experienceId);
+            return false;
+        }
     }
 
     @Override
     public boolean delete(long experienceId) {
-        return experienceDao.delete(experienceId);
+        LOGGER.debug("Deleting experience with id {}", experienceId);
+        if(experienceDao.delete(experienceId)){
+            LOGGER.debug("Experience {} deleted", experienceId);
+            return true;
+        } else {
+            LOGGER.warn("Experience {} NOT deleted", experienceId);
+            return false;
+        }
     }
 
     @Override
     public List<ExperienceModel> listAll() {
+        LOGGER.debug("Retrieving all experiences");
         return experienceDao.listAll();
     }
 
     @Override
     public Optional<ExperienceModel> getById(long experienceId) {
+        LOGGER.debug("Retrieving experience with id {}", experienceId);
         return experienceDao.getById(experienceId);
     }
 
     @Override
     public List<ExperienceModel> listByCategory(long categoryId) {
+        LOGGER.debug("Retrieving experiences with category id {}", categoryId);
         return experienceDao.listByCategory(categoryId);
     }
 
     @Override
     public List<ExperienceModel> listByCategoryAndCity(long categoryId, long cityId) {
+        LOGGER.debug("Retrieving experiences with category id {} and city id {}", categoryId, cityId);
         return experienceDao.listByCategoryAndCity(categoryId, cityId);
     }
 
     @Override
     public List<ExperienceModel> listByCategoryAndPrice(long categoryId, Double max) {
+        LOGGER.debug("Retrieving experiences with category id {} and max price {}", categoryId, max);
         return experienceDao.listByCategoryAndPrice(categoryId, max);
     }
 
     @Override
     public List<ExperienceModel> listByCategoryPriceAndCity(long categoryId, Double max, long cityId) {
+        LOGGER.debug("Retrieving experiences with category id {}, city id {} and max price {}", categoryId, cityId, max);
         return experienceDao.listByCategoryPriceAndCity(categoryId, max, cityId);
     }
 
     @Override
     public List<ExperienceModel> getRandom() {
+        LOGGER.debug("Retrieving random experiences");
         return experienceDao.getRandom();
     }
 
     @Override
     public String getCountryCity(long experienceId) {
+        LOGGER.debug("Retrieving country and city of experience with id {}", experienceId);
         return experienceDao.getCountryCity(experienceId);
     }
 
     @Override
     public List<ExperienceModel> getByUserId(long userId) {
+        LOGGER.debug("Retrieving experiences created by user with id {}", userId);
         return experienceDao.getByUserId(userId);
     }
 
     @Override
     public Optional<Long> getAvgReviews(long experienceId) {
+        LOGGER.debug("Retrieving average ranking of experience with id {}", experienceId);
         return experienceDao.getAvgReviews(experienceId);
     }
 }

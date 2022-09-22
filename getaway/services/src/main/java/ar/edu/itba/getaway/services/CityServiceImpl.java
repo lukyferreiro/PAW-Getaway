@@ -26,21 +26,25 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<CityModel> listAll() {
+        LOGGER.debug("Retrieving all cities");
         return cityDao.listAll();
     }
 
     @Override
     public Optional<CityModel> getById(long cityId) {
+        LOGGER.debug("Retrieving city with name {}", cityId);
         return cityDao.getById(cityId);
     }
 
     @Override
     public List<CityModel> getByCountryId(long countryId) {
+        LOGGER.debug("Retrieving all cities of country with id {}", countryId);
         return cityDao.getByCountryId(countryId);
     }
 
     @Override
     public Optional<CityModel> getIdByName(String cityName) {
+        LOGGER.debug("Retrieving city with name {}", cityName);
         return cityDao.getIdByName(cityName);
     }
 

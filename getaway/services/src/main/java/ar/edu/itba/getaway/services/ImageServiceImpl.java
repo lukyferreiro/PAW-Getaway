@@ -39,19 +39,19 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public List<ImageModel> listAll() {
-        LOGGER.debug("Listing all images");
+        LOGGER.debug("Retrieving all images");
         return imageDao.listAll();
     }
 
     @Override
     public Optional<ImageModel> getById(long imageId) {
-        LOGGER.debug("Looking for image by id {}", imageId);
+        LOGGER.debug("Retrieving image with id {}", imageId);
         return imageDao.getById(imageId);
     }
 
     @Override
     public Optional<ImageModel> getByExperienceId(long experienceId) {
-        LOGGER.debug("Looking for image of experience with id {}", experienceId);
+        LOGGER.debug("Retrieving image of experience with id {}", experienceId);
         return imageDao.getByExperienceId(experienceId);
     }
 

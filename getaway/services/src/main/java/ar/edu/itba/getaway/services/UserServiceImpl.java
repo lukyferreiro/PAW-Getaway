@@ -68,6 +68,7 @@ public class UserServiceImpl implements UserService {
         LOGGER.debug("Creating user with email {}", email);
         UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES);
         LOGGER.debug("Created user with id {}", userModel.getId());
+        LOGGER.debug("Creating verification token to user with id {}", userModel.getId());
         VerificationToken token = generateVerificationToken(userModel.getId());
         LOGGER.debug("Created verification token with id {}", token.getId());
         sendVerificationToken(userModel, token);

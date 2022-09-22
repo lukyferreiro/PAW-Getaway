@@ -20,16 +20,19 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public List<CountryModel> listAll() {
+        LOGGER.debug("Retrieving all countries");
         return countryDao.listAll();
     }
 
     @Override
     public Optional<CountryModel> getById(long countryId) {
+        LOGGER.debug("Retrieving country with id {}", countryId);
         return countryDao.getById(countryId);
     }
 
     @Override
     public Optional<CountryModel> getIdByCountryName(String country) {
+        LOGGER.debug("Retrieving country with name {}", country);
         return countryDao.getIdByCountryName(country);
     }
 }

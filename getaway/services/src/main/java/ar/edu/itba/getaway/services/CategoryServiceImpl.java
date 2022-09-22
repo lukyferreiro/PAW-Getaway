@@ -19,16 +19,19 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryModel> listAll() {
+        LOGGER.debug("Retrieving all categories");
         return categoryDao.listAll();
     }
 
     @Override
     public Optional<CategoryModel> getById(long categoryId) {
+        LOGGER.debug("Retrieving category with id {}", categoryId);
         return categoryDao.getById(categoryId);
     }
 
     @Override
     public Optional<CategoryModel> getByName(String categoryName) {
+        LOGGER.debug("Retrieving category with name {}", categoryName);
         return categoryDao.getByName(categoryName);
     }
 }
