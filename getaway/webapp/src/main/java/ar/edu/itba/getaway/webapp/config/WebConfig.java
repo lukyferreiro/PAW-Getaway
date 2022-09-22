@@ -36,7 +36,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Value("classpath:schema.sql")
     private Resource schemaSql;
 
-    private static final int MAX_SIZE_PER_FILE = 5000000;
+    private static final int MAX_SIZE_PER_FILE = 10000000;
 
     @Bean
     public ViewResolver viewResolver() {
@@ -100,7 +100,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(300000);
+        multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE);
         multipartResolver.setMaxUploadSizePerFile(MAX_SIZE_PER_FILE);
         multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE * 6);
         multipartResolver.setDefaultEncoding("utf-8");
