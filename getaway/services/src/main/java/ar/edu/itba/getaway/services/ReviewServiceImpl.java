@@ -3,6 +3,8 @@ package ar.edu.itba.getaway.services;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
 import ar.edu.itba.getaway.persistence.ReviewDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Autowired
     private ReviewDao reviewDao;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
     @Override
     public ReviewModel create(String title, String description, long score, long experienceId, Date reviewDate, long userId) {

@@ -2,6 +2,8 @@ package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.persistence.ExperienceDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Autowired
     private ExperienceDao experienceDao;
 
-    @Autowired
-    public ExperienceServiceImpl(ExperienceDao experienceDao) {
-        this.experienceDao = experienceDao;
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 
     @Override
     public ExperienceModel create(String name, String address, String description, String url, Double price, long cityId, long categoryId, long userId, boolean hasImage) {

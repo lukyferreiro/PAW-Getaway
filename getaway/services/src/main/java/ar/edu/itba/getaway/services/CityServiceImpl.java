@@ -3,6 +3,8 @@ package ar.edu.itba.getaway.services;
 import ar.edu.itba.getaway.models.CityModel;
 import ar.edu.itba.getaway.models.CountryModel;
 import ar.edu.itba.getaway.persistence.CityDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -20,10 +22,7 @@ public class CityServiceImpl implements CityService {
     @Autowired
     private CityDao cityDao;
 
-    @Autowired
-    public CityServiceImpl(CityDao cityDao) {
-        this.cityDao = cityDao;
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(CityServiceImpl.class);
 
     @Override
     public List<CityModel> listAll() {
