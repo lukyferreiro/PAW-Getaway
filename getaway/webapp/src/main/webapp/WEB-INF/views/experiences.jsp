@@ -67,7 +67,7 @@
                   <div>
                      <form:label path="activityReview" class="form-label"><spring:message code="review.scoreAssign"/></form:label>
                      <jsp:include page="/WEB-INF/views/star_form.jsp"/>
-                     <form:input path="activityReview" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="reviewFormScoreInput"/>
+                     <form:input path="activityReview" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="scoreInput"/>
                      <form:errors path="activityReview" element="p" cssClass="form-error-label"/>
                   </div>
                </form:form>
