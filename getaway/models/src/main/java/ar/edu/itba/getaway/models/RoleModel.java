@@ -22,4 +22,16 @@ public class RoleModel {
     public void setRoleName(Roles roleName) {
         this.roleName = roleName;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+        if (! (o instanceof RoleModel)){
+            return false;
+        }
+        RoleModel other = (RoleModel) o;
+        return this.roleId.equals(other.roleId) && this.roleName.equals(other.roleName);
+    }
 }

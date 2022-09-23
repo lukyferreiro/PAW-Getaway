@@ -39,15 +39,6 @@ public class UserServiceImplTest {
     private static final Collection<Roles> DEFAULT_ROLES = Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     private static final UserModel DEFAULT_USER = new UserModel(new Long(1), PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES,null);
-
-    private static final String TOKEN = "12345";
-    private static final String URL = "http:/paw-2022b-1/user/verifyAccount/" + TOKEN;
-    private static final LocalDateTime DEFAULT_TIME = LocalDateTime.ofEpochSecond(1619457499, 0, ZoneOffset.UTC);
-    private static final String VERIFICATION_SUBJECT = "Verify your account";
-    private static final Map<String, Object> DEFAULT_MAIL_ATTRS = Stream.of(new String[][]{
-            {"confirmationURL", URL},
-            {"to", DEFAULT_USER.getEmail()},
-    }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
     /****/
 
     @InjectMocks
@@ -78,26 +69,5 @@ public class UserServiceImplTest {
 
     @Test
     public void testCreate() throws DuplicateUserException, MessagingException {
-        // 1. Setup!
-        when(mockMessageSource.getMessage(anyString(),any(),eq(LocaleContextHolder.getLocale()))).
-                thenReturn(VERIFICATION_SUBJECT);
-        when(mockVerificationTokenDao.createVerificationToken(eq(DEFAULT_USER.getId()), anyString(), any(LocalDateTime.class)))
-                .thenReturn(new VerificationToken(1, TOKEN, DEFAULT_USER.getId(), DEFAULT_TIME));
-        when(mockEncoder.encode(PASSWORD)).thenReturn(PASSWORD);
-        when(mockUserDao.createUser(PASSWORD, NAME, SURNAME, EMAIL, null)).thenReturn(DEFAULT_USER);
-
-
-        // 2. "ejercito" la class under test
-        UserModel maybeUser = userService.createUser(PASSWORD, NAME, SURNAME, EMAIL);
-
-        // 3. Asserts!
-        verify(mockEmailService, times(1)).sendMail("verification", VERIFICATION_SUBJECT,
-                DEFAULT_MAIL_ATTRS, LocaleContextHolder.getLocale());
-        assertNotNull(maybeUser);
-        assertEquals(PASSWORD, maybeUser.getPassword());
-        assertEquals(NAME, maybeUser.getName());
-        assertEquals(SURNAME, maybeUser.getSurname());
-        assertEquals(EMAIL, maybeUser.getEmail());
-        assertEquals(null, maybeUser.getProfileImageId());
     }
 }

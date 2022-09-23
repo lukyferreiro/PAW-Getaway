@@ -16,6 +16,6 @@ public interface UserService {
     boolean validatePasswordReset (String token);
     void generateNewPassword (UserModel userModel);
     Optional<UserModel> updatePassword (String token, String password);
-    void updateUserInfo (UserInfo userInfo, UserModel userModel);
+    void updateUserInfo (long userId, UserInfo userInfo);
     void updateProfileImage (ImageModel imageModel, UserModel userModel);
 }
