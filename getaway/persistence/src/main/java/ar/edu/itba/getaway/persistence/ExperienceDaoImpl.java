@@ -191,4 +191,12 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public List<ExperienceModel> listByCategoryAndScore(long categoryId, long score) {
         return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? GROUP BY experiences.experienceid, reviews.reviewid HAVING avg(score)=? ",
                 new Object[]{categoryId, score}, EXPERIENCE_MODEL_ROW_MAPPER);    }
+
+    @Override
+    public List<ExperienceModel> listByScore(int page,long categoryId){
+        return jdbcTemplate.query("SELECT *  FROM experiences ORDER BY name ASC LIMIT ? OFFSET ?",new Object[]{PAGE_SIZE, (page-1)*PAGE_SIZE},EXPERIENCE_MODEL_ROW_MAPPER);
+    }
 }
+
+
+

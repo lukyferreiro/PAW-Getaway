@@ -1,11 +1,13 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.models.pagination.PaginatedResult;
 import ar.edu.itba.getaway.persistence.ExperienceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -129,4 +131,11 @@ public class ExperienceServiceImpl implements ExperienceService {
     public List<ExperienceModel> listByCategoryAndScore(long categoryId, long score) {
         return experienceDao.listByCategoryAndScore( categoryId,  score);
     }
+
+    @Transactional
+    @Override
+    public PaginatedResult<ExperienceModel> listByRandomExperience(ExperienceModel experienceModel, int page, int pageSize){
+
+    }
+
 }
