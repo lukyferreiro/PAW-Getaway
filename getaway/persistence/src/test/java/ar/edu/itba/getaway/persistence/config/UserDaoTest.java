@@ -6,14 +6,9 @@ import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserInfo;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.persistence.UserDao;
-import ar.edu.itba.getaway.persistence.UserDaoImpl;
-import org.hsqldb.rights.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runner.notification.RunListener;
-import org.mockito.Mockito;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
@@ -29,17 +24,13 @@ import static org.junit.Assert.assertEquals;
 import javax.sql.DataSource;
 import java.util.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Sql(scripts = "classpath:user-dao-test.sql")
 public class UserDaoTest {
-    /**
-     * Data for tests
-     **/
+    /** Data for tests **/
     private final static String PASSWORD = "password";
     private final static String NAME = "NAME";
     private final static String SURNAME = "SURNAME";
