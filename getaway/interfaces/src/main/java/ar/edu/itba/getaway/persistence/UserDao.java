@@ -18,7 +18,7 @@ public interface UserDao {
     Optional<RoleModel> getRoleByName (Roles role);
     Optional<UserModel> updateRoles (long userId, Roles oldVal, Roles newVal);
     Optional<UserModel> updatePassword (long userId, String password);
-    void updateUserInfo (UserInfo userInfo, UserModel userModel);
+    void updateUserInfo (long userId, UserInfo userInfo);
     void addRole (long userId, Roles newRole);
-    void updateProfileImage (Long imageId, UserModel userModel);
+    void updateProfileImage(long userId, long imageId);
 }

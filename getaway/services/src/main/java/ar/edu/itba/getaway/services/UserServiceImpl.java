@@ -157,9 +157,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserInfo(UserInfo userInfo, UserModel userModel) {
-        LOGGER.debug("Updating user info for user {}", userModel.getEmail());
-        userDao.updateUserInfo(userInfo, userModel);
+    public void updateUserInfo(long userId, UserInfo userInfo) {
+        LOGGER.debug("Updating user info for user {}", userId);
+        userDao.updateUserInfo(userId ,userInfo);
     }
 
     @Override
@@ -168,7 +168,7 @@ public class UserServiceImpl implements UserService {
         LOGGER.debug("Updating user {} profile image", userModel.getEmail());
         if (imageId == 0) {
             imageId = imageService.create(imageModel.getImage()).getId();
-            userDao.updateProfileImage(imageId, userModel);
+            userDao.updateProfileImage(userModel.getId(), imageId);
         } else {
             imageService.update(imageId, imageModel);
         }
