@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.pagination.PaginatedResult;
 import ar.edu.itba.getaway.persistence.ExperienceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,10 +131,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.listByCategoryAndScore( categoryId,  score);
     }
 
-    @Transactional
-    @Override
-    public PaginatedResult<ExperienceModel> listByRandomExperience(ExperienceModel experienceModel, int page, int pageSize){
-
+    public List<ExperienceModel> listByScore(int page, long categoryId) {
+        return experienceDao.listByScore(page,categoryId);
     }
-
 }
