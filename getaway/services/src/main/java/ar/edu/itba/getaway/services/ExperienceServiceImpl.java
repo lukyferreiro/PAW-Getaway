@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.persistence.ExperienceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,6 +133,8 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     public List<ExperienceModel> listByScore(int page, long categoryId) {
-        return experienceDao.listByScore(page,categoryId);
+        //TODO implementar bien esto para que reciba bien la page por parametro y retorne, osea , que calcule bien la page para
+        // despues crear y retornar la clase page
+        return new Page<ExperienceModel>(experienceDao.listByScore(page,categoryId),)
     }
 }

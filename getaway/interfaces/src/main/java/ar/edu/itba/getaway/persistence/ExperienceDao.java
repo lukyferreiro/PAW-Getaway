@@ -25,6 +25,5 @@ public interface ExperienceDao {
     List<ExperienceModel> listByCategoryCityAndScore (long categoryId, long cityId, long score);
     List<ExperienceModel> listByCategoryPriceAndScore (long categoryId, Double max, long score);
     List<ExperienceModel> listByCategoryAndScore (long categoryId, long score);
-
     List<ExperienceModel> listByScore(int page, long categoryId);
 }
