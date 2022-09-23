@@ -5,6 +5,7 @@ TRUNCATE TABLE countries RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE categories RESTART IDENTITY AND COMMIT NO CHECK;
 
 INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (1, 'owner', 'user', 'owner@mail.com', null, 'contra1');
+INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (2, 'owner2', 'user2', 'owner2@mail.com', null, 'contra2');
 
 INSERT INTO categories(categoryname) VALUES ('Aventura');
 INSERT INTO categories(categoryname) VALUES ('Gastronomia');
@@ -29,7 +30,8 @@ VALUES (4, 'testrelax', 10000, 'dirrelax', null, null, 2, 4, 1, false);
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, hasimage)
 VALUES (5, 'testnight', null, 'dirnight', null, null, 2, 5, 1, false);
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, hasimage)
-VALUES (6, 'testhist', 5000, 'dirhist', null, null, 2, 6, 1, false);
+VALUES (6, 'testhist', 5000, 'dirhist', null, null, 2, 6, 2, false);
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, hasimage)
-VALUES (7, 'testaventura2', 1500, 'diraventura2', null, null, 2, 1, 1, false);
-
+VALUES (7, 'testaventura2', 1500, 'diraventura2', null, null, 1, 1, 2, false);
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, hasimage)
+VALUES (8, 'testaventura3', 2000, 'diraventura3', null, null, 2, 1, 2, false);

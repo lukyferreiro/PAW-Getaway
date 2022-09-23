@@ -33,10 +33,11 @@ public class ExperienceDaoTest {
     private final ExperienceModel DEFAULT_HOT = new ExperienceModel(3, "testhotel", "dirhotel", null, null,new Double(1000), 1, 3, 1, false);
     private final ExperienceModel DEFAULT_REL = new ExperienceModel(4, "testrelax", "dirrelax", null, null,new Double(10000), 2, 4, 1, false);
     private final ExperienceModel DEFAULT_NIG = new ExperienceModel(5, "testnight", "dirnight", null, null, null, 2, 5, 1, false);
-    private final ExperienceModel DEFAULT_HIS = new ExperienceModel(6, "testhist", "dirhist", null, null,new Double(5000), 2, 6, 1, false);
-    private final ExperienceModel DEFAULT_ADV2 = new ExperienceModel(7, "testaventura2", "diraventura2", null, null,new Double(1500), 2, 1, 1, false);
+    private final ExperienceModel DEFAULT_HIS = new ExperienceModel(6, "testhist", "dirhist", null, null,new Double(5000), 2, 6, 2, false);
+    private final ExperienceModel DEFAULT_ADV2 = new ExperienceModel(7, "testaventura2", "diraventura2", null, null,new Double(1500), 1, 1, 2, false);
+    private final ExperienceModel DEFAULT_ADV3 = new ExperienceModel(8, "testaventura3", "diraventura3", null, null,new Double(2000), 2, 1, 2, false);
 
-    private final List<ExperienceModel> DEF_LIST_ALL = new ArrayList<>(Arrays.asList(DEFAULT_ADV, DEFAULT_GAS, DEFAULT_HOT, DEFAULT_REL, DEFAULT_NIG, DEFAULT_HIS, DEFAULT_ADV2));
+    private final List<ExperienceModel> DEF_LIST_ALL = new ArrayList<>(Arrays.asList(DEFAULT_ADV, DEFAULT_GAS, DEFAULT_HOT, DEFAULT_REL, DEFAULT_NIG, DEFAULT_HIS, DEFAULT_ADV2, DEFAULT_ADV3));
     /****/
 
     @Autowired
@@ -98,13 +99,6 @@ public class ExperienceDaoTest {
     public void testListAllExperience() {
         List<ExperienceModel> experienceModelList = experienceDao.listAll();
         assertEquals(DEF_LIST_ALL.size(), experienceModelList.size());
-        assertTrue(experienceModelList.contains(DEFAULT_ADV));
-        assertTrue(experienceModelList.contains(DEFAULT_GAS));
-        assertTrue(experienceModelList.contains(DEFAULT_HOT));
-        assertTrue(experienceModelList.contains(DEFAULT_REL));
-        assertTrue(experienceModelList.contains(DEFAULT_NIG));
-        assertTrue(experienceModelList.contains(DEFAULT_HIS));
-        assertTrue(experienceModelList.contains(DEFAULT_ADV2));
         assertTrue(experienceModelList.containsAll(DEF_LIST_ALL));
     }
 
@@ -113,5 +107,76 @@ public class ExperienceDaoTest {
         Optional<ExperienceModel> experienceModel = experienceDao.getById(1);
         assertTrue(experienceModel.isPresent());
         assertEquals(DEFAULT_ADV,experienceModel.get());
+    }
+
+    @Test
+    public void testListByCategory() {
+        List<ExperienceModel> experienceModelList = experienceDao.listByCategory(1);
+        assertFalse(experienceModelList.isEmpty());
+        assertTrue(experienceModelList.contains(DEFAULT_ADV));
+        assertTrue(experienceModelList.contains(DEFAULT_ADV2));
+        assertTrue(experienceModelList.contains(DEFAULT_ADV3));
+    }
+
+    @Test
+    public void testListByCategoryAndCity() {
+        List<ExperienceModel> experienceModelList = experienceDao.listByCategoryAndCity(1,1);
+        assertFalse(experienceModelList.isEmpty());
+        assertTrue(experienceModelList.contains(DEFAULT_ADV));
+        assertTrue(experienceModelList.contains(DEFAULT_ADV2));
+        assertFalse(experienceModelList.contains(DEFAULT_ADV3));
+    }
+
+    @Test
+    public void testListByCategoryAndPrice() {
+        List<ExperienceModel> experienceModelList = experienceDao.listByCategoryAndPrice(1, new Double(1750));
+        assertFalse(experienceModelList.isEmpty());
+        assertTrue(experienceModelList.contains(DEFAULT_ADV));
+        assertTrue(experienceModelList.contains(DEFAULT_ADV2));
+        assertFalse(experienceModelList.contains(DEFAULT_ADV3));
+    }
+
+    @Test
+    public void testListByCategoryPriceAndCity() {
+        List<ExperienceModel> experienceModelList = experienceDao.listByCategoryPriceAndCity(1, new Double(1250), 1);
+        assertFalse(experienceModelList.isEmpty());
+        assertTrue(experienceModelList.contains(DEFAULT_ADV));
+        assertFalse(experienceModelList.contains(DEFAULT_ADV2));
+        assertFalse(experienceModelList.contains(DEFAULT_ADV3));
+    }
+
+    //Weird behavior, not sure how to test
+//    @Test
+//    public void testRandom() {
+//        List<ExperienceModel> experienceModelList = experienceDao.getRandom();
+//        assertFalse(experienceModelList.isEmpty());
+//        assertTrue(experienceModelList.containsAll(DEF_LIST_ALL));
+//    }
+
+    @Test
+    public void testGetCountryCity() {
+        String countryCity = experienceDao.getCountryCity(1);
+        String toMatch = String.format("Test Country, Test City One");
+        assertNotNull(countryCity);
+        assertEquals(countryCity,toMatch);
+    }
+
+    @Test
+    public void testGetByUserId() {
+        List<ExperienceModel> experienceModelList = experienceDao.getByUserId(1);
+        assertFalse(experienceModelList.isEmpty());
+
+        //User 1 experiences
+        assertTrue(experienceModelList.contains(DEFAULT_ADV));
+        assertTrue(experienceModelList.contains(DEFAULT_GAS));
+        assertTrue(experienceModelList.contains(DEFAULT_HOT));
+        assertTrue(experienceModelList.contains(DEFAULT_REL));
+        assertTrue(experienceModelList.contains(DEFAULT_NIG));
+
+
+        //User 2 experiences
+        assertFalse(experienceModelList.contains(DEFAULT_HIS));
+        assertFalse(experienceModelList.contains(DEFAULT_ADV2));
+        assertFalse(experienceModelList.contains(DEFAULT_ADV3));
     }
 }

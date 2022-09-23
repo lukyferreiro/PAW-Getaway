@@ -132,7 +132,6 @@ public class UserDaoTest {
         assertEquals(new Long(1), roleModel.get().getRoleId());
         assertEquals(Roles.PROVIDER, roleModel.get().getRoleName());
     }
-
     @Test
     public void testGetRoleByNameUser(){
         final Optional<RoleModel> roleModel = userDao.getRoleByName(Roles.USER);
@@ -140,7 +139,6 @@ public class UserDaoTest {
         assertEquals(new Long(2), roleModel.get().getRoleId());
         assertEquals(Roles.USER, roleModel.get().getRoleName());
     }
-
     @Test
     public void testGetRoleByNameVerified(){
         final Optional<RoleModel> roleModel = userDao.getRoleByName(Roles.VERIFIED);
@@ -148,7 +146,6 @@ public class UserDaoTest {
         assertEquals(new Long(3), roleModel.get().getRoleId());
         assertEquals(Roles.VERIFIED, roleModel.get().getRoleName());
     }
-
     @Test
     public void testGetRoleByNameNotVerified(){
         final Optional<RoleModel> roleModel = userDao.getRoleByName(Roles.NOT_VERIFIED);
