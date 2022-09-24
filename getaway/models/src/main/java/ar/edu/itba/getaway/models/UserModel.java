@@ -65,4 +65,16 @@ public class UserModel {
     public void addRole(Roles role) {
         roles.add(role);
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+        if (!(o instanceof UserModel)){
+            return false;
+        }
+        UserModel other = (UserModel) o;
+        return this.id == other.id && this.email.equals(other.email);
+    }
 }

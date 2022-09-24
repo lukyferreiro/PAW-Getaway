@@ -67,4 +67,16 @@ public class ReviewUserModel {
     public Long getImgId() {
         return imgId;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+        if( !(o instanceof ReviewUserModel)){
+            return false;
+        }
+        ReviewUserModel other = (ReviewUserModel) o;
+        return this.userId == other.userId && this.reviewId == other.reviewId;
+    }
 }
