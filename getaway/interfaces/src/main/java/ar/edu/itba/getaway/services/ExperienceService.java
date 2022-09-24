@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.models.pagination.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,6 @@ public interface ExperienceService {
     List<ExperienceModel> listByCategoryCityAndScore (long categoryId, long cityId, long score);
     List<ExperienceModel> listByCategoryPriceAndScore (long categoryId, Double max, long score);
     List<ExperienceModel> listByCategoryAndScore (long categoryId, long score);
-    List<ExperienceModel> listByScore(int page, long categoryId);
+    Page<ExperienceModel> listByScore(int page, long categoryId);
 
 }

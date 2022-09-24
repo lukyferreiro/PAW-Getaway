@@ -132,9 +132,8 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.listByCategoryAndScore( categoryId,  score);
     }
 
-    public List<ExperienceModel> listByScore(int page, long categoryId) {
-        //TODO implementar bien esto para que reciba bien la page por parametro y retorne, osea , que calcule bien la page para
-        // despues crear y retornar la clase page
-        return new Page<ExperienceModel>(experienceDao.listByScore(page,categoryId),)
+    public Page<ExperienceModel> listByScore(int page, long categoryId) {
+        return new Page<>(experienceDao.listByScore(page,categoryId),page,experienceDao.getTotalPagesAllExperiences());
     }
 }
+//TODO Testear a ver si funciona la paginacion en la landing , osea testearlo en el mainPage.jsp

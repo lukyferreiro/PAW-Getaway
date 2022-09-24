@@ -196,6 +196,13 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public List<ExperienceModel> listByScore(int page,long categoryId){
         return jdbcTemplate.query("SELECT *  FROM experiences ORDER BY name ASC LIMIT ? OFFSET ?",new Object[]{PAGE_SIZE, (page-1)*PAGE_SIZE},EXPERIENCE_MODEL_ROW_MAPPER);
     }
+
+    @Override
+    public int getTotalPagesAllExperiences() {
+        int rowsCount = jdbcTemplate.queryForObject("SELECT count(*) AS experiencesCount FROM experiences" , Integer.class);
+        int total = (int) Math.ceil(rowsCount/PAGE_SIZE);
+        return total==0?1:total;
+    }
 }
 
 
