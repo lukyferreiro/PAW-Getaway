@@ -242,6 +242,13 @@ public class ExperienceDaoTest {
         assertFalse(experienceModelList.contains(DEFAULT_ADV));
         assertTrue(experienceModelList.contains(DEFAULT_ADV2));
         assertFalse(experienceModelList.contains(DEFAULT_ADV3));
+
+        experienceModelList = experienceDao.listByCategoryPriceCityAndScore(1, new Double(1750), 2, 3);
+        assertTrue(experienceModelList.isEmpty());
+
+        assertFalse(experienceModelList.contains(DEFAULT_ADV));
+        assertFalse(experienceModelList.contains(DEFAULT_ADV2));
+        assertFalse(experienceModelList.contains(DEFAULT_ADV3));
     }
 
 }
