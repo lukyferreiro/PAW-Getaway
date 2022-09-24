@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.exceptions.ExperienceNotFoundException;
@@ -28,6 +29,8 @@ public class ExperienceController {
     private ImageService imageService;
     @Autowired
     private ReviewService reviewService;
+
+    private Page<ExperienceModel> experiencePage;
 
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.GET})
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,

@@ -136,4 +136,3 @@ public class ExperienceServiceImpl implements ExperienceService {
         return new Page<>(experienceDao.listByScore(page,categoryId),page,experienceDao.getTotalPagesAllExperiences());
     }
 }
-//TODO Testear a ver si funciona la paginacion en la landing , osea testearlo en el mainPage.jsp
