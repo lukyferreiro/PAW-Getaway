@@ -22,10 +22,8 @@ import java.util.List;
 @Controller
 public class UserReviewsController {
 
-
     @Autowired
     private ReviewService reviewService;
-
 
     @RequestMapping(value = "/user/reviews", method = {RequestMethod.GET})
     public ModelAndView review(@ModelAttribute("loggedUser") final UserModel loggedUser) {

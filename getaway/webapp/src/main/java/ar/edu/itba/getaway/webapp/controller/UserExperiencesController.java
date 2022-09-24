@@ -30,8 +30,8 @@ public class UserExperiencesController {
     private CityService cityService;
     @Autowired
     private CountryService countryService;
-    @Autowired
-    private ImageExperienceService imageExperienceService;
+//    @Autowired
+//    private ImageExperienceService imageExperienceService;
     @Autowired
     private ImageService imageService;
 
@@ -131,8 +131,8 @@ public class UserExperiencesController {
         boolean hasImg = false;
         if (!form.getActivityImg().isEmpty()) {
             hasImg = true;
-            final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
-            imageExperienceService.create(imageModel.getId(), experienceId, true);
+            final ImageExperienceModel imageModel = imageService.createExperienceImg(
+                    form.getActivityImg().getBytes(), experienceId, true);
         }
         Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
         String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();

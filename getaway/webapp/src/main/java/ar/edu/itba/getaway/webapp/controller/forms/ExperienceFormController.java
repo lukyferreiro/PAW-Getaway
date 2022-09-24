@@ -29,8 +29,8 @@ public class ExperienceFormController {
 
     @Autowired
     private ImageService imageService;
-    @Autowired
-    private ImageExperienceService imageExperienceService;
+//    @Autowired
+//    private ImageExperienceService imageExperienceService;
 
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif");
 
@@ -76,19 +76,18 @@ public class ExperienceFormController {
             throw new UserNotFoundException();
         }
 
-        Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
-        String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
-        String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
-        ExperienceModel experienceModel;
-        MultipartFile activityImg = form.getActivityImg();
+        final Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
+        final String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
+        final String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
+        final ExperienceModel experienceModel;
+        final MultipartFile activityImg = form.getActivityImg();
 
         if (!activityImg.isEmpty()) {
-
             if (contentTypes.contains(activityImg.getContentType())) {
                 experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(),
                         description, url, price, cityId, categoryId + 1, userId, true);
-                final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
-                imageExperienceService.create(imageModel.getId(), experienceModel.getId(), true);
+                final ImageExperienceModel imageModel = imageService.createExperienceImg(
+                        form.getActivityImg().getBytes(), experienceModel.getId(), true);
             } else {
                 return createActivityForm(form);
             }

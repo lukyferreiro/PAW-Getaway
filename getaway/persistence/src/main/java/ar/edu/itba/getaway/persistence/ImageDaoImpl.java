@@ -41,7 +41,7 @@ public class ImageDaoImpl implements ImageDao {
     }
 
     @Override
-    public ImageModel create(byte[] image) {
+    public ImageModel createImg(byte[] image) {
         final Map<String, Object> imageData = new HashMap<>();
         imageData.put("imageObject", image);
         final long imgId = imageSimplejdbcInsert.executeAndReturnKey(imageData).longValue();
@@ -52,39 +52,62 @@ public class ImageDaoImpl implements ImageDao {
     }
 
     @Override
-    public boolean update(long imgid, ImageModel imageModel) {
-        final String query = "UPDATE images SET imageObject = ? WHERE imgid = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.update(query, imageModel.getImage(), imgid) == 1;
+    public ImageExperienceModel createExperienceImg(byte[] image, long experienceId, boolean isCover) {
+        final ImageModel imageData = createImg(image);
+
+        final Map<String, Object> imageExperienceData = new HashMap<>();
+        imageExperienceData.put("experienceId", experienceId);
+        imageExperienceData.put("isCover", isCover);
+        imageExperienceData.put("imgId", imageData.getId());
+        imageExperienceSimplejdbcInsert.execute(imageExperienceData);
+
+        LOGGER.info("Created new image experience with id {}", imageData.getId());
+
+        return new ImageExperienceModel(imageData.getId(), experienceId, isCover);
     }
 
     @Override
-    public boolean delete(long imgid) {
+    public boolean updateImg(byte[] image, long imageId) {
+        final String query = "UPDATE images SET imageObject = ? WHERE imgid = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.update(query, image, imageId) == 1;
+    }
+
+    @Override
+    public boolean deleteImg(long imgid) {
         final String query = "DELETE FROM images WHERE imgid = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.update(query, imgid) == 1;
     }
 
     @Override
-    public List<ImageModel> listAll() {
+    public List<ImageModel> listAllImg() {
         final String query = "SELECT imgid, imageObject FROM images";
         LOGGER.debug("Executing query: {}", query);
         return new ArrayList<>(jdbcTemplate.query(query, IMAGE_MODEL_ROW_MAPPER));
     }
 
     @Override
-    public Optional<ImageModel> getById(long imgid) {
+    public List<ImageExperienceModel> listAllExperienceImg() {
+        final String query = "SELECT imgId, experienceId, isCover FROM imagesExperiences";
+        LOGGER.debug("Executing query: {}", query);
+        return new ArrayList<>(jdbcTemplate.query(query, IMAGE_EXPERIENCE_MODEL_ROW_MAPPER));
+    }
+
+    @Override
+    public Optional<ImageModel> getImgById(long imageId) {
         final String query = "SELECT imgid, imageObject FROM images WHERE imgid = ?";
         LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{imgid}, IMAGE_MODEL_ROW_MAPPER)
+        return jdbcTemplate.query(query, new Object[]{imageId}, IMAGE_MODEL_ROW_MAPPER)
                 .stream().findFirst();
     }
 
     @Override
-    public Optional<ImageModel> getByExperienceId(long experienceId) {
+    public Optional<ImageModel> getImgByExperienceId(long experienceId) {
         final String query = "SELECT imgId, imageObject FROM imagesExperiences NATURAL JOIN images WHERE experienceId = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{experienceId}, IMAGE_MODEL_ROW_MAPPER)
                 .stream().findFirst();
     }
+
 }

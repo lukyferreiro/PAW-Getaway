@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.persistence;
 
+import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.RoleModel;
 import ar.edu.itba.getaway.models.Roles;
@@ -13,12 +14,12 @@ public interface UserDao {
     Collection<RoleModel> getUserRolesModels(long userId);
     Optional<UserModel> getUserById (long userId);
     Optional<UserModel> getUserByEmail (String email);
-    UserModel createUser (String password, String name, String surname, String email, Collection<Roles> roles) throws DuplicateUserException;
+    UserModel createUser (String password, String name, String surname, String email, Collection<Roles> roles) throws DuplicateUserException, DuplicateImageException;
     Collection<Roles> getUserRoles (long userId);
     Optional<RoleModel> getRoleByName (Roles role);
     Optional<UserModel> updateRoles (long userId, Roles oldVal, Roles newVal);
     Optional<UserModel> updatePassword (long userId, String password);
     void updateUserInfo (long userId, UserInfo userInfo);
     void addRole (long userId, Roles newRole);
-    void updateProfileImage(long userId, long imageId);
+    void updateProfileImage(UserModel userModel, byte[] image);
 }

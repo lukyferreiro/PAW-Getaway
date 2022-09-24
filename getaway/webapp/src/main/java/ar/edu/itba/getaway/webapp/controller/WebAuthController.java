@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
@@ -73,7 +74,8 @@ public class WebAuthController {
             user = userService.createUser(form.getPassword(), form.getName(),
                     form.getSurname(), form.getEmail());
             forceLogin(user, request);
-        } catch (DuplicateUserException e) {
+            //TODO no me gusta que tambien me este cacheando DuplicateImageException
+        } catch (DuplicateUserException | DuplicateImageException e) {
             errors.rejectValue("email", "validation.user.DuplicateEmail");
             return register(form);
         }

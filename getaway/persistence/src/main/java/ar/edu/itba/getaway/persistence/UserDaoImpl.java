@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.persistence;
 
+import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.RoleModel;
 import ar.edu.itba.getaway.models.Roles;
@@ -25,6 +26,7 @@ public class UserDaoImpl implements UserDao {
     private final SimpleJdbcInsert userSimpleJdbcInsert;
     private final SimpleJdbcInsert roleSimpleJdbcInsert;
     private final SimpleJdbcInsert userRolesSimpleJdbcInsert;
+    private final SimpleJdbcInsert imagesSimpleJdbcInsert;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
 
     private final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
@@ -35,10 +37,6 @@ public class UserDaoImpl implements UserDao {
                     rs.getString("email"),
                     getUserRoles(rs.getLong("userid")),
                     rs.getLong("imgId"));
-
-//    private static final RowMapper<RoleModel> USER_ROLES_ROW_MAPPER = (rs, rowNum) ->
-//            new RoleModel(rs.getLong("roleid"),
-//                    Roles.valueOf(rs.getString("roleName")));
 
     private static final RowMapper<RoleModel> ROLE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new RoleModel(rs.getLong("roleid"),
@@ -55,17 +53,29 @@ public class UserDaoImpl implements UserDao {
                 .withTableName("roles");
         this.userRolesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("userRoles");
+        this.imagesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
+                .withTableName("images");
     }
 
     @Override
     public UserModel createUser(String password, String name, String surname, String email,
-                                Collection<Roles> roles) throws DuplicateUserException {
+                                Collection<Roles> roles) throws DuplicateUserException, DuplicateImageException {
         final Map<String, Object> userData = new HashMap<>();
         userData.put("userName", name);
         userData.put("userSurname", surname);
         userData.put("email", email);
-        userData.put("imgId", null);
         userData.put("password", password);
+
+        Map<String, Object> userImageData = new HashMap<>();
+        userImageData.put("imageObject", null);
+        final long imageId;
+        try {
+            imageId = imagesSimpleJdbcInsert.executeAndReturnKey(userImageData).longValue();
+            userData.put("imgId", imageId);
+            LOGGER.info("Created image with id {}", imageId);
+        } catch (DuplicateKeyException e) {
+            throw new DuplicateImageException();
+        }
 
         final long userId;
         try {
@@ -182,14 +192,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void updateProfileImage(long userId, long imageId) {
-        final String query = "UPDATE users SET imgId = ? WHERE userId = ?";
+    public void updateProfileImage(UserModel userModel, byte[] image) {
+        final String query = "UPDATE images SET imageObject = ? WHERE imgId = ?";
         LOGGER.debug("Executing query: {}", query);
-        if (jdbcTemplate.update(query, imageId, userId) == 1) {
-            LOGGER.debug("Profile picture of user {} updated", userId);
+        if (jdbcTemplate.update(query, image, userModel.getProfileImageId()) == 1) {
+            LOGGER.debug("Profile picture of user {} updated", userModel.getId());
         }
         else {
-            LOGGER.debug("Profile picture of user {} not updated", userId);
+            LOGGER.debug("Profile picture of user {} not updated", userModel.getId());
         }
     }
 }

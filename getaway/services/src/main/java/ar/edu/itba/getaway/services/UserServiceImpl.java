@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.services;
 
+import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.persistence.PasswordResetTokenDao;
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException {
+    public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException, DuplicateImageException {
         LOGGER.debug("Creating user with email {}", email);
         UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES);
         LOGGER.debug("Created user with id {}", userModel.getId());
@@ -163,15 +164,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateProfileImage(ImageModel imageModel, UserModel userModel) {
-        Long imageId = userModel.getProfileImageId();
-        LOGGER.debug("Updating user {} profile image", userModel.getEmail());
-        if (imageId == 0) {
-            imageId = imageService.create(imageModel.getImage()).getId();
-            userDao.updateProfileImage(userModel.getId(), imageId);
-        } else {
-            imageService.update(imageId, imageModel);
-        }
+    public void updateProfileImage(UserModel userModel, byte[] image) {
+        LOGGER.debug("Updating user {} profile image of id {}", userModel.getId(), userModel.getProfileImageId());
+        userDao.updateProfileImage(userModel, image);
     }
 
     private void sendVerificationToken(UserModel userModel, VerificationToken token) {

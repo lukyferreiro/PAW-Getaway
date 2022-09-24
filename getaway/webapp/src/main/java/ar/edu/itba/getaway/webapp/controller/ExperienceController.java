@@ -93,11 +93,12 @@ public class ExperienceController {
     }
 
 
-    @RequestMapping(path = "/{experienceId}/image", method = RequestMethod.GET,
-            produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     @ResponseBody
+    @RequestMapping(path = "/{experienceId}/image",
+            method = RequestMethod.GET,
+            produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
-        Optional<ImageModel> optionalImageModel = imageService.getByExperienceId(experienceId);
+        Optional<ImageModel> optionalImageModel = imageService.getImgByExperienceId(experienceId);
 
         return optionalImageModel.map(ImageModel::getImage).orElse(null);
     }
