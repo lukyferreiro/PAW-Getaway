@@ -1,4 +1,4 @@
-package ar.edu.itba.getaway.webapp.controller;
+package ar.edu.itba.getaway.webapp.auth;
 
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.services.UserService;
@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 @ControllerAdvice
-public class UserController {
+public class LoggedUserController {
 
     @Autowired
     private UserService userService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoggedUserController.class);
 
-    @ModelAttribute("loggedUser") 
+    @ModelAttribute("loggedUser")
     public UserModel loggedUser(Model model) {
 
         if (model.containsAttribute("loggedUser")) {
@@ -31,11 +31,6 @@ public class UserController {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (!isAnonymous(auth)) {
-            //TODO CHECK
-            //Cuando me verifico, no se me actualiza el auth.getAuthorities()
-            //me sigue diciendo que sigo sin estar verificado
-            //no se esta actualizando el SecurityContextHolder.getContext().getAuthentication();
-            //Para logrrar que fumciones hay que cerrar el servidor y vorlo a abrir
             LOGGER.debug("Retrieved current user via service");
             return userService.getUserByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
         }

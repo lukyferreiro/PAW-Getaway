@@ -37,9 +37,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
-        return (httpServletRequest, httpServletResponse, e) ->
-                httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/access-denied");
-//        return new CustomAccessDeniedHandler();
+        return new CustomAccessDeniedHandler();
     }
 
     @Bean
@@ -76,13 +74,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/verifyAccount/status/send").hasRole("NOT_VERIFIED")
                 .antMatchers("/user/verifyAccount/status/resend").hasRole("NOT_VERIFIED")
                 .antMatchers("/user/verifyAccount/result/unsuccessfully").hasRole("NOT_VERIFIED")
-//                    .antMatchers("/user/verifyAccount/result/successfully").hasRole("NOT_VERIFIED")
                 .antMatchers("/user/verifyAccount/result/successfully").hasRole("VERIFIED")
                 //Reset Password
-                .antMatchers("/user/resetPasswordRequest").authenticated()
-                .antMatchers(HttpMethod.POST,"/user/resetPasswordRequest").authenticated()
-                .antMatchers(HttpMethod.POST,"/user/resetPassword").authenticated()
-                .antMatchers("/user/resetPassword/{token}").authenticated()
+                .antMatchers("/user/resetPasswordRequest").anonymous()
+                .antMatchers(HttpMethod.POST,"/user/resetPasswordRequest").anonymous()
+                .antMatchers(HttpMethod.POST,"/user/resetPassword").anonymous()
+                .antMatchers("/user/resetPassword/{token}").anonymous()
                 //User routes
                 .antMatchers("/user/experiences").authenticated()
                 //Experiences

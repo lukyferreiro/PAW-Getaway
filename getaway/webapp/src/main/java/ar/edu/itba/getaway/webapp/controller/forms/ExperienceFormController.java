@@ -4,6 +4,7 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.webapp.exceptions.AccessDeniedException;
 import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,8 +35,7 @@ public class ExperienceFormController {
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif");
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
-    public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form,
-                                           @ModelAttribute("loggedUser") final UserModel loggedUser) {
+    public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form) {
         final ModelAndView mav = new ModelAndView("experience_form");
 
         ExperienceCategory[] categoryModels = ExperienceCategory.values();
@@ -46,12 +46,6 @@ public class ExperienceFormController {
 
         List<CountryModel> countryModels = countryService.listAll();
         List<CityModel> cityModels = cityService.listAll();
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
 
         mav.addObject("categories", categories);
         mav.addObject("cities", cityModels);
@@ -65,7 +59,7 @@ public class ExperienceFormController {
                                        @ModelAttribute("loggedUser") final UserModel loggedUser) throws Exception {
 
         if (errors.hasErrors()) {
-            return createActivityForm(form, loggedUser);
+            return createActivityForm(form);
         }
 
         long categoryId = form.getActivityCategoryId();
@@ -76,11 +70,10 @@ public class ExperienceFormController {
         long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
 
         long userId;
-
         try {
             userId = loggedUser.getId();
-        } catch (NullPointerException e) {
-            throw new AccessDeniedException();
+        } catch (UserNotFoundException e) {
+            throw new UserNotFoundException();
         }
 
         Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
@@ -97,22 +90,14 @@ public class ExperienceFormController {
                 final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
                 imageExperienceService.create(imageModel.getId(), experienceModel.getId(), true);
             } else {
-                return createActivityForm(form, loggedUser);
+                return createActivityForm(form);
             }
         } else {
             experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(),
                     description, url, price, cityId, categoryId + 1, userId, false);
         }
 
-        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-
-        return mav;
+        return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
     }
 
 }

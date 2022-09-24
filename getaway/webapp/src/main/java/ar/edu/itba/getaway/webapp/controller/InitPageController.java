@@ -19,14 +19,8 @@ public class InitPageController {
     private ExperienceService experienceService;
 
     @RequestMapping(value = "/", method = {RequestMethod.GET})
-    public ModelAndView init(@ModelAttribute("loggedUser") final UserModel loggedUser) {
+    public ModelAndView init() {
         final ModelAndView mav = new ModelAndView("mainPage");
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
 
         List<ExperienceModel> experienceList = experienceService.getRandom();
 

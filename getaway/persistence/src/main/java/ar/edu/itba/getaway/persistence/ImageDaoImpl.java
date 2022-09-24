@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.persistence;
 
+import ar.edu.itba.getaway.models.ImageExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,26 +17,34 @@ import java.util.*;
 public class ImageDaoImpl implements ImageDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private final SimpleJdbcInsert jdbcInsert;
+    private final SimpleJdbcInsert imageSimplejdbcInsert;
+    private final SimpleJdbcInsert imageExperienceSimplejdbcInsert;
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageDaoImpl.class);
 
     private static final RowMapper<ImageModel> IMAGE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new ImageModel(rs.getLong("imgid"),
                     rs.getBytes("imageObject"));
 
+    private static final RowMapper<ImageExperienceModel> IMAGE_EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
+            new ImageExperienceModel(rs.getLong("imgid"),
+                    rs.getLong("experienceId"),
+                    rs.getBoolean("isCover"));
+
     @Autowired
     public ImageDaoImpl(final DataSource ds){
         this.jdbcTemplate = new JdbcTemplate(ds);
-        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+        this.imageSimplejdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("images")
                 .usingGeneratedKeyColumns("imgid");
+        this.imageExperienceSimplejdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("imagesExperiences");
     }
 
     @Override
     public ImageModel create(byte[] image) {
         final Map<String, Object> imageData = new HashMap<>();
         imageData.put("imageObject", image);
-        final long imgId = jdbcInsert.executeAndReturnKey(imageData).longValue();
+        final long imgId = imageSimplejdbcInsert.executeAndReturnKey(imageData).longValue();
 
         LOGGER.info("Created new image with id {}", imgId);
 

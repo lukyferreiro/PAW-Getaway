@@ -12,9 +12,7 @@
 
    <body>
       <div class="container-main">
-         <jsp:include page="/WEB-INF/components/simpleNavbar.jsp">
-            <jsp:param name="loggedUser" value="${loggedUser}"/>
-         </jsp:include>
+         <%@ include file="../components/simpleNavbar.jsp" %>
 
          <div class="container-lg h-100 smallContentContainer d-flex align-items-center justify-content-center">
             <div class="row w-75 m-0 align-items-center justify-content-center">
@@ -54,7 +52,7 @@
                                     <span class="required-field">*</span>
                                  </form:label>
                                  <div class="input-group d-flex justify-content-start align-items-center">
-                                    <form:input type="text" path="confirmPassword" cssClass="form-control input"
+                                    <form:input type="password" path="confirmPassword" cssClass="form-control input"
                                                 id="password2" name="confirmPassword"
                                                 cssErrorClass="form-control is-invalid"/>
                                     <div class="input-group-append">
@@ -64,8 +62,9 @@
                                        </button>
                                     </div>
                                  </div>
+                                 <form:errors path="confirmPassword" cssClass="form-error-label" element="p"/>
                               </div>
-                              <form:errors path="" cssClass="form-error-label" element="p"/>
+                              <form:errors path="passwordsNotEquals" cssClass="form-error-label" element="p"/>
                            </form:form>
                         </div>
                         <div class="col-12 mt-2 d-flex align-items-center justify-content-center">

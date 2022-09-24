@@ -32,7 +32,6 @@ public class ExperienceController {
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.GET})
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,
-                                   @ModelAttribute("loggedUser") final UserModel loggedUser,
                                    @RequestParam Optional<Long> cityId,
                                    @RequestParam Optional<Double> maxPrice,
                                    @RequestParam Optional<Long> score) {
@@ -78,11 +77,6 @@ public class ExperienceController {
             experienceList = experienceService.listByCategory(id);
         }
 
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
 
         List<Long> avgReviews = new ArrayList<>();
         for(ExperienceModel experience : experienceList){
@@ -110,8 +104,7 @@ public class ExperienceController {
 
     @RequestMapping("/experiences/{categoryName}/{experienceId}")
     public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName,
-                                       @PathVariable("experienceId") final long experienceId,
-                                       @ModelAttribute("loggedUser") final UserModel loggedUser) {
+                                       @PathVariable("experienceId") final long experienceId) {
         final ModelAndView mav = new ModelAndView("experience_details");
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
@@ -126,12 +119,6 @@ public class ExperienceController {
             mav.addObject("reviewAvg", experienceAvgReview.get());
         }
 
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
         mav.addObject("reviews", reviews);
@@ -144,12 +131,11 @@ public class ExperienceController {
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.POST})
     public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName,
                                        @Valid @ModelAttribute("filterForm") final FilterForm form,
-                                       @ModelAttribute("loggedUser") final UserModel loggedUser,
                                        final BindingResult errors) {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
-            return experience(categoryName, form, loggedUser, Optional.empty(),Optional.empty(), Optional.empty());
+            return experience(categoryName, form, Optional.empty(),Optional.empty(), Optional.empty());
         }
 
         Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
@@ -167,11 +153,6 @@ public class ExperienceController {
         Long score = form.getScore();
         if(score != null){
             mav.addObject("score", score);
-        }
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
         }
 
         return mav;

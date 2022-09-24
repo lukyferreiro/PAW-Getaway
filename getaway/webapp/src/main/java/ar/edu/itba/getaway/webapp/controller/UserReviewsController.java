@@ -2,7 +2,7 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.webapp.exceptions.AccessDeniedException;
+import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,29 +31,17 @@ public class UserReviewsController {
     public ModelAndView review(@ModelAttribute("loggedUser") final UserModel loggedUser) {
         final ModelAndView mav = new ModelAndView("user_reviews");
 
-        try {
-            List<ReviewUserModel> reviewList = reviewService.getByUserId(loggedUser.getId());
-            mav.addObject("reviews", reviewList);
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
+        List<ReviewUserModel> reviewList = reviewService.getByUserId(loggedUser.getId());
+        mav.addObject("reviews", reviewList);
 
         return mav;
     }
 
     @RequestMapping(value = "/user/reviews/delete/{reviewId}", method = {RequestMethod.GET})
     public ModelAndView reviewDelete(@PathVariable("reviewId") final long reviewId,
-                                         @ModelAttribute("deleteForm") final DeleteForm form,
-                                         @ModelAttribute("loggedUser") final UserModel loggedUser) {
+                                         @ModelAttribute("deleteForm") final DeleteForm form) {
         final ModelAndView mav = new ModelAndView("deleteReview");
         ReviewModel review = reviewService.getById(reviewId).get();
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
 
         mav.addObject("review", review);
         return mav;
@@ -62,10 +50,9 @@ public class UserReviewsController {
     @RequestMapping(value = "/user/reviews/delete/{reviewId}", method = {RequestMethod.POST})
     public ModelAndView reviewDeletePost(@PathVariable(value = "reviewId") final long reviewId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,
-                                             @ModelAttribute("loggedUser") final UserModel loggedUser,
                                              final BindingResult errors) {
         if (errors.hasErrors()) {
-            return reviewDelete(reviewId, form, loggedUser);
+            return reviewDelete(reviewId, form);
         }
 
         reviewService.delete(reviewId);
@@ -74,8 +61,7 @@ public class UserReviewsController {
 
     @RequestMapping(value = "/user/reviews/edit/{reviewId}", method = {RequestMethod.GET})
     public ModelAndView reviewEdit(@PathVariable("reviewId") final long reviewId,
-                                       @ModelAttribute("reviewForm") final ReviewForm form,
-                                       @ModelAttribute("loggedUser") final UserModel loggedUser) {
+                                       @ModelAttribute("reviewForm") final ReviewForm form) {
         final ModelAndView mav = new ModelAndView("review_edit_form");
 
 
@@ -84,13 +70,6 @@ public class UserReviewsController {
         form.setTitle(review.getTitle());
         form.setScore(review.getStringScore());
         form.setDescription(review.getDescription());
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-
 
         mav.addObject("review", review);
 
@@ -103,15 +82,15 @@ public class UserReviewsController {
                                            @ModelAttribute("loggedUser") final UserModel loggedUser,
                                            final BindingResult errors) throws IOException {
         if (errors.hasErrors()) {
-            return reviewEdit(reviewId, form, loggedUser);
+            return reviewEdit(reviewId, form);
         }
 
 
         long userId;
         try {
             userId = loggedUser.getId();
-        } catch (NullPointerException e) {
-            throw new AccessDeniedException();
+        } catch (UserNotFoundException e) {
+            throw new UserNotFoundException();
         }
 
         ReviewModel reviewModel = reviewService.getById(reviewId).get();
@@ -121,12 +100,7 @@ public class UserReviewsController {
 
         reviewService.update(reviewId,newReviewModel);
 
-        final ModelAndView mav = new ModelAndView("redirect:/user/reviews");
-
-        //No hace falta meterlo en un try catch porque ya me fije que loggedUser no sea null
-        mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-
-        return mav;
+        return new ModelAndView("redirect:/user/reviews");
     }
 
 }

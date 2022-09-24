@@ -1,7 +1,5 @@
 package ar.edu.itba.getaway.models;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class ImageModel {
     private final long imageId;
     private final byte[] image;

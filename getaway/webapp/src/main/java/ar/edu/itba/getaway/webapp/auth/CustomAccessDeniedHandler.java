@@ -30,27 +30,25 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
-            LOGGER.warn("User: " + auth.getName()
-                    + " attempted to access the protected URL: "
-                    + request.getRequestURI());
+            LOGGER.warn("User: " + auth.getName() + " attempted to access the protected URL: " + request.getRequestURI());
+            LOGGER.warn("User: " + auth.getName() + " has roles " + auth.getAuthorities());
 
             final Collection<GrantedAuthority> authorities = createAuthorities(Collections.singletonList(Roles.VERIFIED));
             final Collection<? extends GrantedAuthority> currentAuthorities = auth.getAuthorities();
             for (final GrantedAuthority grantedAuthority : authorities) {
+                //Si el usuario no esta verificado
                 if (!currentAuthorities.contains(grantedAuthority)) {
-                    response.sendRedirect(request.getContextPath() + "/");
+                    response.sendRedirect(request.getContextPath() + "/access-denied");
                     return;
                 }
             }
         }
 
-        response.sendRedirect(request.getContextPath() + "/access-denied");
+        response.sendRedirect(request.getContextPath() + "/");
     }
 
     private Collection<GrantedAuthority> createAuthorities(Collection<Roles> roles) {
-        return roles.stream()
-                .map((role) -> new SimpleGrantedAuthority("ROLE_" + role))
-                .collect(Collectors.toList());
+        return roles.stream().map((role) -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
     }
 
 }
