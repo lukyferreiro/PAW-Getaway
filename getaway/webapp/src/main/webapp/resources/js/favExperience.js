@@ -1,32 +1,28 @@
-let processing = false;
-let star = document.getElementById("star");
+let favTrue = document.getElementById("favTrue");
+let favFalse = document.getElementById("favFalse");
 let favExperienceForm = document.getElementById("favExperienceForm");
-let favExperienceFormButton = document.getElementById("favExperienceFormButton");
+let processing = false;
 
-window.addEventListener("load", ()=>{
-    let fav = document.getElementById("setFav");
-    if(fav.value === "true"){
-        star.click();
-    }
+favTrue.addEventListener("click", () => {
+    let favExp = document.getElementById("setFav");
+    favExp.value = false;
+
+    submit();
 })
 
-star.addEventListener("click", () => {
-    let fav = document.getElementById("setFav");
-    console.log(fav.value);
-    if(fav.value === "true"){
-        fav.value = "false"
-    }else{
-        fav.value = "true"
-    }
-    console.log(fav.value);
+favFalse.addEventListener("click", () => {
+    let favExp = document.getElementById("setFav");
+    favExp.value = true;
+
+    submit();
 })
 
-favExperienceFormButton.addEventListener("click", () => {
+
+function submit() {
     if (processing) {
         return;
     }
     processing = true;
-    favExperienceFormButton.disabled = true;
     favExperienceForm.submit();
     processing = false;
-})
+}

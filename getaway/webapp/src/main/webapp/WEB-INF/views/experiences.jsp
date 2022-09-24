@@ -84,18 +84,42 @@
             </div>
 
             <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
-               <c:forEach var="activity" varStatus="myIndex" items="${activities}">
+               <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                   <div class="card card-experience mx-3 my-2 p-0">
 
-                     <a class="card-link" href="<c:url value="${activity.categoryName}/${activity.id}"/>">
+                        <c:set var = "fav" value = "${false}"/>
+                        <c:forEach var="favExperience" items="${favExperienceModels}">
+                           <c:if test="${favExperience == experience.id}">
+                              <c:set var = "fav"  value = "${true}"/>
+                           </c:if>
+                        </c:forEach>
+
+                        <form:form modelAttribute="favExperienceForm" action="${postPath}" id="favExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
+                           <c:choose>
+                              <c:when test="${fav}">
+                                 <button type="submit" class="btn" id="favTrue" form="favExperienceForm">
+                                    <i class="fas fa-star star-color"></i>
+                                 </button>
+                              </c:when>
+                              <c:otherwise>
+                                 <button type="submit" class="btn" id="favFalse" form="favExperienceForm">
+                                    <i class="fas fa-star"></i>
+                                 </button>
+                              </c:otherwise>
+                           </c:choose>
+                           <form:input value="${fav}" path="favExp" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="setFav"/>
+                           <form:input value="${experience.id}" path="experienceId" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="setExpId"/>
+                        </form:form>
+
+                     <a class="card-link" href="<c:url value="${experience.categoryName}/${experience.id}"/>">
                         <jsp:include page="/WEB-INF/views/card_experience.jsp">
-                           <jsp:param name="hasImage" value="${activity.hasImage}"/>
-                           <jsp:param name="categoryName" value="${activity.categoryName}"/>
-                           <jsp:param name="id" value="${activity.id}"/>
-                           <jsp:param name="name" value="${activity.name}"/>
-                           <jsp:param name="description" value="${activity.description}"/>
-                           <jsp:param name="address" value="${activity.address}"/>
-                           <jsp:param name="price" value="${activity.price}"/>
+                           <jsp:param name="hasImage" value="${experience.hasImage}"/>
+                           <jsp:param name="categoryName" value="${experience.categoryName}"/>
+                           <jsp:param name="id" value="${experience.id}"/>
+                           <jsp:param name="name" value="${experience.name}"/>
+                           <jsp:param name="description" value="${experience.description}"/>
+                           <jsp:param name="address" value="${experience.address}"/>
+                           <jsp:param name="price" value="${experience.price}"/>
                            <jsp:param name="myIndex" value="${myIndex.index}"/>
                         </jsp:include>
                         <div class="card-body container-fluid p-2">
@@ -114,7 +138,7 @@
 
       <%@ include file="../components/includes/bottomScripts.jsp" %>
       <script src='<c:url value="/resources/js/filter.js"/>'></script>
-      <script src='<c:url value="/resources/js/ratingScore.js"/>'></script>
+      <script src='<c:url value="/resources/js/favExperience.js"/>'></script>
       <script src="https://kit.fontawesome.com/5ea815c1d0.js"></script>
 
    </body>

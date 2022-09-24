@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+
 <div>
     <div class="star-rating">
         <input type="radio" id="star5" name="rating" value="5" />
@@ -12,5 +14,4 @@
         <input type="radio" id="star1" name="rating" value="1" />
         <label for="star1" class="fas fa-star"></label>
     </div>
-
 </div>

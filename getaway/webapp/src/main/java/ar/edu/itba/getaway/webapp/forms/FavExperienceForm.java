@@ -2,7 +2,7 @@ package ar.edu.itba.getaway.webapp.forms;
 
 public class FavExperienceForm {
 
-    private boolean favExp;
+    private String favExp;
     private long experienceId;
 
     public long getExperienceId() {
@@ -10,14 +10,15 @@ public class FavExperienceForm {
     }
 
     public boolean getFavExp(){
-        return favExp;
+        return favExp.equals("true");
     }
 
     public void setExperienceId(long experienceId) {
         this.experienceId = experienceId;
     }
 
-    public void setFavExp(boolean favExp) {
+    public void setFavExp(String favExp) {
         this.favExp = favExp;
     }
+
 }

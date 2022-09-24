@@ -65,8 +65,8 @@
          <%@ include file="../components/footer.jsp" %>
       </div>
       <%@ include file="../components/includes/bottomScripts.jsp" %>
+      <script src='<c:url value="/resources/js/ratingScore.js"/>'></script>
       <script src='<c:url value="/resources/js/createReview.js"/>'></script>
       <script src='<c:url value="/resources/js/cancelButton.js"/>'></script>
-      <script src='<c:url value="/resources/js/ratingScore.js"/>'></script>
       <script src="https://kit.fontawesome.com/5ea815c1d0.js"></script>
    </body>

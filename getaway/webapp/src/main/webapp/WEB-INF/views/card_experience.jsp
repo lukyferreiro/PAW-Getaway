@@ -2,6 +2,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <div>
     <c:choose>
         <c:when test="${param.hasImage == false}">
@@ -12,12 +14,7 @@
             <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/${param.id}/image'/>" alt="Imagen"/>
         </c:otherwise>
     </c:choose>
-    <%--                                       <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/${activity.id}/image'/>"/>--%>
-                    <%--                        <div class="">--%>
-                    <%--                            <button type="button" class="btn btn-bookmark">--%>
-                    <%--                                <img src="<c:url value="/resources/images/ic_bookmark_white.svg"/>" alt="Guardar"/>--%>
-                    <%--                            </button>--%>
-                    <%--                        </div>--%>
+
     <div class="card-body container-fluid p-2">
         <h2 class="card-title container-fluid p-0"><c:out value="${param.name}"/></h2>
         <div class="card-text container-fluid p-0">
@@ -40,4 +37,5 @@
             </h6>
         </div>
     </div>
+
 </div>

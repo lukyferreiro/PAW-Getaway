@@ -6,6 +6,7 @@ import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.exceptions.ExperienceNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.FavExperienceForm;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -56,7 +57,6 @@ public class ExperienceController {
         List<ExperienceModel> experienceList;
         List<CityModel> cityModels = cityService.listAll();
 
-        //Filtros
         if (cityId.isPresent()) {
             if (maxPrice.isPresent() && maxPrice.get() > 0) {
                 if(score.isPresent()){
@@ -85,8 +85,11 @@ public class ExperienceController {
 
         try {
             mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
+            List<Long> favExperienceModels = favExperienceService.listByUserId(loggedUser.getId());
+            mav.addObject("favExperienceModels", favExperienceModels);
         } catch (NullPointerException e) {
             mav.addObject("loggedUser", false);
+            mav.addObject("favExperienceModels", new ArrayList<>());
         }
 
         List<Long> avgReviews = new ArrayList<>();
@@ -95,11 +98,10 @@ public class ExperienceController {
         }
 
 
-
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
-        mav.addObject("activities", experienceList);
+        mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
 
         return mav;
@@ -139,12 +141,14 @@ public class ExperienceController {
             mav.addObject("loggedUser", false);
         }
 
+
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
         mav.addObject("reviews", reviews);
         mav.addObject("avgScore", avgScore);
         mav.addObject("reviewCount", reviewCount);
         mav.addObject("countryCity", countryCity);
+
         return mav;
     }
 
@@ -160,40 +164,36 @@ public class ExperienceController {
             return experience(categoryName, form, favForm, loggedUser, Optional.empty(),Optional.empty(), Optional.empty());
         }
 
-        if(form != null){
-            Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
 
-            if (cityModel.isPresent()) {
-                long cityId = cityModel.get().getId();
-                mav.addObject("cityId", cityId);
-            }
+        Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
 
-            Double priceMax = form.getActivityPriceMax();
-            if (priceMax != null) {
-                mav.addObject("maxPrice", priceMax);
+        if (cityModel.isPresent()) {
+            long cityId = cityModel.get().getId();
+            mav.addObject("cityId", cityId);
+        }
+        Double priceMax = form.getActivityPriceMax();
+        if (priceMax != null) {
+            mav.addObject("maxPrice", priceMax);
+        }
+        Long score = form.getScore();
+        if(score != -1){
+            mav.addObject("score", score);
+        }
+        try {
+            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
+            System.out.println("aaaaaAAAAAAAAAAA");
+            System.out.println("aaaaaAAAAAAAAAAA");
+            System.out.println("aaaaaAAAAAAAAAAA");
+            System.out.println(favForm.getFavExp());
+            if(favForm.getFavExp()){
+                favExperienceService.create(loggedUser.getId(), favForm.getExperienceId());
+            }else{
+                favExperienceService.delete(loggedUser.getId(), favForm.getExperienceId());
             }
-
-            Long score = form.getScore();
-            if(score != -1){
-                mav.addObject("score", score);
-            }
-            try {
-                mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-            } catch (NullPointerException e) {
-                mav.addObject("loggedUser", false);
-            }
-
+        } catch (NullPointerException e) {
+            mav.addObject("loggedUser", false);
         }
 
-//        if(favForm.getFavExp()){
-//            favExperienceService.create(loggedUser.getId(), favForm.getExperienceId());
-//        }else{
-//            favExperienceService.delete(loggedUser.getId(), favForm.getExperienceId());
-//        }
-//
-//        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-//        System.out.println(favForm.getFavExp());
-//        System.out.println(favForm.getExperienceId());
         return mav;
     }
 

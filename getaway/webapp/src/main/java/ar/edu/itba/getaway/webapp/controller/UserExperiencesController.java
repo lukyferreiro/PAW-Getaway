@@ -6,6 +6,7 @@ import ar.edu.itba.getaway.webapp.exceptions.AccessDeniedException;
 import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
+import ar.edu.itba.getaway.webapp.forms.FavExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -34,14 +35,21 @@ public class UserExperiencesController {
     private ImageExperienceService imageExperienceService;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private FavExperienceService favExperienceService;
 
 
     @RequestMapping(value = "/user/experiences", method = {RequestMethod.GET})
-    public ModelAndView experience(@ModelAttribute("loggedUser") final UserModel loggedUser) {
+    public ModelAndView experience(@ModelAttribute("favExperienceForm") final FavExperienceForm favForm,
+                                   @ModelAttribute("loggedUser") final UserModel loggedUser) {
         final ModelAndView mav = new ModelAndView("user_experiences");
+
+
 
         try {
             List<ExperienceModel> experienceList = experienceService.getByUserId(loggedUser.getId());
+            List<Long> favExperienceModels = favExperienceService.listByUserId(loggedUser.getId());
+            mav.addObject("favExperienceModels", favExperienceModels);
             mav.addObject("activities", experienceList);
             mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
             List<Long> avgReviews = new ArrayList<>();
@@ -55,6 +63,20 @@ public class UserExperiencesController {
 
         return mav;
     }
+
+    @RequestMapping(value = "/user/experiences", method = {RequestMethod.POST})
+    public ModelAndView experienceSetFav(@ModelAttribute("favExperienceForm") final FavExperienceForm favForm,
+                                   @ModelAttribute("loggedUser") final UserModel loggedUser) {
+
+        if(favForm.getFavExp()){
+            favExperienceService.create(loggedUser.getId(), favForm.getExperienceId());
+        }else{
+            favExperienceService.delete(loggedUser.getId(), favForm.getExperienceId());
+        }
+
+        return new ModelAndView("redirect:/user/experiences" );
+    }
+
     @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.GET})
     public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
                                          @ModelAttribute("deleteForm") final DeleteForm form,

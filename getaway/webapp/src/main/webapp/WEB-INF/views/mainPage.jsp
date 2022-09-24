@@ -22,6 +22,12 @@
             <c:forEach var="activity" varStatus="myIndex" items="${activities}">
                <div class="card card-experience mx-3 my-2 p-0">
                   <a class="card-link" href="<c:url value="/experiences/${activity.categoryName}/${activity.id}"/>">
+                     <c:set var = "fav" value = "${false}"/>
+                     <c:forEach var="favExperience" items="${favExperienceModels}">
+                        <c:if test="${favExperience == activity.id}">
+                           <c:set var = "fav"  value = "${true}"/>
+                        </c:if>
+                     </c:forEach>
                      <jsp:include page="/WEB-INF/views/card_experience.jsp">
                         <jsp:param name="hasImage" value="${activity.hasImage}"/>
                         <jsp:param name="categoryName" value="${activity.categoryName}"/>
@@ -31,6 +37,8 @@
                         <jsp:param name="address" value="${activity.address}"/>
                         <jsp:param name="price" value="${activity.price}"/>
                         <jsp:param name="myIndex" value="${myIndex.index}"/>
+                        <jsp:param name="fav" value="${fav}"/>
+                        <jsp:param name="postPath" value="/"/>
                      </jsp:include>
                      <div class="card-body container-fluid p-2">
                            <jsp:include page="/WEB-INF/views/star_avg.jsp">
