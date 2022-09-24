@@ -34,7 +34,7 @@
                      <spring:message code="navbar.user"/>
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                     <a class="dropdown-item" href="<c:url value = "/"/>">
+                     <a class="dropdown-item" href="<c:url value = "/user/profile"/>">
                            <spring:message code="navbar.profile"/>
                      </a>
                      <a class="dropdown-item" href="<c:url value = "/user/experiences"/>">

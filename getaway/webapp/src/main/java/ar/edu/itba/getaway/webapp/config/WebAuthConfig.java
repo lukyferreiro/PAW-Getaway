@@ -84,7 +84,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/user/resetPassword").authenticated()
                 .antMatchers("/user/resetPassword/{token}").authenticated()
                 //User routes
-                .antMatchers("/user/experiences").authenticated()
+                .antMatchers("/user/**").authenticated()
+                .antMatchers("/user/profileImage").authenticated()
                 //Experiences
                 .antMatchers(HttpMethod.GET,"/create_experience").hasRole("VERIFIED")
                 .antMatchers(HttpMethod.POST,"/create_experience").hasRole("VERIFIED")
