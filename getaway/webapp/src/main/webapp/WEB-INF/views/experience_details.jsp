@@ -146,7 +146,6 @@
                   </c:otherwise>
                </c:choose>
             </div>
-
          </div>
 
          <%@ include file="../components/footer.jsp" %>

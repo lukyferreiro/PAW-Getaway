@@ -130,7 +130,6 @@
 }
 
 
-
 /*------ Experiences -------*/
 .container-experiences {
     flex: 5;
@@ -176,17 +175,3 @@
     background-color: white;
     border-color: transparent;
 }
-
-/*.rate{*/
-/*    display: flex;*/
-/*    justify-content: flex-start;*/
-/*    margin-bottom: 10px;*/
-/*}*/
-/*.rate-ic{*/
-/*    align-self: center;*/
-/*}*/
-/*.rate-value{*/
-/*    align-self: center;*/
-/*    margin: 0;*/
-/*}*/
-

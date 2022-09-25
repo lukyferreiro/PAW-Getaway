@@ -22,46 +22,47 @@
             <spring:message code="experienceForm.inputs.placeholder" var="placeholder"/>
             <spring:message code="experienceForm.activityMail.example" var="mailExample"/>
             <spring:message code="experienceForm.activityUrl.example" var="urlExample"/>
-            <form:form modelAttribute="experienceForm" action="${postPath}" id="editExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
-               <div class="container-inputs">
-                  <div class="p-0 m-0 d-flex">
-                     <div class="col m-2"> <!--Nombre de la experiencia-->
-                        <form:label path="activityName" class="form-label">
-                           <spring:message code="experienceForm.activityName"/>
-                           <span class="required-field">*</span>
-                        </form:label>
-                        <form:input path="activityName" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
-                        <form:errors path="activityName" element="p" cssClass="form-error-label"/>
-                     </div>
-                     <div class="col m-2"> <!--Categoria-->
-                        <form:label path="activityCategory" class="form-label">
-                           <spring:message code="experienceForm.activityCategory"/>
-                           <span class="required-field">*</span>
-                        </form:label>
-                        <form:select path="activityCategory" class="form-select" cssErrorClass="form-control is-invalid">
-                           <option disabled selected value><c:out value="${placeholder}"/></option>
-                           <c:forEach var="category" items="${categories}">
-                              <c:choose>
-                                 <c:when test="${category == experience.categoryName}">
-                                    <option selected><c:out value="${category}"/></option>
-                                 </c:when>
-                                 <c:otherwise>
-                                    <option><c:out value="${category}"/></option>
-                                 </c:otherwise>
-                              </c:choose>
-                           </c:forEach>
-                        </form:select>
-                        <form:errors path="activityCategory" element="p" cssClass="form-error-label"/>
-                     </div>
-                     <div class="col m-2"> <!--Precio-->
-                        <form:label path="activityPrice" class="form-label">
-                           <spring:message code="experienceForm.activityPrice"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
-                        </form:label>
-                        <form:input path="activityPrice" type="text" class="form-control" id="experienceFormPriceInput"
-                                    cssErrorClass="form-control is-invalid" placeholder="0"/>
-                        <form:errors path="activityPrice" element="p" cssClass="form-error-label"/>
-                     </div>
+            <form:form modelAttribute="experienceForm" action="${postPath}" id="editExperienceForm" method="post"
+                       acceptCharset="UTF-8" enctype="multipart/form-data">
+            <div class="container-inputs">
+               <div class="p-0 m-0 d-flex">
+                  <div class="col m-2"> <!--Nombre de la experiencia-->
+                     <form:label path="activityName" class="form-label">
+                        <spring:message code="experienceForm.activityName"/>
+                        <span class="required-field">*</span>
+                     </form:label>
+                     <form:input path="activityName" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
+                     <form:errors path="activityName" element="p" cssClass="form-error-label"/>
+                  </div>
+                  <div class="col m-2"> <!--Categoria-->
+                     <form:label path="activityCategory" class="form-label">
+                        <spring:message code="experienceForm.activityCategory"/>
+                        <span class="required-field">*</span>
+                     </form:label>
+                     <form:select path="activityCategory" class="form-select" cssErrorClass="form-control is-invalid">
+                        <option disabled selected value><c:out value="${placeholder}"/></option>
+                        <c:forEach var="category" items="${categories}">
+                           <c:choose>
+                              <c:when test="${category == experience.categoryName}">
+                                 <option selected><c:out value="${category}"/></option>
+                              </c:when>
+                              <c:otherwise>
+                                 <option><c:out value="${category}"/></option>
+                              </c:otherwise>
+                           </c:choose>
+                        </c:forEach>
+                     </form:select>
+                     <form:errors path="activityCategory" element="p" cssClass="form-error-label"/>
+                  </div>
+                  <div class="col m-2"> <!--Precio-->
+                     <form:label path="activityPrice" class="form-label">
+                        <spring:message code="experienceForm.activityPrice"/>
+                        <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
+                     </form:label>
+                     <form:input path="activityPrice" type="text" class="form-control" id="experienceFormPriceInput"
+                                 cssErrorClass="form-control is-invalid" placeholder="0"/>
+                     <form:errors path="activityPrice" element="p" cssClass="form-error-label"/>
+                  </div>
 
                   <div class="p-0 m-2 d-flex flex-column"> <!--Descripcion-->
                      <form:label path="activityInfo" class="form-label">
@@ -159,15 +160,15 @@
                      <spring:message code="experienceForm.submit"/>
                   </button>
                </div>
-            </form:form>
+               </form:form>
+            </div>
+
+            <%@ include file="../components/footer.jsp" %>
          </div>
 
-         <%@ include file="../components/footer.jsp" %>
-      </div>
-
-      <%@ include file="../components/includes/bottomScripts.jsp" %>
-      <script src='<c:url value="/resources/js/editExperience.js"/>'></script>
-      <script src='<c:url value="/resources/js/cancelButton.js"/>'></script>
+         <%@ include file="../components/includes/bottomScripts.jsp" %>
+         <script src='<c:url value="/resources/js/editExperience.js"/>'></script>
+         <script src='<c:url value="/resources/js/cancelButton.js"/>'></script>
 
    </body>
 </html>

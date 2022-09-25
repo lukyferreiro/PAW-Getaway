@@ -14,6 +14,11 @@
     font-weight: normal;
 }
 
+.required-field {
+    color: red;
+    margin-left: 5px;
+}
+
 .form-error-label {
     color: red;
     margin: 0;
