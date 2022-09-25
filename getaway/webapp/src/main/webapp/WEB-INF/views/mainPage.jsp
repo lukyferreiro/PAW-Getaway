@@ -8,8 +8,6 @@
       <title><spring:message code="pageName"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href="<c:url value = "/resources/css/experiences.css" />" rel="stylesheet">
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-      <link href="<c:url value = "/resources/css/start_rating.css" />" rel="stylesheet">
    </head>
 
    <body>
@@ -31,9 +29,9 @@
                         <jsp:param name="myIndex" value="${myIndex.index}"/>
                      </jsp:include>
                      <div class="card-body container-fluid p-2">
-                           <jsp:include page="/WEB-INF/views/star_avg.jsp">
-                              <jsp:param name="avgReview" value="${avgReviews[myIndex.index]}"/>
-                           </jsp:include>
+                        <jsp:include page="/WEB-INF/views/star_avg.jsp">
+                           <jsp:param name="avgReview" value="${avgReviews[myIndex.index]}"/>
+                        </jsp:include>
                      </div>
                   </a>
                </div>

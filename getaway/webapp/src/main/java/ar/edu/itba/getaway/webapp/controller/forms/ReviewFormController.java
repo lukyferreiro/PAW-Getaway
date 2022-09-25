@@ -4,7 +4,7 @@ import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.services.ReviewService;
 import ar.edu.itba.getaway.services.UserService;
-import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -5,8 +5,6 @@
 <html>
    <head>
       <title><spring:message code="pageName"/> - <c:out value="${activity.name}"/></title>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-      <link href="<c:url value = "/resources/css/start_rating.css" />" rel="stylesheet">
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 
@@ -46,7 +44,7 @@
                                  <c:out value="${activity.address}"/>, <c:out value="${countryCity}"/>
                               </p>
                            </div>
-                           <div>
+                           <div> <!-- Precio -->
                               <h5 class="information-title">
                                  <spring:message code="experienceDetail.price"/>
                               </h5>
@@ -66,7 +64,7 @@
                                  </c:choose>
                               </p>
                            </div>
-                           <div>
+                           <div> <!-- Descripcion -->
                               <h5 class="information-title">
                                  <spring:message code="experienceDetail.description"/>
                               </h5>
@@ -81,7 +79,7 @@
                                  </c:choose>
                               </p>
                            </div>
-                           <div>
+                           <div> <!-- URL -->
                               <h5 class="information-title">
                                  <spring:message code="experienceDetail.url"/>
                               </h5>
@@ -100,6 +98,10 @@
                                  </c:otherwise>
                               </c:choose>
                            </div>
+                           <!-- TODO -->
+<%--                           <div> <!-- Email de contacto -->--%>
+<%--                              --%>
+<%--                           </div>--%>
                            <jsp:include page="/WEB-INF/views/star_avg.jsp">
                               <jsp:param name="avgReview" value="${reviewAvg}"/>
                            </jsp:include>
@@ -123,20 +125,18 @@
             </div>
 
             <!-- --------------RESEÑAS-------------- -->
-            <div class="mx-5 my-2">
+            <div class="mx-5 my-2 d-flex flex-wrap">
                <c:choose>
                   <c:when test="${reviews.size()!=0}">
                      <c:forEach var="review" items="${reviews}">
-                        <div class="card mx-5 my-3 p-4">
-                           <jsp:include page="/WEB-INF/views/card_review.jsp">
-                              <jsp:param name="userName" value="${review.userName}"/>
-                              <jsp:param name="userSurname" value="${review.userSurname}"/>
-                              <jsp:param name="title" value="${review.title}"/>
-                              <jsp:param name="description" value="${review.description}"/>
-                              <jsp:param name="reviewDate" value="${review.reviewDate}"/>
-                              <jsp:param name="score" value="${review.score}"/>
-                           </jsp:include>
-                        </div>
+                        <jsp:include page="/WEB-INF/views/card_review.jsp">
+                           <jsp:param name="userName" value="${review.userName}"/>
+                           <jsp:param name="userSurname" value="${review.userSurname}"/>
+                           <jsp:param name="title" value="${review.title}"/>
+                           <jsp:param name="description" value="${review.description}"/>
+                           <jsp:param name="reviewDate" value="${review.reviewDate}"/>
+                           <jsp:param name="score" value="${review.score}"/>
+                        </jsp:include>
                      </c:forEach>
                   </c:when>
                   <c:otherwise>

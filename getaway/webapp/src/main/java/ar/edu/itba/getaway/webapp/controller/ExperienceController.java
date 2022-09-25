@@ -2,8 +2,9 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
-import ar.edu.itba.getaway.webapp.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.exceptions.ImageNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -99,9 +100,10 @@ public class ExperienceController {
     @RequestMapping(path = "/{experienceId}/image", method = RequestMethod.GET,
             produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
-        Optional<ImageModel> optionalImageModel = imageService.getImgByExperienceId(experienceId);
-
-        return optionalImageModel.map(ImageModel::getImage).orElse(null);
+//        Optional<ImageModel> optionalImageModel = imageService.getImgByExperienceId(experienceId);
+//        return optionalImageModel.map(ImageModel::getImage).orElse(null);
+        ImageModel optionalImageModel = imageService.getImgByExperienceId(experienceId).orElseThrow(ImageNotFoundException::new);
+        return optionalImageModel.getImage();
     }
 
     @RequestMapping("/experiences/{categoryName}/{experienceId}")

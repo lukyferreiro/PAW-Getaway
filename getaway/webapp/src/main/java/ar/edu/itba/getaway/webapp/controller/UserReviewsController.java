@@ -2,7 +2,7 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.time.Instant;
 import java.util.Date;

@@ -8,8 +8,6 @@
       <title><spring:message code="pageName"/> - <c:url value="${dbCategoryName}"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href="<c:url value = "/resources/css/experiences.css" />" rel="stylesheet">
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-      <link href="<c:url value = "/resources/css/start_rating.css" />" rel="stylesheet">
    </head>
 
    <body>

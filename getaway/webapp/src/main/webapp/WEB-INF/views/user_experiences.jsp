@@ -6,9 +6,7 @@
 <html>
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="experience.title"/></title>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
       <link href='<c:url value="/resources/css/user_experiences.css"/>' rel="stylesheet">
-      <link href="<c:url value = "/resources/css/start_rating.css" />" rel="stylesheet">
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 

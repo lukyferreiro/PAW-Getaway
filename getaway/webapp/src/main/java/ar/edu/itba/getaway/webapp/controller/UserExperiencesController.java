@@ -2,8 +2,8 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
-import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
