@@ -15,7 +15,6 @@ public class ReviewUserModel {
     private final String userSurname;
     private final Long imgId;
 
-
     public ReviewUserModel(long reviewId, String title, String description, long score, long experienceId, Date reviewDate, long userId, String userName, String userSurname, Long imgId) {
         this.reviewId = reviewId;
         this.title = title;

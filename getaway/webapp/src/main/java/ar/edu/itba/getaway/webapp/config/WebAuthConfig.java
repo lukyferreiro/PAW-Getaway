@@ -50,15 +50,14 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public AccessDecisionManager decisionManager(){
-//        //TODO
-//        return new ConsensusBased(List.of("decicion boters"));
-//    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Override
+    public void configure(final WebSecurity web) {
+        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/403");
     }
 
     /* Es importante el orden de las reglas */
@@ -81,8 +80,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/resetPassword/{token}").anonymous()
                 .antMatchers(HttpMethod.GET, "/user/resetPassword").denyAll()
                 .antMatchers(HttpMethod.POST,"/user/resetPassword").anonymous()
-                //User routes
+                //User profile
                 .antMatchers("/user/experiences").authenticated()
+                //TODO
                 //Experiences
                 .antMatchers(HttpMethod.GET,"/create_experience").hasRole("VERIFIED")
                 .antMatchers(HttpMethod.POST,"/create_experience").hasRole("VERIFIED")
@@ -92,6 +92,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/experiences/{categoryName}").permitAll()
                 .antMatchers(HttpMethod.POST,"/experiences/{categoryName}").permitAll()
                 .antMatchers(HttpMethod.GET,"/{experienceId}/image").permitAll()
+                //Reviews
+                //TODO
                 //else
                 .antMatchers("/**").permitAll()
 
@@ -111,13 +113,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/")
             .and().exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())
-//                    .accessDeniedPage("/errors")
+//                    .accessDeniedPage("/")
             .and().csrf().disable();
     }
-
-    @Override
-    public void configure(final WebSecurity web) {
-        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/403");
-    }
-
 }

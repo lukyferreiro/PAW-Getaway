@@ -12,7 +12,6 @@ public class ImageModel {
     public long getId() {
         return imageId;
     }
-
     public byte[] getImage() {
         return image;
     }

@@ -28,7 +28,7 @@ public class RoleModel {
         if(this == o){
             return true;
         }
-        if (! (o instanceof RoleModel)){
+        if (!(o instanceof RoleModel)){
             return false;
         }
         RoleModel other = (RoleModel) o;

@@ -72,9 +72,7 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
 
 //        javaMailProperties.load(this.applicationContext.getResource(JAVA_MAIL_FILE).getInputStream());
         mailSender.setJavaMailProperties(javaMailProperties);
-
         return mailSender;
-
     }
 
     //Message externalization/internationalization for emails.
