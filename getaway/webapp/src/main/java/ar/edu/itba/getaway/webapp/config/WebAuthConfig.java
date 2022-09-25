@@ -78,8 +78,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //Reset Password
                 .antMatchers("/user/resetPasswordRequest").anonymous()
                 .antMatchers(HttpMethod.POST,"/user/resetPasswordRequest").anonymous()
-                .antMatchers(HttpMethod.POST,"/user/resetPassword").anonymous()
                 .antMatchers("/user/resetPassword/{token}").anonymous()
+                .antMatchers(HttpMethod.GET, "/user/resetPassword").denyAll()
+                .antMatchers(HttpMethod.POST,"/user/resetPassword").anonymous()
                 //User routes
                 .antMatchers("/user/experiences").authenticated()
                 //Experiences

@@ -21,5 +21,4 @@ public interface UserDao {
     Optional<UserModel> updatePassword (long userId, String password);
     void updateUserInfo (long userId, UserInfo userInfo);
     void addRole (long userId, Roles newRole);
-    void updateProfileImage(UserModel userModel, byte[] image);
 }

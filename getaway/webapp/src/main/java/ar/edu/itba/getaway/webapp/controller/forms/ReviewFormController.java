@@ -1,10 +1,9 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
 import ar.edu.itba.getaway.models.ReviewModel;
-import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.services.ReviewService;
-import ar.edu.itba.getaway.webapp.exceptions.AccessDeniedException;
+import ar.edu.itba.getaway.services.UserService;
 import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.time.Instant;
 import java.util.Date;
 
 @Controller
 public class ReviewFormController {
 
+    @Autowired
+    private UserService userService;
     @Autowired
     private ReviewService reviewService;
 
@@ -39,7 +41,7 @@ public class ReviewFormController {
                                              @PathVariable("experienceId") final long experienceId,
                                              @Valid @ModelAttribute("reviewForm") final ReviewForm form,
                                              final BindingResult errors,
-                                             @ModelAttribute("loggedUser") final UserModel loggedUser) {
+                                             Principal principal) {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
 
         if (errors.hasErrors()) {
@@ -48,12 +50,8 @@ public class ReviewFormController {
 
         Date date = Date.from(Instant.now());
 
-        long userId;
-        try {
-            userId = loggedUser.getId();
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException();
-        }
+        final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
+        final Long userId = user.getId();
 
         final ReviewModel reviewModel = reviewService.create(form.getTitle(), form.getDescription(),
                 form.getLongScore(), experienceId ,date, userId);

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -23,13 +24,16 @@ import java.util.List;
 public class UserReviewsController {
 
     @Autowired
+    private UserService userService;
+    @Autowired
     private ReviewService reviewService;
 
     @RequestMapping(value = "/user/reviews", method = {RequestMethod.GET})
-    public ModelAndView review(@ModelAttribute("loggedUser") final UserModel loggedUser) {
+    public ModelAndView review(Principal principal) {
         final ModelAndView mav = new ModelAndView("user_reviews");
 
-        List<ReviewUserModel> reviewList = reviewService.getByUserId(loggedUser.getId());
+        final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
+        List<ReviewUserModel> reviewList = reviewService.getByUserId(user.getId());
         mav.addObject("reviews", reviewList);
 
         return mav;
@@ -77,19 +81,14 @@ public class UserReviewsController {
     @RequestMapping(value = "/user/reviews/edit/{reviewId}", method = {RequestMethod.POST})
     public ModelAndView reviewEditPost(@PathVariable(value = "reviewId") final long reviewId,
                                            @ModelAttribute("reviewForm") final ReviewForm form,
-                                           @ModelAttribute("loggedUser") final UserModel loggedUser,
-                                           final BindingResult errors) throws IOException {
+                                           Principal principal,
+                                           final BindingResult errors) {
         if (errors.hasErrors()) {
             return reviewEdit(reviewId, form);
         }
 
-
-        long userId;
-        try {
-            userId = loggedUser.getId();
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException();
-        }
+        final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
+        final Long userId = user.getId();
 
         ReviewModel reviewModel = reviewService.getById(reviewId).get();
 

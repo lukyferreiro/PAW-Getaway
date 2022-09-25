@@ -21,6 +21,8 @@ import java.util.Optional;
 public class ExperienceController {
 
     @Autowired
+    private UserService userService;
+    @Autowired
     private ExperienceService experienceService;
     @Autowired
     private CityService cityService;
@@ -94,8 +96,7 @@ public class ExperienceController {
 
 
     @ResponseBody
-    @RequestMapping(path = "/{experienceId}/image",
-            method = RequestMethod.GET,
+    @RequestMapping(path = "/{experienceId}/image", method = RequestMethod.GET,
             produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
         Optional<ImageModel> optionalImageModel = imageService.getImgByExperienceId(experienceId);
@@ -109,7 +110,7 @@ public class ExperienceController {
         final ModelAndView mav = new ModelAndView("experience_details");
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        String dbCategoryName = ExperienceCategory.valueOf(categoryName).getName();
+        final String dbCategoryName = ExperienceCategory.valueOf(categoryName).getName();
         final List<ReviewUserModel> reviews = reviewService.getReviewAndUser(experienceId);
         final Double avgScore = reviewService.getAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);

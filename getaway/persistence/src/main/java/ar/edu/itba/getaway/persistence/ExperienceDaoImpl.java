@@ -91,7 +91,15 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public boolean delete(long experienceId) {
         final String query = "DELETE FROM experiences WHERE experienceId = ?";
         LOGGER.debug("Executing query: {}", query);
+        Optional<ExperienceModel> experienceModelOptional = getById(experienceId);
+        deleteImgOfExperience(experienceModelOptional.get().getId());
         return jdbcTemplate.update(query, experienceId) == 1;
+    }
+
+    private void deleteImgOfExperience(long imgId){
+        final String query = "DELETE FROM images WHERE imgId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        jdbcTemplate.update(query, imgId);
     }
 
     @Override

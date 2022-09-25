@@ -6,6 +6,7 @@ import ar.edu.itba.getaway.models.RoleModel;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserInfo;
 import ar.edu.itba.getaway.models.UserModel;
+import ar.edu.itba.getaway.persistence.ImageDao;
 import ar.edu.itba.getaway.persistence.UserDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +44,8 @@ public class UserDaoTest {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private ImageDao imageDao;
 
     private static final Collection<Roles> DEFAULT_ROLES = new ArrayList<>(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
     private static final Collection<RoleModel> DEFAULT_ROLES_MODELS = new ArrayList<>(Arrays.asList(new RoleModel(new Long(2), Roles.USER), new RoleModel(new Long(4), Roles.NOT_VERIFIED)));
@@ -239,7 +242,7 @@ public class UserDaoTest {
     public void testUpdateProfileImage() {
         final Optional<UserModel> userBeforeUpdate = userDao.getUserById(1);
         //TODO CHECK romi
-        userDao.updateProfileImage(userBeforeUpdate.get(), null);
+        imageDao.updateImg(null, userBeforeUpdate.get().getId());
         final Optional<UserModel> user = userDao.getUserById(1);
 
         assertTrue(user.isPresent());

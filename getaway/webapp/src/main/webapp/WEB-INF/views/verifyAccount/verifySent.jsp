@@ -6,13 +6,13 @@
 <html>
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="verifySent.title"/></title>
-      <%@ include file="../components/includes/headers.jsp" %>
+      <%@ include file="../../components/includes/headers.jsp" %>
       <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
    </head>
 
    <body>
       <div class="container-main">
-         <%@ include file="../components/simpleNavbar.jsp" %>
+         <%@ include file="../../components/simpleNavbar.jsp" %>
 
          <div class="container-fluid py-4 px-0 d-flex align-items-center">
             <div class="container-lg p-5 mt-5 smallContentContainer">
@@ -39,10 +39,10 @@
             </div>
          </div>
 
-         <%@ include file="../components/footer.jsp" %>
+         <%@ include file="../../components/footer.jsp" %>
       </div>
 
-      <%@ include file="../components/includes/bottomScripts.jsp" %>
+      <%@ include file="../../components/includes/bottomScripts.jsp" %>
    </body>
 </html>
 

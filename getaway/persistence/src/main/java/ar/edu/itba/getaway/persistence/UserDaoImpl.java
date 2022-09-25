@@ -54,7 +54,8 @@ public class UserDaoImpl implements UserDao {
         this.userRolesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("userRoles");
         this.imagesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("images");
+                .withTableName("images")
+                .usingGeneratedKeyColumns("imgid");
     }
 
     @Override
@@ -189,17 +190,5 @@ public class UserDaoImpl implements UserDao {
         userRolesData.put("roleId", roleModel.get().getRoleId());
         userRolesSimpleJdbcInsert.execute(userRolesData);
         LOGGER.info("Added role {} to user {}", newRole.name(), userId);
-    }
-
-    @Override
-    public void updateProfileImage(UserModel userModel, byte[] image) {
-        final String query = "UPDATE images SET imageObject = ? WHERE imgId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        if (jdbcTemplate.update(query, image, userModel.getProfileImageId()) == 1) {
-            LOGGER.debug("Profile picture of user {} updated", userModel.getId());
-        }
-        else {
-            LOGGER.debug("Profile picture of user {} not updated", userModel.getId());
-        }
     }
 }

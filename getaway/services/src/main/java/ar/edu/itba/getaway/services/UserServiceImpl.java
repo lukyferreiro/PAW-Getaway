@@ -166,7 +166,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateProfileImage(UserModel userModel, byte[] image) {
         LOGGER.debug("Updating user {} profile image of id {}", userModel.getId(), userModel.getProfileImageId());
-        userDao.updateProfileImage(userModel, image);
+        imageService.updateImg(image, userModel.getProfileImageId());
     }
 
     private void sendVerificationToken(UserModel userModel, VerificationToken token) {

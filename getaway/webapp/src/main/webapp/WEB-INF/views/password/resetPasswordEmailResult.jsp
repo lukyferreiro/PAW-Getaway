@@ -5,24 +5,24 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> - <spring:message code="resetEmailConfirmation.title"/></title>
-      <%@ include file="../components/includes/headers.jsp" %>
+      <title><spring:message code="pageName"/> - <spring:message code="resetPasswordEmailResult.title"/></title>
+      <%@ include file="../../components/includes/headers.jsp" %>
       <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
    </head>
 
    <body>
       <div class="container-main">
-         <%@ include file="../components/simpleNavbar.jsp" %>
+         <%@ include file="../../components/simpleNavbar.jsp" %>
 
          <div class="container-fluid py-4 px-0 d-flex align-items-center">
             <div class="container-lg p-5 mt-5 smallContentContainer">
                <div class="row w-100 h-100 m-0 align-items-center justify-content-center">
                   <div class="col-12">
                      <h1 class="text-center title">
-                        <spring:message code="resetEmailConfirmation.sent"/>
+                        <spring:message code="resetPasswordEmailResult.sent"/>
                      </h1>
                      <p class="subtitle text-center mb-4">
-                        <spring:message code="resetEmailConfirmation.revise"/>
+                        <spring:message code="resetPasswordEmailResult.revise"/>
                   </div>
                   <div class="col-12 d-flex align-items-center justify-content-center">
                      <i class="far fa-check-circle fa-7x" id="success"></i>
@@ -30,7 +30,7 @@
                   <div class="col-12 px-0 d-flex align-items-center justify-content-center">
                      <a href="<c:url value = "/"/>">
                         <button type="button" class="btn btn-continue">
-                           <spring:message code="resetEmailConfirmation.homeBtn"/>
+                           <spring:message code="resetPasswordEmailResult.homeBtn"/>
                         </button>
                      </a>
                   </div>
@@ -38,9 +38,9 @@
             </div>
          </div>
 
-         <%@ include file="../components/footer.jsp" %>
+         <%@ include file="../../components/footer.jsp" %>
       </div>
 
-      <%@ include file="../components/includes/bottomScripts.jsp" %>
+      <%@ include file="../../components/includes/bottomScripts.jsp" %>
    </body>
 </html>

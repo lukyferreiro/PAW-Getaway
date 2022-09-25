@@ -2,7 +2,6 @@ package ar.edu.itba.getaway.webapp.controller.forms;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.webapp.exceptions.AccessDeniedException;
 import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
@@ -14,23 +13,24 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Controller
 public class ExperienceFormController {
+
     @Autowired
     private ExperienceService exp;
     @Autowired
     private CityService cityService;
     @Autowired
     private CountryService countryService;;
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private ImageService imageService;
-//    @Autowired
-//    private ImageExperienceService imageExperienceService;
 
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif");
 
@@ -56,7 +56,7 @@ public class ExperienceFormController {
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
     public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,
                                        final BindingResult errors,
-                                       @ModelAttribute("loggedUser") final UserModel loggedUser) throws Exception {
+                                       Principal principal) throws Exception {
 
         if (errors.hasErrors()) {
             return createActivityForm(form);
@@ -69,13 +69,8 @@ public class ExperienceFormController {
 
         long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
 
-        long userId;
-        try {
-            userId = loggedUser.getId();
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException();
-        }
-
+        final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
+        final Long userId = user.getId();
         final Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
         final String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
         final String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();

@@ -14,13 +14,6 @@
 <%--         <spring:message code="navbar.home"/>--%>
 <%--      </a>--%>
       <div class="container-header-btn d-flex justify-content-between">
-<%--         <c:if test="${loggedUser == null}">--%>
-<%--            <a href="<c:url value = "/login"/>">--%>
-<%--               <button type="button" class="btn btn-header">--%>
-<%--                  <spring:message code="navbar.login"/>--%>
-<%--               </button>--%>
-<%--            </a>--%>
-<%--         </c:if>--%>
          <c:choose>
             <c:when test="${loggedUser == null}">
                <a href="<c:url value = "/login"/>">

@@ -37,7 +37,6 @@ public class WebAuthController {
     @Autowired
     private MessageSource messageSource;
 
-
     @RequestMapping(path = "/access-denied")
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = AccessDeniedException.class)
@@ -90,9 +89,9 @@ public class WebAuthController {
         return mav;
     }
 
-    /*-----------------------------------------------------
-    --------------------Verify Account---------------------
-     -----------------------------------------------------*/
+    /*-----------------------------------------------------------------------------------
+    -----------------------------------Verify Account------------------------------------
+    ------------------------------------------------------------------------------------*/
 
     //This is the endpoint that It's called from the email
     @RequestMapping(path = "/user/verifyAccount/{token}")
@@ -113,7 +112,7 @@ public class WebAuthController {
 
     @RequestMapping(path = "/user/verifyAccount/status/send")
     public ModelAndView sendAccountVerification() {
-        return new ModelAndView("verifySent");
+        return new ModelAndView("/verifyAccount/verifySent");
     }
 
     @RequestMapping(path = "/user/verifyAccount/status/resend")
@@ -125,27 +124,27 @@ public class WebAuthController {
     }
 
     @RequestMapping(path = "/user/verifyAccount/result/unsuccessfully")
-    public ModelAndView unsuccesfullyAccountVerification() {
-        return new ModelAndView("verifyUnsuccessfully");
+    public ModelAndView unsuccesfullyAccountVerification()  {
+        return new ModelAndView("/verifyAccount/verifyUnsuccessfully");
     }
 
     @RequestMapping(path = "/user/verifyAccount/result/successfully")
     public ModelAndView succesfullyAccountVerification() {
-        return new ModelAndView("verifySuccessfully");
+        return new ModelAndView("/verifyAccount/verifySuccessfully");
     }
 
-    /*-----------------------------------------------------
-    --------------------Reset Password---------------------
-     -----------------------------------------------------*/
+    /*------------------------------------------------------------------------------------
+    ------------------------------------Reset Password------------------------------------
+     ------------------------------------------------------------------------------------*/
     @RequestMapping(path = "/user/resetPasswordRequest")
     public ModelAndView resetPasswordRequest(@ModelAttribute("resetPasswordEmailForm") final ResetPasswordEmailForm form) {
-        return new ModelAndView("resetPasswordRequest");
+        return new ModelAndView("/password/resetPasswordEmailForm");
     }
 
     @RequestMapping(path = "/user/resetPasswordRequest", method = RequestMethod.POST)
     public ModelAndView sendPasswordReset(@Valid @ModelAttribute("resetPasswordEmailForm") final ResetPasswordEmailForm form,
                                           final BindingResult errors) {
-        final ModelAndView mav = new ModelAndView("resetEmailConfirmation");
+        final ModelAndView mav = new ModelAndView("/password/resetPasswordEmailResult");
 
         if (errors.hasErrors()) {
             return resetPasswordRequest(form);
@@ -167,7 +166,7 @@ public class WebAuthController {
     public ModelAndView resetPassword(@PathVariable("token") String token,
                                       @ModelAttribute("resetPasswordForm") final ResetPasswordForm form) {
         if (userService.validatePasswordReset(token)) {
-            final ModelAndView mav = new ModelAndView("reset");
+            final ModelAndView mav = new ModelAndView("/password/resetPasswordForm");
             mav.addObject("token", token);
             return mav;
         }
@@ -175,21 +174,21 @@ public class WebAuthController {
     }
 
     @RequestMapping(path = "/user/resetPassword", method = RequestMethod.POST)
-    public ModelAndView resetPassword(HttpServletRequest request,
+    public ModelAndView updatePassword(HttpServletRequest request,
                                       @Valid @ModelAttribute("resetPasswordForm") final ResetPasswordForm form,
                                       final BindingResult errors) {
-        ModelAndView mav = new ModelAndView("reset");
+        ModelAndView mav = new ModelAndView("/password/resetPasswordForm");
 
         if (errors.hasErrors()) {
             return mav;
         }
 
         if (!form.getPassword().equals(form.getConfirmPassword())) {
-            errors.rejectValue("passwordsNotEquals", "validation.user.passwordsDontMatch");
+            errors.rejectValue("confirmPassword", "validation.user.passwordsDontMatch");
             return mav;
         }
 
-        mav = new ModelAndView("resetResult");
+        mav = new ModelAndView("/password/resetPasswordResult");
         final Optional<UserModel> userOptional = userService.updatePassword(form.getToken(), form.getPassword());
         boolean success = false;
 
@@ -203,9 +202,9 @@ public class WebAuthController {
         return mav;
     }
 
-    /*-----------------------------------------------------
-    -------------------------------------------------------
-     -----------------------------------------------------*/
+    /*------------------------------------------------------------------------------------
+    --------------------------------------------------------------------------------------
+     ------------------------------------------------------------------------------------*/
 
     //This method is user to update the SpringContextHolder
     private void forceLogin(UserModel user, HttpServletRequest request) {

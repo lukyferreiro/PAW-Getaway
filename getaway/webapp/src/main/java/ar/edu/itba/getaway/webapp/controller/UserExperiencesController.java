@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,22 +31,22 @@ public class UserExperiencesController {
     private CityService cityService;
     @Autowired
     private CountryService countryService;
-//    @Autowired
-//    private ImageExperienceService imageExperienceService;
     @Autowired
     private ImageService imageService;
 
 
     @RequestMapping(value = "/user/experiences", method = {RequestMethod.GET})
-    public ModelAndView experience(@ModelAttribute("loggedUser") final UserModel loggedUser) {
+    public ModelAndView experience(Principal principal) {
         final ModelAndView mav = new ModelAndView("user_experiences");
 
-        List<ExperienceModel> experienceList = experienceService.getByUserId(loggedUser.getId());
-        mav.addObject("activities", experienceList);
+        final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
+        List<ExperienceModel> experienceList = experienceService.getByUserId(user.getId());
         List<Long> avgReviews = new ArrayList<>();
         for(ExperienceModel experience : experienceList){
             avgReviews.add(experienceService.getAvgReviews(experience.getId()).get());
         }
+
+        mav.addObject("activities", experienceList);
         mav.addObject("avgReviews", avgReviews);
 
         return mav;
@@ -108,7 +109,7 @@ public class UserExperiencesController {
     @RequestMapping(value = "/user/experiences/edit/{experienceId}", method = {RequestMethod.POST})
     public ModelAndView experienceEditPost(@PathVariable(value = "experienceId") final long experienceId,
                                            @ModelAttribute("experienceForm") final ExperienceForm form,
-                                           @ModelAttribute("loggedUser") final UserModel loggedUser,
+                                           Principal principal,
                                            final BindingResult errors) throws IOException {
         if (errors.hasErrors()) {
             return experienceEdit(experienceId, form);
@@ -121,12 +122,8 @@ public class UserExperiencesController {
 
         long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
 
-        long userId;
-        try {
-            userId = loggedUser.getId();
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException();
-        }
+        final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
+        final Long userId = user.getId();
 
         boolean hasImg = false;
         if (!form.getActivityImg().isEmpty()) {
