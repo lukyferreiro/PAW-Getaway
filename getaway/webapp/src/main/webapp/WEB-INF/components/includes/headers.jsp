@@ -19,7 +19,7 @@
 <link href="<c:url value = "/resources/css/experiences.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/experienceDetail.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/form.css"/>" rel="stylesheet" type="text/css">
-<link href="<c:url value = "/resources/css/star_rating.css" />" rel="stylesheet">
+<link href="<c:url value = "/resources/css/icons.css" />" rel="stylesheet">
 
 <script src="https://kit.fontawesome.com/a4ef34ae89.js" crossorigin="anonymous"></script>
 

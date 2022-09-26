@@ -34,3 +34,17 @@
 .fas.fa-star{
     color: #FAB672;
 }
+
+.fas.fa-heart.heart-color{
+    color: red;
+    font-size: large;
+}
+
+.fas.fa-heart{
+    color: grey;
+    font-size: medium;
+}
+
+.fas.fa-heart.big{
+    font-size: xxx-large;
+}

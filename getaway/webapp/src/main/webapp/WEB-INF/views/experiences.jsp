@@ -9,7 +9,7 @@
       <%@ include file="../components/includes/headers.jsp" %>
       <link href="<c:url value = "/resources/css/experiences.css" />" rel="stylesheet">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-      <link href="<c:url value = "/resources/css/star_rating.css" />" rel="stylesheet">
+      <link href="<c:url value = "/resources/css/icons.css" />" rel="stylesheet">
    </head>
 
    <body>
@@ -84,26 +84,26 @@
                <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                   <div class="card card-experience mx-3 my-2 p-0">
                         <div>
-                           <c:set var = "fav" value = "${false}"/>
-                           <c:forEach var="favExperience" items="${favExperienceModels}">
-                              <c:if test="${favExperience == experience.id}">
-                                 <c:set var = "fav"  value = "${true}"/>
-                              </c:if>
-                           </c:forEach>
-
                            <c:if test="${loggedUser}">
+                              <c:set var = "fav" value = "${false}"/>
+                              <c:forEach var="favExperience" items="${favExperienceModels}">
+                                 <c:if test="${favExperience == experience.id}">
+                                    <c:set var = "fav"  value = "${true}"/>
+                                 </c:if>
+                              </c:forEach>
+
                               <c:choose>
                                  <c:when test="${fav}">
                                     <a href="<c:url value = "/experiences/${categoryName}?experience=${experience.id}&set=${false}"/>">
                                        <button type="button" class="btn" id="setFalse">
-                                          <i class="fas fa-star star-color"></i>
+                                          <i class="fas fa-heart heart-color"></i>
                                        </button>
                                     </a>
                                  </c:when>
                                  <c:otherwise>
                                     <a href="<c:url value = "/experiences/${categoryName}?experience=${experience.id}&set=${true}"/>">
                                        <button type="button" class="btn" id="setTrue">
-                                          <i class="fas fa-star"></i>
+                                          <i class="fas fa-heart"></i>
                                        </button>
                                     </a>
                                  </c:otherwise>

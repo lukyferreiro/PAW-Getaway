@@ -2,21 +2,17 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.webapp.forms.FavExperienceForm;
 import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.exceptions.ExperienceNotFoundException;
-import ar.edu.itba.getaway.exceptions.ImageNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +36,7 @@ public class ExperienceController {
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.GET})
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,
-                                   @ModelAttribute("loggedUser") final UserModel loggedUser,
+                                   Principal principal,
                                    @RequestParam Optional<Long> cityId,
                                    @RequestParam Optional<Double> maxPrice,
                                    @RequestParam Optional<Long> score,
@@ -63,54 +59,49 @@ public class ExperienceController {
 
         if (cityId.isPresent()) {
             if (maxPrice.isPresent() && maxPrice.get() > 0) {
-                if(score.isPresent()){
+                if (score.isPresent()) {
                     experienceList = experienceService.listByCategoryPriceCityAndScore(id, maxPrice.get(), cityId.get(), score.get());
-                }else{
+                } else {
                     experienceList = experienceService.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
                 }
             } else {
-                if(score.isPresent()){
+                if (score.isPresent()) {
                     experienceList = experienceService.listByCategoryCityAndScore(id, cityId.get(), score.get());
-                }else {
+                } else {
                     experienceList = experienceService.listByCategoryAndCity(id, cityId.get());
                 }
             }
         } else if (maxPrice.isPresent() && maxPrice.get() > 0) {
-            if(score.isPresent()){
+            if (score.isPresent()) {
                 experienceList = experienceService.listByCategoryPriceAndScore(id, maxPrice.get(), score.get());
-            }else{
+            } else {
                 experienceList = experienceService.listByCategoryAndPrice(id, maxPrice.get());
             }
-        } else if(score.isPresent()){
+        } else if (score.isPresent()) {
             experienceList = experienceService.listByCategoryAndScore(id, score.get());
         } else {
             experienceList = experienceService.listByCategory(id);
         }
 
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
+        if(principal!=null){
+            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
 
+            if (user.isPresent()) {
+                final long userId = user.get().getId();
+                setFav(userId, set, experience);
+                List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
 
-            if(set.isPresent() && experience.isPresent()){
-                if(set.get()) {
-                    favExperienceService.create(loggedUser.getId(), experience.get());
-                }
-                else{
-                    favExperienceService.delete(loggedUser.getId(), experience.get());
-                }
+                mav.addObject("favExperienceModels", favExperienceModels);
+                mav.addObject("loggedUser", true);
             }
-
-            List<Long> favExperienceModels = favExperienceService.listByUserId(loggedUser.getId());
-            mav.addObject("favExperienceModels", favExperienceModels);
-
-        } catch (NullPointerException e) {
+        }else{
             mav.addObject("loggedUser", false);
             mav.addObject("favExperienceModels", new ArrayList<>());
         }
 
 
         List<Long> avgReviews = new ArrayList<>();
-        for(ExperienceModel exp : experienceList){
+        for (ExperienceModel exp : experienceList) {
             avgReviews.add(experienceService.getAvgReviews(exp.getId()).get());
         }
 
@@ -125,8 +116,10 @@ public class ExperienceController {
     }
 
     @RequestMapping("/experiences/{categoryName}/{experienceId}")
-    public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName,
-                                       @PathVariable("experienceId") final long experienceId) {
+    public ModelAndView experienceView(Principal principal,
+                                       @PathVariable("categoryName") final String categoryName,
+                                       @PathVariable("experienceId") final long experienceId,
+                                       @RequestParam Optional<Boolean> set) {
         final ModelAndView mav = new ModelAndView("experience_details");
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
@@ -137,16 +130,33 @@ public class ExperienceController {
         final String countryCity = experienceService.getCountryCity(experienceId);
         final Optional<Long> experienceAvgReview = experienceService.getAvgReviews(experienceId);
 
-        if(experienceAvgReview.isPresent()){
+        if (experienceAvgReview.isPresent()) {
             mav.addObject("reviewAvg", experienceAvgReview.get());
         }
 
         mav.addObject("dbCategoryName", dbCategoryName);
-        mav.addObject("activity", experience);
+        mav.addObject("experience", experience);
         mav.addObject("reviews", reviews);
         mav.addObject("avgScore", avgScore);
         mav.addObject("reviewCount", reviewCount);
         mav.addObject("countryCity", countryCity);
+
+        if(principal!=null){
+            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+
+            if (user.isPresent()) {
+                final long userId = user.get().getId();
+                setFav(userId, set, Optional.of(experienceId));
+                List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
+
+                mav.addObject("favExperienceModels", favExperienceModels);
+                mav.addObject("loggedUser", true);
+            }
+        }else{
+            mav.addObject("loggedUser", false);
+            mav.addObject("favExperienceModels", new ArrayList<>());
+        }
+
 
         return mav;
     }
@@ -154,12 +164,12 @@ public class ExperienceController {
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.POST})
     public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName,
                                        @Valid @ModelAttribute("filterForm") final FilterForm form,
-                                       @ModelAttribute("loggedUser") final UserModel loggedUser,
+                                       Principal principal,
                                        final BindingResult errors) {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
-            return experience(categoryName, form, loggedUser,Optional.empty(), Optional.empty(), Optional.empty(),Optional.empty(), Optional.empty());
+            return experience(categoryName, form, principal, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
 
         }
 
@@ -175,39 +185,23 @@ public class ExperienceController {
             mav.addObject("maxPrice", priceMax);
         }
         Long score = form.getScore();
-        if(score != -1){
+        if (score != -1) {
             mav.addObject("score", score);
         }
 
         return mav;
     }
 
-//
-//    @RequestMapping(value = "/experiences/{categoryName}/{experienceId}", method = {RequestMethod.POST})
-//    public ModelAndView experienceFav(@PathVariable("categoryName") final String categoryName,
-//                                      @PathVariable("experienceId") final long experienceId,
-//                                      @RequestParam Optional<Boolean> set,
-//                                       @ModelAttribute("loggedUser") final UserModel loggedUser,
-//                                       final BindingResult errors) {
-//        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
-//
-//        try {
-//            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-//
-//            if(set.isPresent()){
-//                if(set.get()) {
-//                    favExperienceService.create(loggedUser.getId(), experienceId);
-//                }
-//                else{
-//                    favExperienceService.delete(loggedUser.getId(), experienceId);
-//                }
-//            }
-//
-//        } catch (NullPointerException e) {
-//            mav.addObject("loggedUser", false);
-//        }
-//
-//        return mav;
-//    }
+    private void setFav(long userId, Optional<Boolean> set, Optional<Long> experience){
+        List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
 
+        if (set.isPresent() && experience.isPresent()) {
+            if (set.get()) {
+                if (!favExperienceModels.contains(experience.get()))
+                    favExperienceService.create(userId, experience.get());
+            } else {
+                favExperienceService.delete(userId, experience.get());
+            }
+        }
+    }
 }

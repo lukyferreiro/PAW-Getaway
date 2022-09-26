@@ -4,7 +4,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> - <c:out value="${activity.name}"/></title>
+      <title><spring:message code="pageName"/> - <c:out value="${experience.name}"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 
@@ -16,19 +16,46 @@
             <div class="card mx-5 my-3 p-4">
                <div class="card-title d-flex justify-content-center align-content-center">
                   <h1>
-                     <c:out value="${activity.name}"/>
+                     <c:out value="${experience.name}"/>
                   </h1>
+
+                  <c:if test="${loggedUser}">
+                     <c:set var = "fav" value = "${false}"/>
+                     <c:forEach var="favExperience" items="${favExperienceModels}">
+                        <c:if test="${favExperience == experience.id}">
+                           <c:set var = "fav"  value = "${true}"/>
+                        </c:if>
+                     </c:forEach>
+
+                     <c:choose>
+                        <c:when test="${fav}">
+                           <a href="<c:url value = "/experiences/${categoryName}/${experience.id}?set=${false}"/>">
+                              <button type="button" class="btn" id="setFalse">
+                                 <i class="fas fa-heart heart-color big"></i>
+                              </button>
+                           </a>
+                        </c:when>
+                        <c:otherwise>
+                           <a href="<c:url value = "/experiences/${categoryName}/${experience.id}?set=${true}"/>">
+                              <button type="button" class="btn" id="setTrue">
+                                 <i class="fas fa-heart big"></i>
+                              </button>
+                           </a>
+                        </c:otherwise>
+                     </c:choose>
+                  </c:if>
+
                </div>
 
                <div class="d-flex flex-wrap justify-content-center align-content-center">
                   <div class="p-2" style="width: 600px;">
                      <c:choose>
-                        <c:when test="${activity.hasImage == false}">
-                           <img class="container-fluid p-0" style="height: fit-content" alt="Imagen ${activity.categoryName}"
-                                src="<c:url value="/resources/images/${activity.categoryName}.jpg" />" >
+                        <c:when test="${experience.hasImage == false}">
+                           <img class="container-fluid p-0" style="height: fit-content" alt="Imagen ${experience.categoryName}"
+                                src="<c:url value="/resources/images/${experience.categoryName}.jpg" />" >
                         </c:when>
                         <c:otherwise>
-                           <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/${activity.id}/image'/>" alt="Imagen"/>
+                           <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/${experience.id}/image'/>" alt="Imagen"/>
                         </c:otherwise>
                      </c:choose>
                   </div>
@@ -41,7 +68,7 @@
                                  <spring:message code="experienceDetail.address"/>
                               </h5>
                               <p class="information-text">
-                                 <c:out value="${activity.address}"/>, <c:out value="${countryCity}"/>
+                                 <c:out value="${experience.address}"/>, <c:out value="${countryCity}"/>
                               </p>
                            </div>
                            <div> <!-- Precio -->
@@ -50,15 +77,15 @@
                               </h5>
                               <p class="information-text">
                                  <c:choose>
-                                    <c:when test="${activity.price == null}">
+                                    <c:when test="${experience.price == null}">
                                        <spring:message code="experienceDetail.noData"/>
                                     </c:when>
-                                    <c:when test="${activity.price == 0}">
+                                    <c:when test="${experience.price == 0}">
                                        <spring:message code="experienceDetail.price.free"/>
                                     </c:when>
                                     <c:otherwise>
                                        <spring:message code="experienceDetail.price.symbol"/>
-                                       <c:out value="${activity.price}"/>
+                                       <c:out value="${experience.price}"/>
                                        <spring:message code="experienceDetail.price.perPerson"/>
                                     </c:otherwise>
                                  </c:choose>
@@ -70,11 +97,11 @@
                               </h5>
                               <p class="information-text">
                                  <c:choose>
-                                    <c:when test="${activity.description == null}">
+                                    <c:when test="${experience.description == null}">
                                        <spring:message code="experienceDetail.noData"/>
                                     </c:when>
                                     <c:otherwise>
-                                       <c:out value="${activity.description}"/>
+                                       <c:out value="${experience.description}"/>
                                     </c:otherwise>
                                  </c:choose>
                               </p>
@@ -84,15 +111,15 @@
                                  <spring:message code="experienceDetail.url"/>
                               </h5>
                               <c:choose>
-                                 <c:when test="${activity.siteUrl == null}">
+                                 <c:when test="${experience.siteUrl == null}">
                                     <p class="information-text">
                                        <spring:message code="experienceDetail.noData"/>
                                     </p>
                                  </c:when>
                                  <c:otherwise>
-                                    <a href="<c:url value="${activity.siteUrl}"/>">
+                                    <a href="<c:url value="${experience.siteUrl}"/>">
                                        <p class="information-text">
-                                          <c:out value="${activity.siteUrl}"/>
+                                          <c:out value="${experience.siteUrl}"/>
                                        </p>
                                     </a>
                                  </c:otherwise>
@@ -116,7 +143,7 @@
                   <h2 class="align-self-center">
                      <spring:message code="review.start"/>
                   </h2>
-                  <a href="<c:url value = "/experiences/${activity.categoryName}/${activity.id}/create_review"/>">
+                  <a href="<c:url value = "/experiences/${experience.categoryName}/${experience.id}/create_review"/>">
                      <button type="button" class="btn btn-create-review">
                         <spring:message code="review.createReview"/>
                      </button>

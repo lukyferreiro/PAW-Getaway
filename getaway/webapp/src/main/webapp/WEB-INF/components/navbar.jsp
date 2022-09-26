@@ -37,7 +37,10 @@
                            <spring:message code="navbar.profile"/>
                      </a>
                      <a class="dropdown-item" href="<c:url value = "/user/experiences"/>">
-                           <spring:message code="navbar.experiencies"/>
+                        <spring:message code="navbar.experiencies"/>
+                     </a>
+                     <a class="dropdown-item" href="<c:url value = "/user/favourites"/>">
+                        <spring:message code="navbar.favourites"/>
                      </a>
                      <a class="dropdown-item" href="<c:url value = "/user/reviews"/>">
                         <spring:message code="navbar.reviews"/>
