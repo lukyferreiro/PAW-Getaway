@@ -14,11 +14,9 @@ public class CityModel {
     public long getId() {
         return cityId;
     }
-
     public long getCountryId() {
         return countryId;
     }
-
     public String getName() {
         return cityName;
     }

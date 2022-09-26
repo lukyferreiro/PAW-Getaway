@@ -11,10 +11,7 @@
 
    <body>
       <div class="container-main">
-         <jsp:include page="/WEB-INF/components/navbar.jsp">
-            <jsp:param name="loggedUser" value="${loggedUser}"/>
-         </jsp:include>
-<%--         <%@ include file="../components/navbar.jsp" %>--%>
+         <%@ include file="../components/navbar.jsp" %>
 
          <div class="d-flex flex-column justify-content-center mx-5 my-2 p-0">
             <h2 class="text-center font-weight-bold">
@@ -99,9 +96,9 @@
                         <form:select path="activityCountry" id="experienceFormCountryInput" class="form-select" cssErrorClass="form-control is-invalid">
                            <option disabled selected value><c:out value="${placeholder}"/></option>
                            <option><c:out value="Argentina"/></option>
-<%--                           <c:forEach var="country" items="${countries}">--%>
-<%--                              <option><c:out value="${country.name}"/></option>--%>
-<%--                           </c:forEach>--%>
+                           <%--                           <c:forEach var="country" items="${countries}">--%>
+                           <%--                              <option><c:out value="${country.name}"/></option>--%>
+                           <%--                           </c:forEach>--%>
                         </form:select>
                         <form:errors path="activityCountry" element="p" cssClass="form-error-label"/>
                      </div>

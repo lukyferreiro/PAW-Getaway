@@ -81,7 +81,6 @@ public class  ExperienceForm {
     public String getActivityName() {
         return activityName;
     }
-
     public String getActivityPrice() {
         return activityPrice;
     }
@@ -103,7 +102,6 @@ public class  ExperienceForm {
     public void setActivityName(String activityName) {
         this.activityName = activityName;
     }
-
     public void setActivityCountry(String activityCountry) {
         this.activityCountry = activityCountry;
     }

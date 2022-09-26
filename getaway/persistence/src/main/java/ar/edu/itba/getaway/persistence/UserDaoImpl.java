@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.persistence;
 
+import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.RoleModel;
 import ar.edu.itba.getaway.models.Roles;
@@ -15,6 +16,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import javax.swing.text.html.Option;
 import java.util.*;
 
 @Repository
@@ -24,6 +26,7 @@ public class UserDaoImpl implements UserDao {
     private final SimpleJdbcInsert userSimpleJdbcInsert;
     private final SimpleJdbcInsert roleSimpleJdbcInsert;
     private final SimpleJdbcInsert userRolesSimpleJdbcInsert;
+    private final SimpleJdbcInsert imagesSimpleJdbcInsert;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
 
     private final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
@@ -34,10 +37,6 @@ public class UserDaoImpl implements UserDao {
                     rs.getString("email"),
                     getUserRoles(rs.getLong("userid")),
                     rs.getLong("imgId"));
-
-    private static final RowMapper<RoleModel> USER_ROLES_ROW_MAPPER = (rs, rowNum) ->
-            new RoleModel(rs.getLong("roleid"),
-                    Roles.valueOf(rs.getString("roleName")));
 
     private static final RowMapper<RoleModel> ROLE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new RoleModel(rs.getLong("roleid"),
@@ -54,53 +53,30 @@ public class UserDaoImpl implements UserDao {
                 .withTableName("roles");
         this.userRolesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("userRoles");
-    }
-
-    @Override
-    public Collection<RoleModel> getUserRolesModels(long userId){
-        final String query = "SELECT roleid, rolename FROM users NATURAL JOIN userroles NATURAL JOIN roles WHERE userid=?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query,
-                new Object[]{userId}, USER_ROLES_ROW_MAPPER);
-    }
-
-    @Override
-    public Collection<Roles> getUserRoles(long userId) {
-        Collection<RoleModel> rolesModel = getUserRolesModels(userId);
-        Collection<Roles> rolesCollection = new ArrayList<>();
-        for(RoleModel roleModel : rolesModel){
-            rolesCollection.add(roleModel.getRoleName());
-        }
-        LOGGER.debug("Executing query to get roles of user with id: {}", userId);
-        return rolesCollection;
-
-    }
-
-    @Override
-    public Optional<UserModel> getUserById(long userId) {
-        final String query = "SELECT * FROM users WHERE userId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{userId}, USER_MODEL_ROW_MAPPER)
-                .stream().findFirst();
-    }
-
-    @Override
-    public Optional<UserModel> getUserByEmail(String email) {
-        final String query = "SELECT * FROM users WHERE email = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{email}, USER_MODEL_ROW_MAPPER)
-                .stream().findFirst();
+        this.imagesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
+                .withTableName("images")
+                .usingGeneratedKeyColumns("imgid");
     }
 
     @Override
     public UserModel createUser(String password, String name, String surname, String email,
-                                Collection<Roles> roles) throws DuplicateUserException {
+                                Collection<Roles> roles) throws DuplicateUserException, DuplicateImageException {
         final Map<String, Object> userData = new HashMap<>();
         userData.put("userName", name);
         userData.put("userSurname", surname);
         userData.put("email", email);
-        userData.put("imgId", null);
         userData.put("password", password);
+
+        Map<String, Object> userImageData = new HashMap<>();
+        userImageData.put("imageObject", null);
+        final long imageId;
+        try {
+            imageId = imagesSimpleJdbcInsert.executeAndReturnKey(userImageData).longValue();
+            userData.put("imgId", imageId);
+            LOGGER.info("Created image with id {}", imageId);
+        } catch (DuplicateKeyException e) {
+            throw new DuplicateImageException();
+        }
 
         final long userId;
         try {
@@ -122,6 +98,41 @@ public class UserDaoImpl implements UserDao {
         }
 
         return new UserModel(userId, password, name, surname, email, roles, null);
+    }
+
+    @Override
+    public Optional<UserModel> getUserById(long userId) {
+        final String query = "SELECT * FROM users WHERE userId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{userId}, USER_MODEL_ROW_MAPPER)
+                .stream().findFirst();
+    }
+
+    @Override
+    public Optional<UserModel> getUserByEmail(String email) {
+        final String query = "SELECT * FROM users WHERE email = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{email}, USER_MODEL_ROW_MAPPER)
+                .stream().findFirst();
+    }
+
+    @Override
+    public Collection<Roles> getUserRoles(long userId) {
+        Collection<RoleModel> rolesModel = getUserRolesModels(userId);
+        Collection<Roles> rolesCollection = new ArrayList<>();
+        for(RoleModel roleModel : rolesModel){
+            rolesCollection.add(roleModel.getRoleName());
+        }
+        LOGGER.debug("Executing query to get roles of user with id: {}", userId);
+        return rolesCollection;
+    }
+
+    @Override
+    public Collection<RoleModel> getUserRolesModels(long userId){
+        final String query = "SELECT roleid, rolename FROM users NATURAL JOIN userroles NATURAL JOIN roles WHERE userid=?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query,
+                new Object[]{userId}, ROLE_MODEL_ROW_MAPPER);
     }
 
     @Override
@@ -160,10 +171,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void updateUserInfo(UserInfo userInfo, UserModel userModel) {
+    public void updateUserInfo(long userId, UserInfo userInfo) {
         final String query = "UPDATE users SET userName = ?, userSurname = ? WHERE userId = ?";
         LOGGER.debug("Executing query: {}", query);
-        if (jdbcTemplate.update(query, userInfo.getName(), userInfo.getSurname(), userModel.getId()) == 1) {
+        if (jdbcTemplate.update(query, userInfo.getName(), userInfo.getSurname(), userId) == 1) {
             LOGGER.debug("User info updated");
         }
         else {
@@ -175,20 +186,9 @@ public class UserDaoImpl implements UserDao {
     public void addRole(long userId, Roles newRole) {
         Map<String, Object> userRolesData = new HashMap<>();
         userRolesData.put("userId", userId);
-        userRolesData.put("roleName", newRole.name());
+        Optional<RoleModel> roleModel = getRoleByName(newRole);
+        userRolesData.put("roleId", roleModel.get().getRoleId());
         userRolesSimpleJdbcInsert.execute(userRolesData);
         LOGGER.info("Added role {} to user {}", newRole.name(), userId);
-    }
-
-    @Override
-    public void updateProfileImage(Long imageId, UserModel userModel) {
-        final String query = "UPDATE users SET imgId = ? WHERE userId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        if (jdbcTemplate.update(query, imageId, userModel.getId()) == 1) {
-            LOGGER.debug("Profile picture of user {} updated", userModel.getId());
-        }
-        else {
-            LOGGER.debug("Profile picture of user {} not updated", userModel.getId());
-        }
     }
 }

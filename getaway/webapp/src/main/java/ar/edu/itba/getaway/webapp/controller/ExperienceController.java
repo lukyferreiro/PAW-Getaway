@@ -2,9 +2,10 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
-import ar.edu.itba.getaway.webapp.exceptions.ExperienceNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.FavExperienceForm;
+import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.exceptions.ImageNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import java.util.Optional;
 @Controller
 public class ExperienceController {
 
+    @Autowired
+    private UserService userService;
     @Autowired
     private ExperienceService experienceService;
     @Autowired
@@ -92,6 +95,7 @@ public class ExperienceController {
             mav.addObject("favExperienceModels", new ArrayList<>());
         }
 
+
         List<Long> avgReviews = new ArrayList<>();
         for(ExperienceModel experience : experienceList){
             avgReviews.add(experienceService.getAvgReviews(experience.getId()).get());
@@ -107,24 +111,13 @@ public class ExperienceController {
         return mav;
     }
 
-
-    @RequestMapping(path = "/{experienceId}/image", method = RequestMethod.GET,
-            produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    @ResponseBody
-    public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
-        Optional<ImageModel> optionalImageModel = imageService.getByExperienceId(experienceId);
-
-        return optionalImageModel.map(ImageModel::getImage).orElse(null);
-    }
-
     @RequestMapping("/experiences/{categoryName}/{experienceId}")
     public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName,
-                                       @PathVariable("experienceId") final long experienceId,
-                                       @ModelAttribute("loggedUser") final UserModel loggedUser) {
+                                       @PathVariable("experienceId") final long experienceId) {
         final ModelAndView mav = new ModelAndView("experience_details");
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        String dbCategoryName = ExperienceCategory.valueOf(categoryName).getName();
+        final String dbCategoryName = ExperienceCategory.valueOf(categoryName).getName();
         final List<ReviewUserModel> reviews = reviewService.getReviewAndUser(experienceId);
         final Double avgScore = reviewService.getAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
@@ -134,13 +127,6 @@ public class ExperienceController {
         if(experienceAvgReview.isPresent()){
             mav.addObject("reviewAvg", experienceAvgReview.get());
         }
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-
 
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
@@ -162,6 +148,7 @@ public class ExperienceController {
 
         if (errors.hasErrors()) {
             return experience(categoryName, form, favForm, loggedUser, Optional.empty(),Optional.empty(), Optional.empty());
+
         }
 
 
@@ -179,6 +166,7 @@ public class ExperienceController {
         if(score != -1){
             mav.addObject("score", score);
         }
+
         try {
             mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
             if(favForm.getFavExp()){

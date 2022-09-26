@@ -7,15 +7,11 @@
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="editReview.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
-      <link href="<c:url value = "/resources/css/start_rating.css" />" rel="stylesheet">
-
    </head>
 
    <body>
       <div class="container-main">
-         <jsp:include page="/WEB-INF/components/navbar.jsp">
-            <jsp:param name="loggedUser" value="${loggedUser}"/>
-         </jsp:include>
+         <%@ include file="../components/navbar.jsp" %>
 
          <div class="justify-content-center">
             <form:form modelAttribute="reviewForm" action="${postPath}" id="editReviewForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">

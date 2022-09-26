@@ -23,7 +23,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
 
     private static final RowMapper<Long> REVIEWS_EXPERIENCE_ROW_MAPPER = (rs,rowNum) ->
-            rs.getLong("avg");
+            rs.getLong("avg_score");
 
     private static final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new ExperienceModel(rs.getLong("experienceid"),
@@ -91,7 +91,15 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public boolean delete(long experienceId) {
         final String query = "DELETE FROM experiences WHERE experienceId = ?";
         LOGGER.debug("Executing query: {}", query);
+        Optional<ExperienceModel> experienceModelOptional = getById(experienceId);
+        deleteImgOfExperience(experienceModelOptional.get().getId());
         return jdbcTemplate.update(query, experienceId) == 1;
+    }
+
+    private void deleteImgOfExperience(long imgId){
+        final String query = "DELETE FROM images WHERE imgId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        jdbcTemplate.update(query, imgId);
     }
 
     @Override
@@ -164,31 +172,34 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public Optional<Long> getAvgReviews(long experienceId) {
-        final String query = "SELECT avg(score) FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.experienceid = ?";
+        final String query = "SELECT AVG(score) as avg_score FROM reviews WHERE experienceid = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{experienceId}, REVIEWS_EXPERIENCE_ROW_MAPPER)
                 .stream().findFirst();
     }
 
     @Override
-    public List<ExperienceModel> listByCategoryPriceCityAndScore(long categoryId, Double max, long cityId, long score) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND price <=? AND cityid = ? GROUP BY experiences.experienceid, reviews.reviewid HAVING avg(score)=? ",
-                new Object[]{categoryId, max, cityId, score}, EXPERIENCE_MODEL_ROW_MAPPER);
+    public List<ExperienceModel> listByCategoryAndScore(long categoryId, long score) {
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? GROUP BY experiences.experienceid HAVING AVG(score)>=? ",
+                new Object[]{categoryId, score}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
     public List<ExperienceModel> listByCategoryCityAndScore(long categoryId, long cityId, long score) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND cityid = ? GROUP BY experiences.experienceid, reviews.reviewid HAVING avg(score)=? ",
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND cityid = ? GROUP BY experiences.experienceid HAVING AVG(score)>=? ",
                 new Object[]{categoryId, cityId, score}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
     public List<ExperienceModel> listByCategoryPriceAndScore(long categoryId, Double max, long score) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND price <=? GROUP BY experiences.experienceid, reviews.reviewid HAVING avg(score)=? ",
-                new Object[]{categoryId, max, score}, EXPERIENCE_MODEL_ROW_MAPPER);    }
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND price <=? GROUP BY experiences.experienceid HAVING AVG(score)>=? ",
+                new Object[]{categoryId, max, score}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
 
     @Override
-    public List<ExperienceModel> listByCategoryAndScore(long categoryId, long score) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? GROUP BY experiences.experienceid, reviews.reviewid HAVING avg(score)=? ",
-                new Object[]{categoryId, score}, EXPERIENCE_MODEL_ROW_MAPPER);    }
+    public List<ExperienceModel> listByCategoryPriceCityAndScore(long categoryId, Double max, long cityId, long score) {
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND price <=? AND cityid = ? GROUP BY experiences.experienceid HAVING AVG(score)>=? ",
+                new Object[]{categoryId, max, cityId, score}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
 }

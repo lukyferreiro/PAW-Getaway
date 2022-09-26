@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.services;
 
+import ar.edu.itba.getaway.models.ImageExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -7,10 +8,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ImageService {
-    ImageModel create (byte[] image);
-    boolean update (long imageId, ImageModel imageModel);
-    boolean delete (long imageId);
-    List<ImageModel> listAll ();
-    Optional<ImageModel> getById (long imageId);
-    Optional<ImageModel> getByExperienceId (long experienceId);
+
+    ImageModel createImg (byte[] image);
+    boolean updateImg (byte[] image, long imageId);
+    boolean deleteImg (long imageId);
+    List<ImageModel> listAllImg ();
+    Optional<ImageModel> getImgById (long imageId);
+    ImageExperienceModel createExperienceImg (byte[] image, long experienceId, boolean isCover);
+    List<ImageExperienceModel> listAllExperienceImg ();
+    Optional<ImageModel> getImgByExperienceId (long experienceId);
 }

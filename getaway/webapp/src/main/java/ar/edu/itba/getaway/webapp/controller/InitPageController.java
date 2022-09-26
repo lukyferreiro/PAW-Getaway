@@ -23,18 +23,20 @@ public class InitPageController {
     private FavExperienceService favExperienceService;
 
     @RequestMapping(value = "/", method = {RequestMethod.GET})
-    public ModelAndView init(@ModelAttribute("loggedUser") final UserModel loggedUser,
-                             @ModelAttribute("favExperienceForm") final FavExperienceForm favForm) {
+//    public ModelAndView init(@ModelAttribute("loggedUser") final UserModel loggedUser,
+//                             @ModelAttribute("favExperienceForm") final FavExperienceForm favForm) {
+//        final ModelAndView mav = new ModelAndView("mainPage");
+//
+//        try {
+//            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
+//            List<Long> favExperienceModels = favExperienceService.listByUserId(loggedUser.getId());
+//            mav.addObject("favExperienceModels", favExperienceModels);
+//        } catch (NullPointerException e) {
+//            mav.addObject("loggedUser", false);
+//        }
+//
+    public ModelAndView init() {
         final ModelAndView mav = new ModelAndView("mainPage");
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-            List<Long> favExperienceModels = favExperienceService.listByUserId(loggedUser.getId());
-            mav.addObject("favExperienceModels", favExperienceModels);
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-
         List<ExperienceModel> experienceList = experienceService.getRandom();
 
         List<Long> avgReviews = new ArrayList<>();

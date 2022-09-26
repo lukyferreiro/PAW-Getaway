@@ -84,4 +84,17 @@ public class ExperienceModel {
     public void setHasImage(boolean hasImage) {
         this.hasImage = hasImage;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+        if (!(o instanceof ExperienceModel)){
+            return false;
+        }
+        ExperienceModel other = (ExperienceModel) o;
+        return this.experienceId == other.experienceId && this.experienceName.equals(other.experienceName) &&
+                this.address.equals(other.address) && this.cityId == other.cityId ;
+    }
 }

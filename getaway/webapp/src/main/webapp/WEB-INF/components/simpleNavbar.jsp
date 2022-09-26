@@ -14,13 +14,36 @@
 <%--         <spring:message code="navbar.home"/>--%>
 <%--      </a>--%>
       <div class="container-header-btn d-flex justify-content-between">
-         <c:if test="${!loggedUser}">
-            <a href="<c:url value = "/login"/>">
-               <button type="button" class="btn btn-header">
-                  <spring:message code="navbar.login"/>
-               </button>
-            </a>
-         </c:if>
+         <c:choose>
+            <c:when test="${loggedUser == null}">
+               <a href="<c:url value = "/login"/>">
+                  <button type="button" class="btn btn-header">
+                     <spring:message code="navbar.login"/>
+                  </button>
+               </a>
+            </c:when>
+            <c:otherwise>
+               <div class="dropdown">
+                  <button class="btn btn-header dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                     <spring:message code="navbar.user"/>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                     <a class="dropdown-item" href="<c:url value = "/"/>">
+                        <spring:message code="navbar.profile"/>
+                     </a>
+                     <a class="dropdown-item" href="<c:url value = "/user/experiences"/>">
+                        <spring:message code="navbar.experiencies"/>
+                     </a>
+                     <a class="dropdown-item" href="<c:url value = "/user/reviews"/>">
+                        <spring:message code="navbar.reviews"/>
+                     </a>
+                     <a class="dropdown-item" href="<c:url value = "/logout"/>">
+                        <spring:message code="navbar.logout"/>
+                     </a>
+                  </ul>
+               </div>
+            </c:otherwise>
+         </c:choose>
       </div>
    </div>
 </div>

@@ -1,6 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.getaway.webapp.exceptions.*;
+import ar.edu.itba.getaway.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
@@ -137,7 +137,9 @@ public class ErrorsController {
         return mav;
     }
 
-//    /*Server error */
+
+    /*Server error */
+
 //    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
 //    @ExceptionHandler(value = Exception.class)
 //    public ModelAndView serverException() {

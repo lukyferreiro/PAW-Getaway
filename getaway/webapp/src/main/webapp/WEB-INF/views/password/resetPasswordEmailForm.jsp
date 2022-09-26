@@ -6,15 +6,13 @@
 <html>
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="resetPassword.emailConfirmation.title"/></title>
-      <%@ include file="../components/includes/headers.jsp" %>
+      <%@ include file="../../components/includes/headers.jsp" %>
       <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
    </head>
 
    <body>
       <div class="container-main">
-         <jsp:include page="/WEB-INF/components/simpleNavbar.jsp">
-            <jsp:param name="loggedUser" value="${loggedUser}"/>
-         </jsp:include>
+         <%@ include file="../../components/simpleNavbar.jsp" %>
 
          <div class="container-lg h-100 smallContentContainer d-flex align-items-center justify-content-center">
             <div class="row w-75 m-0 align-items-center justify-content-center">
@@ -50,9 +48,9 @@
             </div>
          </div>
 
-         <%@ include file="../components/footer.jsp" %>
+         <%@ include file="../../components/footer.jsp" %>
       </div>
 
-      <%@ include file="../components/includes/bottomScripts.jsp" %>
+      <%@ include file="../../components/includes/bottomScripts.jsp" %>
    </body>
 </html>
