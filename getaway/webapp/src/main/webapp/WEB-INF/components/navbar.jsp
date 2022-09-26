@@ -30,6 +30,17 @@
             <c:otherwise>
                <div class="dropdown">
                   <button class="btn btn-header dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+<%-- aca se definiría si se muestra una imagen de perfil o la default
+ <c:choose>--%>
+<%--                        <c:when test="${loggedUser.hasImage}">--%>
+<%--                           <img class="container-fluid p-0" style="height: 60px; width: 60px" src="<c:url value='/user/profileImage/${loggedUser.profileImageId}'/>" alt="Imagen"/>--%>
+<%--                        </c:when>--%>
+<%--                        <c:otherwise>--%>
+<%--                           <img class="container-fluid p-0" style="height: 60px; width: 60px" alt="Imagen ${loggedUser.email}"--%>
+<%--                                src="<c:url value="/resources/images/ic_user.png" />" >--%>
+<%--                        </c:otherwise>--%>
+<%--                     </c:choose>--%>
+
                      <spring:message code="navbar.user"/>
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">

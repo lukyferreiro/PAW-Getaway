@@ -16,28 +16,43 @@
         <div class="container-main">
             <%@ include file="../components/navbar.jsp" %>
 
-            <h1>${user.email}</h1>
-            <h1>${user.name}</h1>
-            <h1>${user.surname}</h1>
+            <div class="p-2" style="width: 600px;">
+                <c:choose>
+                    <c:when test="${hasImage}">
+                        <img class="container-fluid p-0" src="<c:url value='/user/profileImage/${user.profileImageId}'/>" alt="Imagen"/>
+                    </c:when>
+                    <c:otherwise>
+                        <img class="container-fluid p-0" style="height: fit-content" alt="Imagen ${user.email}"
+                             src="<c:url value="/resources/images/ic_user.png" />" >
+                    </c:otherwise>
+                </c:choose>
+            </div>
 
-            <a href="<c:url value = "/user/profile/edit"/>">
+                    <div class="container-main">
+
+                        <div class="container-fluid p-0 mt-3 h-100 w-100 ">
+                            <div class="container-lg w-100 p-2 smallContentContainer">
+                                <h5><spring:message code="registerForm.email.title"/></h5>
+                                <h6>${user.email}</h6>
+
+                                <h5><spring:message code="registerForm.name.title"/></h5>
+                                <h6>${user.name}</h6>
+
+                                <h5><spring:message code="registerForm.surname.title"/></h5>
+                                <h6>${user.surname}</h6>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="<c:url value = "/user/profile/edit"/>">
                 <button type="button" class="btn btn-header">
                     <spring:message code="editProfile.title"/>
                 </button>
             </a>
 
 
-            <div class="p-2" style="width: 600px;">
-                <c:choose>
-                    <c:when test="${user.profileImageId == 0}">
-                        <img class="container-fluid p-0" style="height: fit-content" alt="Imagen ${user.email}"
-                             src="<c:url value="/resources/images/ic_user.png" />" >
-                    </c:when>
-                    <c:otherwise>
-                        <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/user/profileImage/${user.profileImageId}'/>" alt="Imagen"/>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+
 
             <%@ include file="../components/footer.jsp" %>
         </div>
