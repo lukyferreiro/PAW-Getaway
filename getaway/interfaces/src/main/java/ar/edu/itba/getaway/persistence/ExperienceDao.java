@@ -29,4 +29,29 @@ public interface ExperienceDao {
     List<ExperienceModel> getOrderBy(String order);
 
 
+    List<ExperienceModel> listByCategoryOrderBy(long categoryId, String order);
+    List<ExperienceModel> listByCategoryOrderByDesc(long categoryId, String order);
+
+    List<ExperienceModel> listByCategoryAndCityOrderBy(long categoryId, long cityId, String order);
+    List<ExperienceModel> listByCategoryAndCityOrderByDesc(long categoryId, long cityId, String order);
+
+
+    List<ExperienceModel> listByCategoryAndPriceOrderBy(long categoryId,Double max, String order);
+    List<ExperienceModel> listByCategoryAndPriceOrderByDesc(long categoryId,Double max,String order);
+
+    List<ExperienceModel> listByCategoryPriceAndCityOrderBy(long categoryId, Double max, long cityId,  String order);
+    List<ExperienceModel> listByCategoryPriceAndCityOrderByDesc(long categoryId, Double max, long cityId,  String order);
+
+    List<ExperienceModel> listByCategoryPriceCityAndScoreOrderBy(long categoryId,Double max, long cityId, long score,  String order);
+    List<ExperienceModel> listByCategoryPriceCityAndScoreOrderByDesc(long categoryId, Double max, long cityId, long score, String order);
+
+    List<ExperienceModel> listByCategoryCityAndScoreOrderBy(long categoryId, long cityId, long score, String order);
+    List<ExperienceModel> listByCategoryCityAndScoreOrderByDesc(long categoryId,  long cityId, long score, String order);
+
+
+    List<ExperienceModel> listByCategoryPriceAndScoreOrderBy(long categoryId, Double max, long score, String order);
+    List<ExperienceModel> listByCategoryPriceAndScoreOrderByDesc(long categoryId, Double max, long score, String order);
+
+    List<ExperienceModel> listByCategoryAndScoreOrderBy(long categoryId, long score, String order);
+    List<ExperienceModel> listByCategoryAndScoreOrderByDesc(long categoryId, long score, String order);
 }
