@@ -129,4 +129,34 @@ public class ExperienceServiceImpl implements ExperienceService {
     public List<ExperienceModel> listByCategoryAndScore(long categoryId, long score) {
         return experienceDao.listByCategoryAndScore( categoryId,  score);
     }
+
+    @Override
+    public List<ExperienceModel> getByUserIdOrderByRankingDesc(long id) {
+        return experienceDao.getByUserIdOrderByRankingDesc(id);
+    }
+
+    @Override
+    public List<ExperienceModel> getByUserIdOrderByRankingAsc(long id) {
+        return experienceDao.getByUserIdOrderByRankingAsc(id);
+    }
+
+    @Override
+    public List<ExperienceModel> getByUserIdOrderByNameDesc(long id) {
+        return experienceDao.getByUserIdOrderByNameDesc(id);
+    }
+
+    @Override
+    public List<ExperienceModel> getByUserIdOrderByNameAsc(long id) {
+        return experienceDao.getByUserIdOrderByNameAsc(id);
+    }
+
+    @Override
+    public List<ExperienceModel> getByUserIdOrderByPriceDesc(long id) {
+        return experienceDao.getByUserIdOrderByPriceDesc(id);
+    }
+
+    @Override
+    public List<ExperienceModel> getByUserIdOrderByPriceAsc(long id) {
+        return experienceDao.getByUserIdOrderByPriceAsc(id);
+    }
 }

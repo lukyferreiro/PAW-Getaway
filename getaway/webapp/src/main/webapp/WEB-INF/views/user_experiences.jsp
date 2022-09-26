@@ -16,10 +16,39 @@
 
          <c:choose>
             <c:when test="${experiences.size() == 0}">
-               <h2 class="title"><spring:message code="experience.notExist"/></h2>
+                  <h2 class="title"><spring:message code="experience.notExist"/></h2>
             </c:when>
             <c:otherwise>
-               <h2 class="title"><spring:message code="experience.title"/></h2>
+               <div>
+                  <h2 class="title"><spring:message code="experience.title"/></h2>
+                  <div class="dropdown">
+                     <button class="btn btn-header dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <spring:message code="order.title"/>
+                     </button>
+                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=rankingAsc"/>">
+                           <spring:message code="order.rankingAsc"/>
+                        </a>
+                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=rankingDesc"/>">
+                           <spring:message code="order.rankingDesc"/>
+                        </a>
+                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=A-Z"/>">
+                           <spring:message code="order.A_Z"/>
+                        </a>
+                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=Z-A"/>">
+                           <spring:message code="order.Z_A"/>
+                        </a>
+                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=priceDesc"/>">
+                           <spring:message code="order.low_price"/>
+                        </a>
+                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=priceAsc"/>">
+                           <spring:message code="order.high_price"/>
+                        </a>
+                     </ul>
+                     </ul>
+                  </div>
+
+               </div>
                <div class="cards container-experiences container-fluid">
                   <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                      <div class="card card-experience mx-3 my-2 p-0">

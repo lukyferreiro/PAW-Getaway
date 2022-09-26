@@ -59,6 +59,7 @@ public class UserExperiencesController {
 
     @RequestMapping(value = "/user/experiences")
     public ModelAndView experience(Principal principal,
+                                   @RequestParam Optional<String> orderBy,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set) {
         final ModelAndView mav = new ModelAndView("user_experiences");
@@ -70,7 +71,26 @@ public class UserExperiencesController {
         List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
         mav.addObject("favExperienceModels", favExperienceModels);
 
-        List<ExperienceModel> experienceList = experienceService.getByUserId(user.getId());
+        List<ExperienceModel> experienceList = new ArrayList<>();
+
+        if(orderBy.isPresent()){
+            if(orderBy.get().equals("rankingAsc"))
+                experienceList = experienceService.getByUserIdOrderByRankingAsc(user.getId());
+            else if (orderBy.get().equals("rankingDesc"))
+                experienceList = experienceService.getByUserIdOrderByRankingDesc(user.getId());
+            else if (orderBy.get().equals("A-Z"))
+                experienceList = experienceService.getByUserIdOrderByNameAsc(user.getId());
+            else if (orderBy.get().equals("Z-A"))
+                experienceList = experienceService.getByUserIdOrderByNameDesc(user.getId());
+            else if (orderBy.get().equals("priceAsc"))
+                experienceList = experienceService.getByUserIdOrderByPriceAsc(user.getId());
+            else if (orderBy.get().equals("priceDesc"))
+                experienceList = experienceService.getByUserIdOrderByPriceDesc(user.getId());
+
+        }else{
+            experienceList = experienceService.getByUserId(user.getId());
+        }
+
         List<Long> avgReviews = new ArrayList<>();
         for(ExperienceModel exp : experienceList){
             avgReviews.add(experienceService.getAvgReviews(exp.getId()).get());
