@@ -80,6 +80,16 @@
                </a>
             </div>
 
+            <jsp:include page="/WEB-INF/views/order_dropdown.jsp">
+               <jsp:param name="path1" value="/experiences/{categoryName}?orderBy=avg(score)&direction=asc"/>
+               <jsp:param name="path2" value="/experiences/{categoryName}?orderBy=avg(score)&direction=desc"/>
+               <jsp:param name="path3" value="/experiences/{categoryName}?orderBy=experienceName&direction=asc"/>
+               <jsp:param name="path4" value="/experiences/{categoryName}?orderBy=experienceName&direction=desc"/>
+               <jsp:param name="path5" value="/experiences/{categoryName}?orderBy=price&direction=desc"/>
+               <jsp:param name="path6" value="/experiences/{categoryName}?orderBy=price&direction=asc"/>
+            </jsp:include>
+
+
             <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
                <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                   <div class="card card-experience mx-3 my-2 p-0">
