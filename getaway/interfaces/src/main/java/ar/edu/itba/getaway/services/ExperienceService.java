@@ -12,18 +12,18 @@ public interface ExperienceService {
     boolean delete (long experienceId);
     List<ExperienceModel> listAll ();
     Optional<ExperienceModel> getById (long experienceId);
-    List<ExperienceModel> listByCategory (long categoryId);
-    List<ExperienceModel> listByCategoryAndCity (long categoryId, long cityId);
-    List<ExperienceModel> listByCategoryAndPrice (long categoryId, Double max);
-    List<ExperienceModel> listByCategoryPriceAndCity (long categoryId, Double max, long cityId);
-    List<ExperienceModel> getRandom();
+    Page<ExperienceModel> listByCategory (long categoryId,int page);
+    Page<ExperienceModel> listByCategoryAndCity (long categoryId, long cityId,int page);
+    Page<ExperienceModel> listByCategoryAndPrice (long categoryId, Double max,int page);
+    Page<ExperienceModel> listByCategoryPriceAndCity (long categoryId, Double max, long cityId,int page);
+//    Page<ExperienceModel> getRandom();
     String getCountryCity(long experienceId);
-    List<ExperienceModel> getByUserId(long userId);
+    Page<ExperienceModel> getByUserId(long userId,int page);
     Optional<Long> getAvgReviews(long experienceId);
-    List<ExperienceModel> listByCategoryPriceCityAndScore (long categoryId, Double max, long cityId, long score);
-    List<ExperienceModel> listByCategoryCityAndScore (long categoryId, long cityId, long score);
-    List<ExperienceModel> listByCategoryPriceAndScore (long categoryId, Double max, long score);
-    List<ExperienceModel> listByCategoryAndScore (long categoryId, long score);
+    Page<ExperienceModel> listByCategoryPriceCityAndScore (long categoryId, Double max, long cityId, long score,int page);
+    Page<ExperienceModel> listByCategoryCityAndScore (long categoryId, long cityId, long score,int page);
+    Page<ExperienceModel> listByCategoryPriceAndScore (long categoryId, Double max, long score,int page);
+    Page<ExperienceModel> listByCategoryAndScore (long categoryId, long score,int page);
     Page<ExperienceModel> listByScore(int page, long categoryId);
 
 }

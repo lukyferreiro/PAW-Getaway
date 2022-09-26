@@ -110,28 +110,28 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listByCategory(long categoryId) {
+    public List<ExperienceModel> listByCategory(long categoryId,int page) {
         final String query = "SELECT * FROM experiences NATURAL JOIN categories WHERE categoryId = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public List<ExperienceModel> listByCategoryAndCity(long categoryId, long cityId) {
+    public List<ExperienceModel> listByCategoryAndCity(long categoryId, long cityId,int page) {
         final String query = "SELECT * FROM experiences NATURAL JOIN categories WHERE categoryId = ? AND cityId = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{categoryId, cityId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public List<ExperienceModel> listByCategoryAndPrice(long categoryId, Double max) {
+    public List<ExperienceModel> listByCategoryAndPrice(long categoryId, Double max,int page) {
         final String query = "SELECT * FROM experiences WHERE categoryid = ? AND price <= ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{categoryId, max}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public List<ExperienceModel> listByCategoryPriceAndCity(long categoryId, Double max, long cityId) {
+    public List<ExperienceModel> listByCategoryPriceAndCity(long categoryId, Double max, long cityId,int page) {
         final String query = "SELECT * FROM experiences WHERE categoryid = ? AND price <= ? AND cityid = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{categoryId, max, cityId}, EXPERIENCE_MODEL_ROW_MAPPER);
@@ -156,7 +156,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> getByUserId(long userId) {
+    public List<ExperienceModel> getByUserId(long userId,int page) {
         final String query = "SELECT * FROM experiences WHERE userid = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
@@ -171,24 +171,24 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listByCategoryPriceCityAndScore(long categoryId, Double max, long cityId, long score) {
+    public List<ExperienceModel> listByCategoryPriceCityAndScore(long categoryId, Double max, long cityId, long score,int page) {
         return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND price <=? AND cityid = ? GROUP BY experiences.experienceid, reviews.reviewid HAVING avg(score)=? ",
                 new Object[]{categoryId, max, cityId, score}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public List<ExperienceModel> listByCategoryCityAndScore(long categoryId, long cityId, long score) {
+    public List<ExperienceModel> listByCategoryCityAndScore(long categoryId, long cityId, long score,int page) {
         return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND cityid = ? GROUP BY experiences.experienceid, reviews.reviewid HAVING avg(score)=? ",
                 new Object[]{categoryId, cityId, score}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public List<ExperienceModel> listByCategoryPriceAndScore(long categoryId, Double max, long score) {
+    public List<ExperienceModel> listByCategoryPriceAndScore(long categoryId, Double max, long score,int page) {
         return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND price <=? GROUP BY experiences.experienceid, reviews.reviewid HAVING avg(score)=? ",
                 new Object[]{categoryId, max, score}, EXPERIENCE_MODEL_ROW_MAPPER);    }
 
     @Override
-    public List<ExperienceModel> listByCategoryAndScore(long categoryId, long score) {
+    public List<ExperienceModel> listByCategoryAndScore(long categoryId, long score,int page) {
         return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? GROUP BY experiences.experienceid, reviews.reviewid HAVING avg(score)=? ",
                 new Object[]{categoryId, score}, EXPERIENCE_MODEL_ROW_MAPPER);    }
 

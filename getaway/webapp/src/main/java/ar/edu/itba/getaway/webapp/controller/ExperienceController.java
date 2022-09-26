@@ -51,34 +51,34 @@ public class ExperienceController {
 
         String dbCategoryName = category.getName();
         int id = category.ordinal() + 1;
-        List<ExperienceModel> experienceList;
+        Page<ExperienceModel> experienceList;
         List<CityModel> cityModels = cityService.listAll();
 
         //Filtros
         if (cityId.isPresent()) {
             if (maxPrice.isPresent() && maxPrice.get() > 0) {
                 if(score.isPresent()){
-                    experienceList = experienceService.listByCategoryPriceCityAndScore(id, maxPrice.get(), cityId.get(), score.get());
+                    experienceList = experienceService.listByCategoryPriceCityAndScore(id, maxPrice.get(), cityId.get(), score.get(),1);
                 }else{
-                    experienceList = experienceService.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
+                    experienceList = experienceService.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get(),1);
                 }
             } else {
                 if(score.isPresent()){
-                    experienceList = experienceService.listByCategoryCityAndScore(id, cityId.get(), score.get());
+                    experienceList = experienceService.listByCategoryCityAndScore(id, cityId.get(), score.get(),1);
                 }else {
-                    experienceList = experienceService.listByCategoryAndCity(id, cityId.get());
+                    experienceList = experienceService.listByCategoryAndCity(id, cityId.get(),1);
                 }
             }
         } else if (maxPrice.isPresent() && maxPrice.get() > 0) {
             if(score.isPresent()){
-                experienceList = experienceService.listByCategoryPriceAndScore(id, maxPrice.get(), score.get());
+                experienceList = experienceService.listByCategoryPriceAndScore(id, maxPrice.get(), score.get(),1);
             }else{
-                experienceList = experienceService.listByCategoryAndPrice(id, maxPrice.get());
+                experienceList = experienceService.listByCategoryAndPrice(id, maxPrice.get(),1);
             }
         } else if(score.isPresent()){
-            experienceList = experienceService.listByCategoryAndScore(id, score.get());
+            experienceList = experienceService.listByCategoryAndScore(id, score.get(),1);
         } else {
-            experienceList = experienceService.listByCategory(id);
+            experienceList = experienceService.listByCategory(id,1);
         }
 
         try {
@@ -88,7 +88,7 @@ public class ExperienceController {
         }
 
         List<Long> avgReviews = new ArrayList<>();
-        for(ExperienceModel experience : experienceList){
+        for(ExperienceModel experience : experienceList.getContent()){
             avgReviews.add(experienceService.getAvgReviews(experience.getId()).get());
         }
 
