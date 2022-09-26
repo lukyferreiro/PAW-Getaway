@@ -22,6 +22,12 @@
             <h1>${user.name}</h1>
             <h1>${user.surname}</h1>
 
+            <a href="<c:url value = "/user/profile/edit"/>">
+                <button type="button" class="btn btn-header">
+                    <spring:message code="editProfile.title"/>
+                </button>
+            </a>
+
 
             <div class="p-2" style="width: 600px;">
                 <c:choose>

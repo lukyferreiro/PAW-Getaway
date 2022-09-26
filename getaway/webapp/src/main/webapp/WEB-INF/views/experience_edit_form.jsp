@@ -17,7 +17,7 @@
 
          <div class="d-flex flex-column justify-content-center mx-5 my-2 p-0">
             <h2 class="text-center font-weight-bold">
-               <spring:message code="createExperience.description"/>
+               <spring:message code="editExperience.description"/>
             </h2>
 
             <c:url value="/user/experiences/edit/${experience.id}" var="postPath"/>
