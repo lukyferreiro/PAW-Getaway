@@ -86,30 +86,32 @@
             <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
                <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                   <div class="card card-experience mx-3 my-2 p-0">
+                        <div>
+                           <c:set var = "fav" value = "${false}"/>
+                           <c:forEach var="favExperience" items="${favExperienceModels}">
+                              <c:if test="${favExperience == experience.id}">
+                                 <c:set var = "fav"  value = "${true}"/>
+                              </c:if>
+                           </c:forEach>
 
-                        <c:set var = "fav" value = "${false}"/>
-                        <c:forEach var="favExperience" items="${favExperienceModels}">
-                           <c:if test="${favExperience == experience.id}">
-                              <c:set var = "fav"  value = "${true}"/>
-                           </c:if>
-                        </c:forEach>
-
-                        <form:form modelAttribute="favExperienceForm" action="${postPath}" id="favExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
-                           <c:choose>
-                              <c:when test="${fav}">
-                                 <button type="submit" class="btn" id="favTrue" form="favExperienceForm">
-                                    <i class="fas fa-star star-color"></i>
-                                 </button>
-                              </c:when>
-                              <c:otherwise>
-                                 <button type="submit" class="btn" id="favFalse" form="favExperienceForm">
-                                    <i class="fas fa-star"></i>
-                                 </button>
-                              </c:otherwise>
-                           </c:choose>
-                           <form:input value="${fav}" path="favExp" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="setFav"/>
-                           <form:input value="${experience.id}" path="experienceId" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="setExpId"/>
-                        </form:form>
+                           <form:form modelAttribute="favExperienceForm" action="${postPath}" id="favExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
+                              <form:input value="${experience.id}" path="experienceId" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="setExpId"/>
+                              <form:label path="favExp" class="form-label"/>
+                              <c:choose>
+                                 <c:when test="${fav}">
+                                    <button type="submit" class="btn" id="submitForm" form="favExperienceForm">
+                                       <i class="fas fa-star star-color"></i>
+                                    </button>
+                                 </c:when>
+                                 <c:otherwise>
+                                    <button type="submit" class="btn" id="submitForm" form="favExperienceForm">
+                                       <i class="fas fa-star"></i>
+                                    </button>
+                                 </c:otherwise>
+                              </c:choose>
+                              <form:input value="${!fav}" path="favExp" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="setFav"/>
+                           </form:form>
+                        </div>
 
                      <a class="card-link" href="<c:url value="${experience.categoryName}/${experience.id}"/>">
                         <jsp:include page="/WEB-INF/views/card_experience.jsp">

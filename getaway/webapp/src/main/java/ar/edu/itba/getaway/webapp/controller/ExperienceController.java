@@ -181,10 +181,6 @@ public class ExperienceController {
         }
         try {
             mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-            System.out.println("aaaaaAAAAAAAAAAA");
-            System.out.println("aaaaaAAAAAAAAAAA");
-            System.out.println("aaaaaAAAAAAAAAAA");
-            System.out.println(favForm.getFavExp());
             if(favForm.getFavExp()){
                 favExperienceService.create(loggedUser.getId(), favForm.getExperienceId());
             }else{

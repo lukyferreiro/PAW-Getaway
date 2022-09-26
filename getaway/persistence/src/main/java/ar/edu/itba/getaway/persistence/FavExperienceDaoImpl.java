@@ -33,17 +33,19 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
     public FavExperienceDaoImpl(final DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);
         this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("experiences")
-                .usingGeneratedKeyColumns("experienceid");
+                .withTableName("favuserexperience");
     }
 
     @Override
     public FavExperienceModel create(long userId, long experienceId) {
-        final Map<String, Object> experienceData = new HashMap<>();
-        experienceData.put("userId", userId);
-        experienceData.put("experienceId", experienceId);
-
+        final Map<String, Object> favExperienceData = new HashMap<>();
+        favExperienceData.put("userId", userId);
+        favExperienceData.put("experienceId", experienceId);
+        System.out.println(userId);
+        System.out.println(experienceId);
         LOGGER.info("Setting experience as fav");
+
+        jdbcInsert.execute(favExperienceData);
 
         return new FavExperienceModel(userId, experienceId);
     }

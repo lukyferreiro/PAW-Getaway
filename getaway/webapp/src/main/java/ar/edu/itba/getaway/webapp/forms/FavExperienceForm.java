@@ -2,22 +2,22 @@ package ar.edu.itba.getaway.webapp.forms;
 
 public class FavExperienceForm {
 
-    private String favExp;
-    private long experienceId;
+    private boolean favExp;
+    private long experienceId ;
 
     public long getExperienceId() {
         return experienceId;
     }
 
     public boolean getFavExp(){
-        return favExp.equals("true");
+        return favExp;
     }
 
     public void setExperienceId(long experienceId) {
         this.experienceId = experienceId;
     }
 
-    public void setFavExp(String favExp) {
+    public void setFavExp(boolean favExp) {
         this.favExp = favExp;
     }
 
