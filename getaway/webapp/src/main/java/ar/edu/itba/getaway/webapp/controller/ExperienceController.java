@@ -89,8 +89,6 @@ public class ExperienceController {
 
         try {
             mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-            List<Long> favExperienceModels = favExperienceService.listByUserId(loggedUser.getId());
-            mav.addObject("favExperienceModels", favExperienceModels);
 
 
             if(set.isPresent() && experience.isPresent()){
@@ -101,6 +99,10 @@ public class ExperienceController {
                     favExperienceService.delete(loggedUser.getId(), experience.get());
                 }
             }
+
+            List<Long> favExperienceModels = favExperienceService.listByUserId(loggedUser.getId());
+            mav.addObject("favExperienceModels", favExperienceModels);
+
         } catch (NullPointerException e) {
             mav.addObject("loggedUser", false);
             mav.addObject("favExperienceModels", new ArrayList<>());

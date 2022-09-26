@@ -91,12 +91,8 @@
                               </c:if>
                            </c:forEach>
 
-<%--                           <c:url value="/experiences/${categoryName}/${experience.id}" var="postPathFav"/>--%>
-<%--                           <form:form modelAttribute="favExperienceForm" action="${postPathFav}" id="favExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">--%>
-<%--                              <form:input value="${experience.id}" path="experienceId" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="setExpId"/>--%>
-<%--                              <form:label path="favExp" class="form-label"/>--%>
-
-                           <c:choose>
+                           <c:if test="${loggedUser}">
+                              <c:choose>
                                  <c:when test="${fav}">
                                     <a href="<c:url value = "/experiences/${categoryName}?experience=${experience.id}&set=${false}"/>">
                                        <button type="button" class="btn" id="setFalse">
@@ -112,8 +108,8 @@
                                     </a>
                                  </c:otherwise>
                               </c:choose>
-                              <form:input value="${!fav}" path="favExp" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="setFav"/>
-<%--                           </form:form>--%>
+                           </c:if>
+
                         </div>
 
                      <a class="card-link" href="<c:url value="${experience.categoryName}/${experience.id}"/>">
