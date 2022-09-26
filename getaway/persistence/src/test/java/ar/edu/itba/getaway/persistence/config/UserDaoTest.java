@@ -1,10 +1,12 @@
 package ar.edu.itba.getaway.persistence.config;
 
+import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.RoleModel;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserInfo;
 import ar.edu.itba.getaway.models.UserModel;
+import ar.edu.itba.getaway.persistence.ImageDao;
 import ar.edu.itba.getaway.persistence.UserDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,6 +44,8 @@ public class UserDaoTest {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private ImageDao imageDao;
 
     private static final Collection<Roles> DEFAULT_ROLES = new ArrayList<>(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
     private static final Collection<RoleModel> DEFAULT_ROLES_MODELS = new ArrayList<>(Arrays.asList(new RoleModel(new Long(2), Roles.USER), new RoleModel(new Long(4), Roles.NOT_VERIFIED)));
@@ -55,7 +59,7 @@ public class UserDaoTest {
 
     @Test
     @Rollback
-    public void testCreateUser() throws DuplicateUserException {
+    public void testCreateUser() throws DuplicateUserException, DuplicateImageException {
         final UserModel user = userDao.createUser(PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES);
         assertNotNull(user);
         assertEquals(PASSWORD, user.getPassword());
@@ -66,9 +70,10 @@ public class UserDaoTest {
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "userId = " + user.getId()));
     }
 
+    //TODO CHECK DUPLICATE IMAGE EXCEPTION
     @Test(expected = DuplicateUserException.class)
     @Rollback
-    public void testCreateDuplicateUser() throws DuplicateUserException {
+    public void testCreateDuplicateUser() throws DuplicateUserException, DuplicateImageException {
         userDao.createUser("contra1", "usuario", "uno", "uno@mail.com", DEFAULT_ROLES);
     }
 
@@ -236,7 +241,8 @@ public class UserDaoTest {
     @Rollback
     public void testUpdateProfileImage() {
         final Optional<UserModel> userBeforeUpdate = userDao.getUserById(1);
-        userDao.updateProfileImage(1, 15);
+        //TODO CHECK romi
+        imageDao.updateImg(null, userBeforeUpdate.get().getId());
         final Optional<UserModel> user = userDao.getUserById(1);
 
         assertTrue(user.isPresent());

@@ -2,7 +2,7 @@
     border-color: #F99D32;
 }
 
-.btn-exp:hover , .btn-exp:focus, .btn-exp:active, .btn-exp::selection{
+.btn-exp:hover, .btn-exp:focus, .btn-exp:active, .btn-exp::selection{
     border-color: #FAB672;
 }
 
@@ -14,7 +14,7 @@
 .cards{
     overflow: auto;
     padding: 0;
-    margin: 0px 2px 3px;
+    margin: 0 2px 3px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;

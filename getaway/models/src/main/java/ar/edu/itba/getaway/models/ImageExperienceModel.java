@@ -14,15 +14,12 @@ public class ImageExperienceModel {
     public long getImageId() {
         return imageId;
     }
-
     public long getExperienceId() {
         return experienceId;
     }
-
     public boolean isCover() {
         return isCover;
     }
-
     public void setIsCover(boolean isCover) {
         this.isCover = isCover;
     }

@@ -11,9 +11,7 @@
 
    <body>
       <div class="container-main">
-         <jsp:include page="/WEB-INF/components/navbar.jsp">
-            <jsp:param name="loggedUser" value="${loggedUser}"/>
-         </jsp:include>
+         <%@ include file="../components/navbar.jsp" %>
 
          <div class="d-flex flex-column justify-content-center mx-5 my-2 p-0">
             <h2 class="text-center font-weight-bold">
@@ -24,7 +22,8 @@
             <spring:message code="experienceForm.inputs.placeholder" var="placeholder"/>
             <spring:message code="experienceForm.activityMail.example" var="mailExample"/>
             <spring:message code="experienceForm.activityUrl.example" var="urlExample"/>
-            <form:form modelAttribute="experienceForm" action="${postPath}" id="editExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
+            <form:form modelAttribute="experienceForm" action="${postPath}" id="editExperienceForm" method="post"
+                       acceptCharset="UTF-8" enctype="multipart/form-data">
                <div class="container-inputs">
                   <div class="p-0 m-0 d-flex">
                      <div class="col m-2"> <!--Nombre de la experiencia-->
@@ -64,6 +63,7 @@
                                     cssErrorClass="form-control is-invalid" placeholder="0"/>
                         <form:errors path="activityPrice" element="p" cssClass="form-error-label"/>
                      </div>
+                  </div>
 
                   <div class="p-0 m-2 d-flex flex-column"> <!--Descripcion-->
                      <form:label path="activityInfo" class="form-label">

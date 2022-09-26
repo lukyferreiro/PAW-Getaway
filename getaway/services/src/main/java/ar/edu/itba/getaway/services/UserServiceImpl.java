@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.services;
 
+import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.persistence.PasswordResetTokenDao;
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException {
+    public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException, DuplicateImageException {
         LOGGER.debug("Creating user with email {}", email);
         UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES);
         LOGGER.debug("Created user with id {}", userModel.getId());
@@ -163,21 +164,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateProfileImage(ImageModel imageModel, UserModel userModel) {
-        Long imageId = userModel.getProfileImageId();
-        LOGGER.debug("Updating user {} profile image", userModel.getEmail());
-        if (imageId == 0) {
-            imageId = imageService.create(imageModel.getImage()).getId();
-            userDao.updateProfileImage(userModel.getId(), imageId);
-        } else {
-            imageService.update(imageId, imageModel);
-        }
+    public void updateProfileImage(UserModel userModel, byte[] image) {
+        LOGGER.debug("Updating user {} profile image of id {}", userModel.getId(), userModel.getProfileImageId());
+        imageService.updateImg(image, userModel.getProfileImageId());
     }
 
     private void sendVerificationToken(UserModel userModel, VerificationToken token) {
         try {
-//            String url = new URL("http", appBaseUrl, "/webapp_war_exploded/user/verifyAccount/" + token.getValue()).toString();
-            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount/" + token.getValue()).toString();
+            String url = new URL("http", appBaseUrl, 8080, "/webapp_war/user/verifyAccount/" + token.getValue()).toString();
+//            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount/" + token.getValue()).toString();
             Map<String, Object> mailAttrs = new HashMap<>();
             mailAttrs.put("confirmationURL", url);
             mailAttrs.put("to", userModel.getEmail());
@@ -189,8 +184,8 @@ public class UserServiceImpl implements UserService {
 
     private void sendPasswordResetToken(UserModel userModel, PasswordResetToken token) {
         try {
-//            String url = new URL("http", appBaseUrl, "/webapp_war_exploded/user/resetPassword/" + token.getValue()).toString();
-            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/resetPassword/" + token.getValue()).toString();
+            String url = new URL("http", appBaseUrl, 8080, "/webapp_war/user/resetPassword/" + token.getValue()).toString();
+//            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/resetPassword/" + token.getValue()).toString();
             Map<String, Object> mailAttrs = new HashMap<>();
             mailAttrs.put("confirmationURL", url);
             mailAttrs.put("to", userModel.getEmail());

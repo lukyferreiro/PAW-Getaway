@@ -2,8 +2,9 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
-import ar.edu.itba.getaway.webapp.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.exceptions.ImageNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,6 +22,8 @@ import java.util.Optional;
 public class ExperienceController {
 
     @Autowired
+    private UserService userService;
+    @Autowired
     private ExperienceService experienceService;
     @Autowired
     private CityService cityService;
@@ -32,7 +35,6 @@ public class ExperienceController {
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.GET})
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,
-                                   @ModelAttribute("loggedUser") final UserModel loggedUser,
                                    @RequestParam Optional<Long> cityId,
                                    @RequestParam Optional<Double> maxPrice,
                                    @RequestParam Optional<Long> score) {
@@ -78,11 +80,6 @@ public class ExperienceController {
             experienceList = experienceService.listByCategory(id);
         }
 
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
 
         List<Long> avgReviews = new ArrayList<>();
         for(ExperienceModel experience : experienceList){
@@ -98,24 +95,13 @@ public class ExperienceController {
         return mav;
     }
 
-
-    @RequestMapping(path = "/{experienceId}/image", method = RequestMethod.GET,
-            produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    @ResponseBody
-    public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
-        Optional<ImageModel> optionalImageModel = imageService.getByExperienceId(experienceId);
-
-        return optionalImageModel.map(ImageModel::getImage).orElse(null);
-    }
-
     @RequestMapping("/experiences/{categoryName}/{experienceId}")
     public ModelAndView experienceView(@PathVariable("categoryName") final String categoryName,
-                                       @PathVariable("experienceId") final long experienceId,
-                                       @ModelAttribute("loggedUser") final UserModel loggedUser) {
+                                       @PathVariable("experienceId") final long experienceId) {
         final ModelAndView mav = new ModelAndView("experience_details");
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        String dbCategoryName = ExperienceCategory.valueOf(categoryName).getName();
+        final String dbCategoryName = ExperienceCategory.valueOf(categoryName).getName();
         final List<ReviewUserModel> reviews = reviewService.getReviewAndUser(experienceId);
         final Double avgScore = reviewService.getAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
@@ -124,12 +110,6 @@ public class ExperienceController {
 
         if(experienceAvgReview.isPresent()){
             mav.addObject("reviewAvg", experienceAvgReview.get());
-        }
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
         }
 
         mav.addObject("dbCategoryName", dbCategoryName);
@@ -144,12 +124,11 @@ public class ExperienceController {
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.POST})
     public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName,
                                        @Valid @ModelAttribute("filterForm") final FilterForm form,
-                                       @ModelAttribute("loggedUser") final UserModel loggedUser,
                                        final BindingResult errors) {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
-            return experience(categoryName, form, loggedUser, Optional.empty(),Optional.empty(), Optional.empty());
+            return experience(categoryName, form, Optional.empty(),Optional.empty(), Optional.empty());
         }
 
         Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
@@ -167,11 +146,6 @@ public class ExperienceController {
         Long score = form.getScore();
         if(score != null){
             mav.addObject("score", score);
-        }
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
         }
 
         return mav;

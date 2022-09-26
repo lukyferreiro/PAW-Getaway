@@ -37,9 +37,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
-        return (httpServletRequest, httpServletResponse, e) ->
-                httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/access-denied");
-//        return new CustomAccessDeniedHandler();
+        return new CustomAccessDeniedHandler();
     }
 
     @Bean
@@ -52,15 +50,14 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public AccessDecisionManager decisionManager(){
-//        //TODO
-//        return new ConsensusBased(List.of("decicion boters"));
-//    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Override
+    public void configure(final WebSecurity web) {
+        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/403");
     }
 
     /* Es importante el orden de las reglas */
@@ -72,20 +69,22 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login", "/register").anonymous()
                 .antMatchers("/logout").authenticated()
                 //Verify Account
-                .antMatchers("/user/verifyAccount/{token}").hasRole("NOT_VERIFIED")
+//                .antMatchers("/user/verifyAccount/{token}").hasRole("NOT_VERIFIED")
+                .antMatchers("/user/verifyAccount/{token}").permitAll()
                 .antMatchers("/user/verifyAccount/status/send").hasRole("NOT_VERIFIED")
                 .antMatchers("/user/verifyAccount/status/resend").hasRole("NOT_VERIFIED")
                 .antMatchers("/user/verifyAccount/result/unsuccessfully").hasRole("NOT_VERIFIED")
-//                    .antMatchers("/user/verifyAccount/result/successfully").hasRole("NOT_VERIFIED")
                 .antMatchers("/user/verifyAccount/result/successfully").hasRole("VERIFIED")
                 //Reset Password
-                .antMatchers("/user/resetPasswordRequest").authenticated()
-                .antMatchers(HttpMethod.POST,"/user/resetPasswordRequest").authenticated()
-                .antMatchers(HttpMethod.POST,"/user/resetPassword").authenticated()
-                .antMatchers("/user/resetPassword/{token}").authenticated()
-                //User routes
-                .antMatchers("/user/**").authenticated()
-//                .antMatchers("/user/profileImage").authenticated()
+                .antMatchers("/user/resetPasswordRequest").anonymous()
+                .antMatchers(HttpMethod.POST,"/user/resetPasswordRequest").anonymous()
+                .antMatchers("/user/resetPassword/{token}").anonymous()
+                .antMatchers(HttpMethod.GET, "/user/resetPassword").denyAll()
+                .antMatchers(HttpMethod.POST,"/user/resetPassword").anonymous()
+                //User profile
+                .antMatchers("/user/experiences").authenticated()
+                .antMatchers("/user/profileImage/{imageId}").permitAll()
+                //TODO
                 //Experiences
                 .antMatchers(HttpMethod.GET,"/create_experience").hasRole("VERIFIED")
                 .antMatchers(HttpMethod.POST,"/create_experience").hasRole("VERIFIED")
@@ -94,7 +93,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/experiences/{categoryName}/{experienceId}").permitAll()
                 .antMatchers(HttpMethod.GET,"/experiences/{categoryName}").permitAll()
                 .antMatchers(HttpMethod.POST,"/experiences/{categoryName}").permitAll()
-                .antMatchers(HttpMethod.GET,"/{experienceId}/image").permitAll()
+                .antMatchers(HttpMethod.GET,"/experiences/{experienceId}/image").permitAll()
+                //Reviews
+                //TODO
                 //else
                 .antMatchers("/**").permitAll()
 
@@ -114,13 +115,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/")
             .and().exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())
-//                    .accessDeniedPage("/errors")
+//                    .accessDeniedPage("/")
             .and().csrf().disable();
     }
-
-    @Override
-    public void configure(final WebSecurity web) {
-        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/403");
-    }
-
 }

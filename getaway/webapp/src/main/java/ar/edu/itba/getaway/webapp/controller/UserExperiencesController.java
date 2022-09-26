@@ -2,8 +2,8 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.webapp.exceptions.AccessDeniedException;
-import ar.edu.itba.getaway.webapp.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,42 +32,30 @@ public class UserExperiencesController {
     @Autowired
     private CountryService countryService;
     @Autowired
-    private ImageExperienceService imageExperienceService;
-    @Autowired
     private ImageService imageService;
 
 
     @RequestMapping(value = "/user/experiences", method = {RequestMethod.GET})
-    public ModelAndView experience(@ModelAttribute("loggedUser") final UserModel loggedUser) {
+    public ModelAndView experience(Principal principal) {
         final ModelAndView mav = new ModelAndView("user_experiences");
 
-        try {
-            List<ExperienceModel> experienceList = experienceService.getByUserId(loggedUser.getId());
-            mav.addObject("activities", experienceList);
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-            List<Long> avgReviews = new ArrayList<>();
-            for(ExperienceModel experience : experienceList){
-                avgReviews.add(experienceService.getAvgReviews(experience.getId()).get());
-            }
-            mav.addObject("avgReviews", avgReviews);
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
+        final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
+        List<ExperienceModel> experienceList = experienceService.getByUserId(user.getId());
+        List<Long> avgReviews = new ArrayList<>();
+        for(ExperienceModel experience : experienceList){
+            avgReviews.add(experienceService.getAvgReviews(experience.getId()).get());
         }
+
+        mav.addObject("activities", experienceList);
+        mav.addObject("avgReviews", avgReviews);
 
         return mav;
     }
     @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.GET})
     public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
-                                         @ModelAttribute("deleteForm") final DeleteForm form,
-                                         @ModelAttribute("loggedUser") final UserModel loggedUser) {
+                                         @ModelAttribute("deleteForm") final DeleteForm form) {
         final ModelAndView mav = new ModelAndView("deleteExperience");
         ExperienceModel experience = experienceService.getById(experienceId).get();
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
 
         mav.addObject("experience", experience);
         return mav;
@@ -75,10 +64,9 @@ public class UserExperiencesController {
     @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.POST})
     public ModelAndView experienceDeletePost(@PathVariable(value = "experienceId") final long experienceId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,
-                                             @ModelAttribute("loggedUser") final UserModel loggedUser,
                                              final BindingResult errors) {
         if (errors.hasErrors()) {
-            return experienceDelete(experienceId, form, loggedUser);
+            return experienceDelete(experienceId, form);
         }
 
         experienceService.delete(experienceId);
@@ -87,8 +75,7 @@ public class UserExperiencesController {
 
     @RequestMapping(value = "/user/experiences/edit/{experienceId}", method = {RequestMethod.GET})
     public ModelAndView experienceEdit(@PathVariable("experienceId") final long experienceId,
-                                       @ModelAttribute("experienceForm") final ExperienceForm form,
-                                       @ModelAttribute("loggedUser") final UserModel loggedUser) {
+                                       @ModelAttribute("experienceForm") final ExperienceForm form) {
         final ModelAndView mav = new ModelAndView("experience_edit_form");
 
         ExperienceCategory[] categoryModels = ExperienceCategory.values();
@@ -109,12 +96,6 @@ public class UserExperiencesController {
         }
         form.setActivityUrl(experience.getSiteUrl());
 
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-
         mav.addObject("categories", categories);
         mav.addObject("cities", cityModels);
         mav.addObject("countries", countryModels);
@@ -128,10 +109,10 @@ public class UserExperiencesController {
     @RequestMapping(value = "/user/experiences/edit/{experienceId}", method = {RequestMethod.POST})
     public ModelAndView experienceEditPost(@PathVariable(value = "experienceId") final long experienceId,
                                            @ModelAttribute("experienceForm") final ExperienceForm form,
-                                           @ModelAttribute("loggedUser") final UserModel loggedUser,
+                                           Principal principal,
                                            final BindingResult errors) throws IOException {
         if (errors.hasErrors()) {
-            return experienceEdit(experienceId, form, loggedUser);
+            return experienceEdit(experienceId, form);
         }
 
         long categoryId = form.getActivityCategoryId();
@@ -141,18 +122,14 @@ public class UserExperiencesController {
 
         long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
 
-        long userId;
-        try {
-            userId = loggedUser.getId();
-        } catch (NullPointerException e) {
-            throw new AccessDeniedException();
-        }
+        final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
+        final Long userId = user.getId();
 
         boolean hasImg = false;
         if (!form.getActivityImg().isEmpty()) {
             hasImg = true;
-            final ImageModel imageModel = imageService.create(form.getActivityImg().getBytes());
-            imageExperienceService.create(imageModel.getId(), experienceId, true);
+            final ImageExperienceModel imageModel = imageService.createExperienceImg(
+                    form.getActivityImg().getBytes(), experienceId, true);
         }
         Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
         String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
@@ -162,12 +139,7 @@ public class UserExperiencesController {
                 description, url, price, cityId, categoryId + 1, userId, hasImg);
         experienceService.update(experienceId, experienceModel);
 
-        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
-
-        //No hace falta meterlo en un try catch porque ya me fije que loggedUser no sea null
-        mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-
-        return mav;
+        return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
     }
 
 }

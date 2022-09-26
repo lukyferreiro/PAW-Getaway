@@ -11,7 +11,6 @@ public class ReviewModel {
     private final Date reviewDate;
     private final long userId;
 
-
     public ReviewModel(long reviewId, String title, String description, long score, long experienceId, Date reviewDate, long userId) {
         this.reviewId = reviewId;
         this.title = title;
@@ -25,32 +24,24 @@ public class ReviewModel {
     public long getReviewId() {
         return reviewId;
     }
-
     public String getTitle() {
         return title;
     }
-
     public String getDescription() {
         return description;
     }
-
     public long getScore() {
         return score;
     }
-
     public String getStringScore() {
         return String.valueOf(score);
     }
-
-
     public long getExperienceId() {
         return experienceId;
     }
-
     public Date getReviewDate() {
         return reviewDate;
     }
-
     public long getUserId() {
         return userId;
     }
