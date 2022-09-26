@@ -14,9 +14,7 @@
 
     <body>
         <div class="container-main">
-            <jsp:include page="/WEB-INF/components/navbar.jsp">
-                <jsp:param name="loggedUser" value="${loggedUser}"/>
-            </jsp:include>
+            <%@ include file="../components/navbar.jsp" %>
 
             <h1>${user.email}</h1>
             <h1>${user.name}</h1>
@@ -36,7 +34,7 @@
                              src="<c:url value="/resources/images/ic_user.png" />" >
                     </c:when>
                     <c:otherwise>
-                        <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/user/${user.profileImageId}'/>" alt="Imagen"/>
+                        <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/user/profileImage/${user.profileImageId}'/>" alt="Imagen"/>
                     </c:otherwise>
                 </c:choose>
             </div>

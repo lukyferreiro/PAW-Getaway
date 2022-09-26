@@ -59,6 +59,9 @@ public class ExperienceFormController {
                                        Principal principal) throws Exception {
 
         if (errors.hasErrors()) {
+            form.setActivityCity(form.getActivityCity());
+            form.setActivityCountry(form.getActivityCountry());
+            form.setActivityCategory(form.getActivityCategory());
             return createActivityForm(form);
         }
 
@@ -84,6 +87,8 @@ public class ExperienceFormController {
                 final ImageExperienceModel imageModel = imageService.createExperienceImg(
                         form.getActivityImg().getBytes(), experienceModel.getId(), true);
             } else {
+                //Todo: Enviar mensaje de formato de imagen inválido
+                errors.rejectValue("activityImg", "experienceForm.validation.imageFormat");
                 return createActivityForm(form);
             }
         } else {

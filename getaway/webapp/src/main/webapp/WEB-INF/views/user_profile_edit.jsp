@@ -13,9 +13,7 @@
 
     <body>
     <div class="container-main">
-        <jsp:include page="/WEB-INF/components/navbar.jsp">
-            <jsp:param name="loggedUser" value="${loggedUser}"/>
-        </jsp:include>
+        <%@ include file="../components/navbar.jsp" %>
 
         <div class="container-fluid p-0 mt-3 h-100 w-100 ">
             <div class="container-lg w-100 p-2 smallContentContainer">
@@ -27,7 +25,7 @@
                         <div class="container-lg">
                             <div class="row">
                                 <c:url value="/user/profile/edit" var="postPath"/>
-                                <form:form modelAttribute="registerForm" action="${postPath}" id="registerForm" method="post" acceptCharset="UTF-8">
+                                <form:form modelAttribute="registerForm" action="${postPath}" id="registerForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
                                     <div class="form-group"> <!--Email-->
                                         <spring:message code="registerForm.email.placeholder" var="emailPlaceholder"/>
                                         <form:label path="email" class="form-label">
@@ -94,6 +92,15 @@
 <%--                                        </div>--%>
 <%--                                        <form:errors path="confirmPassword" cssClass="form-error-label" element="p"/>--%>
 <%--                                    </div>--%>
+
+                                    <div class="p-0 m-2 d-flex flex-column"> <!--Imagenes-->
+                                        <form:label path="profileImg" class="form-label">
+                                            <spring:message code="registerForm.addProfileImage"/>
+                                            <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
+                                        </form:label>
+                                        <form:input path="profileImg" type="file" class="form-control" cssErrorClass="form-control is-invalid"/>
+                                        <form:errors path="profileImg" element="p" cssClass="form-error-label"/>
+                                    </div>
 
                                     <div class="form-group">
                                         <spring:hasBindErrors name="registerForm">

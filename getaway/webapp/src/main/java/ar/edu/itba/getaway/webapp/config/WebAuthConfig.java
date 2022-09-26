@@ -84,7 +84,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //User profile
                 .antMatchers("/user/experiences").authenticated()
                 .antMatchers("/user/profileImage/{imageId}").permitAll()
-                //TODO
+                //TODOaa
                 //Experiences
                 .antMatchers(HttpMethod.GET,"/create_experience").hasRole("VERIFIED")
                 .antMatchers(HttpMethod.POST,"/create_experience").hasRole("VERIFIED")

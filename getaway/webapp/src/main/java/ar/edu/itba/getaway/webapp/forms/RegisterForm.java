@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.webapp.forms;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -29,6 +30,8 @@ public class RegisterForm {
     @NotEmpty
     @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$")
     private String email;
+
+    private MultipartFile profileImg;
 
     public String getPassword() {
         return password;
@@ -59,5 +62,11 @@ public class RegisterForm {
     }
     public String getConfirmPassword() {
         return confirmPassword;
+    }
+    public MultipartFile getProfileImg() {
+        return profileImg;
+    }
+    public void setProfileImg(MultipartFile profileImg) {
+        this.profileImg = profileImg;
     }
 }
