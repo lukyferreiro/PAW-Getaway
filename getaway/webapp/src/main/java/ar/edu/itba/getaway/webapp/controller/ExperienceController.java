@@ -1,13 +1,12 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.exceptions.CityNotFoundException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.exceptions.ExperienceNotFoundException;
-import ar.edu.itba.getaway.exceptions.ImageNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +21,9 @@ import java.util.Optional;
 public class ExperienceController {
 
     @Autowired
-    private UserService userService;
-    @Autowired
     private ExperienceService experienceService;
     @Autowired
     private CityService cityService;
-    @Autowired
-    private ImageService imageService;
     @Autowired
     private ReviewService reviewService;
 
@@ -41,17 +36,17 @@ public class ExperienceController {
         final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
-        ExperienceCategory category;
+        final ExperienceCategory category;
         try {
             category = ExperienceCategory.valueOf(categoryName);
         } catch (Exception e) {
             throw new CategoryNotFoundException();
         }
 
-        String dbCategoryName = category.getName();
-        int id = category.ordinal() + 1;
-        List<ExperienceModel> experienceList;
-        List<CityModel> cityModels = cityService.listAll();
+        final String dbCategoryName = category.getName();
+        final int id = category.ordinal() + 1;
+        final List<ExperienceModel> experienceList;
+        final List<CityModel> cityModels = cityService.listAll();
 
         //Filtros
         if (cityId.isPresent()) {
@@ -81,7 +76,7 @@ public class ExperienceController {
         }
 
 
-        List<Long> avgReviews = new ArrayList<>();
+        final List<Long> avgReviews = new ArrayList<>();
         for(ExperienceModel experience : experienceList){
             avgReviews.add(experienceService.getAvgReviews(experience.getId()).get());
         }
@@ -106,11 +101,9 @@ public class ExperienceController {
         final Double avgScore = reviewService.getAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
         final String countryCity = experienceService.getCountryCity(experienceId);
-        final Optional<Long> experienceAvgReview = experienceService.getAvgReviews(experienceId);
 
-        if(experienceAvgReview.isPresent()){
-            mav.addObject("reviewAvg", experienceAvgReview.get());
-        }
+        final Optional<Long> experienceAvgReview = experienceService.getAvgReviews(experienceId);
+        experienceAvgReview.ifPresent(aLong -> mav.addObject("reviewAvg", aLong));
 
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("activity", experience);
@@ -131,19 +124,21 @@ public class ExperienceController {
             return experience(categoryName, form, Optional.empty(),Optional.empty(), Optional.empty());
         }
 
-        Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
+//        Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
+//        if (cityModel.isPresent()) {
+//            long cityId = cityModel.get().getId();
+//            mav.addObject("cityId", cityId);
+//        }
+        final CityModel cityModel = cityService.getIdByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
+        final long cityId = cityModel.getId();
+        mav.addObject("cityId", cityId);
 
-        if (cityModel.isPresent()) {
-            long cityId = cityModel.get().getId();
-            mav.addObject("cityId", cityId);
-        }
-
-        Double priceMax = form.getActivityPriceMax();
+        final Double priceMax = form.getActivityPriceMax();
         if (priceMax != null) {
             mav.addObject("maxPrice", priceMax);
         }
 
-        Long score = form.getScore();
+        final Long score = form.getScore();
         if(score != null){
             mav.addObject("score", score);
         }

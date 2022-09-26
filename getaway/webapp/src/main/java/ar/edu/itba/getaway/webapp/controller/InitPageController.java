@@ -1,8 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.Roles;
-import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.services.ExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,9 +20,9 @@ public class InitPageController {
     public ModelAndView init() {
         final ModelAndView mav = new ModelAndView("mainPage");
 
-        List<ExperienceModel> experienceList = experienceService.getRandom();
+        final List<ExperienceModel> experienceList = experienceService.getRandom();
 
-        List<Long> avgReviews = new ArrayList<>();
+        final List<Long> avgReviews = new ArrayList<>();
         for(ExperienceModel experience : experienceList){
             avgReviews.add(experienceService.getAvgReviews(experience.getId()).get());
         }

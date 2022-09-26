@@ -68,10 +68,9 @@ public class WebAuthController {
             return register(form);
         }
 
-        UserModel user;
+        final UserModel user;
         try {
-            user = userService.createUser(form.getPassword(), form.getName(),
-                    form.getSurname(), form.getEmail());
+            user = userService.createUser(form.getPassword(), form.getName(), form.getSurname(), form.getEmail());
             forceLogin(user, request);
             //TODO no me gusta que tambien me este cacheando DuplicateImageException
         } catch (DuplicateUserException | DuplicateImageException e) {

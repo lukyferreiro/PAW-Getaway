@@ -8,21 +8,17 @@ import ar.edu.itba.getaway.webapp.forms.RegisterForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class UserProfileController {
@@ -45,7 +41,8 @@ public class UserProfileController {
     }
 
     @RequestMapping(value = "/user/profile/edit", method = {RequestMethod.GET})
-    public ModelAndView editProfileGet(Principal principal, @ModelAttribute ("registerForm") final RegisterForm registerForm){
+    public ModelAndView editProfileGet(Principal principal,
+                                       @ModelAttribute ("registerForm") final RegisterForm registerForm){
         final ModelAndView mav = new ModelAndView("user_profile_edit");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
@@ -57,13 +54,15 @@ public class UserProfileController {
     }
 
     @RequestMapping(value = "/user/profile/edit", method = {RequestMethod.POST})
-    public ModelAndView editProfilePost(Principal principal, @ModelAttribute ("registerForm") final RegisterForm registerForm, final BindingResult errors) throws Exception {
+    public ModelAndView editProfilePost(Principal principal,
+                                        @ModelAttribute ("registerForm") final RegisterForm registerForm,
+                                        final BindingResult errors) throws Exception {
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
         userService.updateUserInfo(user.getId(), new UserInfo(registerForm.getName(), registerForm.getSurname()));
 //        userService.updateProfileImage();
 
-        MultipartFile profileImg = registerForm.getProfileImg();
+        final MultipartFile profileImg = registerForm.getProfileImg();
 
         if(!profileImg.isEmpty()){
             if (contentTypes.contains(profileImg.getContentType())) {
@@ -75,9 +74,7 @@ public class UserProfileController {
             }
         }
 
-        final ModelAndView mav = new ModelAndView("redirect:/user/profile");
-
-        return mav;
+        return new ModelAndView("redirect:/user/profile");
     }
 
 }

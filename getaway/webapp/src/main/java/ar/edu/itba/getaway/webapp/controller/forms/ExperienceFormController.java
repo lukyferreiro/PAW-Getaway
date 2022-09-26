@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
+import ar.edu.itba.getaway.exceptions.CityNotFoundException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
@@ -32,24 +33,31 @@ public class ExperienceFormController {
     @Autowired
     private ImageService imageService;
 
-    private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif");
+    private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif", "image/jpg");
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form) {
         final ModelAndView mav = new ModelAndView("experience_form");
 
-        ExperienceCategory[] categoryModels = ExperienceCategory.values();
-        List<String> categories = new ArrayList<>();
+        final ExperienceCategory[] categoryModels = ExperienceCategory.values();
+        final List<String> categories = new ArrayList<>();
         for (ExperienceCategory categoryModel : categoryModels) {
             categories.add(categoryModel.getName());
         }
 
-        List<CountryModel> countryModels = countryService.listAll();
-        List<CityModel> cityModels = cityService.listAll();
+        final List<CountryModel> countries = countryService.listAll();
+        final List<CityModel> cities = cityService.listAll();
 
+        mav.addObject("title", "createExperience.title");
+        mav.addObject("description", "createExperience.description");
+        mav.addObject("endpoint", "/create_experience");
+        mav.addObject("cancelBtn", "/");
         mav.addObject("categories", categories);
-        mav.addObject("cities", cityModels);
-        mav.addObject("countries", countryModels);
+        mav.addObject("cities", cities);
+        mav.addObject("countries", countries);
+        mav.addObject("formCity", form.getActivityCity());
+        mav.addObject("formCategory", form.getActivityCategory());
+
         return mav;
     }
 
@@ -59,18 +67,16 @@ public class ExperienceFormController {
                                        Principal principal) throws Exception {
 
         if (errors.hasErrors()) {
-            form.setActivityCity(form.getActivityCity());
-            form.setActivityCountry(form.getActivityCountry());
-            form.setActivityCategory(form.getActivityCategory());
             return createActivityForm(form);
         }
 
-        long categoryId = form.getActivityCategoryId();
+        final long categoryId = form.getActivityCategoryId();
         if (categoryId < 0) {
             throw new CategoryNotFoundException();
         }
 
-        long cityId = cityService.getIdByName(form.getActivityCity()).get().getId();
+        final CityModel cityModel = cityService.getIdByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
+        final long cityId = cityModel.getId();
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final Long userId = user.getId();
@@ -80,6 +86,8 @@ public class ExperienceFormController {
         final ExperienceModel experienceModel;
         final MultipartFile activityImg = form.getActivityImg();
 
+        //TODO estar haciendo esto no mg nada, la logica de si se debe crear una imagen
+        //o no deberia estar en los services /daos
         if (!activityImg.isEmpty()) {
             if (contentTypes.contains(activityImg.getContentType())) {
                 experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(),

@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Optional;
-
 @Controller
 public class ImagesController {
 
@@ -34,7 +32,9 @@ public class ImagesController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/user/profileImage/{imageId}", method = {RequestMethod.GET}, produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    @RequestMapping(value = "/user/profileImage/{imageId}",
+            method = {RequestMethod.GET},
+            produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public byte[] getUserProfileImage(@PathVariable("imageId") final long imageId){
         LOGGER.info("Retrieving profileImage {}", imageId);
         ImageModel optionalImageModel = imageService.getImgById(imageId).orElseThrow(ImageNotFoundException::new);

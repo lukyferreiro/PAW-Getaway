@@ -84,7 +84,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //User profile
                 .antMatchers("/user/experiences").authenticated()
                 .antMatchers("/user/profileImage/{imageId}").permitAll()
-                //TODOaa
+                //TODO
+                // ...
                 //Experiences
                 .antMatchers(HttpMethod.GET,"/create_experience").hasRole("VERIFIED")
                 .antMatchers(HttpMethod.POST,"/create_experience").hasRole("VERIFIED")
@@ -96,6 +97,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/experiences/{experienceId}/image").permitAll()
                 //Reviews
                 //TODO
+                // ...
                 //else
                 .antMatchers("/**").permitAll()
 
