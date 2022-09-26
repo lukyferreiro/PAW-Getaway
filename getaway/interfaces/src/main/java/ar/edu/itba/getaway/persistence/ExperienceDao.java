@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ExperienceDao {
 
-    int PAGE_SIZE = 6;
+    int PAGE_SIZE = 2;
     ExperienceModel create (String name, String address, String description, String url, Double price, long cityId, long categoryId, long userId, boolean hasImage);
     boolean update (long experienceId, ExperienceModel experienceModel);
     boolean delete (long experienceId);

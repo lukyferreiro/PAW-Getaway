@@ -194,7 +194,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public List<ExperienceModel> listByScore(int page,long categoryId){
-        return jdbcTemplate.query("SELECT *  FROM experiences ORDER BY name ASC LIMIT ? OFFSET ?",new Object[]{PAGE_SIZE, (page-1)*PAGE_SIZE},EXPERIENCE_MODEL_ROW_MAPPER);
+        return jdbcTemplate.query("SELECT *  FROM experiences ORDER BY experienceName LIMIT ? OFFSET ? ",new Object[]{PAGE_SIZE, (page-1)*PAGE_SIZE},EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override

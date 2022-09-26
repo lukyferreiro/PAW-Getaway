@@ -6,6 +6,7 @@ import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.services.ExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,10 +23,8 @@ public class InitPageController {
 
     private Page<ExperienceModel> experienceModelPage;
 
-    //TODO hacer el post para que le llegue la page number
-
-    @RequestMapping(value = {"/","page/{page}"}, method = {RequestMethod.GET})
-    public ModelAndView init(@ModelAttribute("loggedUser") final UserModel loggedUser, @RequestParam(defaultValue = "1") int page) {
+    @RequestMapping(value = {"/","experiences/page/{page}"}, method = {RequestMethod.GET})
+    public ModelAndView init(@ModelAttribute("loggedUser") final UserModel loggedUser, @PathVariable("page") int page) {
         final ModelAndView mav = new ModelAndView("mainPage");
 
         try {
@@ -41,7 +40,7 @@ public class InitPageController {
            // avgReviews.add(experienceService.getAvgReviews(experience.getId()).get());
         }
 
-        mav.addObject("activities", experienceList);
+        mav.addObject("activities", experienceList.getContent());
        // mav.addObject("avgReviews", avgReviews);
 
         return mav;

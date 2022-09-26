@@ -32,11 +32,11 @@
                         <jsp:param name="price" value="${activity.price}"/>
                         <jsp:param name="myIndex" value="${myIndex.index}"/>
                      </jsp:include>
-                     <div class="card-body container-fluid p-2">
-                           <jsp:include page="/WEB-INF/views/star_avg.jsp">
-                              <jsp:param name="avgReview" value="${avgReviews[myIndex.index]}"/>
-                           </jsp:include>
-                     </div>
+<%--                     <div class="card-body container-fluid p-2">--%>
+<%--                           <jsp:include page="/WEB-INF/views/star_avg.jsp">--%>
+<%--                             <jsp:param name="avgReview" value="${avgReviews[myIndex.index]}"/>--%>
+<%--                           </jsp:include>--%>
+<%--                     </div>--%>
                   </a>
                </div>
             </c:forEach>

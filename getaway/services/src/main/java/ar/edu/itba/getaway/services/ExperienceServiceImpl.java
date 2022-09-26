@@ -131,7 +131,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     public List<ExperienceModel> listByCategoryAndScore(long categoryId, long score) {
         return experienceDao.listByCategoryAndScore( categoryId,  score);
     }
-
+    @Override
     public Page<ExperienceModel> listByScore(int page, long categoryId) {
         return new Page<>(experienceDao.listByScore(page,categoryId),page,experienceDao.getTotalPagesAllExperiences());
     }
