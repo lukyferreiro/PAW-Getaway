@@ -92,7 +92,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/experiences/{categoryName}/{experienceId}").permitAll()
                 .antMatchers(HttpMethod.GET,"/experiences/{categoryName}").permitAll()
                 .antMatchers(HttpMethod.POST,"/experiences/{categoryName}").permitAll()
-                .antMatchers(HttpMethod.GET,"/experiences/{experienceId}/image").permitAll()
+                .antMatchers(HttpMethod.GET,"{experienceId}/image").permitAll()
                 //Reviews
                 //TODO
                 //else
