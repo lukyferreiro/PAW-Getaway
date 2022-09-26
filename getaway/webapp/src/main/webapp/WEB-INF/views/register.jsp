@@ -29,6 +29,16 @@
                         <div class="row">
                            <c:url value="/register" var="postPath"/>
                            <form:form modelAttribute="registerForm" action="${postPath}" id="registerForm" method="post" acceptCharset="UTF-8">
+                              <div class="form-group"> <!--Email-->
+                                 <spring:message code="registerForm.email.placeholder" var="emailPlaceholder"/>
+                                 <form:label path="email" class="form-label">
+                                    <spring:message code="registerForm.email.title"/><span class="required-field">*</span>
+                                 </form:label>
+                                 <form:input type="text" path="email" id="email" cssErrorClass="form-control is-invalid"
+                                             class="form-control" placeholder="${emailPlaceholder}"/>
+                                 <form:errors path="email" cssClass="form-error-label" element="p"/>
+                              </div>
+
                               <div class="form-group"> <!--Nombre-->
                                  <spring:message code="registerForm.name.placeholder" var="namePlaceholder"/>
                                  <form:label path="name" class="form-label">
@@ -47,16 +57,6 @@
                                  <form:input type="text" path="surname" cssErrorClass="form-control is-invalid" id="surname"
                                              class="form-control" placeholder="${surnamePlaceholder}"/>
                                  <form:errors path="surname" cssClass="form-error-label" element="p"/>
-                              </div>
-
-                              <div class="form-group"> <!--Email-->
-                                 <spring:message code="registerForm.email.placeholder" var="emailPlaceholder"/>
-                                 <form:label path="email" class="form-label">
-                                    <spring:message code="registerForm.email.title"/><span class="required-field">*</span>
-                                 </form:label>
-                                 <form:input type="text" path="email" id="email" cssErrorClass="form-control is-invalid"
-                                             class="form-control" placeholder="${emailPlaceholder}"/>
-                                 <form:errors path="email" cssClass="form-error-label" element="p"/>
                               </div>
 
                               <div class="form-group"> <!--Contraseña-->

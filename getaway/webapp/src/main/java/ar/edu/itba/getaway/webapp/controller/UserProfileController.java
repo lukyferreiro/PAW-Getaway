@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -52,34 +53,28 @@ public class UserProfileController {
             mav.addObject("loggedUser", false);
         }
 
-        if(user.isPresent()){
-            mav.addObject("user", user.get());
-        }
+        registerForm.setName(user.get().getName());
+        registerForm.setSurname(user.get().getSurname());
+        registerForm.setEmail(user.get().getEmail());
 
         return mav;
     }
 
     @RequestMapping(value = "/user/profile/edit", method = {RequestMethod.POST})
     public ModelAndView editProfilePost(@ModelAttribute ("loggedUser") final UserModel loggedUser, @ModelAttribute ("registerForm") final RegisterForm registerForm){
-        final ModelAndView mav = new ModelAndView("user_profile_edit");
 
-        UserModel user = userService.getUserById(loggedUser.getId()).get();
+        userService.updateUserInfo(loggedUser.getId(), new UserInfo(registerForm.getName(), registerForm.getSurname()));
+//        userService.updateProfileImage();
 
-        userService.updateUserInfo(user.getId(), new UserInfo(registerForm.getName(), registerForm.getSurname()));
-
+        final ModelAndView mav = new ModelAndView("redirect:/user/profile");
 
         return mav;
     }
 
-    @RequestMapping(value = "/user/profileImage", method = {RequestMethod.GET}, produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    public byte[] getUserProfileImage(@ModelAttribute("loggedUser") final UserModel loggedUser){
-        LOGGER.debug(loggedUser.getEmail());
-
-
-        Optional<ImageModel> optionalImageModel = imageService.getById(loggedUser.getProfileImageId());
-
+    @RequestMapping(value = "/user/{imageId}", method = {RequestMethod.GET}, produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    public byte[] getUserProfileImage(@PathVariable("imageId") final long imageId){
+        Optional<ImageModel> optionalImageModel = imageService.getById(imageId);
         LOGGER.debug("Retrieving profileImage");
-
         return optionalImageModel.map(ImageModel::getImage).orElse(null);
     }
 

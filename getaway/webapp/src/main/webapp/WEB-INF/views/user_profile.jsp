@@ -36,7 +36,7 @@
                              src="<c:url value="/resources/images/ic_user.png" />" >
                     </c:when>
                     <c:otherwise>
-                        <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/user/profileImage'/>" alt="Imagen"/>
+                        <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/user/${user.profileImageId}'/>" alt="Imagen"/>
                     </c:otherwise>
                 </c:choose>
             </div>

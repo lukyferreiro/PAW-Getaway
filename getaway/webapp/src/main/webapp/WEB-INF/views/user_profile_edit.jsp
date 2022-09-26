@@ -28,8 +28,18 @@
                             <div class="row">
                                 <c:url value="/user/profile/edit" var="postPath"/>
                                 <form:form modelAttribute="registerForm" action="${postPath}" id="registerForm" method="post" acceptCharset="UTF-8">
+                                    <div class="form-group"> <!--Email-->
+                                        <spring:message code="registerForm.email.placeholder" var="emailPlaceholder"/>
+                                        <form:label path="email" class="form-label">
+                                            <spring:message code="registerForm.email.title"/><span class="required-field">*</span>
+                                        </form:label>
+                                        <form:input type="text" path="email" id="email" cssErrorClass="form-control is-invalid"
+                                                    class="form-control" placeholder="${emailPlaceholder}" disabled="true"/>
+                                        <form:errors path="email" cssClass="form-error-label" element="p"/>
+                                    </div>
+
                                     <div class="form-group"> <!--Nombre-->
-                                        <spring:message code="registerForm.surname.placeholder" var="surnamePlaceholder"/>
+                                        <spring:message code="registerForm.surname.placeholder" var="namePlaceholder"/>
                                         <form:label path="name" class="form-label">
                                             <spring:message code="registerForm.name.title"/><span class="required-field">*</span>
                                         </form:label>
@@ -48,52 +58,42 @@
                                         <form:errors path="surname" cssClass="form-error-label" element="p"/>
                                     </div>
 
-                                    <div class="form-group"> <!--Email-->
-                                        <spring:message code="registerForm.email.placeholder" var="emailPlaceholder"/>
-                                        <form:label path="email" class="form-label">
-                                            <spring:message code="registerForm.email.title"/><span class="required-field">*</span>
-                                        </form:label>
-                                        <form:input type="text" path="email" id="email" cssErrorClass="form-control is-invalid"
-                                                    class="form-control" placeholder="${emailPlaceholder}" disabled="true"/>
-                                        <form:errors path="email" cssClass="form-error-label" element="p"/>
-                                    </div>
+<%--                                    <div class="form-group"> <!--Contraseña-->--%>
+<%--                                        <form:label path="password" class="form-label">--%>
+<%--                                            <spring:message code="registerForm.password.title"/> <span class="required-field">*</span>--%>
+<%--                                        </form:label>--%>
+<%--                                        <div class="input-group d-flex justify-content-start align-items-center">--%>
+<%--                                            <spring:message code="registerForm.password.placeholder" var="passwordPlaceholder"/>--%>
+<%--                                            <form:input type="password" path="password" cssClass="form-control"--%>
+<%--                                                        id="password1" name="password" cssErrorClass="form-control is-invalid"--%>
+<%--                                                        aria-describedby="password input" placeholder="${passwordPlaceholder}"/>--%>
+<%--                                            <div class="input-group-append">--%>
+<%--                                                <button id="passwordEye1" type="button" tabindex="-1"--%>
+<%--                                                        class="btn btn-lg form-control btn-eye input-group-text">--%>
+<%--                                                    <i id="eye1" class="far fa-eye-slash"></i>--%>
+<%--                                                </button>--%>
+<%--                                            </div>--%>
+<%--                                        </div>--%>
+<%--                                        <form:errors path="password" cssClass="form-error-label" element="p"/>--%>
+<%--                                    </div>--%>
 
-                                    <div class="form-group"> <!--Contraseña-->
-                                        <form:label path="password" class="form-label">
-                                            <spring:message code="registerForm.password.title"/> <span class="required-field">*</span>
-                                        </form:label>
-                                        <div class="input-group d-flex justify-content-start align-items-center">
-                                            <spring:message code="registerForm.password.placeholder" var="passwordPlaceholder"/>
-                                            <form:input type="password" path="password" cssClass="form-control"
-                                                        id="password1" name="password" cssErrorClass="form-control is-invalid"
-                                                        aria-describedby="password input" placeholder="${passwordPlaceholder}"/>
-                                            <div class="input-group-append">
-                                                <button id="passwordEye1" type="button" tabindex="-1"
-                                                        class="btn btn-lg form-control btn-eye input-group-text">
-                                                    <i id="eye1" class="far fa-eye-slash"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <form:errors path="password" cssClass="form-error-label" element="p"/>
-                                    </div>
-
-                                    <div class="form-group"> <!--Confirmar contraseña-->
-                                        <form:label path="confirmPassword" class="form-label">
-                                            <spring:message code="registerForm.confirmPassword.title"/> <span class="required-field">*</span>
-                                        </form:label>
-                                        <div class="input-group d-flex justify-content-start align-items-center">
-                                            <form:input type="password" path="confirmPassword" cssClass="form-control"
-                                                        id="password2" name="confirmPassword"
-                                                        aria-describedby="password input" cssErrorClass="form-control is-invalid"/>
-                                            <div class="input-group-append">
-                                                <button id="passwordEye2" type="button" tabindex="-1"
-                                                        class="btn btn-lg form-control btn-eye input-group-text">
-                                                    <i id="eye2" class="far fa-eye-slash"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <form:errors path="confirmPassword" cssClass="form-error-label" element="p"/>
-                                    </div>
+<%--                                    <div class="form-group"> <!--Confirmar contraseña-->--%>
+<%--                                        <form:label path="confirmPassword" class="form-label">--%>
+<%--                                            <spring:message code="registerForm.confirmPassword.title"/> <span class="required-field">*</span>--%>
+<%--                                        </form:label>--%>
+<%--                                        <div class="input-group d-flex justify-content-start align-items-center">--%>
+<%--                                            <form:input type="password" path="confirmPassword" cssClass="form-control"--%>
+<%--                                                        id="password2" name="confirmPassword"--%>
+<%--                                                        aria-describedby="password input" cssErrorClass="form-control is-invalid"/>--%>
+<%--                                            <div class="input-group-append">--%>
+<%--                                                <button id="passwordEye2" type="button" tabindex="-1"--%>
+<%--                                                        class="btn btn-lg form-control btn-eye input-group-text">--%>
+<%--                                                    <i id="eye2" class="far fa-eye-slash"></i>--%>
+<%--                                                </button>--%>
+<%--                                            </div>--%>
+<%--                                        </div>--%>
+<%--                                        <form:errors path="confirmPassword" cssClass="form-error-label" element="p"/>--%>
+<%--                                    </div>--%>
 
                                     <div class="form-group">
                                         <spring:hasBindErrors name="registerForm">
@@ -109,7 +109,7 @@
                                                 <spring:message code="experienceForm.cancel"/>
                                             </button>
                                         </a>
-                                        <button type="submit" class="btn btn-submit-form px-3 py-2" id="editExperienceFormButton" form="editExperienceForm">
+                                        <button type="submit" class="btn btn-submit-form px-3 py-2" id="editExperienceFormButton" form="registerForm">
                                             <spring:message code="experienceForm.submit"/>
                                         </button>
                                     </div>
