@@ -159,4 +159,34 @@ public class ExperienceServiceImpl implements ExperienceService {
     public List<ExperienceModel> getByUserIdOrderByPriceAsc(long id) {
         return experienceDao.getByUserIdOrderByPriceAsc(id);
     }
+
+    @Override
+    public List<ExperienceModel> getOrderByRankingDesc() {
+        return experienceDao.getOrderByRankingDesc();
+    }
+
+    @Override
+    public List<ExperienceModel> getOrderByRankingAsc() {
+        return experienceDao.getOrderByRankingAsc();
+    }
+
+    @Override
+    public List<ExperienceModel> getOrderByNameDesc() {
+        return experienceDao.getOrderByNameDesc();
+    }
+
+    @Override
+    public List<ExperienceModel> getOrderByNameAsc() {
+        return experienceDao.getOrderByNameAsc();
+    }
+
+    @Override
+    public List<ExperienceModel> getOrderByPriceDesc() {
+        return experienceDao.getOrderByPriceDesc();
+    }
+
+    @Override
+    public List<ExperienceModel> getOrderByPriceAsc() {
+        return experienceDao.getOrderByPriceAsc();
+    }
 }

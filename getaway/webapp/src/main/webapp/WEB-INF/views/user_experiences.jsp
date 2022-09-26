@@ -29,31 +29,6 @@
                      <jsp:param name="path5" value="/user/experiences?orderBy=priceDesc"/>
                      <jsp:param name="path6" value="/user/experiences?orderBy=priceAsc"/>
                   </jsp:include>
-<%--                  <div class="dropdown">--%>
-<%--                     <button class="btn btn-header dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">--%>
-<%--                        <spring:message code="order.title"/>--%>
-<%--                     </button>--%>
-<%--                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">--%>
-<%--                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=rankingAsc"/>">--%>
-<%--                           <spring:message code="order.rankingAsc"/>--%>
-<%--                        </a>--%>
-<%--                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=rankingDesc"/>">--%>
-<%--                           <spring:message code="order.rankingDesc"/>--%>
-<%--                        </a>--%>
-<%--                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=A-Z"/>">--%>
-<%--                           <spring:message code="order.A_Z"/>--%>
-<%--                        </a>--%>
-<%--                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=Z-A"/>">--%>
-<%--                           <spring:message code="order.Z_A"/>--%>
-<%--                        </a>--%>
-<%--                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=priceDesc"/>">--%>
-<%--                           <spring:message code="order.low_price"/>--%>
-<%--                        </a>--%>
-<%--                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=priceAsc"/>">--%>
-<%--                           <spring:message code="order.high_price"/>--%>
-<%--                        </a>--%>
-<%--                     </ul>--%>
-<%--                  </div>--%>
 
                </div>
                <div class="cards container-experiences container-fluid">

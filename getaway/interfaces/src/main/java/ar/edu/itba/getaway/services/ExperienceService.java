@@ -29,4 +29,9 @@ public interface ExperienceService {
     List<ExperienceModel> getByUserIdOrderByNameAsc(long id);
     List<ExperienceModel> getByUserIdOrderByPriceDesc(long id);
     List<ExperienceModel> getByUserIdOrderByPriceAsc(long id);
-}
+    List<ExperienceModel> getOrderByRankingDesc();
+    List<ExperienceModel> getOrderByRankingAsc();
+    List<ExperienceModel> getOrderByNameDesc();
+    List<ExperienceModel> getOrderByNameAsc();
+    List<ExperienceModel> getOrderByPriceDesc();
+    List<ExperienceModel> getOrderByPriceAsc();}
