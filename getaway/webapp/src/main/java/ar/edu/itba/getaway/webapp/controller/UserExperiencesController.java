@@ -44,6 +44,7 @@ public class UserExperiencesController {
 
     @RequestMapping(value = "/user/favourites")
     public ModelAndView favourites(Principal principal,
+                                   @RequestParam Optional<String> direction,
                                    @RequestParam Optional<String> orderBy,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set){
@@ -56,7 +57,13 @@ public class UserExperiencesController {
 
         List<ExperienceModel> experienceList = new ArrayList<>();
         if(orderBy.isPresent()){
-            experienceList = listExperienceFav(orderBy);
+            if(direction.isPresent()){
+                if(direction.get().equals("asc")){
+                    experienceList = experienceService.getOrderBy(orderBy.get());
+                }else {
+                    experienceList = experienceService.getOrderByDesc(orderBy.get());
+                }
+            }
         }else{
             experienceList = experienceService.listAll();
         }
@@ -73,6 +80,7 @@ public class UserExperiencesController {
 
     @RequestMapping(value = "/user/experiences")
     public ModelAndView experience(Principal principal,
+                                   @RequestParam Optional<String> direction,
                                    @RequestParam Optional<String> orderBy,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set) {
@@ -89,7 +97,13 @@ public class UserExperiencesController {
         List<ExperienceModel> experienceList = new ArrayList<>();
 
         if(orderBy.isPresent()){
-            experienceList = listExperience(user.getId(), orderBy);
+            if(direction.isPresent()){
+                if(direction.get().equals("asc")){
+                    experienceList = experienceService.getByUserIdOrderBy(user.getId(), orderBy.get());
+                }else {
+                    experienceList = experienceService.getByUserIdOrderByDesc(user.getId(), orderBy.get());
+                }
+            }
         }else{
             experienceList = experienceService.getByUserId(user.getId());
         }
@@ -253,37 +267,4 @@ public class UserExperiencesController {
         }
     }
 
-    private List<ExperienceModel> listExperience(long userId, Optional<String> orderBy){
-            if(orderBy.get().equals("rankingAsc"))
-                return experienceService.getByUserIdOrderByRankingAsc(userId);
-            else if (orderBy.get().equals("rankingDesc"))
-                return experienceService.getByUserIdOrderByRankingDesc(userId);
-            else if (orderBy.get().equals("A-Z"))
-                return experienceService.getByUserIdOrderByNameAsc(userId);
-            else if (orderBy.get().equals("Z-A"))
-                return experienceService.getByUserIdOrderByNameDesc(userId);
-            else if (orderBy.get().equals("priceAsc"))
-                return experienceService.getByUserIdOrderByPriceAsc(userId);
-            else if (orderBy.get().equals("priceDesc"))
-                return experienceService.getByUserIdOrderByPriceDesc(userId);
-            else
-                return new ArrayList<>();
-    }
-
-    private List<ExperienceModel> listExperienceFav(Optional<String> orderBy){
-        if(orderBy.get().equals("rankingAsc"))
-            return experienceService.getOrderByRankingAsc();
-        else if (orderBy.get().equals("rankingDesc"))
-            return experienceService.getOrderByRankingDesc();
-        else if (orderBy.get().equals("A-Z"))
-            return experienceService.getOrderByNameAsc();
-        else if (orderBy.get().equals("Z-A"))
-            return experienceService.getOrderByNameDesc();
-        else if (orderBy.get().equals("priceAsc"))
-            return experienceService.getOrderByPriceAsc();
-        else if (orderBy.get().equals("priceDesc"))
-            return experienceService.getOrderByPriceDesc();
-        else
-            return new ArrayList<>();
-    }
 }

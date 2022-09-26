@@ -6,32 +6,72 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ExperienceService {
-    ExperienceModel create (String name, String address, String description, String url, Double price, long cityId, long categoryId, long userId, boolean hasImage);
-    boolean update (long experienceId, ExperienceModel experienceModel);
-    boolean delete (long experienceId);
-    List<ExperienceModel> listAll ();
-    Optional<ExperienceModel> getById (long experienceId);
-    List<ExperienceModel> listByCategory (long categoryId);
-    List<ExperienceModel> listByCategoryAndCity (long categoryId, long cityId);
-    List<ExperienceModel> listByCategoryAndPrice (long categoryId, Double max);
-    List<ExperienceModel> listByCategoryPriceAndCity (long categoryId, Double max, long cityId);
+    ExperienceModel create(String name, String address, String description, String url, Double price, long cityId, long categoryId, long userId, boolean hasImage);
+
+    boolean update(long experienceId, ExperienceModel experienceModel);
+
+    boolean delete(long experienceId);
+
+    List<ExperienceModel> listAll();
+
+    Optional<ExperienceModel> getById(long experienceId);
+
+    List<ExperienceModel> getByUserIdOrderBy(long id, String order);
+
+    List<ExperienceModel> getByUserIdOrderByDesc(long id, String order);
+
     List<ExperienceModel> getRandom();
+
     String getCountryCity(long experienceId);
+
     List<ExperienceModel> getByUserId(long userId);
+
     Optional<Long> getAvgReviews(long experienceId);
-    List<ExperienceModel> listByCategoryPriceCityAndScore (long categoryId, Double max, long cityId, long score);
-    List<ExperienceModel> listByCategoryCityAndScore (long categoryId, long cityId, long score);
-    List<ExperienceModel> listByCategoryPriceAndScore (long categoryId, Double max, long score);
-    List<ExperienceModel> listByCategoryAndScore (long categoryId, long score);
-    List<ExperienceModel> getByUserIdOrderByRankingDesc(long id);
-    List<ExperienceModel> getByUserIdOrderByRankingAsc(long id);
-    List<ExperienceModel> getByUserIdOrderByNameDesc(long id);
-    List<ExperienceModel> getByUserIdOrderByNameAsc(long id);
-    List<ExperienceModel> getByUserIdOrderByPriceDesc(long id);
-    List<ExperienceModel> getByUserIdOrderByPriceAsc(long id);
-    List<ExperienceModel> getOrderByRankingDesc();
-    List<ExperienceModel> getOrderByRankingAsc();
-    List<ExperienceModel> getOrderByNameDesc();
-    List<ExperienceModel> getOrderByNameAsc();
-    List<ExperienceModel> getOrderByPriceDesc();
-    List<ExperienceModel> getOrderByPriceAsc();}
+
+    List<ExperienceModel> getOrderByDesc(String order);
+
+    List<ExperienceModel> getOrderBy(String order);
+
+    List<ExperienceModel> listByCategory(long categoryId);
+
+    List<ExperienceModel> listByCategoryAndCity(long categoryId, long cityId);
+
+    List<ExperienceModel> listByCategoryAndPrice(long categoryId, Double max);
+
+    List<ExperienceModel> listByCategoryPriceAndCity(long categoryId, Double max, long cityId);
+
+    List<ExperienceModel> listByCategoryPriceCityAndScore(long categoryId, Double max, long cityId, long score);
+
+    List<ExperienceModel> listByCategoryCityAndScore(long categoryId, long cityId, long score);
+
+    List<ExperienceModel> listByCategoryPriceAndScore(long categoryId, Double max, long score);
+
+    List<ExperienceModel> listByCategoryAndScore(long categoryId, long score);
+
+
+    List<ExperienceModel> listByCategoryOrderBy(long categoryId, String order);
+    List<ExperienceModel> listByCategoryOrderByDesc(long categoryId, String order);
+
+    List<ExperienceModel> listByCategoryAndCityOrderBy(long categoryId, long cityId, String order);
+    List<ExperienceModel> listByCategoryAndCityOrderByDesc(long categoryId, long cityId, String order);
+
+
+    List<ExperienceModel> listByCategoryAndPriceOrderBy(long categoryId,Double max, String order);
+    List<ExperienceModel> listByCategoryAndPriceOrderByDesc(long categoryId,Double max,String order);
+
+    List<ExperienceModel> listByCategoryPriceAndCityOrderBy(long categoryId, Double max, long cityId,  String order);
+    List<ExperienceModel> listByCategoryPriceAndCityOrderByDesc(long categoryId, Double max, long cityId,  String order);
+
+    List<ExperienceModel> listByCategoryPriceCityAndScoreOrderBy(long categoryId,Double max, long cityId, long score,  String order);
+    List<ExperienceModel> listByCategoryPriceCityAndScoreOrderByDesc(long categoryId, Double max, long cityId, long score, String order);
+
+    List<ExperienceModel> listByCategoryCityAndScoreOrderBy(long categoryId, long cityId, long score, String order);
+    List<ExperienceModel> listByCategoryCityAndScoreOrderByDesc(long categoryId,  long cityId, long score, String order);
+
+
+    List<ExperienceModel> listByCategoryPriceAndScoreOrderBy(long categoryId, Double max, long score, String order);
+    List<ExperienceModel> listByCategoryPriceAndScoreOrderByDesc(long categoryId, Double max, long score, String order);
+
+    List<ExperienceModel> listByCategoryAndScoreOrderBy(long categoryId, long score, String order);
+    List<ExperienceModel> listByCategoryAndScoreOrderByDesc(long categoryId, long score, String order);
+}
