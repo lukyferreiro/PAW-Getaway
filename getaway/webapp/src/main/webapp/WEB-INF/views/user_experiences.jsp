@@ -21,32 +21,39 @@
             <c:otherwise>
                <div>
                   <h2 class="title"><spring:message code="experience.title"/></h2>
-                  <div class="dropdown">
-                     <button class="btn btn-header dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <spring:message code="order.title"/>
-                     </button>
-                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=rankingAsc"/>">
-                           <spring:message code="order.rankingAsc"/>
-                        </a>
-                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=rankingDesc"/>">
-                           <spring:message code="order.rankingDesc"/>
-                        </a>
-                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=A-Z"/>">
-                           <spring:message code="order.A_Z"/>
-                        </a>
-                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=Z-A"/>">
-                           <spring:message code="order.Z_A"/>
-                        </a>
-                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=priceDesc"/>">
-                           <spring:message code="order.low_price"/>
-                        </a>
-                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=priceAsc"/>">
-                           <spring:message code="order.high_price"/>
-                        </a>
-                     </ul>
-                     </ul>
-                  </div>
+                  <jsp:include page="/WEB-INF/views/order_dropdown.jsp">
+                     <jsp:param name="path1" value="/user/experiences?orderBy=rankingAsc"/>
+                     <jsp:param name="path2" value="/user/experiences?orderBy=rankingDesc"/>
+                     <jsp:param name="path3" value="/user/experiences?orderBy=A-Z"/>
+                     <jsp:param name="path4" value="/user/experiences?orderBy=Z-A"/>
+                     <jsp:param name="path5" value="/user/experiences?orderBy=priceDesc"/>
+                     <jsp:param name="path6" value="/user/experiences?orderBy=priceAsc"/>
+                  </jsp:include>
+<%--                  <div class="dropdown">--%>
+<%--                     <button class="btn btn-header dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">--%>
+<%--                        <spring:message code="order.title"/>--%>
+<%--                     </button>--%>
+<%--                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">--%>
+<%--                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=rankingAsc"/>">--%>
+<%--                           <spring:message code="order.rankingAsc"/>--%>
+<%--                        </a>--%>
+<%--                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=rankingDesc"/>">--%>
+<%--                           <spring:message code="order.rankingDesc"/>--%>
+<%--                        </a>--%>
+<%--                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=A-Z"/>">--%>
+<%--                           <spring:message code="order.A_Z"/>--%>
+<%--                        </a>--%>
+<%--                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=Z-A"/>">--%>
+<%--                           <spring:message code="order.Z_A"/>--%>
+<%--                        </a>--%>
+<%--                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=priceDesc"/>">--%>
+<%--                           <spring:message code="order.low_price"/>--%>
+<%--                        </a>--%>
+<%--                        <a  class="dropdown-item" href="<c:url value = "/user/experiences?orderBy=priceAsc"/>">--%>
+<%--                           <spring:message code="order.high_price"/>--%>
+<%--                        </a>--%>
+<%--                     </ul>--%>
+<%--                  </div>--%>
 
                </div>
                <div class="cards container-experiences container-fluid">
