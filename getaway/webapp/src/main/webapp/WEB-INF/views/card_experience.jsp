@@ -10,7 +10,7 @@
               src="<c:url value="/resources/images/${param.categoryName}.jpg" />">
       </c:when>
       <c:otherwise>
-         <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/${param.id}/image'/>" alt="Imagen"/>
+         <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/experiences/${param.id}/image'/>" alt="Imagen"/>
       </c:otherwise>
    </c:choose>
 

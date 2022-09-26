@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> - <spring:message code="createExperience.title"/></title>
+      <title><spring:message code="pageName"/> - <spring:message code="${title}"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 
@@ -15,10 +15,10 @@
 
          <div class="d-flex flex-column justify-content-center mx-5 my-2 p-0">
             <h2 class="text-center font-weight-bold">
-               <spring:message code="createExperience.description"/>
+               <spring:message code="${description}"/>
             </h2>
 
-            <c:url value="/create_experience" var="postPath"/>
+            <c:url value="${endpoint}" var="postPath"/>
             <spring:message code="experienceForm.inputs.placeholder" var="placeholder"/>
             <spring:message code="experienceForm.activityMail.example" var="mailExample"/>
             <spring:message code="experienceForm.activityUrl.example" var="urlExample"/>
@@ -39,10 +39,20 @@
                            <span class="required-field">*</span>
                         </form:label>
                         <form:select path="activityCategory" class="form-select" cssErrorClass="form-control is-invalid">
-                           <option disabled selected value><c:out value="${placeholder}"/></option>
+                           <c:if test="${formCategory == null}">
+                              <option value="" disabled selected hidden><c:out value="${placeholder}"/></option>
+                           </c:if>
                            <c:forEach var="category" items="${categories}">
-                              <option><c:out value="${category}"/></option>
+                              <c:choose>
+                                 <c:when test="${formCategory != null && category == formCategory}">
+                                    <option selected><c:out value="${category}"/></option>
+                                 </c:when>
+                                 <c:otherwise>
+                                    <option><c:out value="${category}"/></option>
+                                 </c:otherwise>
+                              </c:choose>
                            </c:forEach>
+
                         </form:select>
                         <form:errors path="activityCategory" element="p" cssClass="form-error-label"/>
                      </div>
@@ -95,7 +105,7 @@
                         </form:label>
                         <form:select path="activityCountry" id="experienceFormCountryInput" class="form-select" cssErrorClass="form-control is-invalid">
                            <option disabled selected value><c:out value="${placeholder}"/></option>
-                           <option><c:out value="Argentina"/></option>
+                           <option selected><c:out value="Argentina"/></option>
                            <%--                           <c:forEach var="country" items="${countries}">--%>
                            <%--                              <option><c:out value="${country.name}"/></option>--%>
                            <%--                           </c:forEach>--%>
@@ -109,9 +119,18 @@
                         </form:label>
                         <form:select path="activityCity" id="experienceFormCityInput" class="form-select"
                                      cssErrorClass="form-control is-invalid" disabled="true">
-                           <option disabled selected value><c:out value="${placeholder}"/></option>
+                           <c:if test="${formCity == null}">
+                              <option value="" disabled selected hidden><c:out value="${placeholder}"/></option>
+                           </c:if>
                            <c:forEach var="city" items="${cities}">
-                              <option><c:out value="${city.name}"/></option>
+                              <c:choose>
+                                 <c:when test="${formCity != null && city.name == formCity}">
+                                    <option selected><c:out value="${city.name}"/></option>
+                                 </c:when>
+                                 <c:otherwise>
+                                    <option><c:out value="${city.name}"/></option>
+                                 </c:otherwise>
+                              </c:choose>
                            </c:forEach>
                         </form:select>
                         <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
@@ -137,7 +156,7 @@
                </div>
 
                <div class="p-0 mt-3 mb-0 d-flex justify-content-around">
-                  <a href="<c:url value = "/"/>">
+                  <a href="<c:url value="${cancelBtn}"/>">
                      <button class="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
                         <spring:message code="experienceForm.cancel"/>
                      </button>

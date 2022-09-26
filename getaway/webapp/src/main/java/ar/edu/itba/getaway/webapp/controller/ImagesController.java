@@ -22,7 +22,7 @@ public class ImagesController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImagesController.class);
 
     @ResponseBody
-    @RequestMapping(path = "/{experienceId}/image",
+    @RequestMapping(path = "/experiences/{experienceId}/image",
             method = RequestMethod.GET,
             produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
@@ -31,15 +31,13 @@ public class ImagesController {
         return optionalImageModel.getImage();
     }
 
-
-    @RequestMapping(path = "/user/images/profile/{imageId}",
-            method = RequestMethod.GET,
-            produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     @ResponseBody
-    public byte[] getProfileImages(@PathVariable("imageId") long imageId) {
-        LOGGER.info("Accessed /user/images/profile/{} GET controller", imageId);
+    @RequestMapping(value = "/user/profileImage/{imageId}",
+            method = {RequestMethod.GET},
+            produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    public byte[] getUserProfileImage(@PathVariable("imageId") final long imageId){
+        LOGGER.info("Retrieving profileImage {}", imageId);
         ImageModel optionalImageModel = imageService.getImgById(imageId).orElseThrow(ImageNotFoundException::new);
         return optionalImageModel.getImage();
     }
-
 }

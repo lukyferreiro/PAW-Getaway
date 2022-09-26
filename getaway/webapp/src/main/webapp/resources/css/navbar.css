@@ -38,6 +38,12 @@
     margin-left: 40px;
 }*/
 
+.profile-image-btn{
+    height: 100%;
+    width: 100%;
+    object-fit: scale-down;
+}
+
 .container-header-btn {
     margin: 15px 30px 15px auto;
 }

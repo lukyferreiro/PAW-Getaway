@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.exceptions.ReviewNotFoundException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.UserNotFoundException;
@@ -32,7 +33,7 @@ public class UserReviewsController {
         final ModelAndView mav = new ModelAndView("user_reviews");
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        List<ReviewUserModel> reviewList = reviewService.getByUserId(user.getId());
+        final List<ReviewUserModel> reviewList = reviewService.getByUserId(user.getId());
         mav.addObject("reviews", reviewList);
 
         return mav;
@@ -42,7 +43,8 @@ public class UserReviewsController {
     public ModelAndView reviewDelete(@PathVariable("reviewId") final long reviewId,
                                          @ModelAttribute("deleteForm") final DeleteForm form) {
         final ModelAndView mav = new ModelAndView("deleteReview");
-        ReviewModel review = reviewService.getById(reviewId).get();
+//        final ReviewModel review = reviewService.getById(reviewId).get();
+        final ReviewModel review = reviewService.getById(reviewId).orElseThrow(ReviewNotFoundException::new);
 
         mav.addObject("review", review);
         return mav;
@@ -66,7 +68,8 @@ public class UserReviewsController {
         final ModelAndView mav = new ModelAndView("review_edit_form");
 
 
-        ReviewModel review = reviewService.getById(reviewId).get();
+//        final ReviewModel review = reviewService.getById(reviewId).get();
+        final ReviewModel review = reviewService.getById(reviewId).orElseThrow(ReviewNotFoundException::new);
 
         form.setTitle(review.getTitle());
         form.setScore(review.getStringScore());
@@ -89,10 +92,11 @@ public class UserReviewsController {
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final Long userId = user.getId();
 
-        ReviewModel reviewModel = reviewService.getById(reviewId).get();
+//        final ReviewModel review = reviewService.getById(reviewId).get();
+        final ReviewModel review = reviewService.getById(reviewId).orElseThrow(ReviewNotFoundException::new);
 
-        ReviewModel newReviewModel = new ReviewModel(reviewId, form.getTitle(), form.getDescription(),
-                form.getLongScore(),reviewModel.getExperienceId(), Date.from(Instant.now()), userId);
+        final ReviewModel newReviewModel = new ReviewModel(reviewId, form.getTitle(), form.getDescription(),
+                form.getLongScore(),review.getExperienceId(), Date.from(Instant.now()), userId);
 
         reviewService.update(reviewId,newReviewModel);
 

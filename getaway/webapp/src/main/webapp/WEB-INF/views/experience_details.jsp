@@ -55,7 +55,7 @@
                                 src="<c:url value="/resources/images/${experience.categoryName}.jpg" />" >
                         </c:when>
                         <c:otherwise>
-                           <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/${experience.id}/image'/>" alt="Imagen"/>
+                           <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/experiences/${activity.id}/image'/>" alt="Imagen"/>
                         </c:otherwise>
                      </c:choose>
                   </div>

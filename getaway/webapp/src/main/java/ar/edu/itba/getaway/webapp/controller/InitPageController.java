@@ -1,8 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.getaway.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.services.ExperienceService;
 import ar.edu.itba.getaway.services.FavExperienceService;
@@ -22,10 +20,8 @@ public class InitPageController {
 
     @Autowired
     private ExperienceService experienceService;
-
     @Autowired
     private FavExperienceService favExperienceService;
-
     @Autowired
     private UserService userService;
 
@@ -34,34 +30,34 @@ public class InitPageController {
                              @RequestParam Optional<Long> experience,
                              @RequestParam Optional<Boolean> set) {
         final ModelAndView mav = new ModelAndView("mainPage");
-        List<ExperienceModel> experienceList = experienceService.getRandom();
+
+        final List<ExperienceModel> experienceList = experienceService.getRandom();
 
         List<Long> avgReviews = new ArrayList<>();
-        for(ExperienceModel exp : experienceList){
+        for (ExperienceModel exp : experienceList) {
             avgReviews.add(experienceService.getAvgReviews(exp.getId()).get());
         }
 
-        if(principal!=null){
+        if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
 
-            if(user.isPresent()){
+            if (user.isPresent()) {
                 final long userId = user.get().getId();
                 List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
 
-                if(set.isPresent() && experience.isPresent()){
-                    if(set.get()) {
-                        if(!favExperienceModels.contains(experience.get()))
+                if (set.isPresent() && experience.isPresent()) {
+                    if (set.get()) {
+                        if (!favExperienceModels.contains(experience.get()))
                             favExperienceService.create(userId, experience.get());
-                    }
-                    else{
+                    } else {
                         favExperienceService.delete(userId, experience.get());
                     }
                 }
 
-                favExperienceModels = favExperienceService.listByUserId(userId);
+//                favExperienceModels = favExperienceService.listByUserId(userId);
                 mav.addObject("favExperienceModels", favExperienceModels);
                 mav.addObject("loggedUser", true);
-            }else {
+            } else {
                 mav.addObject("loggedUser", false);
                 mav.addObject("favExperienceModels", new ArrayList<>());
             }
