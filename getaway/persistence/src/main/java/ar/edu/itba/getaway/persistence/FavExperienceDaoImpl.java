@@ -41,8 +41,7 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
         final Map<String, Object> favExperienceData = new HashMap<>();
         favExperienceData.put("userId", userId);
         favExperienceData.put("experienceId", experienceId);
-        System.out.println(userId);
-        System.out.println(experienceId);
+
         LOGGER.info("Setting experience as fav");
 
         jdbcInsert.execute(favExperienceData);

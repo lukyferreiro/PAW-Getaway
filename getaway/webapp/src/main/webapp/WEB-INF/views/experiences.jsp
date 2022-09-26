@@ -91,23 +91,29 @@
                               </c:if>
                            </c:forEach>
 
-                           <form:form modelAttribute="favExperienceForm" action="${postPath}" id="favExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
-                              <form:input value="${experience.id}" path="experienceId" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="setExpId"/>
-                              <form:label path="favExp" class="form-label"/>
-                              <c:choose>
+<%--                           <c:url value="/experiences/${categoryName}/${experience.id}" var="postPathFav"/>--%>
+<%--                           <form:form modelAttribute="favExperienceForm" action="${postPathFav}" id="favExperienceForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">--%>
+<%--                              <form:input value="${experience.id}" path="experienceId" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="setExpId"/>--%>
+<%--                              <form:label path="favExp" class="form-label"/>--%>
+
+                           <c:choose>
                                  <c:when test="${fav}">
-                                    <button type="submit" class="btn" id="submitForm" form="favExperienceForm">
-                                       <i class="fas fa-star star-color"></i>
-                                    </button>
+                                    <a href="<c:url value = "/experiences/${categoryName}?experience=${experience.id}&set=${false}"/>">
+                                       <button type="button" class="btn" id="setFalse">
+                                          <i class="fas fa-star star-color"></i>
+                                       </button>
+                                    </a>
                                  </c:when>
                                  <c:otherwise>
-                                    <button type="submit" class="btn" id="submitForm" form="favExperienceForm">
-                                       <i class="fas fa-star"></i>
-                                    </button>
+                                    <a href="<c:url value = "/experiences/${categoryName}?experience=${experience.id}&set=${true}"/>">
+                                       <button type="button" class="btn" id="setTrue">
+                                          <i class="fas fa-star"></i>
+                                       </button>
+                                    </a>
                                  </c:otherwise>
                               </c:choose>
                               <form:input value="${!fav}" path="favExp" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="setFav"/>
-                           </form:form>
+<%--                           </form:form>--%>
                         </div>
 
                      <a class="card-link" href="<c:url value="${experience.categoryName}/${experience.id}"/>">
