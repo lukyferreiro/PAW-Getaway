@@ -57,17 +57,6 @@
                      </div>
                   </div>
 
-<%--                                 <div class="p-0 m-2 d-flex flex-column"> <!--Tags-->--%>
-<%--                                   <form:label path="activityTags" class="form-label"><spring:message code="experienceForm.activityTags"/></form:label>--%>
-<%--                                   <form:input list="tagOptions" class="form-control" path="activityTags" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>--%>
-<%--                                   <datalist id="tagOptions">--%>
-<%--                                     <c:forEach var="tag" items="${tags}">--%>
-<%--                                     <option value="${tag.name}">--%>
-<%--                                       </c:forEach>--%>
-<%--                                   </datalist>--%>
-<%--                                   <form:errors path="activityTags" element="p" cssClass="form-error-label"/>--%>
-<%--                                 </div>--%>
-
                   <div class="p-0 m-2 d-flex flex-column"> <!--Descripcion-->
                      <form:label path="activityInfo" class="form-label">
                         <spring:message code="experienceForm.activityInfo"/>
@@ -107,9 +96,9 @@
                         <form:select path="activityCountry" id="experienceFormCountryInput" class="form-select" cssErrorClass="form-control is-invalid">
                            <option disabled selected value><c:out value="${placeholder}"/></option>
                            <option><c:out value="Argentina"/></option>
-<%--                           <c:forEach var="country" items="${countries}">--%>
-<%--                              <option><c:out value="${country.name}"/></option>--%>
-<%--                           </c:forEach>--%>
+                           <%--                           <c:forEach var="country" items="${countries}">--%>
+                           <%--                              <option><c:out value="${country.name}"/></option>--%>
+                           <%--                           </c:forEach>--%>
                         </form:select>
                         <form:errors path="activityCountry" element="p" cssClass="form-error-label"/>
                      </div>
