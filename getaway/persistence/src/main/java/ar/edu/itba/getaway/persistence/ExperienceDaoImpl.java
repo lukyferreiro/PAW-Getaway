@@ -185,6 +185,67 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
+    public List<ExperienceModel> getByUserIdOrderByRankingDesc(long id) {
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.userid = ?  GROUP BY experiences.experienceid ORDER BY avg(score) DESC", new Object[]{id}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public List<ExperienceModel> getByUserIdOrderByRankingAsc(long id) {
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.userid = ?  GROUP BY experiences.experienceid ORDER BY avg(score) ASC", new Object[]{id}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public List<ExperienceModel> getByUserIdOrderByNameAsc(long id) {
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences WHERE experiences.userid = ? ORDER BY experienceName", new Object[]{id}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public List<ExperienceModel> getByUserIdOrderByPriceDesc(long id) {
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences WHERE experiences.userid = ? ORDER BY price DESC", new Object[]{id}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public List<ExperienceModel> getByUserIdOrderByPriceAsc(long id) {
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences WHERE experiences.userid = ? ORDER BY price", new Object[]{id}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public List<ExperienceModel> getByUserIdOrderByNameDesc(long id) {
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences WHERE experiences.userid = ? ORDER BY experienceName DESC", new Object[]{id}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+
+    @Override
+    public List<ExperienceModel> getOrderByRankingDesc() {
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid GROUP BY experiences.experienceid ORDER BY avg(score) DESC", new Object[]{}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public List<ExperienceModel> getOrderByRankingAsc() {
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid  GROUP BY experiences.experienceid ORDER BY avg(score) ASC", new Object[]{}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public List<ExperienceModel> getOrderByNameDesc() {
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences ORDER BY experienceName DESC", new Object[]{}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public List<ExperienceModel> getOrderByNameAsc() {
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences ORDER BY experienceName", new Object[]{}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public List<ExperienceModel> getOrderByPriceDesc() {
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences ORDER BY price DESC", new Object[]{}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public List<ExperienceModel> getOrderByPriceAsc() {
+        return jdbcTemplate.query("SELECT experienceId, experienceName, address, description, siteUrl, price, cityId, categoryId, userId, hasImage FROM experiences ORDER BY price", new Object[]{}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
     public List<ExperienceModel> listByCategoryCityAndScore(long categoryId, long cityId, long score) {
         return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, siteUrl, price, cityId, categoryId, experiences.userId, hasImage FROM experiences JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND cityid = ? GROUP BY experiences.experienceid HAVING AVG(score)>=? ",
                 new Object[]{categoryId, cityId, score}, EXPERIENCE_MODEL_ROW_MAPPER);
