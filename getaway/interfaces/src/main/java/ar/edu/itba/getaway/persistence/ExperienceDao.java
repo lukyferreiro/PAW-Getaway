@@ -23,17 +23,10 @@ public interface ExperienceDao {
     List<ExperienceModel> listByCategoryCityAndScore (long categoryId, long cityId, long score);
     List<ExperienceModel> listByCategoryPriceAndScore (long categoryId, Double max, long score);
     List<ExperienceModel> listByCategoryAndScore (long categoryId, long score);
-    List<ExperienceModel> getByUserIdOrderByRankingDesc(long id);
-    List<ExperienceModel> getByUserIdOrderByRankingAsc(long id);
-    List<ExperienceModel> getByUserIdOrderByNameDesc(long id);
-    List<ExperienceModel> getByUserIdOrderByNameAsc(long id);
-    List<ExperienceModel> getByUserIdOrderByPriceDesc(long id);
-    List<ExperienceModel> getByUserIdOrderByPriceAsc(long id);
-    List<ExperienceModel> getOrderByRankingDesc();
-    List<ExperienceModel> getOrderByRankingAsc();
-    List<ExperienceModel> getOrderByNameDesc();
-    List<ExperienceModel> getOrderByNameAsc();
-    List<ExperienceModel> getOrderByPriceDesc();
-    List<ExperienceModel> getOrderByPriceAsc();
+    List<ExperienceModel> getByUserIdOrderBy(long id, String order);
+    List<ExperienceModel> getByUserIdOrderByDesc(long id, String order);
+    List<ExperienceModel> getOrderByDesc(String order);
+    List<ExperienceModel> getOrderBy(String order);
+
 
 }

@@ -131,62 +131,24 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<ExperienceModel> getByUserIdOrderByRankingDesc(long id) {
-        return experienceDao.getByUserIdOrderByRankingDesc(id);
+    public List<ExperienceModel> getByUserIdOrderBy(long id, String order) {
+        return experienceDao.getByUserIdOrderBy(id,order);
     }
 
     @Override
-    public List<ExperienceModel> getByUserIdOrderByRankingAsc(long id) {
-        return experienceDao.getByUserIdOrderByRankingAsc(id);
+    public List<ExperienceModel> getByUserIdOrderByDesc(long id, String order) {
+        return experienceDao.getByUserIdOrderByDesc(id,order);
     }
 
     @Override
-    public List<ExperienceModel> getByUserIdOrderByNameDesc(long id) {
-        return experienceDao.getByUserIdOrderByNameDesc(id);
+    public List<ExperienceModel> getOrderByDesc(String order) {
+        return experienceDao.getOrderByDesc(order);
     }
 
     @Override
-    public List<ExperienceModel> getByUserIdOrderByNameAsc(long id) {
-        return experienceDao.getByUserIdOrderByNameAsc(id);
+    public List<ExperienceModel> getOrderBy(String order) {
+        return experienceDao.getOrderBy(order);
     }
 
-    @Override
-    public List<ExperienceModel> getByUserIdOrderByPriceDesc(long id) {
-        return experienceDao.getByUserIdOrderByPriceDesc(id);
-    }
 
-    @Override
-    public List<ExperienceModel> getByUserIdOrderByPriceAsc(long id) {
-        return experienceDao.getByUserIdOrderByPriceAsc(id);
-    }
-
-    @Override
-    public List<ExperienceModel> getOrderByRankingDesc() {
-        return experienceDao.getOrderByRankingDesc();
-    }
-
-    @Override
-    public List<ExperienceModel> getOrderByRankingAsc() {
-        return experienceDao.getOrderByRankingAsc();
-    }
-
-    @Override
-    public List<ExperienceModel> getOrderByNameDesc() {
-        return experienceDao.getOrderByNameDesc();
-    }
-
-    @Override
-    public List<ExperienceModel> getOrderByNameAsc() {
-        return experienceDao.getOrderByNameAsc();
-    }
-
-    @Override
-    public List<ExperienceModel> getOrderByPriceDesc() {
-        return experienceDao.getOrderByPriceDesc();
-    }
-
-    @Override
-    public List<ExperienceModel> getOrderByPriceAsc() {
-        return experienceDao.getOrderByPriceAsc();
-    }
 }

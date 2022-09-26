@@ -22,12 +22,12 @@
                <div>
                   <h2 class="title"><spring:message code="experience.title"/></h2>
                   <jsp:include page="/WEB-INF/views/order_dropdown.jsp">
-                     <jsp:param name="path1" value="/user/experiences?orderBy=rankingAsc"/>
-                     <jsp:param name="path2" value="/user/experiences?orderBy=rankingDesc"/>
-                     <jsp:param name="path3" value="/user/experiences?orderBy=A-Z"/>
-                     <jsp:param name="path4" value="/user/experiences?orderBy=Z-A"/>
-                     <jsp:param name="path5" value="/user/experiences?orderBy=priceDesc"/>
-                     <jsp:param name="path6" value="/user/experiences?orderBy=priceAsc"/>
+                     <jsp:param name="path1" value="/user/experiences?orderBy=avg(score)&direction=asc"/>
+                     <jsp:param name="path2" value="/user/experiences?orderBy=avg(score)&direction=desc"/>
+                     <jsp:param name="path3" value="/user/experiences?orderBy=experienceName&direction=asc"/>
+                     <jsp:param name="path4" value="/user/experiences?orderBy=experienceName&direction=desc"/>
+                     <jsp:param name="path5" value="/user/experiences?orderBy=price&direction=desc"/>
+                     <jsp:param name="path6" value="/user/experiences?orderBy=price&direction=asc"/>
                   </jsp:include>
 
                </div>
