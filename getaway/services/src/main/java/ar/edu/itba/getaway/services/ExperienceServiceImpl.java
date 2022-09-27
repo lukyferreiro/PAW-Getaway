@@ -52,9 +52,9 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<ExperienceModel> listAll() {
+    public List<ExperienceModel> listAll(String order) {
         LOGGER.debug("Retrieving all experiences");
-        return experienceDao.listAll();
+        return experienceDao.listAll(order);
     }
 
     @Override
@@ -71,9 +71,9 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<ExperienceModel> getByUserId(long userId) {
+    public List<ExperienceModel> listByUserId(long userId, String order) {
         LOGGER.debug("Retrieving experiences created by user with id {}", userId);
-        return experienceDao.getByUserId(userId);
+        return experienceDao.listByUserId(userId, order);
     }
 
     @Override
@@ -82,54 +82,34 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getAvgReviews(experienceId);
     }
 
+//    @Override
+//    public List<ExperienceModel> getByUserIdOrderBy(long id, String order) {
+//        return experienceDao.getByUserIdOrderBy(id,order);
+//    }
+//
+//    @Override
+//    public List<ExperienceModel> getByUserIdOrderByDesc(long id, String order) {
+//        return experienceDao.getByUserIdOrderByDesc(id,order);
+//    }
+//
+//    @Override
+//    public List<ExperienceModel> getOrderByDesc(String order) {
+//        return experienceDao.getOrderByDesc(order);
+//    }
+//
+//    @Override
+//    public List<ExperienceModel> getOrderBy(String order) {
+//        return experienceDao.getOrderBy(order);
+//    }
+
     @Override
-    public List<ExperienceModel> getByUserIdOrderBy(long id, String order) {
-        return experienceDao.getByUserIdOrderBy(id,order);
+    public List<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score, String order) {
+        return experienceDao.listByFilterWithCity(categoryId, max, cityId, score, order);
     }
 
     @Override
-    public List<ExperienceModel> getByUserIdOrderByDesc(long id, String order) {
-        return experienceDao.getByUserIdOrderByDesc(id,order);
-    }
-
-    @Override
-    public List<ExperienceModel> getOrderByDesc(String order) {
-        return experienceDao.getOrderByDesc(order);
-    }
-
-    @Override
-    public List<ExperienceModel> getOrderBy(String order) {
-        return experienceDao.getOrderBy(order);
-    }
-
-    @Override
-    public List<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score) {
-        return experienceDao.listByFilterWithCity(categoryId, max, cityId, score);
-    }
-
-    @Override
-    public List<ExperienceModel> listByFilterWithCityAsc(long categoryId, Double max, long cityId, long score, String order) {
-        return experienceDao.listByFilterWithCityAsc(categoryId, max, cityId, score, order);
-    }
-
-    @Override
-    public List<ExperienceModel> listByFilterWithCityDesc(long categoryId, Double max, long cityId, long score, String order) {
-        return experienceDao.listByFilterWithCityDesc(categoryId, max, cityId, score, order);
-    }
-
-    @Override
-    public List<ExperienceModel> listByFilter(long categoryId, Double max, long score) {
-        return experienceDao.listByFilter(categoryId, max, score);
-    }
-
-    @Override
-    public List<ExperienceModel> listByFilterAsc(long categoryId, Double max, long score, String order) {
-        return experienceDao.listByFilterAsc(categoryId, max, score, order);
-    }
-
-    @Override
-    public List<ExperienceModel> listByFilterDesc(long categoryId, Double max, long score, String order) {
-        return experienceDao.listByFilterDesc(categoryId, max, score, order);
+    public List<ExperienceModel> listByFilter(long categoryId, Double max, long score, String order) {
+        return experienceDao.listByFilter(categoryId, max, score, order);
     }
 
     @Override

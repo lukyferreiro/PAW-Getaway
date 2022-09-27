@@ -3,7 +3,6 @@ package ar.edu.itba.getaway.webapp.controller;
 import ar.edu.itba.getaway.exceptions.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.webapp.controller.forms.ExperienceFormController;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.slf4j.Logger;
@@ -61,17 +60,11 @@ public class UserExperiencesController {
         mav.addObject("favExperienceModels", favExperienceModels);
 
         List<ExperienceModel> experienceList = new ArrayList<>();
-        if (orderBy.isPresent()) {
-            if (direction.isPresent()) {
-                if (direction.get().equals("asc")) {
-                    experienceList = experienceService.getOrderBy(orderBy.get());
-                } else {
-                    experienceList = experienceService.getOrderByDesc(orderBy.get());
-                }
-            }
-        } else {
-            experienceList = experienceService.listAll();
-        }
+        String order = "";
+        if (orderBy.isPresent())
+            order = " ORDER BY " +orderBy.get() + " " +direction.get();
+
+        experienceList = experienceService.listAll(order);
 
         final List<Long> avgReviews = new ArrayList<>();
         for (ExperienceModel exp : experienceList) {
@@ -100,17 +93,12 @@ public class UserExperiencesController {
 
         List<ExperienceModel> experienceList = new ArrayList<>();
 
-        if (orderBy.isPresent()) {
-            if (direction.isPresent()) {
-                if (direction.get().equals("asc")) {
-                    experienceList = experienceService.getByUserIdOrderBy(user.getId(), orderBy.get());
-                } else {
-                    experienceList = experienceService.getByUserIdOrderByDesc(user.getId(), orderBy.get());
-                }
-            }
-        } else {
-            experienceList = experienceService.getByUserId(user.getId());
-        }
+        String order = "";
+        if (orderBy.isPresent())
+            order = " ORDER BY " +orderBy.get() + " " +direction.get();
+
+        experienceList = experienceService.listByUserId(user.getId(), order);
+
 
         final List<Long> avgReviews = new ArrayList<>();
 

@@ -73,27 +73,16 @@ public class ExperienceController {
         if (score.isPresent() && score.get() != -1) {
             scoreVal = score.get();
         }
+        String order = "";
+
+        if (orderBy.isPresent()) {
+            order = " ORDER BY " + orderBy.get() + " " + direction.get();
+        }
 
         if (cityId.isPresent()) {
-            if (orderBy.isPresent()) {
-                if (direction.get().equals("asc")) {
-                    experienceList = experienceService.listByFilterWithCityAsc(id, max, cityId.get(), scoreVal, orderBy.get());
-                } else {
-                    experienceList = experienceService.listByFilterWithCityDesc(id, max, cityId.get(), scoreVal, orderBy.get());
-                }
-            } else {
-                experienceList = experienceService.listByFilterWithCity(id, max, cityId.get(), scoreVal);
-            }
+            experienceList = experienceService.listByFilterWithCity(id, max, cityId.get(), scoreVal, order);
         } else {
-            if (orderBy.isPresent()) {
-                if (direction.get().equals("asc")) {
-                    experienceList = experienceService.listByFilterAsc(id, max, scoreVal, orderBy.get());
-                } else {
-                    experienceList = experienceService.listByFilterDesc(id, max, scoreVal, orderBy.get());
-                }
-            } else {
-                experienceList = experienceService.listByFilter(id, max, scoreVal);
-            }
+            experienceList = experienceService.listByFilter(id, max, scoreVal, order);
         }
 
         if (principal != null) {

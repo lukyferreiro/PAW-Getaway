@@ -167,7 +167,7 @@
 //
 //    @Test
 //    public void testGetByUserId() {
-//        List<ExperienceModel> experienceModelList = experienceDao.getByUserId(1);
+//        List<ExperienceModel> experienceModelList = experienceDao.listByUserId(1);
 //        assertFalse(experienceModelList.isEmpty());
 //
 //        //User 1 experiences

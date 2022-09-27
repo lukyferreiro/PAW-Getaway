@@ -124,8 +124,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listAll() {
-        final String query = "SELECT * FROM experiences";
+    public List<ExperienceModel> listAll(String order) {
+        final String query = "SELECT * FROM experiences" + order;
         LOGGER.debug("Executing query: {}", query);
         return new ArrayList<>(jdbcTemplate.query(query, EXPERIENCE_MODEL_ROW_MAPPER));
     }
@@ -150,8 +150,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> getByUserId(long userId) {
-        final String query = "SELECT * FROM experiences WHERE userid = ?";
+    public List<ExperienceModel> listByUserId(long userId, String order) {
+        final String query = "SELECT * FROM experiences WHERE userid = ?" + order;
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
@@ -165,27 +165,27 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
 
-    @Override
-    public List<ExperienceModel> getByUserIdOrderBy(long id, String order) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.userid = ?  GROUP BY experiences.experienceid ORDER BY ? ", new Object[]{id, order }, EXPERIENCE_MODEL_ROW_MAPPER);
-    }
-
-
-    @Override
-    public List<ExperienceModel> getByUserIdOrderByDesc(long id, String order) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.userid = ?  GROUP BY experiences.experienceid ORDER BY ? DESC ", new Object[]{id, order }, EXPERIENCE_MODEL_ROW_MAPPER);
-    }
-
-
-    @Override
-    public List<ExperienceModel> getOrderByDesc(String order) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid GROUP BY experiences.experienceid ORDER BY ? DESC", new Object[]{order}, EXPERIENCE_MODEL_ROW_MAPPER);
-    }
-
-    @Override
-    public List<ExperienceModel> getOrderBy(String order) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid  GROUP BY experiences.experienceid ORDER BY ?", new Object[]{order}, EXPERIENCE_MODEL_ROW_MAPPER);
-    }
+//    @Override
+//    public List<ExperienceModel> getByUserIdOrderBy(long id, String order) {
+//        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.userid = ?  GROUP BY experiences.experienceid ORDER BY ? ", new Object[]{id, order }, EXPERIENCE_MODEL_ROW_MAPPER);
+//    }
+//
+//
+//    @Override
+//    public List<ExperienceModel> getByUserIdOrderByDesc(long id, String order) {
+//        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.userid = ?  GROUP BY experiences.experienceid ORDER BY ? DESC ", new Object[]{id, order }, EXPERIENCE_MODEL_ROW_MAPPER);
+//    }
+//
+//
+//    @Override
+//    public List<ExperienceModel> getOrderByDesc(String order) {
+//        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid GROUP BY experiences.experienceid ORDER BY ? DESC", new Object[]{order}, EXPERIENCE_MODEL_ROW_MAPPER);
+//    }
+//
+//    @Override
+//    public List<ExperienceModel> getOrderBy(String order) {
+//        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid  GROUP BY experiences.experienceid ORDER BY ?", new Object[]{order}, EXPERIENCE_MODEL_ROW_MAPPER);
+//    }
 
 
     @Override
@@ -195,38 +195,15 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
 
     @Override
-    public List<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityid = ? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=? ",
+    public List<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score , String order) {
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityid = ? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=?" + order,
                 new Object[]{categoryId, max, cityId, score}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public List<ExperienceModel> listByFilterWithCityAsc(long categoryId, Double max, long cityId, long score, String order) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityid = ? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=? ORDER BY ? ",
-                new Object[]{categoryId, max, cityId, score, order}, EXPERIENCE_MODEL_ROW_MAPPER);
-    }
-
-    @Override
-    public List<ExperienceModel> listByFilterWithCityDesc(long categoryId, Double max, long cityId, long score, String order) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityid = ? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=? ORDER BY ? DESC",
-                new Object[]{categoryId, max, cityId, score, order}, EXPERIENCE_MODEL_ROW_MAPPER);
-    }
-
-    @Override
-    public List<ExperienceModel> listByFilter(long categoryId, Double max, long score) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=? ",
+    public List<ExperienceModel> listByFilter(long categoryId, Double max, long score, String order) {
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=?" + order,
                 new Object[]{categoryId, max, score}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
-    @Override
-    public List<ExperienceModel> listByFilterAsc(long categoryId, Double max, long score, String order) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=? ORDER BY ?",
-                new Object[]{categoryId, max, score, order}, EXPERIENCE_MODEL_ROW_MAPPER);
-    }
-
-    @Override
-    public List<ExperienceModel> listByFilterDesc(long categoryId, Double max, long score, String order) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=? ORDER BY ? DESC",
-                new Object[]{categoryId, max, score, order}, EXPERIENCE_MODEL_ROW_MAPPER);
-    }
 }

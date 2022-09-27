@@ -81,12 +81,12 @@
             </div>
 
             <jsp:include page="/WEB-INF/views/order_dropdown.jsp">
-               <jsp:param name="path1" value="/experiences/{categoryName}?orderBy=avg(score)&direction=asc"/>
-               <jsp:param name="path2" value="/experiences/{categoryName}?orderBy=avg(score)&direction=desc"/>
-               <jsp:param name="path3" value="/experiences/{categoryName}?orderBy=experienceName&direction=asc"/>
-               <jsp:param name="path4" value="/experiences/{categoryName}?orderBy=experienceName&direction=desc"/>
-               <jsp:param name="path5" value="/experiences/{categoryName}?orderBy=price&direction=desc"/>
-               <jsp:param name="path6" value="/experiences/{categoryName}?orderBy=price&direction=asc"/>
+               <jsp:param name="path1" value="/experiences/${categoryName}?orderBy=avg(score)&direction=asc"/>
+               <jsp:param name="path2" value="/experiences/${categoryName}?orderBy=avg(score)&direction=desc"/>
+               <jsp:param name="path3" value="/experiences/${categoryName}?orderBy=experienceName&direction=asc"/>
+               <jsp:param name="path4" value="/experiences/${categoryName}?orderBy=experienceName&direction=desc"/>
+               <jsp:param name="path5" value="/experiences/${categoryName}?orderBy=price&direction=desc"/>
+               <jsp:param name="path6" value="/experiences/${categoryName}?orderBy=price&direction=asc"/>
             </jsp:include>
 
 
