@@ -31,11 +31,12 @@ public class InitPageController {
                              @RequestParam Optional<Boolean> set) {
         final ModelAndView mav = new ModelAndView("mainPage");
 
-        final List<ExperienceModel> experienceList = experienceService.getRandom();
+//        final List<ExperienceModel> experienceList = experienceService.getRandom();
+        final List<ExperienceModel> experienceList = experienceService.listAll();
 
         List<Long> avgReviews = new ArrayList<>();
         for (ExperienceModel exp : experienceList) {
-            avgReviews.add(experienceService.getAvgReviews(exp.getId()).get());
+            avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
         }
 
         if (principal != null) {
@@ -56,9 +57,9 @@ public class InitPageController {
 
 //                favExperienceModels = favExperienceService.listByUserId(userId);
                 mav.addObject("favExperienceModels", favExperienceModels);
-                mav.addObject("loggedUser", true);
+//                mav.addObject("loggedUser", true);
             } else {
-                mav.addObject("loggedUser", false);
+//                mav.addObject("loggedUser", false);
                 mav.addObject("favExperienceModels", new ArrayList<>());
             }
 

@@ -4,7 +4,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> - <c:out value="${experience.name}"/></title>
+      <title><spring:message code="pageName"/> - <c:out value="${experience.experienceName}"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 
@@ -16,27 +16,27 @@
             <div class="card mx-5 my-3 p-4">
                <div class="card-title d-flex justify-content-center align-content-center">
                   <h1>
-                     <c:out value="${experience.name}"/>
+                     <c:out value="${experience.experienceName}"/>
                   </h1>
 
-                  <c:if test="${loggedUser}">
+                  <c:if test="${loggedUser != null}">
                      <c:set var = "fav" value = "${false}"/>
                      <c:forEach var="favExperience" items="${favExperienceModels}">
-                        <c:if test="${favExperience == experience.id}">
+                        <c:if test="${favExperience == experience.experienceId}">
                            <c:set var = "fav"  value = "${true}"/>
                         </c:if>
                      </c:forEach>
 
                      <c:choose>
                         <c:when test="${fav}">
-                           <a href="<c:url value = "/experiences/${categoryName}/${experience.id}?set=${false}"/>">
+                           <a href="<c:url value = "/experiences/${categoryName}/${experience.experienceId}?set=${false}"/>">
                               <button type="button" class="btn" id="setFalse">
                                  <i class="fas fa-heart heart-color big"></i>
                               </button>
                            </a>
                         </c:when>
                         <c:otherwise>
-                           <a href="<c:url value = "/experiences/${categoryName}/${experience.id}?set=${true}"/>">
+                           <a href="<c:url value = "/experiences/${categoryName}/${experience.experienceId}?set=${true}"/>">
                               <button type="button" class="btn" id="setTrue">
                                  <i class="fas fa-heart big"></i>
                               </button>
@@ -50,12 +50,12 @@
                <div class="d-flex flex-wrap justify-content-center align-content-center">
                   <div class="p-2" style="width: 600px;">
                      <c:choose>
-                        <c:when test="${experience.hasImage == false}">
-                           <img class="container-fluid p-0" style="height: fit-content" alt="Imagen ${experience.categoryName}"
-                                src="<c:url value="/resources/images/${experience.categoryName}.jpg" />" >
+                        <c:when test="${experience.hasImage}">
+                           <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/experiences/${experience.experienceId}/image'/>" alt="Imagen"/>
                         </c:when>
                         <c:otherwise>
-                           <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/experiences/${activity.id}/image'/>" alt="Imagen"/>
+                           <img class="container-fluid p-0" style="height: fit-content" alt="Imagen ${experience.categoryName}"
+                                src="<c:url value="/resources/images/${experience.categoryName}.jpg" />" >
                         </c:otherwise>
                      </c:choose>
                   </div>
@@ -68,6 +68,7 @@
                                  <spring:message code="experienceDetail.address"/>
                               </h5>
                               <p class="information-text">
+<%--                                 TODO CAMBIAR ESTO PORQUE SEGUN SOTUYO ESTA MAL CONCATENAR STRINGS--%>
                                  <c:out value="${experience.address}"/>, <c:out value="${countryCity}"/>
                               </p>
                            </div>
@@ -125,10 +126,14 @@
                                  </c:otherwise>
                               </c:choose>
                            </div>
-                           <!-- TODO -->
-<%--                           <div> <!-- Email de contacto -->--%>
-<%--                              --%>
-<%--                           </div>--%>
+                           <div> <!-- Email de contacto -->
+                              <h5 class="information-title">
+                                 <spring:message code="experienceDetail.email"/>
+                              </h5>
+                              <p class="information-text">
+                                 <c:out value="${experience.email}"/>
+                              </p>
+                           </div>
                            <jsp:include page="/WEB-INF/views/star_avg.jsp">
                               <jsp:param name="avgReview" value="${reviewAvg}"/>
                            </jsp:include>
@@ -143,7 +148,7 @@
                   <h2 class="align-self-center">
                      <spring:message code="review.start"/>
                   </h2>
-                  <a href="<c:url value = "/experiences/${experience.categoryName}/${experience.id}/create_review"/>">
+                  <a href="<c:url value = "/experiences/${experience.categoryName}/${experience.experienceId}/create_review"/>">
                      <button type="button" class="btn btn-create-review">
                         <spring:message code="review.createReview"/>
                      </button>

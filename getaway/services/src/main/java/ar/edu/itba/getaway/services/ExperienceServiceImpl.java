@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.services;
 
+import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.persistence.ExperienceDao;
 import org.slf4j.Logger;
@@ -7,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,21 +21,21 @@ public class ExperienceServiceImpl implements ExperienceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 
     @Override
-    public ExperienceModel create(String name, String address, String description, String url, Double price, long cityId, long categoryId, long userId, boolean hasImage) {
+    public ExperienceModel create(String name, String address, String description, String email, String url, Double price, long cityId, long categoryId, long userId, byte[] image) throws DuplicateImageException {
         LOGGER.debug("Creating experience with name {}", name);
-        ExperienceModel experienceModel = experienceDao.create(name, address, description, url, price, cityId, categoryId, userId, hasImage);
-        LOGGER.debug("Created experience with id {}", experienceModel.getId());
+        ExperienceModel experienceModel = experienceDao.create(name, address, description, email, url, price, cityId, categoryId, userId, image);
+        LOGGER.debug("Created experience with id {}", experienceModel.getExperienceId());
         return experienceModel;
     }
 
     @Override
-    public boolean update(long experienceId, ExperienceModel experienceModel) {
-        LOGGER.debug("Updating experience with id {}", experienceId);
-        if(experienceDao.update(experienceId, experienceModel)){
-            LOGGER.debug("Experience {} updated", experienceId);
+    public boolean update(ExperienceModel experienceModel, byte[] image) {
+        LOGGER.debug("Updating experience with id {}", experienceModel.getExperienceId());
+        if(experienceDao.update(experienceModel, image)){
+            LOGGER.debug("Experience {} updated", experienceModel.getExperienceId());
             return true;
         } else {
-            LOGGER.warn("Experience {} NOT updated", experienceId);
+            LOGGER.warn("Experience {} NOT updated", experienceModel.getExperienceId());
             return false;
         }
     }
@@ -86,11 +88,11 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.listByCategoryPriceAndCity(categoryId, max, cityId);
     }
 
-    @Override
-    public List<ExperienceModel> getRandom() {
-        LOGGER.debug("Retrieving random experiences");
-        return experienceDao.getRandom();
-    }
+//    @Override
+//    public List<ExperienceModel> getRandom() {
+//        LOGGER.debug("Retrieving random experiences");
+//        return experienceDao.getRandom();
+//    }
 
     @Override
     public String getCountryCity(long experienceId) {
@@ -112,21 +114,21 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     public List<ExperienceModel> listByCategoryPriceCityAndScore(long categoryId, Double max, long cityId, long score) {
-        return experienceDao.listByCategoryPriceCityAndScore( categoryId,  max,  cityId,  score);
+        return experienceDao.listByCategoryPriceCityAndScore(categoryId, max, cityId, score);
     }
 
     @Override
     public List<ExperienceModel> listByCategoryCityAndScore(long categoryId, long cityId, long score) {
-        return experienceDao.listByCategoryCityAndScore( categoryId,  cityId,  score);
+        return experienceDao.listByCategoryCityAndScore(categoryId, cityId, score);
     }
 
     @Override
     public List<ExperienceModel> listByCategoryPriceAndScore(long categoryId, Double max, long score) {
-        return experienceDao.listByCategoryPriceAndScore( categoryId,  max,  score);
+        return experienceDao.listByCategoryPriceAndScore(categoryId, max, score);
     }
 
     @Override
     public List<ExperienceModel> listByCategoryAndScore(long categoryId, long score) {
-        return experienceDao.listByCategoryAndScore( categoryId,  score);
+        return experienceDao.listByCategoryAndScore(categoryId, score);
     }
 }

@@ -56,7 +56,7 @@ public class UserExperiencesController {
         final List<ExperienceModel> experienceList = experienceService.listAll();
         final List<Long> avgReviews = new ArrayList<>();
         for(ExperienceModel exp : experienceList){
-            avgReviews.add(experienceService.getAvgReviews(exp.getId()).get());
+            avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
         }
 
         mav.addObject("experiences", experienceList);
@@ -80,7 +80,7 @@ public class UserExperiencesController {
         final List<ExperienceModel> experienceList = experienceService.getByUserId(user.getId());
         final List<Long> avgReviews = new ArrayList<>();
         for(ExperienceModel exp : experienceList){
-            avgReviews.add(experienceService.getAvgReviews(exp.getId()).get());
+            avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
         }
 
         mav.addObject("experiences", experienceList);
@@ -137,7 +137,7 @@ public class UserExperiencesController {
         //experiencia otra vez :(
 
         if(form == null){
-            form.setActivityName(experience.getName());
+            form.setActivityName(experience.getExperienceName());
             if(experience.getPrice() != null){
                 form.setActivityPrice(experience.getPrice().toString());
             }
@@ -156,7 +156,7 @@ public class UserExperiencesController {
             form.setActivityAddress(form.getActivityAddress());
         }
 
-        final String endpoint = "/user/experiences/edit/" + experience.getId();
+        final String endpoint = "/user/experiences/edit/" + experience.getExperienceId();
 
         mav.addObject("title", "editExperience.title");
         mav.addObject("description", "editExperience.description");
@@ -190,41 +190,34 @@ public class UserExperiencesController {
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final long userId = experience.getUserId();
 
-        //TODO estar haciendo esto no mg nada, la logica de si se debe crear una imagen
-        //o no deberia estar en los services /daos
-        final MultipartFile activityImg = form.getActivityImg();
-        boolean hasImg = experience.isHasImage();
-        if(!hasImg) {
-            if (!activityImg.isEmpty()) {
-                if (contentTypes.contains(activityImg.getContentType())) {
-                    hasImg = true;
-                    final ImageExperienceModel img = imageService.createExperienceImg(
-                            form.getActivityImg().getBytes(), experience.getId(), true);
-                } else {
-                    //Todo: Enviar mensaje de formato de imagen inválido
-                    errors.rejectValue("activityImg", "experienceForm.validation.imageFormat");
-                    return experienceEdit(experienceId, form);
-                }
-            }
-        } else {
-            final ImageModel img = imageService.getImgByExperienceId(experienceId).orElseThrow(ImageNotFoundException::new);
-            imageService.updateImg(form.getActivityImg().getBytes(), img.getId());
-        }
-
         final Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
         final String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
         final String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
 
-        final ExperienceModel experienceModel = new ExperienceModel(experienceId, form.getActivityName(), form.getActivityAddress(),
-                description, url, price, cityId, categoryId + 1, userId, hasImg);
-        experienceService.update(experienceId, experienceModel);
+        final ImageModel imageModel = imageService.getImgByExperienceId(experienceId).orElseThrow(ImageNotFoundException::new);
+        final Long imgId = imageModel.getId();
 
-        return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
+        final MultipartFile experienceImg = form.getActivityImg();
+        if(!experienceImg.isEmpty()) {
+            if (!contentTypes.contains(experienceImg.getContentType())) {
+                errors.rejectValue("activityImg", "experienceForm.validation.imageFormat");
+                return experienceEdit(experienceId, form);
+            }
+        }
+
+        final byte[] image = (experienceImg.isEmpty()) ? null : experienceImg.getBytes();
+
+        final ExperienceModel experienceModel = new ExperienceModel(experienceId, form.getActivityName(), form.getActivityAddress(),
+                description, form.getActivityMail(), url, price, cityId, categoryId + 1, userId, imgId, image!=null);
+
+        experienceService.update(experienceModel, image);
+
+        return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
     }
 
 
     private void setFav(long userId, Optional<Boolean> set, Optional<Long> experience){
-        List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
+        final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
 
         if (set.isPresent() && experience.isPresent()) {
             if (set.get()) {

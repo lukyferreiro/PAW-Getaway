@@ -30,8 +30,6 @@ public class ExperienceFormController {
     private CountryService countryService;;
     @Autowired
     private UserService userService;
-    @Autowired
-    private ImageService imageService;
 
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif", "image/jpg");
 
@@ -84,27 +82,21 @@ public class ExperienceFormController {
         final String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
         final String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
         final ExperienceModel experienceModel;
-        final MultipartFile activityImg = form.getActivityImg();
 
-        //TODO estar haciendo esto no mg nada, la logica de si se debe crear una imagen
-        //o no deberia estar en los services /daos
-        if (!activityImg.isEmpty()) {
-            if (contentTypes.contains(activityImg.getContentType())) {
-                experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(),
-                        description, url, price, cityId, categoryId + 1, userId, true);
-                final ImageExperienceModel imageModel = imageService.createExperienceImg(
-                        form.getActivityImg().getBytes(), experienceModel.getId(), true);
-            } else {
-                //Todo: Enviar mensaje de formato de imagen inválido
+        final MultipartFile experienceImg = form.getActivityImg();
+        if(!experienceImg.isEmpty()) {
+            if (!contentTypes.contains(experienceImg.getContentType())) {
                 errors.rejectValue("activityImg", "experienceForm.validation.imageFormat");
                 return createActivityForm(form);
             }
-        } else {
-            experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(),
-                    description, url, price, cityId, categoryId + 1, userId, false);
         }
 
-        return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getId());
+        final byte[] image = (experienceImg.isEmpty()) ? null : experienceImg.getBytes();
+
+        experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(), description,
+                form.getActivityMail(), url, price, cityId, categoryId + 1, userId, image);
+
+        return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
     }
 
 }

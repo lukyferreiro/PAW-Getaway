@@ -1,10 +1,12 @@
 package ar.edu.itba.getaway.persistence;
 
+import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.models.ImageExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -41,10 +43,16 @@ public class ImageDaoImpl implements ImageDao {
     }
 
     @Override
-    public ImageModel createImg(byte[] image) {
+    public ImageModel createImg(byte[] image) throws DuplicateImageException {
         final Map<String, Object> imageData = new HashMap<>();
         imageData.put("imageObject", image);
-        final long imgId = imageSimplejdbcInsert.executeAndReturnKey(imageData).longValue();
+        final long imgId;
+        try{
+            imgId = imageSimplejdbcInsert.executeAndReturnKey(imageData).longValue();
+            imageData.put("imgId", imgId);
+        }  catch (DuplicateKeyException e) {
+            throw new DuplicateImageException();
+        }
 
         LOGGER.info("Created new image with id {}", imgId);
 
@@ -52,8 +60,13 @@ public class ImageDaoImpl implements ImageDao {
     }
 
     @Override
-    public ImageExperienceModel createExperienceImg(byte[] image, long experienceId, boolean isCover) {
-        final ImageModel imageData = createImg(image);
+    public ImageExperienceModel createExperienceImg(byte[] image, long experienceId, boolean isCover) throws DuplicateImageException {
+        final ImageModel imageData;
+        try {
+            imageData = createImg(image);
+        } catch (DuplicateKeyException e) {
+            throw new DuplicateImageException();
+        }
 
         final Map<String, Object> imageExperienceData = new HashMap<>();
         imageExperienceData.put("experienceId", experienceId);

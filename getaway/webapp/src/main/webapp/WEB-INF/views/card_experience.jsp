@@ -5,12 +5,12 @@
 
 <div>
    <c:choose>
-      <c:when test="${param.hasImage == false}">
-         <img class="card-img-top container-fluid p-0 mw-100" alt="Imagen ${param.categoryName}"
-              src="<c:url value="/resources/images/${param.categoryName}.jpg" />">
+      <c:when test="${param.hasImage}">
+         <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/experiences/${param.id}/image'/>" alt="Imagen"/>
       </c:when>
       <c:otherwise>
-         <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/experiences/${param.id}/image'/>" alt="Imagen"/>
+         <img class="card-img-top container-fluid p-0 mw-100" alt="Imagen ${param.categoryName}"
+              src="<c:url value="/resources/images/${param.categoryName}.jpg" />">
       </c:otherwise>
    </c:choose>
 
@@ -21,10 +21,10 @@
          <h5><c:out value="${param.address}"/></h5>
          <h6>
             <c:choose>
-               <c:when test="${param.price == null}">
+               <c:when test="${param.price == ''}">
                   <spring:message code="experience.noPrice"/>
                </c:when>
-               <c:when test="${param.price == '0'}">
+               <c:when test="${param.price == '0.0'}">
                   <spring:message code="experience.price.free"/>
                </c:when>
                <c:otherwise>

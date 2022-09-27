@@ -22,6 +22,8 @@ import java.util.*;
 @Repository
 public class UserDaoImpl implements UserDao {
 
+    @Autowired
+    private ImageDao imageDao;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert userSimpleJdbcInsert;
     private final SimpleJdbcInsert roleSimpleJdbcInsert;
@@ -67,16 +69,17 @@ public class UserDaoImpl implements UserDao {
         userData.put("email", email);
         userData.put("password", password);
 
-        Map<String, Object> userImageData = new HashMap<>();
-        userImageData.put("imageObject", null);
-        final long imageId;
-        try {
-            imageId = imagesSimpleJdbcInsert.executeAndReturnKey(userImageData).longValue();
-            userData.put("imgId", imageId);
-            LOGGER.info("Created image with id {}", imageId);
-        } catch (DuplicateKeyException e) {
-            throw new DuplicateImageException();
-        }
+//        final Map<String, Object> userImageData = new HashMap<>();
+//        userImageData.put("imageObject", null);
+//        final long imageId;
+//        try {
+//            imageId = imagesSimpleJdbcInsert.executeAndReturnKey(userImageData).longValue();
+//            userData.put("imgId", imageId);
+//            LOGGER.info("Created image with id {}", imageId);
+//        } catch (DuplicateKeyException e) {
+//            throw new DuplicateImageException();
+//        }
+        imageDao.createImg(null);
 
         final long userId;
         try {

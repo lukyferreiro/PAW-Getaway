@@ -26,21 +26,21 @@
                         <div>
                            <c:set var = "fav" value = "${false}"/>
                            <c:forEach var="favExperience" items="${favExperienceModels}">
-                              <c:if test="${favExperience == experience.id}">
+                              <c:if test="${favExperience == experience.experienceId}">
                                  <c:set var = "fav"  value = "${true}"/>
                               </c:if>
                            </c:forEach>
 
                            <c:choose>
                               <c:when test="${fav}">
-                                 <a href="<c:url value = "/user/experiences?experience=${experience.id}&set=${false}"/>">
+                                 <a href="<c:url value = "/user/experiences?experience=${experience.experienceId}&set=${false}"/>">
                                     <button type="button" class="btn" id="setFalse">
                                        <i class="fas fa-heart heart-color"></i>
                                     </button>
                                  </a>
                               </c:when>
                               <c:otherwise>
-                                 <a href="<c:url value = "/user/experiences?experience=${experience.id}&set=${true}"/>">
+                                 <a href="<c:url value = "/user/experiences?experience=${experience.experienceId}&set=${true}"/>">
                                     <button type="button" class="btn" id="setTrue">
                                        <i class="fas fa-heart"></i>
                                     </button>
@@ -50,12 +50,12 @@
 
                         </div>
                         <a class="card-link"
-                           href="<c:url value="/experiences/${experience.categoryName}/${experience.id}"/>">
+                           href="<c:url value="/experiences/${experience.categoryName}/${experience.experienceId}"/>">
                            <jsp:include page="/WEB-INF/views/card_experience.jsp">
                               <jsp:param name="hasImage" value="${experience.hasImage}"/>
                               <jsp:param name="categoryName" value="${experience.categoryName}"/>
-                              <jsp:param name="id" value="${experience.id}"/>
-                              <jsp:param name="name" value="${experience.name}"/>
+                              <jsp:param name="id" value="${experience.experienceId}"/>
+                              <jsp:param name="name" value="${experience.experienceName}"/>
                               <jsp:param name="description" value="${experience.description}"/>
                               <jsp:param name="address" value="${experience.address}"/>
                               <jsp:param name="price" value="${experience.price}"/>
@@ -68,12 +68,12 @@
                            </div>
                         </a>
                         <div class="btn-group" role="group">
-                           <a href="<c:url value="/user/experiences/edit/${experience.id}"/>" class="btn-exp">
+                           <a href="<c:url value="/user/experiences/edit/${experience.experienceId}"/>" class="btn-exp">
                               <button type="button" class="btn btn-circle">
                                  <i class="bi bi-pencil"></i>
                               </button>
                            </a>
-                           <a href="<c:url value="/user/experiences/delete/${experience.id}"/>" class="btn-exp">
+                           <a href="<c:url value="/user/experiences/delete/${experience.experienceId}"/>" class="btn-exp">
                               <button type="button" class="btn btn-circle">
                                  <i class="bi bi-trash"></i>
                               </button>

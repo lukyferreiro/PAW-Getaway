@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.exceptions.CityNotFoundException;
+import ar.edu.itba.getaway.exceptions.ImageNotFoundException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
@@ -23,6 +24,8 @@ public class ExperienceController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ImageService imageService;
     @Autowired
     private ExperienceService experienceService;
     @Autowired
@@ -91,16 +94,16 @@ public class ExperienceController {
                 final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
 
                 mav.addObject("favExperienceModels", favExperienceModels);
-                mav.addObject("loggedUser", true);
+//                mav.addObject("loggedUser", true);
             }
-        }else{
-            mav.addObject("loggedUser", false);
+        } else {
+//            mav.addObject("loggedUser", false);
             mav.addObject("favExperienceModels", new ArrayList<>());
         }
 
         final List<Long> avgReviews = new ArrayList<>();
         for (ExperienceModel exp : experienceList) {
-            avgReviews.add(experienceService.getAvgReviews(exp.getId()).get());
+            avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
         }
 
         mav.addObject("cities", cityModels);
@@ -136,7 +139,7 @@ public class ExperienceController {
         mav.addObject("reviewCount", reviewCount);
         mav.addObject("countryCity", countryCity);
 
-        if(principal!=null){
+        if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
 
             if (user.isPresent()) {
@@ -145,13 +148,12 @@ public class ExperienceController {
                 final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
 
                 mav.addObject("favExperienceModels", favExperienceModels);
-                mav.addObject("loggedUser", true);
+//                mav.addObject("loggedUser", true);
             }
-        }else{
-            mav.addObject("loggedUser", false);
+        } else {
+//            mav.addObject("loggedUser", false);
             mav.addObject("favExperienceModels", new ArrayList<>());
         }
-
 
         return mav;
     }
@@ -168,14 +170,14 @@ public class ExperienceController {
 
         }
 
-//        Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
-//        if (cityModel.isPresent()) {
-//            long cityId = cityModel.get().getId();
-//            mav.addObject("cityId", cityId);
-//        }
-        final CityModel cityModel = cityService.getIdByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
-        final long cityId = cityModel.getId();
-        mav.addObject("cityId", cityId);
+        Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
+        if (cityModel.isPresent()) {
+            long cityId = cityModel.get().getId();
+            mav.addObject("cityId", cityId);
+        }
+//        final CityModel cityModel = cityService.getIdByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
+//        final long cityId = cityModel.getId();
+//        mav.addObject("cityId", cityId);
 
         final Double priceMax = form.getActivityPriceMax();
         if (priceMax != null) {

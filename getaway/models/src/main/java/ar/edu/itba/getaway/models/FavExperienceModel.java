@@ -12,7 +12,6 @@ public class FavExperienceModel {
     public long getUserId() {
         return userId;
     }
-
     public long getExperienceId() {
         return experienceId;
     }
