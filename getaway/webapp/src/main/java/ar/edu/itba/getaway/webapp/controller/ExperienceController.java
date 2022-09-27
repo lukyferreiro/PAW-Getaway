@@ -1,7 +1,5 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.getaway.exceptions.CityNotFoundException;
-import ar.edu.itba.getaway.exceptions.ImageNotFoundException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
@@ -61,109 +59,37 @@ public class ExperienceController {
         List<ExperienceModel> experienceList = new ArrayList<>();
         final List<CityModel> cityModels = cityService.listAll();
 
-        if (cityId.isPresent()) {
-            if (maxPrice.isPresent() && maxPrice.get() > 0) {
-                if (score.isPresent()) {
-                    if (orderBy.isPresent()) {
-                        if (direction.isPresent()) {
-                            if (direction.get().equals("asc")) {
-                                experienceList = experienceService.listByCategoryPriceCityAndScoreOrderBy(id, maxPrice.get(), cityId.get(), score.get(), orderBy.get());
-                            } else {
-                                experienceList = experienceService.listByCategoryPriceCityAndScoreOrderByDesc(id, maxPrice.get(), cityId.get(), score.get(), orderBy.get());
-                            }
-                        }
-                    } else {
-                        experienceList = experienceService.listByCategoryPriceCityAndScore(id, maxPrice.get(), cityId.get(), score.get());
-                    }
-                } else {
-                    if (orderBy.isPresent()) {
-                        if (direction.isPresent()) {
-                            if (direction.get().equals("asc")) {
-                                experienceList = experienceService.listByCategoryPriceAndCityOrderBy(id, maxPrice.get(), cityId.get(), orderBy.get());
-                            } else {
-                                experienceList = experienceService.listByCategoryPriceAndCityOrderByDesc(id, maxPrice.get(), cityId.get(), orderBy.get());
-                            }
-                        }
-                    } else {
-                        experienceList = experienceService.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
-                    }
+
+        Optional<Double> maxPriceOpt = experienceService.getMaxPrice(id);
+        double max = maxPriceOpt.get();
+        if(maxPrice.isPresent()){
+            max = maxPrice.get();
+        }
+
+        long scoreVal = (long) 0.0;
+        if(score.isPresent() && score.get() != -1){
+            scoreVal = score.get();
+        }
+
+        if(cityId.isPresent()){
+            if(orderBy.isPresent()){
+                if(direction.get().equals("asc")){
+                    experienceList = experienceService.listByFilterWithCityAsc(id, max, cityId.get(), scoreVal, orderBy.get());
+                }else{
+                    experienceList = experienceService.listByFilterWithCityDesc(id, max, cityId.get(), scoreVal, orderBy.get());
                 }
-            } else {
-                if (score.isPresent()) {
-                    if (orderBy.isPresent()) {
-                        if (direction.isPresent()) {
-                            if (direction.get().equals("asc")) {
-                                experienceList = experienceService.listByCategoryCityAndScoreOrderBy(id, cityId.get(), score.get(), orderBy.get());
-                            } else {
-                                experienceList = experienceService.listByCategoryCityAndScoreOrderByDesc(id, cityId.get(), score.get(), orderBy.get());
-                            }
-                        }
-                    } else {
-                        experienceList = experienceService.listByCategoryCityAndScore(id, cityId.get(), score.get());
-                    }
-                } else {
-                    if (orderBy.isPresent()) {
-                        if (direction.isPresent()) {
-                            if (direction.get().equals("asc")) {
-                                experienceList = experienceService.listByCategoryAndCityOrderBy(id, cityId.get(), orderBy.get());
-                            } else {
-                                experienceList = experienceService.listByCategoryAndCityOrderByDesc(id, cityId.get(), orderBy.get());
-                            }
-                        }
-                    } else {
-                        experienceList = experienceService.listByCategoryAndCity(id, cityId.get());
-                    }
-                }
+            }else{
+                experienceList = experienceService.listByFilterWithCity(id, max, cityId.get(), scoreVal);
             }
-        } else if (maxPrice.isPresent() && maxPrice.get() > 0) {
-            if (score.isPresent()) {
-                if (orderBy.isPresent()) {
-                    if (direction.isPresent()) {
-                        if (direction.get().equals("asc")) {
-                            experienceList = experienceService.listByCategoryPriceAndScoreOrderBy(id, maxPrice.get(), score.get(), orderBy.get());
-                        } else {
-                            experienceList = experienceService.listByCategoryPriceAndScoreOrderByDesc(id, maxPrice.get(), score.get(), orderBy.get());
-                        }
-                    }
-                } else {
-                    experienceList = experienceService.listByCategoryPriceAndScore(id, maxPrice.get(), score.get());
+        }else{
+            if(orderBy.isPresent()){
+                if(direction.get().equals("asc")){
+                    experienceList = experienceService.listByFilterAsc(id, max, scoreVal, orderBy.get());
+                }else{
+                    experienceList = experienceService.listByFilterDesc(id, max, scoreVal, orderBy.get());
                 }
-            } else {
-                if (orderBy.isPresent()) {
-                    if (direction.isPresent()) {
-                        if (direction.get().equals("asc")) {
-                            experienceList = experienceService.listByCategoryAndPriceOrderBy(id, maxPrice.get(), orderBy.get());
-                        } else {
-                            experienceList = experienceService.listByCategoryAndPriceOrderByDesc(id, maxPrice.get(), orderBy.get());
-                        }
-                    }
-                } else {
-                    experienceList = experienceService.listByCategoryAndPrice(id, maxPrice.get());
-                }
-            }
-        } else if (score.isPresent()) {
-            if (orderBy.isPresent()) {
-                if (direction.isPresent()) {
-                    if (direction.get().equals("asc")) {
-                        experienceList = experienceService.listByCategoryAndScoreOrderBy(id, score.get(), orderBy.get());
-                    } else {
-                        experienceList = experienceService.listByCategoryAndScoreOrderByDesc(id, score.get(), orderBy.get());
-                    }
-                }
-            } else {
-                experienceList = experienceService.listByCategoryAndScore(id, score.get());
-            }
-        } else {
-            if (orderBy.isPresent()) {
-                if (direction.isPresent()) {
-                    if (direction.get().equals("asc")) {
-                        experienceList = experienceService.listByCategoryOrderBy(id, orderBy.get());
-                    } else {
-                        experienceList = experienceService.listByCategoryOrderByDesc(id, orderBy.get());
-                    }
-                }
-            } else {
-                experienceList = experienceService.listByCategory(id);
+            }else{
+                experienceList = experienceService.listByFilter(id, max, scoreVal);
             }
         }
 
