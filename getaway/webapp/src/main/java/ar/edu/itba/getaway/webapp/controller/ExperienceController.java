@@ -55,13 +55,12 @@ public class ExperienceController {
 
         final String dbCategoryName = category.getName();
         final int id = category.ordinal() + 1;
-        final List<ExperienceModel> experienceList;
+        List<ExperienceModel> experienceList = new ArrayList<>();
         final List<CityModel> cityModels = cityService.listAll();
 
         if (cityId.isPresent()) {
             if (maxPrice.isPresent() && maxPrice.get() > 0) {
                 if (score.isPresent()) {
-                    experienceList = experienceService.listByCategoryPriceCityAndScore(id, maxPrice.get(), cityId.get(), score.get());
                     if(orderBy.isPresent()){
                         if (direction.isPresent()){
                             if(direction.get().equals("asc")){
@@ -70,9 +69,10 @@ public class ExperienceController {
                                 experienceList = experienceService.listByCategoryPriceCityAndScoreOrderByDesc(id, maxPrice.get(), cityId.get(), score.get(), orderBy.get());
                             }
                         }
+                    }else{
+                        experienceList = experienceService.listByCategoryPriceCityAndScore(id, maxPrice.get(), cityId.get(), score.get());
                     }
                 } else {
-                    experienceList = experienceService.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
                     if(orderBy.isPresent()){
                         if (direction.isPresent()){
                             if(direction.get().equals("asc")){
@@ -81,11 +81,12 @@ public class ExperienceController {
                                 experienceList = experienceService.listByCategoryPriceAndCityOrderByDesc(id, maxPrice.get(), cityId.get(), orderBy.get());
                             }
                         }
+                    }else {
+                        experienceList = experienceService.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
                     }
                 }
             } else {
                 if (score.isPresent()) {
-                    experienceList = experienceService.listByCategoryCityAndScore(id, cityId.get(), score.get());
                     if(orderBy.isPresent()){
                         if (direction.isPresent()){
                             if(direction.get().equals("asc")){
@@ -94,9 +95,10 @@ public class ExperienceController {
                                 experienceList = experienceService.listByCategoryCityAndScoreOrderByDesc(id, cityId.get(), score.get(), orderBy.get());
                             }
                         }
+                    }else {
+                        experienceList = experienceService.listByCategoryCityAndScore(id, cityId.get(), score.get());
                     }
                 } else {
-                    experienceList = experienceService.listByCategoryAndCity(id, cityId.get());
                     if(orderBy.isPresent()){
                         if (direction.isPresent()){
                             if(direction.get().equals("asc")){
@@ -105,12 +107,13 @@ public class ExperienceController {
                                 experienceList = experienceService.listByCategoryAndCityOrderByDesc(id, cityId.get(), orderBy.get());
                             }
                         }
+                    }else {
+                        experienceList = experienceService.listByCategoryAndCity(id, cityId.get());
                     }
                 }
             }
         } else if (maxPrice.isPresent() && maxPrice.get() > 0) {
             if (score.isPresent()) {
-                experienceList = experienceService.listByCategoryPriceAndScore(id, maxPrice.get(), score.get());
                 if(orderBy.isPresent()){
                     if (direction.isPresent()){
                         if(direction.get().equals("asc")){
@@ -119,9 +122,10 @@ public class ExperienceController {
                             experienceList = experienceService.listByCategoryPriceAndScoreOrderByDesc(id, maxPrice.get(), score.get(), orderBy.get());
                         }
                     }
+                }else {
+                    experienceList = experienceService.listByCategoryPriceAndScore(id, maxPrice.get(), score.get());
                 }
             } else {
-                experienceList = experienceService.listByCategoryAndPrice(id, maxPrice.get());
                 if(orderBy.isPresent()){
                     if (direction.isPresent()){
                         if(direction.get().equals("asc")){
@@ -130,10 +134,11 @@ public class ExperienceController {
                             experienceList = experienceService.listByCategoryAndPriceOrderByDesc(id, maxPrice.get(), orderBy.get());
                         }
                     }
+                }else {
+                    experienceList = experienceService.listByCategoryAndPrice(id, maxPrice.get());
                 }
             }
         } else if (score.isPresent()) {
-            experienceList = experienceService.listByCategoryAndScore(id, score.get());
             if(orderBy.isPresent()){
                 if (direction.isPresent()){
                     if(direction.get().equals("asc")){
@@ -142,10 +147,10 @@ public class ExperienceController {
                         experienceList = experienceService.listByCategoryAndScoreOrderByDesc(id, score.get(), orderBy.get());
                     }
                 }
+            }else {
+                experienceList = experienceService.listByCategoryAndScore(id, score.get());
             }
         } else {
-            experienceList = experienceService.listByCategory(id);
-
             if(orderBy.isPresent()){
                 if (direction.isPresent()){
                     if(direction.get().equals("asc")){
@@ -154,6 +159,8 @@ public class ExperienceController {
                         experienceList = experienceService.listByCategoryOrderByDesc(id,orderBy.get());
                     }
                 }
+            }else {
+                experienceList = experienceService.listByCategory(id);
             }
         }
 
