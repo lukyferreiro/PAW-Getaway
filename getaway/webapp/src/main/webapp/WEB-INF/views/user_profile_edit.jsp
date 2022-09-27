@@ -5,8 +5,7 @@
 
 <html>
     <head>
-        <title><spring:message code="pageName"/> - <spring:message code="navbar.profile"/></title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+        <title><spring:message code="pageName"/> - <spring:message code="editProfile.title"/></title>
         <link href='<c:url value="/resources/css/user_experiences.css"/>' rel="stylesheet">
         <%@ include file="../components/includes/headers.jsp" %>
     </head>

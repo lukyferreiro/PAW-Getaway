@@ -101,9 +101,8 @@
 }
 
 .separator {
-    color: var(--primary-color);
-    border-width: 3px;
-    margin: 10px 0;
+    border: 2px solid black;
+    margin: 0;
 }
 
 .dropdown-item::selection, .dropdown-item:focus{

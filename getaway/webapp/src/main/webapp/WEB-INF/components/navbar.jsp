@@ -67,7 +67,7 @@
    </div>
 
 
-   <div class="container-types container-fluid p-0 d-flex justify-content-center m-0">
+   <div class="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0">
       <a href="<c:url value = "/experiences/Aventura"/>">
          <button type="button" class="btn btn-filter">
             <img src="<c:url value="/resources/images/ic_adventure.svg"/>" alt="Logo aventura"/>

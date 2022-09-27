@@ -11,3 +11,10 @@
     display: flex;
     flex-direction: column;
 }
+
+.smallContentContainer {
+    border-radius: 20px;
+    border: 1px solid var(--primary-color);
+    background-color: whitesmoke;
+    max-width: 40%;
+}

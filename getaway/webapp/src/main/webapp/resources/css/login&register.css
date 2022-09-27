@@ -1,9 +1,3 @@
-.smallContentContainer {
-    border-radius: 20px;
-    border-color: var(--primary-color);
-    max-width: 40%;
-}
-
 .title {
     font-size: xxx-large;
     font-weight: 600;

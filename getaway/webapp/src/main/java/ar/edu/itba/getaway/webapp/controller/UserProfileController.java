@@ -22,9 +22,9 @@ import java.util.List;
 
 @Controller
 public class UserProfileController {
+
     @Autowired
     private UserService userService;
-
     @Autowired
     private ImageService imageService;
 
@@ -36,9 +36,12 @@ public class UserProfileController {
     public ModelAndView profile(Principal principal) {
         final ModelAndView mav = new ModelAndView("user_profile");
 
-        final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        mav.addObject("user", user);
-        mav.addObject("hasImage", imageService.getImgById(user.getProfileImageId()).get().getImage() != null);
+        final UserModel userModel = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
+        final ImageModel imageModel = imageService.getImgById(userModel.getProfileImageId()).get();
+
+        mav.addObject("user", userModel);
+        mav.addObject("hasImage", imageModel.getImage() != null);
+
         return mav;
     }
 
