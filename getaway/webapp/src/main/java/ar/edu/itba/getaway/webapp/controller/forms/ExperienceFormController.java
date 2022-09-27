@@ -5,7 +5,10 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.webapp.controller.UserProfileController;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -23,13 +26,15 @@ import java.util.List;
 public class ExperienceFormController {
 
     @Autowired
-    private ExperienceService exp;
+    private ExperienceService experienceService;
     @Autowired
     private CityService cityService;
     @Autowired
     private CountryService countryService;;
     @Autowired
     private UserService userService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceFormController.class);
 
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif", "image/jpg");
 
@@ -93,7 +98,7 @@ public class ExperienceFormController {
 
         final byte[] image = (experienceImg.isEmpty()) ? null : experienceImg.getBytes();
 
-        experienceModel = exp.create(form.getActivityName(), form.getActivityAddress(), description,
+        experienceModel = experienceService.create(form.getActivityName(), form.getActivityAddress(), description,
                 form.getActivityMail(), url, price, cityId, categoryId + 1, userId, image);
 
         return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());

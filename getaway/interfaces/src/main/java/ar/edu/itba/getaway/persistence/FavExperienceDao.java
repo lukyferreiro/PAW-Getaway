@@ -9,5 +9,5 @@ public interface FavExperienceDao {
     boolean delete(long userId, long experienceId);
     List<FavExperienceModel> getByExperienceId(long experienceId);
     List<FavExperienceModel> listAll();
-    List<Long> listByUserId(Long id);
+    List<Long> listByUserId(Long userId);
 }

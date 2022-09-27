@@ -6,6 +6,8 @@ import ar.edu.itba.getaway.services.ReviewService;
 import ar.edu.itba.getaway.services.UserService;
 import ar.edu.itba.getaway.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -28,6 +30,8 @@ public class ReviewFormController {
     @Autowired
     private ReviewService reviewService;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReviewFormController.class);
+
     @RequestMapping(value = "/experiences/{categoryName}/{experienceId}/create_review", method = {RequestMethod.GET})
     public ModelAndView createReviewForm(@PathVariable("categoryName") final String categoryName,
                                          @PathVariable("experienceId") final long experienceId,
@@ -48,13 +52,12 @@ public class ReviewFormController {
             return createReviewForm(categoryName, experienceId, form);
         }
 
-        Date date = Date.from(Instant.now());
+        final Date date = Date.from(Instant.now());
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final Long userId = user.getId();
 
-        final ReviewModel reviewModel = reviewService.create(form.getTitle(), form.getDescription(),
-                form.getLongScore(), experienceId ,date, userId);
+        reviewService.create(form.getTitle(), form.getDescription(), form.getLongScore(), experienceId ,date, userId);
 
         return mav;
     }

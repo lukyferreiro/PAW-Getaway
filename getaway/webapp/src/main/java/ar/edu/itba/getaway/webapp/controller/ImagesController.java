@@ -28,8 +28,8 @@ public class ImagesController {
             produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
         LOGGER.info("Accessed experiences/{}/image GET controller", experienceId);
-        ImageModel optionalImageModel = imageService.getImgByExperienceId(experienceId).orElseThrow(ImageNotFoundException::new);
-        return optionalImageModel.getImage();
+        final ImageModel imageModel = imageService.getImgByExperienceId(experienceId).orElseThrow(ImageNotFoundException::new);
+        return imageModel.getImage();
     }
 
     @ResponseBody
@@ -38,7 +38,7 @@ public class ImagesController {
             produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public byte[] getUserProfileImage(@PathVariable("imageId") final long imageId){
         LOGGER.info("Retrieving profileImage {}", imageId);
-        ImageModel optionalImageModel = imageService.getImgById(imageId).orElseThrow(ImageNotFoundException::new);
-        return optionalImageModel.getImage();
+        final ImageModel imageModel = imageService.getImgById(imageId).orElseThrow(ImageNotFoundException::new);
+        return imageModel.getImage();
     }
 }

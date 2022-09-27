@@ -6,6 +6,8 @@ import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -27,6 +29,8 @@ public class UserReviewsController {
     private UserService userService;
     @Autowired
     private ReviewService reviewService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserReviewsController.class);
 
     @RequestMapping(value = "/user/reviews", method = {RequestMethod.GET})
     public ModelAndView review(Principal principal) {
@@ -66,7 +70,6 @@ public class UserReviewsController {
     public ModelAndView reviewEdit(@PathVariable("reviewId") final long reviewId,
                                        @ModelAttribute("reviewForm") final ReviewForm form) {
         final ModelAndView mav = new ModelAndView("review_edit_form");
-
 
 //        final ReviewModel review = reviewService.getById(reviewId).get();
         final ReviewModel review = reviewService.getById(reviewId).orElseThrow(ReviewNotFoundException::new);

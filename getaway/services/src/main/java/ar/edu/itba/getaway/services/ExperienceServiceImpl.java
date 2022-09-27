@@ -102,9 +102,6 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getOrderBy(order);
     }
 
-
-
-
     @Override
     public List<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score) {
         return experienceDao.listByFilterWithCity(categoryId, max, cityId, score);
@@ -139,6 +136,5 @@ public class ExperienceServiceImpl implements ExperienceService {
     public Optional<Double> getMaxPrice(long categoryId) {
         return experienceDao.getMaxPrice(categoryId);
     }
-
 
 }

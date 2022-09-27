@@ -3,8 +3,11 @@ package ar.edu.itba.getaway.webapp.controller;
 import ar.edu.itba.getaway.exceptions.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
+import ar.edu.itba.getaway.webapp.controller.forms.ExperienceFormController;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -39,6 +42,8 @@ public class UserExperiencesController {
     private ImageService imageService;
     @Autowired
     private FavExperienceService favExperienceService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserExperiencesController.class);
 
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif", "image/jpg");
 
@@ -92,7 +97,6 @@ public class UserExperiencesController {
         setFav(user.getId(), set, experience);
         final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
         mav.addObject("favExperienceModels", favExperienceModels);
-
 
         List<ExperienceModel> experienceList = new ArrayList<>();
 
@@ -166,14 +170,13 @@ public class UserExperiencesController {
         //y tengo datos mal y me vuelve a llevar al form de edicion, me ponga los datos que
         //estaban bien y que cambie durante la edicion y NO me traiga los datos de la
         //experiencia otra vez :(
-
         if(form == null){
             form.setActivityName(experience.getExperienceName());
             if(experience.getPrice() != null){
                 form.setActivityPrice(experience.getPrice().toString());
             }
             form.setActivityInfo(experience.getDescription());
-            //Email TODO
+            form.setActivityMail(experience.getEmail());
             form.setActivityUrl(experience.getSiteUrl());
             form.setActivityAddress(experience.getAddress());
         } else {
@@ -182,7 +185,7 @@ public class UserExperiencesController {
                 form.setActivityPrice(form.getActivityPrice());
             }
             form.setActivityInfo(form.getActivityInfo());
-            //Email TODO
+            form.setActivityMail(form.getActivityMail());
             form.setActivityUrl(form.getActivityUrl());
             form.setActivityAddress(form.getActivityAddress());
         }

@@ -11,5 +11,5 @@ public interface CityService {
     Optional<CityModel> getById (long cityId);
     List<CityModel> getByCountryId (long countryId);
     Optional<CityModel> getIdByName (String cityName);
-    List<CityModel> getByCountryName(@RequestParam String country);
+//    List<CityModel> getByCountryName(@RequestParam String country);
 }

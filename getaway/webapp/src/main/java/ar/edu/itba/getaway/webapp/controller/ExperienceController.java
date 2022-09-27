@@ -4,7 +4,10 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.webapp.controller.forms.ExperienceFormController;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -23,8 +26,6 @@ public class ExperienceController {
     @Autowired
     private UserService userService;
     @Autowired
-    private ImageService imageService;
-    @Autowired
     private ExperienceService experienceService;
     @Autowired
     private CityService cityService;
@@ -32,6 +33,8 @@ public class ExperienceController {
     private ReviewService reviewService;
     @Autowired
     private FavExperienceService favExperienceService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
 
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.GET})
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
@@ -56,39 +59,39 @@ public class ExperienceController {
 
         final String dbCategoryName = category.getName();
         final int id = category.ordinal() + 1;
-        List<ExperienceModel> experienceList = new ArrayList<>();
+        List<ExperienceModel> experienceList;
         final List<CityModel> cityModels = cityService.listAll();
 
 
-        Optional<Double> maxPriceOpt = experienceService.getMaxPrice(id);
+        final Optional<Double> maxPriceOpt = experienceService.getMaxPrice(id);
         double max = maxPriceOpt.get();
         if(maxPrice.isPresent()){
             max = maxPrice.get();
         }
 
         long scoreVal = (long) 0.0;
-        if(score.isPresent() && score.get() != -1){
+        if (score.isPresent() && score.get() != -1) {
             scoreVal = score.get();
         }
 
-        if(cityId.isPresent()){
-            if(orderBy.isPresent()){
-                if(direction.get().equals("asc")){
+        if (cityId.isPresent()) {
+            if (orderBy.isPresent()) {
+                if (direction.get().equals("asc")) {
                     experienceList = experienceService.listByFilterWithCityAsc(id, max, cityId.get(), scoreVal, orderBy.get());
-                }else{
+                } else {
                     experienceList = experienceService.listByFilterWithCityDesc(id, max, cityId.get(), scoreVal, orderBy.get());
                 }
-            }else{
+            } else {
                 experienceList = experienceService.listByFilterWithCity(id, max, cityId.get(), scoreVal);
             }
-        }else{
-            if(orderBy.isPresent()){
-                if(direction.get().equals("asc")){
+        } else {
+            if (orderBy.isPresent()) {
+                if (direction.get().equals("asc")) {
                     experienceList = experienceService.listByFilterAsc(id, max, scoreVal, orderBy.get());
-                }else{
+                } else {
                     experienceList = experienceService.listByFilterDesc(id, max, scoreVal, orderBy.get());
                 }
-            }else{
+            } else {
                 experienceList = experienceService.listByFilter(id, max, scoreVal);
             }
         }
@@ -175,9 +178,9 @@ public class ExperienceController {
 
         }
 
-        Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
+        final Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
         if (cityModel.isPresent()) {
-            long cityId = cityModel.get().getId();
+            final long cityId = cityModel.get().getId();
             mav.addObject("cityId", cityId);
         }
 

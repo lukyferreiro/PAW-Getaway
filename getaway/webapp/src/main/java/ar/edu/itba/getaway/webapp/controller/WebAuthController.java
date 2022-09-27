@@ -7,6 +7,8 @@ import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.AccessDeniedException;
 import ar.edu.itba.getaway.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -36,6 +38,8 @@ public class WebAuthController {
     private UserService userService;
     @Autowired
     private MessageSource messageSource;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebAuthController.class);
 
     @RequestMapping(path = "/access-denied")
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
@@ -97,7 +101,6 @@ public class WebAuthController {
     public ModelAndView verifyAccount(HttpServletRequest request,
                                       @PathVariable("token") final String token) {
         final ModelAndView mav;
-
         final Optional<UserModel> userOptional = userService.verifyAccount(token);
 
         if (userOptional.isPresent()) {

@@ -28,8 +28,9 @@ public class UserProfileController {
     @Autowired
     private ImageService imageService;
 
-    private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif");
     private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileController.class);
+
+    private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif");
 
     @RequestMapping(value = "/user/profile", method = {RequestMethod.GET})
     public ModelAndView profile(Principal principal) {

@@ -22,11 +22,12 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
-    private static final RowMapper<FavExperienceModel> FAV_EXPERIENCE_ROW_MAPPER = (rs, rowNum) ->new FavExperienceModel(
-            rs.getLong("userid"),
-            rs.getLong("experienceid"));
+    private static final RowMapper<FavExperienceModel> FAV_EXPERIENCE_ROW_MAPPER = (rs, rowNum) ->
+            new FavExperienceModel(rs.getLong("userid"),
+                    rs.getLong("experienceid"));
 
-    private static final RowMapper<Long> FAV_EXPERIENCEID_ROW_MAPPER = (rs, rowNum) -> rs.getLong("experienceid");
+    private static final RowMapper<Long> FAV_EXPERIENCEID_ROW_MAPPER = (rs, rowNum) ->
+            rs.getLong("experienceid");
 
 
     @Autowired
@@ -69,8 +70,8 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
         return jdbcTemplate.query(query, new Object[]{}, FAV_EXPERIENCE_ROW_MAPPER);    }
 
     @Override
-    public List<Long> listByUserId(Long id) {
+    public List<Long> listByUserId(Long userId) {
         final String query = "SELECT experienceid FROM favuserexperience WHERE userid = ? ";
-        return jdbcTemplate.query(query, new Object[]{id}, FAV_EXPERIENCEID_ROW_MAPPER);
+        return jdbcTemplate.query(query, new Object[]{userId}, FAV_EXPERIENCEID_ROW_MAPPER);
     }
 }
