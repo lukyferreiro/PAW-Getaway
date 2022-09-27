@@ -36,7 +36,7 @@ public class InitPageController {
                              @RequestParam Optional<Boolean> set) {
         final ModelAndView mav = new ModelAndView("mainPage");
 
-        final List<ExperienceModel> experienceList = experienceService.listAll();
+        final List<ExperienceModel> experienceList = experienceService.listAll("");
 
         final List<Long> avgReviews = new ArrayList<>();
         for (ExperienceModel exp : experienceList) {

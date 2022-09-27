@@ -165,29 +165,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
 
-//    @Override
-//    public List<ExperienceModel> getByUserIdOrderBy(long id, String order) {
-//        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.userid = ?  GROUP BY experiences.experienceid ORDER BY ? ", new Object[]{id, order }, EXPERIENCE_MODEL_ROW_MAPPER);
-//    }
-//
-//
-//    @Override
-//    public List<ExperienceModel> getByUserIdOrderByDesc(long id, String order) {
-//        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.userid = ?  GROUP BY experiences.experienceid ORDER BY ? DESC ", new Object[]{id, order }, EXPERIENCE_MODEL_ROW_MAPPER);
-//    }
-//
-//
-//    @Override
-//    public List<ExperienceModel> getOrderByDesc(String order) {
-//        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid GROUP BY experiences.experienceid ORDER BY ? DESC", new Object[]{order}, EXPERIENCE_MODEL_ROW_MAPPER);
-//    }
-//
-//    @Override
-//    public List<ExperienceModel> getOrderBy(String order) {
-//        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid  GROUP BY experiences.experienceid ORDER BY ?", new Object[]{order}, EXPERIENCE_MODEL_ROW_MAPPER);
-//    }
-
-
     @Override
     public Optional<Double> getMaxPrice(long categoryId){
         return jdbcTemplate.query("SELECT MAX(COALESCE(price,0)) as max_price FROM experiences WHERE categoryid = ?", new Object[]{categoryId}, PRICE_EXPERIENCE_ROW_MAPPER ).stream().findFirst();

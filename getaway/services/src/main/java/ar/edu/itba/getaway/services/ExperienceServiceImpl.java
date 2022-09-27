@@ -82,25 +82,6 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getAvgReviews(experienceId);
     }
 
-//    @Override
-//    public List<ExperienceModel> getByUserIdOrderBy(long id, String order) {
-//        return experienceDao.getByUserIdOrderBy(id,order);
-//    }
-//
-//    @Override
-//    public List<ExperienceModel> getByUserIdOrderByDesc(long id, String order) {
-//        return experienceDao.getByUserIdOrderByDesc(id,order);
-//    }
-//
-//    @Override
-//    public List<ExperienceModel> getOrderByDesc(String order) {
-//        return experienceDao.getOrderByDesc(order);
-//    }
-//
-//    @Override
-//    public List<ExperienceModel> getOrderBy(String order) {
-//        return experienceDao.getOrderBy(order);
-//    }
 
     @Override
     public List<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score, String order) {
