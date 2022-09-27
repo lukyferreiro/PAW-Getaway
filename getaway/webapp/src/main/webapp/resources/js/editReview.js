@@ -8,7 +8,7 @@ let star4 = document.getElementById("star4");
 let star5 = document.getElementById("star5");
 
 window.addEventListener("load", ()=>{
-    let score = document.getElementById("reviewFormScoreInput");
+    let score = document.getElementById("scoreInput");
     if(score.value === "1"){
         star1.click();
     }else if(score.value === "2"){

@@ -12,9 +12,7 @@
 
    <body>
       <div class="container-main">
-         <jsp:include page="/WEB-INF/components/simpleNavbar.jsp">
-            <jsp:param name="loggedUser" value="${loggedUser}"/>
-         </jsp:include>
+         <%@ include file="../components/simpleNavbar.jsp" %>
 
          <div class="container-fluid py-4 px-0 d-flex align-items-center">
             <div class="container-lg p-5 mt-5 smallContentContainer">
@@ -25,7 +23,7 @@
                      </h1>
                   </div>
                   <div class="col-12 px-0 d-flex align-items-center justify-content-center">
-                     <c:url value="/user/experiences/delete/${experience.id}" var="postPath"/>
+                     <c:url value="/user/experiences/delete/${experience.experienceId}" var="postPath"/>
                      <form:form modelAttribute="deleteForm" action="${postPath}" id="deleteForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
                         <div class="buttons">
                            <a href="<c:url value = "/user/experiences"/>">

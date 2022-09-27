@@ -6,17 +6,13 @@
 <html>
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="navbar.reviews"/></title>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-      <link href="<c:url value = "/resources/css/start_rating.css" />" rel="stylesheet">
       <link href='<c:url value="/resources/css/user_experiences.css"/>' rel="stylesheet">
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 
    <body>
       <div class="container-main">
-         <jsp:include page="/WEB-INF/components/navbar.jsp">
-            <jsp:param name="loggedUser" value="${loggedUser}"/>
-         </jsp:include>
+         <%@ include file="../components/navbar.jsp" %>
 
          <c:choose>
             <c:when test="${reviews.size() == 0}">

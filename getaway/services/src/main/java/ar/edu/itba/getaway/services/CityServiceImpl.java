@@ -48,20 +48,20 @@ public class CityServiceImpl implements CityService {
         return cityDao.getIdByName(cityName);
     }
 
-    @Autowired
-    CountryService countryService;
-
-    @RequestMapping(path = "/create_experience", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @Override
-    public List<CityModel> getByCountryName(@RequestParam String country) {
-        List<CountryModel> countryModels = countryService.listAll();
-        List<CityModel> cityModels = new ArrayList<>();
-        for (int j = 0; j < countryModels.size(); j++) {
-            if (countryModels.get(j).getName().equals(country)) {
-                return this.getByCountryId(j + 1);
-            }
-        }
-        return cityModels;
-    }
+//    @Autowired
+//    CountryService countryService;
+//
+//    @RequestMapping(path = "/create_experience", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    @Override
+//    public List<CityModel> getByCountryName(@RequestParam String country) {
+//        List<CountryModel> countryModels = countryService.listAll();
+//        List<CityModel> cityModels = new ArrayList<>();
+//        for (int j = 0; j < countryModels.size(); j++) {
+//            if (countryModels.get(j).getName().equals(country)) {
+//                return this.getByCountryId(j + 1);
+//            }
+//        }
+//        return cityModels;
+//    }
 }

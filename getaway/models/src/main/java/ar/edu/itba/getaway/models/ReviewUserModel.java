@@ -15,7 +15,6 @@ public class ReviewUserModel {
     private final String userSurname;
     private final Long imgId;
 
-
     public ReviewUserModel(long reviewId, String title, String description, long score, long experienceId, Date reviewDate, long userId, String userName, String userSurname, Long imgId) {
         this.reviewId = reviewId;
         this.title = title;
@@ -66,5 +65,17 @@ public class ReviewUserModel {
 
     public Long getImgId() {
         return imgId;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+        if( !(o instanceof ReviewUserModel)){
+            return false;
+        }
+        ReviewUserModel other = (ReviewUserModel) o;
+        return this.userId == other.userId && this.reviewId == other.reviewId;
     }
 }

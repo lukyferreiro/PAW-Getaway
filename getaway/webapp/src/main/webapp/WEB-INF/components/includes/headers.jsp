@@ -10,6 +10,7 @@
 <%-- Bootstrap --%>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 <!-- Styles -->
 <link href="<c:url value = "/resources/css/error.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/styles.css"/>" rel="stylesheet" type="text/css">
@@ -18,6 +19,7 @@
 <link href="<c:url value = "/resources/css/experiences.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/experienceDetail.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/form.css"/>" rel="stylesheet" type="text/css">
+<link href="<c:url value = "/resources/css/icons.css" />" rel="stylesheet">
 
 <script src="https://kit.fontawesome.com/a4ef34ae89.js" crossorigin="anonymous"></script>
 

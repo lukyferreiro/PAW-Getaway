@@ -12,7 +12,6 @@ public class CategoryModel{
     public long getId() {
         return categoryId;
     }
-
     public String getName() {
         return categoryName;
     }

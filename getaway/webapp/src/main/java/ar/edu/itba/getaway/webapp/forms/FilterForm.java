@@ -6,6 +6,7 @@ public class FilterForm {
     private Double activityPriceMax;
     private Boolean enablePrice;
     private String activityReview;
+    private int pageNum;
 
     public Double getActivityPriceMax() {
         return activityPriceMax;
@@ -17,7 +18,9 @@ public class FilterForm {
         return activityReview;
     }
     public Long getScore(){
-        return Long.valueOf(activityReview);
+        if(activityReview == null || activityReview.equals(""))
+            return (long) -1;
+        return Long.parseLong(activityReview);
     }
     public void setActivityPriceMax(Double activityPriceMax) {
         this.activityPriceMax = activityPriceMax;
@@ -34,4 +37,5 @@ public class FilterForm {
     public void setActivityReview(String activityReview) {
         this.activityReview = activityReview;
     }
+
 }

@@ -2,15 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<div>
-    <c:choose>
-        <c:when test="${param.avgReview!=0}">
-            <div class="information-title">
-                <h6 class="information-title">
-                    <spring:message code="experienceDetail.review"/>
-                </h6>
-            </div>
-            <div class="star-rating">
+<c:choose>
+    <c:when test="${param.avgReview!=0}">
+        <div class="d-flex">
+            <h6 class="information-title">
+                <spring:message code="experienceDetail.review"/>
+            </h6>
+            <div class="star-rating my-1">
                 <c:choose>
                     <c:when test="${param.avgReview == 1 }">
                         <i class="fas fa-star"></i>
@@ -49,7 +47,6 @@
                     </c:when>
                 </c:choose>
             </div>
-
-        </c:when>
-    </c:choose>
-</div>
+        </div>
+    </c:when>
+</c:choose>

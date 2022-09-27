@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
    <head>
@@ -9,14 +9,12 @@
       <%@ include file="../components/includes/headers.jsp" %>
       <link href="<c:url value = "/resources/css/experiences.css" />" rel="stylesheet">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-      <link href="<c:url value = "/resources/css/start_rating.css" />" rel="stylesheet">
+      <link href="<c:url value = "/resources/css/icons.css" />" rel="stylesheet">
    </head>
 
    <body>
       <div class="container-main">
-         <jsp:include page="/WEB-INF/components/navbar.jsp">
-            <jsp:param name="loggedUser" value="${loggedUser}"/>
-         </jsp:include>
+         <%@ include file="../components/navbar.jsp" %>
 
          <div class="container-fluid h-100 p-0 d-flex">
             <div class="container-filters container-fluid px-2 py-0 mx-2 my-0 d-flex flex-column justify-content-start align-items-center border-end">
@@ -82,18 +80,57 @@
                </a>
             </div>
 
+            <jsp:include page="/WEB-INF/views/order_dropdown.jsp">
+               <jsp:param name="path1" value="/experiences/{categoryName}?orderBy=avg(score)&direction=asc"/>
+               <jsp:param name="path2" value="/experiences/{categoryName}?orderBy=avg(score)&direction=desc"/>
+               <jsp:param name="path3" value="/experiences/{categoryName}?orderBy=experienceName&direction=asc"/>
+               <jsp:param name="path4" value="/experiences/{categoryName}?orderBy=experienceName&direction=desc"/>
+               <jsp:param name="path5" value="/experiences/{categoryName}?orderBy=price&direction=desc"/>
+               <jsp:param name="path6" value="/experiences/{categoryName}?orderBy=price&direction=asc"/>
+            </jsp:include>
+
+
             <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
-               <c:forEach var="activity" varStatus="myIndex" items="${activities}">
+               <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                   <div class="card card-experience mx-3 my-2 p-0">
-                     <a class="card-link" href="<c:url value="${activity.categoryName}/${activity.id}"/>">
+                        <div>
+                           <c:if test="${loggedUser != null}">
+                              <c:set var = "fav" value = "${false}"/>
+                              <c:forEach var="favExperience" items="${favExperienceModels}">
+                                 <c:if test="${favExperience == experience.experienceId}">
+                                    <c:set var = "fav"  value = "${true}"/>
+                                 </c:if>
+                              </c:forEach>
+
+                              <c:choose>
+                                 <c:when test="${fav}">
+                                    <a href="<c:url value = "/experiences/${categoryName}?experience=${experience.experienceId}&set=${false}"/>">
+                                       <button type="button" class="btn" id="setFalse">
+                                          <i class="fas fa-heart heart-color"></i>
+                                       </button>
+                                    </a>
+                                 </c:when>
+                                 <c:otherwise>
+                                    <a href="<c:url value = "/experiences/${categoryName}?experience=${experience.experienceId}&set=${true}"/>">
+                                       <button type="button" class="btn" id="setTrue">
+                                          <i class="fas fa-heart"></i>
+                                       </button>
+                                    </a>
+                                 </c:otherwise>
+                              </c:choose>
+                           </c:if>
+
+                        </div>
+
+                     <a class="card-link" href="<c:url value="${experience.categoryName}/${experience.experienceId}"/>">
                         <jsp:include page="/WEB-INF/views/card_experience.jsp">
-                           <jsp:param name="hasImage" value="${activity.hasImage}"/>
-                           <jsp:param name="categoryName" value="${activity.categoryName}"/>
-                           <jsp:param name="id" value="${activity.id}"/>
-                           <jsp:param name="name" value="${activity.name}"/>
-                           <jsp:param name="description" value="${activity.description}"/>
-                           <jsp:param name="address" value="${activity.address}"/>
-                           <jsp:param name="price" value="${activity.price}"/>
+                           <jsp:param name="hasImage" value="${experience.hasImage}"/>
+                           <jsp:param name="categoryName" value="${experience.categoryName}"/>
+                           <jsp:param name="id" value="${experience.experienceId}"/>
+                           <jsp:param name="name" value="${experience.experienceName}"/>
+                           <jsp:param name="description" value="${experience.description}"/>
+                           <jsp:param name="address" value="${experience.address}"/>
+                           <jsp:param name="price" value="${experience.price}"/>
                            <jsp:param name="myIndex" value="${myIndex.index}"/>
                         </jsp:include>
                         <div class="card-body container-fluid p-2">
@@ -112,7 +149,8 @@
 
       <%@ include file="../components/includes/bottomScripts.jsp" %>
       <script src='<c:url value="/resources/js/filter.js"/>'></script>
-      <script src='<c:url value="/resources/js/ratingScore.js"/>'></script>
+      <script src='<c:url value="/resources/js/favExperience.js"/>'></script>
+      <script src="https://kit.fontawesome.com/5ea815c1d0.js"></script>
 
    </body>
 </html>

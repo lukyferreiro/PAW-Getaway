@@ -36,7 +36,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Value("classpath:schema.sql")
     private Resource schemaSql;
 
-    private static final int MAX_SIZE_PER_FILE = 5000000;
+    private static final int MAX_SIZE_PER_FILE = 10000000;
 
     @Bean
     public ViewResolver viewResolver() {
@@ -67,13 +67,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ds.setDriverClass(org.postgresql.Driver.class);
 
         //Usuario Local
-//        ds.setUrl("jdbc:postgresql://localhost/postgres");
-//        ds.setUsername("postgres");
-//        ds.setPassword("getawaydb");
+        ds.setUrl("jdbc:postgresql://localhost/postgres");
+        ds.setUsername("postgres");
+        ds.setPassword("getawaydb");
         //Usuario remoto (para todos los del grupo)
-        ds.setUrl("jdbc:postgresql://ec2-54-204-241-136.compute-1.amazonaws.com:5432/d38a8rs1b2dpeh");
-        ds.setUsername("adrzztklademib");
-        ds.setPassword("580c8ba69151e9ba288d107d1b28f9dfc3706838eccbfb4d4d9ca1cde2f6f86e");
+//        ds.setUrl("jdbc:postgresql://ec2-54-204-241-136.compute-1.amazonaws.com:5432/d38a8rs1b2dpeh");
+//        ds.setUsername("adrzztklademib");
+//        ds.setPassword("580c8ba69151e9ba288d107d1b28f9dfc3706838eccbfb4d4d9ca1cde2f6f86e");
         //Usuario PAW
 //        ds.setUrl("jdbc:postgresql://10.16.1.110/paw-2022b-1");
 //        ds.setUsername("paw-2022b-1");
@@ -100,7 +100,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(300000);
+        multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE);
         multipartResolver.setMaxUploadSizePerFile(MAX_SIZE_PER_FILE);
         multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE * 6);
         multipartResolver.setDefaultEncoding("utf-8");
@@ -115,8 +115,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean(name = "appBaseUrl")
     public String appBaseUrl() {
-//        return "localhost";
-        return "pawserver.it.itba.edu.ar";
+        return "localhost";
+//        return "pawserver.it.itba.edu.ar";
     }
 
 }

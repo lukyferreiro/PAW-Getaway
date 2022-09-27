@@ -7,15 +7,11 @@
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="review.titlePage"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
-      <link href="<c:url value = "/resources/css/start_rating.css" />" rel="stylesheet">
-
    </head>
 
    <body>
       <div class="container-main">
-         <jsp:include page="/WEB-INF/components/navbar.jsp">
-            <jsp:param name="loggedUser" value="${loggedUser}"/>
-         </jsp:include>
+         <%@ include file="../components/navbar.jsp" %>
 
          <div class="justify-content-center">
             <form:form modelAttribute="reviewForm" action="${postPath}" id="createReviewForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
@@ -65,8 +61,8 @@
          <%@ include file="../components/footer.jsp" %>
       </div>
       <%@ include file="../components/includes/bottomScripts.jsp" %>
+      <script src='<c:url value="/resources/js/ratingScore.js"/>'></script>
       <script src='<c:url value="/resources/js/createReview.js"/>'></script>
       <script src='<c:url value="/resources/js/cancelButton.js"/>'></script>
-      <script src='<c:url value="/resources/js/ratingScore.js"/>'></script>
       <script src="https://kit.fontawesome.com/5ea815c1d0.js"></script>
    </body>

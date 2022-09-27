@@ -24,7 +24,7 @@
     -webkit-background-clip: text;
 }
 
-.link-home {
+/*.link-home {
     font-size: xx-large;
     font-weight: 600;
     color: var(--primary-color);
@@ -36,6 +36,12 @@
     color: var(--secondary-color);
     text-decoration: underline;
     margin-left: 40px;
+}*/
+
+.profile-image-btn{
+    height: 100%;
+    width: 100%;
+    object-fit: scale-down;
 }
 
 .container-header-btn {
@@ -66,9 +72,6 @@
     background-color: var(--primary-color);
 }
 
-/*.container-types {*/
-/*    */
-/*}*/
 .btn-filter {
     color: black;
     font-size: x-large;

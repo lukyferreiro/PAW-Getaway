@@ -12,7 +12,6 @@ public class CountryModel {
     public long getId() {
         return countryId;
     }
-
     public String getName() {
         return countryName;
     }

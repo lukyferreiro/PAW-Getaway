@@ -36,7 +36,6 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao{
                 usingGeneratedKeyColumns("passtokenid");
     }
 
-
     @Override
     public Optional<PasswordResetToken> getToken(long id) {
         return jdbcTemplate.query("SELECT * FROM passwordResetToken WHERE passTokenId = ?",

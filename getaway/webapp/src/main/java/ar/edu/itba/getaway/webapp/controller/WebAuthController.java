@@ -1,11 +1,14 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.webapp.exceptions.AccessDeniedException;
-import ar.edu.itba.getaway.webapp.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.exceptions.AccessDeniedException;
+import ar.edu.itba.getaway.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,20 +39,16 @@ public class WebAuthController {
     @Autowired
     private MessageSource messageSource;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebAuthController.class);
+
     @RequestMapping(path = "/access-denied")
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = AccessDeniedException.class)
-    public ModelAndView accessDenied(@ModelAttribute("loggedUser") final UserModel loggedUser) {
+    public ModelAndView accessDenied() {
         Locale locale = LocaleContextHolder.getLocale();
         String error = messageSource.getMessage("errors.accessDenied", null, locale);
         Long code = Long.valueOf(HttpStatus.FORBIDDEN.toString());
         final ModelAndView mav = new ModelAndView("errors");
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
 
         mav.addObject("errors", error);
         mav.addObject("code", code);
@@ -72,12 +72,12 @@ public class WebAuthController {
             return register(form);
         }
 
-        UserModel user;
+        final UserModel user;
         try {
-            user = userService.createUser(form.getPassword(), form.getName(),
-                    form.getSurname(), form.getEmail());
+            user = userService.createUser(form.getPassword(), form.getName(), form.getSurname(), form.getEmail());
             forceLogin(user, request);
-        } catch (DuplicateUserException e) {
+            //TODO no me gusta que tambien me este cacheando DuplicateImageException
+        } catch (DuplicateUserException | DuplicateImageException e) {
             errors.rejectValue("email", "validation.user.DuplicateEmail");
             return register(form);
         }
@@ -92,147 +92,83 @@ public class WebAuthController {
         return mav;
     }
 
-    /*-----------------------------------------------------
-    --------------------Verify Account---------------------
-     -----------------------------------------------------*/
+    /*-----------------------------------------------------------------------------------
+    -----------------------------------Verify Account------------------------------------
+    ------------------------------------------------------------------------------------*/
 
-    //This is the endpoint that I call from the email
+    //This is the endpoint that It's called from the email
     @RequestMapping(path = "/user/verifyAccount/{token}")
     public ModelAndView verifyAccount(HttpServletRequest request,
-                                      @PathVariable("token") final String token,
-                                      @ModelAttribute("loggedUser") final UserModel loggedUser) {
+                                      @PathVariable("token") final String token) {
         final ModelAndView mav;
-
         final Optional<UserModel> userOptional = userService.verifyAccount(token);
+
         if (userOptional.isPresent()) {
-            forceLogin(loggedUser, request);
+            forceLogin(userOptional.get(), request);
             mav = new ModelAndView("redirect:/user/verifyAccount/result/successfully");
-
-            try {
-                mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-            } catch (NullPointerException e) {
-                mav.addObject("loggedUser", false);
-            }
-
             return mav ;
         }
         mav = new ModelAndView("redirect:/user/verifyAccount/result/unsuccessfully");
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-
         return mav;
     }
 
     @RequestMapping(path = "/user/verifyAccount/status/send")
-    public ModelAndView sendAccountVerification(@ModelAttribute("loggedUser") final UserModel loggedUser) {
-        final ModelAndView mav = new ModelAndView("verifySent");
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-        return mav;
+    public ModelAndView sendAccountVerification() {
+        return new ModelAndView("/verifyAccount/verifySent");
     }
 
     @RequestMapping(path = "/user/verifyAccount/status/resend")
-    public ModelAndView resendAccountVerification() {
-        final UserModel user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
-                .orElseThrow(UserNotFoundException::new);
+    public ModelAndView resendAccountVerification(Principal principal) {
+        final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         userService.resendVerificationToken(user);
+        return new ModelAndView("redirect:/user/verifyAccount/status/send");
 
-        final ModelAndView mav = new ModelAndView("redirect:/user/verifyAccount/status/send");
-        mav.addObject("loggedUser", user);
-
-        return mav;
     }
 
     @RequestMapping(path = "/user/verifyAccount/result/unsuccessfully")
-    public ModelAndView unsuccesfullyAccountVerification(@ModelAttribute("loggedUser") final UserModel loggedUser) {
-        final ModelAndView mav = new ModelAndView("verifyUnsuccessfully");
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-
-        return mav;
+    public ModelAndView unsuccesfullyAccountVerification()  {
+        return new ModelAndView("/verifyAccount/verifyUnsuccessfully");
     }
 
     @RequestMapping(path = "/user/verifyAccount/result/successfully")
-    public ModelAndView succesfullyAccountVerification(@ModelAttribute("loggedUser") final UserModel loggedUser) {
-        final ModelAndView mav = new ModelAndView("verifySuccessfully");
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-
-        return mav;
+    public ModelAndView succesfullyAccountVerification() {
+        return new ModelAndView("/verifyAccount/verifySuccessfully");
     }
 
-    /*-----------------------------------------------------
-    --------------------Reset Password---------------------
-     -----------------------------------------------------*/
+    /*------------------------------------------------------------------------------------
+    ------------------------------------Reset Password------------------------------------
+     ------------------------------------------------------------------------------------*/
     @RequestMapping(path = "/user/resetPasswordRequest")
-    public ModelAndView resetPasswordRequest(@ModelAttribute("resetPasswordEmailForm") final ResetPasswordEmailForm form,
-                                             @ModelAttribute("loggedUser") final UserModel loggedUser) {
-        final ModelAndView mav = new ModelAndView("resetPasswordRequest");
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-
-        return mav;
+    public ModelAndView resetPasswordRequest(@ModelAttribute("resetPasswordEmailForm") final ResetPasswordEmailForm form) {
+        return new ModelAndView("/password/resetPasswordEmailForm");
     }
 
     @RequestMapping(path = "/user/resetPasswordRequest", method = RequestMethod.POST)
     public ModelAndView sendPasswordReset(@Valid @ModelAttribute("resetPasswordEmailForm") final ResetPasswordEmailForm form,
-                                          final BindingResult errors,
-                                          @ModelAttribute("loggedUser") final UserModel loggedUser) {
-        final ModelAndView mav = new ModelAndView("resetEmailConfirmation");
+                                          final BindingResult errors) {
+        final ModelAndView mav = new ModelAndView("/password/resetPasswordEmailResult");
 
         if (errors.hasErrors()) {
-            return resetPasswordRequest(form, loggedUser);
+            return resetPasswordRequest(form);
         }
 
         final Optional<UserModel> user = userService.getUserByEmail(form.getEmail());
         if (!user.isPresent()) {
             errors.rejectValue("email", "error.invalidEmail");
-            return resetPasswordRequest(form, loggedUser);
+            return resetPasswordRequest(form);
         }
 
         userService.generateNewPassword(user.get());
 
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-
         return mav;
     }
 
-    //This is the endpoint that I call from the email
+    //This is the endpoint that It's called from the email
     @RequestMapping(path = "/user/resetPassword/{token}")
     public ModelAndView resetPassword(@PathVariable("token") String token,
-                                      @ModelAttribute("resetPasswordForm") final ResetPasswordForm form,
-                                      @ModelAttribute("loggedUser") final UserModel loggedUser) {
+                                      @ModelAttribute("resetPasswordForm") final ResetPasswordForm form) {
         if (userService.validatePasswordReset(token)) {
-            final ModelAndView mav = new ModelAndView("reset");
-            try {
-                mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-            } catch (NullPointerException e) {
-                mav.addObject("loggedUser", false);
-            }
+            final ModelAndView mav = new ModelAndView("/password/resetPasswordForm");
             mav.addObject("token", token);
             return mav;
         }
@@ -240,28 +176,21 @@ public class WebAuthController {
     }
 
     @RequestMapping(path = "/user/resetPassword", method = RequestMethod.POST)
-    public ModelAndView resetPassword(HttpServletRequest request,
+    public ModelAndView updatePassword(HttpServletRequest request,
                                       @Valid @ModelAttribute("resetPasswordForm") final ResetPasswordForm form,
-                                      final BindingResult errors,
-                                      @ModelAttribute("loggedUser") final UserModel loggedUser) {
-        ModelAndView mav = new ModelAndView("reset");
-
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
+                                      final BindingResult errors) {
+        ModelAndView mav = new ModelAndView("/password/resetPasswordForm");
 
         if (errors.hasErrors()) {
             return mav;
         }
 
         if (!form.getPassword().equals(form.getConfirmPassword())) {
-            errors.rejectValue("", "validation.user.passwordsDontMatch");
+            errors.rejectValue("confirmPassword", "validation.user.passwordsDontMatch");
             return mav;
         }
 
-        mav = new ModelAndView("resetResult");
+        mav = new ModelAndView("/password/resetPasswordResult");
         final Optional<UserModel> userOptional = userService.updatePassword(form.getToken(), form.getPassword());
         boolean success = false;
 
@@ -271,20 +200,15 @@ public class WebAuthController {
             forceLogin(user, request);
         }
 
-        try {
-            mav.addObject("loggedUser", loggedUser.hasRole(Roles.USER));
-        } catch (NullPointerException e) {
-            mav.addObject("loggedUser", false);
-        }
-
         mav.addObject("success", success);
         return mav;
     }
 
-    /*-----------------------------------------------------
-    -------------------------------------------------------
-     -----------------------------------------------------*/
+    /*------------------------------------------------------------------------------------
+    --------------------------------------------------------------------------------------
+     ------------------------------------------------------------------------------------*/
 
+    //This method is user to update the SpringContextHolder
     private void forceLogin(UserModel user, HttpServletRequest request) {
         //generate authentication
         final PreAuthenticatedAuthenticationToken token =

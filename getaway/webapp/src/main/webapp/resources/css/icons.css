@@ -3,9 +3,9 @@
     flex-direction: row-reverse;
     font-size:1.5em;
     justify-content:space-around;
-    padding:0 .2em;
+    padding:0 .5em;
     text-align:center;
-    width:5em;
+    /*width:5em;*/
 }
 
 .star-rating input {
@@ -33,4 +33,18 @@
 
 .fas.fa-star{
     color: #FAB672;
+}
+
+.fas.fa-heart.heart-color{
+    color: red;
+    font-size: large;
+}
+
+.fas.fa-heart{
+    color: grey;
+    font-size: medium;
+}
+
+.fas.fa-heart.big{
+    font-size: xxx-large;
 }

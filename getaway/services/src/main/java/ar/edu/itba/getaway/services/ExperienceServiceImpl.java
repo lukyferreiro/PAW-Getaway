@@ -1,11 +1,13 @@
 package ar.edu.itba.getaway.services;
 
+import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.persistence.ExperienceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,28 +16,29 @@ import java.util.Optional;
 
 @Service
 public class ExperienceServiceImpl implements ExperienceService {
-
     @Autowired
     private ExperienceDao experienceDao;
+
+    private static final int PAGE_SIZE=2;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 
     @Override
-    public ExperienceModel create(String name, String address, String description, String url, Double price, long cityId, long categoryId, long userId, boolean hasImage) {
+    public ExperienceModel create(String name, String address, String description, String email, String url, Double price, long cityId, long categoryId, long userId, byte[] image) throws DuplicateImageException {
         LOGGER.debug("Creating experience with name {}", name);
-        ExperienceModel experienceModel = experienceDao.create(name, address, description, url, price, cityId, categoryId, userId, hasImage);
-        LOGGER.debug("Created experience with id {}", experienceModel.getId());
+        ExperienceModel experienceModel = experienceDao.create(name, address, description, email, url, price, cityId, categoryId, userId, image);
+        LOGGER.debug("Created experience with id {}", experienceModel.getExperienceId());
         return experienceModel;
     }
 
     @Override
-    public boolean update(long experienceId, ExperienceModel experienceModel) {
-        LOGGER.debug("Updating experience with id {}", experienceId);
-        if(experienceDao.update(experienceId, experienceModel)){
-            LOGGER.debug("Experience {} updated", experienceId);
+    public boolean update(ExperienceModel experienceModel, byte[] image) {
+        LOGGER.debug("Updating experience with id {}", experienceModel.getExperienceId());
+        if(experienceDao.update(experienceModel, image)){
+            LOGGER.debug("Experience {} updated", experienceModel.getExperienceId());
             return true;
         } else {
-            LOGGER.warn("Experience {} NOT updated", experienceId);
+            LOGGER.warn("Experience {} NOT updated", experienceModel.getExperienceId());
             return false;
         }
     }
@@ -65,45 +68,15 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> listByCategory(long categoryId,int page) {
-        LOGGER.debug("Retrieving experiences with category id {}", categoryId);
-        return new Page<>(experienceDao.listByCategory(categoryId,page),page, experienceDao.getTotalPagesAllExperiences());
-    }
-
-    @Override
-    public Page<ExperienceModel> listByCategoryAndCity(long categoryId, long cityId,int page) {
-        LOGGER.debug("Retrieving experiences with category id {} and city id {}", categoryId, cityId);
-        return new Page<>(experienceDao.listByCategoryAndCity(categoryId, cityId,page),page, experienceDao.getTotalPagesAllExperiences());
-    }
-
-    @Override
-    public Page<ExperienceModel> listByCategoryAndPrice(long categoryId, Double max,int page) {
-        LOGGER.debug("Retrieving experiences with category id {} and max price {}", categoryId, max);
-        return new Page<>(experienceDao.listByCategoryAndPrice(categoryId, max,page),page, experienceDao.getTotalPagesAllExperiences());
-    }
-
-    @Override
-    public Page<ExperienceModel> listByCategoryPriceAndCity(long categoryId, Double max, long cityId, int page) {
-        LOGGER.debug("Retrieving experiences with category id {}, city id {} and max price {}", categoryId, cityId, max);
-        return new Page<>(experienceDao.listByCategoryPriceAndCity(categoryId, max, cityId,page),page, experienceDao.getTotalPagesAllExperiences());
-    }
-
-//    @Override
-//    public List<ExperienceModel> getRandom() {
-//        LOGGER.debug("Retrieving random experiences");
-//        return experienceDao.getRandom();
-//    } Reemplazar con nuevo formato de landing
-
-    @Override
     public String getCountryCity(long experienceId) {
         LOGGER.debug("Retrieving country and city of experience with id {}", experienceId);
         return experienceDao.getCountryCity(experienceId);
     }
 
     @Override
-    public Page<ExperienceModel> getByUserId(long userId,int page) {
+    public List<ExperienceModel> getByUserId(long userId) {
         LOGGER.debug("Retrieving experiences created by user with id {}", userId);
-        return new Page<>(experienceDao.getByUserId(userId,page),page, experienceDao.getTotalPagesAllExperiences());
+        return experienceDao.getByUserId(userId);
     }
 
     @Override
@@ -112,27 +85,70 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getAvgReviews(experienceId);
     }
 
+
     @Override
-    public Page<ExperienceModel> listByCategoryPriceCityAndScore(long categoryId, Double max, long cityId, long score, int page) {
-        return new Page<>(experienceDao.listByCategoryPriceCityAndScore( categoryId,  max,  cityId,  score, page),page, experienceDao.getTotalPagesAllExperiences());
+    public Page<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score, int page) {
+        List<ExperienceModel> experienceModelList = experienceDao.listByFilterWithCity(categoryId, max, cityId, score, page, PAGE_SIZE);
+        return new Page<>(experienceModelList, page, getTotalPageCount(experienceModelList.size()));
     }
 
     @Override
-    public Page<ExperienceModel> listByCategoryCityAndScore(long categoryId, long cityId, long score,int page) {
-        return new Page<>(experienceDao.listByCategoryCityAndScore( categoryId,  cityId,  score, page),page,experienceDao.getTotalPagesAllExperiences());
+    public Page<ExperienceModel> listByFilterWithCityAsc(long categoryId, Double max, long cityId, long score, String order, int page) {
+        List<ExperienceModel> experienceModelList = experienceDao.listByFilterWithCityAsc(categoryId, max, cityId, score, order, page, PAGE_SIZE);
+        return new Page<>(experienceModelList, page, getTotalPageCount(experienceModelList.size()));
     }
 
     @Override
-   public Page<ExperienceModel> listByCategoryPriceAndScore (long categoryId, Double max, long score,int page) {
-        return new Page<>(experienceDao.listByCategoryPriceAndScore(categoryId,max,score,page),page,experienceDao.getTotalPagesAllExperiences());
+    public Page<ExperienceModel> listByFilterWithCityDesc(long categoryId, Double max, long cityId, long score, String order, int page) {
+        List<ExperienceModel> experienceModelList = experienceDao.listByFilterWithCityDesc(categoryId, max, cityId, score, order, page, PAGE_SIZE);
+        return new Page<>(experienceModelList, page, getTotalPageCount(experienceModelList.size()));
     }
 
     @Override
-    public Page<ExperienceModel> listByCategoryAndScore(long categoryId, long score,int page) {
-        return new Page<>(experienceDao.listByCategoryAndScore(categoryId,score,page),page,experienceDao.getTotalPagesAllExperiences());
+    public Page<ExperienceModel> listByFilter(long categoryId, Double max, long score, int page) {
+        List<ExperienceModel> experienceModelList =  experienceDao.listByFilter(categoryId, max, score, page, PAGE_SIZE);
+        return new Page<>(experienceModelList, page, getTotalPageCount(experienceModelList.size()));
     }
+
     @Override
-    public Page<ExperienceModel> listByScore(int page, long categoryId) {
-        return new Page<>(experienceDao.listByScore(page,categoryId),page,experienceDao.getTotalPagesAllExperiences());
+    public Page<ExperienceModel> listByFilterAsc(long categoryId, Double max, long score, String order, int page) {
+        List<ExperienceModel> experienceModelList= experienceDao.listByFilterAsc(categoryId, max, score, order, page, PAGE_SIZE);
+        return new Page<>(experienceModelList, page, getTotalPageCount(experienceModelList.size()));
+    }
+
+    @Override
+    public Page<ExperienceModel> listByFilterDesc(long categoryId, Double max, long score, String order, int page) {
+        List<ExperienceModel> experienceModelList = experienceDao.listByFilterDesc(categoryId, max, score, order, page, PAGE_SIZE);
+        return new Page<>(experienceModelList, page, getTotalPageCount(experienceModelList.size()));
+    }
+
+    @Override
+    public Optional<Double> getMaxPrice(long categoryId) {
+        return experienceDao.getMaxPrice(categoryId);
+    }
+
+    @Override
+    public List<ExperienceModel> getByUserIdOrderBy(long id, String order) {
+        return experienceDao.getByUserIdOrderBy(id,order);
+    }
+
+    @Override
+    public List<ExperienceModel> getByUserIdOrderByDesc(long id, String order) {
+        return experienceDao.getByUserIdOrderByDesc(id,order);
+    }
+
+    @Override
+    public List<ExperienceModel> getOrderByDesc(String order) {
+        return experienceDao.getOrderByDesc(order);
+    }
+
+    @Override
+    public List<ExperienceModel> getOrderBy(String order) {
+        return experienceDao.getOrderBy(order);
+    }
+
+    private int getTotalPageCount(int rowsCount){
+        int total = (int) Math.ceil(rowsCount/PAGE_SIZE);
+        return total==0?1:total;
     }
 }
