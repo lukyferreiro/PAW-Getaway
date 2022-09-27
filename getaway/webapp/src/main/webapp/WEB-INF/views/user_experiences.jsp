@@ -16,10 +16,21 @@
 
          <c:choose>
             <c:when test="${experiences.size() == 0}">
-               <h2 class="title"><spring:message code="experience.notExist"/></h2>
+                  <h2 class="title"><spring:message code="experience.notExist"/></h2>
             </c:when>
             <c:otherwise>
-               <h2 class="title"><spring:message code="experience.title"/></h2>
+               <div>
+                  <h2 class="title"><spring:message code="experience.title"/></h2>
+                  <jsp:include page="/WEB-INF/views/order_dropdown.jsp">
+                     <jsp:param name="path1" value="/user/experiences?orderBy=avg(score)&direction=asc"/>
+                     <jsp:param name="path2" value="/user/experiences?orderBy=avg(score)&direction=desc"/>
+                     <jsp:param name="path3" value="/user/experiences?orderBy=experienceName&direction=asc"/>
+                     <jsp:param name="path4" value="/user/experiences?orderBy=experienceName&direction=desc"/>
+                     <jsp:param name="path5" value="/user/experiences?orderBy=price&direction=desc"/>
+                     <jsp:param name="path6" value="/user/experiences?orderBy=price&direction=asc"/>
+                  </jsp:include>
+
+               </div>
                <div class="cards container-experiences container-fluid">
                   <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                      <div class="card card-experience mx-3 my-2 p-0">

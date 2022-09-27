@@ -39,6 +39,8 @@ public class ExperienceController {
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,
                                    Principal principal,
+                                   @RequestParam Optional<String> orderBy,
+                                   @RequestParam Optional<String> direction,
                                    @RequestParam Optional<Long> cityId,
                                    @RequestParam Optional<Double> maxPrice,
                                    @RequestParam Optional<Long> score,
@@ -56,36 +58,116 @@ public class ExperienceController {
 
         final String dbCategoryName = category.getName();
         final int id = category.ordinal() + 1;
-        final List<ExperienceModel> experienceList;
+        List<ExperienceModel> experienceList = new ArrayList<>();
         final List<CityModel> cityModels = cityService.listAll();
 
         if (cityId.isPresent()) {
             if (maxPrice.isPresent() && maxPrice.get() > 0) {
                 if (score.isPresent()) {
-                    experienceList = experienceService.listByCategoryPriceCityAndScore(id, maxPrice.get(), cityId.get(), score.get());
+                    if (orderBy.isPresent()) {
+                        if (direction.isPresent()) {
+                            if (direction.get().equals("asc")) {
+                                experienceList = experienceService.listByCategoryPriceCityAndScoreOrderBy(id, maxPrice.get(), cityId.get(), score.get(), orderBy.get());
+                            } else {
+                                experienceList = experienceService.listByCategoryPriceCityAndScoreOrderByDesc(id, maxPrice.get(), cityId.get(), score.get(), orderBy.get());
+                            }
+                        }
+                    } else {
+                        experienceList = experienceService.listByCategoryPriceCityAndScore(id, maxPrice.get(), cityId.get(), score.get());
+                    }
                 } else {
-                    experienceList = experienceService.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
+                    if (orderBy.isPresent()) {
+                        if (direction.isPresent()) {
+                            if (direction.get().equals("asc")) {
+                                experienceList = experienceService.listByCategoryPriceAndCityOrderBy(id, maxPrice.get(), cityId.get(), orderBy.get());
+                            } else {
+                                experienceList = experienceService.listByCategoryPriceAndCityOrderByDesc(id, maxPrice.get(), cityId.get(), orderBy.get());
+                            }
+                        }
+                    } else {
+                        experienceList = experienceService.listByCategoryPriceAndCity(id, maxPrice.get(), cityId.get());
+                    }
                 }
             } else {
                 if (score.isPresent()) {
-                    experienceList = experienceService.listByCategoryCityAndScore(id, cityId.get(), score.get());
+                    if (orderBy.isPresent()) {
+                        if (direction.isPresent()) {
+                            if (direction.get().equals("asc")) {
+                                experienceList = experienceService.listByCategoryCityAndScoreOrderBy(id, cityId.get(), score.get(), orderBy.get());
+                            } else {
+                                experienceList = experienceService.listByCategoryCityAndScoreOrderByDesc(id, cityId.get(), score.get(), orderBy.get());
+                            }
+                        }
+                    } else {
+                        experienceList = experienceService.listByCategoryCityAndScore(id, cityId.get(), score.get());
+                    }
                 } else {
-                    experienceList = experienceService.listByCategoryAndCity(id, cityId.get());
+                    if (orderBy.isPresent()) {
+                        if (direction.isPresent()) {
+                            if (direction.get().equals("asc")) {
+                                experienceList = experienceService.listByCategoryAndCityOrderBy(id, cityId.get(), orderBy.get());
+                            } else {
+                                experienceList = experienceService.listByCategoryAndCityOrderByDesc(id, cityId.get(), orderBy.get());
+                            }
+                        }
+                    } else {
+                        experienceList = experienceService.listByCategoryAndCity(id, cityId.get());
+                    }
                 }
             }
         } else if (maxPrice.isPresent() && maxPrice.get() > 0) {
             if (score.isPresent()) {
-                experienceList = experienceService.listByCategoryPriceAndScore(id, maxPrice.get(), score.get());
+                if (orderBy.isPresent()) {
+                    if (direction.isPresent()) {
+                        if (direction.get().equals("asc")) {
+                            experienceList = experienceService.listByCategoryPriceAndScoreOrderBy(id, maxPrice.get(), score.get(), orderBy.get());
+                        } else {
+                            experienceList = experienceService.listByCategoryPriceAndScoreOrderByDesc(id, maxPrice.get(), score.get(), orderBy.get());
+                        }
+                    }
+                } else {
+                    experienceList = experienceService.listByCategoryPriceAndScore(id, maxPrice.get(), score.get());
+                }
             } else {
-                experienceList = experienceService.listByCategoryAndPrice(id, maxPrice.get());
+                if (orderBy.isPresent()) {
+                    if (direction.isPresent()) {
+                        if (direction.get().equals("asc")) {
+                            experienceList = experienceService.listByCategoryAndPriceOrderBy(id, maxPrice.get(), orderBy.get());
+                        } else {
+                            experienceList = experienceService.listByCategoryAndPriceOrderByDesc(id, maxPrice.get(), orderBy.get());
+                        }
+                    }
+                } else {
+                    experienceList = experienceService.listByCategoryAndPrice(id, maxPrice.get());
+                }
             }
         } else if (score.isPresent()) {
-            experienceList = experienceService.listByCategoryAndScore(id, score.get());
+            if (orderBy.isPresent()) {
+                if (direction.isPresent()) {
+                    if (direction.get().equals("asc")) {
+                        experienceList = experienceService.listByCategoryAndScoreOrderBy(id, score.get(), orderBy.get());
+                    } else {
+                        experienceList = experienceService.listByCategoryAndScoreOrderByDesc(id, score.get(), orderBy.get());
+                    }
+                }
+            } else {
+                experienceList = experienceService.listByCategoryAndScore(id, score.get());
+            }
         } else {
-            experienceList = experienceService.listByCategory(id);
+            if (orderBy.isPresent()) {
+                if (direction.isPresent()) {
+                    if (direction.get().equals("asc")) {
+                        experienceList = experienceService.listByCategoryOrderBy(id, orderBy.get());
+                    } else {
+                        experienceList = experienceService.listByCategoryOrderByDesc(id, orderBy.get());
+                    }
+                }
+            } else {
+                experienceList = experienceService.listByCategory(id);
+            }
         }
 
-        if(principal!=null){
+        if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
 
             if (user.isPresent()) {
@@ -94,10 +176,9 @@ public class ExperienceController {
                 final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
 
                 mav.addObject("favExperienceModels", favExperienceModels);
-//                mav.addObject("loggedUser", true);
             }
         } else {
-//            mav.addObject("loggedUser", false);
+
             mav.addObject("favExperienceModels", new ArrayList<>());
         }
 
@@ -148,10 +229,8 @@ public class ExperienceController {
                 final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
 
                 mav.addObject("favExperienceModels", favExperienceModels);
-//                mav.addObject("loggedUser", true);
             }
         } else {
-//            mav.addObject("loggedUser", false);
             mav.addObject("favExperienceModels", new ArrayList<>());
         }
 
@@ -166,7 +245,7 @@ public class ExperienceController {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
-            return experience(categoryName, form, principal, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+            return experience(categoryName, form, principal, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty());
 
         }
 
@@ -175,9 +254,6 @@ public class ExperienceController {
             long cityId = cityModel.get().getId();
             mav.addObject("cityId", cityId);
         }
-//        final CityModel cityModel = cityService.getIdByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
-//        final long cityId = cityModel.getId();
-//        mav.addObject("cityId", cityId);
 
         final Double priceMax = form.getActivityPriceMax();
         if (priceMax != null) {

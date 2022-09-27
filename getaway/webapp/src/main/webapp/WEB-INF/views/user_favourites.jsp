@@ -19,7 +19,17 @@
                <h2 class="title"><spring:message code="favourite.notExist"/></h2>
             </c:when>
             <c:otherwise>
-               <h2 class="title"><spring:message code="navbar.favourites"/></h2>
+               <div>
+                  <h2 class="title"><spring:message code="navbar.favourites"/></h2>
+                  <jsp:include page="/WEB-INF/views/order_dropdown.jsp">
+                     <jsp:param name="path1" value="/user/favourites?orderBy=rankingAsc"/>
+                     <jsp:param name="path2" value="/user/favourites?orderBy=rankingDesc"/>
+                     <jsp:param name="path3" value="/user/favourites?orderBy=A-Z"/>
+                     <jsp:param name="path4" value="/user/favourites?orderBy=Z-A"/>
+                     <jsp:param name="path5" value="/user/favourites?orderBy=priceDesc"/>
+                     <jsp:param name="path6" value="/user/favourites?orderBy=priceAsc"/>
+                  </jsp:include>
+               </div>
                <div class="cards container-experiences container-fluid">
                   <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                      <c:set var = "fav" value = "${false}"/>

@@ -44,6 +44,8 @@ public class UserExperiencesController {
 
     @RequestMapping(value = "/user/favourites")
     public ModelAndView favourites(Principal principal,
+                                   @RequestParam Optional<String> direction,
+                                   @RequestParam Optional<String> orderBy,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set){
         final ModelAndView mav = new ModelAndView("user_favourites");
@@ -53,9 +55,21 @@ public class UserExperiencesController {
         final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
         mav.addObject("favExperienceModels", favExperienceModels);
 
-        final List<ExperienceModel> experienceList = experienceService.listAll();
+        List<ExperienceModel> experienceList = new ArrayList<>();
+        if (orderBy.isPresent()) {
+            if (direction.isPresent()) {
+                if (direction.get().equals("asc")) {
+                    experienceList = experienceService.getOrderBy(orderBy.get());
+                } else {
+                    experienceList = experienceService.getOrderByDesc(orderBy.get());
+                }
+            }
+        } else {
+            experienceList = experienceService.listAll();
+        }
+
         final List<Long> avgReviews = new ArrayList<>();
-        for(ExperienceModel exp : experienceList){
+        for (ExperienceModel exp : experienceList) {
             avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
         }
 
@@ -66,6 +80,8 @@ public class UserExperiencesController {
 
     @RequestMapping(value = "/user/experiences")
     public ModelAndView experience(Principal principal,
+                                   @RequestParam Optional<String> direction,
+                                   @RequestParam Optional<String> orderBy,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set) {
         final ModelAndView mav = new ModelAndView("user_experiences");
@@ -77,9 +93,24 @@ public class UserExperiencesController {
         final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
         mav.addObject("favExperienceModels", favExperienceModels);
 
-        final List<ExperienceModel> experienceList = experienceService.getByUserId(user.getId());
+
+        List<ExperienceModel> experienceList = new ArrayList<>();
+
+        if (orderBy.isPresent()) {
+            if (direction.isPresent()) {
+                if (direction.get().equals("asc")) {
+                    experienceList = experienceService.getByUserIdOrderBy(user.getId(), orderBy.get());
+                } else {
+                    experienceList = experienceService.getByUserIdOrderByDesc(user.getId(), orderBy.get());
+                }
+            }
+        } else {
+            experienceList = experienceService.getByUserId(user.getId());
+        }
+
         final List<Long> avgReviews = new ArrayList<>();
-        for(ExperienceModel exp : experienceList){
+
+        for (ExperienceModel exp : experienceList) {
             avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
         }
 
