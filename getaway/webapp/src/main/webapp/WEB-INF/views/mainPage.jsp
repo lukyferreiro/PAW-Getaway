@@ -3,6 +3,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
+
+<%--TODO agregar bootstrap para paginacion aca , esta en el canal de ds en la parte de codigo dropeado :)--%>
+
 <html>
    <head>
       <title><spring:message code="pageName"/></title>
