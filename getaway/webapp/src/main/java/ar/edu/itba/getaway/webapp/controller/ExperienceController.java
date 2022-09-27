@@ -120,11 +120,16 @@ public class ExperienceController {
             avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
         }
 
+        LOGGER.debug(String.format("Current page: %d", currentPage.getCurrentPage()));
+        LOGGER.debug(String.format("Total pages: %d", currentPage.getMaxPage()));
+
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
         mav.addObject("experiences", currentExperiences);
         mav.addObject("avgReviews", avgReviews);
+        mav.addObject("totalPages", currentPage.getMaxPage());
+        mav.addObject("currentPage", currentPage.getCurrentPage());
 
         return mav;
     }

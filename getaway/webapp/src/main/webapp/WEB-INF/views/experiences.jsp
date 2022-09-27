@@ -142,6 +142,47 @@
                   </div>
                </c:forEach>
             </div>
+
+            <div>
+               <nav class="d-flex justify-content-center align-items-center">
+                  <ul class="pagination">
+<%--                     <li class="page-item">--%>
+<%--                        <a class="page-link" href="--%>
+<%--                        <c:url value = "/experiences/${categoryName}/">--%>
+<%--                           <c:param name = "pageNum" value = "1"/>--%>
+<%--                        </c:url>">--%>
+<%--                           &lt;%&ndash;                        <spring:message code="home.pagination.first"/>&ndash;%&gt;--%>
+<%--                        </a>--%>
+<%--                     </li>--%>
+
+
+                     <c:forEach var = "i" begin = "1" end = "${totalPages}">
+                        <li class="page-item">
+                           <a class="page-link ${i == currentPage ? 'font-weight-bold' : ''}" href="
+                           <c:url value = "/experiences/${categoryName}">
+                              <c:param name = "pageNum" value = "${i}"/>
+<%--                           <c:param name = "category" value = "${param.category}"/>--%>
+                           </c:url>">
+                              <c:out value="${i}"/>
+                           </a>
+                        </li>
+                     </c:forEach>
+
+
+<%--                     <li class="page-item">--%>
+<%--                        <a class="page-link" href="--%>
+<%--                        <c:url value = "/experiences/${categoryName}">--%>
+<%--                           <c:param name = "pageNum" value = "${currentPage+1}"/>--%>
+<%--&lt;%&ndash;                           <c:param name = "category" value = "${param.category}"/>&ndash;%&gt;--%>
+<%--                        </c:url>">--%>
+<%--                        <spring:message code="experience.pagination.next"/>--%>
+<%--                        </a>--%>
+<%--                     </li>--%>
+                  </ul>
+               </nav>
+            </div>
+
+
          </div>
 
          <%@ include file="../components/footer.jsp" %>

@@ -89,37 +89,37 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public Page<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score, int page) {
         List<ExperienceModel> experienceModelList = experienceDao.listByFilterWithCity(categoryId, max, cityId, score, page, PAGE_SIZE);
-        return new Page<>(experienceModelList, page, getTotalPageCount(experienceModelList.size()));
+        return new Page<>(experienceModelList, page, getTotalPageCount());
     }
 
     @Override
     public Page<ExperienceModel> listByFilterWithCityAsc(long categoryId, Double max, long cityId, long score, String order, int page) {
         List<ExperienceModel> experienceModelList = experienceDao.listByFilterWithCityAsc(categoryId, max, cityId, score, order, page, PAGE_SIZE);
-        return new Page<>(experienceModelList, page, getTotalPageCount(experienceModelList.size()));
+        return new Page<>(experienceModelList, page, getTotalPageCount());
     }
 
     @Override
     public Page<ExperienceModel> listByFilterWithCityDesc(long categoryId, Double max, long cityId, long score, String order, int page) {
         List<ExperienceModel> experienceModelList = experienceDao.listByFilterWithCityDesc(categoryId, max, cityId, score, order, page, PAGE_SIZE);
-        return new Page<>(experienceModelList, page, getTotalPageCount(experienceModelList.size()));
+        return new Page<>(experienceModelList, page, getTotalPageCount());
     }
 
     @Override
     public Page<ExperienceModel> listByFilter(long categoryId, Double max, long score, int page) {
         List<ExperienceModel> experienceModelList =  experienceDao.listByFilter(categoryId, max, score, page, PAGE_SIZE);
-        return new Page<>(experienceModelList, page, getTotalPageCount(experienceModelList.size()));
+        return new Page<>(experienceModelList, page, getTotalPageCount());
     }
 
     @Override
     public Page<ExperienceModel> listByFilterAsc(long categoryId, Double max, long score, String order, int page) {
         List<ExperienceModel> experienceModelList= experienceDao.listByFilterAsc(categoryId, max, score, order, page, PAGE_SIZE);
-        return new Page<>(experienceModelList, page, getTotalPageCount(experienceModelList.size()));
+        return new Page<>(experienceModelList, page, getTotalPageCount());
     }
 
     @Override
     public Page<ExperienceModel> listByFilterDesc(long categoryId, Double max, long score, String order, int page) {
         List<ExperienceModel> experienceModelList = experienceDao.listByFilterDesc(categoryId, max, score, order, page, PAGE_SIZE);
-        return new Page<>(experienceModelList, page, getTotalPageCount(experienceModelList.size()));
+        return new Page<>(experienceModelList, page, getTotalPageCount());
     }
 
     @Override
@@ -147,8 +147,8 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getOrderBy(order);
     }
 
-    private int getTotalPageCount(int rowsCount){
-        int total = (int) Math.ceil(rowsCount/PAGE_SIZE);
+    private int getTotalPageCount(){
+        int total = (int) Math.ceil(experienceDao.listAll().size()/PAGE_SIZE);
         return total==0?1:total;
     }
 }
