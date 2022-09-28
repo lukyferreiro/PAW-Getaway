@@ -42,9 +42,7 @@
                         <spring:message code="experience.price.free"/>
                      </c:when>
                      <c:otherwise>
-                        <spring:message code="experience.price.symbol"/>
-                        <c:out value="${param.price}"/>
-                        <spring:message code="experience.price.perPerson"/>
+                        <spring:message code="experience.price.value" arguments="${param.price}"/>
                      </c:otherwise>
                   </c:choose>
                </h6>

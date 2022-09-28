@@ -49,15 +49,13 @@
                   <p class="information-text">
                      <c:choose>
                         <c:when test="${param.price == null}">
-                           <spring:message code="experienceDetail.noData"/>
+                           <spring:message code="experienceDetail.price.noPrice"/>
                         </c:when>
                         <c:when test="${param.price == '0.0'}">
                            <spring:message code="experienceDetail.price.free"/>
                         </c:when>
                         <c:otherwise>
-                           <spring:message code="experienceDetail.price.symbol"/>
-                           <c:out value="${param.price}"/>
-                           <spring:message code="experienceDetail.price.perPerson"/>
+                           <spring:message code="experienceDetail.price.value" arguments="${param.price}"/>
                         </c:otherwise>
                      </c:choose>
                   </p>
