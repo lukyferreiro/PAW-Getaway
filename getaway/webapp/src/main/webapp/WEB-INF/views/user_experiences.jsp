@@ -16,7 +16,9 @@
          <div class="container-fluid p-0 my-3  d-flex flex-column justify-content-center">
             <c:choose>
                <c:when test="${experiences.size() == 0}">
+               <div class="d-flex justify-content-around align-content-center">
                   <h2 class="title"><spring:message code="experience.notExist"/></h2>
+               </div>
                </c:when>
                <c:otherwise>
                   <div class="d-flex justify-content-around align-content-center">
