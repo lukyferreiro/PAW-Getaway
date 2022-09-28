@@ -5,7 +5,6 @@ import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.exceptions.ExperienceNotFoundException;
-import ar.edu.itba.getaway.webapp.controller.forms.ExperienceFormController;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,6 +126,7 @@ public class ExperienceController {
         mav.addObject("path", path);
 
 
+        mav.addObject("max", max);
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);

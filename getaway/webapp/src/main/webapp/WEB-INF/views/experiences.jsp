@@ -32,30 +32,31 @@
                      <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
                   </div>
 
-                  <div class="form-check form-switch my-3 d-flex justify-content-start align-items-center">
-                     <input id="enablePrice" class="form-check-input checkbox-price" type="checkbox"
-                            onchange="let sliderPrice = document.getElementById('customRange');
-                                     sliderPrice.disabled = !this.checked;
-                                     if (this.checked) sliderPrice.style.cursor = 'pointer';
-                                     else sliderPrice.style.cursor = 'default';"/>
-                     <label for="enablePrice" class="form-check-label"><spring:message code="filters.price.checkbox"/></label>
-                  </div>
+<%--                  <div class="form-check form-switch my-3 d-flex justify-content-start align-items-center">--%>
+<%--                     <input id="enablePrice" class="form-check-input checkbox-price" type="checkbox"--%>
+<%--                            onchange="let sliderPrice = document.getElementById('customRange');--%>
+<%--                                     sliderPrice.disabled = !this.checked;--%>
+<%--                                     if (this.checked) sliderPrice.style.cursor = 'pointer';--%>
+<%--                                     else sliderPrice.style.cursor = 'default';"/>--%>
+<%--                     <label for="enablePrice" class="form-check-label"><spring:message code="filters.price.checkbox"/></label>--%>
+<%--                  </div>--%>
 
                   <div class="container-slider-price">
                      <form:label path="activityPriceMax" class="form-label"><spring:message code="filters.price.title"/></form:label>
                      <output id="priceRange" name="priceRange" for="customRange">
-                        <spring:message code="filters.price.min"/></output>
+                        ${max}
+                     </output>
                      <div class="slider-price">
                         <div class="value left">
                            <spring:message code="filters.price.min"/>
                         </div>
                         <div class="slider">
-                           <form:input disabled="true" id="customRange" path="activityPriceMax"
-                                       type="range" min="0" max="10000" value="0"
+                           <form:input id="customRange" path="activityPriceMax"
+                                       type="range" min="0" max="${max}" value="${max}"
                                        oninput="document.getElementById('priceRange').value = this.value"/>
                         </div>
                         <div class="value right">
-                           <spring:message code="filters.price.max"/>
+                           ${max}
                         </div>
                      </div>
                   </div>
