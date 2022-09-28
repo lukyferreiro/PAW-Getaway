@@ -39,7 +39,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
         </dependency>
-        <!--Modulo services-->
+        <!--Módulo services-->
         <dependency>
             <groupId>ar.edu.itba.getaway</groupId>
             <artifactId>services</artifactId>

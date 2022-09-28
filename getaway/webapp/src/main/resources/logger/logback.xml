@@ -8,7 +8,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <maxHistory>5</maxHistory>
             <fileNamePattern>
-                logs/warnings.%d{yyyy-MM-dd}.log
+                logs/warnings-paw22b01.%d{yyyy-MM-dd}.log
             </fileNamePattern>
         </rollingPolicy>
         <encoder>
@@ -21,7 +21,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <maxHistory>5</maxHistory>
             <fileNamePattern>
-                logs/paw.%d{yyyy-MM-dd}.log
+                logs/paw-paw22b01.%d{yyyy-MM-dd}.log
             </fileNamePattern>
         </rollingPolicy>
         <encoder>

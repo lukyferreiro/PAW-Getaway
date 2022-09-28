@@ -41,7 +41,7 @@
         </dependency>
         <!--Modulo models -->
         <dependency>
-            <groupId>ar.edu.itba.paw</groupId>
+            <groupId>ar.edu.itba.getaway</groupId>
             <artifactId>models</artifactId>
             <version>${parent.version}</version>
         </dependency>

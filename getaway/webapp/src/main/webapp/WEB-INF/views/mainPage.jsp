@@ -15,7 +15,7 @@
       <div class="container-main">
          <%@ include file="../components/navbar.jsp" %>
 
-         <div class="container-fluid p-0 overflow-auto my-3 h-100 d-flex flex-wrap justify-content-center">
+         <div class="container-fluid p-0 my-3 d-flex flex-wrap justify-content-center">
             <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                <jsp:include page="/WEB-INF/components/card_experience.jsp">
                   <jsp:param name="hasImage" value="${experience.hasImage}"/>

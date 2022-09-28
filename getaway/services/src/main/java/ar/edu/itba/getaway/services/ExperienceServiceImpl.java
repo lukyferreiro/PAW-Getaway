@@ -20,7 +20,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Autowired
     private ExperienceDao experienceDao;
 
-    private static final int PAGE_SIZE=2;
+    private static final int PAGE_SIZE = 12;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 

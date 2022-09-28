@@ -15,7 +15,7 @@
          <%@ include file="../components/navbar.jsp" %>
 
 
-         <div class="container-fluid p-0 my-3  d-flex flex-column justify-content-center">
+         <div class="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
             <c:choose>
                <c:when test="${experiences.size() == 0}">
                   <h2 class="title"><spring:message code="favourite.description"/></h2>

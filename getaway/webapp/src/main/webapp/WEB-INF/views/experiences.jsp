@@ -13,7 +13,7 @@
       <div class="container-main">
          <%@ include file="../components/navbar.jsp" %>
 
-         <div class="container-fluid overflow-auto h-100 p-0 my-3 d-flex">
+         <div class="container-fluid h-100 p-0 my-3 d-flex">
             <div class="container-filters container-fluid px-2 py-0 mx-2 my-0 d-flex flex-column justify-content-start align-items-center border-end">
                <p class="filters-title m-0">
                   <spring:message code="filters.title"/>
@@ -89,7 +89,7 @@
                </a>
             </div>
 
-            <div class="container-experiences container-fluid overflow-auto p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
+            <div class="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 h-100 d-flex flex-wrap justify-content-center">
                <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                   <jsp:include page="/WEB-INF/components/card_experience.jsp">
                      <jsp:param name="hasImage" value="${experience.hasImage}"/>
