@@ -143,10 +143,10 @@ public class UserExperiencesController {
         final ModelAndView mav = new ModelAndView("experience_form");
 
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
-        final List<String> categories = new ArrayList<>();
-        for (ExperienceCategory categoryModel : categoryModels) {
-            categories.add(categoryModel.getName());
-        }
+//        final List<String> categories = new ArrayList<>();
+////        for (ExperienceCategory categoryModel : categoryModels) {
+////            categories.add(categoryModel.getName());
+////        }
 
         final List<CountryModel> countryModels = countryService.listAll();
         final List<CityModel> cityModels = cityService.listAll();
@@ -185,11 +185,11 @@ public class UserExperiencesController {
         mav.addObject("description", "editExperience.description");
         mav.addObject("endpoint", endpoint);
         mav.addObject("cancelBtn", "/user/experiences");
-        mav.addObject("categories", categories);
+        mav.addObject("categories", categoryModels);
         mav.addObject("cities", cityModels);
         mav.addObject("countries", countryModels);
         mav.addObject("formCity", cityName);
-        mav.addObject("formCategory", experience.getCategoryName());
+        mav.addObject("formCategory", experience.getCategoryId());
 
         return mav;
     }
@@ -202,10 +202,7 @@ public class UserExperiencesController {
             return experienceEdit(experienceId, form);
         }
 
-        long categoryId = form.getActivityCategoryId();
-        if (categoryId < 0) {
-            throw new CategoryNotFoundException();
-        }
+        long categoryId = form.getActivityCategory();
 
         final CityModel city = cityService.getIdByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
         final long cityId = city.getId();
