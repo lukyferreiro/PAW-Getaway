@@ -30,39 +30,30 @@ public class ReviewUserModel {
     public long getReviewId() {
         return reviewId;
     }
-
     public String getTitle() {
         return title;
     }
-
     public String getDescription() {
         return description;
     }
-
     public long getScore() {
         return score;
     }
-
     public long getExperienceId() {
         return experienceId;
     }
-
     public Date getReviewDate() {
         return reviewDate;
     }
-
     public long getUserId() {
         return userId;
     }
-
     public String getUserName() {
         return userName;
     }
-
     public String getUserSurname() {
         return userSurname;
     }
-
     public Long getImgId() {
         return imgId;
     }

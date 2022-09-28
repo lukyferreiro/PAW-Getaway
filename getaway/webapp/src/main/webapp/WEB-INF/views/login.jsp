@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -16,9 +17,11 @@
 
          <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
             <div class="container-lg w-100 p-2 smallContentContainer">
-               <div class="row w-100 m-0 align-items-center justify-content-center">
+               <div class="row w-100 m-0 p-5 align-items-center justify-content-center">
                   <div class="col-12">
-                     <h1 class="text-center title"><spring:message code="loginForm.title"/></h1>
+                     <h1 class="text-center title">
+                        <spring:message code="loginForm.title"/>
+                     </h1>
                      <p class="subtitle text-center">
                         <spring:message code="loginForm.description"/>
                      </p>

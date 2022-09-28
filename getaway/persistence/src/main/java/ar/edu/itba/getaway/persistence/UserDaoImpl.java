@@ -2,10 +2,7 @@ package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
-import ar.edu.itba.getaway.models.RoleModel;
-import ar.edu.itba.getaway.models.Roles;
-import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.getaway.models.UserInfo;
+import ar.edu.itba.getaway.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +66,8 @@ public class UserDaoImpl implements UserDao {
         userData.put("email", email);
         userData.put("password", password);
 
-        imageDao.createImg(null);
+        final ImageModel imageModel = imageDao.createImg(null);
+        userData.put("imgId", imageModel.getId());
 
         final long userId;
         try {

@@ -1,5 +1,5 @@
-.container-header {
-    background-color: rgba(255, 197, 132, 0.3);
+.navbar{
+    background-color: var(--background-color);
 }
 
 .logo {
@@ -38,56 +38,27 @@
     margin-left: 40px;
 }*/
 
-.profile-image-btn{
-    height: 100%;
-    width: 100%;
-    object-fit: scale-down;
+.container-navbar-buttons {
+    margin: 0 30px;
 }
 
-.container-header-btn {
-    margin: 15px 30px 15px auto;
-}
-
-.btn-header {
-    font-size: x-large;
-    font-weight: bold;
-    color: white;
-    border-color: var(--primary-color);
-    background-color: var(--primary-color);
-    padding: 10px 20px 10px 20px;
-    margin-left: 40px;
-}
-
-.btn-header:hover {
-    color: white;
-    border-color: var(--primary-color);
-    background-color: var(--primary-color);
-    transform: scale(1.1);
-    transition: 0.3s;
-}
-
-.btn-header:focus {
-    color: white;
-    border-color: var(--primary-color);
-    background-color: var(--primary-color);
-}
-
-.btn-filter {
+.btn-category {
     color: black;
     font-size: x-large;
-    border-color: var(--primary-color);
+    border-color: black;
     margin: 10px 20px 0 20px;
     padding: 5px 20px 10px 15px;
     border-radius: 15px;
 }
 
-.btn-filter > img {
+.btn-category > img {
     width: 30px;
     height: 30px;
     margin-right: 5px;
+    border: transparent;
 }
 
-.btn-filter:hover {
+.btn-category:hover {
     border-color: var(--primary-color);
     background-color: var(--secondary-color);
     color: black;
@@ -95,17 +66,13 @@
     transition: 0.3s;
 }
 
-.btn-filter:focus {
+.btn-category:focus {
     border-color: var(--primary-color);
     color: black;
 }
 
 .separator {
-    color: var(--primary-color);
-    border-width: 3px;
-    margin: 10px 0;
-}
-
-.dropdown-item::selection, .dropdown-item:focus{
-    background-color: #FAB672;
+    border: 2px solid black;
+    margin: 0;
+    padding: 0;
 }

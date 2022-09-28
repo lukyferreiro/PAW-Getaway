@@ -5,17 +5,16 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> - <spring:message code="experience.deleteQuestion"/></title>
+      <title><spring:message code="pageName"/> - <spring:message code="experience.delete"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
-      <link href='<c:url value="/resources/css/delete.css"/>' rel="stylesheet">
    </head>
 
    <body>
       <div class="container-main">
          <%@ include file="../components/simpleNavbar.jsp" %>
 
-         <div class="container-fluid py-4 px-0 d-flex align-items-center">
-            <div class="container-lg p-5 mt-5 smallContentContainer">
+         <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
+            <div class="w-100 h-50 smallContentContainer">
                <div class="row w-100 h-100 m-0 align-items-center justify-content-center">
                   <div class="col-12">
                      <h1 class="text-center title">
@@ -24,15 +23,16 @@
                   </div>
                   <div class="col-12 px-0 d-flex align-items-center justify-content-center">
                      <c:url value="/user/experiences/delete/${experience.experienceId}" var="postPath"/>
-                     <form:form modelAttribute="deleteForm" action="${postPath}" id="deleteForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
-                        <div class="buttons">
+                     <form:form modelAttribute="deleteForm" action="${postPath}" id="deleteForm" method="post"
+                                acceptCharset="UTF-8" enctype="multipart/form-data" cssStyle="margin: 0;">
+                        <div class="p-0 m-0 d-flex justify-content-around">
                            <a href="<c:url value = "/user/experiences"/>">
                               <button class="btn btn-cancel-form m-3 px-3 py-2" id="cancelFormButton">
-                                 <spring:message code="experienceForm.cancel"/>
+                                 <spring:message code="experience.cancelBtn"/>
                               </button>
                            </a>
                            <button type="submit" class="btn btn-submit-form m-3 px-3 py-2" id="deleteFormButton" form="deleteForm">
-                              <spring:message code="experience.delete"/>
+                              <spring:message code="experience.deleteBtn"/>
                            </button>
                         </div>
                      </form:form>
@@ -47,6 +47,5 @@
       <%@ include file="../components/includes/bottomScripts.jsp" %>
       <script src='<c:url value="/resources/js/delete.js"/>'></script>
       <script src='<c:url value="/resources/js/cancelButton.js"/>'></script>
-
    </body>
 </html>

@@ -1,0 +1,32 @@
+.card-experience {
+    width: 350px;
+    height: fit-content;
+}
+
+.card-experience:hover {
+    transform: scale(1.02);
+    transition: 0.3s;
+    box-shadow: -0.5rem 0 2rem grey;
+}
+
+.card-link {
+    text-decoration: none;
+    color: black;
+}
+
+.card-link:hover, .card-link:focus {
+    color: black;
+}
+
+.card-img-top{
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.btn-fav {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    padding: 3px;
+}

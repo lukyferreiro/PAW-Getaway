@@ -6,7 +6,6 @@ public class FilterForm {
     private Double activityPriceMax;
     private Boolean enablePrice;
     private String activityReview;
-    private int pageNum;
 
     public Double getActivityPriceMax() {
         return activityPriceMax;

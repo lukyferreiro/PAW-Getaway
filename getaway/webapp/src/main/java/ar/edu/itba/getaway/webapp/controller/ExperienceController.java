@@ -52,6 +52,11 @@ public class ExperienceController {
     ) {
         final ModelAndView mav = new ModelAndView("experiences");
 
+        LOGGER.debug("ACA LLEGA");
+        LOGGER.debug(categoryName);
+        LOGGER.debug(String.format("PAGENUM : %d", pageNum));
+
+
         // Ordinal empieza en 0
         final ExperienceCategory category;
         try {
@@ -75,27 +80,16 @@ public class ExperienceController {
         if (score.isPresent() && score.get() != -1) {
             scoreVal = score.get();
         }
+        String order = "";
+
+        if (orderBy.isPresent()) {
+            order = " ORDER BY " + orderBy.get() + " " + direction.get();
+        }
 
         if (cityId.isPresent()) {
-            if (orderBy.isPresent()) {
-                if (direction.get().equals("asc")) {
-                    currentPage = experienceService.listByFilterWithCityAsc(id, max, cityId.get(), scoreVal, orderBy.get(), pageNum);
-                } else {
-                    currentPage = experienceService.listByFilterWithCityDesc(id, max, cityId.get(), scoreVal, orderBy.get(), pageNum);
-                }
-            } else {
-                currentPage = experienceService.listByFilterWithCity(id, max, cityId.get(), scoreVal, pageNum);
-            }
+            currentPage = experienceService.listByFilterWithCity(id, max, cityId.get(), scoreVal, order, pageNum);
         } else {
-            if (orderBy.isPresent()) {
-                if (direction.get().equals("asc")) {
-                    currentPage = experienceService.listByFilterAsc(id, max, scoreVal, orderBy.get(), pageNum);
-                } else {
-                    currentPage = experienceService.listByFilterDesc(id, max, scoreVal, orderBy.get(), pageNum);
-                }
-            } else {
-                currentPage = experienceService.listByFilter(id, max, scoreVal, pageNum);
-            }
+            currentPage = experienceService.listByFilter(id, max, scoreVal, order, pageNum);
         }
 
         if (principal != null) {
@@ -109,7 +103,6 @@ public class ExperienceController {
                 mav.addObject("favExperienceModels", favExperienceModels);
             }
         } else {
-
             mav.addObject("favExperienceModels", new ArrayList<>());
         }
 

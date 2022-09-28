@@ -208,7 +208,7 @@ public class WebAuthController {
     --------------------------------------------------------------------------------------
      ------------------------------------------------------------------------------------*/
 
-    //This method is user to update the SpringContextHolder
+    //This method is used to update the SpringContextHolder
     private void forceLogin(UserModel user, HttpServletRequest request) {
         //generate authentication
         final PreAuthenticatedAuthenticationToken token =
