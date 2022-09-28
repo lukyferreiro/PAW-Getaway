@@ -91,7 +91,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         List<ExperienceModel> experienceModelList =  experienceDao.listByFilterWithCity(categoryId, max, cityId, score, order, page, PAGE_SIZE);
         int total_pages;
         try{
-            int total = (int) Math.ceil(experienceDao.countListByFilter(categoryId, max, score)/PAGE_SIZE);
+            int total = (int) Math.ceil(experienceDao.countListByFilterWithCity(categoryId, max, cityId, score)/PAGE_SIZE);
             total_pages = total==0?1:total;
         }catch (EmptyResultDataAccessException e){
             total_pages=1;
