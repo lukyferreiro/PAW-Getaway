@@ -27,7 +27,7 @@
 
 /*---------------------------*/
 .btn-submit-form {
-    font-size: large;
+    font-size: x-large;
     font-weight: bold;
     color: white;
     border-color: var(--primary-color);
@@ -50,7 +50,7 @@
 
 /*---------------------------*/
 .btn-cancel-form {
-    font-size: large;
+    font-size: x-large;
     font-weight: bold;
     color: var(--primary-color);
     border-color: var(--primary-color);

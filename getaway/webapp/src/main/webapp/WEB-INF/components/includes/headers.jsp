@@ -15,11 +15,13 @@
 <link href="<c:url value = "/resources/css/error.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/styles.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/navbar.css"/>" rel="stylesheet" type="text/css">
-<link href="<c:url value = "/resources/css/footer.css"/>" rel="stylesheet" type="text/css">
-<link href="<c:url value = "/resources/css/experiences.css"/>" rel="stylesheet" type="text/css">
+<link href="<c:url value = "/resources/css/cardExperience.css"/>" rel="stylesheet" type="text/css">
+<link href="<c:url value = "/resources/css/filtersSection.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/experienceDetail.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/form.css"/>" rel="stylesheet" type="text/css">
+<link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
 <link href="<c:url value = "/resources/css/icons.css" />" rel="stylesheet">
+<link href="<c:url value = "/resources/css/error.css" />" rel="stylesheet">
 
 <script src="https://kit.fontawesome.com/a4ef34ae89.js" crossorigin="anonymous"></script>
 

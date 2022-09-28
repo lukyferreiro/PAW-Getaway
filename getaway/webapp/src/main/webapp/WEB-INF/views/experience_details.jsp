@@ -13,136 +13,24 @@
          <%@ include file="../components/navbar.jsp" %>
 
          <div class="container-fluid px-5 d-flex justify-content-center align-content-center flex-column">
-            <div class="card mx-5 my-3 p-4">
-               <div class="card-title d-flex justify-content-center align-content-center">
-                  <h1>
-                     <c:out value="${experience.experienceName}"/>
-                  </h1>
 
-                  <c:if test="${loggedUser != null}">
-                     <c:set var = "fav" value = "${false}"/>
-                     <c:forEach var="favExperience" items="${favExperienceModels}">
-                        <c:if test="${favExperience == experience.experienceId}">
-                           <c:set var = "fav"  value = "${true}"/>
-                        </c:if>
-                     </c:forEach>
+            <jsp:include page="/WEB-INF/components/card_experienceDetail.jsp">
+               <jsp:param name="name" value="${experience.experienceName}"/>
+               <jsp:param name="id" value="${experience.experienceId}"/>
+               <jsp:param name="experienceCategoryName" value="${experience.categoryName}"/>
+               <jsp:param name="categoryName" value="${categoryName}"/>
+               <jsp:param name="address" value="${experience.address}"/>
+               <jsp:param name="countryCity" value="${countryCity}"/>
+               <jsp:param name="price" value="${experience.price}"/>
+               <jsp:param name="description" value="${experience.description}"/>
+               <jsp:param name="siteUrl" value="${experience.siteUrl}"/>
+               <jsp:param name="email" value="${experience.email}"/>
+               <jsp:param name="hasImage" value="${experience.hasImage}"/>
+               <jsp:param name="reviewAvg" value="${reviewAvg}"/>
 
-                     <c:choose>
-                        <c:when test="${fav}">
-                           <a href="<c:url value = "/experiences/${categoryName}/${experience.experienceId}?set=${false}"/>">
-                              <button type="button" class="btn" id="setFalse">
-                                 <i class="fas fa-heart heart-color big"></i>
-                              </button>
-                           </a>
-                        </c:when>
-                        <c:otherwise>
-                           <a href="<c:url value = "/experiences/${categoryName}/${experience.experienceId}?set=${true}"/>">
-                              <button type="button" class="btn" id="setTrue">
-                                 <i class="fas fa-heart big"></i>
-                              </button>
-                           </a>
-                        </c:otherwise>
-                     </c:choose>
-                  </c:if>
+            </jsp:include>
 
-               </div>
-
-               <div class="d-flex flex-wrap justify-content-center align-content-center">
-                  <div class="p-2" style="width: 600px;">
-                     <c:choose>
-                        <c:when test="${experience.hasImage}">
-                           <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/experiences/${experience.experienceId}/image'/>" alt="Imagen"/>
-                        </c:when>
-                        <c:otherwise>
-                           <img class="container-fluid p-0" style="height: fit-content" alt="Imagen ${experience.categoryName}"
-                                src="<c:url value="/resources/images/${experience.categoryName}.jpg" />" >
-                        </c:otherwise>
-                     </c:choose>
-                  </div>
-                  <div style="flex:5; min-width: 350px;">
-                     <div class="row">
-                        <div class="col-3 p-0"></div>
-                        <div class="card-body col-7 h-100">
-                           <div> <!-- Direccion y ciudad -->
-                              <h5 class="information-title">
-                                 <spring:message code="experienceDetail.address"/>
-                              </h5>
-                              <p class="information-text">
-<%--                                 TODO CAMBIAR ESTO PORQUE SEGUN SOTUYO ESTA MAL CONCATENAR STRINGS--%>
-                                 <c:out value="${experience.address}"/>, <c:out value="${countryCity}"/>
-                              </p>
-                           </div>
-                           <div> <!-- Precio -->
-                              <h5 class="information-title">
-                                 <spring:message code="experienceDetail.price"/>
-                              </h5>
-                              <p class="information-text">
-                                 <c:choose>
-                                    <c:when test="${experience.price == null}">
-                                       <spring:message code="experienceDetail.noData"/>
-                                    </c:when>
-                                    <c:when test="${experience.price == 0}">
-                                       <spring:message code="experienceDetail.price.free"/>
-                                    </c:when>
-                                    <c:otherwise>
-                                       <spring:message code="experienceDetail.price.symbol"/>
-                                       <c:out value="${experience.price}"/>
-                                       <spring:message code="experienceDetail.price.perPerson"/>
-                                    </c:otherwise>
-                                 </c:choose>
-                              </p>
-                           </div>
-                           <div> <!-- Descripcion -->
-                              <h5 class="information-title">
-                                 <spring:message code="experienceDetail.description"/>
-                              </h5>
-                              <p class="information-text">
-                                 <c:choose>
-                                    <c:when test="${experience.description == null}">
-                                       <spring:message code="experienceDetail.noData"/>
-                                    </c:when>
-                                    <c:otherwise>
-                                       <c:out value="${experience.description}"/>
-                                    </c:otherwise>
-                                 </c:choose>
-                              </p>
-                           </div>
-                           <div> <!-- URL -->
-                              <h5 class="information-title">
-                                 <spring:message code="experienceDetail.url"/>
-                              </h5>
-                              <c:choose>
-                                 <c:when test="${experience.siteUrl == null}">
-                                    <p class="information-text">
-                                       <spring:message code="experienceDetail.noData"/>
-                                    </p>
-                                 </c:when>
-                                 <c:otherwise>
-                                    <a href="<c:url value="${experience.siteUrl}"/>">
-                                       <p class="information-text">
-                                          <c:out value="${experience.siteUrl}"/>
-                                       </p>
-                                    </a>
-                                 </c:otherwise>
-                              </c:choose>
-                           </div>
-                           <div> <!-- Email de contacto -->
-                              <h5 class="information-title">
-                                 <spring:message code="experienceDetail.email"/>
-                              </h5>
-                              <p class="information-text">
-                                 <c:out value="${experience.email}"/>
-                              </p>
-                           </div>
-                           <jsp:include page="/WEB-INF/views/star_avg.jsp">
-                              <jsp:param name="avgReview" value="${reviewAvg}"/>
-                           </jsp:include>
-                        </div>
-                        <div class="col-2 p-0"></div>
-                     </div>
-                  </div>
-               </div>
-            </div>
+            <!-- --------------RESEÑAS-------------- -->
             <div class="mx-5 my-3">
                <div class="d-flex justify-content-between align-content-center">
                   <h2 class="align-self-center">
@@ -156,12 +44,11 @@
                </div>
             </div>
 
-            <!-- --------------RESEÑAS-------------- -->
             <div class="mx-5 my-2 d-flex flex-wrap">
                <c:choose>
                   <c:when test="${reviews.size()!=0}">
                      <c:forEach var="review" items="${reviews}">
-                        <jsp:include page="/WEB-INF/views/card_review.jsp">
+                        <jsp:include page="/WEB-INF/components/card_review.jsp">
                            <jsp:param name="userName" value="${review.userName}"/>
                            <jsp:param name="userSurname" value="${review.userSurname}"/>
                            <jsp:param name="title" value="${review.title}"/>

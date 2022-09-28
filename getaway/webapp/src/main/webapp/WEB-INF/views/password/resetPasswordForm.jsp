@@ -14,21 +14,21 @@
       <div class="container-main">
          <%@ include file="../../components/simpleNavbar.jsp" %>
 
-         <div class="container-lg h-100 smallContentContainer d-flex align-items-center justify-content-center">
-            <div class="row w-75 m-0 align-items-center justify-content-center">
-               <div class="col-12">
-                  <h1 class="text-center title">
-                     <spring:message code="reset.newPassword.description"/>
-                  </h1>
-               </div>
-               <div class="col-12">
-                  <div class="container-fluid">
-                     <div class="row">
-                        <div class="col-12 mt-4">
+         <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
+            <div class="container-lg w-100 smallContentContainer">
+               <div class="row w-100 m-0 p-4 align-items-center justify-content-center">
+                  <div class="col-12">
+                     <h1 class="text-center title">
+                        <spring:message code="reset.newPassword.description"/>
+                     </h1>
+                  </div>
+                  <div class="col-12">
+                     <div class="container-fluid">
+                        <div class="row">
                            <c:url var="postUrl" value='/user/resetPassword'/>
                            <form:form id="passReset" modelAttribute="resetPasswordForm" action="${postUrl}" method="POST" acceptCharset="UTF-8">
                               <form:input type="hidden" path="token" name="token" value="${token}"/>
-                              <div class="form-group mb-5">
+                              <div class="form-group mt-2 mb-4">
                                  <form:label path="password" for="password" class="form-label">
                                     <spring:message code="reset.newPassword.input"/>
                                     <span class="required-field">*</span>
@@ -64,15 +64,17 @@
                                  </div>
                                  <form:errors path="confirmPassword" cssClass="form-error-label" element="p"/>
                               </div>
-<%--                              <form:errors path="confirmPassword" cssClass="form-error-label" element="p"/>--%>
+
+                              <div class="col-12 mt-3 d-flex align-items-center justify-content-center">
+                                 <button form="passReset" id="sumbitBtn" type="submit" class="btn btn-continue">
+                                    <spring:message code="reset.newPassword.applyBtn"/>
+                                 </button>
+                              </div>
                            </form:form>
                         </div>
-                        <div class="col-12 mt-2 d-flex align-items-center justify-content-center">
-                           <button form="passReset" id="sumbitBtn" type="submit" class="btn btn-continue">
-                              <spring:message code="reset.newPassword.applyBtn"/>
-                           </button>
-                        </div>
+
                      </div>
+
                   </div>
                </div>
             </div>

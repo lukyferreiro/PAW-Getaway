@@ -3,6 +3,17 @@
     --primary-color: #F99D32;
     --secondary-color: #FFC584;
     --third-color: #FAB672;
+    --background-color: rgba(250, 182, 114, 0.25);
+}
+
+.footer {
+    background-color: var(--secondary-color);
+    height: 40px;
+    font-size: large;
+}
+
+.dropdown-item::selection, .dropdown-item:focus{
+    background-color: #FAB672;
 }
 
 .container-main {
@@ -16,5 +27,30 @@
     border-radius: 20px;
     border: 1px solid var(--primary-color);
     background-color: whitesmoke;
-    max-width: 40%;
+    max-width: 50%;
+}
+
+.container-experiences {
+    flex: 5;
+}
+
+/*-------------------------------------*/
+/*  Primary --> botones de la navbar  */
+/*-------------------------------------*/
+
+.button-primary {
+    font-size: x-large;
+    font-weight: bold;
+    color: white;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    padding: 10px 20px 10px 20px;
+}
+
+.button-primary:hover, .button-primary:focus, .button-primary:disabled {
+    color: white;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    transition: 0.3s;
+    transform: scale(1.1);
 }

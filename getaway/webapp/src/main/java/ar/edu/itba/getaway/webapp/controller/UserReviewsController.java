@@ -47,10 +47,10 @@ public class UserReviewsController {
     public ModelAndView reviewDelete(@PathVariable("reviewId") final long reviewId,
                                          @ModelAttribute("deleteForm") final DeleteForm form) {
         final ModelAndView mav = new ModelAndView("deleteReview");
-//        final ReviewModel review = reviewService.getById(reviewId).get();
         final ReviewModel review = reviewService.getById(reviewId).orElseThrow(ReviewNotFoundException::new);
 
         mav.addObject("review", review);
+
         return mav;
     }
 

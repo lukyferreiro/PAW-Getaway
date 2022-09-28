@@ -14,9 +14,9 @@
       <div class="container-main">
          <%@ include file="../components/simpleNavbar.jsp" %>
 
-         <div class="container-fluid p-0 mt-3 h-100 w-100 ">
+         <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
             <div class="container-lg w-100 p-2 smallContentContainer">
-               <div class="row w-100 m-0 align-items-center justify-content-center">
+               <div class="row w-100 m-0 p-4 align-items-center justify-content-center">
                   <div class="col-12">
                      <h1 class="text-center title"><spring:message code="registerForm.title"/></h1>
                      <p class="subtitle text-center">

@@ -43,7 +43,7 @@
     color: white;
     border-color: var(--primary-color);
     background-color: var(--primary-color);
-    transform: scale(1.1);
+    transform: scale(1.02);
     transition: 0.3s;
 }
 

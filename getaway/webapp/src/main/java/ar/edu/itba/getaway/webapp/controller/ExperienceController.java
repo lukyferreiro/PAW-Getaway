@@ -96,7 +96,6 @@ public class ExperienceController {
                 mav.addObject("favExperienceModels", favExperienceModels);
             }
         } else {
-
             mav.addObject("favExperienceModels", new ArrayList<>());
         }
 

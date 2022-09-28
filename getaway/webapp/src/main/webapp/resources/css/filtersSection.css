@@ -97,15 +97,9 @@
     color: black;
 }
 
-.btn-search:hover {
+.btn-search:hover, .btn-search:focus {
     border-color: var(--primary-color);
     background-color: var(--secondary-color);
-    color: black;
-}
-
-.btn-search:focus {
-    border-color: var(--primary-color);
-    background-color: transparent;
     color: black;
     --bs-btn-focus-shadow-rgb: none;
 }
@@ -116,62 +110,9 @@
     color: black;
 }
 
-.btn-clean-filter:hover {
-    border-color: var(--primary-color);
-    background-color: var(--secondary-color);
-    color: black;
-}
-
-.btn-clean-filter:focus {
+.btn-clean-filter:hover, .btn-clean-filter:focus {
     border-color: var(--primary-color);
     background-color: transparent;
     color: black;
     --bs-btn-focus-shadow-rgb: none;
-}
-
-
-/*------ Experiences -------*/
-.container-experiences {
-    flex: 5;
-    font-size: medium;
-}
-
-.card-experience {
-    width: 350px;
-    height: fit-content;
-}
-
-.card-experience:hover {
-    transform: scale(1.02);
-    transition: 0.3s;
-    box-shadow: -0.5rem 0 2rem grey;
-}
-
-.card-link {
-    text-decoration: none;
-    color: black;
-}
-
-.card-link:hover, .card-link:focus {
-    color: black;
-}
-
-.card-img-top{
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-}
-
-.btn-bookmark {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    padding: 3px;
-    background-color: transparent;
-    border-color: transparent;
-}
-
-.btn-bookmark:hover {
-    background-color: white;
-    border-color: transparent;
 }

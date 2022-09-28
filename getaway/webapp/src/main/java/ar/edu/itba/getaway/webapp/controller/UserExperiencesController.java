@@ -59,10 +59,11 @@ public class UserExperiencesController {
         final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
         mav.addObject("favExperienceModels", favExperienceModels);
 
+        //TODO NO ME TRAE LAS FAVORITAS
         List<ExperienceModel> experienceList = new ArrayList<>();
         String order = "";
         if (orderBy.isPresent())
-            order = " ORDER BY " +orderBy.get() + " " +direction.get();
+            order = " ORDER BY " + orderBy.get() + " " +direction.get();
 
         experienceList = experienceService.listAll(order);
 
