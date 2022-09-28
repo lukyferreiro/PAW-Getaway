@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
+import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.persistence.ReviewDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ReviewServiceImpl implements ReviewService{
+public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private ReviewDao reviewDao;
@@ -23,7 +24,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public ReviewModel create(String title, String description, long score, long experienceId, Date reviewDate, long userId) {
         LOGGER.debug("Creating review with title {}", title);
-        ReviewModel reviewModel = reviewDao.create(title,description,score,experienceId,reviewDate, userId);
+        ReviewModel reviewModel = reviewDao.create(title, description, score, experienceId, reviewDate, userId);
         LOGGER.debug("Created title with id {}", reviewModel.getReviewId());
         return reviewModel;
     }
@@ -46,6 +47,12 @@ public class ReviewServiceImpl implements ReviewService{
         return reviewDao.getReviewCount(experienceId);
     }
 
+//    @Override
+//    Page<ReviewUserModel> getReviewAndUser(long experienceId, int page){
+//      List<ReviewUserModel> reviewUserModelList=reviewDao.getReviewAndUser(experienceId,page,PAGE_SIZE_EXP);
+//    return new Page<>(reviewUserModelList, page, getReviewCountExp(experienceId));
+//      }
+
     @Override
     public List<ReviewUserModel> getReviewAndUser(long experienceId) {
         LOGGER.debug("Retrieving all reviews and user of experience with id {}", experienceId);
@@ -57,6 +64,12 @@ public class ReviewServiceImpl implements ReviewService{
         LOGGER.debug("Retrieving review with id {}", reviewId);
         return reviewDao.getById(reviewId);
     }
+
+    //    @Override
+//    Page<ReviewUserModel> getByUserId(long userId, int page){
+//      List<ReviewUserModel> reviewUserModelList=reviewDao.getByUserId(experienceId,page,PAGE_SIZE_USER);
+//    return new Page<>(reviewUserModelList, page, getReviewCountUser(userId));
+//      }
 
     @Override
     public List<ReviewUserModel> getByUserId(long userId) {

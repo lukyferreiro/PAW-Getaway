@@ -19,7 +19,6 @@ import java.util.Map;
 
 @Repository
 public class ExperienceDaoImpl implements ExperienceDao {
-
     @Autowired
     private ImageDao imageDao;
     private final JdbcTemplate jdbcTemplate;
@@ -96,16 +95,16 @@ public class ExperienceDaoImpl implements ExperienceDao {
         LOGGER.debug("Executing query to update experience with id: {}", experienceModel.getExperienceId());
         imageDao.updateImg(image, experienceModel.getImageExperienceId());
         return jdbcTemplate.update("UPDATE experiences " +
-                "SET experienceName = ?, " +
-                "price = ?, " +
-                "address = ?, " +
-                "email = ?, " +
-                "description = ?, " +
-                "siteUrl = ?, " +
-                "cityId = ?, " +
-                "categoryId = ?," +
-                "userId = ?" +
-                "WHERE experienceId = ?",
+                        "SET experienceName = ?, " +
+                        "price = ?, " +
+                        "address = ?, " +
+                        "email = ?, " +
+                        "description = ?, " +
+                        "siteUrl = ?, " +
+                        "cityId = ?, " +
+                        "categoryId = ?," +
+                        "userId = ?" +
+                        "WHERE experienceId = ?",
                 experienceModel.getExperienceName(), experienceModel.getPrice(),
                 experienceModel.getAddress(), experienceModel.getEmail(),
                 experienceModel.getDescription(), experienceModel.getSiteUrl(),
@@ -142,10 +141,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public String getCountryCity(long experienceId){
         LOGGER.debug("Executing query to getCountryCity of experience with id: {}", experienceId);
         return jdbcTemplate.queryForObject("WITH country_city_name AS (" +
-                " SELECT cityname AS city_name, countryname AS country_name, cityid FROM argentinacities, countries" +
-                " WHERE argentinacities.countryid = countries.countryid )" +
-                " SELECT CONCAT(country_name, ', ', city_name) FROM country_city_name WHERE cityid =" +
-                " (SELECT cityid FROM experiences WHERE experienceid = ?)",
+                        " SELECT cityname AS city_name, countryname AS country_name, cityid FROM argentinacities, countries" +
+                        " WHERE argentinacities.countryid = countries.countryid )" +
+                        " SELECT CONCAT(country_name, ', ', city_name) FROM country_city_name WHERE cityid =" +
+                        " (SELECT cityid FROM experiences WHERE experienceid = ?)",
                 new Object[] {experienceId}, String.class);
     }
 
@@ -172,15 +171,29 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
 
     @Override
-    public List<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score , String order) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityid = ? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=?" + order,
-                new Object[]{categoryId, max, cityId, score}, EXPERIENCE_MODEL_ROW_MAPPER);
+    public List<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score , String order, int page, int page_size) {
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityid = ? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=?" + order
+                + "LIMIT ? OFFSET ?",
+                new Object[]{categoryId, max, cityId, score, page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public List<ExperienceModel> listByFilter(long categoryId, Double max, long score, String order) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=?" + order,
-                new Object[]{categoryId, max, score}, EXPERIENCE_MODEL_ROW_MAPPER);
+    public Integer countListByFilterWithCity(long categoryId, Double max, long cityId, long score) {
+        return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityid = ? HAVING AVG(COALESCE(score,0))>=?",
+                new Object[]{categoryId, max, cityId, score}, Integer.class);
+    }
+
+    @Override
+    public List<ExperienceModel> listByFilter(long categoryId, Double max, long score, String order, int page, int page_size) {
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=?" + order
+                + "LIMIT ? OFFSET ?",
+                new Object[]{categoryId, max, score, page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public Integer countListByFilter(long categoryId, Double max, long score) {
+        return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? HAVING AVG(COALESCE(score,0))>=?",
+                new Object[]{categoryId, max, score}, Integer.class);
     }
 
 }

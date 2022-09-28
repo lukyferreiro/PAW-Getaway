@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.models.pagination.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,6 @@ public interface ExperienceService {
 
     List<ExperienceModel> listAll(String order);
     List<ExperienceModel> listByUserId(long userId, String order);
-    List<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score, String order);
-    List<ExperienceModel> listByFilter(long categoryId, Double max,  long score, String order);
+    Page<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score, String order, int page);
+    Page<ExperienceModel> listByFilter(long categoryId, Double max,  long score, String order, int page);
 }

@@ -2,20 +2,25 @@ package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.persistence.ExperienceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ExperienceServiceImpl implements ExperienceService {
-
     @Autowired
     private ExperienceDao experienceDao;
+
+    private static final int PAGE_SIZE=2;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 
@@ -63,7 +68,6 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getById(experienceId);
     }
 
-
     @Override
     public String getCountryCity(long experienceId) {
         LOGGER.debug("Retrieving country and city of experience with id {}", experienceId);
@@ -82,15 +86,30 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getAvgReviews(experienceId);
     }
 
-
     @Override
-    public List<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score, String order) {
-        return experienceDao.listByFilterWithCity(categoryId, max, cityId, score, order);
+    public Page<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score, String order, int page) {
+        List<ExperienceModel> experienceModelList =  experienceDao.listByFilterWithCity(categoryId, max, cityId, score, order, page, PAGE_SIZE);
+        int total_pages;
+        try{
+            int total = (int) Math.ceil(experienceDao.countListByFilter(categoryId, max, score)/PAGE_SIZE);
+            total_pages = total==0?1:total;
+        }catch (EmptyResultDataAccessException e){
+            total_pages=1;
+        }
+        return new Page<>(experienceModelList, page, total_pages);
     }
 
     @Override
-    public List<ExperienceModel> listByFilter(long categoryId, Double max, long score, String order) {
-        return experienceDao.listByFilter(categoryId, max, score, order);
+    public Page<ExperienceModel> listByFilter(long categoryId, Double max, long score, String order, int page) {
+        List<ExperienceModel> experienceModelList =  experienceDao.listByFilter(categoryId, max, score, order, page, PAGE_SIZE);
+        int total_pages;
+        try{
+            int total = (int) Math.ceil(experienceDao.countListByFilter(categoryId, max, score)/PAGE_SIZE);
+             total_pages = total==0?1:total;
+        }catch (EmptyResultDataAccessException e){
+            total_pages=1;
+        }
+        return new Page<>(experienceModelList, page, total_pages);
     }
 
     @Override

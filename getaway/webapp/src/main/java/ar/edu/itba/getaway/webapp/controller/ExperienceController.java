@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.exceptions.ExperienceNotFoundException;
@@ -46,8 +47,15 @@ public class ExperienceController {
                                    @RequestParam Optional<Double> maxPrice,
                                    @RequestParam Optional<Long> score,
                                    @RequestParam Optional<Long> experience,
-                                   @RequestParam Optional<Boolean> set) {
+                                   @RequestParam Optional<Boolean> set,
+                                   @RequestParam (value="pageNum", defaultValue = "1") final int pageNum
+    ) {
         final ModelAndView mav = new ModelAndView("experiences");
+
+        LOGGER.debug("ACA LLEGA");
+        LOGGER.debug(categoryName);
+        LOGGER.debug(String.format("PAGENUM : %d", pageNum));
+
 
         // Ordinal empieza en 0
         final ExperienceCategory category;
@@ -59,9 +67,8 @@ public class ExperienceController {
 
         final String dbCategoryName = category.getName();
         final int id = category.ordinal() + 1;
-        List<ExperienceModel> experienceList;
+        Page<ExperienceModel> currentPage;
         final List<CityModel> cityModels = cityService.listAll();
-
 
         final Optional<Double> maxPriceOpt = experienceService.getMaxPrice(id);
         double max = maxPriceOpt.get();
@@ -80,9 +87,9 @@ public class ExperienceController {
         }
 
         if (cityId.isPresent()) {
-            experienceList = experienceService.listByFilterWithCity(id, max, cityId.get(), scoreVal, order);
+            currentPage = experienceService.listByFilterWithCity(id, max, cityId.get(), scoreVal, order, pageNum);
         } else {
-            experienceList = experienceService.listByFilter(id, max, scoreVal, order);
+            currentPage = experienceService.listByFilter(id, max, scoreVal, order, pageNum);
         }
 
         if (principal != null) {
@@ -99,16 +106,23 @@ public class ExperienceController {
             mav.addObject("favExperienceModels", new ArrayList<>());
         }
 
+        List<ExperienceModel> currentExperiences = currentPage.getContent();
+
         final List<Long> avgReviews = new ArrayList<>();
-        for (ExperienceModel exp : experienceList) {
+        for (ExperienceModel exp : currentExperiences) {
             avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
         }
+
+        LOGGER.debug(String.format("Current page: %d", currentPage.getCurrentPage()));
+        LOGGER.debug(String.format("Total pages: %d", currentPage.getMaxPage()));
 
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
-        mav.addObject("experiences", experienceList);
+        mav.addObject("experiences", currentExperiences);
         mav.addObject("avgReviews", avgReviews);
+        mav.addObject("totalPages", currentPage.getMaxPage());
+        mav.addObject("currentPage", currentPage.getCurrentPage());
 
         return mav;
     }
@@ -162,8 +176,7 @@ public class ExperienceController {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
-            return experience(categoryName, form, principal, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty());
-
+            return experience(categoryName, form, principal, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
         }
 
         final Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());

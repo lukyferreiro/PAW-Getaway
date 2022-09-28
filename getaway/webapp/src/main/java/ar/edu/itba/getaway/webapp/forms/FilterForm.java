@@ -36,4 +36,5 @@ public class FilterForm {
     public void setActivityReview(String activityReview) {
         this.activityReview = activityReview;
     }
+
 }

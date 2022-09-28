@@ -12,8 +12,10 @@ public interface ReviewService {
     List<ReviewModel> getReviewsFromId(long experienceId);
     Double getAverageScore(long experienceId);
     Integer getReviewCount(long experienceId);
+//  Page<ReviewUserModel getReviewAndUser(long experienceId, int page);
     List<ReviewUserModel> getReviewAndUser(long experienceId);
     Optional<ReviewModel> getById(long reviewId);
+//  Page<ReviewUserModel getByUserId(long userId, int page);
     List<ReviewUserModel> getByUserId(long userId);
     boolean delete(long reviewId);
     boolean update(long reviewId, ReviewModel reviewModel);
