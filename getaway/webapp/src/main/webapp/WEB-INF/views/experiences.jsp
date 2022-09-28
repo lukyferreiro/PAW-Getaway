@@ -73,12 +73,12 @@
                </button>
 
                <jsp:include page="/WEB-INF/components/order_dropdown.jsp">
-                  <jsp:param name="path1" value="/experiences/${categoryName}?orderBy=avg(score)&direction=asc"/>
-                  <jsp:param name="path2" value="/experiences/${categoryName}?orderBy=avg(score)&direction=desc"/>
-                  <jsp:param name="path3" value="/experiences/${categoryName}?orderBy=experienceName&direction=asc"/>
-                  <jsp:param name="path4" value="/experiences/${categoryName}?orderBy=experienceName&direction=desc"/>
-                  <jsp:param name="path5" value="/experiences/${categoryName}?orderBy=price&direction=desc"/>
-                  <jsp:param name="path6" value="/experiences/${categoryName}?orderBy=price&direction=asc"/>
+                  <jsp:param name="path1" value="${path}orderBy=avg(score)&direction=asc"/>
+                  <jsp:param name="path2" value="${path}orderBy=avg(score)&direction=desc"/>
+                  <jsp:param name="path3" value="${path}orderBy=experienceName&direction=asc"/>
+                  <jsp:param name="path4" value="${path}orderBy=experienceName&direction=desc"/>
+                  <jsp:param name="path5" value="${path}orderBy=price&direction=desc"/>
+                  <jsp:param name="path6" value="${path}orderBy=price&direction=asc"/>
                </jsp:include>
 
                <a href="<c:url value = "/experiences/${categoryName}"/>">
@@ -99,8 +99,8 @@
                      <jsp:param name="address" value="${experience.address}"/>
                      <jsp:param name="price" value="${experience.price}"/>
                      <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
-                     <jsp:param name="favUrlFalse" value="/experiences/${categoryName}?experience=${experience.experienceId}&set=${false}"/>
-                     <jsp:param name="favUrlTrue" value="/experiences/${categoryName}?experience=${experience.experienceId}&set=${true}"/>
+                     <jsp:param name="favUrlFalse" value="${path}experience=${experience.experienceId}&set=${false}"/>
+                     <jsp:param name="favUrlTrue" value="${path}experience=${experience.experienceId}&set=${true}"/>
                      <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
                   </jsp:include>
                </c:forEach>
@@ -122,7 +122,7 @@
                      <c:forEach var = "i" begin = "1" end = "${totalPages}">
                         <li class="page-item">
                            <a class="page-link ${i == currentPage ? 'font-weight-bold' : ''}" href="
-                           <c:url value = "/experiences/${categoryName}">
+                           <c:url value = "${path}">
                               <c:param name = "pageNum" value = "${i}"/>
 <%--                           <c:param name = "category" value = "${param.category}"/>--%>
                            </c:url>">

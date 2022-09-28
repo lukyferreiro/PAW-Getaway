@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class ExperienceController {
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,
                                    Principal principal,
+                                   HttpServletRequest request,
                                    @RequestParam Optional<String> orderBy,
                                    @RequestParam Optional<String> direction,
                                    @RequestParam Optional<Long> cityId,
@@ -116,6 +118,21 @@ public class ExperienceController {
         LOGGER.debug(String.format("Current page: %d", currentPage.getCurrentPage()));
         LOGGER.debug(String.format("Total pages: %d", currentPage.getMaxPage()));
 
+
+//        PATH RECUPERADO CORRECTAMENTE
+        StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
+        String queryString = request.getQueryString();
+        String path;
+
+        if (queryString == null) {
+            path = requestURL.append("?").toString();
+        } else {
+            path = requestURL.append('?').append(queryString).append("&").toString();
+        }
+
+        mav.addObject("path", path);
+
+
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
@@ -170,13 +187,14 @@ public class ExperienceController {
 
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.POST})
     public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName,
+                                       HttpServletRequest request,
                                        @Valid @ModelAttribute("filterForm") final FilterForm form,
                                        Principal principal,
                                        final BindingResult errors) {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
-            return experience(categoryName, form, principal, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
+            return experience(categoryName, form, principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
         }
 
         final Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
