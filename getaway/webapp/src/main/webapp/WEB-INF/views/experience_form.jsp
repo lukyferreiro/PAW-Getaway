@@ -44,15 +44,14 @@
                            </c:if>
                            <c:forEach var="category" items="${categories}">
                               <c:choose>
-                                 <c:when test="${formCategory != null && category == formCategory}">
-                                    <option selected><c:out value="${category}"/></option>
+                                 <c:when test="${formCategory != null && category.ordinal() == formCategory-1}">
+                                    <option selected value="${category.ordinal()}"><spring:message code="experienceForm.${category.toString()}"/></option>
                                  </c:when>
                                  <c:otherwise>
-                                    <option><c:out value="${category}"/></option>
+                                    <option value="${category.ordinal()}"><spring:message code="experienceForm.${category.toString()}"/></option>
                                  </c:otherwise>
                               </c:choose>
                            </c:forEach>
-
                         </form:select>
                         <form:errors path="activityCategory" element="p" cssClass="form-error-label"/>
                      </div>

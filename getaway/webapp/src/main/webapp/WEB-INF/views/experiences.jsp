@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> - <c:url value="${dbCategoryName}"/></title>
+      <title><spring:message code="pageName"/> - <spring:message code="experienceForm.${dbCategoryName}"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 

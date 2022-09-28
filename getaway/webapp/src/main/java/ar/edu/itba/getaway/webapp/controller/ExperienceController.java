@@ -54,11 +54,6 @@ public class ExperienceController {
     ) {
         final ModelAndView mav = new ModelAndView("experiences");
 
-        LOGGER.debug("ACA LLEGA");
-        LOGGER.debug(categoryName);
-        LOGGER.debug(String.format("PAGENUM : %d", pageNum));
-
-
         // Ordinal empieza en 0
         final ExperienceCategory category;
         try {
@@ -67,7 +62,7 @@ public class ExperienceController {
             throw new CategoryNotFoundException();
         }
 
-        final String dbCategoryName = category.getName();
+        final String dbCategoryName = category.toString();
         final int id = category.ordinal() + 1;
         Page<ExperienceModel> currentPage;
         final List<CityModel> cityModels = cityService.listAll();
@@ -152,7 +147,7 @@ public class ExperienceController {
         final ModelAndView mav = new ModelAndView("experience_details");
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final String dbCategoryName = ExperienceCategory.valueOf(categoryName).getName();
+        final String dbCategoryName = ExperienceCategory.valueOf(categoryName).name();
         final List<ReviewUserModel> reviews = reviewService.getReviewAndUser(experienceId);
         final Double avgScore = reviewService.getAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
