@@ -87,6 +87,13 @@ public class ReviewDaoImpl implements ReviewDao{
         return jdbcTemplate.queryForObject(query, new Object[]{experienceId}, Integer.class);
     }
 
+    //    @Override
+//    List<ReviewUserModel> getReviewAndUser(long experienceId, int page, page_size){
+//    final String query = "SELECT * FROM reviews NATURAL JOIN users WHERE experienceId = ? LIMIT ? OFFSET ?";
+//            LOGGER.debug("Executing query: {}", query);
+//     return jdbcTemplate.query(query, new Object[]{experienceId, page_size, (page-1)*page_size}, REVIEW_USER_ROW_MAPPER);
+//      }
+
     @Override
     public List<ReviewUserModel> getReviewAndUser(long experienceId) {
         final String query = "SELECT * FROM reviews NATURAL JOIN users WHERE experienceId = ?";
@@ -101,6 +108,13 @@ public class ReviewDaoImpl implements ReviewDao{
         return jdbcTemplate.query(query, new Object[]{reviewId}, REVIEW_MODEL_ROW_MAPPER)
                 .stream().findFirst();
     }
+
+    //    @Override
+//    List<ReviewUserModel> getByUserId(long userId, int page, page_size){
+//    final String query = "SELECT * FROM reviews NATURAL JOIN users WHERE userId = ? LIMIT ? OFFSET ?";
+//            LOGGER.debug("Executing query: {}", query);
+//     return jdbcTemplate.query(query, new Object[]{experienceId, page_size, (page-1)*page_size}, REVIEW_USER_ROW_MAPPER);
+//      }
 
     @Override
     public List<ReviewUserModel> getByUserId(long userId) {

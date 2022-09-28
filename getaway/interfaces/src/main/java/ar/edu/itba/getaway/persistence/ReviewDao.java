@@ -13,7 +13,9 @@ public interface ReviewDao {
     Double getAverageScore(long experienceId);
     Integer getReviewCount(long experienceId);
     List<ReviewUserModel> getReviewAndUser(long experienceId);
+//        List<ReviewUserModel> getReviewAndUser(long experienceId, int page, int page_size);
     Optional<ReviewModel> getById(long reviewId);
+//    List<ReviewUserModel> getByUserId(long userId, int page, int page_size);
     List<ReviewUserModel> getByUserId(long userId);
     boolean delete(long reviewId);
     boolean update(long reviewId, ReviewModel reviewModel);
