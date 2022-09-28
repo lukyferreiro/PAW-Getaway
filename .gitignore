@@ -21,7 +21,7 @@ dist/
 
 # Maven
 target/
-dist/
+log/
 
 # Eclipse
 .classpath
@@ -54,6 +54,9 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+
+webapp/target
+.git
 
 #Another files
 *.ini
