@@ -114,7 +114,6 @@ public class ExperienceController {
         LOGGER.debug(String.format("Total pages: %d", currentPage.getMaxPage()));
 
 
-//        PATH RECUPERADO CORRECTAMENTE
         StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
         String queryString = request.getQueryString();
         String path;
