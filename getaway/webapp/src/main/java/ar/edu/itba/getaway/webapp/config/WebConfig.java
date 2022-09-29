@@ -103,11 +103,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE);
         multipartResolver.setMaxUploadSizePerFile(MAX_SIZE_PER_FILE);
         multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE * 6);
-        multipartResolver.setDefaultEncoding("utf-8");
+        multipartResolver.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
         return multipartResolver;
     }
 
-    // Para anotar clases y métodos con @Transactional
     @Bean
     public PlatformTransactionManager transactionManager(final DataSource ds) {
         return new DataSourceTransactionManager(ds);

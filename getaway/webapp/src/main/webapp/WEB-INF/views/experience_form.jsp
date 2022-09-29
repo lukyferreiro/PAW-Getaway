@@ -104,10 +104,7 @@
                         </form:label>
                         <form:select path="activityCountry" id="experienceFormCountryInput" class="form-select" cssErrorClass="form-control is-invalid">
                            <option disabled selected value><c:out value="${placeholder}"/></option>
-                           <option selected><c:out value="Argentina"/></option>
-                           <%--                           <c:forEach var="country" items="${countries}">--%>
-                           <%--                              <option><c:out value="${country.name}"/></option>--%>
-                           <%--                           </c:forEach>--%>
+                           <option selected><c:out value="${country}"/></option>
                         </form:select>
                         <form:errors path="activityCountry" element="p" cssClass="form-error-label"/>
                      </div>

@@ -34,9 +34,7 @@ public class UserExperiencesController {
     @Autowired
     private ExperienceService experienceService;
     @Autowired
-    private CityService cityService;
-    @Autowired
-    private CountryService countryService;
+    private LocationService locationService;
     @Autowired
     private ImageService imageService;
     @Autowired
@@ -155,10 +153,10 @@ public class UserExperiencesController {
 ////            categories.add(categoryModel.getName());
 ////        }
 
-        final List<CountryModel> countryModels = countryService.listAll();
-        final List<CityModel> cityModels = cityService.listAll();
+        final String country = locationService.getCountryByName("Argentina").get().getName();
+        final List<CityModel> cityModels = locationService.listAllCities();
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final CityModel city = cityService.getById(experience.getCityId()).orElseThrow(CityNotFoundException::new);
+        final CityModel city = locationService.getCityById(experience.getCityId()).orElseThrow(CityNotFoundException::new);
         final String cityName = city.getName();
 
         //TODO no se como hacer para detectar que la primera vez que entro a la edicion
@@ -194,7 +192,7 @@ public class UserExperiencesController {
         mav.addObject("cancelBtn", "/user/experiences");
         mav.addObject("categories", categoryModels);
         mav.addObject("cities", cityModels);
-        mav.addObject("countries", countryModels);
+        mav.addObject("country", country);
         mav.addObject("formCity", cityName);
         mav.addObject("formCategory", experience.getCategoryId());
 
@@ -211,8 +209,8 @@ public class UserExperiencesController {
 
         long categoryId = form.getActivityCategory();
 
-        final CityModel city = cityService.getIdByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
-        final long cityId = city.getId();
+        final CityModel city = locationService.getCityByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
+        final Long cityId = city.getId();
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final long userId = experience.getUserId();

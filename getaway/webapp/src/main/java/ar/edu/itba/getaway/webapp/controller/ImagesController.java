@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.exceptions.ImageNotFoundException;
-import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
 import ar.edu.itba.getaway.services.ImageService;
 import org.slf4j.Logger;

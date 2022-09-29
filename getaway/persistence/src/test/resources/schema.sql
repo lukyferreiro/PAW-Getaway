@@ -23,15 +23,6 @@ CREATE TABLE IF NOT EXISTS cities
     FOREIGN KEY (countryId) REFERENCES countries (countryId) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS argentinaCities
-(
-    cityId SERIAL NOT NULL,
-    cityName VARCHAR(255) NOT NULL,
-    countryId INT NOT NULL,
-    PRIMARY KEY (cityId),
-    FOREIGN KEY (countryId) REFERENCES countries (countryId) ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS images
 (
     imgId SERIAL NOT NULL,
@@ -59,7 +50,6 @@ CREATE TABLE IF NOT EXISTS experiences
     price DECIMAL,
     address VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
---     hasImage BOOLEAN NOT NULL,
     description TEXT,
     siteUrl TEXT,
     cityId INT NOT NULL,
@@ -67,7 +57,7 @@ CREATE TABLE IF NOT EXISTS experiences
     userId INT NOT NULL,
     PRIMARY KEY (experienceId),
     UNIQUE(experienceName, address, cityId),
-    FOREIGN KEY (cityId) REFERENCES argentinaCities (cityId) ON DELETE CASCADE,
+    FOREIGN KEY (cityId) REFERENCES cities (cityId) ON DELETE CASCADE,
     FOREIGN KEY (categoryId) REFERENCES categories (categoryId) ON DELETE CASCADE,
     FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE
 );

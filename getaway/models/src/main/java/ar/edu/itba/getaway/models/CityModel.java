@@ -1,20 +1,20 @@
 package ar.edu.itba.getaway.models;
 
 public class CityModel {
-    private final long cityId;
-    private final long countryId;
+    private final Long cityId;
+    private final Long countryId;
     private final String cityName;
 
-    public CityModel(long cityId, long countryId, String cityName) {
+    public CityModel(Long cityId, Long countryId, String cityName) {
         this.cityId = cityId;
         this.countryId = countryId;
         this.cityName = cityName;
     }
 
-    public long getId() {
+    public Long getId() {
         return cityId;
     }
-    public long getCountryId() {
+    public Long getCountryId() {
         return countryId;
     }
     public String getName() {

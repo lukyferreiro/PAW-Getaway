@@ -2,7 +2,7 @@ package ar.edu.itba.getaway.webapp.config;
 
 import ar.edu.itba.getaway.webapp.auth.CustomAccessDeniedHandler;
 import ar.edu.itba.getaway.webapp.auth.RefererRedirectionAuthenticationSuccessHandler;
-import ar.edu.itba.getaway.webapp.auth.UserDetailService;
+import ar.edu.itba.getaway.webapp.auth.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailService userDetailsService;
+    private MyUserDetailsService myUserDetailsService;
 
     @Value("classpath:auth/auth_key.pem")
     private Resource authKey;
@@ -52,7 +52,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -108,7 +108,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error=true")
             .and().rememberMe()
                 .rememberMeParameter("rememberMe")
-                .userDetailsService(userDetailsService)
+                .userDetailsService(myUserDetailsService)
                 .key(FileCopyUtils.copyToString(new InputStreamReader(authKey.getInputStream())))
                 .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
             .and().logout()
