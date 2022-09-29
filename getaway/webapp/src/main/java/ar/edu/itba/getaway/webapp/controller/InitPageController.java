@@ -69,6 +69,7 @@ public class InitPageController {
             listByCategory.get(i).addAll(experienceService.listByBestRanked(i + 1));
         }
 
+
         mav.addObject("listByCategory", listByCategory);
 
 
