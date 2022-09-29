@@ -96,7 +96,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return dbp;
     }
 
-    //TODO: ver con imagenes muy grandes y archivos que no son imagenes
+    //TODO: ver con imagenes muy grandes
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();

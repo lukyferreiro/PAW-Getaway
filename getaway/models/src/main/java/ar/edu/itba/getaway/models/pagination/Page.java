@@ -3,10 +3,10 @@ package ar.edu.itba.getaway.models.pagination;
 
 import java.util.List;
 
-public class Page<T>{
+public class Page<T> {
+
     private final List<T> content;
     private final int currentPage, totalPages;
-
 
     public Page(List<T> content, int currentPage, int totalPages) {
         this.content = content;
@@ -28,20 +28,21 @@ public class Page<T>{
 
     public int getMinPage() {
         int minPage = 1;
-        if (currentPage - 2 >= 1)
+        if (currentPage - 2 >= 1) {
             minPage = currentPage - 2;
-        else if (currentPage - 1 >= 1)
+        } else if (currentPage - 1 >= 1) {
             minPage = currentPage - 1;
+        }
         return minPage;
     }
 
-    public int getMaxPage(){
+    public int getMaxPage() {
         int maxPage = currentPage;
         if (currentPage + 2 <= totalPages) {
             maxPage = currentPage + 2;
-        }
-        else if (currentPage + 1 <= totalPages)
+        } else if (currentPage + 1 <= totalPages) {
             maxPage = currentPage + 1;
+        }
         return maxPage;
     }
 }

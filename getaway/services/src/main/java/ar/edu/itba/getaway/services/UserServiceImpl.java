@@ -42,8 +42,7 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     private final Locale locale = LocaleContextHolder.getLocale();
-    private final Collection<Roles> DEFAULT_ROLES =
-            Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
+    private final Collection<Roles> DEFAULT_ROLES = Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     @Override
     public Collection<RoleModel> getUserRolesModels(long userId) {
@@ -160,7 +159,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserInfo(long userId, UserInfo userInfo) {
         LOGGER.debug("Updating user info for user {}", userId);
-        userDao.updateUserInfo(userId ,userInfo);
+        userDao.updateUserInfo(userId, userInfo);
     }
 
     @Override

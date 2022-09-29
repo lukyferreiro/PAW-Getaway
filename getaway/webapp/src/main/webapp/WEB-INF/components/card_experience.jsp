@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<div class="card card-experience mx-3 my-2 p-0">
+<div class="card card-experience h-auto mx-3 my-2 p-0">
 
    <c:if test="${loggedUser != null}">
       <div class="btn-fav">
@@ -55,5 +55,20 @@
             <jsp:param name="avgReview" value="${param.avgReviews}"/>
          </jsp:include>
       </div>
+
+      <c:if test="${param.isEditing}">
+         <div class="btn-group card-body container-fluid p-2 d-flex align-items-end" role="group">
+            <a href="<c:url value="/user/experiences/edit/${param.id}"/>">
+               <button type="button" class="btn btn-pencil">
+                  <i class="bi bi-pencil"></i>
+               </button>
+            </a>
+            <a href="<c:url value="/user/experiences/delete/${param.id}"/>">
+               <button type="button" class="btn btn-trash">
+                  <i class="bi bi-trash"></i>
+               </button>
+            </a>
+         </div>
+      </c:if>
    </a>
 </div>

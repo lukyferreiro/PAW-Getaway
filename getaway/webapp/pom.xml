@@ -39,7 +39,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
         </dependency>
-        <!--Modulo services-->
+        <!--Módulo services-->
         <dependency>
             <groupId>ar.edu.itba.getaway</groupId>
             <artifactId>services</artifactId>
@@ -88,7 +88,7 @@
         </dependency>
         <dependency>
             <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf-spring5</artifactId>
+            <artifactId>thymeleaf-spring4</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.mail</groupId>

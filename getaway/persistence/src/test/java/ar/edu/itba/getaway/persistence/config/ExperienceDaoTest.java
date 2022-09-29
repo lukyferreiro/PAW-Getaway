@@ -157,13 +157,6 @@
 ////        assertTrue(experienceModelList.containsAll(DEF_LIST_ALL));
 ////    }
 //
-//    @Test
-//    public void testGetCountryCity() {
-//        String countryCity = experienceDao.getCountryCity(1);
-//        String toMatch = String.format("Test Country, Test City One");
-//        assertNotNull(countryCity);
-//        assertEquals(countryCity,toMatch);
-//    }
 //
 //    @Test
 //    public void testGetByUserId() {

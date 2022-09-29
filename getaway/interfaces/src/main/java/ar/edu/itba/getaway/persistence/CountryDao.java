@@ -8,6 +8,5 @@ import java.util.Optional;
 public interface CountryDao {
     Optional<CountryModel> getById (long countryId);
     List<CountryModel> listAll ();
-    Optional<CountryModel> getIdByCountryName(String country);
 }
 
