@@ -47,13 +47,5 @@ public class CountryDaoImpl implements CountryDao{
         return new ArrayList<>(jdbcTemplate.query(query, COUNTRY_MODEL_ROW_MAPPER));
     }
 
-    @Override
-    public Optional<CountryModel> getIdByCountryName(String country) {
-        final String query = "SELECT countryId FROM countries WHERE countryName = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{country}, COUNTRY_MODEL_ROW_MAPPER)
-                .stream().findFirst();
-    }
-
 }
 

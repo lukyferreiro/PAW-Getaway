@@ -13,14 +13,14 @@
 <c:choose>
    <c:when test="${fav}">
       <a href="<c:url value="${param.urlFalse}"/>">
-         <button type="button" class="btn" id="setFalse">
+         <button type="button" class="btn btn-fav" id="setFalse">
             <i class="fas fa-heart heart-color"></i>
          </button>
       </a>
    </c:when>
    <c:otherwise>
       <a href="<c:url value="${param.urlTrue}"/>">
-         <button type="button" class="btn" id="setTrue">
+         <button type="button" class="btn btn-fav" id="setTrue">
             <i class="fas fa-heart"></i>
          </button>
       </a>

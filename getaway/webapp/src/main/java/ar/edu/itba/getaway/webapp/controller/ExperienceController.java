@@ -31,6 +31,8 @@ public class ExperienceController {
     @Autowired
     private CityService cityService;
     @Autowired
+    private CountryService countryService;
+    @Autowired
     private ReviewService reviewService;
     @Autowired
     private FavExperienceService favExperienceService;
@@ -49,8 +51,7 @@ public class ExperienceController {
                                    @RequestParam Optional<Long> score,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set,
-                                   @RequestParam (value="pageNum", defaultValue = "1") final int pageNum
-    ) {
+                                   @RequestParam (value="pageNum", defaultValue = "1") final int pageNum) {
         final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
@@ -70,14 +71,18 @@ public class ExperienceController {
 
         final Optional<Double> maxPriceOpt = experienceService.getMaxPrice(id);
         double max = maxPriceOpt.get();
+        mav.addObject("max", max);
         if(maxPrice.isPresent()){
             max = maxPrice.get();
         }
+        mav.addObject("maxPrice", max);
 
-        long scoreVal = (long) 0.0;
+        long scoreVal = 0;
         if (score.isPresent() && score.get() != -1) {
             scoreVal = score.get();
         }
+        mav.addObject("score", scoreVal);
+
         String order = "";
 
         if (orderBy.isPresent()) {
@@ -86,8 +91,10 @@ public class ExperienceController {
 
         if (cityId.isPresent()) {
             currentPage = experienceService.listByFilterWithCity(id, max, cityId.get(), scoreVal, order, pageNum);
+            mav.addObject("cityId", cityId.get());
         } else {
             currentPage = experienceService.listByFilter(id, max, scoreVal, order, pageNum);
+            mav.addObject("cityId", -1);
         }
 
         if (principal != null) {
@@ -127,7 +134,6 @@ public class ExperienceController {
 
         mav.addObject("path", path);
         mav.addObject("orderByModels", orderByModels);
-        mav.addObject("max", max);
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
@@ -135,6 +141,7 @@ public class ExperienceController {
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("totalPages", currentPage.getMaxPage());
         mav.addObject("currentPage", currentPage.getCurrentPage());
+        mav.addObject("isEditing", false);
 
         return mav;
     }
@@ -151,7 +158,9 @@ public class ExperienceController {
         final List<ReviewUserModel> reviews = reviewService.getReviewAndUser(experienceId);
         final Double avgScore = reviewService.getAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
-        final String countryCity = experienceService.getCountryCity(experienceId);
+        final CityModel cityModel = cityService.getById(experience.getCityId()).get();
+        final String city = cityModel.getName();
+        final String country = countryService.getById(cityModel.getCountryId()).get().getName();
 
         final Optional<Long> experienceAvgReview = experienceService.getAvgReviews(experienceId);
         experienceAvgReview.ifPresent(aLong -> mav.addObject("reviewAvg", aLong));
@@ -161,7 +170,8 @@ public class ExperienceController {
         mav.addObject("reviews", reviews);
         mav.addObject("avgScore", avgScore);
         mav.addObject("reviewCount", reviewCount);
-        mav.addObject("countryCity", countryCity);
+        mav.addObject("city", city);
+        mav.addObject("country", country);
 
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
@@ -203,7 +213,7 @@ public class ExperienceController {
             mav.addObject("maxPrice", priceMax);
         }
 
-        final Long score = form.getScore();
+        final Long score = form.getScoreVal();
         if (score != -1) {
             mav.addObject("score", score);
         }

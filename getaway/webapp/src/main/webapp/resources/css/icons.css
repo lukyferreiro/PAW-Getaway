@@ -1,45 +1,55 @@
 .star-rating {
-    display:flex;
+    display: flex;
     flex-direction: row-reverse;
-    font-size:1.5em;
-    justify-content:space-around;
-    padding:0 .5em;
-    text-align:center;
+    font-size: 1.5em;
+    justify-content: space-around;
+    padding: 0 .5em;
+    text-align: center;
     /*width:5em;*/
 }
 
 .star-rating input {
-    display:none;
+    display: none;
 }
 
 .star-rating label {
-    color:#ccc;
-    cursor:pointer;
+    color: #ccc;
+    cursor: pointer;
 }
 
 .star-rating :checked ~ label {
-    color:gold;
+    color: gold;
 }
 
 .star-rating label:hover,
 .star-rating label:hover ~ label {
-    color:gold;
-}
-
-.fas.fa-star.star-color{
     color: gold;
 }
 
-.fas.fa-star{
+.fas.fa-star.star-color {
+    color: gold;
+}
+
+.fas.fa-star {
     color: #FAB672;
 }
 
-.fas.fa-heart.heart-color{
+.fas.fa-heart.heart-color {
     color: red;
     font-size: xx-large;
 }
 
-.fas.fa-heart{
+.fas.fa-heart {
     color: grey;
     font-size: xx-large;
+}
+
+.btn-fav:hover, .btn-fav:focus,
+.btn-pencil:hover, .btn-pencil:focus,
+.btn-trash:hover, .btn-trash:focus {
+    border-color: transparent;
+}
+
+.btn-pencil, .btn-trash {
+    font-size: x-large;
 }

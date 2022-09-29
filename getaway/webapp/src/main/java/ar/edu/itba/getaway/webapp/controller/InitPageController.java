@@ -69,6 +69,7 @@ public class InitPageController {
 
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
+        mav.addObject("isEditing", false);
 
         return mav;
     }

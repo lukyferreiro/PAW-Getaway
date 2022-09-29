@@ -5,7 +5,7 @@ public class FilterForm {
     private String activityCity;
     private Double activityPriceMax;
     private Boolean enablePrice;
-    private String activityReview;
+    private String score;
 
     public Double getActivityPriceMax() {
         return activityPriceMax;
@@ -13,13 +13,13 @@ public class FilterForm {
     public String getActivityCity() {
         return activityCity;
     }
-    public String getActivityReview() {
-        return activityReview;
+    public String getScore() {
+        return score;
     }
-    public Long getScore(){
-        if(activityReview == null || activityReview.equals(""))
+    public Long getScoreVal(){
+        if(score == null || score.equals(""))
             return (long) -1;
-        return Long.parseLong(activityReview);
+        return Long.parseLong(score);
     }
     public void setActivityPriceMax(Double activityPriceMax) {
         this.activityPriceMax = activityPriceMax;
@@ -33,8 +33,8 @@ public class FilterForm {
     public void setEnablePrice(Boolean enablePrice) {
         this.enablePrice = enablePrice;
     }
-    public void setActivityReview(String activityReview) {
-        this.activityReview = activityReview;
+    public void setScore(String score) {
+        this.score = score;
     }
 
 }
