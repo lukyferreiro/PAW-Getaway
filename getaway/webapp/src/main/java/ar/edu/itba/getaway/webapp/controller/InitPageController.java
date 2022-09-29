@@ -71,6 +71,12 @@ public class InitPageController {
 
 
         mav.addObject("listByCategory", listByCategory);
+        mav.addObject("listAdventure", experienceService.listByBestRanked( 1));
+        mav.addObject("listGastronomy", experienceService.listByBestRanked( 2));
+        mav.addObject("listHotel", experienceService.listByBestRanked( 3));
+        mav.addObject("listRelax", experienceService.listByBestRanked( 4));
+        mav.addObject("listNight", experienceService.listByBestRanked( 5));
+        mav.addObject("listHistoric", experienceService.listByBestRanked( 6));
 
 
         mav.addObject("experiences", experienceList);
