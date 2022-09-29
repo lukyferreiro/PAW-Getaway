@@ -113,8 +113,8 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<ExperienceModel> listBetterRanked(long categoryId) {
-        return experienceDao.listBetterRanked(categoryId);
+    public List<ExperienceModel> listByBestRanked(long categoryId) {
+        return experienceDao.listByBestRanked(categoryId);
     }
 
     @Override

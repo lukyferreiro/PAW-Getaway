@@ -197,7 +197,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listBetterRanked(long categoryId){
+    public List<ExperienceModel> listByBestRanked(long categoryId){
         return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? GROUP BY experiences.experienceid ORDER BY avg(score) ASC ",
                 new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
 
