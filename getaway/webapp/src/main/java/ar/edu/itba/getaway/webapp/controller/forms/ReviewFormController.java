@@ -36,7 +36,6 @@ public class ReviewFormController {
     public ModelAndView createReviewForm(@PathVariable("categoryName") final String categoryName,
                                          @PathVariable("experienceId") final long experienceId,
                                          @ModelAttribute("reviewForm") final ReviewForm form) {
-
         return new ModelAndView("review_form");
     }
 

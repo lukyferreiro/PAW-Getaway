@@ -36,7 +36,7 @@
                      <div style="margin: 0 20px 0 auto; flex:1;"></div>
                   </div>
 
-                  <div class="container-fluid mt-3 d-flex flex-wrap justify-content-center">
+                  <div class="container-fluid my-3 d-flex flex-wrap justify-content-center">
                      <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                         <jsp:include page="/WEB-INF/components/card_experience.jsp">
                            <jsp:param name="hasImage" value="${experience.hasImage}"/>

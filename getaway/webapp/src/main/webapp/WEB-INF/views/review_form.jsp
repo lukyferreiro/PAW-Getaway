@@ -17,7 +17,7 @@
             <div class="container-lg w-100 smallContentContainer d-flex flex-column justify-content-center align-items-center">
                <form:form modelAttribute="reviewForm" action="${postPath}" id="createReviewForm" method="post" acceptCharset="UTF-8"
                           enctype="multipart/form-data" cssStyle="width: 100%;">
-                  <div class="p-4 m-4">
+                  <div class="p-4 mx-4 mt-4 m-1">
                      <div class="col m-2"> <!--Titulo de la review-->
                         <form:label path="title" class="form-label">
                            <spring:message code="review.title"/>
@@ -40,12 +40,16 @@
                            <span class="required-field">*</span>
                         </form:label>
                         <spring:message code="reviewForm.score.placeholder" var="placeholder"/>
-                        <jsp:include page="/WEB-INF/components/star_form.jsp"/>
+                        <div class="w-100 d-flex justify-content-center">
+                           <div class="w-50">
+                              <jsp:include page="/WEB-INF/components/star_form.jsp"/>
+                           </div>
+                        </div>
                         <form:input path="score" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="scoreInput"/>
-                        <form:errors path="score" element="p" cssClass="form-error-label"/>
+                        <form:errors path="score" element="p" cssClass="form-error-label mt-2"/>
                      </div>
                   </div>
-                  <div class="p-0 mt-3 mb-0 d-flex justify-content-around">
+                  <div class="p-0 d-flex justify-content-around">
                      <a href="<c:url value = "/experiences/${categoryName}/${experienceId}"/>">
                         <button class="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
                            <spring:message code="experienceForm.cancel"/>

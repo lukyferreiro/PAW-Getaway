@@ -48,7 +48,7 @@
                   </h5>
                   <p class="information-text">
                      <c:choose>
-                        <c:when test="${param.price == null}">
+                        <c:when test="${param.price == ''}">
                            <spring:message code="experienceDetail.price.noPrice"/>
                         </c:when>
                         <c:when test="${param.price == '0.0'}">
@@ -66,7 +66,7 @@
                   </h5>
                   <p class="information-text">
                      <c:choose>
-                        <c:when test="${param.description == null}">
+                        <c:when test="${param.description == ''}">
                            <spring:message code="experienceDetail.noData"/>
                         </c:when>
                         <c:otherwise>
@@ -80,7 +80,7 @@
                      <spring:message code="experienceDetail.url"/>
                   </h5>
                   <c:choose>
-                     <c:when test="${param.siteUrl == null}">
+                     <c:when test="${param.siteUrl == ''}">
                         <p class="information-text">
                            <spring:message code="experienceDetail.noData"/>
                         </p>
