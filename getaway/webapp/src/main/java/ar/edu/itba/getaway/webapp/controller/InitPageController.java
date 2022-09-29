@@ -67,6 +67,18 @@ public class InitPageController {
 
         }
 
+//        LISTA DE CATEGORIAS CON LAS MEJORES RANKEADAS (ORDENA DEL MAS AL MENOS RANKEADO Y VOY A ELEGIR LAS PRIMERAS 10)
+        List<List<ExperienceModel>> listByCategory = new ArrayList<>();
+        for(int i=0 ; i<=5 ; i++){
+            final Optional<Double> maxPriceOpt = experienceService.getMaxPrice(i);
+            double max = maxPriceOpt.get();
+            listByCategory.add(new ArrayList<>());
+            listByCategory.get(i).addAll(experienceService.listBetterRanked(i + 1));
+        }
+
+        mav.addObject("listByCategory", listByCategory);
+
+
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
 

@@ -43,10 +43,10 @@ public class ExperienceFormController {
         final ModelAndView mav = new ModelAndView("experience_form");
 
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
-        final List<String> categories = new ArrayList<>();
-        for (ExperienceCategory categoryModel : categoryModels) {
-            categories.add(categoryModel.getName());
-        }
+//        final List<String> categories = new ArrayList<>();
+//        for (ExperienceCategory categoryModel : categoryModels) {
+//            categories.add(categoryModel.getName());
+//        }
 
         final List<CountryModel> countries = countryService.listAll();
         final List<CityModel> cities = cityService.listAll();
@@ -55,11 +55,13 @@ public class ExperienceFormController {
         mav.addObject("description", "createExperience.description");
         mav.addObject("endpoint", "/create_experience");
         mav.addObject("cancelBtn", "/");
-        mav.addObject("categories", categories);
+        mav.addObject("categories", categoryModels);
         mav.addObject("cities", cities);
         mav.addObject("countries", countries);
         mav.addObject("formCity", form.getActivityCity());
         mav.addObject("formCategory", form.getActivityCategory());
+
+        LOGGER.debug("Creado el form de experienceForm");
 
         return mav;
     }
@@ -69,14 +71,17 @@ public class ExperienceFormController {
                                        final BindingResult errors,
                                        Principal principal) throws Exception {
 
+        LOGGER.debug("Entro a create_experience");
+        LOGGER.debug(String.format("Category id: %d", form.getActivityCategory()));
+
         if (errors.hasErrors()) {
             return createActivityForm(form);
         }
 
-        final long categoryId = form.getActivityCategoryId();
-        if (categoryId < 0) {
-            throw new CategoryNotFoundException();
-        }
+        final Integer categoryId = form.getActivityCategory();
+//        if (categoryId < 0) {
+//            throw new CategoryNotFoundException();
+//        }
 
         final CityModel cityModel = cityService.getIdByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
         final long cityId = cityModel.getId();

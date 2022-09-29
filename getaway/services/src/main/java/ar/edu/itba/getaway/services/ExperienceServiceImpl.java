@@ -113,6 +113,11 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
+    public List<ExperienceModel> listBetterRanked(long categoryId) {
+        return experienceDao.listBetterRanked(categoryId);
+    }
+
+    @Override
     public Optional<Double> getMaxPrice(long categoryId) {
         return experienceDao.getMaxPrice(categoryId);
     }

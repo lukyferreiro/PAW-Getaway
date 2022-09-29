@@ -19,6 +19,7 @@ public interface ExperienceDao {
     List<ExperienceModel> listByUserId(long userId, String order);
     List<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score, String order, int page, int page_size);
     List<ExperienceModel> listByFilter(long categoryId, Double max,  long score, String order, int page, int page_size);
+    List<ExperienceModel> listBetterRanked(long categoryId);
 
     Integer countListByFilterWithCity(long categoryId, Double max, long cityId, long score);
     Integer countListByFilter(long categoryId, Double max, long score);

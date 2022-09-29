@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> - <c:url value="${dbCategoryName}"/></title>
+      <title><spring:message code="pageName"/> - <spring:message code="experienceForm.${dbCategoryName}"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 
@@ -32,30 +32,31 @@
                      <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
                   </div>
 
-                  <div class="form-check form-switch my-3 d-flex justify-content-start align-items-center">
-                     <input id="enablePrice" class="form-check-input checkbox-price" type="checkbox"
-                            onchange="let sliderPrice = document.getElementById('customRange');
-                                     sliderPrice.disabled = !this.checked;
-                                     if (this.checked) sliderPrice.style.cursor = 'pointer';
-                                     else sliderPrice.style.cursor = 'default';"/>
-                     <label for="enablePrice" class="form-check-label"><spring:message code="filters.price.checkbox"/></label>
-                  </div>
+<%--                  <div class="form-check form-switch my-3 d-flex justify-content-start align-items-center">--%>
+<%--                     <input id="enablePrice" class="form-check-input checkbox-price" type="checkbox"--%>
+<%--                            onchange="let sliderPrice = document.getElementById('customRange');--%>
+<%--                                     sliderPrice.disabled = !this.checked;--%>
+<%--                                     if (this.checked) sliderPrice.style.cursor = 'pointer';--%>
+<%--                                     else sliderPrice.style.cursor = 'default';"/>--%>
+<%--                     <label for="enablePrice" class="form-check-label"><spring:message code="filters.price.checkbox"/></label>--%>
+<%--                  </div>--%>
 
                   <div class="container-slider-price">
                      <form:label path="activityPriceMax" class="form-label"><spring:message code="filters.price.title"/></form:label>
                      <output id="priceRange" name="priceRange" for="customRange">
-                        <spring:message code="filters.price.min"/></output>
+                        ${max}
+                     </output>
                      <div class="slider-price">
                         <div class="value left">
                            <spring:message code="filters.price.min"/>
                         </div>
                         <div class="slider">
-                           <form:input disabled="true" id="customRange" path="activityPriceMax"
-                                       type="range" min="0" max="10000" value="0"
+                           <form:input id="customRange" path="activityPriceMax"
+                                       type="range" min="0" max="${max}" value="${max}"
                                        oninput="document.getElementById('priceRange').value = this.value"/>
                         </div>
                         <div class="value right">
-                           <spring:message code="filters.price.max"/>
+                           ${max}
                         </div>
                      </div>
                   </div>
@@ -73,12 +74,12 @@
                </button>
 
                <jsp:include page="/WEB-INF/components/order_dropdown.jsp">
-                  <jsp:param name="path1" value="/experiences/${categoryName}?orderBy=avg(score)&direction=asc"/>
-                  <jsp:param name="path2" value="/experiences/${categoryName}?orderBy=avg(score)&direction=desc"/>
-                  <jsp:param name="path3" value="/experiences/${categoryName}?orderBy=experienceName&direction=asc"/>
-                  <jsp:param name="path4" value="/experiences/${categoryName}?orderBy=experienceName&direction=desc"/>
-                  <jsp:param name="path5" value="/experiences/${categoryName}?orderBy=price&direction=desc"/>
-                  <jsp:param name="path6" value="/experiences/${categoryName}?orderBy=price&direction=asc"/>
+                  <jsp:param name="path1" value="${path}orderBy=avg(score)&direction=asc"/>
+                  <jsp:param name="path2" value="${path}orderBy=avg(score)&direction=desc"/>
+                  <jsp:param name="path3" value="${path}orderBy=experienceName&direction=asc"/>
+                  <jsp:param name="path4" value="${path}orderBy=experienceName&direction=desc"/>
+                  <jsp:param name="path5" value="${path}orderBy=price&direction=desc"/>
+                  <jsp:param name="path6" value="${path}orderBy=price&direction=asc"/>
                </jsp:include>
 
                <a href="<c:url value = "/experiences/${categoryName}"/>">
@@ -99,8 +100,8 @@
                      <jsp:param name="address" value="${experience.address}"/>
                      <jsp:param name="price" value="${experience.price}"/>
                      <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
-                     <jsp:param name="favUrlFalse" value="/experiences/${categoryName}?experience=${experience.experienceId}&set=${false}"/>
-                     <jsp:param name="favUrlTrue" value="/experiences/${categoryName}?experience=${experience.experienceId}&set=${true}"/>
+                     <jsp:param name="favUrlFalse" value="${path}experience=${experience.experienceId}&set=${false}"/>
+                     <jsp:param name="favUrlTrue" value="${path}experience=${experience.experienceId}&set=${true}"/>
                      <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
                   </jsp:include>
                </c:forEach>
@@ -122,7 +123,7 @@
                      <c:forEach var = "i" begin = "1" end = "${totalPages}">
                         <li class="page-item">
                            <a class="page-link ${i == currentPage ? 'font-weight-bold' : ''}" href="
-                           <c:url value = "/experiences/${categoryName}">
+                           <c:url value = "${path}">
                               <c:param name = "pageNum" value = "${i}"/>
 <%--                           <c:param name = "category" value = "${param.category}"/>--%>
                            </c:url>">

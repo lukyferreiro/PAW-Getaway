@@ -21,4 +21,7 @@ public interface ExperienceService {
     List<ExperienceModel> listByUserId(long userId, String order);
     Page<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score, String order, int page);
     Page<ExperienceModel> listByFilter(long categoryId, Double max,  long score, String order, int page);
+    List<ExperienceModel> listBetterRanked(long categoryId);
+
 }
+

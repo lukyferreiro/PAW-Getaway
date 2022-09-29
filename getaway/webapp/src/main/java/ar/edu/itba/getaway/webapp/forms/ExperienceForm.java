@@ -4,6 +4,7 @@ import ar.edu.itba.getaway.models.ExperienceCategory;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -14,8 +15,8 @@ public class  ExperienceForm {
     @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'·#$%&=:¿?!¡/.-]*$")
     private String activityName;
 
-    @NotEmpty
-    private String activityCategory;
+    @NotNull
+    private Integer activityCategory;
 
     @NotEmpty
     private String activityCountry;
@@ -58,16 +59,8 @@ public class  ExperienceForm {
     public String getActivityUrl() {
         return activityUrl;
     }
-    public String getActivityCategory() {
+    public Integer getActivityCategory() {
         return activityCategory;
-    }
-    public long getActivityCategoryId() {
-        for (int i = 0; i < ExperienceCategory.values().length; i++) {
-            if (ExperienceCategory.values()[i].getName().equals(activityCategory)) {
-                return i;
-            }
-        }
-        return -1;
     }
     public MultipartFile getActivityImg() {
         return activityImg;
@@ -87,7 +80,7 @@ public class  ExperienceForm {
     public void setActivityAddress(String activityAddress) {
         this.activityAddress = activityAddress;
     }
-    public void setActivityCategory(String activityCategory) {
+    public void setActivityCategory(Integer activityCategory) {
         this.activityCategory = activityCategory;
     }
     public void setActivityImg(MultipartFile activityImg) {
