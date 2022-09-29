@@ -20,7 +20,8 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Autowired
     private ExperienceDao experienceDao;
 
-    private static final int PAGE_SIZE = 12;
+    //TODO: limit page number to total_pages amount
+    private static final int PAGE_SIZE = 9;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 
@@ -85,11 +86,13 @@ public class ExperienceServiceImpl implements ExperienceService {
         List<ExperienceModel> experienceModelList = experienceDao.listByFilterWithCity(categoryId, max, cityId, score, order, page, PAGE_SIZE);
         int total_pages;
         try {
-            int total = (int) Math.ceil(experienceDao.countListByFilterWithCity(categoryId, max, cityId, score) / PAGE_SIZE);
-            total_pages = total == 0 ? 1 : total;
+            int total = experienceDao.countListByFilter(categoryId, max, score);
+            LOGGER.debug("TOTAL EXP AMOUNT {}", total);
+            total_pages = (int) Math.ceil( (double) total/ PAGE_SIZE);
         } catch (EmptyResultDataAccessException e) {
             total_pages = 1;
         }
+        LOGGER.debug("TOTAL PAGE AMOUNT {}", total_pages);
         return new Page<>(experienceModelList, page, total_pages);
     }
 
@@ -98,11 +101,13 @@ public class ExperienceServiceImpl implements ExperienceService {
         List<ExperienceModel> experienceModelList = experienceDao.listByFilter(categoryId, max, score, order, page, PAGE_SIZE);
         int total_pages;
         try {
-            int total = (int) Math.ceil(experienceDao.countListByFilter(categoryId, max, score) / PAGE_SIZE);
-            total_pages = total == 0 ? 1 : total;
+            int total = experienceDao.countListByFilter(categoryId, max, score);
+            LOGGER.debug("TOTAL EXP AMOUNT {}", total);
+            total_pages = (int) Math.ceil( (double) total / PAGE_SIZE);
         } catch (EmptyResultDataAccessException e) {
             total_pages = 1;
         }
+        LOGGER.debug("TOTAL PAGE AMOUNT {}", total_pages);
         return new Page<>(experienceModelList, page, total_pages);
     }
 

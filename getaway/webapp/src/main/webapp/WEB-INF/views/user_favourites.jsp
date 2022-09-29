@@ -6,7 +6,6 @@
 <html>
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="favourite.title"/></title>
-      <link href='<c:url value="/resources/css/user_experiences.css"/>' rel="stylesheet">
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 
