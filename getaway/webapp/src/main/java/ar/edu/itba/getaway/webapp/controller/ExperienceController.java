@@ -31,6 +31,8 @@ public class ExperienceController {
     @Autowired
     private CityService cityService;
     @Autowired
+    private CountryService countryService;
+    @Autowired
     private ReviewService reviewService;
     @Autowired
     private FavExperienceService favExperienceService;
@@ -49,8 +51,7 @@ public class ExperienceController {
                                    @RequestParam Optional<Long> score,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set,
-                                   @RequestParam (value="pageNum", defaultValue = "1") final int pageNum
-    ) {
+                                   @RequestParam (value="pageNum", defaultValue = "1") final int pageNum) {
         final ModelAndView mav = new ModelAndView("experiences");
 
         // Ordinal empieza en 0
@@ -72,7 +73,7 @@ public class ExperienceController {
             max = maxPrice.get();
         }
 
-        long scoreVal = (long) 0.0;
+        long scoreVal = 0;
         if (score.isPresent() && score.get() != -1) {
             scoreVal = score.get();
         }
@@ -134,6 +135,7 @@ public class ExperienceController {
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("totalPages", currentPage.getMaxPage());
         mav.addObject("currentPage", currentPage.getCurrentPage());
+        mav.addObject("isEditing", false);
 
         return mav;
     }
@@ -150,7 +152,9 @@ public class ExperienceController {
         final List<ReviewUserModel> reviews = reviewService.getReviewAndUser(experienceId);
         final Double avgScore = reviewService.getAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
-        final String countryCity = experienceService.getCountryCity(experienceId);
+        final CityModel cityModel = cityService.getById(experience.getCityId()).get();
+        final String city = cityModel.getName();
+        final String country = countryService.getById(cityModel.getCountryId()).get().getName();
 
         final Optional<Long> experienceAvgReview = experienceService.getAvgReviews(experienceId);
         experienceAvgReview.ifPresent(aLong -> mav.addObject("reviewAvg", aLong));
@@ -160,7 +164,8 @@ public class ExperienceController {
         mav.addObject("reviews", reviews);
         mav.addObject("avgScore", avgScore);
         mav.addObject("reviewCount", reviewCount);
-        mav.addObject("countryCity", countryCity);
+        mav.addObject("city", city);
+        mav.addObject("country", country);
 
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());

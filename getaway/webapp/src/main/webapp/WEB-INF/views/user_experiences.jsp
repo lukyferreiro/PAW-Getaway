@@ -33,9 +33,9 @@
                      </jsp:include>
                   </div>
 
-                  <div class="container-fluid mt-3 d-flex flex-wrap justify-content-center align-content-center">
+                  <div class="container-fluid mt-3 d-flex flex-wrap justify-content-center">
                      <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
-                        <div class="d-flex flex-column justify-content-center align-content-center">
+<%--                        <div class="d-flex flex-column justify-content-center align-content-center">--%>
                            <jsp:include page="/WEB-INF/components/card_experience.jsp">
                               <jsp:param name="hasImage" value="${experience.hasImage}"/>
                               <jsp:param name="categoryName" value="${experience.categoryName}"/>
@@ -48,20 +48,9 @@
                               <jsp:param name="favUrlFalse" value="/user/experiences?experience=${experience.experienceId}&set=${false}"/>
                               <jsp:param name="favUrlTrue" value="/user/experiences?experience=${experience.experienceId}&set=${true}"/>
                               <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
+                              <jsp:param name="isEditing" value="${isEditing}"/>
                            </jsp:include>
-                           <div class="btn-group" role="group">
-                              <a href="<c:url value="/user/experiences/edit/${experience.experienceId}"/>" class="btn-exp">
-                                 <button type="button" class="btn btn-circle">
-                                    <i class="bi bi-pencil"></i>
-                                 </button>
-                              </a>
-                              <a href="<c:url value="/user/experiences/delete/${experience.experienceId}"/>" class="btn-exp">
-                                 <button type="button" class="btn btn-circle">
-                                    <i class="bi bi-trash"></i>
-                                 </button>
-                              </a>
-                           </div>
-                        </div>
+<%--                        </div>--%>
                      </c:forEach>
                   </div>
                </c:otherwise>

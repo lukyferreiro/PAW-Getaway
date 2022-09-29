@@ -38,12 +38,12 @@
 
                            <div class="btn-group" role="group">
                               <a href="<c:url value="/user/reviews/edit/${review.reviewId}"/>" class="btn-exp">
-                                 <button type="button" class="btn btn-circle">
+                                 <button type="button" class="btn">
                                     <i class="bi bi-pencil"></i>
                                  </button>
                               </a>
                               <a href="<c:url value="/user/reviews/delete/${review.reviewId}"/>" class="btn-exp">
-                                 <button type="button" class="btn btn-circle">
+                                 <button type="button" class="btn">
                                     <i class="bi bi-trash"></i>
                                  </button>
                               </a>

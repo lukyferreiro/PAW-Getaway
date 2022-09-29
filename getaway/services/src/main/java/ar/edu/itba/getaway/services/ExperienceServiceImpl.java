@@ -35,7 +35,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public boolean update(ExperienceModel experienceModel, byte[] image) {
         LOGGER.debug("Updating experience with id {}", experienceModel.getExperienceId());
-        if(experienceDao.update(experienceModel, image)){
+        if (experienceDao.update(experienceModel, image)) {
             LOGGER.debug("Experience {} updated", experienceModel.getExperienceId());
             return true;
         } else {
@@ -47,7 +47,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public boolean delete(long experienceId) {
         LOGGER.debug("Deleting experience with id {}", experienceId);
-        if(experienceDao.delete(experienceId)){
+        if (experienceDao.delete(experienceId)) {
             LOGGER.debug("Experience {} deleted", experienceId);
             return true;
         } else {
@@ -69,12 +69,6 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public String getCountryCity(long experienceId) {
-        LOGGER.debug("Retrieving country and city of experience with id {}", experienceId);
-        return experienceDao.getCountryCity(experienceId);
-    }
-
-    @Override
     public List<ExperienceModel> listByUserId(long userId, String order) {
         LOGGER.debug("Retrieving experiences created by user with id {}", userId);
         return experienceDao.listByUserId(userId, order);
@@ -88,26 +82,26 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     public Page<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score, String order, int page) {
-        List<ExperienceModel> experienceModelList =  experienceDao.listByFilterWithCity(categoryId, max, cityId, score, order, page, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listByFilterWithCity(categoryId, max, cityId, score, order, page, PAGE_SIZE);
         int total_pages;
-        try{
-            int total = (int) Math.ceil(experienceDao.countListByFilterWithCity(categoryId, max, cityId, score)/PAGE_SIZE);
-            total_pages = total==0?1:total;
-        }catch (EmptyResultDataAccessException e){
-            total_pages=1;
+        try {
+            int total = (int) Math.ceil(experienceDao.countListByFilterWithCity(categoryId, max, cityId, score) / PAGE_SIZE);
+            total_pages = total == 0 ? 1 : total;
+        } catch (EmptyResultDataAccessException e) {
+            total_pages = 1;
         }
         return new Page<>(experienceModelList, page, total_pages);
     }
 
     @Override
     public Page<ExperienceModel> listByFilter(long categoryId, Double max, long score, String order, int page) {
-        List<ExperienceModel> experienceModelList =  experienceDao.listByFilter(categoryId, max, score, order, page, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(categoryId, max, score, order, page, PAGE_SIZE);
         int total_pages;
-        try{
-            int total = (int) Math.ceil(experienceDao.countListByFilter(categoryId, max, score)/PAGE_SIZE);
-             total_pages = total==0?1:total;
-        }catch (EmptyResultDataAccessException e){
-            total_pages=1;
+        try {
+            int total = (int) Math.ceil(experienceDao.countListByFilter(categoryId, max, score) / PAGE_SIZE);
+            total_pages = total == 0 ? 1 : total;
+        } catch (EmptyResultDataAccessException e) {
+            total_pages = 1;
         }
         return new Page<>(experienceModelList, page, total_pages);
     }

@@ -74,6 +74,8 @@ public class UserExperiencesController {
 
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
+        mav.addObject("isEditing", false);
+
         return mav;
     }
 
@@ -109,10 +111,10 @@ public class UserExperiencesController {
 
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
+        mav.addObject("isEditing", true);
 
         return mav;
     }
-
 
     @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.GET})
     public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,

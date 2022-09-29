@@ -14,7 +14,6 @@ public interface ExperienceService {
 
     Optional<Double> getMaxPrice(long categoryId);
     Optional<ExperienceModel> getById(long experienceId);
-    String getCountryCity(long experienceId);
     Optional<Long> getAvgReviews(long experienceId);
 
     List<ExperienceModel> listAll(String order);

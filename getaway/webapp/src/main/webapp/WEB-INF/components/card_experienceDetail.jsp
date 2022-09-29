@@ -39,7 +39,7 @@
                      <spring:message code="experienceDetail.address"/>
                   </h5>
                   <p class="information-text">
-                     <spring:message code="experienceDetail.address.value" arguments="${param.address}, ${param.countryCity}"/>
+                     <spring:message code="experienceDetail.address.value" arguments="${param.address},${param.city},${param.country}"/>
                   </p>
                </div>
                <div> <!-- Precio -->

@@ -103,6 +103,7 @@
                      <jsp:param name="favUrlFalse" value="${path}experience=${experience.experienceId}&set=${false}"/>
                      <jsp:param name="favUrlTrue" value="${path}experience=${experience.experienceId}&set=${true}"/>
                      <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
+                     <jsp:param name="isEditing" value="${isEditing}"/>
                   </jsp:include>
                </c:forEach>
             </div>

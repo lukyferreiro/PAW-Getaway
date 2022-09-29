@@ -29,11 +29,5 @@ public class CountryServiceImpl implements CountryService {
         LOGGER.debug("Retrieving country with id {}", countryId);
         return countryDao.getById(countryId);
     }
-
-    @Override
-    public Optional<CountryModel> getIdByCountryName(String country) {
-        LOGGER.debug("Retrieving country with name {}", country);
-        return countryDao.getIdByCountryName(country);
-    }
 }
 
