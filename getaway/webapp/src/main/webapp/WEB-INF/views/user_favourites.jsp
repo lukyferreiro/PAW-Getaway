@@ -6,7 +6,6 @@
 <html>
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="favourite.title"/></title>
-      <link href='<c:url value="/resources/css/user_experiences.css"/>' rel="stylesheet">
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 
@@ -24,12 +23,8 @@
                   <div class="d-flex justify-content-around align-content-center">
                      <h3 class="title"><spring:message code="experience.title"/></h3>
                      <jsp:include page="/WEB-INF/components/order_dropdown.jsp">
-                        <jsp:param name="path1" value="/user/experiences?orderBy=avg(score)&direction=asc"/>
-                        <jsp:param name="path2" value="/user/experiences?orderBy=avg(score)&direction=desc"/>
-                        <jsp:param name="path3" value="/user/experiences?orderBy=experienceName&direction=asc"/>
-                        <jsp:param name="path4" value="/user/experiences?orderBy=experienceName&direction=desc"/>
-                        <jsp:param name="path5" value="/user/experiences?orderBy=price&direction=desc"/>
-                        <jsp:param name="path6" value="/user/experiences?orderBy=price&direction=asc"/>
+                        <jsp:param name="orderByModels" value="${orderByModels}"/>
+                        <jsp:param name="path" value="/user/favourites"/>
                      </jsp:include>
                   </div>
                   <div class="container-fluid mt-3 d-flex flex-wrap justify-content-center align-content-center">

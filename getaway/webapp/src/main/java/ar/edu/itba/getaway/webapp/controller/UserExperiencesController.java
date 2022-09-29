@@ -59,6 +59,8 @@ public class UserExperiencesController {
         final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
         mav.addObject("favExperienceModels", favExperienceModels);
 
+        final OrderByModel[] orderByModels = OrderByModel.values();
+
         //TODO NO ME TRAE LAS FAVORITAS
         List<ExperienceModel> experienceList = new ArrayList<>();
         String order = "";
@@ -72,6 +74,7 @@ public class UserExperiencesController {
             avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
         }
 
+        mav.addObject("orderByModels", orderByModels);
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
         return mav;
@@ -85,6 +88,7 @@ public class UserExperiencesController {
                                    @RequestParam Optional<Boolean> set) {
         final ModelAndView mav = new ModelAndView("user_experiences");
 
+        final OrderByModel[] orderByModels = OrderByModel.values();
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
@@ -107,6 +111,7 @@ public class UserExperiencesController {
             avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
         }
 
+        mav.addObject("orderByModels", orderByModels);
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
 

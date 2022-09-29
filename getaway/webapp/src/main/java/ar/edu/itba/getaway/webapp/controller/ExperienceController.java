@@ -62,15 +62,6 @@ public class ExperienceController {
         }
 
         final OrderByModel[] orderByModels = OrderByModel.values();
-        LOGGER.debug("ADDING ALL OBModels ROMAN");
-        for (OrderByModel obm: orderByModels ) {
-            LOGGER.debug(obm.name());
-            LOGGER.debug(obm.toString());
-            LOGGER.debug(obm.getCriteria());
-            LOGGER.debug(obm.getDirection());
-            LOGGER.debug(obm.getFullUrl());
-        }
-
 
         final String dbCategoryName = category.toString();
         final int id = category.ordinal() + 1;

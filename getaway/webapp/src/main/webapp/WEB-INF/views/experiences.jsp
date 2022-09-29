@@ -32,15 +32,6 @@
                      <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
                   </div>
 
-<%--                  <div class="form-check form-switch my-3 d-flex justify-content-start align-items-center">--%>
-<%--                     <input id="enablePrice" class="form-check-input checkbox-price" type="checkbox"--%>
-<%--                            onchange="let sliderPrice = document.getElementById('customRange');--%>
-<%--                                     sliderPrice.disabled = !this.checked;--%>
-<%--                                     if (this.checked) sliderPrice.style.cursor = 'pointer';--%>
-<%--                                     else sliderPrice.style.cursor = 'default';"/>--%>
-<%--                     <label for="enablePrice" class="form-check-label"><spring:message code="filters.price.checkbox"/></label>--%>
-<%--                  </div>--%>
-
                   <div class="container-slider-price">
                      <form:label path="activityPriceMax" class="form-label"><spring:message code="filters.price.title"/></form:label>
                      <output id="priceRange" name="priceRange" for="customRange">
@@ -75,7 +66,7 @@
 
                <jsp:include page="/WEB-INF/components/order_dropdown.jsp">
                   <jsp:param name="orderByModels" value="${orderByModels}"/>
-                  <jsp:param name="mainPath" value="${path}"/>
+                  <jsp:param name="path" value="${path}"/>
                </jsp:include>
 
                <a href="<c:url value = "/experiences/${categoryName}"/>">
