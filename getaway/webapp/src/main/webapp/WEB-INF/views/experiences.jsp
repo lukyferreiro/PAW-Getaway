@@ -74,12 +74,8 @@
                </button>
 
                <jsp:include page="/WEB-INF/components/order_dropdown.jsp">
-                  <jsp:param name="path1" value="${path}orderBy=avg(score)&direction=asc"/>
-                  <jsp:param name="path2" value="${path}orderBy=avg(score)&direction=desc"/>
-                  <jsp:param name="path3" value="${path}orderBy=experienceName&direction=asc"/>
-                  <jsp:param name="path4" value="${path}orderBy=experienceName&direction=desc"/>
-                  <jsp:param name="path5" value="${path}orderBy=price&direction=desc"/>
-                  <jsp:param name="path6" value="${path}orderBy=price&direction=asc"/>
+                  <jsp:param name="orderByModels" value="${orderByModels}"/>
+                  <jsp:param name="mainPath" value="${path}"/>
                </jsp:include>
 
                <a href="<c:url value = "/experiences/${categoryName}"/>">

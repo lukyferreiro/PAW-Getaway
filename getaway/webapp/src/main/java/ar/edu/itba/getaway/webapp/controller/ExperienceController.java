@@ -61,6 +61,17 @@ public class ExperienceController {
             throw new CategoryNotFoundException();
         }
 
+        final OrderByModel[] orderByModels = OrderByModel.values();
+        LOGGER.debug("ADDING ALL OBModels ROMAN");
+        for (OrderByModel obm: orderByModels ) {
+            LOGGER.debug(obm.name());
+            LOGGER.debug(obm.toString());
+            LOGGER.debug(obm.getCriteria());
+            LOGGER.debug(obm.getDirection());
+            LOGGER.debug(obm.getFullUrl());
+        }
+
+
         final String dbCategoryName = category.toString();
         final int id = category.ordinal() + 1;
         Page<ExperienceModel> currentPage;
@@ -124,8 +135,7 @@ public class ExperienceController {
         }
 
         mav.addObject("path", path);
-
-
+        mav.addObject("orderByModels", orderByModels);
         mav.addObject("max", max);
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
