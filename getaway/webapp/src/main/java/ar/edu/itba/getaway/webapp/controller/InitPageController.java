@@ -71,7 +71,7 @@ public class InitPageController {
         List<List<ExperienceModel>> listByCategory = new ArrayList<>();
         for(int i=0 ; i<=5 ; i++){
             listByCategory.add(new ArrayList<>());
-            listByCategory.get(i).addAll(experienceService.listBetterRanked(i + 1));
+            listByCategory.get(i).addAll(experienceService.listByBestRanked(i + 1));
         }
 
         mav.addObject("listByCategory", listByCategory);
