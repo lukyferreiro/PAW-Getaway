@@ -69,14 +69,18 @@ public class ExperienceController {
 
         final Optional<Double> maxPriceOpt = experienceService.getMaxPrice(id);
         double max = maxPriceOpt.get();
+        mav.addObject("max", max);
         if(maxPrice.isPresent()){
             max = maxPrice.get();
         }
+        mav.addObject("maxPrice", max);
 
         long scoreVal = 0;
         if (score.isPresent() && score.get() != -1) {
             scoreVal = score.get();
         }
+        mav.addObject("score", scoreVal);
+
         String order = "";
 
         if (orderBy.isPresent()) {
@@ -85,8 +89,10 @@ public class ExperienceController {
 
         if (cityId.isPresent()) {
             currentPage = experienceService.listByFilterWithCity(id, max, cityId.get(), scoreVal, order, pageNum);
+            mav.addObject("cityId", cityId.get());
         } else {
             currentPage = experienceService.listByFilter(id, max, scoreVal, order, pageNum);
+            mav.addObject("cityId", -1);
         }
 
         if (principal != null) {
@@ -126,8 +132,6 @@ public class ExperienceController {
 
         mav.addObject("path", path);
 
-
-        mav.addObject("max", max);
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
@@ -207,7 +211,7 @@ public class ExperienceController {
             mav.addObject("maxPrice", priceMax);
         }
 
-        final Long score = form.getScore();
+        final Long score = form.getScoreVal();
         if (score != -1) {
             mav.addObject("score", score);
         }

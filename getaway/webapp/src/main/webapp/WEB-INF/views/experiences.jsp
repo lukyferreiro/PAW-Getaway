@@ -20,31 +20,22 @@
                </p>
                <%--FILTER--%>
                <c:url value="/experiences/${categoryName}" var="postPath"/>
-               <form:form modelAttribute="filterForm" action="${postPath}" cssClass="filter-form" id="cityFilterForm" method="post" acceptCharset="UTF-8">
+               <form:form modelAttribute="filterForm" action="${postPath}" cssClass="filter-form" id="submitForm" method="post" acceptCharset="UTF-8">
                   <div>
                      <form:label path="activityCity" class="form-label"><spring:message code="filters.city"/></form:label>
                      <form:select path="activityCity" class="form-select">
                         <option disabled selected value><spring:message code="filters.city.placeholder"/></option>
                         <c:forEach var="city" items="${cities}">
-                           <option><c:out value="${city.name}"/></option>
+                           <option <c:if test="${city.id == cityId}"> selected </c:if> ><c:out value="${city.name}"/></option>
                         </c:forEach>
                      </form:select>
                      <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
                   </div>
 
-<%--                  <div class="form-check form-switch my-3 d-flex justify-content-start align-items-center">--%>
-<%--                     <input id="enablePrice" class="form-check-input checkbox-price" type="checkbox"--%>
-<%--                            onchange="let sliderPrice = document.getElementById('customRange');--%>
-<%--                                     sliderPrice.disabled = !this.checked;--%>
-<%--                                     if (this.checked) sliderPrice.style.cursor = 'pointer';--%>
-<%--                                     else sliderPrice.style.cursor = 'default';"/>--%>
-<%--                     <label for="enablePrice" class="form-check-label"><spring:message code="filters.price.checkbox"/></label>--%>
-<%--                  </div>--%>
-
                   <div class="container-slider-price">
                      <form:label path="activityPriceMax" class="form-label"><spring:message code="filters.price.title"/></form:label>
                      <output id="priceRange" name="priceRange" for="customRange">
-                        ${max}
+                        ${maxPrice}
                      </output>
                      <div class="slider-price">
                         <div class="value left">
@@ -52,7 +43,7 @@
                         </div>
                         <div class="slider">
                            <form:input id="customRange" path="activityPriceMax"
-                                       type="range" min="0" max="${max}" value="${max}"
+                                       type="range" min="0" max="${max}" value="${maxPrice}"
                                        oninput="document.getElementById('priceRange').value = this.value"/>
                         </div>
                         <div class="value right">
@@ -62,14 +53,14 @@
                   </div>
 
                   <div>
-                     <form:label path="activityReview" class="form-label"><spring:message code="review.scoreAssign"/></form:label>
+                     <form:label path="score" class="form-label"><spring:message code="review.scoreAssign"/></form:label>
                      <jsp:include page="/WEB-INF/components/star_form.jsp"/>
-                     <form:input path="activityReview" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="scoreInput"/>
-                     <form:errors path="activityReview" element="p" cssClass="form-error-label"/>
+                     <form:input value="${score}" path="score" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="scoreInput"/>
+                     <form:errors path="score" element="p" cssClass="form-error-label"/>
                   </div>
                </form:form>
 
-               <button class="btn btn-search px-3 py-2 my-2" type="submit" id="cityFilterFormButton" form="cityFilterForm">
+               <button class="btn btn-search px-3 py-2 my-2" type="submit" id="submitFormButton" form="submitForm">
                   <spring:message code="filters.btn.submit"/>
                </button>
 
@@ -83,7 +74,7 @@
                </jsp:include>
 
                <a href="<c:url value = "/experiences/${categoryName}"/>">
-                  <button class="btn btn-clean-filter px-3 py-2 my-2" type="button" id="cleanFilterFormButton" form="cityFilterForm">
+                  <button class="btn btn-clean-filter px-3 py-2 my-2" type="button" id="cleanFilterFormButton" form="submitForm">
                      <spring:message code="filters.btn.clear"/>
                   </button>
                </a>
@@ -154,10 +145,7 @@
       </div>
 
       <%@ include file="../components/includes/bottomScripts.jsp" %>
-      <script src='<c:url value="/resources/js/filter.js"/>'></script>
-<%--      TODO SE ESTABA USANDO ESTO ??--%>
-      <%--      <script src='<c:url value="/resources/js/favExperience.js"/>'></script>--%>
-      <%--      <script src="https://kit.fontawesome.com/5ea815c1d0.js"></script>--%>
+      <script src='<c:url value="/resources/js/submitStarsButton.js"/>'></script>
 
    </body>
 </html>
