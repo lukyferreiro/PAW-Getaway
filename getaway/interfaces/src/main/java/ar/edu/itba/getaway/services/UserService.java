@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
 
@@ -11,7 +10,7 @@ public interface UserService {
     Collection<RoleModel> getUserRolesModels(long userId);
     Optional<UserModel> getUserById (long userId);
     Optional<UserModel> getUserByEmail (String email);
-    UserModel createUser (String password, String name, String surname, String email) throws DuplicateUserException, DuplicateImageException;
+    UserModel createUser (String password, String name, String surname, String email) throws DuplicateUserException;
     Optional<UserModel> verifyAccount (String token);
     void resendVerificationToken (UserModel userModel);
     boolean validatePasswordReset (String token);

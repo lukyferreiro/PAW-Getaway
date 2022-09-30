@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.persistence.PasswordResetTokenDao;
@@ -64,7 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException, DuplicateImageException {
+    public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException {
         LOGGER.debug("Creating user with email {}", email);
         UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES);
         LOGGER.debug("Created user with id {}", userModel.getId());

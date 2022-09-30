@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.persistence;
 
-import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import javax.swing.text.html.Option;
 import java.util.*;
 
 @Repository
@@ -59,7 +57,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public UserModel createUser(String password, String name, String surname, String email,
-                                Collection<Roles> roles) throws DuplicateUserException, DuplicateImageException {
+                                Collection<Roles> roles) throws DuplicateUserException {
         final Map<String, Object> userData = new HashMap<>();
         userData.put("userName", name);
         userData.put("userSurname", surname);

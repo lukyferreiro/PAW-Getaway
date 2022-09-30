@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.persistence.ExperienceDao;
@@ -8,9 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +24,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 
     @Override
-    public ExperienceModel create(String name, String address, String description, String email, String url, Double price, long cityId, long categoryId, long userId, byte[] image) throws DuplicateImageException {
+    public ExperienceModel create(String name, String address, String description, String email, String url, Double price, long cityId, long categoryId, long userId, byte[] image) {
         LOGGER.debug("Creating experience with name {}", name);
         ExperienceModel experienceModel = experienceDao.create(name, address, description, email, url, price, cityId, categoryId, userId, image);
         LOGGER.debug("Created experience with id {}", experienceModel.getExperienceId());

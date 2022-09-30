@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.persistence.config;
 
-import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.RoleModel;
 import ar.edu.itba.getaway.models.Roles;
@@ -59,9 +58,14 @@ public class UserDaoTest {
 
     @Test
     @Rollback
-    public void testCreateUser() throws DuplicateUserException, DuplicateImageException {
-        final UserModel user = userDao.createUser(PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES);
-        assertNotNull(user);
+    public void testCreateUser() {
+        UserModel user = null;
+        try {
+            user = userDao.createUser(PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES);
+            assertNotNull(user);
+        } catch (DuplicateUserException e) {
+            e.printStackTrace();
+        }
         assertEquals(PASSWORD, user.getPassword());
         assertEquals(NAME, user.getName());
         assertEquals(SURNAME, user.getSurname());
@@ -75,7 +79,7 @@ public class UserDaoTest {
 
     @Test(expected = DuplicateUserException.class)
     @Rollback
-    public void testCreateDuplicateUser() throws DuplicateUserException, DuplicateImageException {
+    public void testCreateDuplicateUser() throws DuplicateUserException {
         userDao.createUser("contra1", "usuario", "uno", "uno@mail.com", DEFAULT_ROLES);
     }
 

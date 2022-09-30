@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.models.ImageExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
 import ar.edu.itba.getaway.persistence.ImageDao;
@@ -21,7 +20,7 @@ public class ImageServiceImpl implements ImageService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageServiceImpl.class);
 
     @Override
-    public ImageModel createImg(byte[] image) throws DuplicateImageException {
+    public ImageModel createImg(byte[] image) {
         final ImageModel img = imageDao.createImg(image);
         LOGGER.info("Created image with id {}", img.getId());
         return img;
@@ -52,7 +51,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ImageExperienceModel createExperienceImg(byte[] image, long experienceId, boolean isCover) throws DuplicateImageException {
+    public ImageExperienceModel createExperienceImg(byte[] image, long experienceId, boolean isCover) {
         final ImageExperienceModel imgExp = imageDao.createExperienceImg(image, experienceId, isCover);
         LOGGER.debug("Creating image {} to experience with id {}", imgExp.getImageId(), experienceId);
         return imgExp;

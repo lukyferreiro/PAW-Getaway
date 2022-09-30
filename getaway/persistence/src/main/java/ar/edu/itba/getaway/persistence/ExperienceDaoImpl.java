@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.persistence;
 
-import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ImageExperienceModel;
 import org.slf4j.Logger;
@@ -67,7 +66,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public ExperienceModel create(String name, String address, String description, String email, String url,
-                                  Double price, long cityId, long categoryId, long userId, byte[] image) throws DuplicateImageException {
+                                  Double price, long cityId, long categoryId, long userId, byte[] image) {
         final Map<String, Object> experienceData = new HashMap<>();
         experienceData.put("experienceName", name);
         experienceData.put("address", address);
