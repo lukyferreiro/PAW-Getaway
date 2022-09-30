@@ -21,4 +21,15 @@ public class CityModel {
         return cityName;
     }
 
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+        if (!(o instanceof CityModel)){
+            return false;
+        }
+        CityModel other = (CityModel) o;
+        return this.cityId.equals(other.cityId);
+    }
 }
