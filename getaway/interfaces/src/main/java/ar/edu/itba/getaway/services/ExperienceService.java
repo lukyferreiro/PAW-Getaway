@@ -12,8 +12,6 @@ public interface ExperienceService {
     boolean update (ExperienceModel experienceModel, byte[] image);
     boolean delete (long experienceId);
 
-    String getUserEmailByExperienceId(Long experienceId);
-
     Optional<Double> getMaxPrice(long categoryId);
     Optional<ExperienceModel> getById(long experienceId);
     Optional<Long> getAvgReviews(long experienceId);

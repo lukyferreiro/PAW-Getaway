@@ -119,13 +119,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public String getUserEmailByExperienceId(Long experienceId){
-        final String query = "SELECT email FROM users WHERE userid = (SELECT userid FROM experiences WHERE experienceid = ?)";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.queryForObject(query, new Object[]{experienceId}, String.class);
-    }
-
-    @Override
     public List<ExperienceModel> listAll(String order) {
         final String query = "SELECT * FROM experiences" + order;
         LOGGER.debug("Executing query: {}", query);

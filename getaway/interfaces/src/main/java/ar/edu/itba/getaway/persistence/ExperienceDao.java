@@ -11,8 +11,6 @@ public interface ExperienceDao {
     boolean update (ExperienceModel experienceModel, byte[] image);
     boolean delete (long experienceId);
 
-    String getUserEmailByExperienceId(Long experienceId);
-
     Optional<ExperienceModel> getById (long experienceId);
     Optional<Long> getAvgReviews(long experienceId);
     Optional<Double> getMaxPrice(long categoryId);

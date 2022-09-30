@@ -62,6 +62,18 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserByEmail(email);
     }
 
+    @Override
+    public Optional<UserModel> getUserByExperienceId(Long experienceId){
+        LOGGER.debug("Retrieving user who creates experience with id {}", experienceId);
+        return userDao.getUserByExperienceId(experienceId);
+    }
+
+    @Override
+    public Optional<UserModel> getUserByReviewId(Long reviewId){
+        LOGGER.debug("Retrieving user who creates review with id {}", reviewId);
+        return userDao.getUserByReviewId(reviewId);
+    }
+
     @Transactional
     @Override
     public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException, DuplicateImageException {

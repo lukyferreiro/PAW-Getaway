@@ -9,6 +9,7 @@ import ar.edu.itba.getaway.webapp.forms.ReviewForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -43,6 +44,7 @@ public class UserReviewsController {
         return mav;
     }
 
+    @PreAuthorize("@antMatcherVoter.canDeleteReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/delete/{reviewId}", method = {RequestMethod.GET})
     public ModelAndView reviewDelete(@PathVariable("reviewId") final long reviewId,
                                          @ModelAttribute("deleteForm") final DeleteForm form) {
@@ -54,6 +56,7 @@ public class UserReviewsController {
         return mav;
     }
 
+    @PreAuthorize("@antMatcherVoter.canDeleteReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/delete/{reviewId}", method = {RequestMethod.POST})
     public ModelAndView reviewDeletePost(@PathVariable(value = "reviewId") final long reviewId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,
@@ -66,6 +69,7 @@ public class UserReviewsController {
         return new ModelAndView("redirect:/user/reviews");
     }
 
+    @PreAuthorize("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/edit/{reviewId}", method = {RequestMethod.GET})
     public ModelAndView reviewEdit(@PathVariable("reviewId") final long reviewId,
                                        @ModelAttribute("reviewForm") final ReviewForm form) {
@@ -83,6 +87,7 @@ public class UserReviewsController {
         return mav;
     }
 
+    @PreAuthorize("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/edit/{reviewId}", method = {RequestMethod.POST})
     public ModelAndView reviewEditPost(@PathVariable(value = "reviewId") final long reviewId,
                                            @ModelAttribute("reviewForm") final ReviewForm form,

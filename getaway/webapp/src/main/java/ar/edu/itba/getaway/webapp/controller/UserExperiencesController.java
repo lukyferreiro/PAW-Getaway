@@ -121,11 +121,7 @@ public class UserExperiencesController {
         return mav;
     }
 
-//    public Optional<String> getUserEmailByExperienceId(Long experienceId){
-//        return experienceService.getUserEmailByExperienceId(experienceId);
-//    }
-
-//    @PreAuthorize("principal.name == @userExperiencesController.getUserEmailByExperienceId(#experienceId)")
+    @PreAuthorize("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
     @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.GET})
     public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
                                          @ModelAttribute("deleteForm") final DeleteForm form,
@@ -137,7 +133,7 @@ public class UserExperiencesController {
         return mav;
     }
 
-//    @PreAuthorize("principal.name == @userExperiencesController.getUserEmailByExperienceId(#experienceId)")
+    @PreAuthorize("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
     @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.POST})
     public ModelAndView experienceDeletePost(@PathVariable(value = "experienceId") final long experienceId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,
@@ -151,6 +147,7 @@ public class UserExperiencesController {
         return new ModelAndView("redirect:/user/experiences");
     }
 
+    @PreAuthorize("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
     @RequestMapping(value = "/user/experiences/edit/{experienceId}", method = {RequestMethod.GET})
     public ModelAndView experienceEdit(@PathVariable("experienceId") final long experienceId,
                                        @ModelAttribute("experienceForm") final ExperienceForm form) {
@@ -158,11 +155,6 @@ public class UserExperiencesController {
         final ModelAndView mav = new ModelAndView("experience_form");
 
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
-//        final List<String> categories = new ArrayList<>();
-////        for (ExperienceCategory categoryModel : categoryModels) {
-////            categories.add(categoryModel.getName());
-////        }
-
         final String country = locationService.getCountryByName("Argentina").get().getName();
         final List<CityModel> cityModels = locationService.listAllCities();
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
@@ -209,6 +201,7 @@ public class UserExperiencesController {
         return mav;
     }
 
+    @PreAuthorize("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
     @RequestMapping(value = "/user/experiences/edit/{experienceId}", method = {RequestMethod.POST})
     public ModelAndView experienceEditPost(@PathVariable(value="experienceId") final long experienceId,
                                            @Valid @ModelAttribute("experienceForm") final ExperienceForm form,
@@ -217,7 +210,7 @@ public class UserExperiencesController {
             return experienceEdit(experienceId, form);
         }
 
-        long categoryId = form.getActivityCategory();
+        final long categoryId = form.getActivityCategory();
 
         final CityModel city = locationService.getCityByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
         final Long cityId = city.getId();

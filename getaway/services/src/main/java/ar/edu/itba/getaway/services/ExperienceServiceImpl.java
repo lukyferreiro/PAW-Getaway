@@ -58,12 +58,6 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public String getUserEmailByExperienceId(Long experienceId) {
-        LOGGER.debug("Retrieving email of user who creates experience with id {}", experienceId);
-        return experienceDao.getUserEmailByExperienceId(experienceId);
-    }
-
-    @Override
     public List<ExperienceModel> listAll(String order) {
         LOGGER.debug("Retrieving all experiences");
         return experienceDao.listAll(order);

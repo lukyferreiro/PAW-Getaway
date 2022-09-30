@@ -108,6 +108,22 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public Optional<UserModel> getUserByExperienceId(Long experienceId){
+        final String query = "SELECT * FROM users WHERE userid = (SELECT userid FROM experiences WHERE experienceid = ?)";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{experienceId}, USER_MODEL_ROW_MAPPER)
+                .stream().findFirst();
+    }
+
+    @Override
+    public Optional<UserModel> getUserByReviewId(Long reviewId){
+        final String query = "SELECT * FROM users WHERE userid = (SELECT userid FROM reviews WHERE reviewId = ?)";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{reviewId}, USER_MODEL_ROW_MAPPER)
+                .stream().findFirst();
+    }
+
+    @Override
     public Collection<Roles> getUserRoles(long userId) {
         Collection<RoleModel> rolesModel = getUserRolesModels(userId);
         Collection<Roles> rolesCollection = new ArrayList<>();
