@@ -1,6 +1,6 @@
 TRUNCATE TABLE users RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE experiences RESTART IDENTITY AND COMMIT NO CHECK;
-TRUNCATE TABLE argentinacities RESTART IDENTITY AND COMMIT NO CHECK;
+TRUNCATE TABLE cities RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE countries RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE categories RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE reviews RESTART IDENTITY AND COMMIT NO CHECK;
@@ -23,17 +23,17 @@ INSERT INTO categories(categoryname) VALUES ('Historico');
 INSERT INTO countries(countryname) VALUES ('Test Country');
 
 -- Add at least two cities
-INSERT INTO argentinacities(cityname, countryid) VALUES('Test City One', 1);
-INSERT INTO argentinacities(cityname, countryid) VALUES('Test City Two', 1);
+INSERT INTO cities(cityname, countryid) VALUES('Test City One', 1);
+INSERT INTO cities(cityname, countryid) VALUES('Test City Two', 1);
 
 -- Add 1 experience of each category
 -- Add 3 to adventure with different price ranges and cities for filter testing
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, hasimage)
-VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 1, false);
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, hasimage)
-VALUES (7, 'testaventura2', 1500, 'diraventura2', null, null, 1, 1, 2, false);
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, hasimage)
-VALUES (8, 'testaventura3', 2000, 'diraventura3', null, null, 2, 1, 2, false);
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
+VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 1, 'owner@mail.com');
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
+VALUES (7, 'testaventura2', 1500, 'diraventura2', null, null, 1, 1, 2, 'owner2@mail.com');
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
+VALUES (8, 'testaventura3', 2000, 'diraventura3', null, null, 2, 1, 2, 'owner2@mail.com');
 
 -- Add 3 reviews to each adventure for review specific filter
 
