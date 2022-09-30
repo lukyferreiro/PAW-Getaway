@@ -1,33 +1,52 @@
-@media (max-width: 767px) {
-    .carousel-inner .carousel-item > div {
-        display: none;
-    }
-    .carousel-inner .carousel-item > div:first-child {
-        display: block;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.carousel-container {
+    margin: 5% auto;
+    position: relative;
+}
+
+@media {
+    .carousel-container {
+        width: 100%;
     }
 }
 
-.carousel-inner .carousel-item.active,
-.carousel-inner .carousel-item-next,
-.carousel-inner .carousel-item-prev {
-    display: flex;
+.track {
+    display: inline-flex;
+    height: 100%;
+    transition: transform 0.2s ease-in-out;
 }
-
-/* medium and up screens */
-@media (min-width: 768px) {
-
-    .carousel-inner .carousel-item-end.active,
-    .carousel-inner .carousel-item-next {
-        transform: translateX(25%);
-    }
-
-    .carousel-inner .carousel-item-start.active,
-    .carousel-inner .carousel-item-prev {
-        transform: translateX(-25%);
+@media  {
+    .card-container {
+        width: 184px;
     }
 }
+.carousel-item{
+    margin: 3%;
+}
 
-.carousel-inner .carousel-item-end,
-.carousel-inner .carousel-item-start {
-    transform: translateX(0);
+.nav button {
+    position: absolute;
+    top: 50%;
+    transform: translatey(-50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    outline: none;
+    border: 1px solid #000;
+    cursor: pointer;
+    background-color: #FAB672;
+}
+.nav .prev {
+    left: -30px;
+    display: block;
+}
+
+.nav .next {
+    right: -30px;
+    display: block;
 }
