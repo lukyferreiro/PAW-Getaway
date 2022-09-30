@@ -14,8 +14,8 @@ import javax.sql.DataSource;
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
-@Sql(scripts = "classpath:city-dao-test.sql")
-public class CityDaoTest {
+@Sql(scripts = "classpath:location-dao-test.sql")
+public class LocationDaoTest {
 
     @Autowired
     private DataSource ds;
@@ -26,5 +26,4 @@ public class CityDaoTest {
     public void setUp() {
         this.jdbcTemplate = new JdbcTemplate(ds);
     }
-
 }

@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.persistence.config;
 
+
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,8 @@ import javax.sql.DataSource;
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
-@Sql(scripts = "classpath:country-dao-test.sql")
-public class CountryDaoTest {
+@Sql(scripts = "classpath:favexperience-dao-test.sql")
+public class FavExperienceDaoTest {
 
     @Autowired
     private DataSource ds;

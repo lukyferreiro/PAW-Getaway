@@ -88,7 +88,7 @@ public class UserDaoImpl implements UserDao {
             LOGGER.info("Added role {} to user {}", roleModel.get().getRoleName().name() , userId);
         }
 
-        return new UserModel(userId, password, name, surname, email, roles, null);
+        return new UserModel(userId, password, name, surname, email, roles, imageModel.getId());
     }
 
     @Override
