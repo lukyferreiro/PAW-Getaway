@@ -121,14 +121,15 @@ public class UserExperiencesController {
         return mav;
     }
 
-    public String getUserEmailByExperienceId(Long experienceId){
-        return experienceService.getUserEmailByExperienceId(experienceId);
-    }
+//    public Optional<String> getUserEmailByExperienceId(Long experienceId){
+//        return experienceService.getUserEmailByExperienceId(experienceId);
+//    }
 
-    @PreAuthorize("principal.getUsername() == @userExperiencesController.getUserEmailByExperienceId(#experienceId)")
+//    @PreAuthorize("principal.name == @userExperiencesController.getUserEmailByExperienceId(#experienceId)")
     @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.GET})
     public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
-                                         @ModelAttribute("deleteForm") final DeleteForm form) {
+                                         @ModelAttribute("deleteForm") final DeleteForm form,
+                                         Principal principal) {
         final ModelAndView mav = new ModelAndView("deleteExperience");
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
 
@@ -136,13 +137,14 @@ public class UserExperiencesController {
         return mav;
     }
 
-    @PreAuthorize("principal.getUsername() == @userExperiencesController.getUserEmailByExperienceId(#experienceId)")
+//    @PreAuthorize("principal.name == @userExperiencesController.getUserEmailByExperienceId(#experienceId)")
     @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.POST})
     public ModelAndView experienceDeletePost(@PathVariable(value = "experienceId") final long experienceId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,
-                                             final BindingResult errors) {
+                                             final BindingResult errors,
+                                             Principal principal) {
         if (errors.hasErrors()) {
-            return experienceDelete(experienceId, form);
+            return experienceDelete(experienceId, form, principal);
         }
 
         experienceService.delete(experienceId);

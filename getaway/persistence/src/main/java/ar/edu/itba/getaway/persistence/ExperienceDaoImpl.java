@@ -3,7 +3,6 @@ package ar.edu.itba.getaway.persistence;
 import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ImageExperienceModel;
-import ar.edu.itba.getaway.models.UserModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     private static final RowMapper<Long> REVIEWS_EXPERIENCE_ROW_MAPPER = (rs,rowNum) ->
             rs.getLong("avg_score");
+
 
     private final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new ExperienceModel(rs.getLong("experienceid"),

@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.webapp.config;
 
 import ar.edu.itba.getaway.services.ExperienceService;
+import ar.edu.itba.getaway.webapp.auth.AntMatcherVoter;
 import ar.edu.itba.getaway.webapp.auth.CustomAccessDeniedHandler;
 import ar.edu.itba.getaway.webapp.auth.RefererRedirectionAuthenticationSuccessHandler;
 import ar.edu.itba.getaway.webapp.auth.MyUserDetailsService;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -50,6 +52,22 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public AntMatcherVoter antMatcherVoter() {
+        return new AntMatcherVoter();
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -88,8 +106,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/experiences").authenticated()
                 .antMatchers("/user/profileImage/{imageId}").permitAll()
 
-                .antMatchers("/user/experiences/delete/{experienceId}").authenticated()
-//                    .access("principal.username == @experienceServiceImpl.getUserEmailByExperienceId(#experienceId)")
+                .antMatchers("/user/experiences/delete/{experienceId}")
+                .access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
+//                   .access("principal.username == @experienceServiceImpl.getUserEmailByExperienceId(#experienceId)")
 
                 //TODO
                 // ...
@@ -127,8 +146,5 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 //                    .accessDeniedPage("/")
             .and().csrf().disable();
     }
-
-    @Autowired
-    private ExperienceService experienceService;
 
 }
