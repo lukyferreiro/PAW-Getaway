@@ -113,4 +113,6 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getMaxPrice(categoryId);
     }
 
+    public ExperienceModel listByName(String name){return experienceDao.getByName(name);}
+
 }
