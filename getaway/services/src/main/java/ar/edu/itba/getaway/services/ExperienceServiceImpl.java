@@ -12,6 +12,7 @@ import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     private ExperienceDao experienceDao;
 
     //TODO: limit page number to total_pages amount
-    private static final int PAGE_SIZE = 9;
+    private static final int PAGE_SIZE = 6;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 
@@ -82,32 +83,29 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score, String order, int page) {
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilterWithCity(categoryId, max, cityId, score, order, page, PAGE_SIZE);
+    public Page<ExperienceModel> listByFilter(long categoryId, Double max, long score, String city, String order, int page) {
         int total_pages;
-        try {
-            int total = experienceDao.countListByFilter(categoryId, max, score);
-            LOGGER.debug("TOTAL EXP AMOUNT {}", total);
-            total_pages = (int) Math.ceil( (double) total/ PAGE_SIZE);
-        } catch (EmptyResultDataAccessException e) {
-            total_pages = 1;
-        }
-        LOGGER.debug("TOTAL PAGE AMOUNT {}", total_pages);
-        return new Page<>(experienceModelList, page, total_pages);
-    }
+        List<ExperienceModel> experienceModelList = new ArrayList<>();
 
-    @Override
-    public Page<ExperienceModel> listByFilter(long categoryId, Double max, long score, String order, int page) {
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(categoryId, max, score, order, page, PAGE_SIZE);
-        int total_pages;
-        try {
-            int total = experienceDao.countListByFilter(categoryId, max, score);
-            LOGGER.debug("TOTAL EXP AMOUNT {}", total);
-            total_pages = (int) Math.ceil( (double) total / PAGE_SIZE);
+        LOGGER.debug("REQUESTED PAGE {}", page);
+        try{
+            int total = experienceDao.countListByFilter(categoryId, max, score, city);
+            total_pages = (int) Math.ceil( (double) total/ PAGE_SIZE);
+
+            LOGGER.debug("MAXPAGE CALCULATED {}", total_pages);
+
+            if (page <= total_pages){
+                experienceModelList  = experienceDao.listByFilter(categoryId, max, score, city, order, page, PAGE_SIZE);
+            }
+            else {
+                page = total_pages;
+                experienceModelList  = experienceDao.listByFilter(categoryId, max, score, city, order, total_pages, PAGE_SIZE);
+            }
         } catch (EmptyResultDataAccessException e) {
             total_pages = 1;
         }
-        LOGGER.debug("TOTAL PAGE AMOUNT {}", total_pages);
+
+        LOGGER.debug("MAXPAGE VALUE SERVICE {}", total_pages);
         return new Page<>(experienceModelList, page, total_pages);
     }
 

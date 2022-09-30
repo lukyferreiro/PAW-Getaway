@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.models.pagination.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +17,6 @@ public interface ExperienceDao {
 
     List<ExperienceModel> listAll (String order);
     List<ExperienceModel> listByUserId(long userId, String order);
-    List<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score, String order, int page, int page_size);
-    List<ExperienceModel> listByFilter(long categoryId, Double max,  long score, String order, int page, int page_size);
-
-    Integer countListByFilterWithCity(long categoryId, Double max, long cityId, long score);
-    Integer countListByFilter(long categoryId, Double max, long score);
-
+    List<ExperienceModel> listByFilter(long categoryId, Double max, long score, String city, String order, int page, int page_size);
+    Integer countListByFilter(long categoryId, Double max, long score, String city);
 }

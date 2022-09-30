@@ -56,7 +56,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Optional<CityModel> getCountryByName(String countryName) {
+    public Optional<CountryModel> getCountryByName(String countryName) {
         LOGGER.debug("Retrieving country with name {}", countryName);
         return locationDao.getCountryByName(countryName);
     }

@@ -158,31 +158,18 @@ public class ExperienceDaoImpl implements ExperienceDao {
         return jdbcTemplate.query("SELECT MAX(COALESCE(price,0)) as max_price FROM experiences WHERE categoryid = ?", new Object[]{categoryId}, PRICE_EXPERIENCE_ROW_MAPPER ).stream().findFirst();
     }
 
-
     @Override
-    public List<ExperienceModel> listByFilterWithCity(long categoryId, Double max, long cityId, long score , String order, int page, int page_size) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityid = ? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=?" + order
-                + " LIMIT ? OFFSET ?",
-                new Object[]{categoryId, max, cityId, score, page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
-    }
-
-    @Override
-    public Integer countListByFilterWithCity(long categoryId, Double max, long cityId, long score) {
-        return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityid = ? HAVING AVG(COALESCE(score,0))>=?",
-                new Object[]{categoryId, max, cityId, score}, Integer.class);
-    }
-
-    @Override
-    public List<ExperienceModel> listByFilter(long categoryId, Double max, long score, String order, int page, int page_size) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=?" + order
+    public List<ExperienceModel> listByFilter(long categoryId, Double max, long score, String city, String order, int page, int page_size) {
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? " + city +
+                        "GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=?" + order
                 + " LIMIT ? OFFSET ?",
                 new Object[]{categoryId, max, score, page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public Integer countListByFilter(long categoryId, Double max, long score) {
-        return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? HAVING AVG(COALESCE(score,0))>=?",
+    public Integer countListByFilter(long categoryId, Double max, long score, String city) {
+        return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? " + city +
+                        "HAVING AVG(COALESCE(score,0))>=?",
                 new Object[]{categoryId, max, score}, Integer.class);
     }
-
 }

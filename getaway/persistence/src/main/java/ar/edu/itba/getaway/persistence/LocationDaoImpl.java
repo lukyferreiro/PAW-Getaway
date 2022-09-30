@@ -89,10 +89,10 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public Optional<CityModel> getCountryByName(String countryName) {
+    public Optional<CountryModel> getCountryByName(String countryName) {
         final String query = "SELECT * FROM countries WHERE countryname = ?";
         LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{countryName}, CITY_MODEL_ROW_MAPPER)
+        return jdbcTemplate.query(query, new Object[]{countryName}, COUNTRY_MODEL_ROW_MAPPER)
                 .stream().findFirst();
     }
 }
