@@ -61,7 +61,7 @@ public class UserDaoTest {
     public void testCreateUser() {
         UserModel user = null;
         try {
-            user = userDao.createUser(PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES);
+            user = userDao.createUser(PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES, 1);
             assertNotNull(user);
         } catch (DuplicateUserException e) {
             e.printStackTrace();
@@ -80,7 +80,7 @@ public class UserDaoTest {
     @Test(expected = DuplicateUserException.class)
     @Rollback
     public void testCreateDuplicateUser() throws DuplicateUserException {
-        userDao.createUser("contra1", "usuario", "uno", "uno@mail.com", DEFAULT_ROLES);
+        userDao.createUser("contra1", "usuario", "uno", "uno@mail.com", DEFAULT_ROLES, 0);
     }
 
     @Test

@@ -9,7 +9,8 @@ INSERT INTO roles(roleName) VALUES ('VERIFIED');
 INSERT INTO roles(roleName) VALUES ('NOT_VERIFIED');
 
 -- Adding an image for updateProfileImg test
-INSERT INTO images(imgid, imageobject) VALUES (15, null)
+INSERT INTO images(imgid, imageobject) VALUES (1, null)
+    INSERT INTO images(imgid, imageobject) VALUES (15, null)
 
 -- Creating user with userid 1
 INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (1, 'usuario', 'uno', 'uno@mail.com', 15, 'contra1');

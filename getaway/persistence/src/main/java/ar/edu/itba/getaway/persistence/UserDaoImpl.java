@@ -17,8 +17,6 @@ import java.util.*;
 @Repository
 public class UserDaoImpl implements UserDao {
 
-    @Autowired
-    private ImageDao imageDao;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert userSimpleJdbcInsert;
     private final SimpleJdbcInsert roleSimpleJdbcInsert;
@@ -57,15 +55,13 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public UserModel createUser(String password, String name, String surname, String email,
-                                Collection<Roles> roles) throws DuplicateUserException {
+                                Collection<Roles> roles, long imageId) throws DuplicateUserException {
         final Map<String, Object> userData = new HashMap<>();
         userData.put("userName", name);
         userData.put("userSurname", surname);
         userData.put("email", email);
         userData.put("password", password);
-
-        final ImageModel imageModel = imageDao.createImg(null);
-        userData.put("imgId", imageModel.getId());
+        userData.put("imgId", imageId);
 
         final long userId;
         try {
@@ -86,7 +82,7 @@ public class UserDaoImpl implements UserDao {
             LOGGER.info("Added role {} to user {}", roleModel.get().getRoleName().name() , userId);
         }
 
-        return new UserModel(userId, password, name, surname, email, roles, imageModel.getId());
+        return new UserModel(userId, password, name, surname, email, roles, imageId);
     }
 
     @Override
