@@ -74,10 +74,10 @@ public class ReviewDaoImpl implements ReviewDao{
     }
 
     @Override
-    public Double getAverageScore(long experienceId) {
-        final String query = "SELECT AVG(score) FROM reviews WHERE experienceId = ?";
+    public Long getAverageScore(long experienceId) {
+        final String query = "SELECT CEILING(AVG(score)) FROM reviews WHERE experienceId = ?";
         LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.queryForObject(query, new Object[]{experienceId}, Double.class);
+        return jdbcTemplate.queryForObject(query, new Object[]{experienceId}, Long.class);
     }
 
     @Override

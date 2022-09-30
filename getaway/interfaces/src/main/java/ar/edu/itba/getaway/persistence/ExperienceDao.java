@@ -12,9 +12,7 @@ public interface ExperienceDao {
     boolean update (ExperienceModel experienceModel, byte[] image);
     boolean delete (long experienceId);
     Optional<ExperienceModel> getById (long experienceId);
-    Optional<Long> getAvgReviews(long experienceId);
     Optional<Double> getMaxPrice(long categoryId);
-
     List<ExperienceModel> listAll (String order);
     List<ExperienceModel> listByUserId(long userId, String order);
     List<ExperienceModel> listByFilter(long categoryId, Double max, long score, String city, String order, int page, int page_size);

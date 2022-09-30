@@ -122,7 +122,7 @@ public class ExperienceController {
 
         final List<Long> avgReviews = new ArrayList<>();
         for (ExperienceModel exp : currentExperiences) {
-            avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
+            avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
         }
 
         // Http Query
@@ -161,15 +161,16 @@ public class ExperienceController {
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final String dbCategoryName = ExperienceCategory.valueOf(categoryName).name();
         final List<ReviewUserModel> reviews = reviewService.getReviewAndUser(experienceId);
-        final Double avgScore = reviewService.getAverageScore(experienceId);
+        final Long avgScore = reviewService.getAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
         final CityModel cityModel = locationService.getCityById(experience.getCityId()).get();
         final String city = cityModel.getName();
         final String country = locationService.getCountryById(cityModel.getCountryId()).get().getName();
 
-        final Optional<Long> experienceAvgReview = experienceService.getAvgReviews(experienceId);
-        experienceAvgReview.ifPresent(aLong -> mav.addObject("reviewAvg", aLong));
+        LOGGER.debug("AVGSCORE reviewService {}", avgScore);
+//        experienceAvgReview.ifPresent(aLong -> mav.addObject("reviewAvg", aLong));
 
+        mav.addObject("reviewAvg", avgScore);
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("experience", experience);
         mav.addObject("reviews", reviews);

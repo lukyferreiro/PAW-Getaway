@@ -31,9 +31,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
     private static final RowMapper<Double> PRICE_EXPERIENCE_ROW_MAPPER = (rs,rowNum) ->
             rs.getDouble("max_price");
 
-    private static final RowMapper<Long> REVIEWS_EXPERIENCE_ROW_MAPPER = (rs,rowNum) ->
-            rs.getLong("avg_score");
-
     private final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
             new ExperienceModel(rs.getLong("experienceid"),
                     rs.getString("experienceName"),
@@ -143,15 +140,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
-
-    @Override
-    public Optional<Long> getAvgReviews(long experienceId) {
-        final String query = "SELECT AVG(score) as avg_score FROM reviews WHERE experienceid = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{experienceId}, REVIEWS_EXPERIENCE_ROW_MAPPER)
-                .stream().findFirst();
-    }
-
 
     @Override
     public Optional<Double> getMaxPrice(long categoryId){

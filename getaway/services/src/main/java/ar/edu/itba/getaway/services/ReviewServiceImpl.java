@@ -36,7 +36,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Double getAverageScore(long experienceId) {
+    public Long getAverageScore(long experienceId) {
         LOGGER.debug("Retrieving average score of experience with id {}", experienceId);
         return reviewDao.getAverageScore(experienceId);
     }

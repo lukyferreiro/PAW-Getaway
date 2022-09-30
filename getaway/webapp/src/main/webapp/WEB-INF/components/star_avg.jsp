@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <c:choose>
-    <c:when test="${param.avgReview!=0}">
+    <c:when test="${param.avgReview != null}">
         <div class="d-flex">
             <h6 class="information-title">
                 <spring:message code="experienceDetail.review"/>

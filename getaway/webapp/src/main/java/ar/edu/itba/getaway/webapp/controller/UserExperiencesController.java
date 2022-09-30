@@ -39,6 +39,8 @@ public class UserExperiencesController {
     private ImageService imageService;
     @Autowired
     private FavExperienceService favExperienceService;
+    @Autowired
+    private ReviewService reviewService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserExperiencesController.class);
 
@@ -69,7 +71,7 @@ public class UserExperiencesController {
 
         final List<Long> avgReviews = new ArrayList<>();
         for (ExperienceModel exp : experienceList) {
-            avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
+            avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
         }
 
         mav.addObject("orderByModels", orderByModels);
@@ -106,9 +108,8 @@ public class UserExperiencesController {
 
 
         final List<Long> avgReviews = new ArrayList<>();
-
         for (ExperienceModel exp : experienceList) {
-            avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
+            avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
         }
 
         mav.addObject("orderByModels", orderByModels);

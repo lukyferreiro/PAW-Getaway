@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface ReviewService {
     ReviewModel create (String title, String description, long score, long experienceId, Date reviewDate, long userId);
     List<ReviewModel> getReviewsFromId(long experienceId);
-    Double getAverageScore(long experienceId);
+    Long getAverageScore(long experienceId);
     Integer getReviewCount(long experienceId);
 //  Page<ReviewUserModel getReviewAndUser(long experienceId, int page);
     List<ReviewUserModel> getReviewAndUser(long experienceId);
