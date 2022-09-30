@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.config;
 
+import ar.edu.itba.getaway.services.ExperienceService;
 import ar.edu.itba.getaway.webapp.auth.CustomAccessDeniedHandler;
 import ar.edu.itba.getaway.webapp.auth.RefererRedirectionAuthenticationSuccessHandler;
 import ar.edu.itba.getaway.webapp.auth.MyUserDetailsService;
@@ -10,7 +11,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @ComponentScan("ar.edu.itba.getaway.webapp.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
@@ -83,6 +87,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //User profile
                 .antMatchers("/user/experiences").authenticated()
                 .antMatchers("/user/profileImage/{imageId}").permitAll()
+
+                .antMatchers("/user/experiences/delete/{experienceId}").authenticated()
+//                    .access("principal.username == @experienceServiceImpl.getUserEmailByExperienceId(#experienceId)")
+
                 //TODO
                 // ...
                 //Experiences
@@ -119,4 +127,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 //                    .accessDeniedPage("/")
             .and().csrf().disable();
     }
+
+    @Autowired
+    private ExperienceService experienceService;
+
 }

@@ -8,6 +8,8 @@ import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -119,6 +121,11 @@ public class UserExperiencesController {
         return mav;
     }
 
+    public String getUserEmailByExperienceId(Long experienceId){
+        return experienceService.getUserEmailByExperienceId(experienceId);
+    }
+
+    @PreAuthorize("principal.getUsername() == @userExperiencesController.getUserEmailByExperienceId(#experienceId)")
     @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.GET})
     public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
                                          @ModelAttribute("deleteForm") final DeleteForm form) {
@@ -129,6 +136,7 @@ public class UserExperiencesController {
         return mav;
     }
 
+    @PreAuthorize("principal.getUsername() == @userExperiencesController.getUserEmailByExperienceId(#experienceId)")
     @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.POST})
     public ModelAndView experienceDeletePost(@PathVariable(value = "experienceId") final long experienceId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,

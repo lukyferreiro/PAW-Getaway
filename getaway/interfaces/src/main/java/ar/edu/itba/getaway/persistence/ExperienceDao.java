@@ -10,6 +10,9 @@ public interface ExperienceDao {
     ExperienceModel create (String name, String address, String description, String email, String url, Double price, long cityId, long categoryId, long userId, byte[] image) throws DuplicateImageException;
     boolean update (ExperienceModel experienceModel, byte[] image);
     boolean delete (long experienceId);
+
+    String getUserEmailByExperienceId(Long experienceId);
+
     Optional<ExperienceModel> getById (long experienceId);
     Optional<Long> getAvgReviews(long experienceId);
     Optional<Double> getMaxPrice(long categoryId);

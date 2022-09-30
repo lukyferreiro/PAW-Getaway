@@ -3,6 +3,7 @@ package ar.edu.itba.getaway.persistence;
 import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ImageExperienceModel;
+import ar.edu.itba.getaway.models.UserModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,11 +62,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
         this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("experiences")
                 .usingGeneratedKeyColumns("experienceid");
-//        this.imageSimplejdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-//                .withTableName("images")
-//                .usingGeneratedKeyColumns("imgid");
-//        this.imageExperienceSimplejdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-//                .withTableName("imagesExperiences");
     }
 
     @Override
@@ -120,6 +116,13 @@ public class ExperienceDaoImpl implements ExperienceDao {
         Optional<ExperienceModel> experienceModelOptional = getById(experienceId);
         imageDao.deleteImg(experienceModelOptional.get().getImageExperienceId());
         return jdbcTemplate.update(query, experienceId) == 1;
+    }
+
+    @Override
+    public String getUserEmailByExperienceId(Long experienceId){
+        final String query = "SELECT email FROM users WHERE userid = (SELECT userid FROM experiences WHERE experienceid = ?)";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.queryForObject(query, new Object[]{experienceId}, String.class);
     }
 
     @Override
