@@ -29,9 +29,7 @@ public class ExperienceController {
     @Autowired
     private ExperienceService experienceService;
     @Autowired
-    private CityService cityService;
-    @Autowired
-    private CountryService countryService;
+    private LocationService locationService;
     @Autowired
     private ReviewService reviewService;
     @Autowired
@@ -53,7 +51,9 @@ public class ExperienceController {
                                    @RequestParam Optional<Boolean> set,
                                    @RequestParam (value="pageNum", defaultValue = "1") final int pageNum) {
         final ModelAndView mav = new ModelAndView("experiences");
+        final Page<ExperienceModel> currentPage;
 
+        // Category
         // Ordinal empieza en 0
         final ExperienceCategory category;
         try {
@@ -64,9 +64,17 @@ public class ExperienceController {
 
         final String dbCategoryName = category.toString();
         final int id = category.ordinal() + 1;
-        Page<ExperienceModel> currentPage;
-        final List<CityModel> cityModels = cityService.listAll();
 
+        // Order By
+        final OrderByModel[] orderByModels = OrderByModel.values();
+
+        String orderByQuery = "";
+
+        if (orderBy.isPresent()) {
+            orderByQuery = " ORDER BY " + orderBy.get() + " " + direction.get();
+        }
+
+        // Price
         final Optional<Double> maxPriceOpt = experienceService.getMaxPrice(id);
         double max = maxPriceOpt.get();
         mav.addObject("max", max);
@@ -75,26 +83,27 @@ public class ExperienceController {
         }
         mav.addObject("maxPrice", max);
 
+        // Score
         long scoreVal = 0;
         if (score.isPresent() && score.get() != -1) {
             scoreVal = score.get();
         }
         mav.addObject("score", scoreVal);
 
-        String order = "";
-
-        if (orderBy.isPresent()) {
-            order = " ORDER BY " + orderBy.get() + " " + direction.get();
-        }
+        // City
+        final List<CityModel> cityModels = locationService.listAllCities();
+        String cityQuery = "";
 
         if (cityId.isPresent()) {
-            currentPage = experienceService.listByFilterWithCity(id, max, cityId.get(), scoreVal, order, pageNum);
+            cityQuery = " AND cityId = " + cityId.get().toString() + " ";
+            currentPage = experienceService.listByFilter(id, max, scoreVal, cityQuery, orderByQuery, pageNum);
             mav.addObject("cityId", cityId.get());
         } else {
-            currentPage = experienceService.listByFilter(id, max, scoreVal, order, pageNum);
+            currentPage = experienceService.listByFilter(id, max, scoreVal, cityQuery, orderByQuery, pageNum);
             mav.addObject("cityId", -1);
         }
 
+        // FavExperiences
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
 
@@ -113,13 +122,10 @@ public class ExperienceController {
 
         final List<Long> avgReviews = new ArrayList<>();
         for (ExperienceModel exp : currentExperiences) {
-            avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
+            avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
         }
 
-        LOGGER.debug(String.format("Current page: %d", currentPage.getCurrentPage()));
-        LOGGER.debug(String.format("Total pages: %d", currentPage.getMaxPage()));
-
-
+        // Http Query
         StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
         String queryString = request.getQueryString();
         String path;
@@ -130,8 +136,9 @@ public class ExperienceController {
             path = requestURL.append('?').append(queryString).append("&").toString();
         }
 
+        // mav info
         mav.addObject("path", path);
-
+        mav.addObject("orderByModels", orderByModels);
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("categoryName", categoryName);
@@ -154,15 +161,16 @@ public class ExperienceController {
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final String dbCategoryName = ExperienceCategory.valueOf(categoryName).name();
         final List<ReviewUserModel> reviews = reviewService.getReviewAndUser(experienceId);
-        final Double avgScore = reviewService.getAverageScore(experienceId);
+        final Long avgScore = reviewService.getAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
-        final CityModel cityModel = cityService.getById(experience.getCityId()).get();
+        final CityModel cityModel = locationService.getCityById(experience.getCityId()).get();
         final String city = cityModel.getName();
-        final String country = countryService.getById(cityModel.getCountryId()).get().getName();
+        final String country = locationService.getCountryById(cityModel.getCountryId()).get().getName();
 
-        final Optional<Long> experienceAvgReview = experienceService.getAvgReviews(experienceId);
-        experienceAvgReview.ifPresent(aLong -> mav.addObject("reviewAvg", aLong));
+        LOGGER.debug("AVGSCORE reviewService {}", avgScore);
+//        experienceAvgReview.ifPresent(aLong -> mav.addObject("reviewAvg", aLong));
 
+        mav.addObject("reviewAvg", avgScore);
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("experience", experience);
         mav.addObject("reviews", reviews);
@@ -200,7 +208,7 @@ public class ExperienceController {
             return experience(categoryName, form, principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
         }
 
-        final Optional<CityModel> cityModel = cityService.getIdByName(form.getActivityCity());
+        final Optional<CityModel> cityModel = locationService.getCityByName(form.getActivityCity());
         if (cityModel.isPresent()) {
             final long cityId = cityModel.get().getId();
             mav.addObject("cityId", cityId);

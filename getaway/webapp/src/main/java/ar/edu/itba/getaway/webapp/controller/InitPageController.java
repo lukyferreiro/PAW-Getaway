@@ -4,7 +4,10 @@ import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.services.ExperienceService;
 import ar.edu.itba.getaway.services.FavExperienceService;
+import ar.edu.itba.getaway.services.ReviewService;
 import ar.edu.itba.getaway.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +27,10 @@ public class InitPageController {
     private FavExperienceService favExperienceService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ReviewService reviewService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(InitPageController.class);
 
     @RequestMapping(value = "/")
     public ModelAndView init(Principal principal,
@@ -35,8 +42,10 @@ public class InitPageController {
 
         final List<Long> avgReviews = new ArrayList<>();
         for (ExperienceModel exp : experienceList) {
-            avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
+            avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
         }
+
+        LOGGER.debug("Size of avgReviews {}", avgReviews.size());
 
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
@@ -62,7 +71,6 @@ public class InitPageController {
 
         }
 
-//        LISTA DE CATEGORIAS CON LAS MEJORES RANKEADAS (ORDENA DEL MAS AL MENOS RANKEADO Y VOY A ELEGIR LAS PRIMERAS 10)
         List<List<ExperienceModel>> listByCategory = new ArrayList<>();
         for(int i=0 ; i<=5 ; i++){
             listByCategory.add(new ArrayList<>());

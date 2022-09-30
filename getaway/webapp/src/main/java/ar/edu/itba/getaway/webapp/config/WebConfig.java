@@ -74,6 +74,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ds.setUrl("jdbc:postgresql://ec2-54-204-241-136.compute-1.amazonaws.com:5432/d38a8rs1b2dpeh");
         ds.setUsername("adrzztklademib");
         ds.setPassword("580c8ba69151e9ba288d107d1b28f9dfc3706838eccbfb4d4d9ca1cde2f6f86e");
+
         //Usuario PAW
 //        ds.setUrl("jdbc:postgresql://10.16.1.110/paw-2022b-1");
 //        ds.setUsername("paw-2022b-1");
@@ -103,11 +104,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE);
         multipartResolver.setMaxUploadSizePerFile(MAX_SIZE_PER_FILE);
         multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE * 6);
-        multipartResolver.setDefaultEncoding("utf-8");
+        multipartResolver.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
         return multipartResolver;
     }
 
-    // Para anotar clases y métodos con @Transactional
     @Bean
     public PlatformTransactionManager transactionManager(final DataSource ds) {
         return new DataSourceTransactionManager(ds);

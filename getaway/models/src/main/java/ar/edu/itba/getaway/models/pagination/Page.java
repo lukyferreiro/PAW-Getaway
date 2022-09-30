@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.models.pagination;
 
-
 import java.util.List;
 
 public class Page<T> {

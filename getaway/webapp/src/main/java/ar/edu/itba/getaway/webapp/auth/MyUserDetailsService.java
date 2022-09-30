@@ -16,11 +16,10 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 import java.util.Locale;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
-public class UserDetailService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserService us;

@@ -34,13 +34,13 @@ public class UserExperiencesController {
     @Autowired
     private ExperienceService experienceService;
     @Autowired
-    private CityService cityService;
-    @Autowired
-    private CountryService countryService;
+    private LocationService locationService;
     @Autowired
     private ImageService imageService;
     @Autowired
     private FavExperienceService favExperienceService;
+    @Autowired
+    private ReviewService reviewService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserExperiencesController.class);
 
@@ -59,6 +59,8 @@ public class UserExperiencesController {
         final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
         mav.addObject("favExperienceModels", favExperienceModels);
 
+        final OrderByModel[] orderByModels = OrderByModel.values();
+
         //TODO NO ME TRAE LAS FAVORITAS
         List<ExperienceModel> experienceList = new ArrayList<>();
         String order = "";
@@ -69,9 +71,10 @@ public class UserExperiencesController {
 
         final List<Long> avgReviews = new ArrayList<>();
         for (ExperienceModel exp : experienceList) {
-            avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
+            avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
         }
 
+        mav.addObject("orderByModels", orderByModels);
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("isEditing", false);
@@ -87,6 +90,7 @@ public class UserExperiencesController {
                                    @RequestParam Optional<Boolean> set) {
         final ModelAndView mav = new ModelAndView("user_experiences");
 
+        final OrderByModel[] orderByModels = OrderByModel.values();
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
@@ -104,11 +108,11 @@ public class UserExperiencesController {
 
 
         final List<Long> avgReviews = new ArrayList<>();
-
         for (ExperienceModel exp : experienceList) {
-            avgReviews.add(experienceService.getAvgReviews(exp.getExperienceId()).get());
+            avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
         }
 
+        mav.addObject("orderByModels", orderByModels);
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("isEditing", true);
@@ -150,10 +154,10 @@ public class UserExperiencesController {
 ////            categories.add(categoryModel.getName());
 ////        }
 
-        final List<CountryModel> countryModels = countryService.listAll();
-        final List<CityModel> cityModels = cityService.listAll();
+        final String country = locationService.getCountryByName("Argentina").get().getName();
+        final List<CityModel> cityModels = locationService.listAllCities();
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final CityModel city = cityService.getById(experience.getCityId()).orElseThrow(CityNotFoundException::new);
+        final CityModel city = locationService.getCityById(experience.getCityId()).orElseThrow(CityNotFoundException::new);
         final String cityName = city.getName();
 
         //TODO no se como hacer para detectar que la primera vez que entro a la edicion
@@ -189,7 +193,7 @@ public class UserExperiencesController {
         mav.addObject("cancelBtn", "/user/experiences");
         mav.addObject("categories", categoryModels);
         mav.addObject("cities", cityModels);
-        mav.addObject("countries", countryModels);
+        mav.addObject("country", country);
         mav.addObject("formCity", cityName);
         mav.addObject("formCategory", experience.getCategoryId());
 
@@ -206,8 +210,8 @@ public class UserExperiencesController {
 
         long categoryId = form.getActivityCategory();
 
-        final CityModel city = cityService.getIdByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
-        final long cityId = city.getId();
+        final CityModel city = locationService.getCityByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
+        final Long cityId = city.getId();
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final long userId = experience.getUserId();

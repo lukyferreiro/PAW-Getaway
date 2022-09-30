@@ -3,27 +3,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 
+
 <button class="btn btn-search my-2 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
    <spring:message code="order.title"/>
 </button>
 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-   <a class="dropdown-item" href="<c:url value = "${param.path1}"/>">
-      <spring:message code="order.rankingAsc"/>
-   </a>
-   <a class="dropdown-item" href="<c:url value = "${param.path2}"/>">
-      <spring:message code="order.rankingDesc"/>
-   </a>
-   <a class="dropdown-item" href="<c:url value = "${param.path3}"/>">
-      <spring:message code="order.A_Z"/>
-   </a>
-   <a class="dropdown-item" href="<c:url value = "${param.path4}"/>">
-      <spring:message code="order.Z_A"/>
-   </a>
-   <a class="dropdown-item" href="<c:url value = "${param.path5}"/>">
-      <spring:message code="order.low_price"/>
-   </a>
-   <a class="dropdown-item" href="<c:url value = "${param.path6}"/>">
-      <spring:message code="order.high_price"/>
-   </a>
+   <jsp:useBean id="orderByModels" scope="request" type="ar.edu.itba.getaway.models.OrderByModel[]"/>
+   <c:forEach var="orderBy" items="${orderByModels}">
+      <a class="dropdown-item" href="
+            <c:url value="${param.path}">
+               <c:param name = "orderBy" value = "${orderBy.criteria}"/>
+               <c:param name = "direction" value = "${orderBy.direction}"/>
+            </c:url>">
+         <spring:message code="order.${orderBy.toString()}"/>
+      </a>
+   </c:forEach>
 </ul>
-

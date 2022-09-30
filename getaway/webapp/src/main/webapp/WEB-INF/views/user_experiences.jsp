@@ -24,12 +24,8 @@
                   <div class="d-flex justify-content-center align-content-center">
                      <div style="margin: 0 auto 0 20px; flex:1;">
                         <jsp:include page="/WEB-INF/components/order_dropdown.jsp">
-                           <jsp:param name="path1" value="/user/experiences?orderBy=avg(score)&direction=asc"/>
-                           <jsp:param name="path2" value="/user/experiences?orderBy=avg(score)&direction=desc"/>
-                           <jsp:param name="path3" value="/user/experiences?orderBy=experienceName&direction=asc"/>
-                           <jsp:param name="path4" value="/user/experiences?orderBy=experienceName&direction=desc"/>
-                           <jsp:param name="path5" value="/user/experiences?orderBy=price&direction=desc"/>
-                           <jsp:param name="path6" value="/user/experiences?orderBy=price&direction=asc"/>
+                           <jsp:param name="orderByModels" value="${orderByModels}"/>
+                           <jsp:param name="path" value="/user/experiences"/>
                         </jsp:include>
                      </div>
                      <h3 class="title m-0"><spring:message code="experience.description"/></h3>

@@ -3,9 +3,7 @@ package ar.edu.itba.getaway.webapp.controller.forms;
 import ar.edu.itba.getaway.exceptions.CityNotFoundException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.exceptions.UserNotFoundException;
-import ar.edu.itba.getaway.webapp.controller.UserProfileController;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,9 +25,7 @@ public class ExperienceFormController {
     @Autowired
     private ExperienceService experienceService;
     @Autowired
-    private CityService cityService;
-    @Autowired
-    private CountryService countryService;;
+    private LocationService locationService;
     @Autowired
     private UserService userService;
 
@@ -48,8 +43,8 @@ public class ExperienceFormController {
 //            categories.add(categoryModel.getName());
 //        }
 
-        final List<CountryModel> countries = countryService.listAll();
-        final List<CityModel> cities = cityService.listAll();
+        final List<CityModel> cities = locationService.listAllCities();
+        final String country = locationService.getCountryByName("Argentina").get().getName();
 
         mav.addObject("title", "createExperience.title");
         mav.addObject("description", "createExperience.description");
@@ -57,7 +52,7 @@ public class ExperienceFormController {
         mav.addObject("cancelBtn", "/");
         mav.addObject("categories", categoryModels);
         mav.addObject("cities", cities);
-        mav.addObject("countries", countries);
+        mav.addObject("country", country);
         mav.addObject("formCity", form.getActivityCity());
         mav.addObject("formCategory", form.getActivityCategory());
 
@@ -83,8 +78,8 @@ public class ExperienceFormController {
 //            throw new CategoryNotFoundException();
 //        }
 
-        final CityModel cityModel = cityService.getIdByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
-        final long cityId = cityModel.getId();
+        final CityModel cityModel = locationService.getCityByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
+        final Long cityId = cityModel.getId();
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final Long userId = user.getId();
