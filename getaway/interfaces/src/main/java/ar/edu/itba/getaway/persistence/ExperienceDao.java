@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ExperienceDao {
-    ExperienceModel create (String name, String address, String description, String email, String url, Double price, long cityId, long categoryId, long userId, byte[] image);
-    boolean update (ExperienceModel experienceModel, byte[] image);
+    ExperienceModel create (String name, String address, String description, String email, String url, Double price, long cityId, long categoryId, long userId);
+    boolean update (ExperienceModel experienceModel);
     boolean delete (long experienceId);
     Optional<ExperienceModel> getById (long experienceId);
     Optional<Double> getMaxPrice(long categoryId);

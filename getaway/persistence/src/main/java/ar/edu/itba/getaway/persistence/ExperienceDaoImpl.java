@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.ImageExperienceModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
     private ImageDao imageDao;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
-//    private final SimpleJdbcInsert imageSimplejdbcInsert;
-//    private final SimpleJdbcInsert imageExperienceSimplejdbcInsert;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
 
@@ -66,7 +63,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public ExperienceModel create(String name, String address, String description, String email, String url,
-                                  Double price, long cityId, long categoryId, long userId, byte[] image) {
+                                  Double price, long cityId, long categoryId, long userId) {
         final Map<String, Object> experienceData = new HashMap<>();
         experienceData.put("experienceName", name);
         experienceData.put("address", address);
@@ -79,17 +76,15 @@ public class ExperienceDaoImpl implements ExperienceDao {
         experienceData.put("userId", userId);
 
         final long experienceId = jdbcInsert.executeAndReturnKey(experienceData).longValue();
-        final ImageExperienceModel imageExperienceModel = imageDao.createExperienceImg(image, experienceId, true);
 
         LOGGER.info("Created new experience with id {}", experienceId);
 
-        return new ExperienceModel(experienceId, name, address, description, email, url, price, cityId, categoryId, userId, imageExperienceModel.getImageId(), image!=null);
+        return new ExperienceModel(experienceId, name, address, description, email, url, price, cityId, categoryId, userId, null, false);
     }
 
     @Override
-    public boolean update(ExperienceModel experienceModel, byte[] image) {
+    public boolean update(ExperienceModel experienceModel) {
         LOGGER.debug("Executing query to update experience with id: {}", experienceModel.getExperienceId());
-        imageDao.updateImg(image, experienceModel.getImageExperienceId());
         return jdbcTemplate.update("UPDATE experiences " +
                         "SET experienceName = ?, " +
                         "price = ?, " +
@@ -113,8 +108,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public boolean delete(long experienceId) {
         final String query = "DELETE FROM experiences WHERE experienceId = ?";
         LOGGER.debug("Executing query: {}", query);
-        Optional<ExperienceModel> experienceModelOptional = getById(experienceId);
-        imageDao.deleteImg(experienceModelOptional.get().getImageExperienceId());
         return jdbcTemplate.update(query, experienceId) == 1;
     }
 

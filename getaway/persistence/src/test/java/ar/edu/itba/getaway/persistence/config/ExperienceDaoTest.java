@@ -28,14 +28,14 @@ import java.util.List;
 public class ExperienceDaoTest {
     /** Data for tests **/
 
-    private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1, "testaventura", "diraventura", null, null, null, new Double(0), 1, 1, 1, null, false);
-    private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2, "testgastro", "dirgastro", null, null, null, new Double(1000), 1, 2, 1, null, false);
-    private final ExperienceModel DEFAULT_HOT = new ExperienceModel(3, "testhotel", "dirhotel", null, null, null, new Double(1000), 1, 3, 1, null, false);
-    private final ExperienceModel DEFAULT_REL = new ExperienceModel(4, "testrelax", "dirrelax", null, null, null, new Double(10000), 2, 4, 1, null, false);
-    private final ExperienceModel DEFAULT_NIG = new ExperienceModel(5, "testnight", "dirnight", null, null, null, null,2, 5, 1, null, false);
-    private final ExperienceModel DEFAULT_HIS = new ExperienceModel(6, "testhist", "dirhist", null, null, null, new Double(5000), 2, 6, 2, null, false);
-    private final ExperienceModel DEFAULT_ADV2 = new ExperienceModel(7, "testaventura2", "diraventura2", null, null, null,new Double(1500), 1, 1, 2, null, false);
-    private final ExperienceModel DEFAULT_ADV3 = new ExperienceModel(8, "testaventura3", "diraventura3", null, null, null, new Double(2000), 2, 1, 2, null, false);
+    private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1, "testaventura", "diraventura", null, null, null, new Double(0), 1, 1, 1, new Long(1), false);
+    private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2, "testgastro", "dirgastro", null, null, null, new Double(1000), 1, 2, 1, new Long(2), false);
+    private final ExperienceModel DEFAULT_HOT = new ExperienceModel(3, "testhotel", "dirhotel", null, null, null, new Double(1000), 1, 3, 1, new Long(3), false);
+    private final ExperienceModel DEFAULT_REL = new ExperienceModel(4, "testrelax", "dirrelax", null, null, null, new Double(10000), 2, 4, 1, new Long(4), false);
+    private final ExperienceModel DEFAULT_NIG = new ExperienceModel(5, "testnight", "dirnight", null, null, null, null,2, 5, 1,  new Long(5), false);
+    private final ExperienceModel DEFAULT_HIS = new ExperienceModel(6, "testhist", "dirhist", null, null, null, new Double(5000), 2, 6, 2,  new Long(6), false);
+    private final ExperienceModel DEFAULT_ADV2 = new ExperienceModel(7, "testaventura2", "diraventura2", null, null, null,new Double(1500), 1, 1, 2,  new Long(7), false);
+    private final ExperienceModel DEFAULT_ADV3 = new ExperienceModel(8, "testaventura3", "diraventura3", null, null, null, new Double(2000), 2, 1, 2,  new Long(8), false);
 
     private final List<ExperienceModel> DEF_LIST_ALL = new ArrayList<>(Arrays.asList(DEFAULT_ADV, DEFAULT_GAS, DEFAULT_HOT, DEFAULT_REL, DEFAULT_NIG, DEFAULT_HIS, DEFAULT_ADV2, DEFAULT_ADV3));
 
@@ -60,7 +60,7 @@ public class ExperienceDaoTest {
     @Test
     @Rollback
     public void testCreateExperience(){
-        final ExperienceModel experienceModel= experienceDao.create("TestCreate", "DirectionCreate", null, "owner@mail.com", null, null, 1, 1, 1, null);
+        final ExperienceModel experienceModel= experienceDao.create("TestCreate", "DirectionCreate", null, "owner@mail.com", null, null, 1, 1, 1);
         assertNotNull(experienceModel);
         assertEquals("TestCreate", experienceModel.getExperienceName());
         assertEquals("DirectionCreate", experienceModel.getAddress());
@@ -81,7 +81,7 @@ public class ExperienceDaoTest {
 //        final ExperienceModel experienceModel = new ExperienceModel(1, "TestUpdate", "DirectionUpdate", "newdesc", "newsite", new Double(235), 2, 2, 1, true);
 //        assertTrue(experienceDao.update(1, experienceModel));
 //
-//        assertEquals("TestUpdate", experienceModel.getName());
+//        assertEquals("TestUpdate", experienceModel.getExperienceName());
 //        assertEquals("DirectionUpdate", experienceModel.getAddress());
 //        assertEquals("newdesc", experienceModel.getDescription());
 //        assertEquals("newsite", experienceModel.getSiteUrl());
@@ -93,19 +93,19 @@ public class ExperienceDaoTest {
 //        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "experiences", "experienceId = " + experienceModel.getId()));
 //    }
 //
-//    @Test
-//    @Rollback
-//    public void testDeleteExperience() {
-//        assertTrue(experienceDao.delete(1));
-//        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "experiences", "experienceId = " + 1));
-//    }
-//
-//    @Test
-//    public void testListAllExperience() {
-//        List<ExperienceModel> experienceModelList = experienceDao.listAll();
-//        assertEquals(DEF_LIST_ALL.size(), experienceModelList.size());
-//        assertTrue(experienceModelList.containsAll(DEF_LIST_ALL));
-//    }
+    @Test
+    @Rollback
+    public void testDeleteExperience() {
+        assertTrue(experienceDao.delete(1));
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "experiences", "experienceId = " + 1));
+    }
+
+    @Test
+    public void testListAllExperience() {
+        List<ExperienceModel> experienceModelList = experienceDao.listAll("");
+        assertEquals(DEF_LIST_ALL.size(), experienceModelList.size());
+        assertTrue(experienceModelList.containsAll(DEF_LIST_ALL));
+    }
 //
 //    @Test
 //    public void testGetByIdExperience() {

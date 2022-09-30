@@ -1,8 +1,10 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.models.ImageExperienceModel;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.persistence.ExperienceDao;
+import ar.edu.itba.getaway.persistence.ImageDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Autowired
     private ExperienceDao experienceDao;
 
+    @Autowired
+    private ImageDao imageDao;
+
     //TODO: limit page number to total_pages amount
     private static final int PAGE_SIZE = 6;
 
@@ -26,7 +31,10 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public ExperienceModel create(String name, String address, String description, String email, String url, Double price, long cityId, long categoryId, long userId, byte[] image) {
         LOGGER.debug("Creating experience with name {}", name);
-        ExperienceModel experienceModel = experienceDao.create(name, address, description, email, url, price, cityId, categoryId, userId, image);
+        ExperienceModel experienceModel = experienceDao.create(name, address, description, email, url, price, cityId, categoryId, userId);
+        ImageExperienceModel imageExperienceModel = imageDao.createExperienceImg(image, experienceModel.getExperienceId(), true);
+        experienceModel.setHasImage(image != null);
+        experienceModel.setImageExperienceId(imageExperienceModel.getImageId());
         LOGGER.debug("Created experience with id {}", experienceModel.getExperienceId());
         return experienceModel;
     }
@@ -34,7 +42,10 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public boolean update(ExperienceModel experienceModel, byte[] image) {
         LOGGER.debug("Updating experience with id {}", experienceModel.getExperienceId());
-        if (experienceDao.update(experienceModel, image)) {
+
+        imageDao.updateImg(image, experienceModel.getImageExperienceId());
+        if (experienceDao.update(experienceModel)) {
+            imageDao.updateImg(image, experienceModel.getImageExperienceId());
             LOGGER.debug("Experience {} updated", experienceModel.getExperienceId());
             return true;
         } else {
@@ -46,7 +57,10 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public boolean delete(long experienceId) {
         LOGGER.debug("Deleting experience with id {}", experienceId);
-        if (experienceDao.delete(experienceId)) {
+        Optional<ExperienceModel> experienceModelOptional = getById(experienceId);
+        if (experienceModelOptional.isPresent()) {
+            experienceDao.delete(experienceId);
+            imageDao.deleteImg(experienceModelOptional.get().getImageExperienceId());
             LOGGER.debug("Experience {} deleted", experienceId);
             return true;
         } else {
