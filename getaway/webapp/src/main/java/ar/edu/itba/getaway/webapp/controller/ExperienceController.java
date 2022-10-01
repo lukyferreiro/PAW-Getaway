@@ -107,9 +107,8 @@ public class ExperienceController {
 
             if (user.isPresent()) {
                 final long userId = user.get().getId();
-                setFav(userId, set, experience);
+                favExperienceService.setFav(userId, set, experience);
                 final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
-
                 mav.addObject("favExperienceModels", favExperienceModels);
             }
         } else {
@@ -185,7 +184,7 @@ public class ExperienceController {
 
             if (user.isPresent()) {
                 final long userId = user.get().getId();
-                setFav(userId, set, Optional.of(experienceId));
+                favExperienceService.setFav(userId, set, Optional.of(experienceId));
                 final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
 
                 mav.addObject("favExperienceModels", favExperienceModels);
@@ -226,18 +225,5 @@ public class ExperienceController {
         }
 
         return mav;
-    }
-
-    private void setFav(long userId, Optional<Boolean> set, Optional<Long> experience){
-        final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
-
-        if (set.isPresent() && experience.isPresent()) {
-            if (set.get()) {
-                if (!favExperienceModels.contains(experience.get()))
-                    favExperienceService.create(userId, experience.get());
-            } else {
-                favExperienceService.delete(userId, experience.get());
-            }
-        }
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FavExperienceServiceImpl implements FavExperienceService{
@@ -45,5 +46,19 @@ public class FavExperienceServiceImpl implements FavExperienceService{
     public List<Long> listByUserId(Long userId) {
         LOGGER.debug("Retrieving all favs of user with id {}", userId);
         return favExperienceDao.listByUserId(userId);
+    }
+
+    @Override
+    public void setFav(long userId, Optional<Boolean> set, Optional<Long> experience){
+        final List<Long> favExperienceModels = listByUserId(userId);
+
+        if (set.isPresent() && experience.isPresent()) {
+            if (set.get()) {
+                if (!favExperienceModels.contains(experience.get()))
+                    create(userId, experience.get());
+            } else {
+                delete(userId, experience.get());
+            }
+        }
     }
 }
