@@ -22,6 +22,7 @@ public class SearchFormController {
     @Autowired
     private ExperienceService experienceService;
 
+    //TODO Agregar loggers
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchFormController.class);
 
