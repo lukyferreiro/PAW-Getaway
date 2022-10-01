@@ -117,13 +117,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //Experiences
                 .antMatchers(HttpMethod.GET,"/create_experience").hasRole("VERIFIED")
                 .antMatchers(HttpMethod.POST,"/create_experience").hasRole("VERIFIED")
-                .antMatchers(HttpMethod.GET,"/experiences/{categoryName:[A-Za-z]+}").permitAll()
-                .antMatchers(HttpMethod.POST,"/experiences/{categoryName:[A-Za-z]+}").permitAll()
-                .antMatchers(HttpMethod.GET,"/experiences/{categoryName:[A-Za-z]+}/{experienceId:[0-9]+}").permitAll()
+                .antMatchers(HttpMethod.GET,"/experiences/{categoryName:[A-Za-z_]+}").permitAll()
+                .antMatchers(HttpMethod.POST,"/experiences/{categoryName:[A-Za-z_]+}").permitAll()
+                .antMatchers(HttpMethod.GET,"/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}").permitAll()
                 .antMatchers(HttpMethod.GET,"/experiences/{experienceId:[0-9]+}/image").permitAll()
                 //Reviews
-                .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z]+}/{experienceId:[0-9]+}/create_review").hasRole("VERIFIED")
-                .antMatchers(HttpMethod.POST, "/experiences/{categoryName:[A-Za-z]+}/{experienceId:[0-9]+}/create_review").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.POST, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review").hasRole("VERIFIED")
                 //else
                 .antMatchers("/**").permitAll()
 

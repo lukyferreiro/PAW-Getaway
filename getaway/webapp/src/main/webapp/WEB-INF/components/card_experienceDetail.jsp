@@ -102,9 +102,14 @@
                      <c:out value="${param.email}"/>
                   </p>
                </div>
-               <jsp:include page="/WEB-INF/components/star_avg.jsp">
-                  <jsp:param name="avgReview" value="${param.reviewAvg}"/>
-               </jsp:include>
+               <div class="d-flex">
+                  <h6 class="information-title">
+                     <spring:message code="experienceDetail.review"/>
+                  </h6>
+                  <jsp:include page="/WEB-INF/components/star_avg.jsp">
+                     <jsp:param name="avgReview" value="${param.reviewAvg}"/>
+                  </jsp:include>
+               </div>
             </div>
             <div class="col-2 p-0"></div>
          </div>
