@@ -30,7 +30,7 @@ public class SearchFormController {
     public ModelAndView createSearchForm(@PathVariable("activityName") final String activityName,
                                          @ModelAttribute("searchForm") final SearchForm searchForm){
 
-        return new ModelAndView("search_form");
+        return new ModelAndView("navbar");
     }
 
     @RequestMapping(value = "/", method = {RequestMethod.POST})
@@ -39,7 +39,7 @@ public class SearchFormController {
 
         final List<ExperienceModel> experienceModel = experienceService.getByName(searchForm.getActivityName());
 
-        return new ModelAndView("mainPage");
+        return new ModelAndView("navbar");
 
     }
 
