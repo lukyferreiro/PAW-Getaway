@@ -183,6 +183,7 @@ public class ExperienceController {
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("experience", experience);
         mav.addObject("reviews", reviews);
+        mav.addObject("isEditing", false);
         mav.addObject("listReviewsHasImages", listReviewsHasImages);
         mav.addObject("avgScore", avgScore);
         mav.addObject("reviewCount", reviewCount);

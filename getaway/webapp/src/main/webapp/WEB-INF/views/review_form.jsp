@@ -31,7 +31,7 @@
                            <spring:message code="review.description"/>
                            <span class="required-field">*</span>
                         </form:label>
-                        <form:textarea path="description" class="form-control" cssErrorClass="form-control is-invalid" rows="4"/>
+                        <form:textarea path="description" class="form-control" cssErrorClass="form-control is-invalid" rows="4" cssStyle="max-height: 200px;"/>
                         <form:errors path="description" element="p" cssClass="form-error-label"/>
                      </div>
                      <div class="col m-2"> <!--Rating-->

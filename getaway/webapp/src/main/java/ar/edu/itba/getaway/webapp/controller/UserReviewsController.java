@@ -32,6 +32,8 @@ public class UserReviewsController {
     @Autowired
     private ImageService imageService;
     @Autowired
+    private ExperienceService experienceService;
+    @Autowired
     private ReviewService reviewService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserReviewsController.class);
@@ -44,12 +46,16 @@ public class UserReviewsController {
         final List<ReviewUserModel> reviewList = reviewService.getByUserId(user.getId());
 
         final List<Boolean> listReviewsHasImages = new ArrayList<>();
+        final List<ExperienceModel> listExperiencesOfReviews = new ArrayList<>();
         for(ReviewUserModel review : reviewList){
             listReviewsHasImages.add(imageService.getImgById(review.getImgId()).get().getImage() != null);
+            listExperiencesOfReviews.add(experienceService.getById(review.getExperienceId()).get());
         }
 
         mav.addObject("reviews", reviewList);
         mav.addObject("listReviewsHasImages", listReviewsHasImages);
+        mav.addObject("listExperiencesOfReviews", listExperiencesOfReviews);
+        mav.addObject("isEditing", true);
 
         return mav;
     }

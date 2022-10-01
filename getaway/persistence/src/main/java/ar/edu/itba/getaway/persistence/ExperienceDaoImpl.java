@@ -125,15 +125,15 @@ public class ExperienceDaoImpl implements ExperienceDao {
     //TODO: inconsistent behavior with order by avg(score)
     @Override
     public List<ExperienceModel> listByUserId(long userId, String order) {
-        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences " +
-                " GROUP BY experiences.experienceid " + order;
+        final String query = "SELECT * FROM experiences WHERE userId = ? " + order;
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
     public Optional<Double> getMaxPrice(long categoryId){
-        return jdbcTemplate.query("SELECT MAX(COALESCE(price,0)) as max_price FROM experiences WHERE categoryid = ?", new Object[]{categoryId}, PRICE_EXPERIENCE_ROW_MAPPER ).stream().findFirst();
+        return jdbcTemplate.query("SELECT MAX(COALESCE(price,0)) as max_price FROM experiences WHERE categoryid = ?",
+                new Object[]{categoryId}, PRICE_EXPERIENCE_ROW_MAPPER ).stream().findFirst();
     }
 
     @Override
