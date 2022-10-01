@@ -37,7 +37,7 @@ public class ExperienceController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
 
-    @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.GET})
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,
                                    Principal principal,
@@ -149,7 +149,7 @@ public class ExperienceController {
         return mav;
     }
 
-    @RequestMapping("/experiences/{categoryName}/{experienceId}")
+    @RequestMapping("/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}")
     public ModelAndView experienceView(Principal principal,
                                        @PathVariable("categoryName") final String categoryName,
                                        @PathVariable("experienceId") final long experienceId,
@@ -194,7 +194,7 @@ public class ExperienceController {
         return mav;
     }
 
-    @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.POST})
     public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName,
                                        HttpServletRequest request,
                                        @Valid @ModelAttribute("filterForm") final FilterForm form,

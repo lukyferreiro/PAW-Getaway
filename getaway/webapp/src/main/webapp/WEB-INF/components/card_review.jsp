@@ -17,45 +17,9 @@
             </div>
          </div>
          <div class="my-2 d-flex">
-            <div class="star-rating">
-               <c:choose>
-                  <c:when test="${param.score == '1'}">
-                     <i class="fas fa-star"></i>
-                     <i class="fas fa-star"></i>
-                     <i class="fas fa-star"></i>
-                     <i class="fas fa-star"></i>
-                     <i class="fas fa-star star-color"></i>
-                  </c:when>
-                  <c:when test="${param.score == '2'}">
-                     <i class="fas fa-star"></i>
-                     <i class="fas fa-star"></i>
-                     <i class="fas fa-star"></i>
-                     <i class="fas fa-star star-color"></i>
-                     <i class="fas fa-star star-color"></i>
-                  </c:when>
-                  <c:when test="${param.score == '3'}">
-                     <i class="fas fa-star"></i>
-                     <i class="fas fa-star"></i>
-                     <i class="fas fa-star star-color"></i>
-                     <i class="fas fa-star star-color"></i>
-                     <i class="fas fa-star star-color"></i>
-                  </c:when>
-                  <c:when test="${param.score == '4'}">
-                     <i class="fas fa-star"></i>
-                     <i class="fas fa-star star-color"></i>
-                     <i class="fas fa-star star-color"></i>
-                     <i class="fas fa-star star-color"></i>
-                     <i class="fas fa-star star-color"></i>
-                  </c:when>
-                  <c:when test="${param.score == '5'}">
-                     <i class="fas fa-star star-color"></i>
-                     <i class="fas fa-star star-color"></i>
-                     <i class="fas fa-star star-color"></i>
-                     <i class="fas fa-star star-color"></i>
-                     <i class="fas fa-star star-color"></i>
-                  </c:when>
-               </c:choose>
-            </div>
+            <jsp:include page="/WEB-INF/components/star_avg.jsp">
+               <jsp:param name="avgReview" value="${param.score}"/>
+            </jsp:include>
          </div>
       </div>
       <div class="card-body m-2 p-0">

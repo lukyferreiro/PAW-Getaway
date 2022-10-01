@@ -9,6 +9,7 @@ import ar.edu.itba.getaway.webapp.forms.ReviewForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -43,7 +44,8 @@ public class UserReviewsController {
         return mav;
     }
 
-    @RequestMapping(value = "/user/reviews/delete/{reviewId}", method = {RequestMethod.GET})
+    @PreAuthorize("@antMatcherVoter.canDeleteReviewById(authentication, #reviewId)")
+    @RequestMapping(value = "/user/reviews/delete/{reviewId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewDelete(@PathVariable("reviewId") final long reviewId,
                                          @ModelAttribute("deleteForm") final DeleteForm form) {
         final ModelAndView mav = new ModelAndView("deleteReview");
@@ -54,7 +56,8 @@ public class UserReviewsController {
         return mav;
     }
 
-    @RequestMapping(value = "/user/reviews/delete/{reviewId}", method = {RequestMethod.POST})
+    @PreAuthorize("@antMatcherVoter.canDeleteReviewById(authentication, #reviewId)")
+    @RequestMapping(value = "/user/reviews/delete/{reviewId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView reviewDeletePost(@PathVariable(value = "reviewId") final long reviewId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,
                                              final BindingResult errors) {
@@ -66,7 +69,8 @@ public class UserReviewsController {
         return new ModelAndView("redirect:/user/reviews");
     }
 
-    @RequestMapping(value = "/user/reviews/edit/{reviewId}", method = {RequestMethod.GET})
+    @PreAuthorize("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
+    @RequestMapping(value = "/user/reviews/edit/{reviewId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewEdit(@PathVariable("reviewId") final long reviewId,
                                        @ModelAttribute("reviewForm") final ReviewForm form) {
         final ModelAndView mav = new ModelAndView("review_edit_form");
@@ -83,7 +87,8 @@ public class UserReviewsController {
         return mav;
     }
 
-    @RequestMapping(value = "/user/reviews/edit/{reviewId}", method = {RequestMethod.POST})
+    @PreAuthorize("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
+    @RequestMapping(value = "/user/reviews/edit/{reviewId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView reviewEditPost(@PathVariable(value = "reviewId") final long reviewId,
                                            @ModelAttribute("reviewForm") final ReviewForm form,
                                            Principal principal,

@@ -13,6 +13,8 @@ public interface UserDao {
     Collection<RoleModel> getUserRolesModels(long userId);
     Optional<UserModel> getUserById (long userId);
     Optional<UserModel> getUserByEmail (String email);
+    Optional<UserModel> getUserByExperienceId(Long experienceId);
+    Optional<UserModel> getUserByReviewId(Long reviewId);
     UserModel createUser (String password, String name, String surname, String email, Collection<Roles> roles, long imageId) throws DuplicateUserException;
     Collection<Roles> getUserRoles (long userId);
     Optional<RoleModel> getRoleByName (Roles role);

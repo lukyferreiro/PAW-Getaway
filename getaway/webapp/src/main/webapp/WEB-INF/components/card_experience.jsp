@@ -51,9 +51,14 @@
       </div>
 
       <div class="card-body container-fluid p-2">
-         <jsp:include page="/WEB-INF/components/star_avg.jsp">
-            <jsp:param name="avgReview" value="${param.avgReviews}"/>
-         </jsp:include>
+         <div class="d-flex">
+            <h6 class="information-title">
+               <spring:message code="experienceDetail.review"/>
+            </h6>
+            <jsp:include page="/WEB-INF/components/star_avg.jsp">
+               <jsp:param name="avgReview" value="${param.avgReviews}"/>
+            </jsp:include>
+         </div>
       </div>
 
       <c:if test="${param.isEditing}">

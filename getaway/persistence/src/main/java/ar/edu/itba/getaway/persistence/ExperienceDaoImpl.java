@@ -17,6 +17,7 @@ import java.util.Map;
 
 @Repository
 public class ExperienceDaoImpl implements ExperienceDao {
+
     @Autowired
     private ImageDao imageDao;
     private final JdbcTemplate jdbcTemplate;
@@ -54,11 +55,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
         this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("experiences")
                 .usingGeneratedKeyColumns("experienceid");
-//        this.imageSimplejdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-//                .withTableName("images")
-//                .usingGeneratedKeyColumns("imgid");
-//        this.imageExperienceSimplejdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-//                .withTableName("imagesExperiences");
     }
 
     @Override
@@ -126,9 +122,11 @@ public class ExperienceDaoImpl implements ExperienceDao {
                 .stream().findFirst();
     }
 
+    //TODO: inconsistent behavior with order by avg(score)
     @Override
     public List<ExperienceModel> listByUserId(long userId, String order) {
-        final String query = "SELECT * FROM experiences WHERE userid = ?" + order;
+        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences " +
+                " GROUP BY experiences.experienceid " + order;
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }

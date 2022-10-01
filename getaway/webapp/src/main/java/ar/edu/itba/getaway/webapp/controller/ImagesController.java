@@ -22,7 +22,7 @@ public class ImagesController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImagesController.class);
 
     @ResponseBody
-    @RequestMapping(path = "/experiences/{experienceId}/image",
+    @RequestMapping(path = "/experiences/{experienceId:[0-9]+}/image",
             method = RequestMethod.GET,
             produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
@@ -32,7 +32,7 @@ public class ImagesController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/user/profileImage/{imageId}",
+    @RequestMapping(value = "/user/profileImage/{imageId:[0-9]+}",
             method = {RequestMethod.GET},
             produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public byte[] getUserProfileImage(@PathVariable("imageId") final long imageId){

@@ -23,10 +23,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     public static final Logger LOGGER = LoggerFactory.getLogger(CustomAccessDeniedHandler.class);
 
     @Override
-    public void handle(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            AccessDeniedException exc) throws IOException {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exc) throws IOException {
 
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
