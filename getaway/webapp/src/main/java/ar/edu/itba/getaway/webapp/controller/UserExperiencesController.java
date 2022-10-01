@@ -8,6 +8,7 @@ import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -65,7 +66,7 @@ public class UserExperiencesController {
         List<ExperienceModel> experienceList = new ArrayList<>();
         String order = "";
         if (orderBy.isPresent())
-            order = " ORDER BY " + orderBy.get() + " " +direction.get();
+            order = " ORDER BY " + orderBy.get() + " " + direction.get();
 
         experienceList = experienceService.listAll(order);
 
@@ -120,9 +121,11 @@ public class UserExperiencesController {
         return mav;
     }
 
-    @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.GET})
+    @PreAuthorize("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
+    @RequestMapping(value = "/user/experiences/delete/{experienceId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
-                                         @ModelAttribute("deleteForm") final DeleteForm form) {
+                                         @ModelAttribute("deleteForm") final DeleteForm form,
+                                         Principal principal) {
         final ModelAndView mav = new ModelAndView("deleteExperience");
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
 
@@ -130,30 +133,28 @@ public class UserExperiencesController {
         return mav;
     }
 
-    @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.POST})
+    @PreAuthorize("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
+    @RequestMapping(value = "/user/experiences/delete/{experienceId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView experienceDeletePost(@PathVariable(value = "experienceId") final long experienceId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,
-                                             final BindingResult errors) {
+                                             final BindingResult errors,
+                                             Principal principal) {
         if (errors.hasErrors()) {
-            return experienceDelete(experienceId, form);
+            return experienceDelete(experienceId, form, principal);
         }
 
         experienceService.delete(experienceId);
         return new ModelAndView("redirect:/user/experiences");
     }
 
-    @RequestMapping(value = "/user/experiences/edit/{experienceId}", method = {RequestMethod.GET})
+    @PreAuthorize("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
+    @RequestMapping(value = "/user/experiences/edit/{experienceId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView experienceEdit(@PathVariable("experienceId") final long experienceId,
                                        @ModelAttribute("experienceForm") final ExperienceForm form) {
 
         final ModelAndView mav = new ModelAndView("experience_form");
 
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
-//        final List<String> categories = new ArrayList<>();
-////        for (ExperienceCategory categoryModel : categoryModels) {
-////            categories.add(categoryModel.getName());
-////        }
-
         final String country = locationService.getCountryByName("Argentina").get().getName();
         final List<CityModel> cityModels = locationService.listAllCities();
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
@@ -200,7 +201,8 @@ public class UserExperiencesController {
         return mav;
     }
 
-    @RequestMapping(value = "/user/experiences/edit/{experienceId}", method = {RequestMethod.POST})
+    @PreAuthorize("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
+    @RequestMapping(value = "/user/experiences/edit/{experienceId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView experienceEditPost(@PathVariable(value="experienceId") final long experienceId,
                                            @Valid @ModelAttribute("experienceForm") final ExperienceForm form,
                                            final BindingResult errors) throws IOException {
@@ -208,7 +210,7 @@ public class UserExperiencesController {
             return experienceEdit(experienceId, form);
         }
 
-        long categoryId = form.getActivityCategory();
+        final long categoryId = form.getActivityCategory();
 
         final CityModel city = locationService.getCityByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
         final Long cityId = city.getId();

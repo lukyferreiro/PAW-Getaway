@@ -55,7 +55,7 @@ public class WebAuthController {
         return mav;
     }
 
-    @RequestMapping(path = "/register")
+    @RequestMapping(path = "/register", method = RequestMethod.GET)
     public ModelAndView register(@ModelAttribute("registerForm") final RegisterForm form) {
         return new ModelAndView("register");
     }
@@ -138,7 +138,7 @@ public class WebAuthController {
     /*------------------------------------------------------------------------------------
     ------------------------------------Reset Password------------------------------------
      ------------------------------------------------------------------------------------*/
-    @RequestMapping(path = "/user/resetPasswordRequest")
+    @RequestMapping(path = "/user/resetPasswordRequest", method = RequestMethod.GET)
     public ModelAndView resetPasswordRequest(@ModelAttribute("resetPasswordEmailForm") final ResetPasswordEmailForm form) {
         return new ModelAndView("/password/resetPasswordEmailForm");
     }

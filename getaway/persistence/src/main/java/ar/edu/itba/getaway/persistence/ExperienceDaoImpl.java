@@ -19,12 +19,11 @@ import java.util.Map;
 
 @Repository
 public class ExperienceDaoImpl implements ExperienceDao {
+
     @Autowired
     private ImageDao imageDao;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
-//    private final SimpleJdbcInsert imageSimplejdbcInsert;
-//    private final SimpleJdbcInsert imageExperienceSimplejdbcInsert;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
 
@@ -58,11 +57,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
         this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("experiences")
                 .usingGeneratedKeyColumns("experienceid");
-//        this.imageSimplejdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-//                .withTableName("images")
-//                .usingGeneratedKeyColumns("imgid");
-//        this.imageExperienceSimplejdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-//                .withTableName("imagesExperiences");
     }
 
     @Override

@@ -105,12 +105,8 @@ public class ErrorsController {
         return mav;
     }
 
-    /*By default when the DispatcherServlet can't find a handler for a request it sends a 404 response.
-     However if its property "throwExceptionIfNoHandlerFound" is set to true this exception is raised and
-      may be handled with a configured HandlerExceptionResolver.
-     * https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/NoHandlerFoundException.html
-     * https://stackoverflow.com/questions/13356549/handle-error-404-with-spring-controller/46704230
-     * */
+    /* https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/NoHandlerFoundException.html
+       https://stackoverflow.com/questions/13356549/handle-error-404-with-spring-controller/46704230 */
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = NoHandlerFoundException.class)
     public ModelAndView resourceNotFoundException() {
@@ -139,18 +135,17 @@ public class ErrorsController {
 
 
     /*Server error */
-
-    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(value = Exception.class)
-    public ModelAndView serverException() {
-        LOGGER.error("Error serverException caught");
-        Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.ServerError", null, locale);
-        Long code = Long.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.toString());
-        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-        mav.addObject("errors", error);
-        mav.addObject("code", code);
-        return mav;
-    }
+//    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+//    @ExceptionHandler(value = Exception.class)
+//    public ModelAndView serverException() {
+//        LOGGER.error("Error serverException caught");
+//        Locale locale = LocaleContextHolder.getLocale();
+//        String error = messageSource.getMessage("errors.ServerError", null, locale);
+//        Long code = Long.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+//        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
+//        mav.addObject("errors", error);
+//        mav.addObject("code", code);
+//        return mav;
+//    }
 
 }
