@@ -88,7 +88,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> listByFilter(long categoryId, Double max, long score, String city, String order, int page) {
+    public Page<ExperienceModel> listByFilter(long categoryId, Double max, long score, Long city, String order, int page) {
         int total_pages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 

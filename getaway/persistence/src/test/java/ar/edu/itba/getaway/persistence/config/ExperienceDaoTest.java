@@ -47,7 +47,7 @@ public class ExperienceDaoTest {
 
     private final long DEFAULT_SCORE = 0;
     private final String NO_ORDER = "";
-    private final String NO_CITY = "" ;
+    private final Long NO_CITY = new Long(-1);
     private final int PAGE_SIZE = 6;
 
     /****/
@@ -135,7 +135,7 @@ public class ExperienceDaoTest {
     @Test
     public void testListByCategoryAndCity() {
         final Optional<Double> maxPrice = experienceDao.getMaxPrice(1);
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, maxPrice.get(), DEFAULT_SCORE, "AND cityId = 1 ", NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, maxPrice.get(), DEFAULT_SCORE, new Long(1), NO_ORDER, 1, PAGE_SIZE);
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
         assertTrue(experienceModelList.contains(DEFAULT_ADV2));
@@ -153,7 +153,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryPriceAndCity() {
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, new Double(1250), DEFAULT_SCORE, "AND cityId = 1 ", NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, new Double(1250), DEFAULT_SCORE, new Long(1), NO_ORDER, 1, PAGE_SIZE);
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
         assertFalse(experienceModelList.contains(DEFAULT_ADV2));
@@ -192,7 +192,7 @@ public class ExperienceDaoTest {
     @Test
     public void testListByCategoryCityAndScore() {
         final Optional<Double> maxPrice = experienceDao.getMaxPrice(1);
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, maxPrice.get(), 3, "AND cityId = 1 ", NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, maxPrice.get(), 3, new Long(1), NO_ORDER, 1, PAGE_SIZE);
 
         assertFalse(experienceModelList.isEmpty());
         assertFalse(experienceModelList.contains(DEFAULT_ADV));
@@ -212,7 +212,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryPriceCityAndScoreOne() {
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, new Double(1750), 3, "AND cityId = 1 ", NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, new Double(1750), 3, new Long(1), NO_ORDER, 1, PAGE_SIZE);
 
         assertFalse(experienceModelList.isEmpty());
         assertFalse(experienceModelList.contains(DEFAULT_ADV));
@@ -222,7 +222,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryPriceCityAndScoreTwo() {
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, new Double(1750), 3, "AND cityId = 2 ", NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, new Double(1750), 3, new Long(2), NO_ORDER, 1, PAGE_SIZE);
 
         assertTrue(experienceModelList.isEmpty());
         assertFalse(experienceModelList.contains(DEFAULT_ADV));
