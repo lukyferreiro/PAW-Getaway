@@ -6,6 +6,7 @@ import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
+import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,8 @@ public class UserReviewsController {
 
     @RequestMapping(value = "/user/reviews/delete/{reviewId}", method = {RequestMethod.POST})
     public ModelAndView reviewDeletePost(@PathVariable(value = "reviewId") final long reviewId,
-                                             @ModelAttribute("deleteForm") final DeleteForm form,
+                                             @ModelAttribute("deleteForm") final DeleteForm form
+                                            ,
                                              final BindingResult errors) {
         if (errors.hasErrors()) {
             return reviewDelete(reviewId, form);

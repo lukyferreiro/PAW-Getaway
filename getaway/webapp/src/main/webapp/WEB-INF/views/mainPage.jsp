@@ -14,18 +14,6 @@
       <div class="container-main">
          <%@ include file="../components/navbar.jsp" %>
 
-          <div>
-              <nav class="navbar navbar-light bg-light">
-                  <c:url value="/search_result" var = "postPath"/>
-                  <form:form modelAttribute= "searchForm" action="${postPath}" id="searchExperienceForm" method="post" acceptCharset="UTF-8">
-                      <c:param  name="query" value="${query}"/>
-                      <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
-                      <form:errors path="query" element="p" cssClass="form-error-label"/>
-                      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Busca</button>
-                  </form:form>
-              </nav>
-          </div>
-
 
           <c:forEach varStatus="categoryIndex" var="categoryList" items="${listByCategory}">
                  <c:if test="${categoryList.size() != 0}">

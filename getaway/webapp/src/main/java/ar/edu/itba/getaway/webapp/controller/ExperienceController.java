@@ -6,6 +6,7 @@ import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.exceptions.ExperienceNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
+import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,7 +156,8 @@ public class ExperienceController {
     public ModelAndView experienceView(Principal principal,
                                        @PathVariable("categoryName") final String categoryName,
                                        @PathVariable("experienceId") final long experienceId,
-                                       @RequestParam Optional<Boolean> set) {
+                                       @RequestParam Optional<Boolean> set,
+                                       @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("experience_details");
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);

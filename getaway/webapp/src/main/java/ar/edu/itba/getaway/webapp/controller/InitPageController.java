@@ -6,6 +6,7 @@ import ar.edu.itba.getaway.services.ExperienceService;
 import ar.edu.itba.getaway.services.FavExperienceService;
 import ar.edu.itba.getaway.services.ReviewService;
 import ar.edu.itba.getaway.services.UserService;
+import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,8 @@ public class InitPageController {
     @RequestMapping(value = "/")
     public ModelAndView init(Principal principal,
                              @RequestParam Optional<Long> experience,
-                             @RequestParam Optional<Boolean> set) {
+                             @RequestParam Optional<Boolean> set,
+                             @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("mainPage");
 
         final List<ExperienceModel> experienceList = experienceService.listAll("");

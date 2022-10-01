@@ -15,6 +15,17 @@
         <%--         <spring:message code="navbar.home"/>--%>
         <%--      </a>--%>
 
+        <div>
+            <c:url value="/search_result" var="postPath"/>
+            <form:form modelAttribute="searchForm" action="${postPath}" id="searchExperienceForm" method="post"
+                       acceptCharset="UTF-8">
+                <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
+                <form:errors path="query" element="p" cssClass="form-error-label"/>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Busca</button>
+            </form:form>
+        </div>
+
+
         <div class="container-navbar-buttons d-flex justify-content-between">
             <c:if test="${loggedUser.hasRole('VERIFIED')}">
                 <a href="<c:url value = "/create_experience"/>" style="margin-right: 40px;">

@@ -5,6 +5,7 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
+import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,8 @@ public class UserExperiencesController {
                                    @RequestParam Optional<String> direction,
                                    @RequestParam Optional<String> orderBy,
                                    @RequestParam Optional<Long> experience,
-                                   @RequestParam Optional<Boolean> set){
+                                   @RequestParam Optional<Boolean> set
+                                    ,@ModelAttribute("searchForm") final SearchForm searchForm){
         final ModelAndView mav = new ModelAndView("user_favourites");
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
