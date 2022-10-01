@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.persistence.config;
 
-import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.RoleModel;
 import ar.edu.itba.getaway.models.Roles;
@@ -59,22 +58,29 @@ public class UserDaoTest {
 
     @Test
     @Rollback
-    public void testCreateUser() throws DuplicateUserException, DuplicateImageException {
-        final UserModel user = userDao.createUser(PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES);
-        assertNotNull(user);
+    public void testCreateUser() {
+        UserModel user = null;
+        try {
+            user = userDao.createUser(PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES, 1);
+            assertNotNull(user);
+        } catch (DuplicateUserException e) {
+            e.printStackTrace();
+        }
         assertEquals(PASSWORD, user.getPassword());
         assertEquals(NAME, user.getName());
         assertEquals(SURNAME, user.getSurname());
         assertEquals(EMAIL, user.getEmail());
-        assertEquals(null, user.getProfileImageId());
+
+        //Assert to check every user is created with a profile image pointing to null
+        assertTrue(imageDao.getImgById(user.getProfileImageId()).isPresent());
+        assertEquals(null, imageDao.getImgById(user.getProfileImageId()).get().getImage());
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "userId = " + user.getId()));
     }
 
-    //TODO CHECK DUPLICATE IMAGE EXCEPTION
     @Test(expected = DuplicateUserException.class)
     @Rollback
-    public void testCreateDuplicateUser() throws DuplicateUserException, DuplicateImageException {
-        userDao.createUser("contra1", "usuario", "uno", "uno@mail.com", DEFAULT_ROLES);
+    public void testCreateDuplicateUser() throws DuplicateUserException {
+        userDao.createUser("contra1", "usuario", "uno", "uno@mail.com", DEFAULT_ROLES, 0);
     }
 
     @Test
@@ -89,16 +95,16 @@ public class UserDaoTest {
         assertEquals("usuario", user.get().getName());
         assertEquals("uno", user.get().getSurname());
         assertEquals("uno@mail.com", user.get().getEmail());
-        assertEquals(new Long(0), user.get().getProfileImageId());
+        assertEquals(new Long(15), user.get().getProfileImageId());
         assertTrue(arrayRoles.contains(Roles.USER));
         assertTrue(arrayRoles.contains(Roles.NOT_VERIFIED));
     }
 
-//
-//    @Test(expected = UserNotFound.class)
-//    public void testGetUserByIdNotFound(){
-//        userDao.getUserById(50);
-//    }
+    @Test
+    public void testGetUserByIdNotFound(){
+       final Optional<UserModel> notFoundUser = userDao.getUserById(50);
+       assertFalse(notFoundUser.isPresent());
+    }
 
     @Test
     public void testGetUserByEmail(){
@@ -111,7 +117,7 @@ public class UserDaoTest {
         assertEquals("usuario", user.get().getName());
         assertEquals("uno", user.get().getSurname());
         assertEquals("uno@mail.com", user.get().getEmail());
-        assertEquals(new Long(0), user.get().getProfileImageId());
+        assertEquals(new Long(15), user.get().getProfileImageId());
         assertEquals(DEFAULT_ROLES, user.get().getRoles());
     }
 
@@ -235,25 +241,5 @@ public class UserDaoTest {
         assertTrue(arrayRoles.contains(Roles.USER));
         assertTrue(arrayRoles.contains(Roles.NOT_VERIFIED));
         assertTrue(arrayRoles.contains(Roles.PROVIDER));
-    }
-
-    @Test
-    @Rollback
-    public void testUpdateProfileImage() {
-        final Optional<UserModel> userBeforeUpdate = userDao.getUserById(1);
-        //TODO CHECK romi
-        imageDao.updateImg(null, userBeforeUpdate.get().getId());
-        final Optional<UserModel> user = userDao.getUserById(1);
-
-        assertTrue(user.isPresent());
-
-        //Check if all the other info is the same
-        assertEquals(userBeforeUpdate.get().getEmail(), user.get().getEmail());
-        assertEquals(userBeforeUpdate.get().getName(), user.get().getName());
-        assertEquals(userBeforeUpdate.get().getSurname(), user.get().getSurname());
-        assertEquals(userBeforeUpdate.get().getPassword(), user.get().getPassword());
-        assertEquals(userBeforeUpdate.get().getRoles(), user.get().getRoles());
-
-        assertEquals(new Long(15), user.get().getProfileImageId());
     }
 }

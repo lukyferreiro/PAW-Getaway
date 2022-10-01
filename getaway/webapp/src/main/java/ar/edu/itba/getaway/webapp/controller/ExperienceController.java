@@ -92,14 +92,12 @@ public class ExperienceController {
 
         // City
         final List<CityModel> cityModels = locationService.listAllCities();
-        String cityQuery = "";
 
         if (cityId.isPresent()) {
-            cityQuery = " AND cityId = " + cityId.get().toString() + " ";
-            currentPage = experienceService.listByFilter(id, max, scoreVal, cityQuery, orderByQuery, pageNum);
+            currentPage = experienceService.listByFilter(id, max, scoreVal, cityId.get(), orderByQuery, pageNum);
             mav.addObject("cityId", cityId.get());
         } else {
-            currentPage = experienceService.listByFilter(id, max, scoreVal, cityQuery, orderByQuery, pageNum);
+            currentPage = experienceService.listByFilter(id, max, scoreVal, new Long(-1), orderByQuery, pageNum);
             mav.addObject("cityId", -1);
         }
 

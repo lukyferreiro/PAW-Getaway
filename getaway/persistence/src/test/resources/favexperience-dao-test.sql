@@ -5,6 +5,7 @@ TRUNCATE TABLE countries RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE categories RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE images RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE imagesExperiences RESTART IDENTITY AND COMMIT NO CHECK;
+TRUNCATE TABLE favuserexperience RESTART IDENTITY AND COMMIT NO CHECK;
 
 -- Add at least three users (in case we limit 1 review per experience per user)
 INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (1, 'owner', 'user', 'owner@mail.com', null, 'contra1');
@@ -39,6 +40,10 @@ VALUES (5, 'testnight', null, 'dirnight', null, null, 2, 5, 1, 'owner@mail.com')
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
 VALUES (8, 'testaventura3', 2000, 'diraventura3', null, null, 2, 1, 2, 'owner2@mail.com');
 
+INSERT INTO favuserexperience(userid, experienceid) VALUES (1, 1);
+INSERT INTO favuserexperience(userid, experienceid) VALUES (1, 5);
+
 -- Add imagesExperiences for consistency
 INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (1,1,true);
 INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (5,5,true);
+INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (8,8,true);

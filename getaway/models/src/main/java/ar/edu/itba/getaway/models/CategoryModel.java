@@ -15,4 +15,16 @@ public class CategoryModel{
     public String getName() {
         return categoryName;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+        if (!(o instanceof CategoryModel)){
+            return false;
+        }
+        CategoryModel other = (CategoryModel) o;
+        return this.categoryId == other.categoryId;
+    }
 }

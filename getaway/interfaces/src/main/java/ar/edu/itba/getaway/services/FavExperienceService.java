@@ -7,7 +7,7 @@ import java.util.List;
 public interface FavExperienceService {
     FavExperienceModel create (long userId, long experienceId);
     boolean delete(long userId, long experienceId);
-    List<FavExperienceModel> getByExperienceId(long experienceId);
-    List<FavExperienceModel> listAll();
+//    List<FavExperienceModel> getByExperienceId(long experienceId);
+//    List<FavExperienceModel> listAll();
     List<Long> listByUserId(Long userId);
 }

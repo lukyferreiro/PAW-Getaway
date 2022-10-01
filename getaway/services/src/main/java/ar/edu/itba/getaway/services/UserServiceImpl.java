@@ -1,8 +1,8 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.persistence.ImageDao;
 import ar.edu.itba.getaway.persistence.PasswordResetTokenDao;
 import ar.edu.itba.getaway.persistence.UserDao;
 import ar.edu.itba.getaway.persistence.VerificationTokenDao;
@@ -26,13 +26,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
     @Autowired
+    private ImageDao imageDao;
+    @Autowired
     private VerificationTokenDao verificationTokenDao;
     @Autowired
     private PasswordResetTokenDao passwordResetTokenDao;
     @Autowired
     private EmailService emailService;
-    @Autowired
-    private ImageService imageService;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -76,9 +76,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException, DuplicateImageException {
+    public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException {
+        final ImageModel imageModel = imageDao.createImg(null);
         LOGGER.debug("Creating user with email {}", email);
-        UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES);
+        UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES, imageModel.getId());
         LOGGER.debug("Created user with id {}", userModel.getId());
         LOGGER.debug("Creating verification token to user with id {}", userModel.getId());
         VerificationToken token = generateVerificationToken(userModel.getId());
@@ -177,7 +178,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateProfileImage(UserModel userModel, byte[] image) {
         LOGGER.debug("Updating user {} profile image of id {}", userModel.getId(), userModel.getProfileImageId());
-        imageService.updateImg(image, userModel.getProfileImageId());
+        imageDao.updateImg(image, userModel.getProfileImageId());
     }
 
     private void sendVerificationToken(UserModel userModel, VerificationToken token) {
