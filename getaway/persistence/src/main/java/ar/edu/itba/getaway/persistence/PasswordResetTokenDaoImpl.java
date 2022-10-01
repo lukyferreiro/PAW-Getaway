@@ -37,18 +37,12 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao{
     }
 
     @Override
-    public Optional<PasswordResetToken> getToken(long id) {
-        return jdbcTemplate.query("SELECT * FROM passwordResetToken WHERE passTokenId = ?",
-                new Object[]{id}, PASSWORD_RESET_TOKEN_ROW_MAPPER).stream().findFirst();
-    }
-
-    @Override
-    public PasswordResetToken createToken(long userId, String token, LocalDateTime expirationDate) {
+    public PasswordResetToken createToken(Long userId, String token, LocalDateTime expirationDate) {
         Map<String, Object> passTokenData = new HashMap<>();
         passTokenData.put("passTokenUserId", userId);
         passTokenData.put("passToken", token);
         passTokenData.put("passTokenExpirationDate", expirationDate);
-        final long tokenId = simpleJdbcInsert.executeAndReturnKey(passTokenData).longValue();;
+        final Long tokenId = simpleJdbcInsert.executeAndReturnKey(passTokenData).longValue();;
 
         LOGGER.debug("Created new password reset token with id {}", tokenId);
 
@@ -64,24 +58,17 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao{
     }
 
     @Override
-    public void removeTokenById(long id) {
+    public void removeTokenById(Long id) {
         final String query = "DELETE FROM passwordResetToken WHERE passTokenId = ?";
         LOGGER.debug("Executing query: {}", query);
         jdbcTemplate.update(query, id);
     }
 
     @Override
-    public void removeTokenByUserId(long userId) {
+    public void removeTokenByUserId(Long userId) {
         final String query = "DELETE FROM passwordResetToken WHERE passTokenUserId = ?";
         LOGGER.debug("Executing query: {}", query);
         jdbcTemplate.update(query, userId);
     }
 
-    @Override
-    public Optional<PasswordResetToken> getTokenByUserId(long userId) {
-        final String query = "SELECT * FROM passwordResetToken WHERE passTokenUserId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{userId}, PASSWORD_RESET_TOKEN_ROW_MAPPER)
-                .stream().findFirst();
-    }
 }

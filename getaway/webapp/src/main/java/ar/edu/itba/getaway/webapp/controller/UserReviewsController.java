@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class UserReviewsController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ImageService imageService;
     @Autowired
     private ReviewService reviewService;
 
@@ -39,7 +42,14 @@ public class UserReviewsController {
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final List<ReviewUserModel> reviewList = reviewService.getByUserId(user.getId());
+
+        final List<Boolean> listReviewsHasImages = new ArrayList<>();
+        for(ReviewUserModel review : reviewList){
+            listReviewsHasImages.add(imageService.getImgById(review.getImgId()).get().getImage() != null);
+        }
+
         mav.addObject("reviews", reviewList);
+        mav.addObject("listReviewsHasImages", listReviewsHasImages);
 
         return mav;
     }

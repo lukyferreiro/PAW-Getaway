@@ -15,7 +15,7 @@
          <%@ include file="../../components/simpleNavbar.jsp" %>
 
          <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
-            <div class="container-lg w-100 smallContentContainer">
+            <div class="container-lg w-100 modalContainer">
                <div class="row w-100 m-0 p-4 align-items-center justify-content-center">
                   <div class="col-12">
                      <h1 class="text-center title">
@@ -72,9 +72,7 @@
                               </div>
                            </form:form>
                         </div>
-
                      </div>
-
                   </div>
                </div>
             </div>

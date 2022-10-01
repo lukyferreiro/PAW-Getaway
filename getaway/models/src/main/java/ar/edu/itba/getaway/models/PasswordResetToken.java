@@ -5,17 +5,17 @@ import java.time.LocalDateTime;
 public class PasswordResetToken {
 
     private String value;
-    private long id;
-    private long userId;
+    private Long id;
+    private Long userId;
     private LocalDateTime expirationDate;
 
-    private static final int TOKEN_DURATION_DAYS = 1;
+    private static final Integer TOKEN_DURATION_DAYS = 1;
 
     public static LocalDateTime generateTokenExpirationDate() {
         return LocalDateTime.now().plusDays(TOKEN_DURATION_DAYS);
     }
 
-    public PasswordResetToken(long id, String value, long userId, LocalDateTime expirationDate) {
+    public PasswordResetToken(Long id, String value, Long userId, LocalDateTime expirationDate) {
         this.value = value;
         this.id = id;
         this.userId = userId;
@@ -31,16 +31,16 @@ public class PasswordResetToken {
     public void setValue(String value) {
         this.value = value;
     }
-    public long getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
     public LocalDateTime getExpirationDate() {

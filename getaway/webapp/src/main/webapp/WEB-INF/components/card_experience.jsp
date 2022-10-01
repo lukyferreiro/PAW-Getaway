@@ -42,7 +42,7 @@
                         <spring:message code="experience.price.free"/>
                      </c:when>
                      <c:otherwise>
-                        <spring:message code="experience.reviews" arguments="${param.price}"/>
+                        <spring:message code="experience.price.value" arguments="${param.price}"/>
                      </c:otherwise>
                   </c:choose>
                </h6>
@@ -51,9 +51,9 @@
       </div>
 
       <div class="card-body container-fluid d-flex p-2 mb-1 align-items-end">
-         <h6 class="information-title mb-1">
-            <spring:message code="experienceDetail.review" arguments="${param.reviewCount}"/>
-         </h6>
+         <h5 class="mb-1">
+            <spring:message code="experience.reviews" arguments="${param.reviewCount}"/>
+         </h5>
          <jsp:include page="/WEB-INF/components/star_avg.jsp">
             <jsp:param name="avgReview" value="${param.avgReviews}"/>
          </jsp:include>

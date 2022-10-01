@@ -25,7 +25,7 @@
                      <h3 class="title"><spring:message code="review.profile.description"/></h3>
                   </div>
                   <div class="mx-5 my-2 d-flex flex-wrap justify-content-around align-content-center">
-                     <c:forEach var="review" items="${reviews}">
+                     <c:forEach var="review" varStatus="myIndex" items="${reviews}">
                         <div class="d-flex flex-column justify-content-center align-content-center">
                            <jsp:include page="/WEB-INF/components/card_review.jsp">
                               <jsp:param name="userName" value="${review.userName}"/>
@@ -34,6 +34,8 @@
                               <jsp:param name="description" value="${review.description}"/>
                               <jsp:param name="reviewDate" value="${review.reviewDate}"/>
                               <jsp:param name="score" value="${review.score}"/>
+                              <jsp:param name="hasImage" value="${listReviewsHasImages[myIndex.index]}"/>
+                              <jsp:param name="userId" value="${reviews[myIndex.index].imgId}"/>
                            </jsp:include>
 
                            <div class="btn-group" role="group">

@@ -37,15 +37,7 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
     }
 
     @Override
-    public Optional<VerificationToken> getVerificationToken(long id) {
-        final String query = "SELECT * FROM verificationToken WHERE verifId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{id}, VERIFICATION_TOKEN_ROW_MAPPER)
-                .stream().findFirst();
-    }
-
-    @Override
-    public VerificationToken createVerificationToken(long userId, String token, LocalDateTime expirationDate) {
+    public VerificationToken createVerificationToken(Long userId, String token, LocalDateTime expirationDate) {
         Map<String, Object> verifTokenData = new HashMap<>();
         verifTokenData.put("verifUserId", userId);
         verifTokenData.put("verifToken", token);
@@ -66,24 +58,17 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
     }
 
     @Override
-    public void removeTokenById(long id) {
+    public void removeTokenById(Long id) {
         final String query = "DELETE FROM verificationToken WHERE verifId = ?";
         LOGGER.debug("Executing query: {}", query);
         jdbcTemplate.update(query, id);
     }
 
     @Override
-    public void removeTokenByUserId(long userId) {
+    public void removeTokenByUserId(Long userId) {
         final String query = "DELETE FROM verificationToken WHERE verifUserId = ?";
         LOGGER.debug("Executing query: {}", query);
         jdbcTemplate.update(query, userId);
     }
 
-    @Override
-    public Optional<VerificationToken> getTokenByUserId(long userId) {
-        final String query = "SELECT * FROM verificationToken WHERE verifUserId=?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{userId}, VERIFICATION_TOKEN_ROW_MAPPER)
-                .stream().findFirst();
-    }
 }

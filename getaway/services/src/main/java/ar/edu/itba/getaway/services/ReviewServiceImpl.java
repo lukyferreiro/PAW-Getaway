@@ -2,7 +2,6 @@ package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
-import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.persistence.ReviewDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

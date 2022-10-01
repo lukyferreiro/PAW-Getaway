@@ -24,17 +24,14 @@ public class EmailServiceImpl implements EmailService {
     private TemplateEngine htmlTemplateEngine;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
-
     private static final String GETAWAY_EMAIL = "getawaypaw@gmail.com";
 
     @Async
     @Override
     public void sendMail(String template, String subject, Map<String, Object> variables, final Locale locale) throws MessagingException {
-        // Prepare the evaluation context
         final Context ctx = new Context(locale);
         ctx.setVariables(variables);
 
-        // Prepare message using a Spring helper
         final MimeMessage mimeMessage = mailSender.createMimeMessage();
         final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
         final String to = (String) variables.get("to");
@@ -42,13 +39,10 @@ public class EmailServiceImpl implements EmailService {
         message.setFrom(GETAWAY_EMAIL);
         message.setTo(to);
 
-        // Create the HTML body using Thymeleaf
         final String htmlContent = htmlTemplateEngine.process(template, ctx);
         message.setText(htmlContent, true);
 
-        // Send email
         mailSender.send(mimeMessage);
-        LOGGER.info("Sent email with subject {} from {} to {} using template {}",
-                subject, GETAWAY_EMAIL, to, template);
+        LOGGER.info("Sent email with subject {} from {} to {} using template {}", subject, GETAWAY_EMAIL, to, template);
     }
 }

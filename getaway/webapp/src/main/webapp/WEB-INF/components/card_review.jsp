@@ -6,7 +6,14 @@
    <div class="card m-2">
       <div class="card-title m-2 d-flex justify-content-between">
          <div class="d-flex">
-            <img class="user-img" src="<c:url value = "/resources/images/ic_user.png" />" alt="User"/>
+            <c:choose>
+               <c:when test="${param.hasImage}">
+                  <img class="user-img" src="<c:url value='/user/profileImage/${param.userId}'/>" alt="Imagen" style="margin-right: 8px"/>
+               </c:when>
+               <c:otherwise>
+                  <img class="user-img" src="<c:url value="/resources/images/user_default.png" />" alt="Imagen"/>
+               </c:otherwise>
+            </c:choose>
             <div class="d-flex flex-column justify-content-center align-content-center">
                <h5 class="my-1">
                   <c:out value="${param.userName}"/> <c:out value="${param.userSurname}"/>

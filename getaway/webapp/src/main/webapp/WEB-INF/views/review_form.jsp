@@ -14,7 +14,7 @@
          <%@ include file="../components/navbar.jsp" %>
 
          <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
-            <div class="container-lg w-100 smallContentContainer d-flex flex-column justify-content-center align-items-center">
+            <div class="container-lg w-100 modalContainer d-flex flex-column justify-content-center align-items-center">
                <form:form modelAttribute="reviewForm" action="${postPath}" id="submitForm" method="post" acceptCharset="UTF-8"
                           enctype="multipart/form-data" cssStyle="width: 100%;">
                   <div class="p-4 mx-4 mt-4 m-1">
