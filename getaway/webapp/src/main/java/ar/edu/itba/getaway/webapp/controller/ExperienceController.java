@@ -49,7 +49,7 @@ public class ExperienceController {
                                    @RequestParam Optional<Long> score,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set,
-                                   @RequestParam (value="pageNum", defaultValue = "1") final int pageNum) {
+                                   @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum) {
         final ModelAndView mav = new ModelAndView("experiences");
         final Page<ExperienceModel> currentPage;
 
@@ -78,7 +78,7 @@ public class ExperienceController {
         final Optional<Double> maxPriceOpt = experienceService.getMaxPrice(id);
         double max = maxPriceOpt.get();
         mav.addObject("max", max);
-        if(maxPrice.isPresent()){
+        if (maxPrice.isPresent()) {
             max = maxPrice.get();
         }
         mav.addObject("maxPrice", max);
@@ -205,7 +205,7 @@ public class ExperienceController {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
-            return experience(categoryName, form, principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
+            return experience(categoryName, form, principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), 1);
         }
 
         final Optional<CityModel> cityModel = locationService.getCityByName(form.getActivityCity());
@@ -227,7 +227,7 @@ public class ExperienceController {
         return mav;
     }
 
-    private void setFav(long userId, Optional<Boolean> set, Optional<Long> experience){
+    private void setFav(long userId, Optional<Boolean> set, Optional<Long> experience) {
         final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
 
         if (set.isPresent() && experience.isPresent()) {
