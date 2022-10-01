@@ -174,4 +174,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
                 new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
+    @Override
+    public List<ExperienceModel> listFavsByUserId(Long userId, String order) {
+        final String query = "SELECT * FROM experiences WHERE experienceId IN ( SELECT experienceId FROM favuserexperience WHERE userId = ? )" + order;
+        return jdbcTemplate.query(query, new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
 }

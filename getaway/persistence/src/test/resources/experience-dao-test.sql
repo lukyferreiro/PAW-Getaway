@@ -6,6 +6,7 @@ TRUNCATE TABLE categories RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE reviews RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE images RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE imagesExperiences RESTART IDENTITY AND COMMIT NO CHECK;
+TRUNCATE TABLE favuserexperience RESTART IDENTITY AND COMMIT NO CHECK;
 
 -- Add at least three users (in case we limit 1 review per experience per user)
 INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (1, 'owner', 'user', 'owner@mail.com', null, 'contra1');
@@ -27,7 +28,7 @@ INSERT INTO countries(countryname) VALUES ('Test Country');
 INSERT INTO cities(cityname, countryid) VALUES('Test City One', 1);
 INSERT INTO cities(cityname, countryid) VALUES('Test City Two', 1);
 
--- Add images (with value null), because all experiences are created that way from Service layer
+-- Add images (with value null) for consistency
 INSERT INTO images(imgid, imageObject) VALUES(1, null);
 INSERT INTO images(imgid, imageObject) VALUES(2, null);
 INSERT INTO images(imgid, imageObject) VALUES(3, null);
@@ -56,6 +57,10 @@ VALUES (7, 'testaventura2', 1500, 'diraventura2', null, null, 1, 1, 2, 'owner2@m
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
 VALUES (8, 'testaventura3', 2000, 'diraventura3', null, null, 2, 1, 2, 'owner2@mail.com');
 
+INSERT INTO favuserexperience(userid, experienceid) VALUES (1, 1);
+INSERT INTO favuserexperience(userid, experienceid) VALUES (1, 5);
+
+-- Add imagesExperiences for consistency
 INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (1,1,true);
 INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (2,2,true);
 INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (3,3,true);

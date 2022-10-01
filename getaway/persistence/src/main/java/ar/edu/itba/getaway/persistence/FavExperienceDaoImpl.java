@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.FavExperienceModel;
-import ar.edu.itba.getaway.services.FavExperienceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,17 +56,18 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
         return jdbcTemplate.update(query, experienceId, userId) == 1;
     }
 
-    @Override
-    public List<FavExperienceModel> getByExperienceId(long experienceId) {
-        final String query = "SELECT * FROM favuserexperience WHERE experienceId = ? ";
-        return jdbcTemplate.query(query, new Object[]{experienceId}, FAV_EXPERIENCE_ROW_MAPPER);
-
-    }
-
-    @Override
-    public List<FavExperienceModel> listAll() {
-        final String query = "SELECT * FROM favuserexperience";
-        return jdbcTemplate.query(query, new Object[]{}, FAV_EXPERIENCE_ROW_MAPPER);    }
+//    @Override
+//    public List<FavExperienceModel> getByExperienceId(long experienceId) {
+//        final String query = "SELECT * FROM favuserexperience WHERE experienceId = ? ";
+//        return jdbcTemplate.query(query, new Object[]{experienceId}, FAV_EXPERIENCE_ROW_MAPPER);
+//
+//    }
+//
+//    @Override
+//    public List<FavExperienceModel> listAll() {
+//        final String query = "SELECT * FROM favuserexperience";
+//        return jdbcTemplate.query(query, new Object[]{}, FAV_EXPERIENCE_ROW_MAPPER);
+//    }
 
     @Override
     public List<Long> listByUserId(Long userId) {

@@ -18,5 +18,6 @@ public interface ExperienceService {
     List<ExperienceModel> listByUserId(long userId, String order);
     Page<ExperienceModel> listByFilter(long categoryId, Double max, long score, Long city, String order, int page);
     List<ExperienceModel> listByBestRanked(long categoryId);
+    List<ExperienceModel> listFavsByUserId(Long userId, String order);
 }
 

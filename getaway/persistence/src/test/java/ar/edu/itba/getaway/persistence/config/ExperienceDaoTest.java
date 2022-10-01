@@ -14,10 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 import javax.sql.DataSource;
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -234,14 +232,20 @@ public class ExperienceDaoTest {
     public void testListByBestRanked() {
         List<ExperienceModel> experienceModelList = experienceDao.listByBestRanked(1);
 
-        for (ExperienceModel exp: experienceModelList         ) {
-            System.out.println(exp.getExperienceName());
-        }
-
         assertFalse(experienceModelList.isEmpty());
         assertEquals( DEFAULT_ADV3, experienceModelList.get(0));
         assertEquals( DEFAULT_ADV2, experienceModelList.get(1));
         assertEquals( DEFAULT_ADV, experienceModelList.get(2));
+    }
+
+    @Test
+    public void testListFavsByUserId() {
+        List<ExperienceModel> experienceModelList = experienceDao.listFavsByUserId(new Long(1), NO_ORDER);
+
+        assertFalse(experienceModelList.isEmpty());
+        assertTrue(experienceModelList.contains(DEFAULT_ADV));
+        assertTrue(experienceModelList.contains(DEFAULT_NIG));
+        assertFalse(experienceModelList.contains(DEFAULT_ADV2));
     }
 
 }

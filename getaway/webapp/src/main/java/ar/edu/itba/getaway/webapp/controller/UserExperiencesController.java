@@ -62,12 +62,12 @@ public class UserExperiencesController {
         final OrderByModel[] orderByModels = OrderByModel.values();
 
         //TODO NO ME TRAE LAS FAVORITAS
-        List<ExperienceModel> experienceList = new ArrayList<>();
         String order = "";
         if (orderBy.isPresent())
             order = " ORDER BY " + orderBy.get() + " " +direction.get();
 
-        experienceList = experienceService.listAll(order);
+        List<ExperienceModel> experienceList;
+        experienceList = experienceService.listFavsByUserId(user.getId() ,order);
 
         final List<Long> avgReviews = new ArrayList<>();
         for (ExperienceModel exp : experienceList) {

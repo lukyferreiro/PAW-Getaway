@@ -29,17 +29,17 @@ public class FavExperienceServiceImpl implements FavExperienceService{
         return favExperienceDao.delete(userId,experienceId);
     }
 
-    @Override
-    public List<FavExperienceModel> getByExperienceId(long experienceId) {
-        LOGGER.debug("Retrieving all favs of experience with id {}", experienceId);
-        return favExperienceDao.getByExperienceId(experienceId);
-    }
-
-    @Override
-    public List<FavExperienceModel> listAll() {
-        LOGGER.debug("Retrieving all favs");
-        return favExperienceDao.listAll();
-    }
+//    @Override
+//    public List<FavExperienceModel> getByExperienceId(long experienceId) {
+//        LOGGER.debug("Retrieving all favs of experience with id {}", experienceId);
+//        return favExperienceDao.getByExperienceId(experienceId);
+//    }
+//
+//    @Override
+//    public List<FavExperienceModel> listAll() {
+//        LOGGER.debug("Retrieving all favs");
+//        return favExperienceDao.listAll();
+//    }
 
     @Override
     public List<Long> listByUserId(Long userId) {

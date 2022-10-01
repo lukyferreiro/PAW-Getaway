@@ -124,4 +124,9 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getMaxPrice(categoryId);
     }
 
+    @Override
+    public List<ExperienceModel> listFavsByUserId(Long userId, String order) {
+        LOGGER.debug("Retrieving all favs of user with id {}", userId);
+        return experienceDao.listFavsByUserId(userId, order);
+    }
 }
