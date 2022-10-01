@@ -34,8 +34,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private EmailService emailService;
     @Autowired
-    private ImageService imageService;
-    @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private String appBaseUrl;
@@ -168,7 +166,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateProfileImage(UserModel userModel, byte[] image) {
         LOGGER.debug("Updating user {} profile image of id {}", userModel.getId(), userModel.getProfileImageId());
-        imageService.updateImg(image, userModel.getProfileImageId());
+        imageDao.updateImg(image, userModel.getProfileImageId());
     }
 
     private void sendVerificationToken(UserModel userModel, VerificationToken token) {

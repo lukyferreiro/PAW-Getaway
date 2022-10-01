@@ -39,12 +39,6 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public List<ImageModel> listAllImg() {
-        LOGGER.debug("Retrieving all images");
-        return imageDao.listAllImg();
-    }
-
-    @Override
     public Optional<ImageModel> getImgById(long imageId) {
         LOGGER.debug("Retrieving image with id {}", imageId);
         return imageDao.getImgById(imageId);
@@ -58,15 +52,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public List<ImageExperienceModel> listAllExperienceImg() {
-        LOGGER.debug("Retrieving all images");
-        return imageDao.listAllExperienceImg();
-    }
-
-    @Override
     public Optional<ImageModel> getImgByExperienceId(long experienceId) {
         LOGGER.debug("Retrieving image of experience with id {}", experienceId);
         return imageDao.getImgByExperienceId(experienceId);
     }
-
 }
