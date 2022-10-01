@@ -6,7 +6,6 @@
 <html>
    <head>
       <title><spring:message code="pageName"/></title>
-<%--      <link href="<c:url value = "/resources/css/carousel.css"/>" rel="stylesheet" type="text/css"/>--%>
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
 
