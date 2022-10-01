@@ -4,7 +4,7 @@
 
 <div class="star-rating my-1">
    <c:choose>
-      <c:when test="${param.avgReview != null}">
+      <c:when test="${param.avgReview == null || param.avgReview == ''}">
          <i class="fas fa-star"></i>
          <i class="fas fa-star"></i>
          <i class="fas fa-star"></i>

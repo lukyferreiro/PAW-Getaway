@@ -104,7 +104,7 @@
                </div>
                <div class="d-flex">
                   <h6 class="information-title">
-                     <spring:message code="experienceDetail.review"/>
+                     <spring:message code="experienceDetail.review" arguments="${param.reviewCount}"/>
                   </h6>
                   <jsp:include page="/WEB-INF/components/star_avg.jsp">
                      <jsp:param name="avgReview" value="${param.reviewAvg}"/>

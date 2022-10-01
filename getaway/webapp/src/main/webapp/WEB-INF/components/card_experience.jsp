@@ -16,7 +16,7 @@
       </div>
    </c:if>
 
-   <a class="card-link" href="<c:url value="/experiences/${param.categoryName}/${param.id}"/>">
+   <a class="card-link h-100 d-flex flex-column" href="<c:url value="/experiences/${param.categoryName}/${param.id}"/>">
       <div>
          <c:choose>
             <c:when test="${param.hasImage}">
@@ -42,7 +42,7 @@
                         <spring:message code="experience.price.free"/>
                      </c:when>
                      <c:otherwise>
-                        <spring:message code="experience.price.value" arguments="${param.price}"/>
+                        <spring:message code="experience.reviews" arguments="${param.price}"/>
                      </c:otherwise>
                   </c:choose>
                </h6>
@@ -50,15 +50,13 @@
          </div>
       </div>
 
-      <div class="card-body container-fluid p-2">
-         <div class="d-flex">
-            <h6 class="information-title">
-               <spring:message code="experienceDetail.review"/>
-            </h6>
-            <jsp:include page="/WEB-INF/components/star_avg.jsp">
-               <jsp:param name="avgReview" value="${param.avgReviews}"/>
-            </jsp:include>
-         </div>
+      <div class="card-body container-fluid d-flex p-2 mb-1 align-items-end">
+         <h6 class="information-title mb-1">
+            <spring:message code="experienceDetail.review" arguments="${param.reviewCount}"/>
+         </h6>
+         <jsp:include page="/WEB-INF/components/star_avg.jsp">
+            <jsp:param name="avgReview" value="${param.avgReviews}"/>
+         </jsp:include>
       </div>
 
       <c:if test="${param.isEditing}">

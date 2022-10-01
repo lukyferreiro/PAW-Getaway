@@ -41,8 +41,10 @@ public class InitPageController {
         final List<ExperienceModel> experienceList = experienceService.listAll("");
 
         final List<Long> avgReviews = new ArrayList<>();
+        final List<Integer> listReviewsCount = new ArrayList<>();
         for (ExperienceModel exp : experienceList) {
             avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
+            listReviewsCount.add(reviewService.getReviewCount(exp.getExperienceId()));
         }
 
         LOGGER.debug("Size of avgReviews {}", avgReviews.size());
@@ -83,6 +85,7 @@ public class InitPageController {
 
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
+        mav.addObject("listReviewsCount", listReviewsCount);
         mav.addObject("isEditing", false);
 
         return mav;

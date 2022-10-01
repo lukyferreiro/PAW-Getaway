@@ -121,8 +121,10 @@ public class ExperienceController {
         List<ExperienceModel> currentExperiences = currentPage.getContent();
 
         final List<Long> avgReviews = new ArrayList<>();
+        final List<Integer> listReviewsCount = new ArrayList<>();
         for (ExperienceModel exp : currentExperiences) {
             avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
+            listReviewsCount.add(reviewService.getReviewCount(exp.getExperienceId()));
         }
 
         // Http Query
@@ -144,6 +146,7 @@ public class ExperienceController {
         mav.addObject("categoryName", categoryName);
         mav.addObject("experiences", currentExperiences);
         mav.addObject("avgReviews", avgReviews);
+        mav.addObject("listReviewsCount", listReviewsCount);
         mav.addObject("totalPages", currentPage.getMaxPage());
         mav.addObject("currentPage", currentPage.getCurrentPage());
         mav.addObject("isEditing", false);

@@ -28,7 +28,7 @@
                <jsp:param name="email" value="${experience.email}"/>
                <jsp:param name="hasImage" value="${experience.hasImage}"/>
                <jsp:param name="reviewAvg" value="${reviewAvg}"/>
-
+               <jsp:param name="reviewCount" value="${reviewCount}"/>
             </jsp:include>
 
             <!-- --------------RESEÑAS-------------- -->
