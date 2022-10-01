@@ -2,7 +2,6 @@ package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.pagination.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,5 +27,5 @@ public interface ExperienceDao {
 
     List<ExperienceModel> listByBestRanked(long categoryId);
 
-    ExperienceModel getByName(String name);
+    List<ExperienceModel> getByName(String name);
 }

@@ -169,8 +169,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public ExperienceModel getByName(String name) {
-        return  jdbcTemplate.queryForObject("SELECT * FROM experiences WHERE experienceName = ?", new Object[]{name}, EXPERIENCE_MODEL_ROW_MAPPER);
+    public List<ExperienceModel> getByName(String name) {
+        return  jdbcTemplate.query("SELECT * FROM experiences WHERE experienceName LIKE = ?", new Object[]{name}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
 }
