@@ -14,7 +14,7 @@
          <%@ include file="../components/navbar.jsp" %>
 
          <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
-            <div class="container-lg w-100 smallContentContainer d-flex flex-column justify-content-center align-items-center">
+            <div class="container-lg w-100 modalContainer d-flex flex-column justify-content-center align-items-center">
                <form:form modelAttribute="reviewForm" action="${postPath}" id="submitForm" method="post" acceptCharset="UTF-8"
                           enctype="multipart/form-data" cssStyle="width: 100%;">
                   <div class="p-4 mx-4 mt-4 m-1">
@@ -31,7 +31,7 @@
                            <spring:message code="review.description"/>
                            <span class="required-field">*</span>
                         </form:label>
-                        <form:textarea path="description" class="form-control" cssErrorClass="form-control is-invalid" rows="4"/>
+                        <form:textarea path="description" class="form-control" cssErrorClass="form-control is-invalid" rows="4" cssStyle="max-height: 200px;"/>
                         <form:errors path="description" element="p" cssClass="form-error-label"/>
                      </div>
                      <div class="col m-2"> <!--Rating-->

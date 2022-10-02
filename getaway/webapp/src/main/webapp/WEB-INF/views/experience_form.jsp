@@ -71,7 +71,7 @@
                         <spring:message code="experienceForm.activityInfo"/>
                         <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
                      </form:label>
-                     <form:textarea path="activityInfo" class="form-control" cssErrorClass="form-control is-invalid" rows="4"/>
+                     <form:textarea path="activityInfo" class="form-control" cssErrorClass="form-control is-invalid" rows="4" cssStyle="max-height: 300px;"/>
                      <form:errors path="activityInfo" element="p" cssClass="form-error-label"/>
                   </div>
 

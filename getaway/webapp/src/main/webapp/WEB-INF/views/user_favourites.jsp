@@ -13,7 +13,6 @@
       <div class="container-main">
          <%@ include file="../components/navbar.jsp" %>
 
-
          <div class="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
             <c:choose>
                <c:when test="${experiences.size() == 0}">
@@ -55,10 +54,9 @@
                   </div>
                </c:otherwise>
             </c:choose>
-
-            <%@ include file="../components/footer.jsp" %>
          </div>
-
-         <%@ include file="../components/includes/bottomScripts.jsp" %>
+         <%@ include file="../components/footer.jsp" %>
+      </div>
+      <%@ include file="../components/includes/bottomScripts.jsp" %>
    </body>
 </html>

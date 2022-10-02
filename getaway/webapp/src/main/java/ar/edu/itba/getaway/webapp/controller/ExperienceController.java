@@ -27,6 +27,8 @@ public class ExperienceController {
     @Autowired
     private UserService userService;
     @Autowired
+    private ImageService imageService;
+    @Autowired
     private ExperienceService experienceService;
     @Autowired
     private LocationService locationService;
@@ -169,6 +171,12 @@ public class ExperienceController {
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final String dbCategoryName = ExperienceCategory.valueOf(categoryName).name();
         final List<ReviewUserModel> reviews = reviewService.getReviewAndUser(experienceId);
+
+        final List<Boolean> listReviewsHasImages = new ArrayList<>();
+        for(ReviewUserModel review : reviews){
+            listReviewsHasImages.add(imageService.getImgById(review.getImgId()).get().getImage() != null);
+        }
+
         final Long avgScore = reviewService.getAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
         final CityModel cityModel = locationService.getCityById(experience.getCityId()).get();
@@ -182,6 +190,8 @@ public class ExperienceController {
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("experience", experience);
         mav.addObject("reviews", reviews);
+        mav.addObject("isEditing", false);
+        mav.addObject("listReviewsHasImages", listReviewsHasImages);
         mav.addObject("avgScore", avgScore);
         mav.addObject("reviewCount", reviewCount);
         mav.addObject("city", city);

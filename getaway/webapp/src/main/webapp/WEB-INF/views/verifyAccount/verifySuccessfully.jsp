@@ -14,7 +14,7 @@
          <%@ include file="../../components/simpleNavbar.jsp" %>
 
          <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
-            <div class="container-lg w-100 smallContentContainer">
+            <div class="container-lg w-100 modalContainer">
                <div class="row w-100 m-0 p-4 align-items-center justify-content-center">
                   <div class="col-12">
                      <h1 class="text-center title">
@@ -23,9 +23,6 @@
                      <p class="subtitle text-center mb-4">
                         <spring:message code="verifySuccessfully.success.description"/>
                      </p>
-                  </div>
-                  <div class="col-12 d-flex align-items-center justify-content-center">
-                     <i class="far fa-check-circle fa-7x" id="success"></i>
                   </div>
                   <div class="col-12 px-0 mt-4 d-flex align-items-center justify-content-center">
                      <a href="<c:url value = "/"/>">

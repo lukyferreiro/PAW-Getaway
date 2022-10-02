@@ -16,7 +16,7 @@
          <%@ include file="../components/simpleNavbar.jsp" %>
 
          <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
-            <div class="container-lg w-100 p-2 smallContentContainer">
+            <div class="container-lg w-100 p-2 modalContainer">
                <div class="row w-100 m-0 p-5 align-items-center justify-content-center">
                   <div class="col-12">
                      <h1 class="text-center title">
@@ -32,7 +32,8 @@
                         <form id="loginForm" action="${postPath}" accept-charset="UTF-8" method="POST" enctype="application/x-www-form-urlencoded">
                            <div class="row">
                               <div class="col-12"> <!--Email-->
-                                 <label for="email" class="form-label">
+                                 <label class="form-label d-flex align-items-center" for="email">
+                                    <img src="<c:url value="/resources/images/ic_user.svg"/>" alt="Imagen perfil" style="margin-right: 5px;">
                                     <spring:message code="loginForm.email.title"/>
                                  </label>
                                  <input type="text" id="email" name="email" class="form-control mb-2" aria-describedby="email input"/>
@@ -43,7 +44,8 @@
                               <div class="container-fluid">
                                  <div class="row">
                                     <div class="col-6 px-0">
-                                       <label class="form-label" for="password">
+                                       <label class="form-label d-flex align-items-center" for="password">
+                                          <img src="<c:url value="/resources/images/ic_password.svg"/>" alt="Imagen perfil" style="margin-right: 5px;">
                                           <spring:message code="loginForm.password.title"/>
                                        </label>
                                     </div>

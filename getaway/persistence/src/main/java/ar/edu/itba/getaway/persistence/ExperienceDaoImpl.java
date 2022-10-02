@@ -132,7 +132,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public Optional<Double> getMaxPrice(long categoryId){
-        return jdbcTemplate.query("SELECT MAX(COALESCE(price,0)) as max_price FROM experiences WHERE categoryid = ?", new Object[]{categoryId}, PRICE_EXPERIENCE_ROW_MAPPER ).stream().findFirst();
+        return jdbcTemplate.query("SELECT MAX(COALESCE(price,0)) as max_price FROM experiences WHERE categoryid = ?",
+                new Object[]{categoryId}, PRICE_EXPERIENCE_ROW_MAPPER ).stream().findFirst();
     }
 
     @Override

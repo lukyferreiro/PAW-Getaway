@@ -42,6 +42,7 @@
                      <spring:message code="experienceDetail.address.value" arguments="${param.address},${param.city},${param.country}"/>
                   </p>
                </div>
+
                <div> <!-- Precio -->
                   <h5 class="information-title">
                      <spring:message code="experienceDetail.price"/>
@@ -60,11 +61,12 @@
                      </c:choose>
                   </p>
                </div>
+
                <div> <!-- Descripcion -->
                   <h5 class="information-title">
                      <spring:message code="experienceDetail.description"/>
                   </h5>
-                  <p class="information-text">
+                  <p class="information-text" id="experienceDescription">
                      <c:choose>
                         <c:when test="${param.description == ''}">
                            <spring:message code="experienceDetail.noData"/>
@@ -75,6 +77,7 @@
                      </c:choose>
                   </p>
                </div>
+
                <div> <!-- URL -->
                   <h5 class="information-title">
                      <spring:message code="experienceDetail.url"/>
@@ -94,6 +97,7 @@
                      </c:otherwise>
                   </c:choose>
                </div>
+
                <div> <!-- Email de contacto -->
                   <h5 class="information-title">
                      <spring:message code="experienceDetail.email"/>
@@ -102,7 +106,8 @@
                      <c:out value="${param.email}"/>
                   </p>
                </div>
-               <div class="d-flex">
+
+               <div class="d-flex"> <!-- Ranking -->
                   <h6 class="information-title">
                      <spring:message code="experienceDetail.review" arguments="${param.reviewCount}"/>
                   </h6>

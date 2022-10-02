@@ -49,7 +49,3 @@
 .btn-trash:hover, .btn-trash:focus {
     border-color: transparent;
 }
-
-.btn-pencil, .btn-trash {
-    font-size: x-large;
-}
