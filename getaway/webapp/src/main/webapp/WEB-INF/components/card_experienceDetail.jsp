@@ -76,6 +76,10 @@
                         </c:otherwise>
                      </c:choose>
                   </p>
+                  <script>
+                      let experienceDescription = document.getElementById('experienceDescription').innerHTML
+                      experienceDescription = marked.parse(experienceDescription);
+                  </script>
                </div>
 
                <div> <!-- URL -->

@@ -9,7 +9,6 @@ public interface ExperienceDao {
     ExperienceModel create (String name, String address, String description, String email, String url, Double price, long cityId, long categoryId, long userId);
     boolean update (ExperienceModel experienceModel);
     boolean delete (long experienceId);
-
     Optional<ExperienceModel> getById (long experienceId);
     Optional<Double> getMaxPrice(long categoryId);
     List<ExperienceModel> listAll (String order);

@@ -19,9 +19,9 @@ public class UserDaoImpl implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert userSimpleJdbcInsert;
-    private final SimpleJdbcInsert roleSimpleJdbcInsert;
+//    private final SimpleJdbcInsert roleSimpleJdbcInsert;
     private final SimpleJdbcInsert userRolesSimpleJdbcInsert;
-    private final SimpleJdbcInsert imagesSimpleJdbcInsert;
+//    private final SimpleJdbcInsert imagesSimpleJdbcInsert;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
 
     private final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
@@ -44,13 +44,13 @@ public class UserDaoImpl implements UserDao {
         this.userSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("userid");
-        this.roleSimpleJdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("roles");
+//        this.roleSimpleJdbcInsert = new SimpleJdbcInsert(ds)
+//                .withTableName("roles");
         this.userRolesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("userRoles");
-        this.imagesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("images")
-                .usingGeneratedKeyColumns("imgid");
+//        this.imagesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
+//                .withTableName("images")
+//                .usingGeneratedKeyColumns("imgid");
     }
 
     @Override

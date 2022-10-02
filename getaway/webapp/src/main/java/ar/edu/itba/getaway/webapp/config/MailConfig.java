@@ -35,12 +35,12 @@ public class MailConfig implements EnvironmentAware {
     @Bean
     public JavaMailSender mailSender() {
 
-        final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(this.environment.getProperty(HOST));
-        mailSender.setPort(Integer.parseInt(this.environment.getProperty(PORT)));
-        mailSender.setProtocol(this.environment.getProperty(PROTOCOL));
-        mailSender.setUsername(this.environment.getProperty(USERNAME));
-        mailSender.setPassword(this.environment.getProperty(PASSWORD));
+        final JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+        javaMailSender.setHost(this.environment.getProperty(HOST));
+        javaMailSender.setPort(Integer.parseInt(this.environment.getProperty(PORT)));
+        javaMailSender.setProtocol(this.environment.getProperty(PROTOCOL));
+        javaMailSender.setUsername(this.environment.getProperty(USERNAME));
+        javaMailSender.setPassword(this.environment.getProperty(PASSWORD));
 
         // https://stackoverflow.com/questions/16115453/javamail-could-not-convert-socket-to-tls-gmail
         final Properties javaMailProperties = new Properties();
@@ -53,8 +53,8 @@ public class MailConfig implements EnvironmentAware {
         javaMailProperties.put("mail.smtp.quitwait", "false");
         javaMailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
-        mailSender.setJavaMailProperties(javaMailProperties);
-        return mailSender;
+        javaMailSender.setJavaMailProperties(javaMailProperties);
+        return javaMailSender;
     }
 
     @Bean

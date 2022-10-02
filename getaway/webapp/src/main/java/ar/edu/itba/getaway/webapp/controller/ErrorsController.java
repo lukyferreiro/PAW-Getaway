@@ -31,7 +31,20 @@ public class ErrorsController {
     public ModelAndView experienceNotFound() {
         LOGGER.error("Error experienceNotFound caught");
         Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.NotFound.Experience", null, locale);
+        String error = messageSource.getMessage("errors.NotFound.experience", null, locale);
+        Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
+        mav.addObject("errors", error);
+        mav.addObject("code", code);
+        return mav;
+    }
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = ReviewNotFoundException.class)
+    public ModelAndView reviewNotFound() {
+        LOGGER.error("Error reviewNotFound caught");
+        Locale locale = LocaleContextHolder.getLocale();
+        String error = messageSource.getMessage("errors.NotFound.review", null, locale);
         Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
         mav.addObject("errors", error);
@@ -44,7 +57,7 @@ public class ErrorsController {
     public ModelAndView categoryNotFound() {
         LOGGER.error("Error categoryNotFound caught");
         Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.NotFound.Category", null, locale);
+        String error = messageSource.getMessage("errors.NotFound.category", null, locale);
         Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
         mav.addObject("errors", error);
@@ -72,19 +85,6 @@ public class ErrorsController {
         Locale locale = LocaleContextHolder.getLocale();
         String error = messageSource.getMessage("errors.NotFound.user", null, locale);
         Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
-        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-        mav.addObject("errors", error);
-        mav.addObject("code", code);
-        return mav;
-    }
-
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = IllegalContentTypeException.class)
-    public ModelAndView illegalContentTypeException() {
-        LOGGER.error("Error illegalContentTypeException caught");
-        Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.IllegalContentTypeException", null, locale);
-        Long code = Long.valueOf(HttpStatus.BAD_REQUEST.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
         mav.addObject("errors", error);
         mav.addObject("code", code);

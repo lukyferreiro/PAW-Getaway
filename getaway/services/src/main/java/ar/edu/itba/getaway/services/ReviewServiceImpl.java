@@ -23,9 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewModel create(String title, String description, long score, long experienceId, Date reviewDate, long userId) {
         LOGGER.debug("Creating review with title {}", title);
-        ReviewModel reviewModel = reviewDao.create(title, description, score, experienceId, reviewDate, userId);
-        LOGGER.debug("Created title with id {}", reviewModel.getReviewId());
-        return reviewModel;
+        return reviewDao.create(title, description, score, experienceId, reviewDate, userId);
     }
 
     @Override

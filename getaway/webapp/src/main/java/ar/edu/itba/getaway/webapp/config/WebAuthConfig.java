@@ -37,7 +37,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     private MyUserDetailsService myUserDetailsService;
 
     @Value("classpath:auth/auth_key.pem")
-    private Resource authKey;
+    private Resource rememberMeKey;
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
@@ -75,7 +75,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/403");
     }
 
-    /* Es importante el orden de las reglas */
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
@@ -102,7 +101,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/user/profile").authenticated()
                 .antMatchers(HttpMethod.GET,"/user/profile/edit").authenticated()
                 .antMatchers(HttpMethod.POST,"/user/profile/edit").authenticated()
-                .antMatchers(HttpMethod.GET,"/user/experiences").authenticated()
+                .antMatchers(HttpMethod.GET,"/user/experiences").hasRole("PROVIDER")
                 .antMatchers(HttpMethod.GET,"/user/favourites").authenticated()
                 .antMatchers("/user/profileImage/{imageId:[0-9]+}").permitAll()
 //              ------------------------------SE USA @PreAuthorize-------------------------------
@@ -136,7 +135,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
             .and().rememberMe()
                 .rememberMeParameter("rememberMe")
                 .userDetailsService(myUserDetailsService)
-                .key(FileCopyUtils.copyToString(new InputStreamReader(authKey.getInputStream())))
+                .key(FileCopyUtils.copyToString(new InputStreamReader(rememberMeKey.getInputStream())))
                 .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
             .and().logout()
                 .logoutUrl("/logout")

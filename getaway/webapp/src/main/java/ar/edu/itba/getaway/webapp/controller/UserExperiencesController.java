@@ -164,7 +164,7 @@ public class UserExperiencesController {
         final String country = locationService.getCountryByName("Argentina").get().getName();
         final List<CityModel> cityModels = locationService.listAllCities();
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final CityModel city = locationService.getCityById(experience.getCityId()).orElseThrow(CityNotFoundException::new);
+        final CityModel city = locationService.getCityById(experience.getCityId()).get();
         final String cityName = city.getName();
 
         //TODO no se como hacer para detectar que la primera vez que entro a la edicion
@@ -218,7 +218,7 @@ public class UserExperiencesController {
 
         final long categoryId = form.getActivityCategory();
 
-        final CityModel city = locationService.getCityByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
+        final CityModel city = locationService.getCityByName(form.getActivityCity()).get();
         final Long cityId = city.getId();
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);

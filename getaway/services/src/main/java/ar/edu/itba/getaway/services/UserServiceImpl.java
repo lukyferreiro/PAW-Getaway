@@ -2,14 +2,12 @@ package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.getaway.persistence.ImageDao;
 import ar.edu.itba.getaway.persistence.PasswordResetTokenDao;
 import ar.edu.itba.getaway.persistence.UserDao;
 import ar.edu.itba.getaway.persistence.VerificationTokenDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,18 +20,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
     @Autowired
-    private ImageDao imageDao;
-    @Autowired
     private VerificationTokenDao verificationTokenDao;
     @Autowired
     private PasswordResetTokenDao passwordResetTokenDao;
+    @Autowired
+    private ImageService imageService;
     @Autowired
     private TokensServiceImpl tokensService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
-    private final Locale locale = LocaleContextHolder.getLocale();
     private final Collection<Roles> DEFAULT_ROLES = Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     @Override
@@ -69,10 +66,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException {
-        final ImageModel imageModel = imageDao.createImg(null);
+        final ImageModel imageModel = imageService.createImg(null);
         LOGGER.debug("Creating user with email {}", email);
         UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES, imageModel.getId());
-        LOGGER.debug("Created user with id {}", userModel.getId());
         LOGGER.debug("Creating verification token to user with id {}", userModel.getId());
         VerificationToken token = tokensService.generateVerificationToken(userModel.getId());
         LOGGER.debug("Created verification token with id {}", token.getId());
@@ -168,7 +164,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateProfileImage(UserModel userModel, byte[] image) {
         LOGGER.debug("Updating user {} profile image of id {}", userModel.getId(), userModel.getProfileImageId());
-        imageDao.updateImg(image, userModel.getProfileImageId());
+        imageService.updateImg(image, userModel.getProfileImageId());
+    }
+
+    @Override
+    public void addRole(long userId, Roles newRole){
+        LOGGER.debug("Adding role {} to user with id {}", newRole.name(), userId);
+        userDao.addRole(userId, newRole);
     }
 
 }

@@ -111,11 +111,10 @@
 
                      <c:forEach var = "i" begin = "1" end = "${totalPages}">
                         <li class="page-item">
-                           <a class="page-link ${i == currentPage ? 'font-weight-bold' : ''}" href="
-                        <c:url value = "${path}">
-                           <c:param name = "pageNum" value = "${i}"/>
-<%--                           <c:param name = "category" value = "${param.category}"/>--%>
-                        </c:url>">
+                           <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
+                              href="<c:url value = "${path}">
+                                       <c:param name = "pageNum" value = "${i}"/>
+                                    </c:url>">
                               <c:out value="${i}"/>
                            </a>
                         </li>

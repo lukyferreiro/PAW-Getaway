@@ -29,18 +29,18 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendMail(String template, String subject, Map<String, Object> variables, final Locale locale) throws MessagingException {
-        final Context ctx = new Context(locale);
-        ctx.setVariables(variables);
+        final Context context = new Context(locale);
+        context.setVariables(variables);
 
         final MimeMessage mimeMessage = mailSender.createMimeMessage();
-        final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+        final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
         final String to = (String) variables.get("to");
-        message.setSubject(subject);
-        message.setFrom(GETAWAY_EMAIL);
-        message.setTo(to);
+        mimeMessageHelper.setSubject(subject);
+        mimeMessageHelper.setFrom(GETAWAY_EMAIL);
+        mimeMessageHelper.setTo(to);
 
-        final String htmlContent = htmlTemplateEngine.process(template, ctx);
-        message.setText(htmlContent, true);
+        final String htmlContent = htmlTemplateEngine.process(template, context);
+        mimeMessageHelper.setText(htmlContent, true);
 
         mailSender.send(mimeMessage);
         LOGGER.info("Sent email with subject {} from {} to {} using template {}", subject, GETAWAY_EMAIL, to, template);

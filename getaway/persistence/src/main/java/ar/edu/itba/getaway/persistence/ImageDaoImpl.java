@@ -83,20 +83,6 @@ public class ImageDaoImpl implements ImageDao {
         return jdbcTemplate.update(query, imgid) == 1;
     }
 
-//    @Override
-//    public List<ImageModel> listAllImg() {
-//        final String query = "SELECT imgid, imageObject FROM images";
-//        LOGGER.debug("Executing query: {}", query);
-//        return new ArrayList<>(jdbcTemplate.query(query, IMAGE_MODEL_ROW_MAPPER));
-//    }
-//
-//    @Override
-//    public List<ImageExperienceModel> listAllExperienceImg() {
-//        final String query = "SELECT imgId, experienceId, isCover FROM imagesExperiences";
-//        LOGGER.debug("Executing query: {}", query);
-//        return new ArrayList<>(jdbcTemplate.query(query, IMAGE_EXPERIENCE_MODEL_ROW_MAPPER));
-//    }
-
     @Override
     public Optional<ImageModel> getImgById(long imageId) {
         final String query = "SELECT imgid, imageObject FROM images WHERE imgid = ?";

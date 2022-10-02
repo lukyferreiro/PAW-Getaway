@@ -40,12 +40,14 @@ public class TokensServiceImpl implements TokensService {
     @Override
     public VerificationToken generateVerificationToken(Long userId) {
         String token = UUID.randomUUID().toString();
+        LOGGER.debug("Created verification token {}", token);
         return verificationTokenDao.createVerificationToken(userId, token, VerificationToken.generateTokenExpirationDate());
     }
 
     @Override
     public PasswordResetToken generatePasswordResetToken(Long userId) {
         String token = UUID.randomUUID().toString();
+        LOGGER.debug("Created password token {}", token);
         return passwordResetTokenDao.createToken(userId, token, PasswordResetToken.generateTokenExpirationDate());
     }
 

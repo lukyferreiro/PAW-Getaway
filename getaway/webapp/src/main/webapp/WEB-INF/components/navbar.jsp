@@ -38,10 +38,12 @@
                         <img src="<c:url value="/resources/images/ic_user.svg"/>" alt="Imagen perfil">
                         <spring:message code="navbar.profile"/>
                      </a>
-                     <a class="dropdown-item" href="<c:url value="/user/experiences"/>">
-                        <img src="<c:url value="/resources/images/ic_experiences.svg"/>" alt="Imagen perfil">
-                        <spring:message code="navbar.experiences"/>
-                     </a>
+                     <c:if test="${loggedUser.hasRole('PROVIDER')}">
+                        <a class="dropdown-item" href="<c:url value="/user/experiences"/>">
+                           <img src="<c:url value="/resources/images/ic_experiences.svg"/>" alt="Imagen perfil">
+                           <spring:message code="navbar.experiences"/>
+                        </a>
+                     </c:if>
                      <a class="dropdown-item" href="<c:url value="/user/favourites"/>">
                         <img src="<c:url value="/resources/images/ic_fav.svg"/>" alt="Imagen perfil">
                         <spring:message code="navbar.favourites"/>

@@ -20,4 +20,5 @@ public interface UserService {
     Optional<UserModel> updatePassword (String token, String password);
     void updateUserInfo (long userId, UserInfo userInfo);
     void updateProfileImage (UserModel userModel, byte[] image);
+    void addRole(long userId, Roles newRole);
 }

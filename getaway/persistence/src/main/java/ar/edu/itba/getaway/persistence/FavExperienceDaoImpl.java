@@ -16,10 +16,10 @@ import java.util.Map;
 
 @Repository
 public class FavExperienceDaoImpl implements FavExperienceDao {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(FavExperienceDaoImpl.class);
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FavExperienceDaoImpl.class);
 
     private static final RowMapper<FavExperienceModel> FAV_EXPERIENCE_ROW_MAPPER = (rs, rowNum) ->
             new FavExperienceModel(rs.getLong("userid"),

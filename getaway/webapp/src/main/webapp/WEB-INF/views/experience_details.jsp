@@ -79,7 +79,7 @@
 
       <%@ include file="../components/includes/bottomScripts.jsp" %>
       <script>
-         <%@ include file="../../resources/js/experienceDetails.js" %>
+<%--         <%@ include file="../../resources/js/experienceDetails.js" %>--%>
          <%@ include file="../../resources/js/review.js" %>
       </script>
    </body>

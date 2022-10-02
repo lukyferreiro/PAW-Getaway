@@ -10,10 +10,8 @@ public interface ExperienceService {
     ExperienceModel create (String name, String address, String description, String email, String url, Double price, long cityId, long categoryId, long userId, byte[] image);
     boolean update (ExperienceModel experienceModel, byte[] image);
     boolean delete (long experienceId);
-
     Optional<Double> getMaxPrice(long categoryId);
     Optional<ExperienceModel> getById(long experienceId);
-
     List<ExperienceModel> listAll(String order);
     List<ExperienceModel> listByUserId(long userId, String order);
     Page<ExperienceModel> listByFilter(long categoryId, Double max, long score, Long city, String order, int page);
