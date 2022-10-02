@@ -12,14 +12,22 @@
 
 <c:choose>
    <c:when test="${fav}">
-      <a href="<c:url value="${param.urlFalse}"/>">
+      <a href="<c:url value="${param.path}">
+            <c:param name="set" value="${false}"/>
+            <c:param name="experience" value="${param.experienceId}"/>
+         </c:url>
+      ">
          <button type="button" class="btn btn-fav" id="setFalse">
             <i class="fas fa-heart heart-color"></i>
          </button>
       </a>
    </c:when>
    <c:otherwise>
-      <a href="<c:url value="${param.urlTrue}"/>">
+      <a href="<c:url value="${param.path}">
+            <c:param name="set" value="${true}"/>
+            <c:param name="experience" value="${param.experienceId}"/>
+         </c:url>
+      ">
          <button type="button" class="btn btn-fav" id="setTrue">
             <i class="fas fa-heart"></i>
          </button>

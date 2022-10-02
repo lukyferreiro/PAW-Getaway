@@ -66,7 +66,7 @@
 
                <jsp:include page="/WEB-INF/components/order_dropdown.jsp">
                   <jsp:param name="orderByModels" value="${orderByModels}"/>
-                  <jsp:param name="path" value="${postPath}"/>
+                  <jsp:param name="path" value="/experiences/${categoryName}"/>
                </jsp:include>
 
                <a href="<c:url value = "/experiences/${categoryName}"/>">
@@ -88,9 +88,10 @@
                         <jsp:param name="address" value="${experience.address}"/>
                         <jsp:param name="price" value="${experience.price}"/>
                         <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
-                        <jsp:param name="favUrlFalse" value="${path}experience=${experience.experienceId}&set=${false}"/>
-                        <jsp:param name="favUrlTrue" value="${path}experience=${experience.experienceId}&set=${true}"/>
-                        <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
+
+                        <jsp:param name="path" value="/experiences/${categoryName}"/>
+
+                         <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
                         <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
                         <jsp:param name="isEditing" value="${isEditing}"/>
                      </jsp:include>

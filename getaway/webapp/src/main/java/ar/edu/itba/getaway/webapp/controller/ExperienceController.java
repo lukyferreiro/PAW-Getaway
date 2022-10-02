@@ -112,7 +112,10 @@ public class ExperienceController {
 
             if (user.isPresent()) {
                 final long userId = user.get().getId();
-                favExperienceService.setFav(userId, set, experience);
+
+                if(set.isPresent()){
+                    favExperienceService.setFav(userId, set, experience);
+                }
                 final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
                 mav.addObject("favExperienceModels", favExperienceModels);
             }
@@ -128,21 +131,20 @@ public class ExperienceController {
             avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
             listReviewsCount.add(reviewService.getReviewCount(exp.getExperienceId()));
         }
-//        request.setAttribute("pageNum", pageNum);
+        request.setAttribute("pageNum", pageNum);
 
-        // Http Query
-        StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
-        String queryString = request.getQueryString();
-        String path;
+//        // Http Query
+//        StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
+//        String queryString = request.getQueryString();
+//        String path;
+////
+//        if (queryString == null) {
+//            path = requestURL.append("?").toString();
+//        } else {
+//            path = requestURL.append('?').append(queryString).append("&").toString();
+//        }
 //
-        if (queryString == null) {
-            path = requestURL.append("?").toString();
-        } else {
-            path = requestURL.append('?').append(queryString).append("&").toString();
-        }
-
-        // mav info
-        mav.addObject("path", path);
+//        // mav info
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
@@ -190,7 +192,9 @@ public class ExperienceController {
 
             if (user.isPresent()) {
                 final long userId = user.get().getId();
-                favExperienceService.setFav(userId, set, Optional.of(experienceId));
+                if(set.isPresent()){
+                    favExperienceService.setFav(userId, set, Optional.of(experienceId));
+                }
                 final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
 
                 mav.addObject("favExperienceModels", favExperienceModels);

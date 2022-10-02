@@ -56,13 +56,15 @@ public class UserExperiencesController {
         final ModelAndView mav = new ModelAndView("user_favourites");
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        favExperienceService.setFav(user.getId(), set, experience);
+
+        if(set.isPresent()){
+            favExperienceService.setFav(user.getId(), set, experience);
+        }
         final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
         mav.addObject("favExperienceModels", favExperienceModels);
 
         final OrderByModel[] orderByModels = OrderByModel.values();
 
-        //TODO NO ME TRAE LAS FAVORITAS
         String order = "";
         if (orderBy.isPresent())
             order = " ORDER BY " + orderBy.get() + " " + direction.get();
@@ -98,7 +100,10 @@ public class UserExperiencesController {
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
-        favExperienceService.setFav(user.getId(), set, experience);
+        if(set.isPresent()){
+            favExperienceService.setFav(user.getId(), set, experience);
+        }
+
         final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
         mav.addObject("favExperienceModels", favExperienceModels);
 

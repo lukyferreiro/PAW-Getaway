@@ -50,15 +50,20 @@ public class FavExperienceServiceImpl implements FavExperienceService{
 
     @Override
     public void setFav(long userId, Optional<Boolean> set, Optional<Long> experience){
-        final List<Long> favExperienceModels = listByUserId(userId);
+        LOGGER.debug("In setFav context");
+        LOGGER.debug("ExperienceId {}", experience.get());
+        LOGGER.debug("SetValue {}", set.get());
 
-        if (set.isPresent() && experience.isPresent()) {
+        if (experience.isPresent() && set.isPresent()) {
             if (set.get()) {
-                if (!favExperienceModels.contains(experience.get()))
-                    create(userId, experience.get());
-            } else {
+                LOGGER.debug("Agrego");
+                create(userId, experience.get());
+            }
+            else {
+                LOGGER.debug("Saco");
                 delete(userId, experience.get());
             }
         }
     }
+
 }
