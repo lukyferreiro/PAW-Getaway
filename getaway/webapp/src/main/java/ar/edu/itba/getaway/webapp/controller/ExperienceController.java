@@ -71,6 +71,7 @@ public class ExperienceController {
         String orderByQuery = "";
 
         if (orderBy.isPresent()) {
+            request.setAttribute("orderBy", orderBy.get());
             orderByQuery = " ORDER BY " + orderBy.get() + " " + direction.get();
         }
 
@@ -79,6 +80,7 @@ public class ExperienceController {
         double max = maxPriceOpt.get();
         mav.addObject("max", max);
         if(maxPrice.isPresent()){
+            request.setAttribute("maxPrice", max);
             max = maxPrice.get();
         }
         mav.addObject("maxPrice", max);
@@ -86,6 +88,7 @@ public class ExperienceController {
         // Score
         long scoreVal = 0;
         if (score.isPresent() && score.get() != -1) {
+            request.setAttribute("score", score.get());
             scoreVal = score.get();
         }
         mav.addObject("score", scoreVal);
@@ -95,9 +98,11 @@ public class ExperienceController {
 
         if (cityId.isPresent()) {
             currentPage = experienceService.listByFilter(id, max, scoreVal, cityId.get(), orderByQuery, pageNum);
+            request.setAttribute("cityId", cityId.get());
             mav.addObject("cityId", cityId.get());
         } else {
             currentPage = experienceService.listByFilter(id, max, scoreVal, new Long(-1), orderByQuery, pageNum);
+            request.setAttribute("cityId", -1);
             mav.addObject("cityId", -1);
         }
 
@@ -107,6 +112,8 @@ public class ExperienceController {
 
             if (user.isPresent()) {
                 final long userId = user.get().getId();
+                request.setAttribute("set", set);
+                request.setAttribute("experience", experience);
                 favExperienceService.setFav(userId, set, experience);
                 final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
                 mav.addObject("favExperienceModels", favExperienceModels);
@@ -123,20 +130,20 @@ public class ExperienceController {
             avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
             listReviewsCount.add(reviewService.getReviewCount(exp.getExperienceId()));
         }
+//        request.setAttribute("pageNum", pageNum);
 
         // Http Query
-        StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
-        String queryString = request.getQueryString();
-        String path;
-
-        if (queryString == null) {
-            path = requestURL.append("?").toString();
-        } else {
-            path = requestURL.append('?').append(queryString).append("&").toString();
-        }
+//        StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
+//        String queryString = request.getQueryString();
+//        String path;
+//
+//        if (queryString == null) {
+//            path = requestURL.append("?").toString();
+//        } else {
+//            path = requestURL.append('?').append(queryString).append("&").toString();
+//        }
 
         // mav info
-        mav.addObject("path", path);
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);

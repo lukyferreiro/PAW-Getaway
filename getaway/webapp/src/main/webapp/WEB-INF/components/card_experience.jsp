@@ -10,8 +10,6 @@
          <jsp:include page="/WEB-INF/components/fav.jsp">
             <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
             <jsp:param name="experienceId" value="${param.id}"/>
-            <jsp:param name="urlFalse" value="${param.favUrlFalse}"/>
-            <jsp:param name="urlTrue" value="${param.favUrlTrue}"/>
          </jsp:include>
       </div>
    </c:if>

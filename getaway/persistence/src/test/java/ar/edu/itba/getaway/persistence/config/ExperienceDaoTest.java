@@ -46,7 +46,7 @@ public class ExperienceDaoTest {
     private final long DEFAULT_SCORE = 0;
     private final String NO_ORDER = "";
     private final Long NO_CITY = new Long(-1);
-    private final int PAGE_SIZE = 6;
+    private final int PAGE_SIZE = 3;
 
     /****/
 
