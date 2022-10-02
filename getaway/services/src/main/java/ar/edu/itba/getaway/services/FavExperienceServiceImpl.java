@@ -43,6 +43,11 @@ public class FavExperienceServiceImpl implements FavExperienceService{
 //    }
 
     @Override
+    public boolean isFav(long userId, Long experienceId){
+        return favExperienceDao.isFav(userId, experienceId);
+    }
+
+    @Override
     public List<Long> listByUserId(Long userId) {
         LOGGER.debug("Retrieving all favs of user with id {}", userId);
         return favExperienceDao.listByUserId(userId);
@@ -50,17 +55,13 @@ public class FavExperienceServiceImpl implements FavExperienceService{
 
     @Override
     public void setFav(long userId, Optional<Boolean> set, Optional<Long> experience){
-        LOGGER.debug("In setFav context");
-        LOGGER.debug("ExperienceId {}", experience.get());
-        LOGGER.debug("SetValue {}", set.get());
-
         if (experience.isPresent() && set.isPresent()) {
-            if (set.get()) {
-                LOGGER.debug("Agrego");
-                create(userId, experience.get());
+            if (set.get() ) {
+                if(  !isFav(userId, experience.get())){
+                    create(userId, experience.get());
+                }
             }
             else {
-                LOGGER.debug("Saco");
                 delete(userId, experience.get());
             }
         }

@@ -87,11 +87,11 @@
                         <jsp:param name="description" value="${experience.description}"/>
                         <jsp:param name="address" value="${experience.address}"/>
                         <jsp:param name="price" value="${experience.price}"/>
-                        <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
 
+                        <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
                         <jsp:param name="path" value="/experiences/${categoryName}"/>
 
-                         <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
+                        <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
                         <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
                         <jsp:param name="isEditing" value="${isEditing}"/>
                      </jsp:include>

@@ -69,4 +69,14 @@ public class FavExperienceDaoTest {
         assertFalse(experiencesIds.isEmpty());
         assertTrue(experiencesIds.containsAll(USER_FAVOURITES));
     }
+
+    @Test
+    public void testIsFavTrue() {
+        assertTrue(favExperienceDao.isFav(1,new Long(1)));
+    }
+
+    @Test
+    public void testIsFavFalse() {
+        assertFalse(favExperienceDao.isFav(1, new Long(8)));
+    }
 }

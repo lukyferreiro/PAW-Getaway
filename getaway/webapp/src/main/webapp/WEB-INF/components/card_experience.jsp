@@ -59,7 +59,7 @@
       </div>
 
       <c:if test="${param.isEditing}">
-         <div class="btn-group card-body container-fluid p-2 d-flex align-items-end" role="group">
+         <div class="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
             <a href="<c:url value="/user/experiences/edit/${param.id}"/>">
                <button type="button" class="btn btn-pencil">
                   <i class="bi bi-pencil"></i>

@@ -57,9 +57,7 @@ public class UserExperiencesController {
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
-        if(set.isPresent()){
-            favExperienceService.setFav(user.getId(), set, experience);
-        }
+        favExperienceService.setFav(user.getId(), set, experience);
         final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
         mav.addObject("favExperienceModels", favExperienceModels);
 
@@ -69,8 +67,7 @@ public class UserExperiencesController {
         if (orderBy.isPresent())
             order = " ORDER BY " + orderBy.get() + " " + direction.get();
 
-        List<ExperienceModel> experienceList;
-        experienceList = experienceService.listFavsByUserId(user.getId() ,order);
+        List<ExperienceModel> experienceList = experienceService.listFavsByUserId(user.getId() ,order);
 
         final List<Long> avgReviews = new ArrayList<>();
         final List<Integer> listReviewsCount = new ArrayList<>();
@@ -96,25 +93,20 @@ public class UserExperiencesController {
                                    @RequestParam Optional<Boolean> set) {
         final ModelAndView mav = new ModelAndView("user_experiences");
 
-        final OrderByModel[] orderByModels = OrderByModel.values();
-
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
-        if(set.isPresent()){
-            favExperienceService.setFav(user.getId(), set, experience);
-        }
-
+        favExperienceService.setFav(user.getId(), set, experience);
         final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
         mav.addObject("favExperienceModels", favExperienceModels);
 
-        List<ExperienceModel> experienceList = new ArrayList<>();
+        final OrderByModel[] orderByModels = OrderByModel.values();
 
         String order = "";
-        if (orderBy.isPresent())
+        if (orderBy.isPresent()) {
             order = " ORDER BY " +orderBy.get() + " " +direction.get();
+        }
 
-        experienceList = experienceService.listByUserId(user.getId(), order);
-
+        List<ExperienceModel> experienceList = experienceService.listByUserId(user.getId(), order);
 
         final List<Long> avgReviews = new ArrayList<>();
         final List<Integer> listReviewsCount = new ArrayList<>();

@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class FavExperienceDaoImpl implements FavExperienceDao {
@@ -73,5 +74,12 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
     public List<Long> listByUserId(Long userId) {
         final String query = "SELECT experienceid FROM favuserexperience WHERE userid = ? ";
         return jdbcTemplate.query(query, new Object[]{userId}, FAV_EXPERIENCEID_ROW_MAPPER);
+    }
+
+    @Override
+    public boolean isFav(long userId, Long experienceId) {
+        final String query = "SELECT * FROM favuserexperience WHERE userid = ? AND experienceId = ?";
+        Optional<FavExperienceModel> fav = jdbcTemplate.query(query, new Object[]{userId, experienceId}, FAV_EXPERIENCE_ROW_MAPPER).stream().findFirst();
+        return fav.isPresent();
     }
 }

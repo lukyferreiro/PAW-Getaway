@@ -25,9 +25,10 @@
                                         <jsp:param name="description" value="${categoryList.get(experience).description}"/>
                                         <jsp:param name="address" value="${categoryList.get(experience).address}"/>
                                         <jsp:param name="price" value="${categoryList.get(experience).price}"/>
-                                        <jsp:param name="favExperienceModels" value="${param.favExperienceModels}"/>
-                                        <jsp:param name="favUrlFalse" value="/?experience=${categoryList.get(experience).experienceId}&set=${false}"/>
-                                        <jsp:param name="favUrlTrue" value="/?experience=${categoryList.get(experience).experienceId}&set=${true}"/>
+
+                                        <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
+                                        <jsp:param name="path" value="/"/>
+
                                         <jsp:param name="avgReviews" value="${avgReviews[experience]}"/>
                                     </jsp:include>
                                 </c:forEach>

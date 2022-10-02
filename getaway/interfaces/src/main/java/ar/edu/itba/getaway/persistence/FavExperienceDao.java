@@ -10,4 +10,5 @@ public interface FavExperienceDao {
 //    List<FavExperienceModel> getByExperienceId(long experienceId);
 //    List<FavExperienceModel> listAll();
     List<Long> listByUserId(Long userId);
+    boolean isFav(long userId, Long experienceId);
 }
