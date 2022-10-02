@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,12 +87,52 @@ public class SearchFormController {
     }
 
 
-//    @RequestMapping(value = "/search_result", method = {RequestMethod.POST})
-//        public ModelAndView searchByName(@RequestParam("query") final String query,
-//                                     @Valid @ModelAttribute("searchForm") final SearchForm searchForm){
-//
-//
-//    }
+    @RequestMapping(value = "/search_result", method = {RequestMethod.POST})
+    public ModelAndView searchByName(@RequestParam("query") final String query,
+                                     @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                                     @RequestParam("set") final Optional<Boolean> set,
+                                    @RequestParam("experience") final Optional<Long> experience,
+                                    Principal principal) {
+
+        final List<ExperienceModel> experienceModels = experienceService.getByName(searchForm.getQuery());
+
+        final ModelAndView mav = new ModelAndView("/search_result");
+
+        if (principal != null) {
+            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+
+            if (user.isPresent()) {
+                final long userId = user.get().getId();
+                setFav(userId, set, experience);
+                final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
+
+                mav.addObject("favExperienceModels", favExperienceModels);
+            }
+        } else {
+            mav.addObject("favExperienceModels", new ArrayList<>());
+        }
+
+//        List<ExperienceModel> currentExperiences = currentPage.getContent();
+
+        final List<Long> avgReviews = new ArrayList<>();
+        for (ExperienceModel exp : experienceModels) {
+            avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
+        }
+
+        LOGGER.debug("AVGSCORE reviewService {}", avgReviews);
+
+        mav.addObject("avgReviews", avgReviews);
+
+        mav.addObject("set", set);
+
+        mav.addObject("experience", experience);
+
+        mav.addObject("experiences", experienceModels);
+
+        mav.addObject("isEditing", false);
+
+        return mav;
+    }
 
 
     private void setFav(long userId, Optional<Boolean> set, Optional<Long> experience) {
