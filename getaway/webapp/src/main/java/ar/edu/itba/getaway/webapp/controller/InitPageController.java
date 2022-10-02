@@ -81,8 +81,6 @@ public class InitPageController {
 
 
         mav.addObject("listByCategory", listByCategory);
-
-
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("listReviewsCount", listReviewsCount);

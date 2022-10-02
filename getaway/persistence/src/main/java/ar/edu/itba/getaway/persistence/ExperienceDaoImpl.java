@@ -125,7 +125,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     //TODO: inconsistent behavior with order by avg(score)
     @Override
     public List<ExperienceModel> listByUserId(long userId, String order) {
-        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences " +
+        final String query = "SELECT * FROM experiences " +
                 " GROUP BY experiences.experienceid " + order;
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
