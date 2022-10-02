@@ -41,6 +41,7 @@ public class ExperienceController {
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.GET})
     public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,
+                                   @ModelAttribute("searchForm") final SearchForm searchForm,
                                    Principal principal,
                                    HttpServletRequest request,
                                    @RequestParam Optional<String> orderBy,
@@ -201,13 +202,15 @@ public class ExperienceController {
     @RequestMapping(value = "/experiences/{categoryName}", method = {RequestMethod.POST})
     public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName,
                                        HttpServletRequest request,
+                                       @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                        @Valid @ModelAttribute("filterForm") final FilterForm form,
                                        Principal principal,
                                        final BindingResult errors) {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
+
         if (errors.hasErrors()) {
-            return experience(categoryName, form, principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), 1);
+            return experience(categoryName, form,searchForm, principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), 1);
         }
 
         final Optional<CityModel> cityModel = locationService.getCityByName(form.getActivityCity());

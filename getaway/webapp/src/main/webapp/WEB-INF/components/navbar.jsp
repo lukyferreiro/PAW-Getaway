@@ -16,12 +16,12 @@
         <%--      </a>--%>
 
         <div>
-            <c:url value="/search_result" var="postPath"/>
-            <form:form modelAttribute="searchForm" action="${postPath}" id="searchExperienceForm" method="post"
+            <c:url value="/search_result" var="searchPostPath"/>
+            <form:form modelAttribute="searchForm" action="${searchPostPath}" id="searchExperienceForm" method="post"
                        acceptCharset="UTF-8">
                 <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
                 <form:errors path="query" element="p" cssClass="form-error-label"/>
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Busca</button>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" form="searchExperienceForm">Busca</button>
             </form:form>
         </div>
 

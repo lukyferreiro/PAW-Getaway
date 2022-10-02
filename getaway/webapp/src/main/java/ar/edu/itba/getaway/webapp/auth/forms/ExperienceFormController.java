@@ -5,6 +5,7 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
+import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-public class  ExperienceFormController {
+public class ExperienceFormController {
 
     @Autowired
     private ExperienceService experienceService;
@@ -34,7 +35,9 @@ public class  ExperienceFormController {
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif", "image/jpg");
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
-    public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form) {
+    public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form,
+                                           @ModelAttribute("searchForm") final SearchForm searchForm
+    ) {
         final ModelAndView mav = new ModelAndView("experience_form");
 
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
@@ -63,6 +66,7 @@ public class  ExperienceFormController {
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
     public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,
+                                       @ModelAttribute("searchForm") final SearchForm searchForm,
                                        final BindingResult errors,
                                        Principal principal) throws Exception {
 
@@ -70,7 +74,7 @@ public class  ExperienceFormController {
         LOGGER.debug(String.format("Category id: %d", form.getActivityCategory()));
 
         if (errors.hasErrors()) {
-            return createActivityForm(form);
+            return createActivityForm(form,searchForm);
         }
 
         final Integer categoryId = form.getActivityCategory();
@@ -89,10 +93,10 @@ public class  ExperienceFormController {
         final ExperienceModel experienceModel;
 
         final MultipartFile experienceImg = form.getActivityImg();
-        if(!experienceImg.isEmpty()) {
+        if (!experienceImg.isEmpty()) {
             if (!contentTypes.contains(experienceImg.getContentType())) {
                 errors.rejectValue("activityImg", "experienceForm.validation.imageFormat");
-                return createActivityForm(form);
+                return createActivityForm(form,searchForm);
             }
         }
 

@@ -47,7 +47,6 @@ public class SearchFormController {
                                          Principal principal) {
 
         final List<ExperienceModel> experienceModels = experienceService.getByName(searchForm.getQuery());
-
         final ModelAndView mav = new ModelAndView("search_result");
 
         if (principal != null) {
@@ -91,8 +90,8 @@ public class SearchFormController {
     public ModelAndView searchByName(@RequestParam("query") final String query,
                                      @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                      @RequestParam("set") final Optional<Boolean> set,
-                                    @RequestParam("experience") final Optional<Long> experience,
-                                    Principal principal) {
+                                     @RequestParam("experience") final Optional<Long> experience,
+                                     Principal principal) {
 
         final List<ExperienceModel> experienceModels = experienceService.getByName(searchForm.getQuery());
 
