@@ -2,7 +2,6 @@ package ar.edu.itba.getaway.webapp.config;
 
 import ar.edu.itba.getaway.webapp.auth.AntMatcherVoter;
 import ar.edu.itba.getaway.webapp.auth.CustomAccessDeniedHandler;
-//import ar.edu.itba.getaway.webapp.auth.RefererRedirectionAuthenticationSuccessHandler;
 import ar.edu.itba.getaway.webapp.auth.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +20,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
-//import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.InputStreamReader;
@@ -43,11 +41,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public AccessDeniedHandler accessDeniedHandler() {
         return new CustomAccessDeniedHandler();
     }
-
-//    @Bean
-//    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-//        return new RefererRedirectionAuthenticationSuccessHandler();
-//    }
 
     @Bean
     @Override
