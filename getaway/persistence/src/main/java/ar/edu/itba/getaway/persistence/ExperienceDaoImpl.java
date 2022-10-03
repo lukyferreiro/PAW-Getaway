@@ -173,12 +173,12 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public Integer countListByFilter(long categoryId, Double max, long score, Long city) {
         if (city > 0){
             return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityId = ?" +
-                            "HAVING AVG(COALESCE(score,0))>=?",
+                            " HAVING AVG(COALESCE(score,0))>=?",
                     new Object[]{categoryId, max, city, score}, Integer.class);
         }
         else {
             return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? " +
-                            "HAVING AVG(COALESCE(score,0))>=?",
+                            " HAVING AVG(COALESCE(score,0))>=?",
                     new Object[]{categoryId, max, score}, Integer.class);
         }
     }
