@@ -53,7 +53,13 @@
 }
 
 .btn-category:focus {
+    border-color: black;
+    color: black;
+}
+
+.isActive {
     border-color: var(--primary-color);
+    background-color: rgba(255, 197, 132, 0.5);
     color: black;
 }
 

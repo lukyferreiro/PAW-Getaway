@@ -40,17 +40,6 @@ public class InitPageController {
                              @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("mainPage");
 
-        final List<ExperienceModel> experienceList = experienceService.listAll("");
-
-        final List<Long> avgReviews = new ArrayList<>();
-        final List<Integer> listReviewsCount = new ArrayList<>();
-        for (ExperienceModel exp : experienceList) {
-            avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
-            listReviewsCount.add(reviewService.getReviewCount(exp.getExperienceId()));
-        }
-
-        LOGGER.debug("Size of avgReviews {}", avgReviews.size());
-
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
 
@@ -69,18 +58,26 @@ public class InitPageController {
 
         }
 
-        List<List<ExperienceModel>> listByCategory = new ArrayList<>();
+        final List<List<Long>> avgReviews = new ArrayList<>();
+        final List<List<Integer>> listReviewsCount = new ArrayList<>();
+        final List<List<ExperienceModel>> listByCategory = new ArrayList<>();
+
         for(int i=0 ; i<=5 ; i++){
             listByCategory.add(new ArrayList<>());
+            avgReviews.add(new ArrayList<>());
+            listReviewsCount.add(new ArrayList<>());
+
             listByCategory.get(i).addAll(experienceService.listByBestRanked(i + 1));
+
+            for(ExperienceModel experienceModel : listByCategory.get(i)){
+                avgReviews.get(i).add(reviewService.getAverageScore(experienceModel.getExperienceId()));
+                listReviewsCount.get(i).add(reviewService.getReviewCount(experienceModel.getExperienceId()));
+            }
         }
 
-
         mav.addObject("listByCategory", listByCategory);
-        mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("listReviewsCount", listReviewsCount);
-        mav.addObject("isEditing", false);
 
         return mav;
     }

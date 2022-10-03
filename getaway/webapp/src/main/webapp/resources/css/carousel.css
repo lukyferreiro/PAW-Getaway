@@ -1,11 +1,6 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-.carousel-item{
-    margin: 3%;
+.row{
+    margin: 1%;
+    justify-content: space-around;
 }
 
 .nav button {
@@ -20,47 +15,3 @@
     cursor: pointer;
     background-color: #FAB672;
 }
-.nav .prev {
-    left: -30px;
-    display: block;
-}
-
-.nav .next {
-    right: -30px;
-    display: block;
-}
-/*.carousel-item{*/
-/*    margin: 3%;*/
-/*}*/
-
-/*.nav button {*/
-/*    position: absolute;*/
-/*    top: 50%;*/
-/*    transform: translatey(-50%);*/
-/*    width: 60px;*/
-/*    height: 60px;*/
-/*    border-radius: 50%;*/
-/*    outline: none;*/
-/*    border: 1px solid #000;*/
-/*    cursor: pointer;*/
-/*    background-color: #FAB672;*/
-/*}*/
-/*.nav .prev {*/
-/*    left: -30px;*/
-/*    display: block;*/
-/*}*/
-
-/*.nav .next {*/
-/*    right: -30px;*/
-/*    display: block;*/
-/*}*/
-
-/*.carousel-inner {*/
-/*    display: flex;*/
-/*    flex-direction: row;*/
-/*    flex-wrap: nowrap;*/
-/*}*/
-
-/*.carousel-item.active {*/
-/*    flex: 1;*/
-/*}*/
