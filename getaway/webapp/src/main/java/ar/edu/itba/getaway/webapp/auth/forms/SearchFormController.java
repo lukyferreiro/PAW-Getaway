@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -45,11 +46,17 @@ public class SearchFormController {
     public ModelAndView createSearchForm(@ModelAttribute("searchForm") final SearchForm searchForm,
                                          @RequestParam("set") final Optional<Boolean> set,
                                          @RequestParam("experience") final Optional<Long> experience,
+                                         @RequestParam Optional<String> query,
                                          @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum,
-                                         Principal principal) {
+                                         Principal principal,
+                                         HttpServletRequest request) {
 
         final Page<ExperienceModel> currentPage = experienceService.getByName(searchForm.getQuery(), pageNum);
         final ModelAndView mav = new ModelAndView("search_result");
+
+        LOGGER.debug("Pagination");
+        LOGGER.debug("CurrentPage {}", currentPage.getCurrentPage());
+        LOGGER.debug("TotalPages {}", currentPage.getMaxPage());
 
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
@@ -73,6 +80,13 @@ public class SearchFormController {
             avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
         }
 
+        if(query.isPresent()){
+            request.setAttribute("query", query);
+            mav.addObject("query", query.get());
+        }
+
+        mav.addObject("currentPage", currentPage.getCurrentPage());
+        mav.addObject("totalPages", currentPage.getMaxPage());
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("set", set);
         mav.addObject("experience", experience);
@@ -88,14 +102,16 @@ public class SearchFormController {
                                      @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                      @RequestParam("set") final Optional<Boolean> set,
                                      @RequestParam("experience") final Optional<Long> experience,
+                                     @RequestParam Optional<String> query,
                                      @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum,
                                      final BindingResult errors,
-                                     Principal principal) {
+                                     Principal principal,
+                                     HttpServletRequest request) {
 
         final ModelAndView mav = new ModelAndView("/search_result");
 
         if (errors.hasErrors()) {
-            return createSearchForm(searchForm,set,experience,pageNum,principal);
+            return createSearchForm(searchForm,set,experience,query,pageNum,principal,request);
         }
 
         if (principal != null) {
@@ -122,8 +138,13 @@ public class SearchFormController {
             avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
         }
 
-        LOGGER.debug("AVGSCORE reviewService {}", avgReviews);
+        if(query.isPresent()){
+            request.setAttribute("query", query);
+            mav.addObject("query", query.get());
+        }
 
+        mav.addObject("currentPage", currentPage.getCurrentPage());
+        mav.addObject("totalPages", currentPage.getMaxPage());
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("set", set);
         mav.addObject("experience", experience);

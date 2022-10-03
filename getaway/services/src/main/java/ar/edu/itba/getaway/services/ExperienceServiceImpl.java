@@ -25,7 +25,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     //TODO: limit page number to total_pages amount
     private static final int PAGE_SIZE = 6;
-    private static final int RESULT_PAGE_SIZE = 9;
+    private static final int RESULT_PAGE_SIZE = 3;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 
