@@ -45,7 +45,7 @@ public class ExperienceFormController {
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form,
-                                           @ModelAttribute("searchForm") final SearchForm searchForm
+                                           @Valid @ModelAttribute("searchForm") final SearchForm searchForm
     ) {
         final ModelAndView mav = new ModelAndView("experience_form");
 
@@ -75,7 +75,7 @@ public class ExperienceFormController {
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
     public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,
-                                       @ModelAttribute("searchForm") final SearchForm searchForm,
+                                       @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                        final BindingResult errors,
                                        Principal principal,
                                        HttpServletRequest request) throws Exception {

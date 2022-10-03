@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class InitPageController {
     public ModelAndView init(Principal principal,
                              @RequestParam Optional<Long> experience,
                              @RequestParam Optional<Boolean> set,
-                             @ModelAttribute("searchForm") final SearchForm searchForm) {
+                             @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("mainPage");
 
         if (principal != null) {

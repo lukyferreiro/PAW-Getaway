@@ -52,8 +52,8 @@ public class UserExperiencesController {
     public ModelAndView favourites(Principal principal,
                                    @RequestParam Optional<OrderByModel> orderBy,
                                    @RequestParam Optional<Long> experience,
-                                   @RequestParam Optional<Boolean> set
-                                    ,@ModelAttribute("searchForm") final SearchForm searchForm){
+                                   @RequestParam Optional<Boolean> set,
+                                   @Valid @ModelAttribute("searchForm") final SearchForm searchForm){
         final ModelAndView mav = new ModelAndView("user_favourites");
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
@@ -86,7 +86,8 @@ public class UserExperiencesController {
     public ModelAndView experience(Principal principal,
                                    @RequestParam Optional<OrderByModel> orderBy,
                                    @RequestParam Optional<Long> experience,
-                                   @RequestParam Optional<Boolean> set) {
+                                   @RequestParam Optional<Boolean> set,
+                                   @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("user_experiences");
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);

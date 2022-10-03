@@ -43,7 +43,7 @@ public class ExperienceController {
     @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.GET})
     public ModelAndView experienceGet(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,
-                                   @ModelAttribute("searchForm") final SearchForm searchForm,
+                                   @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                    Principal principal,
                                    HttpServletRequest request,
                                    @RequestParam Optional<OrderByModel> orderBy,
@@ -134,19 +134,7 @@ public class ExperienceController {
         }
         request.setAttribute("pageNum", pageNum);
 
-//        // Http Query
-//        StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
-//        String queryString = request.getQueryString();
-//        String path;
-////
-//        if (queryString == null) {
-//            path = requestURL.append("?").toString();
-//        } else {
-//            path = requestURL.append('?').append(queryString).append("&").toString();
-//        }
-//
-//        // mav info
-
+        // mav info
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
@@ -170,9 +158,8 @@ public class ExperienceController {
                                        final BindingResult errors) {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
-
         if (errors.hasErrors()) {
-            return experienceGet(categoryName, form, searchForm,principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
+            return experienceGet(categoryName, form, searchForm, principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
         }
 
         final Optional<CityModel> cityModel = locationService.getCityByName(form.getActivityCity());
@@ -199,7 +186,7 @@ public class ExperienceController {
                                        @PathVariable("categoryName") final String categoryName,
                                        @PathVariable("experienceId") final long experienceId,
                                        @RequestParam Optional<Boolean> set,
-                                       @ModelAttribute("searchForm") final SearchForm searchForm) {
+                                       @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("experience_details");
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
