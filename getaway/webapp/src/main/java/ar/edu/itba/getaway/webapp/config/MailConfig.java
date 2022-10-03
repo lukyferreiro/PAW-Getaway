@@ -64,6 +64,7 @@ public class MailConfig implements EnvironmentAware {
         return messageSource;
     }
 
+    //https://www.baeldung.com/spring-thymeleaf-template-directory
     @Bean
     public TemplateEngine emailTemplateEngine() {
         final SpringTemplateEngine templateEngine = new SpringTemplateEngine();

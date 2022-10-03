@@ -1,7 +1,7 @@
 * {
     font-family: "Cambria", sans-serif;
     --primary-color: #F99D32;
-    --secondary-color: #FFC584;
+    --secondary-color: rgb(255, 197, 132);
     --third-color: #FAB672;
     --background-color: rgba(250, 182, 114, 0.25);
 }
