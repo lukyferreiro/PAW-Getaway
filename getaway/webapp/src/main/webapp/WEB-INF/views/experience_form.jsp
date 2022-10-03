@@ -60,7 +60,7 @@
                      <div class="col m-2"> <!--Precio-->
                         <form:label path="activityPrice" class="form-label">
                            <spring:message code="experienceForm.activityPrice"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
+                           <span class="optional-text"><spring:message code="inputField.optional"/></span>
                         </form:label>
                         <form:input path="activityPrice" type="text" class="form-control" id="experienceFormPriceInput"
                                     cssErrorClass="form-control is-invalid" placeholder="0"/>
@@ -71,7 +71,7 @@
                   <div class="p-0 m-2 d-flex flex-column"> <!--Descripcion-->
                      <form:label path="activityInfo" class="form-label">
                         <spring:message code="experienceForm.activityInfo"/>
-                        <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
+                        <span class="optional-text"><spring:message code="inputField.optional"/></span>
                      </form:label>
                      <form:textarea path="activityInfo" class="form-control" cssErrorClass="form-control is-invalid" rows="4" cssStyle="max-height: 300px;"/>
                      <form:errors path="activityInfo" element="p" cssClass="form-error-label"/>
@@ -90,7 +90,7 @@
                      <div class="col m-2"> <!--Url-->
                         <form:label path="activityUrl" class="form-label">
                            <spring:message code="experienceForm.activityUrl"/>
-                           <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
+                           <span class="optional-text"><spring:message code="inputField.optional"/></span>
                         </form:label>
                         <form:input path="activityUrl" id="experienceFormUrlInput" type="text"
                                     cssErrorClass="form-control is-invalid" class="form-control" placeholder="${urlExample}"/>
@@ -146,7 +146,7 @@
                   <div class="p-0 m-2 d-flex flex-column"> <!--Imagenes-->
                      <form:label path="activityImg" class="form-label">
                         <spring:message code="experienceForm.activityImg"/>
-                        <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
+                        <span class="optional-text"><spring:message code="inputField.optional"/></span>
                      </form:label>
                      <form:input path="activityImg" type="file" class="form-control" cssErrorClass="form-control is-invalid"/>
                      <form:errors path="activityImg" element="p" cssClass="form-error-label"/>

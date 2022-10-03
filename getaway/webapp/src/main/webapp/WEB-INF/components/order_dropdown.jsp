@@ -10,10 +10,10 @@
    <c:forEach var="orderBy" items="${orderByModels}">
       <a class="dropdown-item" href="
          <c:url value="${param.path}">
-            <c:param name = "orderBy" value = "${orderBy}"/>
-               <c:param name = "score" value = "${param.score}"/>
-               <c:param name = "cityId" value = "${param.cityId}"/>
-               <c:param name = "maxPrice" value = "${param.maxPrice}"/>
+            <c:param name="orderBy" value="${orderBy}"/>
+               <c:param name="score" value="${param.score}"/>
+               <c:param name="cityId" value="${param.cityId}"/>
+               <c:param name="maxPrice" value="${param.maxPrice}"/>
          </c:url>">
          <spring:message code="order.${orderBy.toString()}"/>
       </a>

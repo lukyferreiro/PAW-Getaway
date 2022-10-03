@@ -49,7 +49,7 @@ public class WebAuthController {
         Long code = Long.valueOf(HttpStatus.FORBIDDEN.toString());
         final ModelAndView mav = new ModelAndView("errors");
 
-        mav.addObject("errors", error);
+        mav.addObject("description", error);
         mav.addObject("code", code);
         return mav;
     }
