@@ -45,10 +45,12 @@
                            <c:forEach var="category" items="${categories}">
                               <c:choose>
                                  <c:when test="${formCategory != null && category.ordinal() == formCategory-1}">
-                                    <option selected value="${category.ordinal()}"><spring:message code="experienceForm.${category.toString()}"/></option>
+                                    <option selected value="${category.ordinal()}">
+                                       <spring:message code="experienceForm.${category.toString()}"/></option>
                                  </c:when>
                                  <c:otherwise>
-                                    <option value="${category.ordinal()}"><spring:message code="experienceForm.${category.toString()}"/></option>
+                                    <option value="${category.ordinal()}">
+                                       <spring:message code="experienceForm.${category.toString()}"/></option>
                                  </c:otherwise>
                               </c:choose>
                            </c:forEach>

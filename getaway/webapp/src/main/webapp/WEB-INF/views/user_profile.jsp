@@ -39,11 +39,22 @@
                </div>
 
                <div class="mb-2">
-                  <a href="<c:url value="/user/profile/edit"/>">
-                     <button type="button" class="btn btn-error">
-                        <spring:message code="profile.editBtn"/>
-                     </button>
-                  </a>
+                  <c:choose>
+                     <c:when test="${loggedUser.hasRole('VERIFIED')}">
+                        <a href="<c:url value="/user/profile/edit"/>">
+                           <button type="button" class="btn btn-error">
+                              <spring:message code="profile.editBtn"/>
+                           </button>
+                        </a>
+                     </c:when>
+                     <c:otherwise>
+                        <a href="<c:url value="/user/verifyAccount/status/resend"/>">
+                           <button type="button" class="btn btn-error">
+                              <spring:message code="profile.verifyAccountBtn"/>
+                           </button>
+                        </a>
+                     </c:otherwise>
+                  </c:choose>
                </div>
             </div>
          </div>

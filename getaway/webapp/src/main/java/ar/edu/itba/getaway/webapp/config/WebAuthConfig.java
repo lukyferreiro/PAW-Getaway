@@ -99,10 +99,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/user/resetPassword").anonymous()
                 //User profile
                 .antMatchers(HttpMethod.GET,"/user/profile").authenticated()
-                .antMatchers(HttpMethod.GET,"/user/profile/edit").authenticated()
-                .antMatchers(HttpMethod.POST,"/user/profile/edit").authenticated()
+                .antMatchers(HttpMethod.GET,"/user/profile/edit").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.POST,"/user/profile/edit").hasRole("VERIFIED")
                 .antMatchers(HttpMethod.GET,"/user/experiences").hasRole("PROVIDER")
                 .antMatchers(HttpMethod.GET,"/user/favourites").authenticated()
+                .antMatchers(HttpMethod.GET,"/user/reviews").authenticated()
                 .antMatchers("/user/profileImage/{imageId:[0-9]+}").permitAll()
 //              ------------------------------SE USA @PreAuthorize-------------------------------
 //                .antMatchers(HttpMethod.GET,"/user/experiences/delete/{experienceId:[0-9]+").access("...")

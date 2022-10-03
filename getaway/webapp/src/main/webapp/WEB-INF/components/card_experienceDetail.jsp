@@ -12,8 +12,7 @@
          <jsp:include page="/WEB-INF/components/fav.jsp">
             <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
             <jsp:param name="experienceId" value="${param.id}"/>
-            <jsp:param name="urlFalse" value="/experiences/${param.categoryName}/${param.id}?set=${false}"/>
-            <jsp:param name="urlTrue" value="/experiences/${param.categoryName}/${param.id}?set=${true}"/>
+            <jsp:param name="path" value="${param.path}"/>
          </jsp:include>
       </c:if>
    </div>
@@ -26,7 +25,7 @@
             </c:when>
             <c:otherwise>
                <img class="container-fluid p-0" style="height: fit-content" alt="Imagen ${param.experienceCategoryName}"
-                    src="<c:url value="/resources/images/${param.experienceCategoryName}.jpg" />" >
+                    src="<c:url value="/resources/images/${param.experienceCategoryName}.jpg" />">
             </c:otherwise>
          </c:choose>
       </div>

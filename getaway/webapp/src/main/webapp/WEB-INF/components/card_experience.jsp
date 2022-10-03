@@ -10,8 +10,7 @@
          <jsp:include page="/WEB-INF/components/fav.jsp">
             <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
             <jsp:param name="experienceId" value="${param.id}"/>
-            <jsp:param name="urlFalse" value="${param.favUrlFalse}"/>
-            <jsp:param name="urlTrue" value="${param.favUrlTrue}"/>
+            <jsp:param name="path" value="${param.path}"/>
          </jsp:include>
       </div>
    </c:if>
@@ -60,7 +59,7 @@
       </div>
 
       <c:if test="${param.isEditing}">
-         <div class="btn-group card-body container-fluid p-2 d-flex align-items-end" role="group">
+         <div class="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
             <a href="<c:url value="/user/experiences/edit/${param.id}"/>">
                <button type="button" class="btn btn-pencil" style="font-size: x-large">
                   <i class="bi bi-pencil"></i>

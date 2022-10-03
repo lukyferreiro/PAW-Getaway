@@ -42,9 +42,13 @@
          <h2 class="m-0 align-self-center" style="font-size: x-large">
             <c:out value="${param.title}"/>
          </h2>
-         <h6 style="font-size: medium">
+         <h6 style="font-size: medium" id="reviewDescription">
             <c:out value="${param.description}"/>
          </h6>
+         <script>
+             let reviewDescription = document.getElementById('reviewDescription').innerHTML
+             reviewDescription = marked.parse(reviewDescription);
+         </script>
       </div>
    </div>
 

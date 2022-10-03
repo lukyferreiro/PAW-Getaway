@@ -54,18 +54,12 @@ public class InitPageController {
 
             if (user.isPresent()) {
                 final long userId = user.get().getId();
-                List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
 
-                if (set.isPresent() && experience.isPresent()) {
-                    if (set.get()) {
-                        if (!favExperienceModels.contains(experience.get()))
-                            favExperienceService.create(userId, experience.get());
-                    } else {
-                        favExperienceService.delete(userId, experience.get());
-                    }
+                if(set.isPresent()){
+                    favExperienceService.setFav(userId, set, experience);
                 }
 
-                favExperienceModels = favExperienceService.listByUserId(userId);
+                List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
                 mav.addObject("favExperienceModels", favExperienceModels);
             } else {
                 mav.addObject("favExperienceModels", new ArrayList<>());
@@ -81,8 +75,6 @@ public class InitPageController {
 
 
         mav.addObject("listByCategory", listByCategory);
-
-
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("listReviewsCount", listReviewsCount);

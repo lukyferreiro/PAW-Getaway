@@ -16,9 +16,9 @@
          <div class="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
             <c:choose>
                <c:when test="${experiences.size() == 0}">
-               <div class="d-flex justify-content-around align-content-center">
-                  <h2 class="title"><spring:message code="experience.notExist"/></h2>
-               </div>
+                  <div class="d-flex justify-content-around align-content-center">
+                     <h2 class="title"><spring:message code="experience.notExist"/></h2>
+                  </div>
                </c:when>
                <c:otherwise>
                   <div class="d-flex justify-content-center align-content-center">
@@ -43,8 +43,7 @@
                            <jsp:param name="address" value="${experience.address}"/>
                            <jsp:param name="price" value="${experience.price}"/>
                            <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
-                           <jsp:param name="favUrlFalse" value="/user/experiences?experience=${experience.experienceId}&set=${false}"/>
-                           <jsp:param name="favUrlTrue" value="/user/experiences?experience=${experience.experienceId}&set=${true}"/>
+                           <jsp:param name="path" value="/user/experiences"/>
                            <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
                            <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
                            <jsp:param name="isEditing" value="${isEditing}"/>

@@ -29,6 +29,7 @@
                <jsp:param name="hasImage" value="${experience.hasImage}"/>
                <jsp:param name="reviewAvg" value="${reviewAvg}"/>
                <jsp:param name="reviewCount" value="${reviewCount}"/>
+               <jsp:param name="path" value="/experiences/${categoryName}/${experience.experienceId}"/>
             </jsp:include>
 
             <!-- --------------RESEÑAS-------------- -->
@@ -78,9 +79,5 @@
       </div>
 
       <%@ include file="../components/includes/bottomScripts.jsp" %>
-      <script>
-<%--         <%@ include file="../../resources/js/experienceDetails.js" %>--%>
-         <%@ include file="../../resources/js/review.js" %>
-      </script>
    </body>
 </html>
