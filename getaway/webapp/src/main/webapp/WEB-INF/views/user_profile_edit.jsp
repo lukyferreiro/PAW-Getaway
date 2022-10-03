@@ -13,9 +13,9 @@
       <div class="container-main">
          <%@ include file="../components/navbar.jsp" %>
 
-          <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
-              <div class="container-lg w-100 p-2 smallContentContainer">
-                  <div class="row w-100 m-0 p-4 align-items-center justify-content-center">
+         <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
+            <div class="container-lg w-100 p-2 modalContainer">
+               <div class="row w-100 m-0 p-4 align-items-center justify-content-center">
                   <div class="col-12">
                      <h1 class="text-center title"><spring:message code="editProfile.title"/></h1>
                   </div>
@@ -24,7 +24,7 @@
                         <div class="row">
                            <c:url value="/user/profile/edit" var="postPath"/>
                            <form:form modelAttribute="registerForm" action="${postPath}" id="registerForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
-                              <div class="form-group"> <!--Email-->
+                              <div class="form-group my-2"> <!--Email-->
                                  <spring:message code="registerForm.email.placeholder" var="emailPlaceholder"/>
                                  <form:label path="email" class="form-label">
                                     <spring:message code="registerForm.email.title"/><span class="required-field">*</span>
@@ -34,7 +34,7 @@
                                  <form:errors path="email" cssClass="form-error-label" element="p"/>
                               </div>
 
-                              <div class="form-group"> <!--Nombre-->
+                              <div class="form-group my-2"> <!--Nombre-->
                                  <spring:message code="registerForm.surname.placeholder" var="namePlaceholder"/>
                                  <form:label path="name" class="form-label">
                                     <spring:message code="registerForm.name.title"/><span class="required-field">*</span>
@@ -44,7 +44,7 @@
                                  <form:errors path="name" cssClass="form-error-label" element="p"/>
                               </div>
 
-                              <div class="form-group"> <!--Apellido-->
+                              <div class="form-group my-2"> <!--Apellido-->
                                  <spring:message code="registerForm.surname.placeholder" var="surnamePlaceholder"/>
                                  <form:label path="surname" class="form-label">
                                     <spring:message code="registerForm.surname.title"/><span class="required-field">*</span>
@@ -91,7 +91,7 @@
                               <%--                                        <form:errors path="confirmPassword" cssClass="form-error-label" element="p"/>--%>
                               <%--                                    </div>--%>
 
-                              <div class="p-0 m-2 d-flex flex-column"> <!--Imagenes-->
+                              <div class="form-group my-2"> <!--Imagenes-->
                                  <form:label path="profileImg" class="form-label">
                                     <spring:message code="registerForm.addProfileImage"/>
                                     <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
@@ -100,7 +100,7 @@
                                  <form:errors path="profileImg" element="p" cssClass="form-error-label"/>
                               </div>
 
-                              <div class="form-group">
+                              <div class="form-group my-2">
                                  <spring:hasBindErrors name="registerForm">
                                     <c:if test="${errors.globalErrorCount > 0}">
                                        <div class="alert alert-danger"><form:errors/></div>

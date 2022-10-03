@@ -9,6 +9,7 @@ import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -49,36 +50,33 @@ public class UserExperiencesController {
 
     @RequestMapping(value = "/user/favourites")
     public ModelAndView favourites(Principal principal,
-                                   @RequestParam Optional<String> direction,
-                                   @RequestParam Optional<String> orderBy,
+                                   @RequestParam Optional<OrderByModel> orderBy,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set
                                     ,@ModelAttribute("searchForm") final SearchForm searchForm){
         final ModelAndView mav = new ModelAndView("user_favourites");
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        setFav(user.getId(), set, experience);
+
+        favExperienceService.setFav(user.getId(), set, experience);
         final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
         mav.addObject("favExperienceModels", favExperienceModels);
 
         final OrderByModel[] orderByModels = OrderByModel.values();
 
-        //TODO NO ME TRAE LAS FAVORITAS
-        List<ExperienceModel> experienceList = new ArrayList<>();
-        String order = "";
-        if (orderBy.isPresent())
-            order = " ORDER BY " + orderBy.get() + " " +direction.get();
-
-        experienceList = experienceService.listAll(order);
+        List<ExperienceModel> experienceList = experienceService.listFavsByUserId(user.getId(), orderBy);
 
         final List<Long> avgReviews = new ArrayList<>();
+        final List<Integer> listReviewsCount = new ArrayList<>();
         for (ExperienceModel exp : experienceList) {
             avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
+            listReviewsCount.add(reviewService.getReviewCount(exp.getExperienceId()));
         }
 
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
+        mav.addObject("listReviewsCount", listReviewsCount);
         mav.addObject("isEditing", false);
 
         return mav;
@@ -86,45 +84,42 @@ public class UserExperiencesController {
 
     @RequestMapping(value = "/user/experiences")
     public ModelAndView experience(Principal principal,
-                                   @RequestParam Optional<String> direction,
-                                   @RequestParam Optional<String> orderBy,
+                                   @RequestParam Optional<OrderByModel> orderBy,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set) {
         final ModelAndView mav = new ModelAndView("user_experiences");
 
-        final OrderByModel[] orderByModels = OrderByModel.values();
-
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
-        setFav(user.getId(), set, experience);
+        favExperienceService.setFav(user.getId(), set, experience);
         final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
         mav.addObject("favExperienceModels", favExperienceModels);
 
-        List<ExperienceModel> experienceList = new ArrayList<>();
+        final OrderByModel[] orderByModels = OrderByModel.values();
 
-        String order = "";
-        if (orderBy.isPresent())
-            order = " ORDER BY " +orderBy.get() + " " +direction.get();
-
-        experienceList = experienceService.listByUserId(user.getId(), order);
-
+        List<ExperienceModel> experienceList = experienceService.listByUserId(user.getId(), orderBy);
 
         final List<Long> avgReviews = new ArrayList<>();
+        final List<Integer> listReviewsCount = new ArrayList<>();
         for (ExperienceModel exp : experienceList) {
             avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
+            listReviewsCount.add(reviewService.getReviewCount(exp.getExperienceId()));
         }
 
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);
+        mav.addObject("listReviewsCount", listReviewsCount);
         mav.addObject("isEditing", true);
 
         return mav;
     }
 
-    @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.GET})
+    @PreAuthorize("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
+    @RequestMapping(value = "/user/experiences/delete/{experienceId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
-                                         @ModelAttribute("deleteForm") final DeleteForm form) {
+                                         @ModelAttribute("deleteForm") final DeleteForm form,
+                                         Principal principal) {
         final ModelAndView mav = new ModelAndView("deleteExperience");
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
 
@@ -132,34 +127,32 @@ public class UserExperiencesController {
         return mav;
     }
 
-    @RequestMapping(value = "/user/experiences/delete/{experienceId}", method = {RequestMethod.POST})
+    @PreAuthorize("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
+    @RequestMapping(value = "/user/experiences/delete/{experienceId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView experienceDeletePost(@PathVariable(value = "experienceId") final long experienceId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,
-                                             final BindingResult errors) {
+                                             final BindingResult errors,
+                                             Principal principal) {
         if (errors.hasErrors()) {
-            return experienceDelete(experienceId, form);
+            return experienceDelete(experienceId, form, principal);
         }
 
         experienceService.delete(experienceId);
         return new ModelAndView("redirect:/user/experiences");
     }
 
-    @RequestMapping(value = "/user/experiences/edit/{experienceId}", method = {RequestMethod.GET})
+    @PreAuthorize("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
+    @RequestMapping(value = "/user/experiences/edit/{experienceId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView experienceEdit(@PathVariable("experienceId") final long experienceId,
                                        @ModelAttribute("experienceForm") final ExperienceForm form) {
 
         final ModelAndView mav = new ModelAndView("experience_form");
 
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
-//        final List<String> categories = new ArrayList<>();
-////        for (ExperienceCategory categoryModel : categoryModels) {
-////            categories.add(categoryModel.getName());
-////        }
-
         final String country = locationService.getCountryByName("Argentina").get().getName();
         final List<CityModel> cityModels = locationService.listAllCities();
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final CityModel city = locationService.getCityById(experience.getCityId()).orElseThrow(CityNotFoundException::new);
+        final CityModel city = locationService.getCityById(experience.getCityId()).get();
         final String cityName = city.getName();
 
         //TODO no se como hacer para detectar que la primera vez que entro a la edicion
@@ -202,7 +195,8 @@ public class UserExperiencesController {
         return mav;
     }
 
-    @RequestMapping(value = "/user/experiences/edit/{experienceId}", method = {RequestMethod.POST})
+    @PreAuthorize("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
+    @RequestMapping(value = "/user/experiences/edit/{experienceId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView experienceEditPost(@PathVariable(value="experienceId") final long experienceId,
                                            @Valid @ModelAttribute("experienceForm") final ExperienceForm form,
                                            final BindingResult errors) throws IOException {
@@ -210,9 +204,9 @@ public class UserExperiencesController {
             return experienceEdit(experienceId, form);
         }
 
-        long categoryId = form.getActivityCategory();
+        final long categoryId = form.getActivityCategory();
 
-        final CityModel city = locationService.getCityByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
+        final CityModel city = locationService.getCityByName(form.getActivityCity()).get();
         final Long cityId = city.getId();
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
@@ -242,19 +236,4 @@ public class UserExperiencesController {
 
         return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
     }
-
-
-    private void setFav(long userId, Optional<Boolean> set, Optional<Long> experience){
-        final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
-
-        if (set.isPresent() && experience.isPresent()) {
-            if (set.get()) {
-                if (!favExperienceModels.contains(experience.get()))
-                    favExperienceService.create(userId, experience.get());
-            } else {
-                favExperienceService.delete(userId, experience.get());
-            }
-        }
-    }
-
 }

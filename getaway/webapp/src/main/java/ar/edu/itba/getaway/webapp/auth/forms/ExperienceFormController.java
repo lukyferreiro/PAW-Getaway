@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.webapp.auth.forms;
 
-import ar.edu.itba.getaway.exceptions.CityNotFoundException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.UserNotFoundException;
@@ -9,16 +8,26 @@ import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ExperienceFormController {
@@ -68,7 +77,8 @@ public class ExperienceFormController {
     public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,
                                        @ModelAttribute("searchForm") final SearchForm searchForm,
                                        final BindingResult errors,
-                                       Principal principal) throws Exception {
+                                       Principal principal,
+                                       HttpServletRequest request) throws Exception {
 
         LOGGER.debug("Entro a create_experience");
         LOGGER.debug(String.format("Category id: %d", form.getActivityCategory()));
@@ -82,7 +92,7 @@ public class ExperienceFormController {
 //            throw new CategoryNotFoundException();
 //        }
 
-        final CityModel cityModel = locationService.getCityByName(form.getActivityCity()).orElseThrow(CityNotFoundException::new);
+        final CityModel cityModel = locationService.getCityByName(form.getActivityCity()).get();
         final Long cityId = cityModel.getId();
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
@@ -104,8 +114,33 @@ public class ExperienceFormController {
 
         experienceModel = experienceService.create(form.getActivityName(), form.getActivityAddress(), description,
                 form.getActivityMail(), url, price, cityId, categoryId + 1, userId, image);
+        if(!user.hasRole("PROVIDER")){
+            forceLogin(user, request);
+        }
 
         return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
+    }
+
+
+    //This method is used to update the SpringContextHolder
+    //https://stackoverflow.com/questions/9910252/how-to-reload-authorities-on-user-update-with-spring-security
+    private void forceLogin(UserModel user, HttpServletRequest request) {
+        //generate authentication
+        final PreAuthenticatedAuthenticationToken token =
+                new PreAuthenticatedAuthenticationToken(user.getEmail(), user.getPassword(), getAuthorities(user.getRoles()));
+
+        token.setDetails(new WebAuthenticationDetails(request));
+
+        final SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(token);
+
+        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+    }
+
+    private Collection<? extends GrantedAuthority> getAuthorities(Collection<Roles> roles) {
+        return roles.stream()
+                .map((role) -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                .collect(Collectors.toList());
     }
 
 }

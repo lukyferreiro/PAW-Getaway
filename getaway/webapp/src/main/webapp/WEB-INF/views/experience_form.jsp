@@ -45,10 +45,12 @@
                            <c:forEach var="category" items="${categories}">
                               <c:choose>
                                  <c:when test="${formCategory != null && category.ordinal() == formCategory-1}">
-                                    <option selected value="${category.ordinal()}"><spring:message code="experienceForm.${category.toString()}"/></option>
+                                    <option selected value="${category.ordinal()}">
+                                       <spring:message code="experienceForm.${category.toString()}"/></option>
                                  </c:when>
                                  <c:otherwise>
-                                    <option value="${category.ordinal()}"><spring:message code="experienceForm.${category.toString()}"/></option>
+                                    <option value="${category.ordinal()}">
+                                       <spring:message code="experienceForm.${category.toString()}"/></option>
                                  </c:otherwise>
                               </c:choose>
                            </c:forEach>
@@ -71,7 +73,7 @@
                         <spring:message code="experienceForm.activityInfo"/>
                         <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
                      </form:label>
-                     <form:textarea path="activityInfo" class="form-control" cssErrorClass="form-control is-invalid" rows="4"/>
+                     <form:textarea path="activityInfo" class="form-control" cssErrorClass="form-control is-invalid" rows="4" cssStyle="max-height: 300px;"/>
                      <form:errors path="activityInfo" element="p" cssClass="form-error-label"/>
                   </div>
 

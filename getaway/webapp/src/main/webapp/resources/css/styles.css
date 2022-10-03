@@ -23,7 +23,7 @@
     flex-direction: column;
 }
 
-.smallContentContainer {
+.modalContainer {
     border-radius: 20px;
     border: 1px solid var(--primary-color);
     background-color: whitesmoke;
@@ -32,6 +32,21 @@
 
 .container-experiences {
     flex: 5;
+}
+
+.card{
+    border: 1.5px solid black;
+}
+
+.page-link, .page-link:hover, .page-link:focus {
+    color: var(--primary-color);
+    --bs-btn-focus-shadow-rgb: none;
+}
+
+.current-page-link {
+    background-color: var(--secondary-color);
+    font-weight: 600 !important;
+    color: black !important;
 }
 
 /*-------------------------------------*/

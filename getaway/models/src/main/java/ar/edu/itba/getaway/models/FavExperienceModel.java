@@ -15,4 +15,16 @@ public class FavExperienceModel {
     public long getExperienceId() {
         return experienceId;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+        if (!(o instanceof FavExperienceModel)){
+            return false;
+        }
+        FavExperienceModel other = (FavExperienceModel) o;
+        return this.experienceId == other.experienceId && this.userId == other.userId;
+    }
 }

@@ -16,7 +16,7 @@ import java.util.*;
 public class CategoryDaoImpl implements CategoryDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private final SimpleJdbcInsert jdbcInsert;
+//    private final SimpleJdbcInsert jdbcInsert;
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryDaoImpl.class);
 
     private static final RowMapper<CategoryModel> CATEGORY_MODEL_ROW_MAPPER = (rs, rowNum) ->
@@ -26,9 +26,9 @@ public class CategoryDaoImpl implements CategoryDao {
     @Autowired
     public CategoryDaoImpl(final DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);
-        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("categories")
-                .usingGeneratedKeyColumns("categoryId");
+//        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+//                .withTableName("categories")
+//                .usingGeneratedKeyColumns("categoryId");
     }
 
     @Override

@@ -26,7 +26,8 @@
                      <form:select path="activityCity" class="form-select">
                         <option disabled selected value><spring:message code="filters.city.placeholder"/></option>
                         <c:forEach var="city" items="${cities}">
-                           <option <c:if test="${city.id == cityId}"> selected </c:if> ><c:out value="${city.name}"/></option>
+                           <option <c:if test="${city.id == cityId}"> selected </c:if> >
+                              <c:out value="${city.name}"/></option>
                         </c:forEach>
                      </form:select>
                      <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
@@ -35,7 +36,7 @@
                   <div class="container-slider-price">
                      <form:label path="activityPriceMax" class="form-label"><spring:message code="filters.price.title"/></form:label>
                      <output id="priceRange" name="priceRange" for="customRange">
-                        ${maxPrice}
+                           ${maxPrice}
                      </output>
                      <div class="slider-price">
                         <div class="value left">
@@ -47,7 +48,7 @@
                                        oninput="document.getElementById('priceRange').value = this.value"/>
                         </div>
                         <div class="value right">
-                           ${max}
+                              ${max}
                         </div>
                      </div>
                   </div>
@@ -66,7 +67,10 @@
 
                <jsp:include page="/WEB-INF/components/order_dropdown.jsp">
                   <jsp:param name="orderByModels" value="${orderByModels}"/>
-                  <jsp:param name="path" value="${path}"/>
+                  <jsp:param name="path" value="/experiences/${categoryName}"/>
+                  <jsp:param name = "score" value = "${score}"/>
+                  <jsp:param name = "cityId" value = "${cityId}"/>
+                  <jsp:param name = "maxPrice" value = "${maxPrice}"/>
                </jsp:include>
 
                <a href="<c:url value = "/experiences/${categoryName}"/>">
@@ -88,9 +92,9 @@
                         <jsp:param name="address" value="${experience.address}"/>
                         <jsp:param name="price" value="${experience.price}"/>
                         <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
-                        <jsp:param name="favUrlFalse" value="${path}experience=${experience.experienceId}&set=${false}"/>
-                        <jsp:param name="favUrlTrue" value="${path}experience=${experience.experienceId}&set=${true}"/>
+                        <jsp:param name="path" value="/experiences/${categoryName}"/>
                         <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
+                        <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
                         <jsp:param name="isEditing" value="${isEditing}"/>
                      </jsp:include>
                   </c:forEach>
@@ -107,19 +111,20 @@
                      <%--                        </a>--%>
                      <%--                     </li>--%>
 
-
-                     <c:forEach var = "i" begin = "1" end = "${totalPages}">
+                     <c:forEach var="i" begin="1" end="${totalPages}">
                         <li class="page-item">
-                           <a class="page-link ${i == currentPage ? 'font-weight-bold' : ''}" href="
-                        <c:url value = "${path}">
-                           <c:param name = "pageNum" value = "${i}"/>
-<%--                           <c:param name = "category" value = "${param.category}"/>--%>
-                        </c:url>">
+                           <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
+                              href="<c:url value = "/experiences/${categoryName}">
+                                 <c:param name = "pageNum" value = "${i}"/>
+                                 <c:param name = "score" value = "${score}"/>
+                                 <c:param name = "cityId" value = "${cityId}"/>
+                                 <c:param name = "maxPrice" value = "${maxPrice}"/>
+                                 <c:param name = "orderBy" value = "${orderBy}" />
+                                 </c:url>">
                               <c:out value="${i}"/>
                            </a>
                         </li>
                      </c:forEach>
-
 
                      <%--                     <li class="page-item">--%>
                      <%--                        <a class="page-link" href="--%>

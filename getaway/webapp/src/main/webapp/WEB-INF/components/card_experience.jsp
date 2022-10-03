@@ -10,13 +10,12 @@
          <jsp:include page="/WEB-INF/components/fav.jsp">
             <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
             <jsp:param name="experienceId" value="${param.id}"/>
-            <jsp:param name="urlFalse" value="${param.favUrlFalse}"/>
-            <jsp:param name="urlTrue" value="${param.favUrlTrue}"/>
+            <jsp:param name="path" value="${param.path}"/>
          </jsp:include>
       </div>
    </c:if>
 
-   <a class="card-link" href="<c:url value="/experiences/${param.categoryName}/${param.id}"/>">
+   <a class="card-link h-100 d-flex flex-column" href="<c:url value="/experiences/${param.categoryName}/${param.id}"/>">
       <div>
          <c:choose>
             <c:when test="${param.hasImage}">
@@ -50,21 +49,24 @@
          </div>
       </div>
 
-      <div class="card-body container-fluid p-2">
+      <div class="card-body container-fluid d-flex p-2 mb-1 align-items-end">
+         <h5 class="mb-1">
+            <spring:message code="experience.reviews" arguments="${param.reviewCount}"/>
+         </h5>
          <jsp:include page="/WEB-INF/components/star_avg.jsp">
             <jsp:param name="avgReview" value="${param.avgReviews}"/>
          </jsp:include>
       </div>
 
       <c:if test="${param.isEditing}">
-         <div class="btn-group card-body container-fluid p-2 d-flex align-items-end" role="group">
+         <div class="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
             <a href="<c:url value="/user/experiences/edit/${param.id}"/>">
-               <button type="button" class="btn btn-pencil">
+               <button type="button" class="btn btn-pencil" style="font-size: x-large">
                   <i class="bi bi-pencil"></i>
                </button>
             </a>
             <a href="<c:url value="/user/experiences/delete/${param.id}"/>">
-               <button type="button" class="btn btn-trash">
+               <button type="button" class="btn btn-trash" style="font-size: x-large">
                   <i class="bi bi-trash"></i>
                </button>
             </a>

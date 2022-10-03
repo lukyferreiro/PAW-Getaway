@@ -31,7 +31,20 @@ public class ErrorsController {
     public ModelAndView experienceNotFound() {
         LOGGER.error("Error experienceNotFound caught");
         Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.NotFound.Experience", null, locale);
+        String error = messageSource.getMessage("errors.NotFound.experience", null, locale);
+        Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
+        mav.addObject("errors", error);
+        mav.addObject("code", code);
+        return mav;
+    }
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = ReviewNotFoundException.class)
+    public ModelAndView reviewNotFound() {
+        LOGGER.error("Error reviewNotFound caught");
+        Locale locale = LocaleContextHolder.getLocale();
+        String error = messageSource.getMessage("errors.NotFound.review", null, locale);
         Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
         mav.addObject("errors", error);
@@ -44,7 +57,7 @@ public class ErrorsController {
     public ModelAndView categoryNotFound() {
         LOGGER.error("Error categoryNotFound caught");
         Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.NotFound.Category", null, locale);
+        String error = messageSource.getMessage("errors.NotFound.category", null, locale);
         Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
         mav.addObject("errors", error);
@@ -78,19 +91,6 @@ public class ErrorsController {
         return mav;
     }
 
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = IllegalContentTypeException.class)
-    public ModelAndView illegalContentTypeException() {
-        LOGGER.error("Error illegalContentTypeException caught");
-        Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.IllegalContentTypeException", null, locale);
-        Long code = Long.valueOf(HttpStatus.BAD_REQUEST.toString());
-        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-        mav.addObject("errors", error);
-        mav.addObject("code", code);
-        return mav;
-    }
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = MultipartException.class)
     public ModelAndView maxUploadSizeException() {
@@ -105,12 +105,8 @@ public class ErrorsController {
         return mav;
     }
 
-    /*By default when the DispatcherServlet can't find a handler for a request it sends a 404 response.
-     However if its property "throwExceptionIfNoHandlerFound" is set to true this exception is raised and
-      may be handled with a configured HandlerExceptionResolver.
-     * https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/NoHandlerFoundException.html
-     * https://stackoverflow.com/questions/13356549/handle-error-404-with-spring-controller/46704230
-     * */
+    /* https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/NoHandlerFoundException.html
+       https://stackoverflow.com/questions/13356549/handle-error-404-with-spring-controller/46704230 */
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = NoHandlerFoundException.class)
     public ModelAndView resourceNotFoundException() {
@@ -139,7 +135,6 @@ public class ErrorsController {
 
 
     /*Server error */
-
 //    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
 //    @ExceptionHandler(value = Exception.class)
 //    public ModelAndView serverException() {

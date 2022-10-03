@@ -13,9 +13,9 @@
          <%@ include file="../components/navbar.jsp" %>
 
          <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
-            <div class="container-lg w-100 smallContentContainer d-flex flex-column justify-content-center align-items-center">
+            <div class="container-lg w-100 modalContainer d-flex flex-column justify-content-center align-items-center">
                <div class="m-2">
-                  <h1> <spring:message code="profile.description"/> </h1>
+                  <h1><spring:message code="profile.description"/></h1>
                </div>
                <div class="m-2" style="max-width: 200px;">
                   <c:choose>
@@ -24,7 +24,7 @@
                      </c:when>
                      <c:otherwise>
                         <img class="container-fluid p-0" style="height: fit-content" alt="Imagen ${user.email}"
-                             src="<c:url value="/resources/images/ic_user.png" />">
+                             src="<c:url value="/resources/images/user_default.png" />">
                      </c:otherwise>
                   </c:choose>
                </div>
@@ -39,11 +39,22 @@
                </div>
 
                <div class="mb-2">
-                  <a href="<c:url value = "/user/profile/edit"/>">
-                     <button type="button" class="btn btn-error">
-                        <spring:message code="profile.editBtn"/>
-                     </button>
-                  </a>
+                  <c:choose>
+                     <c:when test="${loggedUser.hasRole('VERIFIED')}">
+                        <a href="<c:url value="/user/profile/edit"/>">
+                           <button type="button" class="btn btn-error">
+                              <spring:message code="profile.editBtn"/>
+                           </button>
+                        </a>
+                     </c:when>
+                     <c:otherwise>
+                        <a href="<c:url value="/user/verifyAccount/status/resend"/>">
+                           <button type="button" class="btn btn-error">
+                              <spring:message code="profile.verifyAccountBtn"/>
+                           </button>
+                        </a>
+                     </c:otherwise>
+                  </c:choose>
                </div>
             </div>
          </div>

@@ -16,18 +16,18 @@
          <div class="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
             <c:choose>
                <c:when test="${experiences.size() == 0}">
-               <div class="d-flex justify-content-around align-content-center">
-                  <h2 class="title"><spring:message code="experience.notExist"/></h2>
-               </div>
+                  <div class="d-flex justify-content-around align-content-center">
+                     <h2 class="title"><spring:message code="experience.notExist"/></h2>
+                  </div>
                </c:when>
                <c:otherwise>
                   <div class="d-flex justify-content-center align-content-center">
-                     <div style="margin: 0 auto 0 20px; flex:1;">
-                        <jsp:include page="/WEB-INF/components/order_dropdown.jsp">
-                           <jsp:param name="orderByModels" value="${orderByModels}"/>
-                           <jsp:param name="path" value="/user/experiences"/>
-                        </jsp:include>
-                     </div>
+<%--                     <div style="margin: 0 auto 0 20px; flex:1;">--%>
+<%--                        <jsp:include page="/WEB-INF/components/order_dropdown.jsp">--%>
+<%--                           <jsp:param name="orderByModels" value="${orderByModels}"/>--%>
+<%--                           <jsp:param name="path" value="/user/experiences"/>--%>
+<%--                        </jsp:include>--%>
+<%--                     </div>--%>
                      <h3 class="title m-0"><spring:message code="experience.description"/></h3>
                      <div style="margin: 0 20px 0 auto; flex:1;"></div>
                   </div>
@@ -43,9 +43,9 @@
                            <jsp:param name="address" value="${experience.address}"/>
                            <jsp:param name="price" value="${experience.price}"/>
                            <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
-                           <jsp:param name="favUrlFalse" value="/user/experiences?experience=${experience.experienceId}&set=${false}"/>
-                           <jsp:param name="favUrlTrue" value="/user/experiences?experience=${experience.experienceId}&set=${true}"/>
+                           <jsp:param name="path" value="/user/experiences"/>
                            <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
+                           <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
                            <jsp:param name="isEditing" value="${isEditing}"/>
                         </jsp:include>
                      </c:forEach>

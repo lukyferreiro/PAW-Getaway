@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> - <spring:message code="register.title"/> </title>
+      <title><spring:message code="pageName"/> - <spring:message code="register.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
       <link href="<c:url value = "/resources/css/login&register.css"/>" rel="stylesheet" type="text/css"/>
    </head>
@@ -15,7 +15,7 @@
          <%@ include file="../components/simpleNavbar.jsp" %>
 
          <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
-            <div class="container-lg w-100 p-2 smallContentContainer">
+            <div class="container-lg w-100 p-2 modalContainer">
                <div class="row w-100 m-0 p-4 align-items-center justify-content-center">
                   <div class="col-12">
                      <h1 class="text-center title"><spring:message code="registerForm.title"/></h1>
@@ -61,7 +61,8 @@
 
                               <div class="form-group"> <!--Contraseña-->
                                  <form:label path="password" class="form-label">
-                                    <spring:message code="registerForm.password.title"/> <span class="required-field">*</span>
+                                    <spring:message code="registerForm.password.title"/>
+                                    <span class="required-field">*</span>
                                  </form:label>
                                  <div class="input-group d-flex justify-content-start align-items-center">
                                     <spring:message code="registerForm.password.placeholder" var="passwordPlaceholder"/>
@@ -80,7 +81,8 @@
 
                               <div class="form-group"> <!--Confirmar contraseña-->
                                  <form:label path="confirmPassword" class="form-label">
-                                    <spring:message code="registerForm.confirmPassword.title"/> <span class="required-field">*</span>
+                                    <spring:message code="registerForm.confirmPassword.title"/>
+                                    <span class="required-field">*</span>
                                  </form:label>
                                  <div class="input-group d-flex justify-content-start align-items-center">
                                     <form:input type="password" path="confirmPassword" cssClass="form-control"

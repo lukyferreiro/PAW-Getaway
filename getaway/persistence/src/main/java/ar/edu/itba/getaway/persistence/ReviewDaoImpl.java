@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.persistence;
 
-import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
 import org.slf4j.Logger;

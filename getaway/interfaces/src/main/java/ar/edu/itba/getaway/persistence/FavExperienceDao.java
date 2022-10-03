@@ -7,7 +7,8 @@ import java.util.List;
 public interface FavExperienceDao {
     FavExperienceModel create (long userId, long experienceId);
     boolean delete(long userId, long experienceId);
-    List<FavExperienceModel> getByExperienceId(long experienceId);
-    List<FavExperienceModel> listAll();
+//    List<FavExperienceModel> getByExperienceId(long experienceId);
+//    List<FavExperienceModel> listAll();
     List<Long> listByUserId(Long userId);
+    boolean isFav(long userId, Long experienceId);
 }

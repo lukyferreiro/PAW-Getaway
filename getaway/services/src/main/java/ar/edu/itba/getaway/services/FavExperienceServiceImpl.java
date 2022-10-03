@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FavExperienceServiceImpl implements FavExperienceService{
@@ -29,16 +30,21 @@ public class FavExperienceServiceImpl implements FavExperienceService{
         return favExperienceDao.delete(userId,experienceId);
     }
 
-    @Override
-    public List<FavExperienceModel> getByExperienceId(long experienceId) {
-        LOGGER.debug("Retrieving all favs of experience with id {}", experienceId);
-        return favExperienceDao.getByExperienceId(experienceId);
-    }
+//    @Override
+//    public List<FavExperienceModel> getByExperienceId(long experienceId) {
+//        LOGGER.debug("Retrieving all favs of experience with id {}", experienceId);
+//        return favExperienceDao.getByExperienceId(experienceId);
+//    }
+//
+//    @Override
+//    public List<FavExperienceModel> listAll() {
+//        LOGGER.debug("Retrieving all favs");
+//        return favExperienceDao.listAll();
+//    }
 
     @Override
-    public List<FavExperienceModel> listAll() {
-        LOGGER.debug("Retrieving all favs");
-        return favExperienceDao.listAll();
+    public boolean isFav(long userId, Long experienceId){
+        return favExperienceDao.isFav(userId, experienceId);
     }
 
     @Override
@@ -46,4 +52,19 @@ public class FavExperienceServiceImpl implements FavExperienceService{
         LOGGER.debug("Retrieving all favs of user with id {}", userId);
         return favExperienceDao.listByUserId(userId);
     }
+
+    @Override
+    public void setFav(long userId, Optional<Boolean> set, Optional<Long> experience){
+        if (experience.isPresent() && set.isPresent()) {
+            if (set.get() ) {
+                if(!isFav(userId, experience.get())){
+                    create(userId, experience.get());
+                }
+            }
+            else {
+                delete(userId, experience.get());
+            }
+        }
+    }
+
 }

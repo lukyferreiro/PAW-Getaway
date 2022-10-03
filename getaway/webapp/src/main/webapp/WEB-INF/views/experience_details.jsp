@@ -28,7 +28,8 @@
                <jsp:param name="email" value="${experience.email}"/>
                <jsp:param name="hasImage" value="${experience.hasImage}"/>
                <jsp:param name="reviewAvg" value="${reviewAvg}"/>
-
+               <jsp:param name="reviewCount" value="${reviewCount}"/>
+               <jsp:param name="path" value="/experiences/${categoryName}/${experience.experienceId}"/>
             </jsp:include>
 
             <!-- --------------RESEÑAS-------------- -->
@@ -48,15 +49,21 @@
             <div class="mx-5 my-2 d-flex flex-wrap">
                <c:choose>
                   <c:when test="${reviews.size()!=0}">
-                     <c:forEach var="review" items="${reviews}">
-                        <jsp:include page="/WEB-INF/components/card_review.jsp">
-                           <jsp:param name="userName" value="${review.userName}"/>
-                           <jsp:param name="userSurname" value="${review.userSurname}"/>
-                           <jsp:param name="title" value="${review.title}"/>
-                           <jsp:param name="description" value="${review.description}"/>
-                           <jsp:param name="reviewDate" value="${review.reviewDate}"/>
-                           <jsp:param name="score" value="${review.score}"/>
-                        </jsp:include>
+                     <c:forEach var="review" varStatus="myIndex" items="${reviews}">
+                        <div class="pl-5 pr-2 w-50" style="min-width: 400px; min-height: 150px; height: fit-content;">
+                           <jsp:include page="/WEB-INF/components/card_review.jsp">
+                              <jsp:param name="userName" value="${review.userName}"/>
+                              <jsp:param name="userSurname" value="${review.userSurname}"/>
+                              <jsp:param name="title" value="${review.title}"/>
+                              <jsp:param name="description" value="${review.description}"/>
+                              <jsp:param name="reviewDate" value="${review.reviewDate}"/>
+                              <jsp:param name="score" value="${review.score}"/>
+                              <jsp:param name="hasImage" value="${listReviewsHasImages[myIndex.index]}"/>
+                              <jsp:param name="userId" value="${reviews[myIndex.index].imgId}"/>
+                              <jsp:param name="reviewId" value="${review.reviewId}"/>
+                              <jsp:param name="isEditing" value="${isEditing}"/>
+                           </jsp:include>
+                        </div>
                      </c:forEach>
                   </c:when>
                   <c:otherwise>

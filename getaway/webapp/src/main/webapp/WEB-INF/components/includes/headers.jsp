@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com"/>
 
 <!-- Fonts -->
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Yeseva+One"/>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Yeseva+One&text=GETAWAY">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 <!-- Fav icon -->
 <link rel="icon" href="<c:url value = "/resources/images/getaway-icon.png"/>">

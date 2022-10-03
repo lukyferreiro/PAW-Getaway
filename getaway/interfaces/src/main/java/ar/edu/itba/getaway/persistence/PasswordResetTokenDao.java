@@ -6,10 +6,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface PasswordResetTokenDao {
-    Optional<PasswordResetToken> getToken (long id);
-    PasswordResetToken createToken (long userId, String token, LocalDateTime expirationDate);
+    PasswordResetToken createToken (Long userId, String token, LocalDateTime expirationDate);
     Optional<PasswordResetToken> getTokenByValue (String token);
-    void removeTokenById (long id);
-    void removeTokenByUserId (long userId);
-    Optional<PasswordResetToken> getTokenByUserId (long userId);
+    void removeTokenById (Long id);
+    void removeTokenByUserId (Long userId);
 }

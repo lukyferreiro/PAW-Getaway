@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.FavExperienceModel;
-import ar.edu.itba.getaway.services.FavExperienceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +13,14 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class FavExperienceDaoImpl implements FavExperienceDao {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(FavExperienceDaoImpl.class);
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FavExperienceDaoImpl.class);
 
     private static final RowMapper<FavExperienceModel> FAV_EXPERIENCE_ROW_MAPPER = (rs, rowNum) ->
             new FavExperienceModel(rs.getLong("userid"),
@@ -57,21 +57,29 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
         return jdbcTemplate.update(query, experienceId, userId) == 1;
     }
 
-    @Override
-    public List<FavExperienceModel> getByExperienceId(long experienceId) {
-        final String query = "SELECT * FROM favuserexperience WHERE experienceId = ? ";
-        return jdbcTemplate.query(query, new Object[]{experienceId}, FAV_EXPERIENCE_ROW_MAPPER);
-
-    }
-
-    @Override
-    public List<FavExperienceModel> listAll() {
-        final String query = "SELECT * FROM favuserexperience";
-        return jdbcTemplate.query(query, new Object[]{}, FAV_EXPERIENCE_ROW_MAPPER);    }
+//    @Override
+//    public List<FavExperienceModel> getByExperienceId(long experienceId) {
+//        final String query = "SELECT * FROM favuserexperience WHERE experienceId = ? ";
+//        return jdbcTemplate.query(query, new Object[]{experienceId}, FAV_EXPERIENCE_ROW_MAPPER);
+//
+//    }
+//
+//    @Override
+//    public List<FavExperienceModel> listAll() {
+//        final String query = "SELECT * FROM favuserexperience";
+//        return jdbcTemplate.query(query, new Object[]{}, FAV_EXPERIENCE_ROW_MAPPER);
+//    }
 
     @Override
     public List<Long> listByUserId(Long userId) {
         final String query = "SELECT experienceid FROM favuserexperience WHERE userid = ? ";
         return jdbcTemplate.query(query, new Object[]{userId}, FAV_EXPERIENCEID_ROW_MAPPER);
+    }
+
+    @Override
+    public boolean isFav(long userId, Long experienceId) {
+        final String query = "SELECT * FROM favuserexperience WHERE userid = ? AND experienceId = ?";
+        Optional<FavExperienceModel> fav = jdbcTemplate.query(query, new Object[]{userId, experienceId}, FAV_EXPERIENCE_ROW_MAPPER).stream().findFirst();
+        return fav.isPresent();
     }
 }

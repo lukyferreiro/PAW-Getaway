@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <div class="navbar container-fluid p-0 d-flex flex-column">
     <div class="container-fluid px-2 pt-2 d-flex">
@@ -11,22 +10,7 @@
                 <spring:message code="pageName"/>
          </span>
         </a>
-        <%--      <a href="<c:url value = "/"/>" class="link-home" >--%>
-        <%--         <spring:message code="navbar.home"/>--%>
-        <%--      </a>--%>
-
-        <div>
-            <c:url value="/search_result" var="searchPostPath"/>
-            <form:form modelAttribute="searchForm" action="${searchPostPath}" id="searchExperienceForm" method="post"
-                       acceptCharset="UTF-8">
-                <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
-                <form:errors path="query" element="p" cssClass="form-error-label"/>
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" form="searchExperienceForm">Busca</button>
-            </form:form>
-        </div>
-
-
-        <div class="container-navbar-buttons d-flex justify-content-between">
+        <div class="container-navbar-buttons d-flex justify-content-between align-items-center">
             <c:if test="${loggedUser.hasRole('VERIFIED')}">
                 <a href="<c:url value = "/create_experience"/>" style="margin-right: 40px;">
                     <button type="button" class="btn button-primary">
@@ -44,34 +28,32 @@
                 </c:when>
                 <c:otherwise>
                     <div class="dropdown">
-                        <button class="btn button-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <%--                     <c:choose>--%>
-                                <%--                        <c:when test="${loggedUser.hasImage}">--%>
-                                <%--                           <img class="container-fluid p-0" style="height: 60px; width: 60px" src="<c:url value='/user/profileImage/${loggedUser.profileImageId}'/>" alt="Imagen"/>--%>
-                                <%--                        </c:when>--%>
-                                <%--                        <c:otherwise>--%>
-                                <%--                           <img class="container-fluid p-0" style="height: 60px; width: 60px" alt="Imagen ${loggedUser.email}"--%>
-                                <%--                                src="<c:url value="/resources/images/ic_user.png" />"--%>
-                                <%--                        </c:otherwise>--%>
-                                <%--                     </c:choose>--%>
-                            <spring:message code="navbar.user"/>
+                        <button class="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="<c:url value="/resources/images/ic_user_white.svg"/>" alt="Imagen perfil" style="width:35px; height:35px;">
                         </button>
 
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="left: -50px;">
                             <a class="dropdown-item" href="<c:url value="/user/profile"/>">
+                                <img src="<c:url value="/resources/images/ic_user.svg"/>" alt="Imagen perfil">
                                 <spring:message code="navbar.profile"/>
                             </a>
-                            <a class="dropdown-item" href="<c:url value="/user/experiences"/>">
-                                <spring:message code="navbar.experiencies"/>
-                            </a>
+                            <c:if test="${loggedUser.hasRole('PROVIDER')}">
+                                <a class="dropdown-item" href="<c:url value="/user/experiences"/>">
+                                    <img src="<c:url value="/resources/images/ic_experiences.svg"/>" alt="Imagen perfil">
+                                    <spring:message code="navbar.experiences"/>
+                                </a>
+                            </c:if>
                             <a class="dropdown-item" href="<c:url value="/user/favourites"/>">
+                                <img src="<c:url value="/resources/images/ic_fav.svg"/>" alt="Imagen perfil">
                                 <spring:message code="navbar.favourites"/>
                             </a>
                             <a class="dropdown-item" href="<c:url value="/user/reviews"/>">
+                                <img src="<c:url value="/resources/images/ic_review.svg"/>" alt="Imagen perfil">
                                 <spring:message code="navbar.reviews"/>
                             </a>
                             <a class="dropdown-item" href="<c:url value="/logout"/>">
+                                <img src="<c:url value="/resources/images/ic_logout.svg"/>" alt="Imagen perfil">
                                 <spring:message code="navbar.logout"/>
                             </a>
                         </ul>
@@ -79,6 +61,16 @@
                 </c:otherwise>
             </c:choose>
         </div>
+    </div>
+
+    <div>
+        <c:url value="/search_result" var="searchPostPath"/>
+        <form:form modelAttribute="searchForm" action="${searchPostPath}" id="searchExperienceForm" method="post"
+                   acceptCharset="UTF-8">
+            <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
+            <form:errors path="query" element="p" cssClass="form-error-label"/>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" form="searchExperienceForm">Busca</button>
+        </form:form>
     </div>
 
     <div class="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0">
@@ -122,4 +114,3 @@
 </div>
 
 <hr class="separator"/>
-

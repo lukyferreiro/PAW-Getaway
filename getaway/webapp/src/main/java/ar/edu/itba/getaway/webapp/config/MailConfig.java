@@ -1,8 +1,5 @@
 package ar.edu.itba.getaway.webapp.config;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,28 +14,18 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
-import java.io.IOException;
 import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:mail/emailConfig.properties")
-public class MailConfig implements ApplicationContextAware, EnvironmentAware {
-
-    public static final String EMAIL_TEMPLATE_ENCODING = "UTF-8";
-//    private static final String JAVA_MAIL_FILE = "classpath:mail/javaMail.properties";
+public class MailConfig implements EnvironmentAware {
 
     private static final String HOST = "mail.server.host";
     private static final String PORT = "mail.server.port";
     private static final String PROTOCOL = "mail.server.protocol";
     private static final String USERNAME = "mail.server.username";
     private static final String PASSWORD = "mail.server.password";
-    private ApplicationContext applicationContext;
     private Environment environment;
-
-    @Override
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
 
     @Override
     public void setEnvironment(final Environment environment) {
@@ -46,18 +33,15 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
     }
 
     @Bean
-    public JavaMailSender mailSender() throws IOException {
+    public JavaMailSender mailSender() {
 
-        final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        final JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+        javaMailSender.setHost(this.environment.getProperty(HOST));
+        javaMailSender.setPort(Integer.parseInt(this.environment.getProperty(PORT)));
+        javaMailSender.setProtocol(this.environment.getProperty(PROTOCOL));
+        javaMailSender.setUsername(this.environment.getProperty(USERNAME));
+        javaMailSender.setPassword(this.environment.getProperty(PASSWORD));
 
-        // Basic mail sender configuration, based on emailconfig.properties
-        mailSender.setHost(this.environment.getProperty(HOST));
-        mailSender.setPort(Integer.parseInt(this.environment.getProperty(PORT)));
-        mailSender.setProtocol(this.environment.getProperty(PROTOCOL));
-        mailSender.setUsername(this.environment.getProperty(USERNAME));
-        mailSender.setPassword(this.environment.getProperty(PASSWORD));
-
-        // JavaMail-specific mail sender configuration, based on javamail.properties
         // https://stackoverflow.com/questions/16115453/javamail-could-not-convert-socket-to-tls-gmail
         final Properties javaMailProperties = new Properties();
         javaMailProperties.put("mail.smtp.host", "smtp.gmail.com");
@@ -69,12 +53,10 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
         javaMailProperties.put("mail.smtp.quitwait", "false");
         javaMailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
-//        javaMailProperties.load(this.applicationContext.getResource(JAVA_MAIL_FILE).getInputStream());
-        mailSender.setJavaMailProperties(javaMailProperties);
-        return mailSender;
+        javaMailSender.setJavaMailProperties(javaMailProperties);
+        return javaMailSender;
     }
 
-    //Message externalization/internationalization for emails.
     @Bean
     public ResourceBundleMessageSource emailMessageSource() {
         final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -93,11 +75,10 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
     private ITemplateResolver htmlTemplateResolver() {
         final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setOrder(2);
-//        templateResolver.setResolvablePatterns(Collections.singleton("html/*"));
         templateResolver.setPrefix("/mail/html/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setCharacterEncoding(EMAIL_TEMPLATE_ENCODING);
+        templateResolver.setCharacterEncoding("UTF-8");
         templateResolver.setCacheable(false);
         return templateResolver;
     }

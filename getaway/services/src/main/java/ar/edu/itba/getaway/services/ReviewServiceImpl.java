@@ -2,7 +2,6 @@ package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
-import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.persistence.ReviewDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewModel create(String title, String description, long score, long experienceId, Date reviewDate, long userId) {
         LOGGER.debug("Creating review with title {}", title);
-        ReviewModel reviewModel = reviewDao.create(title, description, score, experienceId, reviewDate, userId);
-        LOGGER.debug("Created title with id {}", reviewModel.getReviewId());
-        return reviewModel;
+        return reviewDao.create(title, description, score, experienceId, reviewDate, userId);
     }
 
     @Override

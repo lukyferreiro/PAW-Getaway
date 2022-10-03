@@ -1,8 +1,7 @@
 package ar.edu.itba.getaway.persistence;
 
-import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.ImageExperienceModel;
+import ar.edu.itba.getaway.models.OrderByModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +18,11 @@ import java.util.Map;
 
 @Repository
 public class ExperienceDaoImpl implements ExperienceDao {
+
     @Autowired
     private ImageDao imageDao;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
-//    private final SimpleJdbcInsert imageSimplejdbcInsert;
-//    private final SimpleJdbcInsert imageExperienceSimplejdbcInsert;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
 
@@ -58,16 +56,11 @@ public class ExperienceDaoImpl implements ExperienceDao {
         this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("experiences")
                 .usingGeneratedKeyColumns("experienceid");
-//        this.imageSimplejdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-//                .withTableName("images")
-//                .usingGeneratedKeyColumns("imgid");
-//        this.imageExperienceSimplejdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-//                .withTableName("imagesExperiences");
     }
 
     @Override
     public ExperienceModel create(String name, String address, String description, String email, String url,
-                                  Double price, long cityId, long categoryId, long userId, byte[] image) throws DuplicateImageException {
+                                  Double price, long cityId, long categoryId, long userId) {
         final Map<String, Object> experienceData = new HashMap<>();
         experienceData.put("experienceName", name);
         experienceData.put("address", address);
@@ -80,17 +73,15 @@ public class ExperienceDaoImpl implements ExperienceDao {
         experienceData.put("userId", userId);
 
         final long experienceId = jdbcInsert.executeAndReturnKey(experienceData).longValue();
-        final ImageExperienceModel imageExperienceModel = imageDao.createExperienceImg(image, experienceId, true);
 
         LOGGER.info("Created new experience with id {}", experienceId);
 
-        return new ExperienceModel(experienceId, name, address, description, email, url, price, cityId, categoryId, userId, imageExperienceModel.getImageId(), image!=null);
+        return new ExperienceModel(experienceId, name, address, description, email, url, price, cityId, categoryId, userId, null, false);
     }
 
     @Override
-    public boolean update(ExperienceModel experienceModel, byte[] image) {
+    public boolean update(ExperienceModel experienceModel) {
         LOGGER.debug("Executing query to update experience with id: {}", experienceModel.getExperienceId());
-        imageDao.updateImg(image, experienceModel.getImageExperienceId());
         return jdbcTemplate.update("UPDATE experiences " +
                         "SET experienceName = ?, " +
                         "price = ?, " +
@@ -114,8 +105,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public boolean delete(long experienceId) {
         final String query = "DELETE FROM experiences WHERE experienceId = ?";
         LOGGER.debug("Executing query: {}", query);
-        Optional<ExperienceModel> experienceModelOptional = getById(experienceId);
-        imageDao.deleteImg(experienceModelOptional.get().getImageExperienceId());
         return jdbcTemplate.update(query, experienceId) == 1;
     }
 
@@ -134,38 +123,84 @@ public class ExperienceDaoImpl implements ExperienceDao {
                 .stream().findFirst();
     }
 
+    //TODO: inconsistent behavior with order by avg(score)
     @Override
-    public List<ExperienceModel> listByUserId(long userId, String order) {
-        final String query = "SELECT * FROM experiences WHERE userid = ?" + order;
+    public List<ExperienceModel> listByUserId(long userId, Optional<OrderByModel> order) {
+        String orderQuery;
+        if (order.isPresent()){
+            orderQuery = order.get().getSqlQuery();
+        }
+        else {
+            orderQuery = " ";
+        }
+
+        final String query = "SELECT * FROM experiences WHERE userId = ? " + orderQuery;
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
     public Optional<Double> getMaxPrice(long categoryId){
-        return jdbcTemplate.query("SELECT MAX(COALESCE(price,0)) as max_price FROM experiences WHERE categoryid = ?", new Object[]{categoryId}, PRICE_EXPERIENCE_ROW_MAPPER ).stream().findFirst();
+        return jdbcTemplate.query("SELECT MAX(COALESCE(price,0)) as max_price FROM experiences WHERE categoryid = ?",
+                new Object[]{categoryId}, PRICE_EXPERIENCE_ROW_MAPPER ).stream().findFirst();
     }
 
     @Override
-    public List<ExperienceModel> listByFilter(long categoryId, Double max, long score, String city, String order, int page, int page_size) {
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? " + city +
-                        "GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=?" + order
-                + " LIMIT ? OFFSET ?",
-                new Object[]{categoryId, max, score, page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
+    public List<ExperienceModel> listByFilter(long categoryId, Double max, long score, Long city, Optional<OrderByModel> order, int page, int page_size) {
+        String orderQuery;
+        if (order.isPresent()){
+            orderQuery = order.get().getSqlQuery();
+        }
+        else {
+            orderQuery = " ";
+        }
+
+        if (city > 0){
+            return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityId = ? " +
+                            "GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=? " + orderQuery
+                            + " LIMIT ? OFFSET ?",
+                    new Object[]{categoryId, max, city, score, page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
+        }
+        else {
+            return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? " +
+                            "GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=?" + orderQuery
+                            + " LIMIT ? OFFSET ?",
+                    new Object[]{categoryId, max, score, page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
+        }
     }
 
     @Override
-    public Integer countListByFilter(long categoryId, Double max, long score, String city) {
-        return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? " + city +
-                        "HAVING AVG(COALESCE(score,0))>=?",
-                new Object[]{categoryId, max, score}, Integer.class);
+    public Integer countListByFilter(long categoryId, Double max, long score, Long city) {
+        if (city > 0){
+            return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityId = ?" +
+                            "HAVING AVG(COALESCE(score,0))>=?",
+                    new Object[]{categoryId, max, city, score}, Integer.class);
+        }
+        else {
+            return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? " +
+                            "HAVING AVG(COALESCE(score,0))>=?",
+                    new Object[]{categoryId, max, score}, Integer.class);
+        }
     }
 
     @Override
     public List<ExperienceModel> listByBestRanked(long categoryId){
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? GROUP BY experiences.experienceid ORDER BY avg(score) ASC ",
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? GROUP BY experiences.experienceid ORDER BY avg(score) DESC ",
                 new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
 
+    @Override
+    public List<ExperienceModel> listFavsByUserId(Long userId, Optional<OrderByModel> order) {
+        String orderQuery;
+        if (order.isPresent()){
+            orderQuery = order.get().getSqlQuery();
+        }
+        else {
+            orderQuery = " ";
+        }
+
+        final String query = "SELECT * FROM experiences WHERE experienceId IN ( SELECT experienceId FROM favuserexperience WHERE userId = ? )" + orderQuery;
+        return jdbcTemplate.query(query, new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override

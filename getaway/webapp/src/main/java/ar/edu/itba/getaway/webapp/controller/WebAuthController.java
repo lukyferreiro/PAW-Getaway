@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
@@ -55,7 +54,7 @@ public class WebAuthController {
         return mav;
     }
 
-    @RequestMapping(path = "/register")
+    @RequestMapping(path = "/register", method = RequestMethod.GET)
     public ModelAndView register(@ModelAttribute("registerForm") final RegisterForm form) {
         return new ModelAndView("register");
     }
@@ -76,8 +75,7 @@ public class WebAuthController {
         try {
             user = userService.createUser(form.getPassword(), form.getName(), form.getSurname(), form.getEmail());
             forceLogin(user, request);
-            //TODO no me gusta que tambien me este cacheando DuplicateImageException
-        } catch (DuplicateUserException | DuplicateImageException e) {
+        } catch (DuplicateUserException e) {
             errors.rejectValue("email", "validation.user.DuplicateEmail");
             return register(form);
         }
@@ -138,7 +136,7 @@ public class WebAuthController {
     /*------------------------------------------------------------------------------------
     ------------------------------------Reset Password------------------------------------
      ------------------------------------------------------------------------------------*/
-    @RequestMapping(path = "/user/resetPasswordRequest")
+    @RequestMapping(path = "/user/resetPasswordRequest", method = RequestMethod.GET)
     public ModelAndView resetPasswordRequest(@ModelAttribute("resetPasswordEmailForm") final ResetPasswordEmailForm form) {
         return new ModelAndView("/password/resetPasswordEmailForm");
     }
@@ -209,6 +207,7 @@ public class WebAuthController {
      ------------------------------------------------------------------------------------*/
 
     //This method is used to update the SpringContextHolder
+    //https://stackoverflow.com/questions/9910252/how-to-reload-authorities-on-user-update-with-spring-security
     private void forceLogin(UserModel user, HttpServletRequest request) {
         //generate authentication
         final PreAuthenticatedAuthenticationToken token =

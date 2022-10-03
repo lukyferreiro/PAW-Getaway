@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.persistence.PasswordResetTokenDao;
@@ -9,15 +8,10 @@ import ar.edu.itba.getaway.persistence.VerificationTokenDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 
 @Service
@@ -30,18 +24,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordResetTokenDao passwordResetTokenDao;
     @Autowired
-    private EmailService emailService;
-    @Autowired
     private ImageService imageService;
     @Autowired
+    private TokensServiceImpl tokensService;
+    @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private String appBaseUrl;
-    @Autowired
-    private MessageSource messageSource;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
-    private final Locale locale = LocaleContextHolder.getLocale();
     private final Collection<Roles> DEFAULT_ROLES = Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     @Override
@@ -62,16 +51,28 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserByEmail(email);
     }
 
+    @Override
+    public Optional<UserModel> getUserByExperienceId(Long experienceId){
+        LOGGER.debug("Retrieving user who creates experience with id {}", experienceId);
+        return userDao.getUserByExperienceId(experienceId);
+    }
+
+    @Override
+    public Optional<UserModel> getUserByReviewId(Long reviewId){
+        LOGGER.debug("Retrieving user who creates review with id {}", reviewId);
+        return userDao.getUserByReviewId(reviewId);
+    }
+
     @Transactional
     @Override
-    public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException, DuplicateImageException {
+    public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException {
+        final ImageModel imageModel = imageService.createImg(null);
         LOGGER.debug("Creating user with email {}", email);
-        UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES);
-        LOGGER.debug("Created user with id {}", userModel.getId());
+        UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES, imageModel.getId());
         LOGGER.debug("Creating verification token to user with id {}", userModel.getId());
-        VerificationToken token = generateVerificationToken(userModel.getId());
+        VerificationToken token = tokensService.generateVerificationToken(userModel.getId());
         LOGGER.debug("Created verification token with id {}", token.getId());
-        sendVerificationToken(userModel, token);
+        tokensService.sendVerificationToken(userModel, token);
         return userModel;
     }
 
@@ -86,7 +87,6 @@ public class UserServiceImpl implements UserService {
         }
 
         final VerificationToken verificationToken = verificationTokenOptional.get();
-        //Eliminamos el token siempre, ya sea valido o no
         verificationTokenDao.removeTokenById(verificationToken.getId());
         LOGGER.debug("Removed verification token with id {}", verificationToken.getId());
 
@@ -104,9 +104,9 @@ public class UserServiceImpl implements UserService {
     public void resendVerificationToken(UserModel userModel) {
         LOGGER.debug("Removing verification token for user with id {}", userModel.getId());
         verificationTokenDao.removeTokenByUserId(userModel.getId());
-        VerificationToken verificationToken = generateVerificationToken(userModel.getId());
+        VerificationToken verificationToken = tokensService.generateVerificationToken(userModel.getId());
         LOGGER.debug("Created verification token with id {}", verificationToken.getId());
-        sendVerificationToken(userModel, verificationToken);
+        tokensService.sendVerificationToken(userModel, verificationToken);
     }
 
     @Override
@@ -127,9 +127,9 @@ public class UserServiceImpl implements UserService {
     public void generateNewPassword(UserModel userModel) {
         LOGGER.debug("Removing password reset token for user {}", userModel.getId());
         passwordResetTokenDao.removeTokenByUserId(userModel.getId());
-        PasswordResetToken passwordResetToken = generatePasswordResetToken(userModel.getId());
+        PasswordResetToken passwordResetToken = tokensService.generatePasswordResetToken(userModel.getId());
         LOGGER.info("Created password reset token for user {}", userModel.getId());
-        sendPasswordResetToken(userModel, passwordResetToken);
+        tokensService.sendPasswordResetToken(userModel, passwordResetToken);
     }
 
     @Transactional
@@ -143,7 +143,6 @@ public class UserServiceImpl implements UserService {
         }
 
         final PasswordResetToken passwordResetToken = passwordResetTokenOptional.get();
-        //Eliminamos el token siempre, ya sea valido o no
         passwordResetTokenDao.removeTokenById(passwordResetToken.getId());
         LOGGER.debug("Removed password reset token with id {}", passwordResetToken.getId());
 
@@ -168,40 +167,10 @@ public class UserServiceImpl implements UserService {
         imageService.updateImg(image, userModel.getProfileImageId());
     }
 
-    private void sendVerificationToken(UserModel userModel, VerificationToken token) {
-        try {
-            String url = new URL("http", appBaseUrl, 8080, "/webapp_war/user/verifyAccount/" + token.getValue()).toString();
-//            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount/" + token.getValue()).toString();
-            Map<String, Object> mailAttrs = new HashMap<>();
-            mailAttrs.put("confirmationURL", url);
-            mailAttrs.put("to", userModel.getEmail());
-            emailService.sendMail("verification", messageSource.getMessage("email.verifyAccount", new Object[]{}, locale), mailAttrs, locale);
-        } catch (MessagingException | MalformedURLException e) {
-            LOGGER.warn("Error, user verification mail not sent");
-        }
-    }
-
-    private void sendPasswordResetToken(UserModel userModel, PasswordResetToken token) {
-        try {
-            String url = new URL("http", appBaseUrl, 8080, "/webapp_war/user/resetPassword/" + token.getValue()).toString();
-//            String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/resetPassword/" + token.getValue()).toString();
-            Map<String, Object> mailAttrs = new HashMap<>();
-            mailAttrs.put("confirmationURL", url);
-            mailAttrs.put("to", userModel.getEmail());
-            emailService.sendMail("passwordReset", messageSource.getMessage("email.resetPassword", new Object[]{}, locale), mailAttrs, locale);
-        } catch (MessagingException | MalformedURLException e) {
-            LOGGER.warn("Error, user password reset mail not sent");
-        }
-    }
-
-    private VerificationToken generateVerificationToken(long userId) {
-        String token = UUID.randomUUID().toString();
-        return verificationTokenDao.createVerificationToken(userId, token, VerificationToken.generateTokenExpirationDate());
-    }
-
-    private PasswordResetToken generatePasswordResetToken(long userId) {
-        String token = UUID.randomUUID().toString();
-        return passwordResetTokenDao.createToken(userId, token, PasswordResetToken.generateTokenExpirationDate());
+    @Override
+    public void addRole(long userId, Roles newRole){
+        LOGGER.debug("Adding role {} to user with id {}", newRole.name(), userId);
+        userDao.addRole(userId, newRole);
     }
 
 }

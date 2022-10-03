@@ -32,7 +32,7 @@ public class ReviewFormController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewFormController.class);
 
-    @RequestMapping(value = "/experiences/{categoryName}/{experienceId}/create_review", method = {RequestMethod.GET})
+    @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review", method = {RequestMethod.GET})
     public ModelAndView createReviewForm(@PathVariable("categoryName") final String categoryName,
                                          @PathVariable("experienceId") final long experienceId,
                                          @ModelAttribute("searchForm") final SearchForm searchForm,
@@ -40,7 +40,7 @@ public class ReviewFormController {
         return new ModelAndView("review_form");
     }
 
-    @RequestMapping(value = "/experiences/{categoryName}/{experienceId}/create_review", method = {RequestMethod.POST})
+    @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review", method = {RequestMethod.POST})
     public ModelAndView experienceWithReview(@PathVariable("categoryName") final String categoryName,
                                              @PathVariable("experienceId") final long experienceId,
                                              @Valid @ModelAttribute("reviewForm") final ReviewForm form,

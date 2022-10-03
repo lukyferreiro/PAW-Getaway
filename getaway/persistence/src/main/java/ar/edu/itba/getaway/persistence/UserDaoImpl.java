@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.persistence;
 
-import ar.edu.itba.getaway.exceptions.DuplicateImageException;
 import ar.edu.itba.getaway.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
 import org.slf4j.Logger;
@@ -13,19 +12,16 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import javax.swing.text.html.Option;
 import java.util.*;
 
 @Repository
 public class UserDaoImpl implements UserDao {
 
-    @Autowired
-    private ImageDao imageDao;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert userSimpleJdbcInsert;
-    private final SimpleJdbcInsert roleSimpleJdbcInsert;
+//    private final SimpleJdbcInsert roleSimpleJdbcInsert;
     private final SimpleJdbcInsert userRolesSimpleJdbcInsert;
-    private final SimpleJdbcInsert imagesSimpleJdbcInsert;
+//    private final SimpleJdbcInsert imagesSimpleJdbcInsert;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
 
     private final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
@@ -48,26 +44,24 @@ public class UserDaoImpl implements UserDao {
         this.userSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("userid");
-        this.roleSimpleJdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("roles");
+//        this.roleSimpleJdbcInsert = new SimpleJdbcInsert(ds)
+//                .withTableName("roles");
         this.userRolesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("userRoles");
-        this.imagesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("images")
-                .usingGeneratedKeyColumns("imgid");
+//        this.imagesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
+//                .withTableName("images")
+//                .usingGeneratedKeyColumns("imgid");
     }
 
     @Override
     public UserModel createUser(String password, String name, String surname, String email,
-                                Collection<Roles> roles) throws DuplicateUserException, DuplicateImageException {
+                                Collection<Roles> roles, long imageId) throws DuplicateUserException {
         final Map<String, Object> userData = new HashMap<>();
         userData.put("userName", name);
         userData.put("userSurname", surname);
         userData.put("email", email);
         userData.put("password", password);
-
-        final ImageModel imageModel = imageDao.createImg(null);
-        userData.put("imgId", imageModel.getId());
+        userData.put("imgId", imageId);
 
         final long userId;
         try {
@@ -88,7 +82,7 @@ public class UserDaoImpl implements UserDao {
             LOGGER.info("Added role {} to user {}", roleModel.get().getRoleName().name() , userId);
         }
 
-        return new UserModel(userId, password, name, surname, email, roles, null);
+        return new UserModel(userId, password, name, surname, email, roles, imageId);
     }
 
     @Override
@@ -104,6 +98,22 @@ public class UserDaoImpl implements UserDao {
         final String query = "SELECT * FROM users WHERE email = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{email}, USER_MODEL_ROW_MAPPER)
+                .stream().findFirst();
+    }
+
+    @Override
+    public Optional<UserModel> getUserByExperienceId(Long experienceId){
+        final String query = "SELECT * FROM users WHERE userid = (SELECT userid FROM experiences WHERE experienceid = ?)";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{experienceId}, USER_MODEL_ROW_MAPPER)
+                .stream().findFirst();
+    }
+
+    @Override
+    public Optional<UserModel> getUserByReviewId(Long reviewId){
+        final String query = "SELECT * FROM users WHERE userid = (SELECT userid FROM reviews WHERE reviewId = ?)";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.query(query, new Object[]{reviewId}, USER_MODEL_ROW_MAPPER)
                 .stream().findFirst();
     }
 

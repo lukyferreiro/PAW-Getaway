@@ -19,8 +19,8 @@ import java.util.Optional;
 public class LocationDaoImpl implements LocationDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private final SimpleJdbcInsert citySimpleJdbcInsert;
-    private final SimpleJdbcInsert countrySimpleJdbcInsert;
+//    private final SimpleJdbcInsert citySimpleJdbcInsert;
+//    private final SimpleJdbcInsert countrySimpleJdbcInsert;
     private static final Logger LOGGER = LoggerFactory.getLogger(LocationDao.class);
 
     private static final RowMapper<CityModel> CITY_MODEL_ROW_MAPPER = (rs, rowNum) ->
@@ -35,12 +35,12 @@ public class LocationDaoImpl implements LocationDao {
     @Autowired
     public LocationDaoImpl(final DataSource ds){
         this.jdbcTemplate = new JdbcTemplate(ds);
-        this.citySimpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("cities")
-                .usingGeneratedKeyColumns("cityId");
-        this.countrySimpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("countries")
-                .usingGeneratedKeyColumns("countryId");
+//        this.citySimpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+//                .withTableName("cities")
+//                .usingGeneratedKeyColumns("cityId");
+//        this.countrySimpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+//                .withTableName("countries")
+//                .usingGeneratedKeyColumns("countryId");
     }
 
     @Override
