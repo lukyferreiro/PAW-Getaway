@@ -5,6 +5,7 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.ImageService;
 import ar.edu.itba.getaway.services.UserService;
 import ar.edu.itba.getaway.webapp.forms.RegisterForm;
+import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,8 @@ public class UserProfileController {
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif", "image/jpg");
 
     @RequestMapping(value = "/user/profile", method = {RequestMethod.GET})
-    public ModelAndView profile(Principal principal) {
+    public ModelAndView profile(Principal principal
+            ,@ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("user_profile");
 
         final UserModel userModel = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);

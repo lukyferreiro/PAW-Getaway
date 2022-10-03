@@ -18,4 +18,6 @@ public interface ExperienceDao {
     Integer countListByFilter(long categoryId, Double max, long score, Long city);
     List<ExperienceModel> listByBestRanked(long categoryId);
     List<ExperienceModel> listFavsByUserId(Long userId, Optional<OrderByModel> order);
+    List<ExperienceModel> getByName(String name, Optional<OrderByModel> order, int page, int page_size);
+    Integer getCountByName(String name);
 }

@@ -6,6 +6,7 @@ import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.exceptions.ExperienceNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
+import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,9 @@ public class ExperienceController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
 
     @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.GET})
-    public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
+    public ModelAndView experienceGet(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,
+                                   @ModelAttribute("searchForm") final SearchForm searchForm,
                                    Principal principal,
                                    HttpServletRequest request,
                                    @RequestParam Optional<OrderByModel> orderBy,
@@ -50,7 +52,7 @@ public class ExperienceController {
                                    @RequestParam Optional<Long> score,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set,
-                                   @RequestParam (value="pageNum", defaultValue = "1") final int pageNum) {
+                                   @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum) {
         final ModelAndView mav = new ModelAndView("experiences");
         final Page<ExperienceModel> currentPage;
 
@@ -159,11 +161,45 @@ public class ExperienceController {
         return mav;
     }
 
+    @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.POST})
+    public ModelAndView experiencePost(@PathVariable("categoryName") final String categoryName,
+                                       HttpServletRequest request,
+                                       @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                                       @Valid @ModelAttribute("filterForm") final FilterForm form,
+                                       Principal principal,
+                                       final BindingResult errors) {
+        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
+
+
+        if (errors.hasErrors()) {
+            return experienceGet(categoryName, form, searchForm,principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
+        }
+
+        final Optional<CityModel> cityModel = locationService.getCityByName(form.getActivityCity());
+        if (cityModel.isPresent()) {
+            final long cityId = cityModel.get().getId();
+            mav.addObject("cityId", cityId);
+        }
+
+        final Double priceMax = form.getActivityPriceMax();
+        if (priceMax != null) {
+            mav.addObject("maxPrice", priceMax);
+        }
+
+        final Long score = form.getScoreVal();
+        if (score != -1) {
+            mav.addObject("score", score);
+        }
+
+        return mav;
+    }
+
     @RequestMapping("/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}")
     public ModelAndView experienceView(Principal principal,
                                        @PathVariable("categoryName") final String categoryName,
                                        @PathVariable("experienceId") final long experienceId,
-                                       @RequestParam Optional<Boolean> set) {
+                                       @RequestParam Optional<Boolean> set,
+                                       @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("experience_details");
 
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
@@ -214,34 +250,5 @@ public class ExperienceController {
         return mav;
     }
 
-    @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.POST})
-    public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName,
-                                       HttpServletRequest request,
-                                       @Valid @ModelAttribute("filterForm") final FilterForm form,
-                                       Principal principal,
-                                       final BindingResult errors) {
-        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
-        if (errors.hasErrors()) {
-            return experience(categoryName, form, principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
-        }
-
-        final Optional<CityModel> cityModel = locationService.getCityByName(form.getActivityCity());
-        if (cityModel.isPresent()) {
-            final long cityId = cityModel.get().getId();
-            mav.addObject("cityId", cityId);
-        }
-
-        final Double priceMax = form.getActivityPriceMax();
-        if (priceMax != null) {
-            mav.addObject("maxPrice", priceMax);
-        }
-
-        final Long score = form.getScoreVal();
-        if (score != -1) {
-            mav.addObject("score", score);
-        }
-
-        return mav;
-    }
 }

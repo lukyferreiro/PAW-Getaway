@@ -249,4 +249,20 @@ public class ExperienceDaoTest {
         assertFalse(experienceModelList.contains(DEFAULT_ADV2));
     }
 
+    @Test
+    public void testGetByName() {
+        List<ExperienceModel> experienceModelList = experienceDao.getByName("testave", NO_ORDER,1, PAGE_SIZE);
+
+        assertFalse(experienceModelList.isEmpty());
+        assertTrue(experienceModelList.contains(DEFAULT_ADV));
+        assertTrue(experienceModelList.contains(DEFAULT_ADV2));
+        assertTrue(experienceModelList.contains(DEFAULT_ADV3));
+        assertFalse(experienceModelList.contains(DEFAULT_NIG));
+    }
+
+    @Test
+    public void testGetCountByName() {
+        assertEquals(new Integer(3), experienceDao.getCountByName("testave"));
+    }
+
 }

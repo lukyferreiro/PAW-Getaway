@@ -67,13 +67,22 @@
                   <spring:message code="filters.btn.submit"/>
                </button>
 
-               <jsp:include page="/WEB-INF/components/order_dropdown.jsp">
-                  <jsp:param name="orderByModels" value="${orderByModels}"/>
-                  <jsp:param name="path" value="/experiences/${categoryName}"/>
-                  <jsp:param name = "score" value = "${score}"/>
-                  <jsp:param name = "cityId" value = "${cityId}"/>
-                  <jsp:param name = "maxPrice" value = "${maxPrice}"/>
-               </jsp:include>
+               <button class="btn btn-search my-2 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <spring:message code="order.title"/>
+               </button>
+               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <c:forEach var="orderBy" items="${orderByModels}">
+                     <a class="dropdown-item" href="
+                        <c:url value="/experiences/${categoryName}">
+                           <c:param name = "orderBy" value = "${orderBy}"/>
+                           <c:param name = "score" value = "${score}"/>
+                           <c:param name = "cityId" value = "${cityId}"/>
+                           <c:param name = "maxPrice" value = "${maxPrice}"/>
+                        </c:url>">
+                        <spring:message code="order.${orderBy.toString()}"/>
+                     </a>
+                  </c:forEach>
+               </ul>
 
                <a href="<c:url value = "/experiences/${categoryName}"/>">
                   <button class="btn btn-clean-filter px-3 py-2 my-2" type="button" id="cleanFilterFormButton" form="submitForm">

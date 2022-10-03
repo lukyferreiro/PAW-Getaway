@@ -161,7 +161,7 @@ public class WebAuthController {
         return mav;
     }
 
-    //This is the endpoint that It's called from the email
+    //This is the endpoint that it's called from the email
     @RequestMapping(path = "/user/resetPassword/{token}")
     public ModelAndView resetPassword(@PathVariable("token") String token,
                                       @ModelAttribute("resetPasswordForm") final ResetPasswordForm form) {
