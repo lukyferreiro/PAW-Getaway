@@ -11,9 +11,11 @@
 
    <body>
       <div class="container-main">
-         <%@ include file="../components/navbar.jsp" %>
+         <jsp:include page="../components/navbar.jsp">
+            <jsp:param name="categoryName" value="${categoryName}"/>
+         </jsp:include>
 
-         <div class="container-fluid p-0 mt-3 d-flex">
+         <div class="container-fluid p-0 mt-3 d-flex" style="min-height: 650px;">
             <div class="container-filters container-fluid px-2 py-0 mx-2 my-0 d-flex flex-column justify-content-start align-items-center border-end">
                <p class="filters-title m-0">
                   <spring:message code="filters.title"/>
@@ -81,24 +83,39 @@
             </div>
 
             <div class="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex flex-column justify-content-center align-content-center">
-               <div class="d-flex flex-wrap justify-content-center">
-                  <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
-                     <jsp:include page="/WEB-INF/components/card_experience.jsp">
-                        <jsp:param name="hasImage" value="${experience.hasImage}"/>
-                        <jsp:param name="categoryName" value="${experience.categoryName}"/>
-                        <jsp:param name="id" value="${experience.experienceId}"/>
-                        <jsp:param name="name" value="${experience.experienceName}"/>
-                        <jsp:param name="description" value="${experience.description}"/>
-                        <jsp:param name="address" value="${experience.address}"/>
-                        <jsp:param name="price" value="${experience.price}"/>
-                        <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
-                        <jsp:param name="path" value="/experiences/${categoryName}"/>
-                        <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
-                        <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
-                        <jsp:param name="isEditing" value="${isEditing}"/>
-                     </jsp:include>
-                  </c:forEach>
-               </div>
+               <c:choose>
+                  <c:when test="${experiences.size() == 0}">
+                     <div class="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
+                        <div class="d-flex justify-content-center align-content-center">
+                           <img src="<c:url value="/resources/images/ic_no_search.jpeg"/>" alt="Imagen lupa" style="width: 150px; height:150px; min-width: 150px; min-height: 150px; margin-right: 5px;">
+                           <h1 class="d-flex align-self-center">
+                              <spring:message code="experience.emptyResult"/>
+                           </h1>
+                        </div>
+                     </div>
+                  </c:when>
+                  <c:otherwise>
+                     <div class="d-flex flex-wrap justify-content-center">
+                        <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
+                           <jsp:include page="/WEB-INF/components/card_experience.jsp">
+                              <jsp:param name="hasImage" value="${experience.hasImage}"/>
+                              <jsp:param name="categoryName" value="${experience.categoryName}"/>
+                              <jsp:param name="id" value="${experience.experienceId}"/>
+                              <jsp:param name="name" value="${experience.experienceName}"/>
+                              <jsp:param name="description" value="${experience.description}"/>
+                              <jsp:param name="address" value="${experience.address}"/>
+                              <jsp:param name="price" value="${experience.price}"/>
+                              <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
+                              <jsp:param name="path" value="/experiences/${categoryName}"/>
+                              <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
+                              <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
+                              <jsp:param name="isEditing" value="${isEditing}"/>
+                           </jsp:include>
+                        </c:forEach>
+                     </div>
+                  </c:otherwise>
+               </c:choose>
+
 
                <div class="d-flex justify-content-center align-items-center">
                   <ul class="pagination m-0">
