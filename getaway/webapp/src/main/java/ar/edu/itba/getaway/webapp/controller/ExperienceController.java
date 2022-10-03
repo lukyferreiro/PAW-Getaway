@@ -41,7 +41,7 @@ public class ExperienceController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
 
     @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.GET})
-    public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
+    public ModelAndView experienceGet(@PathVariable("categoryName") final String categoryName,
                                    @ModelAttribute("filterForm") final FilterForm form,
                                    @ModelAttribute("searchForm") final SearchForm searchForm,
                                    Principal principal,
@@ -161,6 +161,39 @@ public class ExperienceController {
         return mav;
     }
 
+    @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.POST})
+    public ModelAndView experiencePost(@PathVariable("categoryName") final String categoryName,
+                                       HttpServletRequest request,
+                                       @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                                       @Valid @ModelAttribute("filterForm") final FilterForm form,
+                                       Principal principal,
+                                       final BindingResult errors) {
+        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
+
+
+        if (errors.hasErrors()) {
+            return experienceGet(categoryName, form, searchForm,principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
+        }
+
+        final Optional<CityModel> cityModel = locationService.getCityByName(form.getActivityCity());
+        if (cityModel.isPresent()) {
+            final long cityId = cityModel.get().getId();
+            mav.addObject("cityId", cityId);
+        }
+
+        final Double priceMax = form.getActivityPriceMax();
+        if (priceMax != null) {
+            mav.addObject("maxPrice", priceMax);
+        }
+
+        final Long score = form.getScoreVal();
+        if (score != -1) {
+            mav.addObject("score", score);
+        }
+
+        return mav;
+    }
+
     @RequestMapping("/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}")
     public ModelAndView experienceView(Principal principal,
                                        @PathVariable("categoryName") final String categoryName,
@@ -217,36 +250,5 @@ public class ExperienceController {
         return mav;
     }
 
-    @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.POST})
-    public ModelAndView experienceCity(@PathVariable("categoryName") final String categoryName,
-                                       HttpServletRequest request,
-                                       @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
-                                       @Valid @ModelAttribute("filterForm") final FilterForm form,
-                                       Principal principal,
-                                       final BindingResult errors) {
-        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
-
-        if (errors.hasErrors()) {
-            return experience(categoryName, form, searchForm,principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
-        }
-
-        final Optional<CityModel> cityModel = locationService.getCityByName(form.getActivityCity());
-        if (cityModel.isPresent()) {
-            final long cityId = cityModel.get().getId();
-            mav.addObject("cityId", cityId);
-        }
-
-        final Double priceMax = form.getActivityPriceMax();
-        if (priceMax != null) {
-            mav.addObject("maxPrice", priceMax);
-        }
-
-        final Long score = form.getScoreVal();
-        if (score != -1) {
-            mav.addObject("score", score);
-        }
-
-        return mav;
-    }
 }

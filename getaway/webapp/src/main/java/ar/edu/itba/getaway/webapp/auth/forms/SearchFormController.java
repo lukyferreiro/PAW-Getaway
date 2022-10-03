@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.webapp.auth.forms;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.models.OrderByModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.services.ExperienceService;
@@ -47,11 +48,12 @@ public class SearchFormController {
                                          @RequestParam("set") final Optional<Boolean> set,
                                          @RequestParam("experience") final Optional<Long> experience,
                                          @RequestParam Optional<String> query,
+                                         @RequestParam Optional<OrderByModel> orderBy,
                                          @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum,
                                          Principal principal,
                                          HttpServletRequest request) {
 
-        final Page<ExperienceModel> currentPage = experienceService.getByName(searchForm.getQuery(), pageNum);
+        final Page<ExperienceModel> currentPage = experienceService.getByName(searchForm.getQuery(), orderBy, pageNum);
         final ModelAndView mav = new ModelAndView("search_result");
 
         LOGGER.debug("Pagination");
@@ -85,6 +87,14 @@ public class SearchFormController {
             mav.addObject("query", query.get());
         }
 
+        final OrderByModel[] orderByModels = OrderByModel.values();
+
+        if ( orderBy.isPresent() ){
+            request.setAttribute("orderBy", orderBy);
+            mav.addObject("orderBy", orderBy.get());
+        }
+
+        mav.addObject("orderByModels", orderByModels);
         mav.addObject("currentPage", currentPage.getCurrentPage());
         mav.addObject("totalPages", currentPage.getMaxPage());
         mav.addObject("avgReviews", avgReviews);
@@ -103,6 +113,7 @@ public class SearchFormController {
                                      @RequestParam("set") final Optional<Boolean> set,
                                      @RequestParam("experience") final Optional<Long> experience,
                                      @RequestParam Optional<String> query,
+                                     @RequestParam Optional<OrderByModel> orderBy,
                                      @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum,
                                      final BindingResult errors,
                                      Principal principal,
@@ -111,7 +122,7 @@ public class SearchFormController {
         final ModelAndView mav = new ModelAndView("/search_result");
 
         if (errors.hasErrors()) {
-            return createSearchForm(searchForm,set,experience,query,pageNum,principal,request);
+            return createSearchForm(searchForm,set,experience,query,orderBy,pageNum,principal,request);
         }
 
         if (principal != null) {
@@ -130,7 +141,7 @@ public class SearchFormController {
 
 //        List<ExperienceModel> currentExperiences = currentPage.getContent();
 
-        Page<ExperienceModel> currentPage = experienceService.getByName(searchForm.getQuery(), pageNum);
+        Page<ExperienceModel> currentPage = experienceService.getByName(searchForm.getQuery(), orderBy, pageNum);
         final List<ExperienceModel> experienceModels = currentPage.getContent();
 
         final List<Long> avgReviews = new ArrayList<>();
@@ -143,6 +154,14 @@ public class SearchFormController {
             mav.addObject("query", query.get());
         }
 
+        final OrderByModel[] orderByModels = OrderByModel.values();
+
+        if ( orderBy.isPresent() ){
+            request.setAttribute("orderBy", orderBy);
+            mav.addObject("orderBy", orderBy.get());
+        }
+
+        mav.addObject("orderByModels", orderByModels);
         mav.addObject("currentPage", currentPage.getCurrentPage());
         mav.addObject("totalPages", currentPage.getMaxPage());
         mav.addObject("avgReviews", avgReviews);

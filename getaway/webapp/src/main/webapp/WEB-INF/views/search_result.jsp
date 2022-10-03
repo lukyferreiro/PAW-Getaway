@@ -14,6 +14,27 @@
     <%@ include file="../components/navbar.jsp" %>
 
     <div class="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex flex-column justify-content-center align-content-center">
+
+        <div>
+            <button class="btn btn-search my-2 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <spring:message code="order.title"/>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <c:forEach var="orderBy" items="${orderByModels}">
+                    <a class="dropdown-item" href="
+                        <c:url value="/search_result">
+                           <c:param name = "query" value = "${query}"/>
+                           <c:param name = "orderBy" value = "${orderBy}"/>
+                        </c:url>"
+                    >
+                        <spring:message code="order.${orderBy.toString()}"/>
+                    </a>
+                </c:forEach>
+            </ul>
+        </div>
+
+
+
         <div class="d-flex flex-wrap justify-content-center">
             <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                 <jsp:include page="/WEB-INF/components/card_experience.jsp">
@@ -50,7 +71,7 @@
                         <c:url value = "/search_result">
                            <c:param name = "pageNum" value = "${i}"/>
                            <c:param name = "query" value="${query}"/>
-<%--                           <c:param name = "category" value = "${param.category}"/>--%>
+                           <c:param name = "orderBy" value = "${orderBy}"/>
                         </c:url>">
                             <c:out value="${i}"/>
                         </a>

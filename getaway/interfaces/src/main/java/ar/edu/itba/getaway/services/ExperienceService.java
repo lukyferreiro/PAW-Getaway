@@ -18,5 +18,5 @@ public interface ExperienceService {
     Page<ExperienceModel> listByFilter(long categoryId, Double max, long score, Long city, Optional<OrderByModel> order, int page);
     List<ExperienceModel> listByBestRanked(long categoryId);
     List<ExperienceModel> listFavsByUserId(Long userId, Optional<OrderByModel> order);
-    Page<ExperienceModel> getByName(String name, int page);
+    Page<ExperienceModel> getByName(String name, Optional<OrderByModel> order, int page);
 }

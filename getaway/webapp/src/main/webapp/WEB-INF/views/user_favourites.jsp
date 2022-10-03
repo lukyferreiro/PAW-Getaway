@@ -22,12 +22,6 @@
                </c:when>
                <c:otherwise>
                   <div class="d-flex justify-content-center align-content-center">
-<%--                     <div style="margin: 0 auto 0 20px; flex:1;">--%>
-<%--                        <jsp:include page="/WEB-INF/components/order_dropdown.jsp">--%>
-<%--                           <jsp:param name="orderByModels" value="${orderByModels}"/>--%>
-<%--                           <jsp:param name="path" value="/user/favourites"/>--%>
-<%--                        </jsp:include>--%>
-<%--                     </div>--%>
                      <h3 class="title m-0"><spring:message code="favourite.description"/></h3>
                      <div style="margin: 0 20px 0 auto; flex:1;"></div>
                   </div>

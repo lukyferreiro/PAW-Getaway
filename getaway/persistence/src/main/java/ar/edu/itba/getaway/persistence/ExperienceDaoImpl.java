@@ -204,12 +204,19 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> getByName(String name, int page, int page_size) {
-        return jdbcTemplate.query("SELECT * FROM experiences WHERE experienceName LIKE ? ORDER BY experienceName ASC LIMIT ? OFFSET ?", new Object[]{'%'+name+'%', page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
+    public List<ExperienceModel> getByName(String name, Optional<OrderByModel> order, int page, int page_size) {
+        String orderQuery;
+        if (order.isPresent()){
+            orderQuery = order.get().getSqlQuery();
+        }
+        else {
+            orderQuery = " ";
+        }
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experienceName LIKE ? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=0 " + orderQuery + " LIMIT ? OFFSET ?", new Object[]{'%'+name+'%', page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
     public Integer getCountByName(String name) {
-        return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 1) FROM experiences WHERE experienceName LIKE ?", new Object[]{'%'+name+'%'}, Integer.class);
+        return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 1) FROM experiences WHERE experienceName LIKE ? ", new Object[]{'%'+name+'%'}, Integer.class);
     }
 }

@@ -251,7 +251,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testGetByName() {
-        List<ExperienceModel> experienceModelList = experienceDao.getByName("testave", 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.getByName("testave", NO_ORDER,1, PAGE_SIZE);
 
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
