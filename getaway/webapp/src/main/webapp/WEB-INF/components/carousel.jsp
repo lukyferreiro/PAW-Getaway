@@ -7,18 +7,24 @@
 
    <jsp:useBean id="listByCategory" scope="request" type="java.util.List"/>
    <jsp:useBean id="avgReviews" scope="request" type="java.util.List"/>
+   <jsp:useBean id="listReviewsCount" scope="request" type="java.util.List"/>
 
    <c:forEach varStatus="categoryIndex" var="categoryList" items="${listByCategory}">
       <c:if test="${categoryList.size() != 0}">
-         <div class="container text-center">
-            <h2 class="font-weight-light">${categoryList.get(0).categoryName}</h2>
-            <div id="recipeCarousel<c:out value="${categoryIndex.index}"/>" class="carousel slide" data-bs-ride="carousel">
+         <div class="text-center">
+            <c:if test="${categoryIndex.index != 0}">
+               <hr class="separator mx-5"/>
+            </c:if>
+            <h2 style="font-weight: 600; text-decoration: underline">
+                  <c:out value="${categoryList.get(0).categoryName}"/>
+            </h2>
+            <div id="recipeCarousel<c:out value="${categoryIndex.index}"/>" class="carousel slide" data-bs-interval="false">
                <div class="carousel-inner">
                   <c:forEach begin="0" step="3" end="${categoryList.size() - 1}" var="index">
                      <div class="carousel-item <c:if test="${index == 0}">active</c:if>">
-                        <div class="row">
-                           <c:forEach begin="${index}" step="1" end="${categoryList.size()-1 < 2 + index ? categoryList.size() - 1 : 2 + index}" var="experience">
-                              <div class="col-md-3">
+                        <div class="d-flex justify-content-center align-content-center">
+                           <c:forEach begin="${index}" step="1" end="${categoryList.size()-1 < 2 + index ? categoryList.size() - 1 : 2 + index}" var="experience" varStatus="myIndex">
+<%--                              <div class="col-md-3">--%>
                                  <jsp:include page="/WEB-INF/components/card_experience.jsp">
                                     <jsp:param name="hasImage" value="${categoryList.get(experience).hasImage}"/>
                                     <jsp:param name="categoryName" value="${categoryList.get(experience).categoryName}"/>
@@ -29,9 +35,10 @@
                                     <jsp:param name="price" value="${categoryList.get(experience).price}"/>
                                     <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
                                     <jsp:param name="path" value="/"/>
-                                    <jsp:param name="avgReviews" value="${avgReviews[experience]}"/>
+                                    <jsp:param name="avgReviews" value="${avgReviews[categoryIndex.index][myIndex.index]}"/>
+                                    <jsp:param name="reviewCount" value="${listReviewsCount[categoryIndex.index][myIndex.index]}"/>
                                  </jsp:include>
-                              </div>
+<%--                              </div>--%>
                            </c:forEach>
                         </div>
                      </div>
