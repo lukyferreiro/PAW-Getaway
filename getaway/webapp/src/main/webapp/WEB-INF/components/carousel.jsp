@@ -14,7 +14,7 @@
             <h2 class="font-weight-light">${categoryList.get(0).categoryName}</h2>
             <div id="recipeCarousel<c:out value="${categoryIndex.index}"/>" class="carousel slide" data-bs-ride="carousel">
                <div class="carousel-inner">
-                  <c:forEach begin="0" step="1" end="${categoryList.size() - 1}" var="index">
+                  <c:forEach begin="0" step="3" end="${categoryList.size() - 1}" var="index">
                      <div class="carousel-item <c:if test="${index == 0}">active</c:if>">
                         <div class="row">
                            <c:forEach begin="${index}" step="1" end="${categoryList.size()-1 < 2 + index ? categoryList.size() - 1 : 2 + index}" var="experience">
