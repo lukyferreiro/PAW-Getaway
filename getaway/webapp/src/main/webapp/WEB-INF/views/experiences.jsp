@@ -68,6 +68,9 @@
                <jsp:include page="/WEB-INF/components/order_dropdown.jsp">
                   <jsp:param name="orderByModels" value="${orderByModels}"/>
                   <jsp:param name="path" value="/experiences/${categoryName}"/>
+                  <jsp:param name = "score" value = "${score}"/>
+                  <jsp:param name = "cityId" value = "${cityId}"/>
+                  <jsp:param name = "maxPrice" value = "${maxPrice}"/>
                </jsp:include>
 
                <a href="<c:url value = "/experiences/${categoryName}"/>">
@@ -112,7 +115,12 @@
                         <li class="page-item">
                            <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
                               href="<c:url value = "/experiences/${categoryName}">
-                                 <c:param name = "pageNum" value = "${i}"/></c:url>">
+                                 <c:param name = "pageNum" value = "${i}"/>
+                                 <c:param name = "score" value = "${score}"/>
+                                 <c:param name = "cityId" value = "${cityId}"/>
+                                 <c:param name = "maxPrice" value = "${maxPrice}"/>
+                                 <c:param name = "orderBy" value = "${orderBy}" />
+                                 </c:url>">
                               <c:out value="${i}"/>
                            </a>
                         </li>

@@ -69,7 +69,10 @@ public class ExperienceController {
         // Order By
         final OrderByModel[] orderByModels = OrderByModel.values();
 
-        orderBy.ifPresent(orderByModel -> request.setAttribute("orderBy", orderByModel));
+        if ( orderBy.isPresent() ){
+            request.setAttribute("orderBy", orderBy);
+            mav.addObject("orderBy", orderBy.get());
+        }
 
         // Price
         final Optional<Double> maxPriceOpt = experienceService.getMaxPrice(id);
@@ -141,6 +144,7 @@ public class ExperienceController {
 //        }
 //
 //        // mav info
+
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("cities", cityModels);
         mav.addObject("dbCategoryName", dbCategoryName);
