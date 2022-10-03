@@ -1,9 +1,6 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.ImageExperienceModel;
-import ar.edu.itba.getaway.models.Roles;
-import ar.edu.itba.getaway.models.UserModel;
+import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.persistence.ExperienceDao;
 import org.slf4j.Logger;
@@ -86,13 +83,13 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<ExperienceModel> listByUserId(long userId, String order) {
+    public List<ExperienceModel> listByUserId(long userId, Optional<OrderByModel> order) {
         LOGGER.debug("Retrieving experiences created by user with id {}", userId);
         return experienceDao.listByUserId(userId, order);
     }
 
     @Override
-    public Page<ExperienceModel> listByFilter(long categoryId, Double max, long score, Long city, String order, int page) {
+    public Page<ExperienceModel> listByFilter(long categoryId, Double max, long score, Long city, Optional<OrderByModel> order, int page) {
         int total_pages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
@@ -131,7 +128,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<ExperienceModel> listFavsByUserId(Long userId, String order) {
+    public List<ExperienceModel> listFavsByUserId(Long userId, Optional<OrderByModel> order) {
         LOGGER.debug("Retrieving all favs of user with id {}", userId);
         return experienceDao.listFavsByUserId(userId, order);
     }

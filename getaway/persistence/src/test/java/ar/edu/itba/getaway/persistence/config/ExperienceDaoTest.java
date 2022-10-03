@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.persistence.config;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
+import ar.edu.itba.getaway.models.OrderByModel;
 import ar.edu.itba.getaway.persistence.ExperienceDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +45,7 @@ public class ExperienceDaoTest {
     private final Long ADV3_REV = new Long(5);
 
     private final long DEFAULT_SCORE = 0;
-    private final String NO_ORDER = "";
+    private final Optional<OrderByModel> NO_ORDER = Optional.empty();
     private final Long NO_CITY = new Long(-1);
     private final int PAGE_SIZE = 3;
 

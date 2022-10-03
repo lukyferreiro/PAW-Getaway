@@ -44,8 +44,7 @@ public class ExperienceController {
                                    @ModelAttribute("filterForm") final FilterForm form,
                                    Principal principal,
                                    HttpServletRequest request,
-                                   @RequestParam Optional<String> orderBy,
-                                   @RequestParam Optional<String> direction,
+                                   @RequestParam Optional<OrderByModel> orderBy,
                                    @RequestParam Optional<Long> cityId,
                                    @RequestParam Optional<Double> maxPrice,
                                    @RequestParam Optional<Long> score,
@@ -70,12 +69,7 @@ public class ExperienceController {
         // Order By
         final OrderByModel[] orderByModels = OrderByModel.values();
 
-        String orderByQuery = "";
-
-        if (orderBy.isPresent()) {
-            request.setAttribute("orderBy", orderBy.get());
-            orderByQuery = " ORDER BY " + orderBy.get() + " " + direction.get();
-        }
+        orderBy.ifPresent(orderByModel -> request.setAttribute("orderBy", orderByModel));
 
         // Price
         final Optional<Double> maxPriceOpt = experienceService.getMaxPrice(id);
@@ -99,11 +93,11 @@ public class ExperienceController {
         final List<CityModel> cityModels = locationService.listAllCities();
 
         if (cityId.isPresent()) {
-            currentPage = experienceService.listByFilter(id, max, scoreVal, cityId.get(), orderByQuery, pageNum);
+            currentPage = experienceService.listByFilter(id, max, scoreVal, cityId.get(), orderBy, pageNum);
             request.setAttribute("cityId", cityId.get());
             mav.addObject("cityId", cityId.get());
         } else {
-            currentPage = experienceService.listByFilter(id, max, scoreVal, new Long(-1), orderByQuery, pageNum);
+            currentPage = experienceService.listByFilter(id, max, scoreVal, new Long(-1), orderBy, pageNum);
             request.setAttribute("cityId", -1);
             mav.addObject("cityId", -1);
         }
@@ -225,7 +219,7 @@ public class ExperienceController {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
-            return experience(categoryName, form, principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
+            return experience(categoryName, form, principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
         }
 
         final Optional<CityModel> cityModel = locationService.getCityByName(form.getActivityCity());

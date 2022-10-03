@@ -10,8 +10,7 @@
    <c:forEach var="orderBy" items="${orderByModels}">
       <a class="dropdown-item" href="
          <c:url value="${param.path}">
-            <c:param name = "orderBy" value = "${orderBy.criteria}"/>
-            <c:param name = "direction" value = "${orderBy.direction}"/>
+            <c:param name = "orderBy" value = "${orderBy}"/>
          </c:url>">
          <spring:message code="order.${orderBy.toString()}"/>
       </a>

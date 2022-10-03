@@ -24,7 +24,7 @@ public enum OrderByModel {
         return this.direction;
     }
 
-    public String getFullUrl() {
-        return String.format("orderBy=%s&direction=%s", this.criteria,this.direction);
+    public String getSqlQuery() {
+        return String.format("ORDER BY %s %s", criteria, direction);
     }
 }

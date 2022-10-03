@@ -49,8 +49,7 @@ public class UserExperiencesController {
 
     @RequestMapping(value = "/user/favourites")
     public ModelAndView favourites(Principal principal,
-                                   @RequestParam Optional<String> direction,
-                                   @RequestParam Optional<String> orderBy,
+                                   @RequestParam Optional<OrderByModel> orderBy,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set){
         final ModelAndView mav = new ModelAndView("user_favourites");
@@ -63,11 +62,7 @@ public class UserExperiencesController {
 
         final OrderByModel[] orderByModels = OrderByModel.values();
 
-        String order = "";
-        if (orderBy.isPresent())
-            order = " ORDER BY " + orderBy.get() + " " + direction.get();
-
-        List<ExperienceModel> experienceList = experienceService.listFavsByUserId(user.getId() ,order);
+        List<ExperienceModel> experienceList = experienceService.listFavsByUserId(user.getId(), orderBy);
 
         final List<Long> avgReviews = new ArrayList<>();
         final List<Integer> listReviewsCount = new ArrayList<>();
@@ -87,8 +82,7 @@ public class UserExperiencesController {
 
     @RequestMapping(value = "/user/experiences")
     public ModelAndView experience(Principal principal,
-                                   @RequestParam Optional<String> direction,
-                                   @RequestParam Optional<String> orderBy,
+                                   @RequestParam Optional<OrderByModel> orderBy,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set) {
         final ModelAndView mav = new ModelAndView("user_experiences");
@@ -101,12 +95,7 @@ public class UserExperiencesController {
 
         final OrderByModel[] orderByModels = OrderByModel.values();
 
-        String order = "";
-        if (orderBy.isPresent()) {
-            order = " ORDER BY " +orderBy.get() + " " +direction.get();
-        }
-
-        List<ExperienceModel> experienceList = experienceService.listByUserId(user.getId(), order);
+        List<ExperienceModel> experienceList = experienceService.listByUserId(user.getId(), orderBy);
 
         final List<Long> avgReviews = new ArrayList<>();
         final List<Integer> listReviewsCount = new ArrayList<>();
