@@ -40,7 +40,7 @@
 
 .page-link, .page-link:hover, .page-link:focus {
     color: var(--primary-color);
-    --bs-btn-focus-shadow-rgb: none;
+    box-shadow: none !important;
 }
 
 .current-page-link {

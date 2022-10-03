@@ -15,7 +15,7 @@
             <jsp:param name="categoryName" value="${categoryName}"/>
          </jsp:include>
 
-         <div class="container-fluid p-0 mt-3 d-flex" style="min-height: 650px;">
+         <div class="container-fluid p-0 mt-3 d-flex">
             <div class="container-filters container-fluid px-2 py-0 mx-2 my-0 d-flex flex-column justify-content-start align-items-center border-end">
                <p class="filters-title m-0">
                   <spring:message code="filters.title"/>
@@ -82,7 +82,8 @@
                </a>
             </div>
 
-            <div class="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex flex-column justify-content-center align-content-center">
+            <div class="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex flex-column justify-content-center align-content-center"
+                 style="min-height: 650px;">
                <c:choose>
                   <c:when test="${experiences.size() == 0}">
                      <div class="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
@@ -113,47 +114,46 @@
                            </jsp:include>
                         </c:forEach>
                      </div>
-                  </c:otherwise>
-               </c:choose>
 
+                     <div class="mt-auto d-flex justify-content-center align-items-center">
+                        <ul class="pagination m-0">
+                              <%--                     <li class="page-item">--%>
+                              <%--                        <a class="page-link" href="--%>
+                              <%--                        <c:url value = "/experiences/${categoryName}/">--%>
+                              <%--                           <c:param name = "pageNum" value = "1"/>--%>
+                              <%--                        </c:url>">--%>
+                              <%--                           &lt;%&ndash;                        <spring:message code="home.pagination.first"/>&ndash;%&gt;--%>
+                              <%--                        </a>--%>
+                              <%--                     </li>--%>
 
-               <div class="d-flex justify-content-center align-items-center">
-                  <ul class="pagination m-0">
-                     <%--                     <li class="page-item">--%>
-                     <%--                        <a class="page-link" href="--%>
-                     <%--                        <c:url value = "/experiences/${categoryName}/">--%>
-                     <%--                           <c:param name = "pageNum" value = "1"/>--%>
-                     <%--                        </c:url>">--%>
-                     <%--                           &lt;%&ndash;                        <spring:message code="home.pagination.first"/>&ndash;%&gt;--%>
-                     <%--                        </a>--%>
-                     <%--                     </li>--%>
-
-                     <c:forEach var="i" begin="1" end="${totalPages}">
-                        <li class="page-item">
-                           <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
-                              href="<c:url value = "/experiences/${categoryName}">
+                           <c:forEach var="i" begin="1" end="${totalPages}">
+                              <li class="page-item">
+                                 <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
+                                    href="<c:url value = "/experiences/${categoryName}">
                                  <c:param name = "pageNum" value = "${i}"/>
                                  <c:param name = "score" value = "${score}"/>
                                  <c:param name = "cityId" value = "${cityId}"/>
                                  <c:param name = "maxPrice" value = "${maxPrice}"/>
                                  <c:param name = "orderBy" value = "${orderBy}" />
                                  </c:url>">
-                              <c:out value="${i}"/>
-                           </a>
-                        </li>
-                     </c:forEach>
+                                    <c:out value="${i}"/>
+                                 </a>
+                              </li>
+                           </c:forEach>
 
-                     <%--                     <li class="page-item">--%>
-                     <%--                        <a class="page-link" href="--%>
-                     <%--                        <c:url value = "/experiences/${categoryName}">--%>
-                     <%--                           <c:param name = "pageNum" value = "${currentPage+1}"/>--%>
-                     <%--&lt;%&ndash;                           <c:param name = "category" value = "${param.category}"/>&ndash;%&gt;--%>
-                     <%--                        </c:url>">--%>
-                     <%--                        <spring:message code="experience.pagination.next"/>--%>
-                     <%--                        </a>--%>
-                     <%--                     </li>--%>
-                  </ul>
-               </div>
+                              <%--                     <li class="page-item">--%>
+                              <%--                        <a class="page-link" href="--%>
+                              <%--                        <c:url value = "/experiences/${categoryName}">--%>
+                              <%--                           <c:param name = "pageNum" value = "${currentPage+1}"/>--%>
+                              <%--&lt;%&ndash;                           <c:param name = "category" value = "${param.category}"/>&ndash;%&gt;--%>
+                              <%--                        </c:url>">--%>
+                              <%--                        <spring:message code="experience.pagination.next"/>--%>
+                              <%--                        </a>--%>
+                              <%--                     </li>--%>
+                        </ul>
+                     </div>
+                  </c:otherwise>
+               </c:choose>
             </div>
          </div>
 
