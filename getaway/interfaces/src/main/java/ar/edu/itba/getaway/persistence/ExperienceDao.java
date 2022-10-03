@@ -27,5 +27,6 @@ public interface ExperienceDao {
 
     List<ExperienceModel> listByBestRanked(long categoryId);
 
-    List<ExperienceModel> getByName(String name);
+    List<ExperienceModel> getByName(String name, int page, int page_size);
+    Integer getCountByName(String name);
 }

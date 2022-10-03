@@ -169,8 +169,12 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> getByName(String name) {
-        return  jdbcTemplate.query("SELECT * FROM experiences WHERE experienceName LIKE ? ORDER BY experienceName ASC", new Object[]{'%'+name+'%'}, EXPERIENCE_MODEL_ROW_MAPPER);
+    public List<ExperienceModel> getByName(String name, int page, int page_size) {
+        return jdbcTemplate.query("SELECT * FROM experiences WHERE experienceName LIKE ? ORDER BY experienceName ASC LIMIT ? OFFSET ?", new Object[]{'%'+name+'%', page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
+    @Override
+    public Integer getCountByName(String name) {
+        return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 1) FROM experiences WHERE experienceName LIKE ?", new Object[]{'%'+name+'%'}, Integer.class);
+    }
 }

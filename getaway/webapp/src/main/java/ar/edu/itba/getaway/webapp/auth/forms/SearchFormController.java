@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.webapp.auth.forms;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.UserModel;
+import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.services.ExperienceService;
 import ar.edu.itba.getaway.services.FavExperienceService;
 import ar.edu.itba.getaway.services.ReviewService;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -40,13 +42,13 @@ public class SearchFormController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchFormController.class);
 
     @RequestMapping(value = "/search_result", method = {RequestMethod.GET})
-    public ModelAndView createSearchForm(@RequestParam("query") final String query,
-                                         @ModelAttribute("searchForm") final SearchForm searchForm,
+    public ModelAndView createSearchForm(@ModelAttribute("searchForm") final SearchForm searchForm,
                                          @RequestParam("set") final Optional<Boolean> set,
                                          @RequestParam("experience") final Optional<Long> experience,
+                                         @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum,
                                          Principal principal) {
 
-        final List<ExperienceModel> experienceModels = experienceService.getByName(searchForm.getQuery());
+        final Page<ExperienceModel> currentPage = experienceService.getByName(searchForm.getQuery(), pageNum);
         final ModelAndView mav = new ModelAndView("search_result");
 
         if (principal != null) {
@@ -65,21 +67,16 @@ public class SearchFormController {
 
 //        List<ExperienceModel> currentExperiences = currentPage.getContent();
 
+        final List<ExperienceModel> experienceModels = currentPage.getContent();
         final List<Long> avgReviews = new ArrayList<>();
         for (ExperienceModel exp : experienceModels) {
             avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
         }
 
-        LOGGER.debug("AVGSCORE reviewService {}", avgReviews);
-
         mav.addObject("avgReviews", avgReviews);
-
         mav.addObject("set", set);
-
         mav.addObject("experience", experience);
-
         mav.addObject("experiences", experienceModels);
-
         mav.addObject("isEditing", false);
 
         return mav;
@@ -87,15 +84,19 @@ public class SearchFormController {
 
 
     @RequestMapping(value = "/search_result", method = {RequestMethod.POST})
-    public ModelAndView searchByName(@RequestParam("query") final String query,
+    public ModelAndView searchByName(
                                      @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                      @RequestParam("set") final Optional<Boolean> set,
                                      @RequestParam("experience") final Optional<Long> experience,
+                                     @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum,
+                                     final BindingResult errors,
                                      Principal principal) {
 
-        final List<ExperienceModel> experienceModels = experienceService.getByName(searchForm.getQuery());
-
         final ModelAndView mav = new ModelAndView("/search_result");
+
+        if (errors.hasErrors()) {
+            return createSearchForm(searchForm,set,experience,pageNum,principal);
+        }
 
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
@@ -113,6 +114,9 @@ public class SearchFormController {
 
 //        List<ExperienceModel> currentExperiences = currentPage.getContent();
 
+        Page<ExperienceModel> currentPage = experienceService.getByName(searchForm.getQuery(), pageNum);
+        final List<ExperienceModel> experienceModels = currentPage.getContent();
+
         final List<Long> avgReviews = new ArrayList<>();
         for (ExperienceModel exp : experienceModels) {
             avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
@@ -121,13 +125,9 @@ public class SearchFormController {
         LOGGER.debug("AVGSCORE reviewService {}", avgReviews);
 
         mav.addObject("avgReviews", avgReviews);
-
         mav.addObject("set", set);
-
         mav.addObject("experience", experience);
-
         mav.addObject("experiences", experienceModels);
-
         mav.addObject("isEditing", false);
 
         return mav;

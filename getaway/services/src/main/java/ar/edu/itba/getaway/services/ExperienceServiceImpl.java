@@ -21,6 +21,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     //TODO: limit page number to total_pages amount
     private static final int PAGE_SIZE = 6;
+    private static final int RESULT_PAGE_SIZE = 9;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 
@@ -111,6 +112,34 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getMaxPrice(categoryId);
     }
 
-    public List<ExperienceModel> getByName(String name){return experienceDao.getByName(name);}
+    @Override
+    public Page<ExperienceModel> getByName(String name, int page){
+        int total_pages;
+        List<ExperienceModel> experienceModelList = new ArrayList<>();
+
+        LOGGER.debug("REQUESTED PAGE {}", page);
+        try{
+            int total = experienceDao.getCountByName(name);
+
+            LOGGER.debug("TOTAL FOUND {}", total);
+
+            total_pages = (int) Math.ceil( (double) total/ RESULT_PAGE_SIZE);
+
+            LOGGER.debug("MAXPAGE CALCULATED {}", total_pages);
+
+            if (page <= total_pages){
+                experienceModelList  = experienceDao.getByName(name, page, RESULT_PAGE_SIZE);
+            }
+            else {
+                page = total_pages;
+                experienceModelList  = experienceDao.getByName(name, page, RESULT_PAGE_SIZE);
+            }
+        } catch (EmptyResultDataAccessException e) {
+            total_pages = 1;
+        }
+
+        LOGGER.debug("MAXPAGE VALUE SERVICE {}", total_pages);
+        return new Page<>(experienceModelList, page, total_pages);
+    }
 
 }
