@@ -1,30 +1,20 @@
 package ar.edu.itba.getaway.models;
 
 public enum OrderByModel {
-    OrderByRankAsc("AVG(SCORE)","ASC"),
-    OrderByRankDesc("AVG(SCORE)", "DESC"),
-    OrderByAZ("experienceName", "ASC"),
-    OrderByZA("experienceName", "DESC"),
-    OrderByLowPrice("price", "ASC"),
-    OrderByHighPrice("price", "DESC");
+    OrderByRankAsc("ORDER BY AVG(SCORE) ASC"),
+    OrderByRankDesc("ORDER BY AVG(SCORE) DESC"),
+    OrderByAZ("ORDER BY experienceName ASC"),
+    OrderByZA("ORDER BY experienceName DESC"),
+    OrderByLowPrice("ORDER BY price ASC"),
+    OrderByHighPrice("ORDER BY price ASC DESC");
 
-    String criteria;
-    String direction;
+    String SqlQuery;
 
-    OrderByModel(String criteria, String direction){
-        this.criteria = criteria;
-        this.direction = direction;
-    }
-
-    public String getCriteria(){
-        return this.criteria;
-    }
-
-    public String getDirection(){
-        return this.direction;
+    OrderByModel(String SqlQuery){
+        this.SqlQuery = SqlQuery;
     }
 
     public String getSqlQuery() {
-        return String.format("ORDER BY %s %s", criteria, direction);
+        return SqlQuery;
     }
 }
