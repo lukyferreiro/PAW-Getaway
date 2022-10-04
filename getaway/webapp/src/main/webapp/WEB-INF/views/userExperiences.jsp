@@ -15,6 +15,7 @@
 
     <div class="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
                 <div class="d-flex justify-content-center align-content-center">
+                    <div style="margin: 0 auto 0 20px; flex:1;"></div>
                     <h3 class="title m-0"><spring:message code="experience.description"/></h3>
                     <div style="margin: 0 20px 0 auto; flex:1;"></div>
                 </div>

@@ -50,6 +50,8 @@ public class UserExperiencesController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserExperiencesController.class);
 
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif", "image/jpg");
+    private static final int MAX_SIZE_PER_FILE = 10000000;
+
 
     @RequestMapping(value = "/user/favourites")
     public ModelAndView favourites(Principal principal,
@@ -219,6 +221,10 @@ public class UserExperiencesController {
         if(!experienceImg.isEmpty()) {
             if (!contentTypes.contains(experienceImg.getContentType())) {
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageFormat");
+                return experienceEdit(experienceId, form, searchForm ,request);
+            }
+            if(experienceImg.getSize()>MAX_SIZE_PER_FILE){
+                errors.rejectValue("experienceImg", "experienceForm.validation.imageSize");
                 return experienceEdit(experienceId, form, searchForm ,request);
             }
         }

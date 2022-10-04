@@ -48,7 +48,7 @@ public class ExperienceController {
                                       @RequestParam Optional<Long> cityId,
                                       @RequestParam Optional<Double> maxPrice,
                                       @RequestParam Optional<Long> score,
-                                      @RequestParam Optional<Long> experienceId,
+                                      @RequestParam Optional<Long> experience,
                                       @RequestParam Optional<Boolean> set,
                                       @RequestParam(value = "pageNum", defaultValue = "1") final Integer pageNum) {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
@@ -111,9 +111,7 @@ public class ExperienceController {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if (user.isPresent()) {
                 final Long userId = user.get().getUserId();
-                if(set.isPresent()){
-                    favExperienceService.setFav(userId, set, experienceId);
-                }
+                favExperienceService.setFav(userId, set, experience);
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
                 mav.addObject("favExperienceModels", favExperienceModels);
             }
@@ -215,9 +213,7 @@ public class ExperienceController {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if (user.isPresent()) {
                 final Long userId = user.get().getUserId();
-                if(set.isPresent()){
-                    favExperienceService.setFav(userId, set, Optional.of(experienceId));
-                }
+                favExperienceService.setFav(userId, set, Optional.of(experienceId));
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
 
                 mav.addObject("favExperienceModels", favExperienceModels);

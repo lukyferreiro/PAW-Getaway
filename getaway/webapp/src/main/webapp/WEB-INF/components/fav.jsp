@@ -13,15 +13,13 @@
 <c:choose>
    <c:when test="${fav}">
       <a href="<c:url value="${param.path}">
-                     <c:choose>
+                 <c:choose>
                     <c:when test="${param.search}">
                        <c:param name="query" value="${param.query}"/>
-                       <c:param name="orderBy" value="${param.orderBy}"/>
                     </c:when>
                     <c:when test="${param.filter}">
                        <c:param name="score" value="${param.score}"/>
                        <c:param name="cityId" value="${param.cityId}"/>
-                       <c:param name="orderBy" value="${param.orderBy}"/>
                        <c:param name="maxPrice" value="${param.maxPrice}"/>
                     </c:when>
                     <c:otherwise>
@@ -54,7 +52,6 @@
                     <c:when test="${param.filter}">
                        <c:param name="score" value="${param.score}"/>
                        <c:param name="cityId" value="${param.cityId}"/>
-                       <c:param name="orderBy" value="${param.orderBy}"/>
                        <c:param name="maxPrice" value="${param.maxPrice}"/>
                     </c:when>
                  </c:choose>

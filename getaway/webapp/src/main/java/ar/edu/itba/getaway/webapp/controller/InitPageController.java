@@ -48,10 +48,7 @@ public class InitPageController {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if (user.isPresent()) {
                 final Long userId = user.get().getUserId();
-
-                if (set.isPresent()) {
-                    favExperienceService.setFav(userId, set, experience);
-                }
+                favExperienceService.setFav(userId, set, experience);
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
                 mav.addObject("favExperienceModels", favExperienceModels);
             } else {

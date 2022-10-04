@@ -97,13 +97,14 @@ public class ExperienceServiceImpl implements ExperienceService {
 
             LOGGER.debug("Total pages calculated: {}", total_pages);
 
-            if (page <= total_pages){
-                experienceModelList  = experienceDao.listExperiencesByFilter(categoryId, max, score, city, order, page, PAGE_SIZE);
-            }
-            else {
+            if (page > total_pages) {
                 page = total_pages;
-                experienceModelList  = experienceDao.listExperiencesByFilter(categoryId, max, score, city, order, total_pages, PAGE_SIZE);
             }
+            else if (page < 0){
+                page = 1;
+            }
+
+            experienceModelList  = experienceDao.listExperiencesByFilter(categoryId, max, score, city, order, page, PAGE_SIZE);
         } catch (EmptyResultDataAccessException e) {
             total_pages = 1;
         }
@@ -143,6 +144,9 @@ public class ExperienceServiceImpl implements ExperienceService {
             if (page > total_pages) {
                 page = total_pages;
             }
+            else if (page < 0){
+                page = 1;
+            }
             experienceModelList  = experienceDao.listExperiencesFavsByUserId(userId, order, page, RESULT_PAGE_SIZE);
         }
         else {
@@ -171,6 +175,9 @@ public class ExperienceServiceImpl implements ExperienceService {
 
             if (page > total_pages) {
                 page = total_pages;
+            }
+            else if (page < 0){
+                page = 1;
             }
             experienceModelList  = experienceDao.listExperiencesByName(name, order, page, RESULT_PAGE_SIZE);
         }
