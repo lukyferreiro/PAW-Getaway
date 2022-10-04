@@ -13,7 +13,7 @@ public interface ExperienceDao {
     Optional<ExperienceModel> getById (long experienceId);
     Optional<Double> getMaxPrice(long categoryId);
     List<ExperienceModel> listAll (String order);
-    List<ExperienceModel> listByUserId(long userId, Optional<OrderByModel> order);
+    List<ExperienceModel> listByUserId(long userId, Long categoryId);
     List<ExperienceModel> listByFilter(long categoryId, Double max, long score, Long city, Optional<OrderByModel> order, int page, int page_size);
     Integer countListByFilter(long categoryId, Double max, long score, Long city);
     List<ExperienceModel> listByBestRanked(long categoryId);

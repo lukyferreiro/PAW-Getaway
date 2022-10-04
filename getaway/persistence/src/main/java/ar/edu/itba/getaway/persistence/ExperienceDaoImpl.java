@@ -125,18 +125,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     //TODO: inconsistent behavior with order by avg(score)
     @Override
-    public List<ExperienceModel> listByUserId(long userId, Optional<OrderByModel> order) {
-        String orderQuery;
-        if (order.isPresent()){
-            orderQuery = order.get().getSqlQuery();
-        }
-        else {
-            orderQuery = " ";
-        }
-
-        final String query = "SELECT * FROM experiences WHERE userId = ? " + orderQuery;
+    public List<ExperienceModel> listByUserId(long userId, Long categoryId) {
+        final String query = "SELECT * FROM experiences WHERE userId = ? AND categoryId = ? ";
         LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
+        return jdbcTemplate.query(query, new Object[]{userId,categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override

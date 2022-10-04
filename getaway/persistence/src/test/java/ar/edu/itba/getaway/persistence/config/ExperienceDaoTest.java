@@ -161,20 +161,14 @@ public class ExperienceDaoTest {
 
     @Test
     public void testGetByUserId() {
-        List<ExperienceModel> experienceModelList = experienceDao.listByUserId(1, NO_ORDER);
+        List<ExperienceModel> experienceModelList = experienceDao.listByUserId(2L, 1L);
         assertFalse(experienceModelList.isEmpty());
 
         //User 1 experiences
-        assertTrue(experienceModelList.contains(DEFAULT_ADV));
-        assertTrue(experienceModelList.contains(DEFAULT_GAS));
-        assertTrue(experienceModelList.contains(DEFAULT_HOT));
-        assertTrue(experienceModelList.contains(DEFAULT_REL));
-        assertTrue(experienceModelList.contains(DEFAULT_NIG));
-
+        assertFalse(experienceModelList.contains(DEFAULT_ADV));
         //User 2 experiences
-        assertFalse(experienceModelList.contains(DEFAULT_HIS));
-        assertFalse(experienceModelList.contains(DEFAULT_ADV2));
-        assertFalse(experienceModelList.contains(DEFAULT_ADV3));
+        assertTrue(experienceModelList.contains(DEFAULT_ADV2));
+        assertTrue(experienceModelList.contains(DEFAULT_ADV3));
     }
 
     @Test

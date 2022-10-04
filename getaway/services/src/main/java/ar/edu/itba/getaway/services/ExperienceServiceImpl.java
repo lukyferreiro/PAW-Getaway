@@ -84,9 +84,9 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<ExperienceModel> listByUserId(long userId, Optional<OrderByModel> order) {
+    public List<ExperienceModel> listByUserId(long userId, Long categoryId) {
         LOGGER.debug("Retrieving experiences created by user with id {}", userId);
-        return experienceDao.listByUserId(userId, order);
+        return experienceDao.listByUserId(userId,  categoryId);
     }
 
     @Override

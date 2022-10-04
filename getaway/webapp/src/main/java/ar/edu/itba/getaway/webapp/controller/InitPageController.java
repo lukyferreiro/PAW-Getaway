@@ -47,7 +47,7 @@ public class InitPageController {
             if (user.isPresent()) {
                 final long userId = user.get().getId();
 
-                if(set.isPresent()){
+                if (set.isPresent()) {
                     favExperienceService.setFav(userId, set, experience);
                 }
 
@@ -63,19 +63,20 @@ public class InitPageController {
         final List<List<Integer>> listReviewsCount = new ArrayList<>();
         final List<List<ExperienceModel>> listByCategory = new ArrayList<>();
 
-        for(int i=0 ; i<=5 ; i++){
+        for (int i = 0; i <= 5; i++) {
             listByCategory.add(new ArrayList<>());
             avgReviews.add(new ArrayList<>());
             listReviewsCount.add(new ArrayList<>());
 
             listByCategory.get(i).addAll(experienceService.listByBestRanked(i + 1));
 
-            for(ExperienceModel experienceModel : listByCategory.get(i)){
+            for (ExperienceModel experienceModel : listByCategory.get(i)) {
                 avgReviews.get(i).add(reviewService.getAverageScore(experienceModel.getExperienceId()));
                 listReviewsCount.get(i).add(reviewService.getReviewCount(experienceModel.getExperienceId()));
             }
         }
 
+        mav.addObject("isEditing",false);
         mav.addObject("listByCategory", listByCategory);
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("listReviewsCount", listReviewsCount);
