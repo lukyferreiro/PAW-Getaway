@@ -96,7 +96,6 @@ public class SearchFormController {
         return mav;
     }
 
-
     @RequestMapping(value = "/search_result", method = {RequestMethod.POST})
     public ModelAndView searchByName(@Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                      final BindingResult errors,

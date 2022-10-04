@@ -28,6 +28,7 @@ public class  ExperienceForm {
     @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ,'_.-]*$")
     private String experienceAddress;
 
+    @Size(max = 9)
     @Pattern(regexp = "^((0|([1-9][0-9]*))(\\.[0-9]{1,2})?)?$")
     private String experiencePrice;
 

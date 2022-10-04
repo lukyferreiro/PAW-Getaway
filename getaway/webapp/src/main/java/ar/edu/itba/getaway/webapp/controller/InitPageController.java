@@ -43,38 +43,37 @@ public class InitPageController {
 
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-
             if (user.isPresent()) {
                 final Long userId = user.get().getUserId();
-
                 if(set.isPresent()){
                     favExperienceService.setFav(userId, set, experience);
                 }
-
-                List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
+                final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
                 mav.addObject("favExperienceModels", favExperienceModels);
             } else {
                 mav.addObject("favExperienceModels", new ArrayList<>());
             }
-
         }
 
-        final List<List<Long>> avgReviews = new ArrayList<>();
-        final List<List<Integer>> listReviewsCount = new ArrayList<>();
-        final List<List<ExperienceModel>> listByCategory = new ArrayList<>();
+        final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategories();
+        final List<List<Long>> avgReviews = reviewService.getListOfAverageScoreByExperienceListAndCategoryId(listByCategory);
+        final List<List<Integer>> listReviewsCount = reviewService.getListOfReviewCountByExperienceListAndCategoryId(listByCategory);
 
-        for(int i=0 ; i<=5 ; i++){
-            listByCategory.add(new ArrayList<>());
-            avgReviews.add(new ArrayList<>());
-            listReviewsCount.add(new ArrayList<>());
-
-            listByCategory.get(i).addAll(experienceService.listExperiencesByBestRanked((long) (i + 1)));
-
-            for(ExperienceModel experienceModel : listByCategory.get(i)){
-                avgReviews.get(i).add(reviewService.getReviewAverageScore(experienceModel.getExperienceId()));
-                listReviewsCount.get(i).add(reviewService.getReviewCount(experienceModel.getExperienceId()));
-            }
-        }
+//        final List<List<Long>> avgReviews = new ArrayList<>();
+//        final List<List<Integer>> listReviewsCount = new ArrayList<>();
+//        final List<List<ExperienceModel>> listByCategory = new ArrayList<>();
+//        for(int i=0 ; i<=5 ; i++){
+//            listByCategory.add(new ArrayList<>());
+//            avgReviews.add(new ArrayList<>());
+//            listReviewsCount.add(new ArrayList<>());
+//
+//            listByCategory.get(i).addAll(experienceService.listExperiencesByBestRanked((long) (i + 1)));
+//
+//            for(ExperienceModel experienceModel : listByCategory.get(i)){
+//                avgReviews.get(i).add(reviewService.getReviewAverageScore(experienceModel.getExperienceId()));
+//                listReviewsCount.get(i).add(reviewService.getReviewCount(experienceModel.getExperienceId()));
+//            }
+//        }
 
         mav.addObject("listByCategory", listByCategory);
         mav.addObject("avgReviews", avgReviews);

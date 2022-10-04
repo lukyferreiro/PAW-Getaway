@@ -4,6 +4,7 @@ import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -13,8 +14,11 @@ public interface ReviewService {
     List<ReviewModel> getReviewsByExperienceId (Long experienceId);
     Long getReviewAverageScore (Long experienceId);
     List<Long> getListOfAverageScoreByExperienceList(List<ExperienceModel> experienceModelList);
+    List<List<Long>> getListOfAverageScoreByExperienceListAndCategoryId(List<List<ExperienceModel>> experienceModelList);
     Integer getReviewCount (Long experienceId);
     List<Integer> getListOfReviewCountByExperienceList(List<ExperienceModel> experienceModelList);
+    List<List<Integer>> getListOfReviewCountByExperienceListAndCategoryId(List<List<ExperienceModel>> experienceModelList);
+    List<Boolean> getListOfReviewHasImages(List<ReviewUserModel> reviewUserModelList);
     List<ReviewUserModel> getReviewAndUser (Long experienceId);
     Optional<ReviewModel> getReviewById (Long reviewId);
     List<ReviewUserModel> getReviewsByUserId (Long userId);

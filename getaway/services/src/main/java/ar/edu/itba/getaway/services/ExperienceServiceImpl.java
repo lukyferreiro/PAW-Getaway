@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.services;
 
+import ar.edu.itba.getaway.interfaces.services.CategoryService;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
@@ -25,6 +26,8 @@ public class ExperienceServiceImpl implements ExperienceService {
     private ImageService imageService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CategoryService categoryService;
 
     //TODO: limit page number to total_pages amount
     private static final int PAGE_SIZE = 6;
@@ -161,6 +164,16 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         LOGGER.debug("Max page value service: {}", total_pages);
         return new Page<>(experienceModelList, page, total_pages);
+    }
+
+    @Override
+    public List<List<ExperienceModel>> getExperiencesListByCategories() {
+        final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
+        for (int i = 0; i < categoryService.getCategoriesCount(); i++) {
+            listExperiencesByCategory.add(new ArrayList<>());
+            listExperiencesByCategory.get(i).addAll(listExperiencesByBestRanked((long) (i + 1)));
+        }
+        return listExperiencesByCategory;
     }
 
 }

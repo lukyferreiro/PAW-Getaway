@@ -23,7 +23,7 @@
                <jsp:param name="address" value="${experience.address}"/>
                <jsp:param name="city" value="${city}"/>
                <jsp:param name="country" value="${country}"/>
-               <jsp:param name="price" value="${experience.price}"/>
+               <jsp:param name="price" value="${experience.price.toString()}"/>
                <jsp:param name="description" value="${experience.description}"/>
                <jsp:param name="siteUrl" value="${experience.siteUrl}"/>
                <jsp:param name="email" value="${experience.email}"/>

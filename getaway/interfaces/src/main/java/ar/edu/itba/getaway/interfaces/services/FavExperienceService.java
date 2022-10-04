@@ -10,5 +10,5 @@ public interface FavExperienceService {
     void deleteFav (Long userId, Long experienceId);
     List<Long> listFavsByUserId (Long userId);
     boolean isFav (Long userId, Long experienceId);
-    void setFav (Long userId, Optional<Boolean> set, Optional<Long> experience);
+    void setFav (Long userId, Optional<Boolean> set, Optional<Long> experienceId);
 }

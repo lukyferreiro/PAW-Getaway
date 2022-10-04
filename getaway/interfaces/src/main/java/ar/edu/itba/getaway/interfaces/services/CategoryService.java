@@ -9,4 +9,5 @@ public interface CategoryService {
     List<CategoryModel> listAllCategories ();
     Optional<CategoryModel> getCategoryById (Long categoryId);
     Optional<CategoryModel> getCategoryByName (String categoryName);
+    Integer getCategoriesCount ();
 }
