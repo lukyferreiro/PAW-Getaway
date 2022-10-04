@@ -120,7 +120,7 @@ public class UserExperiencesController {
 
     @PreAuthorize("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
     @RequestMapping(value = "/user/experiences/delete/{experienceId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView experienceDelete(@PathVariable("experienceId") final Long experienceId,
+    public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
                                          @ModelAttribute("deleteForm") final DeleteForm form,
                                          @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("deleteExperience");
@@ -132,7 +132,7 @@ public class UserExperiencesController {
 
     @PreAuthorize("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
     @RequestMapping(value = "/user/experiences/delete/{experienceId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView experienceDeletePost(@PathVariable(value = "experienceId") final Long experienceId,
+    public ModelAndView experienceDeletePost(@PathVariable(value = "experienceId") final long experienceId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,
                                              final BindingResult errors,
                                              @ModelAttribute("searchForm") final SearchForm searchForm) {
@@ -146,7 +146,7 @@ public class UserExperiencesController {
 
     @PreAuthorize("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
     @RequestMapping(value = "/user/experiences/edit/{experienceId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView experienceEdit(@PathVariable("experienceId") final Long experienceId,
+    public ModelAndView experienceEdit(@PathVariable("experienceId") final long experienceId,
                                        @ModelAttribute("experienceForm") final ExperienceForm form,
                                        @ModelAttribute("searchForm") final SearchForm searchForm) {
 
@@ -201,7 +201,7 @@ public class UserExperiencesController {
 
     @PreAuthorize("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
     @RequestMapping(value = "/user/experiences/edit/{experienceId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView experienceEditPost(@PathVariable(value="experienceId") final Long experienceId,
+    public ModelAndView experienceEditPost(@PathVariable(value="experienceId") final long experienceId,
                                            @Valid @ModelAttribute("experienceForm") final ExperienceForm form,
                                            final BindingResult errors,
                                            @ModelAttribute("searchForm") final SearchForm searchForm) throws IOException {
@@ -209,7 +209,7 @@ public class UserExperiencesController {
             return experienceEdit(experienceId, form, searchForm);
         }
 
-        final Long categoryId = form.getExperienceCategory();
+        final long categoryId = form.getExperienceCategory();
 
         final CityModel city = locationService.getCityByName(form.getExperienceCity()).get();
         final Long cityId = city.getCityId();

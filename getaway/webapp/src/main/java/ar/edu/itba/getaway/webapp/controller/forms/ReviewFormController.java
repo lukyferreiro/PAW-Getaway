@@ -34,13 +34,13 @@ public class ReviewFormController {
 
     @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review", method = {RequestMethod.GET})
     public ModelAndView createReviewForm(@PathVariable("categoryName") final String categoryName,
-                                         @PathVariable("experienceId") final Long experienceId,
+                                         @PathVariable("experienceId") final long experienceId,
                                          @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                          @ModelAttribute("reviewForm") final ReviewForm form) {
         LOGGER.debug("Endpoint GET /experiences/{}/{}/create_review", categoryName, experienceId);
         final ModelAndView mav = new ModelAndView("reviewForm");
 
-        final String endpoint = "/experiences/" + categoryName + experienceId + "/create_review";
+        final String endpoint = "/experiences/" + categoryName + "/" + experienceId + "/create_review";
         mav.addObject("endpoint", endpoint);
 
         return mav;
@@ -48,7 +48,7 @@ public class ReviewFormController {
 
     @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review", method = {RequestMethod.POST})
     public ModelAndView experienceWithReview(@PathVariable("categoryName") final String categoryName,
-                                             @PathVariable("experienceId") final Long experienceId,
+                                             @PathVariable("experienceId") final long experienceId,
                                              @Valid @ModelAttribute("reviewForm") final ReviewForm form,
                                              @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                              final BindingResult errors,

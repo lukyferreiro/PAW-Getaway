@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
+import ar.edu.itba.getaway.interfaces.services.CategoryService;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.auth.ForceLogin;
@@ -33,6 +34,8 @@ public class ExperienceFormController {
     @Autowired
     private UserService userService;
     @Autowired
+    private CategoryService categoryService;
+    @Autowired
     private ForceLogin forceLogin;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceFormController.class);
@@ -44,12 +47,9 @@ public class ExperienceFormController {
                                              @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
         LOGGER.debug("Endpoint GET /create_experience");
         final ModelAndView mav = new ModelAndView("experienceForm");
-
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
-
         final List<CityModel> cities = locationService.listAllCities();
         final String country = locationService.getCountryByName().get().getCountryName();
-
         mav.addObject("title", "createExperience.title");
         mav.addObject("description", "createExperience.description");
         mav.addObject("endpoint", "/create_experience");
@@ -59,7 +59,6 @@ public class ExperienceFormController {
         mav.addObject("country", country);
         mav.addObject("formCity", form.getExperienceCity());
         mav.addObject("formCategory", form.getExperienceCategory());
-
         return mav;
     }
 
@@ -72,23 +71,23 @@ public class ExperienceFormController {
         LOGGER.debug("Endpoint POST /create_experience");
         LOGGER.debug("User tries to create an experience with category id: {}", form.getExperienceCategory());
 
+        System.out.println("----------------HOLA 7------------------");
         if (errors.hasErrors()) {
-            LOGGER.debug("Error in some input of create experience form");
-            return createExperienceForm(form,searchForm);
+            return createExperienceForm(form, searchForm);
         }
-
+        System.out.println("----------------HOLA 8------------------");
         final MultipartFile experienceImg = form.getExperienceImg();
         if (!experienceImg.isEmpty()) {
             if (!contentTypes.contains(experienceImg.getContentType())) {
-                LOGGER.debug("Error in format of image");
+                System.out.println("----------------HOLA 9------------------");
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageFormat");
-                return createExperienceForm(form,searchForm);
+                return createExperienceForm(form, searchForm);
             }
         }
-
+        System.out.println("----------------HOLA 10------------------");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final Long userId = user.getUserId();
-        final Long categoryId = form.getExperienceCategory();
+        final long categoryId = form.getExperienceCategory();
         final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).get();
         final Long cityId = cityModel.getCityId();
         final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
@@ -96,14 +95,16 @@ public class ExperienceFormController {
         final String url = (form.getExperienceUrl().isEmpty()) ? null : form.getExperienceUrl();
 
         final byte[] image = (experienceImg.isEmpty()) ? null : experienceImg.getBytes();
-
+        System.out.println("----------------HOLA 11------------------");
         final ExperienceModel experienceModel = experienceService.createExperience(form.getExperienceName(), form.getExperienceAddress(), description,
                 form.getExperienceMail(), url, price, cityId, categoryId + 1, userId, image);
+        System.out.println("----------------HOLA 12------------------");
         if(!user.hasRole("PROVIDER")){
+            System.out.println("----------------HOLA 13------------------");
             LOGGER.debug("Updating SpringContextHolder");
             forceLogin.forceLogin(user, request);
         }
-
+        System.out.println("----------------HOLA 4------------------");
         return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
     }
 
