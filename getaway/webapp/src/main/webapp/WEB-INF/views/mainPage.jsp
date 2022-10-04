@@ -18,6 +18,7 @@
         <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
         <jsp:param name="avgReviews" value="${avgReviews}"/>
         <jsp:param name="listReviewsCount" value="${listReviewsCount}"/>
+        <jsp:param name="isEditing" value="${isEditing}"/>
     </jsp:include>
 
     <%@ include file="../components/footer.jsp" %>

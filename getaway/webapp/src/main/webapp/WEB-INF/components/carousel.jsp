@@ -17,7 +17,6 @@
                 </c:if>
                 <h2 style="font-weight: 600; text-decoration: underline">
                     <spring:message code="experienceForm.${categoryList.get(0).categoryName}"></spring:message>
-
                 </h2>
                 <div id="recipeCarousel<c:out value="${categoryIndex.index}"/>" class="carousel slide"
                      data-bs-interval="false">
