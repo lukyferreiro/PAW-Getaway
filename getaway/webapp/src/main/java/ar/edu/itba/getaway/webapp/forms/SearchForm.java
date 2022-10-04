@@ -1,7 +1,5 @@
 package ar.edu.itba.getaway.webapp.forms;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 

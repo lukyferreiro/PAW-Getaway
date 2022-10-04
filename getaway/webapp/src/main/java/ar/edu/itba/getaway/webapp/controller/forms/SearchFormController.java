@@ -1,4 +1,4 @@
-package ar.edu.itba.getaway.webapp.auth.forms;
+package ar.edu.itba.getaway.webapp.controller.forms;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.OrderByModel;
@@ -32,10 +32,8 @@ public class SearchFormController {
     private ExperienceService experienceService;
     @Autowired
     private UserService userService;
-
     @Autowired
     private FavExperienceService favExperienceService;
-
     @Autowired
     private ReviewService reviewService;
 
@@ -65,7 +63,7 @@ public class SearchFormController {
 
             if (user.isPresent()) {
                 final long userId = user.get().getId();
-                setFav(userId, set, experience);
+                favExperienceService.setFav(userId, set, experience);
                 final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
 
                 mav.addObject("favExperienceModels", favExperienceModels);
@@ -128,19 +126,6 @@ public class SearchFormController {
         return mav;
     }
 
-
-    private void setFav(long userId, Optional<Boolean> set, Optional<Long> experience) {
-        final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
-
-        if (set.isPresent() && experience.isPresent()) {
-            if (set.get()) {
-                if (!favExperienceModels.contains(experience.get()))
-                    favExperienceService.create(userId, experience.get());
-            } else {
-                favExperienceService.delete(userId, experience.get());
-            }
-        }
-    }
 }
 
 

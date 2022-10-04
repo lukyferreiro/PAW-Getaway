@@ -49,7 +49,7 @@ public class WebAuthController {
         Long code = Long.valueOf(HttpStatus.FORBIDDEN.toString());
         final ModelAndView mav = new ModelAndView("errors");
 
-        mav.addObject("errors", error);
+        mav.addObject("description", error);
         mav.addObject("code", code);
         return mav;
     }
@@ -58,6 +58,7 @@ public class WebAuthController {
     public ModelAndView register(@ModelAttribute("registerForm") final RegisterForm form) {
         return new ModelAndView("register");
     }
+
     @RequestMapping(path = "/register", method = RequestMethod.POST)
     public ModelAndView registerPost(@Valid @ModelAttribute("registerForm") final RegisterForm form,
                                      final BindingResult errors,
@@ -175,8 +176,8 @@ public class WebAuthController {
 
     @RequestMapping(path = "/user/resetPassword", method = RequestMethod.POST)
     public ModelAndView updatePassword(HttpServletRequest request,
-                                      @Valid @ModelAttribute("resetPasswordForm") final ResetPasswordForm form,
-                                      final BindingResult errors) {
+                                       @Valid @ModelAttribute("resetPasswordForm") final ResetPasswordForm form,
+                                       final BindingResult errors) {
         ModelAndView mav = new ModelAndView("/password/resetPasswordForm");
 
         if (errors.hasErrors()) {

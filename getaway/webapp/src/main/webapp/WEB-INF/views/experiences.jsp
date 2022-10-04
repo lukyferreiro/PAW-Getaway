@@ -67,14 +67,6 @@
                   <spring:message code="filters.btn.submit"/>
                </button>
 
-               <jsp:include page="/WEB-INF/components/order_dropdown.jsp">
-                  <jsp:param name="orderByModels" value="${orderByModels}"/>
-                  <jsp:param name="path" value="${path}"/>
-                  <jsp:param name = "score" value = "${score}"/>
-                  <jsp:param name = "cityId" value = "${cityId}"/>
-                  <jsp:param name = "maxPrice" value = "${maxPrice}"/>
-               </jsp:include>
-
 
                <a href="<c:url value = "/experiences/${categoryName}"/>">
                   <button class="btn btn-clean-filter px-3 py-2 my-2" type="button" id="cleanFilterFormButton" form="submitForm">
@@ -85,6 +77,15 @@
 
             <div class="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex flex-column justify-content-center align-content-center"
                  style="min-height: 650px;">
+               <div>
+                  <jsp:include page="/WEB-INF/components/order_dropdown.jsp">
+                     <jsp:param name="orderByModels" value="${orderByModels}"/>
+                     <jsp:param name="path" value="${path}"/>
+                     <jsp:param name = "score" value = "${score}"/>
+                     <jsp:param name = "cityId" value = "${cityId}"/>
+                     <jsp:param name = "maxPrice" value = "${maxPrice}"/>
+                  </jsp:include>
+               </div>
                <c:choose>
                   <c:when test="${experiences.size() == 0}">
                      <div class="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">

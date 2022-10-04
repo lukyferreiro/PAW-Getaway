@@ -25,9 +25,9 @@
                            <c:url value="/user/profile/edit" var="postPath"/>
                            <form:form modelAttribute="registerForm" action="${postPath}" id="registerForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
                               <div class="form-group my-2"> <!--Email-->
-                                 <spring:message code="registerForm.email.placeholder" var="emailPlaceholder"/>
+                                 <spring:message code="editProfile.email.placeholder" var="emailPlaceholder"/>
                                  <form:label path="email" class="form-label">
-                                    <spring:message code="registerForm.email.title"/><span class="required-field">*</span>
+                                    <spring:message code="editProfile.email"/><span class="required-field">*</span>
                                  </form:label>
                                  <form:input type="text" path="email" id="email" cssErrorClass="form-control is-invalid"
                                              class="form-control" placeholder="${emailPlaceholder}" disabled="true"/>
@@ -35,9 +35,9 @@
                               </div>
 
                               <div class="form-group my-2"> <!--Nombre-->
-                                 <spring:message code="registerForm.surname.placeholder" var="namePlaceholder"/>
+                                 <spring:message code="editProfile.surname.placeholder" var="namePlaceholder"/>
                                  <form:label path="name" class="form-label">
-                                    <spring:message code="registerForm.name.title"/><span class="required-field">*</span>
+                                    <spring:message code="editProfile.name"/><span class="required-field">*</span>
                                  </form:label>
                                  <form:input type="text" path="name" id="name" cssErrorClass="form-control is-invalid"
                                              class="form-control" placeholder="${namePlaceholder}"/>
@@ -45,9 +45,9 @@
                               </div>
 
                               <div class="form-group my-2"> <!--Apellido-->
-                                 <spring:message code="registerForm.surname.placeholder" var="surnamePlaceholder"/>
+                                 <spring:message code="editProfile.surname.placeholder" var="surnamePlaceholder"/>
                                  <form:label path="surname" class="form-label">
-                                    <spring:message code="registerForm.surname.title"/><span class="required-field">*</span>
+                                    <spring:message code="editProfile.surname"/><span class="required-field">*</span>
                                  </form:label>
                                  <form:input type="text" path="surname" cssErrorClass="form-control is-invalid" id="surname"
                                              class="form-control" placeholder="${surnamePlaceholder}"/>
@@ -93,8 +93,8 @@
 
                               <div class="form-group my-2"> <!--Imagenes-->
                                  <form:label path="profileImg" class="form-label">
-                                    <spring:message code="registerForm.addProfileImage"/>
-                                    <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>
+                                    <spring:message code="editProfile.profileImage"/>
+                                    <span class="optional-text"><spring:message code="inputField.optional"/></span>
                                  </form:label>
                                  <form:input path="profileImg" type="file" class="form-control" cssErrorClass="form-control is-invalid"/>
                                  <form:errors path="profileImg" element="p" cssClass="form-error-label"/>
@@ -111,11 +111,11 @@
                               <div class="p-0 mt-3 mb-0 d-flex justify-content-around">
                                  <a href="<c:url value = "/user/profile"/>">
                                     <button class="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
-                                       <spring:message code="experienceForm.cancel"/>
+                                       <spring:message code="editProfile.cancel"/>
                                     </button>
                                  </a>
                                  <button type="submit" class="btn btn-submit-form px-3 py-2" id="editExperienceFormButton" form="registerForm">
-                                    <spring:message code="experienceForm.submit"/>
+                                    <spring:message code="editProfile.submit"/>
                                  </button>
                               </div>
                            </form:form>

@@ -30,11 +30,11 @@ public class ErrorsController {
     @ExceptionHandler(value = ExperienceNotFoundException.class)
     public ModelAndView experienceNotFound() {
         LOGGER.error("Error experienceNotFound caught");
-        Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.NotFound.experience", null, locale);
-        Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final Locale locale = LocaleContextHolder.getLocale();
+        final String error = messageSource.getMessage("errors.NotFound.experience", null, locale);
+        final Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-        mav.addObject("errors", error);
+        mav.addObject("description", error);
         mav.addObject("code", code);
         return mav;
     }
@@ -43,11 +43,11 @@ public class ErrorsController {
     @ExceptionHandler(value = ReviewNotFoundException.class)
     public ModelAndView reviewNotFound() {
         LOGGER.error("Error reviewNotFound caught");
-        Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.NotFound.review", null, locale);
-        Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final Locale locale = LocaleContextHolder.getLocale();
+        final String error = messageSource.getMessage("errors.NotFound.review", null, locale);
+        final Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-        mav.addObject("errors", error);
+        mav.addObject("description", error);
         mav.addObject("code", code);
         return mav;
     }
@@ -56,11 +56,11 @@ public class ErrorsController {
     @ExceptionHandler(value = CategoryNotFoundException.class)
     public ModelAndView categoryNotFound() {
         LOGGER.error("Error categoryNotFound caught");
-        Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.NotFound.category", null, locale);
-        Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final Locale locale = LocaleContextHolder.getLocale();
+        final String error = messageSource.getMessage("errors.NotFound.category", null, locale);
+        final Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-        mav.addObject("errors", error);
+        mav.addObject("description", error);
         mav.addObject("code", code);
         return mav;
     }
@@ -69,11 +69,11 @@ public class ErrorsController {
     @ExceptionHandler(value = ImageNotFoundException.class)
     public ModelAndView imageNotFound() {
         LOGGER.error("Error imageNotFound caught");
-        Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.NotFound.image", null, locale);
-        Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final Locale locale = LocaleContextHolder.getLocale();
+        final String error = messageSource.getMessage("errors.NotFound.image", null, locale);
+        final Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-        mav.addObject("errors", error);
+        mav.addObject("description", error);
         mav.addObject("code", code);
         return mav;
     }
@@ -82,11 +82,11 @@ public class ErrorsController {
     @ExceptionHandler(value = UserNotFoundException.class)
     public ModelAndView userNotFound() {
         LOGGER.error("Error userNotFound caught");
-        Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.NotFound.user", null, locale);
-        Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final Locale locale = LocaleContextHolder.getLocale();
+        final String error = messageSource.getMessage("errors.NotFound.user", null, locale);
+        final Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-        mav.addObject("errors", error);
+        mav.addObject("description", error);
         mav.addObject("code", code);
         return mav;
     }
@@ -95,11 +95,11 @@ public class ErrorsController {
     @ExceptionHandler(value = MultipartException.class)
     public ModelAndView maxUploadSizeException() {
         LOGGER.error("Error maxUploadSizeException caught");
-        Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.MaxUploadSizeException", null, locale);
-        Long code = Long.valueOf(HttpStatus.BAD_REQUEST.toString());
+        final Locale locale = LocaleContextHolder.getLocale();
+        final String error = messageSource.getMessage("errors.MaxUploadSizeException", null, locale);
+        final Long code = Long.valueOf(HttpStatus.BAD_REQUEST.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-        mav.addObject("errors", error);
+        mav.addObject("description", error);
         mav.addObject("code", code);
 
         return mav;
@@ -111,11 +111,11 @@ public class ErrorsController {
     @ExceptionHandler(value = NoHandlerFoundException.class)
     public ModelAndView resourceNotFoundException() {
         LOGGER.error("Error resourceNotFoundException caught");
-        Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.NotFound.Resource", null, locale);
-        Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final Locale locale = LocaleContextHolder.getLocale();
+        final String error = messageSource.getMessage("errors.NotFound.Resource", null, locale);
+        final Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-        mav.addObject("errors", error);
+        mav.addObject("description", error);
         mav.addObject("code", code);
         return mav;
     }
@@ -124,26 +124,24 @@ public class ErrorsController {
     @ExceptionHandler(value = TypeMismatchException.class)
     public ModelAndView badRequestException() {
         LOGGER.error("Error badRequestException caught");
-        Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.BadRequest", null, locale);
-        Long code = Long.valueOf(HttpStatus.BAD_REQUEST.toString());
+        final Locale locale = LocaleContextHolder.getLocale();
+        final String error = messageSource.getMessage("errors.BadRequest", null, locale);
+        final Long code = Long.valueOf(HttpStatus.BAD_REQUEST.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-        mav.addObject("errors", error);
+        mav.addObject("description", error);
         mav.addObject("code", code);
         return mav;
     }
 
-
-    /*Server error */
 //    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
 //    @ExceptionHandler(value = Exception.class)
 //    public ModelAndView serverException() {
 //        LOGGER.error("Error serverException caught");
-//        Locale locale = LocaleContextHolder.getLocale();
-//        String error = messageSource.getMessage("errors.ServerError", null, locale);
-//        Long code = Long.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+//        final Locale locale = LocaleContextHolder.getLocale();
+//        final String error = messageSource.getMessage("errors.ServerError", null, locale);
+//        final Long code = Long.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.toString());
 //        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-//        mav.addObject("errors", error);
+//        mav.addObject("description", error);
 //        mav.addObject("code", code);
 //        return mav;
 //    }

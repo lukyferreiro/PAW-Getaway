@@ -42,17 +42,17 @@ public class ExperienceController {
 
     @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.GET})
     public ModelAndView experienceGet(@PathVariable("categoryName") final String categoryName,
-                                   @ModelAttribute("filterForm") final FilterForm form,
-                                   @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
-                                   Principal principal,
-                                   HttpServletRequest request,
-                                   @RequestParam Optional<OrderByModel> orderBy,
-                                   @RequestParam Optional<Long> cityId,
-                                   @RequestParam Optional<Double> maxPrice,
-                                   @RequestParam Optional<Long> score,
-                                   @RequestParam Optional<Long> experience,
-                                   @RequestParam Optional<Boolean> set,
-                                   @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum) {
+                                      @ModelAttribute("filterForm") final FilterForm form,
+                                      @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                                      Principal principal,
+                                      HttpServletRequest request,
+                                      @RequestParam Optional<OrderByModel> orderBy,
+                                      @RequestParam Optional<Long> cityId,
+                                      @RequestParam Optional<Double> maxPrice,
+                                      @RequestParam Optional<Long> score,
+                                      @RequestParam Optional<Long> experience,
+                                      @RequestParam Optional<Boolean> set,
+                                      @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum) {
         final ModelAndView mav = new ModelAndView("experiences");
         final Page<ExperienceModel> currentPage;
 
@@ -239,6 +239,5 @@ public class ExperienceController {
 
         return mav;
     }
-
 
 }

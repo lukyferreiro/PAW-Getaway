@@ -1,4 +1,4 @@
-package ar.edu.itba.getaway.webapp.auth.forms;
+package ar.edu.itba.getaway.webapp.controller.forms;
 
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.services.ReviewService;
