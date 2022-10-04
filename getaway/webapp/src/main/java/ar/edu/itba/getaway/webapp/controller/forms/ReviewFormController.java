@@ -50,8 +50,8 @@ public class ReviewFormController {
     public ModelAndView experienceWithReview(@PathVariable("categoryName") final String categoryName,
                                              @PathVariable("experienceId") final long experienceId,
                                              @Valid @ModelAttribute("reviewForm") final ReviewForm form,
-                                             @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                              final BindingResult errors,
+                                             @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                              Principal principal) {
         LOGGER.debug("Endpoint POST /experiences/{}/{}/create_review", categoryName, experienceId);
         if (errors.hasErrors()) {

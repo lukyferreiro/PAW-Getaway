@@ -34,8 +34,6 @@ public class ExperienceFormController {
     @Autowired
     private UserService userService;
     @Autowired
-    private CategoryService categoryService;
-    @Autowired
     private ForceLogin forceLogin;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceFormController.class);
@@ -64,8 +62,8 @@ public class ExperienceFormController {
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
     public ModelAndView createExperience(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,
-                                         @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                          final BindingResult errors,
+                                         @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                          Principal principal,
                                          HttpServletRequest request) throws Exception {
         LOGGER.debug("Endpoint POST /create_experience");
