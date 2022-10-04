@@ -37,6 +37,7 @@ public class ReviewFormController {
                                          @PathVariable("experienceId") final Long experienceId,
                                          @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                          @ModelAttribute("reviewForm") final ReviewForm form) {
+        LOGGER.debug("Endpoint GET /experiences/{}/{}/create_review", categoryName, experienceId);
         final ModelAndView mav = new ModelAndView("reviewForm");
 
         final String endpoint = "/experiences/" + categoryName + experienceId + "/create_review";
@@ -52,19 +53,20 @@ public class ReviewFormController {
                                              @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                              final BindingResult errors,
                                              Principal principal) {
-        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
-
+        LOGGER.debug("Endpoint POST /experiences/{}/{}/create_review", categoryName, experienceId);
         if (errors.hasErrors()) {
+            LOGGER.debug("Error in some input of create review form");
             return createReviewForm(categoryName, experienceId, searchForm,form);
         }
-
-        final Date date = Date.from(Instant.now());
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final Long userId = user.getUserId();
 
+        //TODO cambiar el tipo DATE
+        final Date date = Date.from(Instant.now());
+
         reviewService.createReview(form.getTitle(), form.getDescription(), form.getLongScore(), experienceId ,date, userId);
 
-        return mav;
+        return new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
     }
 }

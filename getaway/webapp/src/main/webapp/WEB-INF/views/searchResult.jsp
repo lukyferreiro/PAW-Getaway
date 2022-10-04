@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> - <spring:message code="searchResult.title" arguments="${query}"/> </title>
+      <title><spring:message code="pageName"/> <c:if test="${query != null}">- <spring:message code="searchResult.title" arguments="${query}"/></c:if>  </title>
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
    <body>

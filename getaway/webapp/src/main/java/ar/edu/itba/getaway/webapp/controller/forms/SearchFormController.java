@@ -17,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
@@ -37,8 +36,7 @@ public class SearchFormController {
     @Autowired
     private ReviewService reviewService;
 
-    //TODO Agregar loggers ,PAGINARLO
-
+    //TODO PAGINARLO
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchFormController.class);
 
     @RequestMapping(value = "/search_result", method = {RequestMethod.GET})
@@ -50,7 +48,7 @@ public class SearchFormController {
                                          @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum,
                                          Principal principal,
                                          HttpServletRequest request) {
-
+        LOGGER.debug("Endpoint GET /search_result?query={}", query);
         final Page<ExperienceModel> currentPage = experienceService.getExperienceByName(searchForm.getQuery(), orderBy, pageNum);
         final ModelAndView mav = new ModelAndView("searchResult");
 
@@ -60,43 +58,31 @@ public class SearchFormController {
 
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-
             if (user.isPresent()) {
                 final Long userId = user.get().getUserId();
                 favExperienceService.setFav(userId, set, experience);
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
-
                 mav.addObject("favExperienceModels", favExperienceModels);
             }
         } else {
             mav.addObject("favExperienceModels", new ArrayList<>());
         }
 
-
+        final OrderByModel[] orderByModels = OrderByModel.values();
         final List<ExperienceModel> experienceModels = currentPage.getContent();
-        final List<Long> avgReviews = new ArrayList<>();
-        final List<Integer> listReviewsCount = new ArrayList<>();
-        for (ExperienceModel exp : experienceModels) {
-            avgReviews.add(reviewService.getReviewAverageScore(exp.getExperienceId()));
-            listReviewsCount.add(reviewService.getReviewCount(exp.getExperienceId()));
-        }
+        final List<Long> avgReviews = reviewService.getListOfAverageScoreByExperienceList(experienceModels);
+        final List<Integer> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(experienceModels);
 
         if(query.isPresent()){
             request.setAttribute("query", query);
             mav.addObject("query", query.get());
         }
-
-        final OrderByModel[] orderByModels = OrderByModel.values();
-
-
         if (orderBy.isPresent()){
             request.setAttribute("orderBy", orderBy);
             mav.addObject("orderBy", orderBy.get());
         }
 
-        final String path = "/search_result";
-        mav.addObject("path", path);
-
+        mav.addObject("path", request.getServletPath());
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("currentPage", currentPage.getCurrentPage());
         mav.addObject("totalPages", currentPage.getMaxPage());
@@ -117,11 +103,12 @@ public class SearchFormController {
                                      Principal principal,
                                      HttpServletRequest request) {
 
-        final ModelAndView mav = new ModelAndView("redirect:/search_result");
-
         if (errors.hasErrors()) {
+            LOGGER.debug("Error in the search input");
             return createSearchForm(searchForm,Optional.empty(),Optional.empty(),Optional.empty(),Optional.empty(),1,principal,request);
         }
+
+        final ModelAndView mav = new ModelAndView("redirect:/search_result");
 
         mav.addObject("query", searchForm.getQuery());
 

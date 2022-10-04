@@ -19,6 +19,7 @@ public class LocationServiceImpl implements LocationService {
     private LocationDao locationDao;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LocationServiceImpl.class);
+    private final String ARGENTINA = "Argentina";
 
     @Override
     public List<CityModel> listAllCities() {
@@ -57,8 +58,8 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Optional<CountryModel> getCountryByName(String countryName) {
-        LOGGER.debug("Retrieving country with name {}", countryName);
-        return locationDao.getCountryByName(countryName);
+    public Optional<CountryModel> getCountryByName() {
+        LOGGER.debug("Retrieving country with name {}", ARGENTINA);
+        return locationDao.getCountryByName(ARGENTINA);
     }
 }

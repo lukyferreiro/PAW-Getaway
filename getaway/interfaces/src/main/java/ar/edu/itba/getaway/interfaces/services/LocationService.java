@@ -13,5 +13,5 @@ public interface LocationService {
     Optional<CityModel> getCityByName (String cityName);
     List<CountryModel> listAllCountries ();
     Optional<CountryModel> getCountryById (Long countryId);
-    Optional<CountryModel> getCountryByName (String countryName);
+    Optional<CountryModel> getCountryByName ();
 }

@@ -153,7 +153,7 @@ public class UserExperiencesController {
         final ModelAndView mav = new ModelAndView("experienceForm");
 
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
-        final String country = locationService.getCountryByName("Argentina").get().getCountryName();
+        final String country = locationService.getCountryByName().get().getCountryName();
         final List<CityModel> cityModels = locationService.listAllCities();
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final CityModel city = locationService.getCityById(experience.getCityId()).get();

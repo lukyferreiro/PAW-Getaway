@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.services;
 
+import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
 import ar.edu.itba.getaway.interfaces.persistence.ReviewDao;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -40,9 +42,27 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public List<Long> getListOfAverageScoreByExperienceList(List<ExperienceModel> experienceModelList){
+        final List<Long> avgReviews = new ArrayList<>();
+        for (ExperienceModel experienceModel : experienceModelList) {
+            avgReviews.add(reviewDao.getReviewAverageScore(experienceModel.getExperienceId()));
+        }
+        return avgReviews;
+    }
+
+    @Override
     public Integer getReviewCount(Long experienceId) {
         LOGGER.debug("Retrieving count of reviews of experience with id {}", experienceId);
         return reviewDao.getReviewCount(experienceId);
+    }
+
+    @Override
+    public List<Integer> getListOfReviewCountByExperienceList(List<ExperienceModel> experienceModelList){
+        final List<Integer> listReviewsCount = new ArrayList<>();
+        for (ExperienceModel experienceModel : experienceModelList) {
+            listReviewsCount.add(reviewDao.getReviewCount(experienceModel.getExperienceId()));
+        }
+        return listReviewsCount;
     }
 
     @Override
