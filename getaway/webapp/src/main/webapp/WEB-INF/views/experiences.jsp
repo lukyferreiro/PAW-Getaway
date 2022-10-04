@@ -110,6 +110,11 @@
                               <jsp:param name="price" value="${experience.price}"/>
                               <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
                               <jsp:param name="path" value="/experiences/${categoryName}"/>
+                              <jsp:param name = "score" value = "${score}"/>
+                              <jsp:param name = "cityId" value = "${cityId}"/>
+                              <jsp:param name = "maxPrice" value = "${maxPrice}"/>
+                              <jsp:param name="filter" value="${true}"/>
+                              <jsp:param name="orderBy" value="${orderBy}"/>
                               <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
                               <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
                               <jsp:param name="isEditing" value="${isEditing}"/>

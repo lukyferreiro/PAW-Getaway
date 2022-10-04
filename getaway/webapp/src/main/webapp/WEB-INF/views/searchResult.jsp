@@ -49,6 +49,9 @@
                            <jsp:param name="price" value="${experience.price}"/>
                            <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
                            <jsp:param name="path" value="/search_result"/>
+                           <jsp:param name="query" value="${query}"/>
+                           <jsp:param name="orderBy" value="${orderBy}"/>
+                           <jsp:param name="search" value="true"/>
                            <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
                            <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
                            <jsp:param name="isEditing" value="${isEditing}"/>
@@ -58,39 +61,40 @@
 
                   <div class="mt-auto d-flex justify-content-center align-items-center">
                      <ul class="pagination m-0">
-                           <%--                     <li class="page-item">--%>
-                           <%--                        <a class="page-link" href="--%>
-                           <%--                        <c:url value = "/experiences/${categoryName}/">--%>
-                           <%--                           <c:param name = "pageNum" value = "1"/>--%>
-                           <%--                        </c:url>">--%>
-                           <%--                           &lt;%&ndash;                        <spring:message code="home.pagination.first"/>&ndash;%&gt;--%>
-                           <%--                        </a>--%>
-                           <%--                     </li>--%>
-
-                        <c:forEach var="i" begin="1" end="${totalPages}">
+                        <li class="page-item">
+                           <a class="page-link "
+                              href=" <c:url value="/search_result">
+                                           <c:param name="pageNum" value="1"/>
+                                           <c:param name="query" value="${query}"/>
+                                           <c:param name="orderBy" value="${orderBy}"/> </c:url>">
+                              <spring:message code="pagination.start"/>
+                           </a>
+                        </li>
+                        <c:forEach var="i" begin="${minPage}" end="${maxPage}">
                            <li class="page-item">
                               <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
                                  href=" <c:url value="/search_result">
                                            <c:param name="pageNum" value="${i}"/>
                                            <c:param name="query" value="${query}"/>
-                                           <c:param name="orderBy" value="${orderBy}"/> </c:url>"
-                              >
+                                           <c:param name="orderBy" value="${orderBy}"/> </c:url>">
                                  <c:out value="${i}"/>
                               </a>
                            </li>
                         </c:forEach>
-
-                           <%--                     <li class="page-item">--%>
-                           <%--                        <a class="page-link" href="--%>
-                           <%--                        <c:url value = "/experiences/${categoryName}">--%>
-                           <%--                           <c:param name = "pageNum" value = "${currentPage+1}"/>--%>
-                           <%--&lt;%&ndash;                           <c:param name = "category" value = "${param.category}"/>&ndash;%&gt;--%>
-                           <%--                        </c:url>">--%>
-                           <%--                        <spring:message code="experience.pagination.next"/>--%>
-                           <%--                        </a>--%>
-                           <%--                     </li>--%>
+                        <li class="page-item">
+                           <a class="page-link "
+                              href=" <c:url value="/search_result">
+                                           <c:param name="pageNum" value="${totalPages}"/>
+                                           <c:param name="query" value="${query}"/>
+                                           <c:param name="orderBy" value="${orderBy}"/> </c:url>"
+                           >
+                              <spring:message code="pagination.end"/>
+                           </a>
+                        </li>
                      </ul>
                   </div>
+
+
                </c:otherwise>
             </c:choose>
          </div>

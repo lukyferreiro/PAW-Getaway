@@ -37,7 +37,7 @@
                               <jsp:param name="address" value="${categoryList.get(experience).address}"/>
                               <jsp:param name="price" value="${categoryList.get(experience).price}"/>
                               <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
-                              <jsp:param name="path" value="/"/>
+                              <jsp:param name="path" value="${param.path}"/>
                               <jsp:param name="avgReviews" value="${avgReviews[categoryIndex.index][myIndex.index]}"/>
                               <jsp:param name="reviewCount" value="${listReviewsCount[categoryIndex.index][myIndex.index]}"/>
                               <jsp:param name="isEditing" value="${param.isEditing}"/>

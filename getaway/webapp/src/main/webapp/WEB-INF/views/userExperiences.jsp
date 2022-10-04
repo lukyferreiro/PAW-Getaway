@@ -26,6 +26,7 @@
                         <jsp:param name="avgReviews" value="${avgReviews}"/>
                         <jsp:param name="listReviewsCount" value="${listReviewsCount}"/>
                         <jsp:param name="isEditing" value="${isEditing}"/>
+                        <jsp:param name="path" value="/user/experiences"/>
                     </jsp:include>
                 </div>
     </div>

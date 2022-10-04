@@ -19,6 +19,7 @@
         <jsp:param name="avgReviews" value="${avgReviews}"/>
         <jsp:param name="listReviewsCount" value="${listReviewsCount}"/>
         <jsp:param name="isEditing" value="${isEditing}"/>
+        <jsp:param name="path" value="/"/>
     </jsp:include>
 
     <%@ include file="../components/footer.jsp" %>

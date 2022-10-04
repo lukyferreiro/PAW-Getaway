@@ -11,6 +11,13 @@
             <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
             <jsp:param name="experienceId" value="${param.id}"/>
             <jsp:param name="path" value="${param.path}"/>
+            <jsp:param name="query" value="${param.query}"/>
+            <jsp:param name="score" value="${param.score}"/>
+            <jsp:param name="cityId" value="${param.cityId}"/>
+            <jsp:param name="maxPrice" value="${param.maxPrice}"/>
+            <jsp:param name="orderBy" value="${param.orderBy}"/>
+            <jsp:param name="filter" value="${param.filter}"/>
+            <jsp:param name="search" value="${param.search}"/>
          </jsp:include>
       </div>
    </c:if>
