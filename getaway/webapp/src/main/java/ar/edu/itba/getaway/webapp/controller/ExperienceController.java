@@ -53,6 +53,7 @@ public class ExperienceController {
                                       @RequestParam Optional<Long> experience,
                                       @RequestParam Optional<Boolean> set,
                                       @RequestParam(value = "pageNum", defaultValue = "1") final Integer pageNum) {
+        LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("experiences");
         final Page<ExperienceModel> currentPage;
 
@@ -66,18 +67,18 @@ public class ExperienceController {
         }
 
         final String dbCategoryName = category.toString();
-        final Long id = (long) (category.ordinal() + 1);
+        final Long categoryId = (long) (category.ordinal() + 1);
 
         // Order By
         final OrderByModel[] orderByModels = OrderByModel.values();
 
-        if ( orderBy.isPresent() ){
+        if (orderBy.isPresent()){
             request.setAttribute("orderBy", orderBy);
             mav.addObject("orderBy", orderBy.get());
         }
 
         // Price
-        final Optional<Double> maxPriceOpt = experienceService.getMaxPriceByCategoryId(id);
+        final Optional<Double> maxPriceOpt = experienceService.getMaxPriceByCategoryId(categoryId);
         Double max = maxPriceOpt.get();
         mav.addObject("max", max);
         if(maxPrice.isPresent()){
@@ -98,11 +99,11 @@ public class ExperienceController {
         final List<CityModel> cityModels = locationService.listAllCities();
 
         if (cityId.isPresent()) {
-            currentPage = experienceService.listExperiencesByFilter(id, max, scoreVal, cityId.get(), orderBy, pageNum);
+            currentPage = experienceService.listExperiencesByFilter(categoryId, max, scoreVal, cityId.get(), orderBy, pageNum);
             request.setAttribute("cityId", cityId.get());
             mav.addObject("cityId", cityId.get());
         } else {
-            currentPage = experienceService.listExperiencesByFilter(id, max, scoreVal, (long) -1, orderBy, pageNum);
+            currentPage = experienceService.listExperiencesByFilter(categoryId, max, scoreVal, (long) -1, orderBy, pageNum);
             request.setAttribute("cityId", -1);
             mav.addObject("cityId", -1);
         }
