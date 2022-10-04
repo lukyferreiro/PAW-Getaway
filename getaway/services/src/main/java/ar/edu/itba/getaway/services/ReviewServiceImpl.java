@@ -2,8 +2,8 @@ package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
-import ar.edu.itba.interfaces.persistence.ReviewDao;
-import ar.edu.itba.interfaces.services.ReviewService;
+import ar.edu.itba.getaway.interfaces.persistence.ReviewDao;
+import ar.edu.itba.getaway.interfaces.services.ReviewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

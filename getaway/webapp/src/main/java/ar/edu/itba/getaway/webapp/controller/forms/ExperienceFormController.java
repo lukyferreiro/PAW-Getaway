@@ -1,12 +1,12 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
-import ar.edu.itba.interfaces.services.ExperienceService;
-import ar.edu.itba.interfaces.services.LocationService;
-import ar.edu.itba.interfaces.services.UserService;
+import ar.edu.itba.getaway.interfaces.services.ExperienceService;
+import ar.edu.itba.getaway.interfaces.services.LocationService;
+import ar.edu.itba.getaway.interfaces.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

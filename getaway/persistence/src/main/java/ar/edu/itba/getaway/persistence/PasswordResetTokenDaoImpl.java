@@ -1,7 +1,7 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.PasswordResetToken;
-import ar.edu.itba.interfaces.persistence.PasswordResetTokenDao;
+import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

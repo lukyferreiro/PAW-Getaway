@@ -2,7 +2,7 @@ package ar.edu.itba.getaway.persistence.config;
 
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
-import ar.edu.itba.interfaces.persistence.ReviewDao;
+import ar.edu.itba.getaway.interfaces.persistence.ReviewDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

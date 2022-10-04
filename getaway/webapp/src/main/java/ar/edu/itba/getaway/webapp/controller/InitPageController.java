@@ -2,10 +2,10 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.interfaces.services.ExperienceService;
-import ar.edu.itba.interfaces.services.FavExperienceService;
-import ar.edu.itba.interfaces.services.ReviewService;
-import ar.edu.itba.interfaces.services.UserService;
+import ar.edu.itba.getaway.interfaces.services.ExperienceService;
+import ar.edu.itba.getaway.interfaces.services.FavExperienceService;
+import ar.edu.itba.getaway.interfaces.services.ReviewService;
+import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

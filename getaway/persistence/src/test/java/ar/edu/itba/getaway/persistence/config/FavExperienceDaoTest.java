@@ -1,7 +1,7 @@
 package ar.edu.itba.getaway.persistence.config;
 
 import ar.edu.itba.getaway.models.FavExperienceModel;
-import ar.edu.itba.interfaces.persistence.FavExperienceDao;
+import ar.edu.itba.getaway.interfaces.persistence.FavExperienceDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

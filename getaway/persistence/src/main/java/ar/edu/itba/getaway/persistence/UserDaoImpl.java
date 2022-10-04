@@ -1,8 +1,8 @@
 package ar.edu.itba.getaway.persistence;
 
-import ar.edu.itba.interfaces.exceptions.DuplicateUserException;
+import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.interfaces.persistence.UserDao;
+import ar.edu.itba.getaway.interfaces.persistence.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

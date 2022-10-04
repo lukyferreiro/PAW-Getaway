@@ -1,8 +1,8 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.CategoryModel;
-import ar.edu.itba.interfaces.persistence.CategoryDao;
-import ar.edu.itba.interfaces.services.CategoryService;
+import ar.edu.itba.getaway.interfaces.persistence.CategoryDao;
+import ar.edu.itba.getaway.interfaces.services.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

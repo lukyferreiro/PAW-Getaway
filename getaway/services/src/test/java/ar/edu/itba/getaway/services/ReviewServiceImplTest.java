@@ -1,8 +1,8 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.interfaces.persistence.ReviewDao;
-import ar.edu.itba.interfaces.services.ReviewService;
-import ar.edu.itba.interfaces.services.UserService;
+import ar.edu.itba.getaway.interfaces.persistence.ReviewDao;
+import ar.edu.itba.getaway.interfaces.services.ReviewService;
+import ar.edu.itba.getaway.interfaces.services.UserService;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

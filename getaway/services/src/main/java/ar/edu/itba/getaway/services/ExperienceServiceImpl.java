@@ -2,10 +2,10 @@ package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
-import ar.edu.itba.interfaces.persistence.ExperienceDao;
-import ar.edu.itba.interfaces.services.ExperienceService;
-import ar.edu.itba.interfaces.services.ImageService;
-import ar.edu.itba.interfaces.services.UserService;
+import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
+import ar.edu.itba.getaway.interfaces.services.ExperienceService;
+import ar.edu.itba.getaway.interfaces.services.ImageService;
+import ar.edu.itba.getaway.interfaces.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

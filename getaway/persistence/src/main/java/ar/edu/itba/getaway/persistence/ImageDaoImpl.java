@@ -2,7 +2,7 @@ package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.ImageExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
-import ar.edu.itba.interfaces.persistence.ImageDao;
+import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

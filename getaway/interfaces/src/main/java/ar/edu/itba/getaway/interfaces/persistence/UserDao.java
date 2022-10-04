@@ -1,6 +1,6 @@
-package ar.edu.itba.interfaces.persistence;
+package ar.edu.itba.getaway.interfaces.persistence;
 
-import ar.edu.itba.interfaces.exceptions.DuplicateUserException;
+import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.RoleModel;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;

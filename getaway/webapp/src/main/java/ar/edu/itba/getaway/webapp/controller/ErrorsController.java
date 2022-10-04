@@ -1,6 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.interfaces.exceptions.*;
+import ar.edu.itba.getaway.interfaces.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;

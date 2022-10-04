@@ -2,7 +2,7 @@ package ar.edu.itba.getaway.persistence.config;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.OrderByModel;
-import ar.edu.itba.interfaces.persistence.ExperienceDao;
+import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

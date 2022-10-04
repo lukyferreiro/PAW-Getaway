@@ -1,4 +1,4 @@
-package ar.edu.itba.interfaces.persistence;
+package ar.edu.itba.getaway.interfaces.services;
 
 import ar.edu.itba.getaway.models.CityModel;
 import ar.edu.itba.getaway.models.CountryModel;
@@ -6,7 +6,7 @@ import ar.edu.itba.getaway.models.CountryModel;
 import java.util.List;
 import java.util.Optional;
 
-public interface LocationDao {
+public interface LocationService {
     List<CityModel> listAllCities();
     Optional<CityModel> getCityById (Long cityId);
     List<CityModel> getCitiesByCountryId (Long countryId);

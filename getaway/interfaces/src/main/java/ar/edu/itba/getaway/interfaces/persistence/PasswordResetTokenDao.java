@@ -1,4 +1,4 @@
-package ar.edu.itba.interfaces.persistence;
+package ar.edu.itba.getaway.interfaces.persistence;
 
 import ar.edu.itba.getaway.models.PasswordResetToken;
 

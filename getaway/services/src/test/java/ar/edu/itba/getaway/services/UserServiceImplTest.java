@@ -1,12 +1,12 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.interfaces.exceptions.DuplicateUserException;
+import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.interfaces.persistence.PasswordResetTokenDao;
-import ar.edu.itba.interfaces.persistence.UserDao;
-import ar.edu.itba.interfaces.persistence.VerificationTokenDao;
-import ar.edu.itba.interfaces.services.EmailService;
+import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
+import ar.edu.itba.getaway.interfaces.persistence.UserDao;
+import ar.edu.itba.getaway.interfaces.persistence.VerificationTokenDao;
+import ar.edu.itba.getaway.interfaces.services.EmailService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,12 +1,12 @@
 package ar.edu.itba.getaway.persistence.config;
 
-import ar.edu.itba.interfaces.exceptions.DuplicateUserException;
+import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.RoleModel;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserInfo;
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.interfaces.persistence.ImageDao;
-import ar.edu.itba.interfaces.persistence.UserDao;
+import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
+import ar.edu.itba.getaway.interfaces.persistence.UserDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

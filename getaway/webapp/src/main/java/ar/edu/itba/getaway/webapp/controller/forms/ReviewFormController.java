@@ -1,9 +1,9 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.interfaces.services.ReviewService;
-import ar.edu.itba.interfaces.services.UserService;
-import ar.edu.itba.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.interfaces.services.ReviewService;
+import ar.edu.itba.getaway.interfaces.services.UserService;
+import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;

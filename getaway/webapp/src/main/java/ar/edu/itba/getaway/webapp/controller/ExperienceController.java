@@ -1,12 +1,12 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
-import ar.edu.itba.interfaces.exceptions.CategoryNotFoundException;
-import ar.edu.itba.interfaces.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
-import ar.edu.itba.interfaces.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

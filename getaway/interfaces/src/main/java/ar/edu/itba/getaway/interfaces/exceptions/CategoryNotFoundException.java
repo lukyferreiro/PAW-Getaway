@@ -1,4 +1,4 @@
-package ar.edu.itba.interfaces.exceptions;
+package ar.edu.itba.getaway.interfaces.exceptions;
 
 public class CategoryNotFoundException extends RuntimeException {
 

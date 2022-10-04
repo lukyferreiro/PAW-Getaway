@@ -1,7 +1,7 @@
 package ar.edu.itba.getaway.webapp.auth;
 
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.interfaces.services.UserService;
+import ar.edu.itba.getaway.interfaces.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

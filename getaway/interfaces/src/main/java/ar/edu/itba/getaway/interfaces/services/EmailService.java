@@ -1,4 +1,4 @@
-package ar.edu.itba.interfaces.services;
+package ar.edu.itba.getaway.interfaces.services;
 
 import javax.mail.MessagingException;
 import java.util.Locale;
