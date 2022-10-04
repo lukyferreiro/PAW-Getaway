@@ -2,10 +2,10 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.getaway.services.ExperienceService;
-import ar.edu.itba.getaway.services.FavExperienceService;
-import ar.edu.itba.getaway.services.ReviewService;
-import ar.edu.itba.getaway.services.UserService;
+import ar.edu.itba.interfaces.services.ExperienceService;
+import ar.edu.itba.interfaces.services.FavExperienceService;
+import ar.edu.itba.interfaces.services.ReviewService;
+import ar.edu.itba.interfaces.services.UserService;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,13 +45,13 @@ public class InitPageController {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
 
             if (user.isPresent()) {
-                final long userId = user.get().getId();
+                final Long userId = user.get().getUserId();
 
                 if(set.isPresent()){
                     favExperienceService.setFav(userId, set, experience);
                 }
 
-                List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
+                List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
                 mav.addObject("favExperienceModels", favExperienceModels);
             } else {
                 mav.addObject("favExperienceModels", new ArrayList<>());
@@ -68,10 +68,10 @@ public class InitPageController {
             avgReviews.add(new ArrayList<>());
             listReviewsCount.add(new ArrayList<>());
 
-            listByCategory.get(i).addAll(experienceService.listByBestRanked(i + 1));
+            listByCategory.get(i).addAll(experienceService.listExperiencesByBestRanked((long) (i + 1)));
 
             for(ExperienceModel experienceModel : listByCategory.get(i)){
-                avgReviews.get(i).add(reviewService.getAverageScore(experienceModel.getExperienceId()));
+                avgReviews.get(i).add(reviewService.getReviewAverageScore(experienceModel.getExperienceId()));
                 listReviewsCount.get(i).add(reviewService.getReviewCount(experienceModel.getExperienceId()));
             }
         }

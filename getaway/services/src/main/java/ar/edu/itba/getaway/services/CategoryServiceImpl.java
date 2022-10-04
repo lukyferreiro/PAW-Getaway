@@ -1,7 +1,8 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.CategoryModel;
-import ar.edu.itba.getaway.persistence.CategoryDao;
+import ar.edu.itba.interfaces.persistence.CategoryDao;
+import ar.edu.itba.interfaces.services.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +20,20 @@ public class CategoryServiceImpl implements CategoryService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryServiceImpl.class);
 
     @Override
-    public List<CategoryModel> listAll() {
+    public List<CategoryModel> listAllCategories() {
         LOGGER.debug("Retrieving all categories");
-        return categoryDao.listAll();
+        return categoryDao.listAllCategories();
     }
 
     @Override
-    public Optional<CategoryModel> getById(long categoryId) {
+    public Optional<CategoryModel> getCategoryById(Long categoryId) {
         LOGGER.debug("Retrieving category with id {}", categoryId);
-        return categoryDao.getById(categoryId);
+        return categoryDao.getCategoryById(categoryId);
     }
 
     @Override
-    public Optional<CategoryModel> getByName(String categoryName) {
+    public Optional<CategoryModel> getCategoryByName(String categoryName) {
         LOGGER.debug("Retrieving category with name {}", categoryName);
-        return categoryDao.getByName(categoryName);
+        return categoryDao.getCategoryByName(categoryName);
     }
 }

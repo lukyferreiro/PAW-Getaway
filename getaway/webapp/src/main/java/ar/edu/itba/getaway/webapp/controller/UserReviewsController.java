@@ -1,12 +1,15 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.getaway.exceptions.ReviewNotFoundException;
+import ar.edu.itba.interfaces.exceptions.ReviewNotFoundException;
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.exceptions.UserNotFoundException;
+import ar.edu.itba.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
+import ar.edu.itba.interfaces.services.ExperienceService;
+import ar.edu.itba.interfaces.services.ImageService;
+import ar.edu.itba.interfaces.services.ReviewService;
+import ar.edu.itba.interfaces.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,16 +45,16 @@ public class UserReviewsController {
     @RequestMapping(value = "/user/reviews", method = {RequestMethod.GET})
     public ModelAndView review(Principal principal,
                                @ModelAttribute("searchForm") final SearchForm searchForm) {
-        final ModelAndView mav = new ModelAndView("user_reviews");
+        final ModelAndView mav = new ModelAndView("userReviews");
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        final List<ReviewUserModel> reviewList = reviewService.getByUserId(user.getId());
+        final List<ReviewUserModel> reviewList = reviewService.getReviewsByUserId(user.getUserId());
 
         final List<Boolean> listReviewsHasImages = new ArrayList<>();
         final List<ExperienceModel> listExperiencesOfReviews = new ArrayList<>();
         for(ReviewUserModel review : reviewList){
             listReviewsHasImages.add(imageService.getImgById(review.getImgId()).get().getImage() != null);
-            listExperiencesOfReviews.add(experienceService.getById(review.getExperienceId()).get());
+            listExperiencesOfReviews.add(experienceService.getExperienceById(review.getExperienceId()).get());
         }
 
         mav.addObject("reviews", reviewList);
@@ -64,11 +67,11 @@ public class UserReviewsController {
 
     @PreAuthorize("@antMatcherVoter.canDeleteReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/delete/{reviewId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewDelete(@PathVariable("reviewId") final long reviewId,
+    public ModelAndView reviewDelete(@PathVariable("reviewId") final Long reviewId,
                                      @ModelAttribute("deleteForm") final DeleteForm form,
                                      @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("deleteReview");
-        final ReviewModel review = reviewService.getById(reviewId).orElseThrow(ReviewNotFoundException::new);
+        final ReviewModel review = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
 
         mav.addObject("review", review);
 
@@ -77,7 +80,7 @@ public class UserReviewsController {
 
     @PreAuthorize("@antMatcherVoter.canDeleteReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/delete/{reviewId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewDeletePost(@PathVariable(value = "reviewId") final long reviewId,
+    public ModelAndView reviewDeletePost(@PathVariable(value = "reviewId") final Long reviewId,
                                          @ModelAttribute("deleteForm") final DeleteForm form,
                                          @ModelAttribute("searchForm") final SearchForm searchForm,
                                          final BindingResult errors) {
@@ -85,24 +88,25 @@ public class UserReviewsController {
             return reviewDelete(reviewId, form,searchForm);
         }
 
-        reviewService.delete(reviewId);
+        reviewService.deleteReview(reviewId);
         return new ModelAndView("redirect:/user/reviews");
     }
 
     @PreAuthorize("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/edit/{reviewId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewEdit(@PathVariable("reviewId") final long reviewId,
+    public ModelAndView reviewEdit(@PathVariable("reviewId") final Long reviewId,
                                    @ModelAttribute("reviewForm") final ReviewForm form,
                                    @ModelAttribute("searchForm") final SearchForm searchForm) {
-        final ModelAndView mav = new ModelAndView("review_edit_form");
+        final ModelAndView mav = new ModelAndView("reviewEditForm");
 
-//        final ReviewModel review = reviewService.getById(reviewId).get();
-        final ReviewModel review = reviewService.getById(reviewId).orElseThrow(ReviewNotFoundException::new);
+        final ReviewModel review = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
 
         form.setTitle(review.getTitle());
         form.setScore(review.getStringScore());
         form.setDescription(review.getDescription());
 
+        final String endpoint = "/user/reviews/edit/" + reviewId;
+        mav.addObject("endpoint", endpoint);
         mav.addObject("review", review);
 
         return mav;
@@ -110,7 +114,7 @@ public class UserReviewsController {
 
     @PreAuthorize("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/edit/{reviewId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewEditPost(@PathVariable(value = "reviewId") final long reviewId,
+    public ModelAndView reviewEditPost(@PathVariable(value = "reviewId") final Long reviewId,
                                        @ModelAttribute("reviewForm") final ReviewForm form,
                                        Principal principal,
                                        @ModelAttribute("searchForm") final SearchForm searchForm,
@@ -120,15 +124,15 @@ public class UserReviewsController {
         }
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        final Long userId = user.getId();
+        final Long userId = user.getUserId();
 
 //        final ReviewModel review = reviewService.getById(reviewId).get();
-        final ReviewModel review = reviewService.getById(reviewId).orElseThrow(ReviewNotFoundException::new);
+        final ReviewModel review = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
 
         final ReviewModel newReviewModel = new ReviewModel(reviewId, form.getTitle(), form.getDescription(),
                 form.getLongScore(),review.getExperienceId(), Date.from(Instant.now()), userId);
 
-        reviewService.update(reviewId,newReviewModel);
+        reviewService.updateReview(reviewId,newReviewModel);
 
         return new ModelAndView("redirect:/user/reviews");
     }

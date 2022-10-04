@@ -1,20 +1,20 @@
 package ar.edu.itba.getaway.models;
 
 public class ImageExperienceModel {
-    private final long imageId;
-    private final long experienceId;
+    private final Long imageId;
+    private final Long experienceId;
     private boolean isCover;
 
-    public ImageExperienceModel(long imageId, long experienceId, boolean isCover ) {
+    public ImageExperienceModel(Long imageId, Long experienceId, boolean isCover ) {
         this.imageId = imageId;
         this.experienceId = experienceId;
         this.isCover = isCover;
     }
 
-    public long getImageId() {
+    public Long getImageId() {
         return imageId;
     }
-    public long getExperienceId() {
+    public Long getExperienceId() {
         return experienceId;
     }
     public boolean isCover() {

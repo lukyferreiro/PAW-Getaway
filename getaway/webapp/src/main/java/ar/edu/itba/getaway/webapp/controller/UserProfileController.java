@@ -1,9 +1,9 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.getaway.exceptions.UserNotFoundException;
+import ar.edu.itba.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.getaway.services.ImageService;
-import ar.edu.itba.getaway.services.UserService;
+import ar.edu.itba.interfaces.services.ImageService;
+import ar.edu.itba.interfaces.services.UserService;
 import ar.edu.itba.getaway.webapp.forms.RegisterForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ public class UserProfileController {
     @RequestMapping(value = "/user/profile", method = {RequestMethod.GET})
     public ModelAndView profile(Principal principal,
                                 @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
-        final ModelAndView mav = new ModelAndView("user_profile");
+        final ModelAndView mav = new ModelAndView("userProfile");
 
         final UserModel userModel = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final ImageModel imageModel = imageService.getImgById(userModel.getProfileImageId()).get();
@@ -51,7 +51,7 @@ public class UserProfileController {
     @RequestMapping(value = "/user/profile/edit", method = {RequestMethod.GET})
     public ModelAndView editProfileGet(Principal principal,
                                        @ModelAttribute ("registerForm") final RegisterForm registerForm){
-        final ModelAndView mav = new ModelAndView("user_profile_edit");
+        final ModelAndView mav = new ModelAndView("userProfileEdit");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
         registerForm.setName(user.getName());
@@ -67,7 +67,7 @@ public class UserProfileController {
                                         final BindingResult errors) throws Exception {
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
-        userService.updateUserInfo(user.getId(), new UserInfo(registerForm.getName(), registerForm.getSurname()));
+        userService.updateUserInfo(user.getUserId(), new UserInfo(registerForm.getName(), registerForm.getSurname()));
 //        userService.updateProfileImage();
 
         final MultipartFile profileImg = registerForm.getProfileImg();

@@ -3,15 +3,14 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<div>
-
+<div class="my-2">
    <jsp:useBean id="listByCategory" scope="request" type="java.util.List"/>
    <jsp:useBean id="avgReviews" scope="request" type="java.util.List"/>
    <jsp:useBean id="listReviewsCount" scope="request" type="java.util.List"/>
 
    <c:forEach varStatus="categoryIndex" var="categoryList" items="${listByCategory}">
       <c:if test="${categoryList.size() != 0}">
-         <div class="text-center">
+         <div class="text-center my-2">
             <h2 style="font-weight: 600; text-decoration: underline">
                <spring:message code="mainPage.bestRanked.${categoryList.get(0).categoryName}"/>
             </h2>
@@ -22,7 +21,7 @@
                   <div class="carousel-item <c:if test="${index == 0}">active</c:if>">
                      <div class="d-flex justify-content-center align-content-center">
                         <c:forEach begin="${index}" step="1" end="${categoryList.size()-1 < 3 + index ? categoryList.size() - 1 : 3 + index}" var="experience" varStatus="myIndex">
-                           <jsp:include page="/WEB-INF/components/card_experience.jsp">
+                           <jsp:include page="/WEB-INF/components/cardExperience.jsp">
                               <jsp:param name="hasImage" value="${categoryList.get(experience).hasImage}"/>
                               <jsp:param name="categoryName" value="${categoryList.get(experience).categoryName}"/>
                               <jsp:param name="id" value="${categoryList.get(experience).experienceId}"/>

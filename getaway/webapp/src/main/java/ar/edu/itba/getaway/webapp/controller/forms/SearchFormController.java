@@ -4,10 +4,10 @@ import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.OrderByModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.pagination.Page;
-import ar.edu.itba.getaway.services.ExperienceService;
-import ar.edu.itba.getaway.services.FavExperienceService;
-import ar.edu.itba.getaway.services.ReviewService;
-import ar.edu.itba.getaway.services.UserService;
+import ar.edu.itba.interfaces.services.ExperienceService;
+import ar.edu.itba.interfaces.services.FavExperienceService;
+import ar.edu.itba.interfaces.services.ReviewService;
+import ar.edu.itba.interfaces.services.UserService;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,8 +51,8 @@ public class SearchFormController {
                                          Principal principal,
                                          HttpServletRequest request) {
 
-        final Page<ExperienceModel> currentPage = experienceService.getByName(searchForm.getQuery(), orderBy, pageNum);
-        final ModelAndView mav = new ModelAndView("search_result");
+        final Page<ExperienceModel> currentPage = experienceService.getExperienceByName(searchForm.getQuery(), orderBy, pageNum);
+        final ModelAndView mav = new ModelAndView("searchResult");
 
         LOGGER.debug("Pagination");
         LOGGER.debug("CurrentPage {}", currentPage.getCurrentPage());
@@ -62,9 +62,9 @@ public class SearchFormController {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
 
             if (user.isPresent()) {
-                final long userId = user.get().getId();
+                final Long userId = user.get().getUserId();
                 favExperienceService.setFav(userId, set, experience);
-                final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
+                final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
 
                 mav.addObject("favExperienceModels", favExperienceModels);
             }
@@ -75,8 +75,10 @@ public class SearchFormController {
 
         final List<ExperienceModel> experienceModels = currentPage.getContent();
         final List<Long> avgReviews = new ArrayList<>();
+        final List<Integer> listReviewsCount = new ArrayList<>();
         for (ExperienceModel exp : experienceModels) {
-            avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
+            avgReviews.add(reviewService.getReviewAverageScore(exp.getExperienceId()));
+            listReviewsCount.add(reviewService.getReviewCount(exp.getExperienceId()));
         }
 
         if(query.isPresent()){
@@ -92,8 +94,7 @@ public class SearchFormController {
             mav.addObject("orderBy", orderBy.get());
         }
 
-
-        String path = "/search_result";
+        final String path = "/search_result";
         mav.addObject("path", path);
 
         mav.addObject("orderByModels", orderByModels);
@@ -103,6 +104,7 @@ public class SearchFormController {
         mav.addObject("set", set);
         mav.addObject("experience", experience);
         mav.addObject("experiences", experienceModels);
+        mav.addObject("listReviewsCount", listReviewsCount);
         mav.addObject("isEditing", false);
 
         return mav;

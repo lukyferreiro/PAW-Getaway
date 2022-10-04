@@ -27,7 +27,7 @@
          </div>
 
          <c:if test="${loggedUser.hasRole('VERIFIED')}">
-            <a href="<c:url value = "/create_experience"/>" style="margin-right: 40px;">
+            <a href="<c:url value="/create_experience"/>" style="margin-right: 40px;">
                <button type="button" class="btn button-primary">
                   <spring:message code="navbar.createExperience"/>
                </button>
@@ -35,7 +35,7 @@
          </c:if>
          <c:choose>
             <c:when test="${loggedUser == null}">
-               <a href="<c:url value = "/login"/>">
+               <a href="<c:url value="/login"/>">
                   <button type="button" class="btn button-primary">
                      <spring:message code="navbar.login"/>
                   </button>

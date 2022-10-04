@@ -2,16 +2,16 @@ package ar.edu.itba.getaway.webapp.forms;
 
 public class FilterForm {
 
-    private String activityCity;
-    private Double activityPriceMax;
+    private String experienceCity;
+    private Double experiencePriceMax;
     private Boolean enablePrice;
     private String score;
 
-    public Double getActivityPriceMax() {
-        return activityPriceMax;
+    public Double getExperiencePriceMax() {
+        return experiencePriceMax;
     }
-    public String getActivityCity() {
-        return activityCity;
+    public String getExperienceCity() {
+        return experienceCity;
     }
     public String getScore() {
         return score;
@@ -21,11 +21,11 @@ public class FilterForm {
             return (long) -1;
         return Long.parseLong(score);
     }
-    public void setActivityPriceMax(Double activityPriceMax) {
-        this.activityPriceMax = activityPriceMax;
+    public void setExperiencePriceMax(Double experiencePriceMax) {
+        this.experiencePriceMax = experiencePriceMax;
     }
-    public void setActivityCity(String activityCity) {
-        this.activityCity = activityCity;
+    public void setExperienceCity(String experienceCity) {
+        this.experienceCity = experienceCity;
     }
     public Boolean getEnablePrice() {
         return enablePrice;

@@ -1,18 +1,18 @@
 package ar.edu.itba.getaway.models;
 
 public class FavExperienceModel {
-    private final long experienceId;
-    private final long userId;
+    private final Long experienceId;
+    private final Long userId;
 
-    public FavExperienceModel(long userId, long experienceId) {
+    public FavExperienceModel(Long userId, Long experienceId) {
         this.experienceId = experienceId;
         this.userId = userId;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
-    public long getExperienceId() {
+    public Long getExperienceId() {
         return experienceId;
     }
 
@@ -25,6 +25,6 @@ public class FavExperienceModel {
             return false;
         }
         FavExperienceModel other = (FavExperienceModel) o;
-        return this.experienceId == other.experienceId && this.userId == other.userId;
+        return this.experienceId.equals(other.experienceId) && this.userId.equals(other.userId);
     }
 }

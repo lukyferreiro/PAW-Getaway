@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.FavExperienceModel;
+import ar.edu.itba.interfaces.persistence.FavExperienceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +39,12 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
     }
 
     @Override
-    public FavExperienceModel create(long userId, long experienceId) {
+    public FavExperienceModel createFav(Long userId, Long experienceId) {
         final Map<String, Object> favExperienceData = new HashMap<>();
         favExperienceData.put("userId", userId);
         favExperienceData.put("experienceId", experienceId);
 
-        LOGGER.info("Setting experience as fav");
+        LOGGER.info("Setting experience with {} as fav of user with id {}", experienceId, userId);
 
         jdbcInsert.execute(favExperienceData);
 
@@ -51,35 +52,25 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
     }
 
     @Override
-    public boolean delete(long userId, long experienceId){
+    public boolean deleteFav(Long userId, Long experienceId){
         final String query = "DELETE FROM favuserexperience WHERE experienceId = ? AND userid = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.update(query, experienceId, userId) == 1;
     }
 
-//    @Override
-//    public List<FavExperienceModel> getByExperienceId(long experienceId) {
-//        final String query = "SELECT * FROM favuserexperience WHERE experienceId = ? ";
-//        return jdbcTemplate.query(query, new Object[]{experienceId}, FAV_EXPERIENCE_ROW_MAPPER);
-//
-//    }
-//
-//    @Override
-//    public List<FavExperienceModel> listAll() {
-//        final String query = "SELECT * FROM favuserexperience";
-//        return jdbcTemplate.query(query, new Object[]{}, FAV_EXPERIENCE_ROW_MAPPER);
-//    }
-
     @Override
-    public List<Long> listByUserId(Long userId) {
+    public List<Long> listFavsByUserId(Long userId) {
         final String query = "SELECT experienceid FROM favuserexperience WHERE userid = ? ";
+        LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{userId}, FAV_EXPERIENCEID_ROW_MAPPER);
     }
 
     @Override
-    public boolean isFav(long userId, Long experienceId) {
+    public boolean isFav(Long userId, Long experienceId) {
         final String query = "SELECT * FROM favuserexperience WHERE userid = ? AND experienceId = ?";
-        Optional<FavExperienceModel> fav = jdbcTemplate.query(query, new Object[]{userId, experienceId}, FAV_EXPERIENCE_ROW_MAPPER).stream().findFirst();
+        LOGGER.debug("Executing query: {}", query);
+        Optional<FavExperienceModel> fav = jdbcTemplate.query(query, new Object[]{userId, experienceId}, FAV_EXPERIENCE_ROW_MAPPER)
+                .stream().findFirst();
         return fav.isPresent();
     }
 }

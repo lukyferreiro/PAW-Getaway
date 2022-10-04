@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.webapp.forms;
 
-import ar.edu.itba.getaway.models.ExperienceCategory;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,98 +12,98 @@ public class  ExperienceForm {
     @NotEmpty
     @Size(min = 3, max = 255)
     @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'·#$%&=:¿?!¡/.-]*$")
-    private String activityName;
+    private String experienceName;
 
     @NotNull
-    private Integer activityCategory;
+    private Long experienceCategory;
 
     @NotEmpty
-    private String activityCountry;
+    private String experienceCountry;
 
     @NotEmpty
-    private String activityCity;
+    private String experienceCity;
 
     @NotEmpty
     @Size(min = 5, max = 200)
     @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ,'_.-]*$")
-    private String activityAddress;
+    private String experienceAddress;
 
     @Pattern(regexp = "^((0|([1-9][0-9]*))(\\.[0-9]{1,2})?)?$")
-    private String activityPrice;
+    private String experiencePrice;
 
     // https://regexr.com/39nr7
     @Pattern(regexp = "^([(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*))?$")
-    private String activityUrl;
+    private String experienceUrl;
 
     @NotEmpty
     @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$")
-    private String activityMail;
+    private String experienceMail;
 
-    private MultipartFile activityImg;
+    private MultipartFile experienceImg;
 
     @Size(max = 500)
     @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,';$%#&=:¿?!¡\\n\\s\\t/.-])*$")
-    private String activityInfo;
+    private String experienceInfo;
 
 
-    public String getActivityAddress() {
-        return activityAddress;
+    public String getExperienceAddress() {
+        return experienceAddress;
     }
-    public String getActivityCity() {
-        return activityCity;
+    public String getExperienceCity() {
+        return experienceCity;
     }
-    public String getActivityCountry() {
-        return activityCountry;
+    public String getExperienceCountry() {
+        return experienceCountry;
     }
-    public String getActivityUrl() {
-        return activityUrl;
+    public String getExperienceUrl() {
+        return experienceUrl;
     }
-    public Integer getActivityCategory() {
-        return activityCategory;
+    public Long getExperienceCategory() {
+        return experienceCategory;
     }
-    public MultipartFile getActivityImg() {
-        return activityImg;
+    public MultipartFile getExperienceImg() {
+        return experienceImg;
     }
-    public String getActivityInfo() {
-        return activityInfo;
+    public String getExperienceInfo() {
+        return experienceInfo;
     }
-    public String getActivityMail() {
-        return activityMail;
+    public String getExperienceMail() {
+        return experienceMail;
     }
-    public String getActivityName() {
-        return activityName;
+    public String getExperienceName() {
+        return experienceName;
     }
-    public String getActivityPrice() {
-        return activityPrice;
+    public String getExperiencePrice() {
+        return experiencePrice;
     }
-    public void setActivityAddress(String activityAddress) {
-        this.activityAddress = activityAddress;
+    public void setExperienceAddress(String experienceAddress) {
+        this.experienceAddress = experienceAddress;
     }
-    public void setActivityCategory(Integer activityCategory) {
-        this.activityCategory = activityCategory;
+    public void setExperienceCategory(Long experienceCategory) {
+        this.experienceCategory = experienceCategory;
     }
-    public void setActivityImg(MultipartFile activityImg) {
-        this.activityImg = activityImg;
+    public void setExperienceImg(MultipartFile experienceImg) {
+        this.experienceImg = experienceImg;
     }
-    public void setActivityInfo(String activityInfo) {
-        this.activityInfo = activityInfo;
+    public void setExperienceInfo(String experienceInfo) {
+        this.experienceInfo = experienceInfo;
     }
-    public void setActivityMail(String activityMail) {
-        this.activityMail = activityMail;
+    public void setExperienceMail(String experienceMail) {
+        this.experienceMail = experienceMail;
     }
-    public void setActivityName(String activityName) {
-        this.activityName = activityName;
+    public void setExperienceName(String experienceName) {
+        this.experienceName = experienceName;
     }
-    public void setActivityCountry(String activityCountry) {
-        this.activityCountry = activityCountry;
+    public void setExperienceCountry(String experienceCountry) {
+        this.experienceCountry = experienceCountry;
     }
-    public void setActivityCity(String activityCity) {
-        this.activityCity = activityCity;
+    public void setExperienceCity(String experienceCity) {
+        this.experienceCity = experienceCity;
     }
-    public void setActivityUrl(String activityUrl) {
-        this.activityUrl = activityUrl;
+    public void setExperienceUrl(String experienceUrl) {
+        this.experienceUrl = experienceUrl;
     }
-    public void setActivityPrice(String activityPrice) {
-        this.activityPrice = activityPrice;
+    public void setExperiencePrice(String experiencePrice) {
+        this.experiencePrice = experiencePrice;
     }
 }

@@ -4,18 +4,19 @@ package ar.edu.itba.getaway.models;
 import java.util.Date;
 
 public class ReviewUserModel {
-    private final long reviewId;
+    private final Long reviewId;
     private final String title;
     private final String description;
-    private final long score;
-    private final long experienceId;
+    private final Long score;
+    private final Long experienceId;
+    //TODO cambiar tipo DATE
     private final Date reviewDate;
-    private final long userId;
+    private final Long userId;
     private final String userName;
     private final String userSurname;
     private final Long imgId;
 
-    public ReviewUserModel(long reviewId, String title, String description, long score, long experienceId, Date reviewDate, long userId, String userName, String userSurname, Long imgId) {
+    public ReviewUserModel(Long reviewId, String title, String description, Long score, Long experienceId, Date reviewDate, Long userId, String userName, String userSurname, Long imgId) {
         this.reviewId = reviewId;
         this.title = title;
         this.description = description;
@@ -27,7 +28,7 @@ public class ReviewUserModel {
         this.userSurname = userSurname;
         this.imgId = imgId;
     }
-    public long getReviewId() {
+    public Long getReviewId() {
         return reviewId;
     }
     public String getTitle() {
@@ -36,16 +37,16 @@ public class ReviewUserModel {
     public String getDescription() {
         return description;
     }
-    public long getScore() {
+    public Long getScore() {
         return score;
     }
-    public long getExperienceId() {
+    public Long getExperienceId() {
         return experienceId;
     }
     public Date getReviewDate() {
         return reviewDate;
     }
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
     public String getUserName() {
@@ -67,6 +68,6 @@ public class ReviewUserModel {
             return false;
         }
         ReviewUserModel other = (ReviewUserModel) o;
-        return this.userId == other.userId && this.reviewId == other.reviewId;
+        return this.userId.equals(other.userId) && this.reviewId.equals(other.reviewId);
     }
 }

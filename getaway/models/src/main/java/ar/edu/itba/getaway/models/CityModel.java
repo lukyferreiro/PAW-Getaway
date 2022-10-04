@@ -11,13 +11,13 @@ public class CityModel {
         this.cityName = cityName;
     }
 
-    public Long getId() {
+    public Long getCityId() {
         return cityId;
     }
     public Long getCountryId() {
         return countryId;
     }
-    public String getName() {
+    public String getCityName() {
         return cityName;
     }
 

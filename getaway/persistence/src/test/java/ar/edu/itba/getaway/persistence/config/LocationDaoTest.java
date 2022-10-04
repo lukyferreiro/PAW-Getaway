@@ -2,7 +2,7 @@ package ar.edu.itba.getaway.persistence.config;
 
 import ar.edu.itba.getaway.models.CityModel;
 import ar.edu.itba.getaway.models.CountryModel;
-import ar.edu.itba.getaway.persistence.LocationDao;
+import ar.edu.itba.interfaces.persistence.LocationDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,15 +28,15 @@ import static org.junit.Assert.*;
 public class LocationDaoTest {
     /** Data for tests **/
 
-    private final static CityModel CITY_1 = new CityModel(new Long(1), new Long(1), "Test FirstOne");
-    private final static CityModel CITY_2 = new CityModel(new Long(2), new Long(1), "Test FirstTwo");
-    private final static CityModel CITY_3 = new CityModel(new Long(3), new Long(2), "Test SecondOne");
-    private final static CityModel CITY_4 = new CityModel(new Long(4), new Long(2), "Test SecondTwo");
+    private final static CityModel CITY_1 = new CityModel(1L, 1L, "Test FirstOne");
+    private final static CityModel CITY_2 = new CityModel(2L, 1L, "Test FirstTwo");
+    private final static CityModel CITY_3 = new CityModel(3L, 2L, "Test SecondOne");
+    private final static CityModel CITY_4 = new CityModel(4L, 2L, "Test SecondTwo");
 
     private final static List<CityModel> CITY_LIST = new ArrayList<>(Arrays.asList(CITY_1,CITY_2, CITY_3, CITY_4));
 
-    private final static CountryModel COUNTRY_1 = new CountryModel(new Long(1), "TestCountryFirst");
-    private final static CountryModel COUNTRY_2 = new CountryModel(new Long(2), "TestCountrySecond");
+    private final static CountryModel COUNTRY_1 = new CountryModel(1L, "TestCountryFirst");
+    private final static CountryModel COUNTRY_2 = new CountryModel(2L, "TestCountrySecond");
 
     private final static List<CountryModel> COUNTRY_LIST = new ArrayList<>(Arrays.asList(COUNTRY_1, COUNTRY_2));
     /****/
@@ -63,7 +63,7 @@ public class LocationDaoTest {
 
     @Test
     public void testGetCityById() {
-        Optional<CityModel> cityModel = locationDao.getCityById(new Long(2));
+        Optional<CityModel> cityModel = locationDao.getCityById(2L);
         assertTrue(cityModel.isPresent());
         assertEquals(CITY_2, cityModel.get());
     }
@@ -77,7 +77,7 @@ public class LocationDaoTest {
 
     @Test
     public void testGetCitiesByCountryId() {
-        List<CityModel> cityModels = locationDao.getCitiesByCountryId(new Long(1));
+        List<CityModel> cityModels = locationDao.getCitiesByCountryId(1L);
         assertEquals(2, cityModels.size());
         assertTrue(cityModels.contains(CITY_1));
         assertTrue(cityModels.contains(CITY_2));
@@ -94,7 +94,7 @@ public class LocationDaoTest {
 
     @Test
     public void testGetCountryById() {
-        Optional<CountryModel> countryModel = locationDao.getCountryById(new Long(2));
+        Optional<CountryModel> countryModel = locationDao.getCountryById(2L);
         assertTrue(countryModel.isPresent());
         assertEquals(COUNTRY_2, countryModel.get());
     }

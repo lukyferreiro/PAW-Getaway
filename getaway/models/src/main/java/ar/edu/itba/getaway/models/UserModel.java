@@ -4,11 +4,11 @@ import java.util.Collection;
 
 public class UserModel {
     private String name, password, surname, email;
-    private Long id, profileImageId;
+    private Long userId, profileImageId;
     private Collection<Roles> roles;
 
-    public UserModel(Long id, String password, String name, String surname, String email, Collection<Roles> roles, Long profileImageId) {
-        this.id = id;
+    public UserModel(Long userId, String password, String name, String surname, String email, Collection<Roles> roles, Long profileImageId) {
+        this.userId = userId;
         this.password = password;
         this.name = name;
         this.surname = surname;
@@ -23,9 +23,6 @@ public class UserModel {
     public void setProfileImageId(Long profileImageId) {
         this.profileImageId = profileImageId;
     }
-//    public boolean hasRole(Roles role) {
-//        return roles.contains(role);
-//    }
     public boolean hasRole(String role) {
         return roles.stream().anyMatch(p -> p.name().equals(role));
     }
@@ -53,11 +50,11 @@ public class UserModel {
     public void setEmail(String email) {
         this.email = email;
     }
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
     public Collection<Roles> getRoles() {
         return roles;
@@ -78,6 +75,6 @@ public class UserModel {
             return false;
         }
         UserModel other = (UserModel) o;
-        return this.id == other.id && this.email.equals(other.email);
+        return this.userId.equals(other.userId) && this.email.equals(other.email);
     }
 }

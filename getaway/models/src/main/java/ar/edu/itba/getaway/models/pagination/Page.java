@@ -5,9 +5,9 @@ import java.util.List;
 public class Page<T> {
 
     private final List<T> content;
-    private final int currentPage, totalPages;
+    private final Integer currentPage, totalPages;
 
-    public Page(List<T> content, int currentPage, int totalPages) {
+    public Page(List<T> content, Integer currentPage, Integer totalPages) {
         this.content = content;
         this.currentPage = currentPage;
         this.totalPages = totalPages;
@@ -17,15 +17,15 @@ public class Page<T> {
         return content;
     }
 
-    public int getCurrentPage() {
+    public Integer getCurrentPage() {
         return currentPage;
     }
 
-    public int getTotalPages() {
+    public Integer getTotalPages() {
         return totalPages;
     }
 
-    public int getMinPage() {
+    public Integer getMinPage() {
         int minPage = 1;
         if (currentPage - 2 >= 1) {
             minPage = currentPage - 2;
@@ -35,7 +35,7 @@ public class Page<T> {
         return minPage;
     }
 
-    public int getMaxPage() {
+    public Integer getMaxPage() {
         int maxPage = currentPage;
         if (currentPage + 2 <= totalPages) {
             maxPage = currentPage + 2;

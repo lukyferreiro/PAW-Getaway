@@ -1,7 +1,8 @@
 package ar.edu.itba.getaway.persistence;
 
-import ar.edu.itba.getaway.exceptions.DuplicateUserException;
+import ar.edu.itba.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.interfaces.persistence.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,7 @@ public class UserDaoImpl implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert userSimpleJdbcInsert;
-//    private final SimpleJdbcInsert roleSimpleJdbcInsert;
     private final SimpleJdbcInsert userRolesSimpleJdbcInsert;
-//    private final SimpleJdbcInsert imagesSimpleJdbcInsert;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
 
     private final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
@@ -44,18 +43,13 @@ public class UserDaoImpl implements UserDao {
         this.userSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("userid");
-//        this.roleSimpleJdbcInsert = new SimpleJdbcInsert(ds)
-//                .withTableName("roles");
         this.userRolesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("userRoles");
-//        this.imagesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
-//                .withTableName("images")
-//                .usingGeneratedKeyColumns("imgid");
     }
 
     @Override
     public UserModel createUser(String password, String name, String surname, String email,
-                                Collection<Roles> roles, long imageId) throws DuplicateUserException {
+                                Collection<Roles> roles, Long imageId) throws DuplicateUserException {
         final Map<String, Object> userData = new HashMap<>();
         userData.put("userName", name);
         userData.put("userSurname", surname);
@@ -63,7 +57,7 @@ public class UserDaoImpl implements UserDao {
         userData.put("password", password);
         userData.put("imgId", imageId);
 
-        final long userId;
+        final Long userId;
         try {
             userId = userSimpleJdbcInsert.executeAndReturnKey(userData).longValue();
             LOGGER.info("Created user with id {}", userId);
@@ -71,7 +65,7 @@ public class UserDaoImpl implements UserDao {
             throw new DuplicateUserException();
         }
 
-        Map<String, Object> userRolesData = new HashMap<>();
+        final Map<String, Object> userRolesData = new HashMap<>();
         userRolesData.put("userId", userId);
 
         Optional<RoleModel> roleModel;
@@ -86,7 +80,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<UserModel> getUserById(long userId) {
+    public Optional<UserModel> getUserById(Long userId) {
         final String query = "SELECT * FROM users WHERE userId = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{userId}, USER_MODEL_ROW_MAPPER)
@@ -118,9 +112,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Collection<Roles> getUserRoles(long userId) {
-        Collection<RoleModel> rolesModel = getUserRolesModels(userId);
-        Collection<Roles> rolesCollection = new ArrayList<>();
+    public Collection<Roles> getUserRoles(Long userId) {
+        final Collection<RoleModel> rolesModel = getUserRolesModels(userId);
+        final Collection<Roles> rolesCollection = new ArrayList<>();
         for(RoleModel roleModel : rolesModel){
             rolesCollection.add(roleModel.getRoleName());
         }
@@ -129,7 +123,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Collection<RoleModel> getUserRolesModels(long userId){
+    public Collection<RoleModel> getUserRolesModels(Long userId){
         final String query = "SELECT roleid, rolename FROM users NATURAL JOIN userroles NATURAL JOIN roles WHERE userid=?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query,
@@ -140,17 +134,17 @@ public class UserDaoImpl implements UserDao {
     public Optional<RoleModel> getRoleByName(Roles role) {
         final String query = "SELECT * FROM roles WHERE roleName = ?";
         LOGGER.debug("Executing query: {}", query);
-        String roleName = role.name();
+        final String roleName = role.name();
         return jdbcTemplate.query(query, new Object[]{roleName}, ROLE_MODEL_ROW_MAPPER)
                 .stream().findFirst();
     }
 
     @Override
-    public Optional<UserModel> updateRoles(long userId, Roles oldVal, Roles newVal) {
+    public Optional<UserModel> updateRoles(Long userId, Roles oldVal, Roles newVal) {
         final String query = "UPDATE userroles SET roleid = ? WHERE userid = ? AND roleid = ?";
         LOGGER.debug("Executing query: {}", query);
-        Long oldValueID = getRoleByName(oldVal).get().getRoleId();
-        Long newValueID = getRoleByName(newVal).get().getRoleId();
+        final Long oldValueID = getRoleByName(oldVal).get().getRoleId();
+        final Long newValueID = getRoleByName(newVal).get().getRoleId();
         if (jdbcTemplate.update(query, newValueID, userId, oldValueID) == 1) {
             LOGGER.debug("Roles updated");
             return getUserById(userId);
@@ -160,7 +154,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<UserModel> updatePassword(long userId, String password) {
+    public Optional<UserModel> updatePassword(Long userId, String password) {
         final String query = "UPDATE users SET password = ? WHERE userId = ?";
         LOGGER.debug("Executing query: {}", query);
         if (jdbcTemplate.update(query, password, userId) == 1) {
@@ -172,7 +166,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void updateUserInfo(long userId, UserInfo userInfo) {
+    public void updateUserInfo(Long userId, UserInfo userInfo) {
         final String query = "UPDATE users SET userName = ?, userSurname = ? WHERE userId = ?";
         LOGGER.debug("Executing query: {}", query);
         if (jdbcTemplate.update(query, userInfo.getName(), userInfo.getSurname(), userId) == 1) {
@@ -184,10 +178,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void addRole(long userId, Roles newRole) {
-        Map<String, Object> userRolesData = new HashMap<>();
+    public void addRole(Long userId, Roles newRole) {
+        final Map<String, Object> userRolesData = new HashMap<>();
         userRolesData.put("userId", userId);
-        Optional<RoleModel> roleModel = getRoleByName(newRole);
+        final Optional<RoleModel> roleModel = getRoleByName(newRole);
         userRolesData.put("roleId", roleModel.get().getRoleId());
         userRolesSimpleJdbcInsert.execute(userRolesData);
         LOGGER.info("Added role {} to user {}", newRole.name(), userId);

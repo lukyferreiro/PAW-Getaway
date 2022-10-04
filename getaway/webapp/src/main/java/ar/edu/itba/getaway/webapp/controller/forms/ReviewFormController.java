@@ -1,9 +1,9 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.getaway.services.ReviewService;
-import ar.edu.itba.getaway.services.UserService;
-import ar.edu.itba.getaway.exceptions.UserNotFoundException;
+import ar.edu.itba.interfaces.services.ReviewService;
+import ar.edu.itba.interfaces.services.UserService;
+import ar.edu.itba.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
@@ -34,15 +34,20 @@ public class ReviewFormController {
 
     @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review", method = {RequestMethod.GET})
     public ModelAndView createReviewForm(@PathVariable("categoryName") final String categoryName,
-                                         @PathVariable("experienceId") final long experienceId,
+                                         @PathVariable("experienceId") final Long experienceId,
                                          @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                          @ModelAttribute("reviewForm") final ReviewForm form) {
-        return new ModelAndView("review_form");
+        final ModelAndView mav = new ModelAndView("reviewForm");
+
+        final String endpoint = "/experiences/" + categoryName + experienceId + "/create_review";
+        mav.addObject("endpoint", endpoint);
+
+        return mav;
     }
 
     @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review", method = {RequestMethod.POST})
     public ModelAndView experienceWithReview(@PathVariable("categoryName") final String categoryName,
-                                             @PathVariable("experienceId") final long experienceId,
+                                             @PathVariable("experienceId") final Long experienceId,
                                              @Valid @ModelAttribute("reviewForm") final ReviewForm form,
                                              @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                              final BindingResult errors,
@@ -56,9 +61,9 @@ public class ReviewFormController {
         final Date date = Date.from(Instant.now());
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        final Long userId = user.getId();
+        final Long userId = user.getUserId();
 
-        reviewService.create(form.getTitle(), form.getDescription(), form.getLongScore(), experienceId ,date, userId);
+        reviewService.createReview(form.getTitle(), form.getDescription(), form.getLongScore(), experienceId ,date, userId);
 
         return mav;
     }

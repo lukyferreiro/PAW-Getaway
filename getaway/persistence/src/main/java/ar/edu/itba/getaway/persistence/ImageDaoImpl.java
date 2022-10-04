@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.ImageExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
+import ar.edu.itba.interfaces.persistence.ImageDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,6 @@ public class ImageDaoImpl implements ImageDao {
             new ImageModel(rs.getLong("imgid"),
                     rs.getBytes("imageObject"));
 
-    private static final RowMapper<ImageExperienceModel> IMAGE_EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
-            new ImageExperienceModel(rs.getLong("imgid"),
-                    rs.getLong("experienceId"),
-                    rs.getBoolean("isCover"));
-
     @Autowired
     public ImageDaoImpl(final DataSource ds){
         this.jdbcTemplate = new JdbcTemplate(ds);
@@ -44,9 +40,8 @@ public class ImageDaoImpl implements ImageDao {
     public ImageModel createImg(byte[] image) {
         final Map<String, Object> imageData = new HashMap<>();
         imageData.put("imageObject", image);
-        final long imgId;
 
-        imgId = imageSimplejdbcInsert.executeAndReturnKey(imageData).longValue();
+        final Long imgId = imageSimplejdbcInsert.executeAndReturnKey(imageData).longValue();
         imageData.put("imgId", imgId);
 
         LOGGER.info("Created new image with id {}", imgId);
@@ -55,36 +50,36 @@ public class ImageDaoImpl implements ImageDao {
     }
 
     @Override
-    public ImageExperienceModel createExperienceImg(byte[] image, long experienceId, boolean isCover) {
+    public ImageExperienceModel createExperienceImg(byte[] image, Long experienceId, boolean isCover) {
         final ImageModel imageData = createImg(image);
 
         final Map<String, Object> imageExperienceData = new HashMap<>();
         imageExperienceData.put("experienceId", experienceId);
         imageExperienceData.put("isCover", isCover);
-        imageExperienceData.put("imgId", imageData.getId());
+        imageExperienceData.put("imgId", imageData.getImageId());
         imageExperienceSimplejdbcInsert.execute(imageExperienceData);
 
-        LOGGER.info("Created new image experience with id {}", imageData.getId());
+        LOGGER.info("Created new image experience with id {}", imageData.getImageId());
 
-        return new ImageExperienceModel(imageData.getId(), experienceId, isCover);
+        return new ImageExperienceModel(imageData.getImageId(), experienceId, isCover);
     }
 
     @Override
-    public boolean updateImg(byte[] image, long imageId) {
+    public boolean updateImg(byte[] image, Long imageId) {
         final String query = "UPDATE images SET imageObject = ? WHERE imgid = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.update(query, image, imageId) == 1;
     }
 
     @Override
-    public boolean deleteImg(long imgid) {
+    public boolean deleteImg(Long imgid) {
         final String query = "DELETE FROM images WHERE imgid = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.update(query, imgid) == 1;
     }
 
     @Override
-    public Optional<ImageModel> getImgById(long imageId) {
+    public Optional<ImageModel> getImgById(Long imageId) {
         final String query = "SELECT imgid, imageObject FROM images WHERE imgid = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{imageId}, IMAGE_MODEL_ROW_MAPPER)
@@ -92,7 +87,7 @@ public class ImageDaoImpl implements ImageDao {
     }
 
     @Override
-    public Optional<ImageModel> getImgByExperienceId(long experienceId) {
+    public Optional<ImageModel> getImgByExperienceId(Long experienceId) {
         final String query = "SELECT imgId, imageObject FROM imagesExperiences NATURAL JOIN images WHERE experienceId = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{experienceId}, IMAGE_MODEL_ROW_MAPPER)

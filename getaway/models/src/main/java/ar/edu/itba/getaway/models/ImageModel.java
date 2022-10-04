@@ -1,15 +1,15 @@
 package ar.edu.itba.getaway.models;
 
 public class ImageModel {
-    private final long imageId;
+    private final Long imageId;
     private final byte[] image;
 
-    public ImageModel(long imageId, byte[] image ) {
+    public ImageModel(Long imageId, byte[] image ) {
         this.imageId = imageId;
         this.image = image;
     }
 
-    public long getId() {
+    public Long getImageId() {
         return imageId;
     }
     public byte[] getImage() {

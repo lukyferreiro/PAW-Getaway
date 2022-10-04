@@ -2,12 +2,12 @@ package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.CityModel;
 import ar.edu.itba.getaway.models.CountryModel;
+import ar.edu.itba.interfaces.persistence.LocationDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -19,8 +19,6 @@ import java.util.Optional;
 public class LocationDaoImpl implements LocationDao {
 
     private final JdbcTemplate jdbcTemplate;
-//    private final SimpleJdbcInsert citySimpleJdbcInsert;
-//    private final SimpleJdbcInsert countrySimpleJdbcInsert;
     private static final Logger LOGGER = LoggerFactory.getLogger(LocationDao.class);
 
     private static final RowMapper<CityModel> CITY_MODEL_ROW_MAPPER = (rs, rowNum) ->
@@ -35,12 +33,6 @@ public class LocationDaoImpl implements LocationDao {
     @Autowired
     public LocationDaoImpl(final DataSource ds){
         this.jdbcTemplate = new JdbcTemplate(ds);
-//        this.citySimpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-//                .withTableName("cities")
-//                .usingGeneratedKeyColumns("cityId");
-//        this.countrySimpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-//                .withTableName("countries")
-//                .usingGeneratedKeyColumns("countryId");
     }
 
     @Override

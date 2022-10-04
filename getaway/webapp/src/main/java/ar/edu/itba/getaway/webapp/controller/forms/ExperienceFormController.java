@@ -1,10 +1,12 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.exceptions.UserNotFoundException;
+import ar.edu.itba.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
+import ar.edu.itba.interfaces.services.ExperienceService;
+import ar.edu.itba.interfaces.services.LocationService;
+import ar.edu.itba.interfaces.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,19 +46,15 @@ public class ExperienceFormController {
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif", "image/jpg");
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
-    public ModelAndView createActivityForm(@ModelAttribute("experienceForm") final ExperienceForm form,
+    public ModelAndView createExperienceForm(@ModelAttribute("experienceForm") final ExperienceForm form,
                                            @Valid @ModelAttribute("searchForm") final SearchForm searchForm
     ) {
-        final ModelAndView mav = new ModelAndView("experience_form");
+        final ModelAndView mav = new ModelAndView("experienceForm");
 
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
-//        final List<String> categories = new ArrayList<>();
-//        for (ExperienceCategory categoryModel : categoryModels) {
-//            categories.add(categoryModel.getName());
-//        }
 
         final List<CityModel> cities = locationService.listAllCities();
-        final String country = locationService.getCountryByName("Argentina").get().getName();
+        final String country = locationService.getCountryByName("Argentina").get().getCountryName();
 
         mav.addObject("title", "createExperience.title");
         mav.addObject("description", "createExperience.description");
@@ -65,8 +63,8 @@ public class ExperienceFormController {
         mav.addObject("categories", categoryModels);
         mav.addObject("cities", cities);
         mav.addObject("country", country);
-        mav.addObject("formCity", form.getActivityCity());
-        mav.addObject("formCategory", form.getActivityCategory());
+        mav.addObject("formCity", form.getExperienceCity());
+        mav.addObject("formCategory", form.getExperienceCategory());
 
         LOGGER.debug("Creado el form de experienceForm");
 
@@ -74,46 +72,43 @@ public class ExperienceFormController {
     }
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.POST})
-    public ModelAndView createActivity(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,
+    public ModelAndView createExperience(@Valid @ModelAttribute("experienceForm") final ExperienceForm form,
                                        @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                        final BindingResult errors,
                                        Principal principal,
                                        HttpServletRequest request) throws Exception {
 
         LOGGER.debug("Entro a create_experience");
-        LOGGER.debug(String.format("Category id: %d", form.getActivityCategory()));
+        LOGGER.debug(String.format("Category id: %d", form.getExperienceCategory()));
 
         if (errors.hasErrors()) {
-            return createActivityForm(form,searchForm);
+            return createExperienceForm(form,searchForm);
         }
 
-        final Integer categoryId = form.getActivityCategory();
-//        if (categoryId < 0) {
-//            throw new CategoryNotFoundException();
-//        }
+        final Long categoryId = form.getExperienceCategory();
 
-        final CityModel cityModel = locationService.getCityByName(form.getActivityCity()).get();
-        final Long cityId = cityModel.getId();
+        final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).get();
+        final Long cityId = cityModel.getCityId();
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        final Long userId = user.getId();
-        final Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
-        final String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
-        final String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
+        final Long userId = user.getUserId();
+        final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
+        final String description = (form.getExperienceInfo().isEmpty()) ? null : form.getExperienceInfo();
+        final String url = (form.getExperienceUrl().isEmpty()) ? null : form.getExperienceUrl();
         final ExperienceModel experienceModel;
 
-        final MultipartFile experienceImg = form.getActivityImg();
+        final MultipartFile experienceImg = form.getExperienceImg();
         if (!experienceImg.isEmpty()) {
             if (!contentTypes.contains(experienceImg.getContentType())) {
-                errors.rejectValue("activityImg", "experienceForm.validation.imageFormat");
-                return createActivityForm(form,searchForm);
+                errors.rejectValue("experienceImg", "experienceForm.validation.imageFormat");
+                return createExperienceForm(form,searchForm);
             }
         }
 
         final byte[] image = (experienceImg.isEmpty()) ? null : experienceImg.getBytes();
 
-        experienceModel = experienceService.create(form.getActivityName(), form.getActivityAddress(), description,
-                form.getActivityMail(), url, price, cityId, categoryId + 1, userId, image);
+        experienceModel = experienceService.createExperience(form.getExperienceName(), form.getExperienceAddress(), description,
+                form.getExperienceMail(), url, price, cityId, categoryId + 1, userId, image);
         if(!user.hasRole("PROVIDER")){
             forceLogin(user, request);
         }

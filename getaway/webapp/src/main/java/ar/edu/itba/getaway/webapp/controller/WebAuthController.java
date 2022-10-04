@@ -1,11 +1,11 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.getaway.exceptions.DuplicateUserException;
+import ar.edu.itba.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.exceptions.AccessDeniedException;
-import ar.edu.itba.getaway.exceptions.UserNotFoundException;
+import ar.edu.itba.interfaces.exceptions.AccessDeniedException;
+import ar.edu.itba.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.*;
+import ar.edu.itba.interfaces.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +44,9 @@ public class WebAuthController {
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = AccessDeniedException.class)
     public ModelAndView accessDenied() {
-        Locale locale = LocaleContextHolder.getLocale();
-        String error = messageSource.getMessage("errors.accessDenied", null, locale);
-        Long code = Long.valueOf(HttpStatus.FORBIDDEN.toString());
+        final Locale locale = LocaleContextHolder.getLocale();
+        final String error = messageSource.getMessage("errors.accessDenied", null, locale);
+        final Long code = Long.valueOf(HttpStatus.FORBIDDEN.toString());
         final ModelAndView mav = new ModelAndView("errors");
 
         mav.addObject("description", error);

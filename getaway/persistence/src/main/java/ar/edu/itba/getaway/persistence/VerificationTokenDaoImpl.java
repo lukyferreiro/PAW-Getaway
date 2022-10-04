@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.VerificationToken;
+import ar.edu.itba.interfaces.persistence.VerificationTokenDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +39,11 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
 
     @Override
     public VerificationToken createVerificationToken(Long userId, String token, LocalDateTime expirationDate) {
-        Map<String, Object> verifTokenData = new HashMap<>();
+        final Map<String, Object> verifTokenData = new HashMap<>();
         verifTokenData.put("verifUserId", userId);
         verifTokenData.put("verifToken", token);
         verifTokenData.put("verifExpirationDate", expirationDate);
-        final long tokenId = simpleJdbcInsert.executeAndReturnKey(verifTokenData).longValue();
+        final Long tokenId = simpleJdbcInsert.executeAndReturnKey(verifTokenData).longValue();
 
         LOGGER.info("Created new verification token for user with id {}", userId);
 

@@ -2,7 +2,7 @@ package ar.edu.itba.getaway.persistence.config;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.OrderByModel;
-import ar.edu.itba.getaway.persistence.ExperienceDao;
+import ar.edu.itba.interfaces.persistence.ExperienceDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,25 +29,25 @@ import java.util.Optional;
 public class ExperienceDaoTest {
     /** Data for tests **/
 
-    private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1, "testaventura", "diraventura", null, null, null, new Double(0), 1, 1, 1, new Long(1), false);
-    private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2, "testgastro", "dirgastro", null, null, null, new Double(1000), 1, 2, 1, new Long(2), false);
-    private final ExperienceModel DEFAULT_HOT = new ExperienceModel(3, "testhotel", "dirhotel", null, null, null, new Double(1000), 1, 3, 1, new Long(3), false);
-    private final ExperienceModel DEFAULT_REL = new ExperienceModel(4, "testrelax", "dirrelax", null, null, null, new Double(10000), 2, 4, 1, new Long(4), false);
-    private final ExperienceModel DEFAULT_NIG = new ExperienceModel(5, "testnight", "dirnight", null, null, null, null,2, 5, 1,  new Long(5), false);
-    private final ExperienceModel DEFAULT_HIS = new ExperienceModel(6, "testhist", "dirhist", null, null, null, new Double(5000), 2, 6, 2,  new Long(6), false);
-    private final ExperienceModel DEFAULT_ADV2 = new ExperienceModel(7, "testaventura2", "diraventura2", null, null, null,new Double(1500), 1, 1, 2,  new Long(7), false);
-    private final ExperienceModel DEFAULT_ADV3 = new ExperienceModel(8, "testaventura3", "diraventura3", null, null, null, new Double(2000), 2, 1, 2,  new Long(8), false);
+    private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, null, null, (double) 0, 1L, 1L, 1L, 1L, false);
+    private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2L, "testgastro", "dirgastro", null, null, null, 1000.0, 1L, 2L, 1L, 2L, false);
+    private final ExperienceModel DEFAULT_HOT = new ExperienceModel(3L, "testhotel", "dirhotel", null, null, null, 1000.0, 1L, 3L, 1L, 3L, false);
+    private final ExperienceModel DEFAULT_REL = new ExperienceModel(4L, "testrelax", "dirrelax", null, null, null, 10000.0, 2L, 4L, 1L, 4L, false);
+    private final ExperienceModel DEFAULT_NIG = new ExperienceModel(5L, "testnight", "dirnight", null, null, null, null,2L, 5L, 1L,  5L, false);
+    private final ExperienceModel DEFAULT_HIS = new ExperienceModel(6L, "testhist", "dirhist", null, null, null, 5000.0, 2L, 6L, 2L,  6L, false);
+    private final ExperienceModel DEFAULT_ADV2 = new ExperienceModel(7L, "testaventura2", "diraventura2", null, null, null, 1500.0, 1L, 1L, 2L,  7L, false);
+    private final ExperienceModel DEFAULT_ADV3 = new ExperienceModel(8L, "testaventura3", "diraventura3", null, null, null, 2000.0, 2L, 1L, 2L,  8L, false);
 
     private final List<ExperienceModel> DEF_LIST_ALL = new ArrayList<>(Arrays.asList(DEFAULT_ADV, DEFAULT_GAS, DEFAULT_HOT, DEFAULT_REL, DEFAULT_NIG, DEFAULT_HIS, DEFAULT_ADV2, DEFAULT_ADV3));
 
-    private final Long ADV1_REV = new Long(2);
-    private final Long ADV2_REV = new Long(4);
-    private final Long ADV3_REV = new Long(5);
+    private final Long ADV1_REV = 2L;
+    private final Long ADV2_REV = 4L;
+    private final Long ADV3_REV = 5L;
 
-    private final long DEFAULT_SCORE = 0;
+    private final Long DEFAULT_SCORE = 0L;
     private final Optional<OrderByModel> NO_ORDER = Optional.empty();
-    private final Long NO_CITY = new Long(-1);
-    private final int PAGE_SIZE = 3;
+    private final Long NO_CITY = (long) -1;
+    private final Integer PAGE_SIZE = 3;
 
     /****/
 
@@ -67,7 +67,7 @@ public class ExperienceDaoTest {
     @Test
     @Rollback
     public void testCreateExperience(){
-        final ExperienceModel experienceModel= experienceDao.create("TestCreate", "DirectionCreate", null, "owner@mail.com", null, null, 1, 1, 1);
+        final ExperienceModel experienceModel= experienceDao.createExperience("TestCreate", "DirectionCreate", null, "owner@mail.com", null, null, 1L, 1L, 1L);
         assertNotNull(experienceModel);
         assertEquals("TestCreate", experienceModel.getExperienceName());
         assertEquals("DirectionCreate", experienceModel.getAddress());
@@ -75,9 +75,10 @@ public class ExperienceDaoTest {
         assertNull(experienceModel.getSiteUrl());
         assertNull(experienceModel.getPrice());
         assertEquals("owner@mail.com", experienceModel.getEmail());
-        assertEquals(1, experienceModel.getCityId());
-        assertEquals(1, experienceModel.getCategoryId());
-        assertEquals(1, experienceModel.getUserId());
+        //TODO corregir
+        assertEquals(new Long(1), experienceModel.getCityId());
+        assertEquals(new Long(1), experienceModel.getCategoryId());
+        assertEquals(new Long(1), experienceModel.getUserId());
         assertFalse(experienceModel.isHasImage());
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "experiences", "experienceId = " + experienceModel.getExperienceId()));
     }
@@ -85,46 +86,47 @@ public class ExperienceDaoTest {
     @Test
     @Rollback
     public void testUpdateExperience() {
-        final ExperienceModel experienceModel = new ExperienceModel(1, "TestUpdate", "DirectionUpdate", "newdesc", "newemail", "newsite", new Double(235), 2, 2, 1, new Long(1), false);
+        final ExperienceModel experienceModel = new ExperienceModel(1L, "TestUpdate", "DirectionUpdate", "newdesc", "newemail", "newsite", 235.0, 2L, 2L, 1L, 1L, false);
 
-        assertTrue(experienceDao.update( experienceModel));
+        assertTrue(experienceDao.updateExperience( experienceModel));
         assertEquals("TestUpdate", experienceModel.getExperienceName());
         assertEquals("DirectionUpdate", experienceModel.getAddress());
         assertEquals("newdesc", experienceModel.getDescription());
         assertEquals("newsite", experienceModel.getSiteUrl());
         assertEquals("newemail", experienceModel.getEmail());
         assertEquals(new Double(235), experienceModel.getPrice());
-        assertEquals(2, experienceModel.getCityId());
-        assertEquals(2, experienceModel.getCategoryId());
-        assertEquals(1, experienceModel.getUserId());
+        //TODO check
+        assertEquals(new Long(2), experienceModel.getCityId());
+        assertEquals(new Long(2), experienceModel.getCategoryId());
+        assertEquals(new Long(1), experienceModel.getUserId());
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "experiences", "experienceId = " + experienceModel.getExperienceId()));
     }
 
     @Test
     @Rollback
     public void testDeleteExperience() {
-        assertTrue(experienceDao.delete(1));
+        assertTrue(experienceDao.deleteExperience(1L));
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "experiences", "experienceId = " + 1));
     }
 
     @Test
     public void testListAllExperience() {
-        List<ExperienceModel> experienceModelList = experienceDao.listAll("");
+        List<ExperienceModel> experienceModelList = experienceDao.listAllExperiences("");
         assertEquals(DEF_LIST_ALL.size(), experienceModelList.size());
         assertTrue(experienceModelList.containsAll(DEF_LIST_ALL));
     }
 
     @Test
-    public void testGetByIdExperience() {
-        Optional<ExperienceModel> experienceModel = experienceDao.getById(1);
+    public void testGetExperienceById() {
+        Optional<ExperienceModel> experienceModel = experienceDao.getExperienceById(1L);
         assertTrue(experienceModel.isPresent());
         assertEquals(DEFAULT_ADV,experienceModel.get());
     }
 
     @Test
     public void testListByCategory() {
-        final Optional<Double> maxPrice = experienceDao.getMaxPrice(1);
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, maxPrice.get(), DEFAULT_SCORE, NO_CITY, NO_ORDER, 1, PAGE_SIZE);
+        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategoryId(1L);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, maxPrice.get(), DEFAULT_SCORE, NO_CITY, NO_ORDER, 1, PAGE_SIZE);
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
         assertTrue(experienceModelList.contains(DEFAULT_ADV2));
@@ -133,8 +135,8 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryAndCity() {
-        final Optional<Double> maxPrice = experienceDao.getMaxPrice(1);
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, maxPrice.get(), DEFAULT_SCORE, new Long(1), NO_ORDER, 1, PAGE_SIZE);
+        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategoryId(1L);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, maxPrice.get(), DEFAULT_SCORE, 1L, NO_ORDER, 1, PAGE_SIZE);
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
         assertTrue(experienceModelList.contains(DEFAULT_ADV2));
@@ -143,7 +145,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryAndPrice() {
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, new Double(1750), DEFAULT_SCORE, NO_CITY, NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, 1750.0, DEFAULT_SCORE, NO_CITY, NO_ORDER, 1, PAGE_SIZE);
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
         assertTrue(experienceModelList.contains(DEFAULT_ADV2));
@@ -152,7 +154,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryPriceAndCity() {
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, new Double(1250), DEFAULT_SCORE, new Long(1), NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, 1250.0, DEFAULT_SCORE, 1L, NO_ORDER, 1, PAGE_SIZE);
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
         assertFalse(experienceModelList.contains(DEFAULT_ADV2));
@@ -161,7 +163,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testGetByUserId() {
-        List<ExperienceModel> experienceModelList = experienceDao.listByUserId(1, NO_ORDER);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByUserId(1L, NO_ORDER);
         assertFalse(experienceModelList.isEmpty());
 
         //User 1 experiences
@@ -179,8 +181,8 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryAndScore(){
-        final Optional<Double> maxPrice = experienceDao.getMaxPrice(1);
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, maxPrice.get(), 3, NO_CITY, NO_ORDER, 1, PAGE_SIZE);
+        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategoryId(1L);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, maxPrice.get(), 3L, NO_CITY, NO_ORDER, 1, PAGE_SIZE);
 
         assertFalse(experienceModelList.isEmpty());
         assertFalse(experienceModelList.contains(DEFAULT_ADV));
@@ -190,8 +192,8 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryCityAndScore() {
-        final Optional<Double> maxPrice = experienceDao.getMaxPrice(1);
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, maxPrice.get(), 3, new Long(1), NO_ORDER, 1, PAGE_SIZE);
+        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategoryId(1L);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, maxPrice.get(), 3L, 1L, NO_ORDER, 1, PAGE_SIZE);
 
         assertFalse(experienceModelList.isEmpty());
         assertFalse(experienceModelList.contains(DEFAULT_ADV));
@@ -201,7 +203,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryPriceAndScore() {
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, new Double(1750), 3, NO_CITY, NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, 1750.0, 3L, NO_CITY, NO_ORDER, 1, PAGE_SIZE);
 
         assertFalse(experienceModelList.isEmpty());
         assertFalse(experienceModelList.contains(DEFAULT_ADV));
@@ -211,7 +213,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryPriceCityAndScoreOne() {
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, new Double(1750), 3, new Long(1), NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, 1750.0, 3L, 1L, NO_ORDER, 1, PAGE_SIZE);
 
         assertFalse(experienceModelList.isEmpty());
         assertFalse(experienceModelList.contains(DEFAULT_ADV));
@@ -221,9 +223,10 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryPriceCityAndScoreTwo() {
-        List<ExperienceModel> experienceModelList = experienceDao.listByFilter(1, new Double(1750), 3, new Long(2), NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, 1750.0, 3L, 2L, NO_ORDER, 1, PAGE_SIZE);
 
         assertTrue(experienceModelList.isEmpty());
+        //TODO CHECK
         assertFalse(experienceModelList.contains(DEFAULT_ADV));
         assertFalse(experienceModelList.contains(DEFAULT_ADV2));
         assertFalse(experienceModelList.contains(DEFAULT_ADV3));
@@ -231,8 +234,9 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByBestRanked() {
-        List<ExperienceModel> experienceModelList = experienceDao.listByBestRanked(1);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByBestRanked(1L);
 
+        //TODO CHEQUEAR
         assertFalse(experienceModelList.isEmpty());
         assertEquals( DEFAULT_ADV3, experienceModelList.get(0));
         assertEquals( DEFAULT_ADV2, experienceModelList.get(1));
@@ -241,7 +245,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListFavsByUserId() {
-        List<ExperienceModel> experienceModelList = experienceDao.listFavsByUserId(new Long(1), NO_ORDER);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesFavsByUserId(1L, NO_ORDER);
 
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
@@ -251,7 +255,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testGetByName() {
-        List<ExperienceModel> experienceModelList = experienceDao.getByName("testave", NO_ORDER,1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.getExperiencesByName("testave", NO_ORDER,1, PAGE_SIZE);
 
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
