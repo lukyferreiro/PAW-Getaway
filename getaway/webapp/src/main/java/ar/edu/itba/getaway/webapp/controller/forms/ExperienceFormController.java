@@ -1,9 +1,7 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
-import ar.edu.itba.getaway.interfaces.services.CategoryService;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
-import ar.edu.itba.getaway.webapp.auth.ForceLogin;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import ar.edu.itba.getaway.interfaces.services.ExperienceService;
@@ -12,6 +10,13 @@ import ar.edu.itba.getaway.interfaces.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ExperienceFormController {
@@ -33,8 +40,8 @@ public class ExperienceFormController {
     private LocationService locationService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private ForceLogin forceLogin;
+//    @Autowired
+//    private ForceLogin forceLogin;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceFormController.class);
 
@@ -96,9 +103,31 @@ public class ExperienceFormController {
                 form.getExperienceMail(), url, price, cityId, categoryId + 1, userId, image);
         if(!user.hasRole("PROVIDER")){
             LOGGER.debug("Updating SpringContextHolder");
-            forceLogin.forceLogin(user, request);
+            forceLogin(user, request);
         }
         return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
+    }
+
+    //This method is used to update the SpringContextHolder
+    //https://stackoverflow.com/questions/9910252/how-to-reload-authorities-on-user-update-with-spring-security
+    private void forceLogin(UserModel user, HttpServletRequest request) {
+
+        final PreAuthenticatedAuthenticationToken token =
+                new PreAuthenticatedAuthenticationToken(user.getEmail(), user.getPassword(), getAuthorities(user.getRoles()));
+
+        token.setDetails(new WebAuthenticationDetails(request));
+
+        final SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(token);
+
+        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+        LOGGER.debug("Updated SpringContextHolder in order to update user roles");
+    }
+
+    private Collection<? extends GrantedAuthority> getAuthorities(Collection<Roles> roles) {
+        return roles.stream()
+                .map((role) -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                .collect(Collectors.toList());
     }
 
 }

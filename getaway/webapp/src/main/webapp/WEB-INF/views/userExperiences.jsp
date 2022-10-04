@@ -20,6 +20,13 @@
                     <div style="margin: 0 20px 0 auto; flex:1;"></div>
                 </div>
 
+                <c:choose>
+                    <c:when test="">
+
+                    </c:when>
+                </c:choose>
+
+
                 <div class="container-fluid my-3 d-flex flex-wrap justify-content-center">
                     <jsp:include page="/WEB-INF/components/carousel.jsp">
                         <jsp:param name="listByCategory" value="${listByCategory}"/>
