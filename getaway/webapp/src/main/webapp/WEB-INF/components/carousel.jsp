@@ -12,7 +12,14 @@
       <c:if test="${categoryList.size() != 0}">
          <div class="text-center my-2">
             <h2 style="font-weight: 600; text-decoration: underline">
-               <spring:message code="mainPage.bestRanked.${categoryList.get(0).categoryName}"/>
+            <c:choose>
+               <c:when test="${isEditing}">
+                  <spring:message code="myExperiences.${categoryList.get(0).categoryName}"/>
+               </c:when>
+               <c:otherwise>
+                  <spring:message code="mainPage.bestRanked.${categoryList.get(0).categoryName}"/>
+               </c:otherwise>
+            </c:choose>
             </h2>
          </div>
          <div id="recipeCarousel<c:out value="${categoryIndex.index}"/>" class="carousel slide" data-bs-interval="false">
