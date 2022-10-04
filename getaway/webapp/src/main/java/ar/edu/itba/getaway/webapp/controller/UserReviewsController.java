@@ -22,11 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.swing.text.html.Option;
 import java.security.Principal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class UserReviewsController {
@@ -53,8 +55,14 @@ public class UserReviewsController {
         final List<Boolean> listReviewsHasImages = new ArrayList<>();
         final List<ExperienceModel> listExperiencesOfReviews = new ArrayList<>();
         for(ReviewUserModel review : reviewList){
-            listReviewsHasImages.add(imageService.getImgById(review.getImgId()).get().getImage() != null);
-            listExperiencesOfReviews.add(experienceService.getExperienceById(review.getExperienceId()).get());
+            Optional<ImageModel> img = imageService.getImgById(review.getImgId());
+            if(img.isPresent()){
+                listReviewsHasImages.add(img.get().getImage() != null);
+            }else{
+                listReviewsHasImages.add(false);
+            }
+            Optional<ExperienceModel> experienceModel = experienceService.getExperienceById(review.getExperienceId());
+            experienceModel.ifPresent(listExperiencesOfReviews::add);
         }
 
         mav.addObject("reviews", reviewList);
