@@ -10,16 +10,16 @@ public class ReviewForm {
     @NotEmpty
     @Size(min = 3, max = 50)
     @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'$%#&=:¿?!¡/.-])*$")
-     String title;
+    private String title;
 
     @NotEmpty
     @Size(min = 3, max = 255)
     @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'$%#&=:;\\n\\s\\t¿?!¡/.-])*$")
-     String description;
+    private String description;
 
     @NotEmpty
     @Pattern(regexp = "^([1-5])$")
-     String score;
+    private String score;
 
     public String getTitle() {
         return title;

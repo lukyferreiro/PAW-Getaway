@@ -209,7 +209,7 @@ public class UserExperiencesController {
             return experienceEdit(experienceId, form, searchForm);
         }
 
-        final long categoryId = form.getExperienceCategory();
+        final Long categoryId = form.getExperienceCategory();
 
         final CityModel city = locationService.getCityByName(form.getExperienceCity()).get();
         final Long cityId = city.getCityId();

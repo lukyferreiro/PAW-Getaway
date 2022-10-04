@@ -15,7 +15,7 @@ public class  ExperienceForm {
     private String experienceName;
 
     @NotNull
-    private Integer experienceCategory;
+    private Long experienceCategory;
 
     @NotEmpty
     private String experienceCountry;
@@ -58,7 +58,7 @@ public class  ExperienceForm {
     public String getExperienceUrl() {
         return experienceUrl;
     }
-    public Integer getExperienceCategory() {
+    public Long getExperienceCategory() {
         return experienceCategory;
     }
     public MultipartFile getExperienceImg() {
@@ -79,7 +79,7 @@ public class  ExperienceForm {
     public void setExperienceAddress(String experienceAddress) {
         this.experienceAddress = experienceAddress;
     }
-    public void setExperienceCategory(Integer experienceCategory) {
+    public void setExperienceCategory(Long experienceCategory) {
         this.experienceCategory = experienceCategory;
     }
     public void setExperienceImg(MultipartFile experienceImg) {

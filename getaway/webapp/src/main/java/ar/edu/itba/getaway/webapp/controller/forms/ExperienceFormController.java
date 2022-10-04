@@ -71,23 +71,21 @@ public class ExperienceFormController {
         LOGGER.debug("Endpoint POST /create_experience");
         LOGGER.debug("User tries to create an experience with category id: {}", form.getExperienceCategory());
 
-        System.out.println("----------------HOLA 7------------------");
         if (errors.hasErrors()) {
             return createExperienceForm(form, searchForm);
         }
-        System.out.println("----------------HOLA 8------------------");
+
         final MultipartFile experienceImg = form.getExperienceImg();
         if (!experienceImg.isEmpty()) {
             if (!contentTypes.contains(experienceImg.getContentType())) {
-                System.out.println("----------------HOLA 9------------------");
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageFormat");
                 return createExperienceForm(form, searchForm);
             }
         }
-        System.out.println("----------------HOLA 10------------------");
+
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final Long userId = user.getUserId();
-        final long categoryId = form.getExperienceCategory();
+        final Long categoryId = form.getExperienceCategory();
         final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).get();
         final Long cityId = cityModel.getCityId();
         final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
@@ -95,16 +93,12 @@ public class ExperienceFormController {
         final String url = (form.getExperienceUrl().isEmpty()) ? null : form.getExperienceUrl();
 
         final byte[] image = (experienceImg.isEmpty()) ? null : experienceImg.getBytes();
-        System.out.println("----------------HOLA 11------------------");
         final ExperienceModel experienceModel = experienceService.createExperience(form.getExperienceName(), form.getExperienceAddress(), description,
                 form.getExperienceMail(), url, price, cityId, categoryId + 1, userId, image);
-        System.out.println("----------------HOLA 12------------------");
         if(!user.hasRole("PROVIDER")){
-            System.out.println("----------------HOLA 13------------------");
             LOGGER.debug("Updating SpringContextHolder");
             forceLogin.forceLogin(user, request);
         }
-        System.out.println("----------------HOLA 4------------------");
         return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
     }
 
