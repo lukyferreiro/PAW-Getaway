@@ -198,7 +198,12 @@ public class ExperienceController {
 
         final List<Boolean> listReviewsHasImages = new ArrayList<>();
         for(ReviewUserModel review : reviews){
-            listReviewsHasImages.add(imageService.getImgById(review.getImgId()).get().getImage() != null);
+            Optional<ImageModel> img = imageService.getImgById(review.getImgId());
+            if(img.isPresent()){
+                listReviewsHasImages.add(img.get().getImage() != null);
+            }else{
+                listReviewsHasImages.add(false);
+            }
         }
 
         final Long avgScore = reviewService.getReviewAverageScore(experienceId);
