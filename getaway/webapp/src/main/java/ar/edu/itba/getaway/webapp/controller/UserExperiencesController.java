@@ -159,12 +159,8 @@ public class UserExperiencesController {
         final CityModel city = locationService.getCityById(experience.getCityId()).get();
         final String cityName = city.getCityName();
 
-        //TODO no se como hacer para detectar que la primera vez que entro a la edicion
-        //me traiga los datos de la experiencia, pero si cuando le doy a guardar
-        //y tengo datos mal y me vuelve a llevar al form de edicion, me ponga los datos que
-        //estaban bien y que cambie durante la edicion y NO me traiga los datos de la
-        //experiencia otra vez :(
-        if(form == null){
+
+        if(form.getExperienceName() == null){
             form.setExperienceName(experience.getExperienceName());
             if(experience.getPrice() != null){
                 form.setExperiencePrice(experience.getPrice().toString());
