@@ -173,19 +173,19 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public Integer countListByFilter(long categoryId, Double max, long score, Long city) {
         if (city > 0){
             return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityId = ?" +
-                            "HAVING AVG(COALESCE(score,0))>=?",
+                            " HAVING AVG(COALESCE(score,0))>=?",
                     new Object[]{categoryId, max, city, score}, Integer.class);
         }
         else {
             return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? " +
-                            "HAVING AVG(COALESCE(score,0))>=?",
+                            " HAVING AVG(COALESCE(score,0))>=?",
                     new Object[]{categoryId, max, score}, Integer.class);
         }
     }
 
     @Override
     public List<ExperienceModel> listByBestRanked(long categoryId){
-        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? GROUP BY experiences.experienceid ORDER BY avg(score) DESC ",
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? GROUP BY experiences.experienceid ORDER BY avg(score) ASC ",
                 new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
@@ -201,5 +201,22 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
         final String query = "SELECT * FROM experiences WHERE experienceId IN ( SELECT experienceId FROM favuserexperience WHERE userId = ? )" + orderQuery;
         return jdbcTemplate.query(query, new Object[]{userId}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public List<ExperienceModel> getByName(String name, Optional<OrderByModel> order, int page, int page_size) {
+        String orderQuery;
+        if (order.isPresent()){
+            orderQuery = order.get().getSqlQuery();
+        }
+        else {
+            orderQuery = " ";
+        }
+        return jdbcTemplate.query("SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experienceName LIKE ? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=0 " + orderQuery + " LIMIT ? OFFSET ?", new Object[]{'%'+name+'%', page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
+    }
+
+    @Override
+    public Integer getCountByName(String name) {
+        return jdbcTemplate.queryForObject("SELECT COALESCE(COUNT (experienceName), 1) FROM experiences WHERE experienceName LIKE ? ", new Object[]{'%'+name+'%'}, Integer.class);
     }
 }

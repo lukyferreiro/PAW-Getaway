@@ -11,6 +11,6 @@ public interface FavExperienceService {
 //    List<FavExperienceModel> getByExperienceId(long experienceId);
 //    List<FavExperienceModel> listAll();
     List<Long> listByUserId(Long userId);
-     void setFav(long userId, Optional<Boolean> set, Optional<Long> experience);
+    void setFav(long userId, Optional<Boolean> set, Optional<Long> experience);
     boolean isFav(long userId, Long experienceId);
 }

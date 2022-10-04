@@ -28,6 +28,11 @@
     margin: 0 30px;
 }
 
+.btn-search-navbar, .btn-search-navbar:hover, .btn-search-navbar:focus {
+    margin-right: 2%;
+    border: none;
+}
+
 .btn-category {
     color: black;
     font-size: x-large;

@@ -6,6 +6,7 @@ import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
+import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,8 @@ public class UserReviewsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserReviewsController.class);
 
     @RequestMapping(value = "/user/reviews", method = {RequestMethod.GET})
-    public ModelAndView review(Principal principal) {
+    public ModelAndView review(Principal principal,
+                               @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("user_reviews");
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
@@ -63,7 +65,8 @@ public class UserReviewsController {
     @PreAuthorize("@antMatcherVoter.canDeleteReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/delete/{reviewId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewDelete(@PathVariable("reviewId") final long reviewId,
-                                         @ModelAttribute("deleteForm") final DeleteForm form) {
+                                     @ModelAttribute("deleteForm") final DeleteForm form,
+                                     @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("deleteReview");
         final ReviewModel review = reviewService.getById(reviewId).orElseThrow(ReviewNotFoundException::new);
 
@@ -75,10 +78,11 @@ public class UserReviewsController {
     @PreAuthorize("@antMatcherVoter.canDeleteReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/delete/{reviewId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView reviewDeletePost(@PathVariable(value = "reviewId") final long reviewId,
-                                             @ModelAttribute("deleteForm") final DeleteForm form,
-                                             final BindingResult errors) {
+                                         @ModelAttribute("deleteForm") final DeleteForm form,
+                                         @ModelAttribute("searchForm") final SearchForm searchForm,
+                                         final BindingResult errors) {
         if (errors.hasErrors()) {
-            return reviewDelete(reviewId, form);
+            return reviewDelete(reviewId, form,searchForm);
         }
 
         reviewService.delete(reviewId);
@@ -88,7 +92,8 @@ public class UserReviewsController {
     @PreAuthorize("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/edit/{reviewId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewEdit(@PathVariable("reviewId") final long reviewId,
-                                       @ModelAttribute("reviewForm") final ReviewForm form) {
+                                   @ModelAttribute("reviewForm") final ReviewForm form,
+                                   @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("review_edit_form");
 
 //        final ReviewModel review = reviewService.getById(reviewId).get();
@@ -106,11 +111,12 @@ public class UserReviewsController {
     @PreAuthorize("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/edit/{reviewId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView reviewEditPost(@PathVariable(value = "reviewId") final long reviewId,
-                                           @ModelAttribute("reviewForm") final ReviewForm form,
-                                           Principal principal,
-                                           final BindingResult errors) {
+                                       @ModelAttribute("reviewForm") final ReviewForm form,
+                                       Principal principal,
+                                       @ModelAttribute("searchForm") final SearchForm searchForm,
+                                       final BindingResult errors) {
         if (errors.hasErrors()) {
-            return reviewEdit(reviewId, form);
+            return reviewEdit(reviewId, form,searchForm);
         }
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);

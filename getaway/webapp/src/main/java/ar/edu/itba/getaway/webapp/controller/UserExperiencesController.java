@@ -5,6 +5,7 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
+import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,8 @@ public class UserExperiencesController {
     public ModelAndView favourites(Principal principal,
                                    @RequestParam Optional<OrderByModel> orderBy,
                                    @RequestParam Optional<Long> experience,
-                                   @RequestParam Optional<Boolean> set){
+                                   @RequestParam Optional<Boolean> set,
+                                   @Valid @ModelAttribute("searchForm") final SearchForm searchForm){
         final ModelAndView mav = new ModelAndView("user_favourites");
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
@@ -84,7 +86,8 @@ public class UserExperiencesController {
     public ModelAndView experience(Principal principal,
                                    @RequestParam Optional<OrderByModel> orderBy,
                                    @RequestParam Optional<Long> experience,
-                                   @RequestParam Optional<Boolean> set) {
+                                   @RequestParam Optional<Boolean> set,
+                                   @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("user_experiences");
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
@@ -116,8 +119,7 @@ public class UserExperiencesController {
     @PreAuthorize("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
     @RequestMapping(value = "/user/experiences/delete/{experienceId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
-                                         @ModelAttribute("deleteForm") final DeleteForm form,
-                                         Principal principal) {
+                                         @ModelAttribute("deleteForm") final DeleteForm form) {
         final ModelAndView mav = new ModelAndView("deleteExperience");
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
 
@@ -129,10 +131,9 @@ public class UserExperiencesController {
     @RequestMapping(value = "/user/experiences/delete/{experienceId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView experienceDeletePost(@PathVariable(value = "experienceId") final long experienceId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,
-                                             final BindingResult errors,
-                                             Principal principal) {
+                                             final BindingResult errors) {
         if (errors.hasErrors()) {
-            return experienceDelete(experienceId, form, principal);
+            return experienceDelete(experienceId, form);
         }
 
         experienceService.delete(experienceId);

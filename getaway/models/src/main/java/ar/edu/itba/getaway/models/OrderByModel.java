@@ -6,7 +6,7 @@ public enum OrderByModel {
     OrderByAZ("ORDER BY experienceName ASC"),
     OrderByZA("ORDER BY experienceName DESC"),
     OrderByLowPrice("ORDER BY price ASC"),
-    OrderByHighPrice("ORDER BY price ASC DESC");
+    OrderByHighPrice("ORDER BY price DESC");
 
     String SqlQuery;
 

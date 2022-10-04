@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <div class="navbar container-fluid p-0 d-flex flex-column">
    <div class="container-fluid px-2 pt-2 d-flex">
@@ -11,6 +12,20 @@
          </span>
       </a>
       <div class="container-navbar-buttons d-flex justify-content-between align-items-center">
+         <div class="d-flex justify-items-center align-items-center" style="margin-right: 40px;">
+
+            <button class="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm">
+               <img src="<c:url value="/resources/images/ic_lupa.svg"/>" alt="Icono lupa">
+            </button>
+            <spring:message code="navbar.search" var="placeholder"/>
+            <c:url value="/search_result" var="searchPostPath"/>
+            <form:form modelAttribute="searchForm" action="${searchPostPath}" id="searchExperienceForm" method="post"
+                       acceptCharset="UTF-8" cssClass="my-auto">
+               <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>
+               <form:errors path="query" element="p" cssClass="form-error-label"/>
+            </form:form>
+         </div>
+
          <c:if test="${loggedUser.hasRole('VERIFIED')}">
             <a href="<c:url value = "/create_experience"/>" style="margin-right: 40px;">
                <button type="button" class="btn button-primary">

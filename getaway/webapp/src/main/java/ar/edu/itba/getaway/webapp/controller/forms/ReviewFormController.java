@@ -5,6 +5,7 @@ import ar.edu.itba.getaway.services.ReviewService;
 import ar.edu.itba.getaway.services.UserService;
 import ar.edu.itba.getaway.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
+import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class ReviewFormController {
     @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review", method = {RequestMethod.GET})
     public ModelAndView createReviewForm(@PathVariable("categoryName") final String categoryName,
                                          @PathVariable("experienceId") final long experienceId,
+                                         @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                          @ModelAttribute("reviewForm") final ReviewForm form) {
         return new ModelAndView("review_form");
     }
@@ -42,12 +44,13 @@ public class ReviewFormController {
     public ModelAndView experienceWithReview(@PathVariable("categoryName") final String categoryName,
                                              @PathVariable("experienceId") final long experienceId,
                                              @Valid @ModelAttribute("reviewForm") final ReviewForm form,
+                                             @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                              final BindingResult errors,
                                              Principal principal) {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
 
         if (errors.hasErrors()) {
-            return createReviewForm(categoryName, experienceId, form);
+            return createReviewForm(categoryName, experienceId, searchForm,form);
         }
 
         final Date date = Date.from(Instant.now());
