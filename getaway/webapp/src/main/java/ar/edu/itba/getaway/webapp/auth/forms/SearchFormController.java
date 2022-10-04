@@ -74,7 +74,6 @@ public class SearchFormController {
             mav.addObject("favExperienceModels", new ArrayList<>());
         }
 
-//        List<ExperienceModel> currentExperiences = currentPage.getContent();
 
         final List<ExperienceModel> experienceModels = currentPage.getContent();
         final List<Long> avgReviews = new ArrayList<>();
@@ -89,10 +88,15 @@ public class SearchFormController {
 
         final OrderByModel[] orderByModels = OrderByModel.values();
 
-        if ( orderBy.isPresent() ){
+
+        if (orderBy.isPresent()){
             request.setAttribute("orderBy", orderBy);
             mav.addObject("orderBy", orderBy.get());
         }
+
+
+        String path = "/search_result";
+        mav.addObject("path", path);
 
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("currentPage", currentPage.getCurrentPage());
@@ -108,67 +112,18 @@ public class SearchFormController {
 
 
     @RequestMapping(value = "/search_result", method = {RequestMethod.POST})
-    public ModelAndView searchByName(
-                                     @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
-                                     @RequestParam("set") final Optional<Boolean> set,
-                                     @RequestParam("experience") final Optional<Long> experience,
-                                     @RequestParam Optional<String> query,
-                                     @RequestParam Optional<OrderByModel> orderBy,
-                                     @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum,
+    public ModelAndView searchByName(@Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                      final BindingResult errors,
                                      Principal principal,
                                      HttpServletRequest request) {
 
-        final ModelAndView mav = new ModelAndView("/search_result");
+        final ModelAndView mav = new ModelAndView("redirect:/search_result");
 
         if (errors.hasErrors()) {
-            return createSearchForm(searchForm,set,experience,query,orderBy,pageNum,principal,request);
+            return createSearchForm(searchForm,Optional.empty(),Optional.empty(),Optional.empty(),Optional.empty(),1,principal,request);
         }
 
-        if (principal != null) {
-            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-
-            if (user.isPresent()) {
-                final long userId = user.get().getId();
-                setFav(userId, set, experience);
-                final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
-
-                mav.addObject("favExperienceModels", favExperienceModels);
-            }
-        } else {
-            mav.addObject("favExperienceModels", new ArrayList<>());
-        }
-
-//        List<ExperienceModel> currentExperiences = currentPage.getContent();
-
-        Page<ExperienceModel> currentPage = experienceService.getByName(searchForm.getQuery(), orderBy, pageNum);
-        final List<ExperienceModel> experienceModels = currentPage.getContent();
-
-        final List<Long> avgReviews = new ArrayList<>();
-        for (ExperienceModel exp : experienceModels) {
-            avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
-        }
-
-        if(query.isPresent()){
-            request.setAttribute("query", query);
-            mav.addObject("query", query.get());
-        }
-
-        final OrderByModel[] orderByModels = OrderByModel.values();
-
-        if ( orderBy.isPresent() ){
-            request.setAttribute("orderBy", orderBy);
-            mav.addObject("orderBy", orderBy.get());
-        }
-
-        mav.addObject("orderByModels", orderByModels);
-        mav.addObject("currentPage", currentPage.getCurrentPage());
-        mav.addObject("totalPages", currentPage.getMaxPage());
-        mav.addObject("avgReviews", avgReviews);
-        mav.addObject("set", set);
-        mav.addObject("experience", experience);
-        mav.addObject("experiences", experienceModels);
-        mav.addObject("isEditing", false);
+        mav.addObject("query", searchForm.getQuery());
 
         return mav;
     }

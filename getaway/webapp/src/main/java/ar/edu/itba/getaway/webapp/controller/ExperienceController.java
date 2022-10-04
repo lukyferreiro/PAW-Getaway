@@ -134,6 +134,9 @@ public class ExperienceController {
         }
         request.setAttribute("pageNum", pageNum);
 
+        String path = "/experiences/" + categoryName;
+        mav.addObject("path", path);
+
         // mav info
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("cities", cityModels);
