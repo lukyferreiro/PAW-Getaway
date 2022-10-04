@@ -21,10 +21,10 @@
       <div class="p-2" style="width: 600px;">
          <c:choose>
             <c:when test="${param.hasImage}">
-               <img class="container-fluid p-0" style="height: fit-content" src="<c:url value='/experiences/${param.id}/image'/>" alt="Imagen"/>
+               <img class="container-fluid p-0" style="height: fit-content; max-height: 550px;" src="<c:url value='/experiences/${param.id}/image'/>" alt="Imagen"/>
             </c:when>
             <c:otherwise>
-               <img class="container-fluid p-0" style="height: fit-content" alt="Imagen ${param.experienceCategoryName}"
+               <img class="container-fluid p-0" style="height: fit-content; max-height: 550px;" alt="Imagen ${param.experienceCategoryName}"
                     src="<c:url value="/resources/images/${param.experienceCategoryName}.jpg" />">
             </c:otherwise>
          </c:choose>

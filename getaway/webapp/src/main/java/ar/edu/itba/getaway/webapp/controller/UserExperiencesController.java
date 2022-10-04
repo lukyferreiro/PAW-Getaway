@@ -119,7 +119,8 @@ public class UserExperiencesController {
     @PreAuthorize("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
     @RequestMapping(value = "/user/experiences/delete/{experienceId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
-                                         @ModelAttribute("deleteForm") final DeleteForm form) {
+                                         @ModelAttribute("deleteForm") final DeleteForm form,
+                                         @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("deleteExperience");
         final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
 
@@ -131,9 +132,10 @@ public class UserExperiencesController {
     @RequestMapping(value = "/user/experiences/delete/{experienceId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView experienceDeletePost(@PathVariable(value = "experienceId") final long experienceId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,
-                                             final BindingResult errors) {
+                                             final BindingResult errors,
+                                             @ModelAttribute("searchForm") final SearchForm searchForm) {
         if (errors.hasErrors()) {
-            return experienceDelete(experienceId, form);
+            return experienceDelete(experienceId, form, searchForm);
         }
 
         experienceService.delete(experienceId);
@@ -143,7 +145,8 @@ public class UserExperiencesController {
     @PreAuthorize("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
     @RequestMapping(value = "/user/experiences/edit/{experienceId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView experienceEdit(@PathVariable("experienceId") final long experienceId,
-                                       @ModelAttribute("experienceForm") final ExperienceForm form) {
+                                       @ModelAttribute("experienceForm") final ExperienceForm form,
+                                       @ModelAttribute("searchForm") final SearchForm searchForm) {
 
         final ModelAndView mav = new ModelAndView("experience_form");
 
@@ -198,9 +201,10 @@ public class UserExperiencesController {
     @RequestMapping(value = "/user/experiences/edit/{experienceId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView experienceEditPost(@PathVariable(value="experienceId") final long experienceId,
                                            @Valid @ModelAttribute("experienceForm") final ExperienceForm form,
-                                           final BindingResult errors) throws IOException {
+                                           final BindingResult errors,
+                                           @ModelAttribute("searchForm") final SearchForm searchForm) throws IOException {
         if (errors.hasErrors()) {
-            return experienceEdit(experienceId, form);
+            return experienceEdit(experienceId, form, searchForm);
         }
 
         final long categoryId = form.getActivityCategory();
@@ -222,7 +226,7 @@ public class UserExperiencesController {
         if(!experienceImg.isEmpty()) {
             if (!contentTypes.contains(experienceImg.getContentType())) {
                 errors.rejectValue("activityImg", "experienceForm.validation.imageFormat");
-                return experienceEdit(experienceId, form);
+                return experienceEdit(experienceId, form, searchForm);
             }
         }
 
