@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.PasswordResetToken;
+import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao{
+public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
@@ -38,7 +39,7 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao{
 
     @Override
     public PasswordResetToken createToken(Long userId, String token, LocalDateTime expirationDate) {
-        Map<String, Object> passTokenData = new HashMap<>();
+        final Map<String, Object> passTokenData = new HashMap<>();
         passTokenData.put("passTokenUserId", userId);
         passTokenData.put("passToken", token);
         passTokenData.put("passTokenExpirationDate", expirationDate);

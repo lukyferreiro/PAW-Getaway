@@ -9,10 +9,10 @@ public class CountryModel {
         this.countryName = countryName;
     }
 
-    public Long getId() {
+    public Long getCountryId() {
         return countryId;
     }
-    public String getName() {
+    public String getCountryName() {
         return countryName;
     }
 

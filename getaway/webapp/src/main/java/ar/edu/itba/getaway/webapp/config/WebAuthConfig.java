@@ -90,7 +90,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/resetPassword/{token}").anonymous()
                 .antMatchers(HttpMethod.GET,"/user/resetPassword").denyAll()
                 .antMatchers(HttpMethod.POST,"/user/resetPassword").anonymous()
-                //User profile
+                //User
+                .antMatchers(HttpMethod.GET,"/search_result").permitAll()
+                .antMatchers(HttpMethod.POST,"/search_result").permitAll()
                 .antMatchers(HttpMethod.GET,"/user/profile").authenticated()
                 .antMatchers(HttpMethod.GET,"/user/profile/edit").hasRole("VERIFIED")
                 .antMatchers(HttpMethod.POST,"/user/profile/edit").hasRole("VERIFIED")

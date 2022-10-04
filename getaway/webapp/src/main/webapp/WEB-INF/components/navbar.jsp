@@ -4,75 +4,79 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <div class="navbar container-fluid p-0 d-flex flex-column">
-    <div class="container-fluid px-2 pt-2 d-flex">
-        <a href="<c:url value = "/"/>" class="logo d-flex">
-            <img class="logo-img" src="<c:url value = "/resources/images/getaway-icon.png"/>" alt="Logo">
-            <span class="logo-text align-self-center text-uppercase font-weight-bold">
+   <div class="container-fluid px-2 pt-2 d-flex">
+      <a href="<c:url value = "/"/>" class="logo d-flex">
+         <img class="logo-img" src="<c:url value = "/resources/images/getaway-icon.png"/>" alt="Logo">
+         <span class="logo-text align-self-center text-uppercase font-weight-bold">
                 <spring:message code="pageName"/>
          </span>
-        </a>
-        <div class="container-navbar-buttons d-flex justify-content-between align-items-center">
-            <c:if test="${loggedUser.hasRole('VERIFIED')}">
-                <a href="<c:url value = "/create_experience"/>" style="margin-right: 40px;">
-                    <button type="button" class="btn button-primary">
-                        <spring:message code="navbar.createExperience"/>
-                    </button>
-                </a>
-            </c:if>
-            <c:choose>
-                <c:when test="${loggedUser == null}">
-                    <a href="<c:url value = "/login"/>">
-                        <button type="button" class="btn button-primary">
-                            <spring:message code="navbar.login"/>
-                        </button>
-                    </a>
-                </c:when>
-                <c:otherwise>
-                    <div class="dropdown">
-                        <button class="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
-                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="<c:url value="/resources/images/ic_user_white.svg"/>" alt="Imagen perfil" style="width:35px; height:35px;">
-                        </button>
+      </a>
+      <div class="container-navbar-buttons d-flex justify-content-between align-items-center">
+         <div class="d-flex justify-items-center align-items-center" style="margin-right: 40px;">
 
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="left: -50px;">
-                            <a class="dropdown-item" href="<c:url value="/user/profile"/>">
-                                <img src="<c:url value="/resources/images/ic_user.svg"/>" alt="Imagen perfil">
-                                <spring:message code="navbar.profile"/>
-                            </a>
-                            <c:if test="${loggedUser.hasRole('PROVIDER')}">
-                                <a class="dropdown-item" href="<c:url value="/user/experiences"/>">
-                                    <img src="<c:url value="/resources/images/ic_experiences.svg"/>" alt="Imagen perfil">
-                                    <spring:message code="navbar.experiences"/>
-                                </a>
-                            </c:if>
-                            <a class="dropdown-item" href="<c:url value="/user/favourites"/>">
-                                <img src="<c:url value="/resources/images/ic_fav.svg"/>" alt="Imagen perfil">
-                                <spring:message code="navbar.favourites"/>
-                            </a>
-                            <a class="dropdown-item" href="<c:url value="/user/reviews"/>">
-                                <img src="<c:url value="/resources/images/ic_review.svg"/>" alt="Imagen perfil">
-                                <spring:message code="navbar.reviews"/>
-                            </a>
-                            <a class="dropdown-item" href="<c:url value="/logout"/>">
-                                <img src="<c:url value="/resources/images/ic_logout.svg"/>" alt="Imagen perfil">
-                                <spring:message code="navbar.logout"/>
-                            </a>
-                        </ul>
-                    </div>
-                </c:otherwise>
-            </c:choose>
-        </div>
-    </div>
+            <button class="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm">
+               <img src="<c:url value="/resources/images/ic_lupa.svg"/>" alt="Icono lupa">
+            </button>
+            <spring:message code="navbar.search" var="placeholder"/>
+            <c:url value="/search_result" var="searchPostPath"/>
+            <form:form modelAttribute="searchForm" action="${searchPostPath}" id="searchExperienceForm" method="post"
+                       acceptCharset="UTF-8" cssClass="my-auto">
+               <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>
+               <form:errors path="query" element="p" cssClass="form-error-label"/>
+            </form:form>
+         </div>
 
-    <div>
-        <c:url value="/search_result" var="searchPostPath"/>
-        <form:form modelAttribute="searchForm" action="${searchPostPath}" id="searchExperienceForm" method="post"
-                   acceptCharset="UTF-8">
-            <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
-            <form:errors path="query" element="p" cssClass="form-error-label"/>
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" form="searchExperienceForm">Busca</button>
-        </form:form>
-    </div>
+         <c:if test="${loggedUser.hasRole('VERIFIED')}">
+            <a href="<c:url value="/create_experience"/>" style="margin-right: 40px;">
+               <button type="button" class="btn button-primary">
+                  <spring:message code="navbar.createExperience"/>
+               </button>
+            </a>
+         </c:if>
+         <c:choose>
+            <c:when test="${loggedUser == null}">
+               <a href="<c:url value="/login"/>">
+                  <button type="button" class="btn button-primary">
+                     <spring:message code="navbar.login"/>
+                  </button>
+               </a>
+            </c:when>
+            <c:otherwise>
+               <div class="dropdown">
+                  <button class="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
+                          id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                     <img src="<c:url value="/resources/images/ic_user_white.svg"/>" alt="Icono usuario" style="width:35px; height:35px;">
+                  </button>
+
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="left: -50px;">
+                     <a class="dropdown-item" href="<c:url value="/user/profile"/>">
+                        <img src="<c:url value="/resources/images/ic_user.svg"/>" alt="Icono perfil">
+                        <spring:message code="navbar.profile"/>
+                     </a>
+                     <c:if test="${loggedUser.hasRole('PROVIDER')}">
+                        <a class="dropdown-item" href="<c:url value="/user/experiences"/>">
+                           <img src="<c:url value="/resources/images/ic_experiences.svg"/>" alt="Icono experiencias">
+                           <spring:message code="navbar.experiences"/>
+                        </a>
+                     </c:if>
+                     <a class="dropdown-item" href="<c:url value="/user/favourites"/>">
+                        <img src="<c:url value="/resources/images/ic_fav.svg"/>" alt="Icono favoritos">
+                        <spring:message code="navbar.favourites"/>
+                     </a>
+                     <a class="dropdown-item" href="<c:url value="/user/reviews"/>">
+                        <img src="<c:url value="/resources/images/ic_review.svg"/>" alt="Icono reseñas">
+                        <spring:message code="navbar.reviews"/>
+                     </a>
+                     <a class="dropdown-item" href="<c:url value="/logout"/>">
+                        <img src="<c:url value="/resources/images/ic_logout.svg"/>" alt="Icono cerrar sesion">
+                        <spring:message code="navbar.logout"/>
+                     </a>
+                  </ul>
+               </div>
+            </c:otherwise>
+         </c:choose>
+      </div>
+   </div>
 
    <div class="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0">
       <a href="<c:url value="/experiences/Aventura"/>">

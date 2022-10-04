@@ -1,7 +1,7 @@
 let items = document.querySelectorAll('.carousel-container .carousel-item')
 
 items.forEach((el) => {
-    const minPerSlide = 3
+    const minPerSlide = 4
     let next = el.nextElementSibling
     for (let i=1; i<minPerSlide; i++) {
         if (!next) {

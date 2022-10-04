@@ -1,8 +1,8 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.getaway.exceptions.ImageNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.ImageNotFoundException;
 import ar.edu.itba.getaway.models.ImageModel;
-import ar.edu.itba.getaway.services.ImageService;
+import ar.edu.itba.getaway.interfaces.services.ImageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

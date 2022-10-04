@@ -1,15 +1,15 @@
 package ar.edu.itba.getaway.models;
 
 public class ExperienceModel {
-    private final long experienceId;
+    private final Long experienceId;
     private String experienceName, address, description, siteUrl, categoryName, email;
     private Double price;
-    private long cityId, categoryId;
-    private final long userId;
+    private Long cityId, categoryId;
+    private final Long userId;
     private Long imageExperienceId;
     private boolean hasImage;
 
-    public ExperienceModel(long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, long cityId, long categoryId, long userId, Long imageExperienceId, boolean hasImage) {
+    public ExperienceModel(Long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, Long cityId, Long categoryId, Long userId, Long imageExperienceId, boolean hasImage) {
         this.experienceId = experienceId;
         this.experienceName = experienceName;
         this.address = address;
@@ -25,7 +25,7 @@ public class ExperienceModel {
         this.hasImage = hasImage;
     }
 
-    public long getExperienceId() {
+    public Long getExperienceId() {
         return experienceId;
     }
     public String getExperienceName() {
@@ -70,19 +70,19 @@ public class ExperienceModel {
     public void setPrice(Double price) {
         this.price = price;
     }
-    public long getCityId() {
+    public Long getCityId() {
         return cityId;
     }
-    public void setCityId(long cityId) {
+    public void setCityId(Long cityId) {
         this.cityId = cityId;
     }
-    public long getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
-    public void setCategoryId(long categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
     public Long getImageExperienceId() {
@@ -107,7 +107,7 @@ public class ExperienceModel {
             return false;
         }
         ExperienceModel other = (ExperienceModel) o;
-        return this.experienceId == other.experienceId && this.experienceName.equals(other.experienceName) &&
-                this.address.equals(other.address) && this.cityId == other.cityId ;
+        return this.experienceId.equals(other.experienceId) && this.experienceName.equals(other.experienceName) &&
+                this.address.equals(other.address) && this.cityId.equals(other.cityId);
     }
 }

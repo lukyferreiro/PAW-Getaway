@@ -8,7 +8,7 @@ public enum OrderByModel {
     OrderByLowPrice("ORDER BY price ASC"),
     OrderByHighPrice("ORDER BY price DESC");
 
-    String SqlQuery;
+    final String SqlQuery;
 
     OrderByModel(String SqlQuery){
         this.SqlQuery = SqlQuery;

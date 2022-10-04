@@ -3,15 +3,16 @@ package ar.edu.itba.getaway.models;
 import java.util.Date;
 
 public class ReviewModel {
-    private final long reviewId;
+    private final Long reviewId;
     private final String title;
     private final String description;
-    private final long score;
-    private final long experienceId;
+    private final Long score;
+    private final Long experienceId;
+    //TODO change tipo DATE
     private final Date reviewDate;
-    private final long userId;
+    private final Long userId;
 
-    public ReviewModel(long reviewId, String title, String description, long score, long experienceId, Date reviewDate, long userId) {
+    public ReviewModel(Long reviewId, String title, String description, Long score, Long experienceId, Date reviewDate, Long userId) {
         this.reviewId = reviewId;
         this.title = title;
         this.description = description;
@@ -21,7 +22,7 @@ public class ReviewModel {
         this.userId=userId;
     }
 
-    public long getReviewId() {
+    public Long getReviewId() {
         return reviewId;
     }
     public String getTitle() {
@@ -30,19 +31,19 @@ public class ReviewModel {
     public String getDescription() {
         return description;
     }
-    public long getScore() {
+    public Long getScore() {
         return score;
     }
     public String getStringScore() {
         return String.valueOf(score);
     }
-    public long getExperienceId() {
+    public Long getExperienceId() {
         return experienceId;
     }
     public Date getReviewDate() {
         return reviewDate;
     }
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
@@ -55,6 +56,6 @@ public class ReviewModel {
             return false;
         }
         ReviewModel other = (ReviewModel) o;
-        return this.reviewId == (other.reviewId);
+        return this.reviewId.equals(other.reviewId);
     }
 }

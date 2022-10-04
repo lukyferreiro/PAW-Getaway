@@ -1,12 +1,12 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.getaway.exceptions.DuplicateUserException;
+import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.getaway.models.VerificationToken;
-import ar.edu.itba.getaway.persistence.PasswordResetTokenDao;
-import ar.edu.itba.getaway.persistence.UserDao;
-import ar.edu.itba.getaway.persistence.VerificationTokenDao;
+import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
+import ar.edu.itba.getaway.interfaces.persistence.UserDao;
+import ar.edu.itba.getaway.interfaces.persistence.VerificationTokenDao;
+import ar.edu.itba.getaway.interfaces.services.EmailService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,14 +18,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.mail.MessagingException;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 
 @RunWith(MockitoJUnitRunner.class)

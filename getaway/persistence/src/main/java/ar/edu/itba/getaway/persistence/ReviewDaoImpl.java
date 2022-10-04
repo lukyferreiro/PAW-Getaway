@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
+import ar.edu.itba.getaway.interfaces.persistence.ReviewDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import javax.sql.DataSource;
 import java.util.*;
 
 @Repository
-public class ReviewDaoImpl implements ReviewDao{
+public class ReviewDaoImpl implements ReviewDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
@@ -50,7 +51,7 @@ public class ReviewDaoImpl implements ReviewDao{
     }
 
     @Override
-    public ReviewModel create(String title, String description, long score, long experienceId, Date reviewDate, long userId) {
+    public ReviewModel createReview (String title, String description, Long score, Long experienceId, Date reviewDate, Long userId) {
         final Map<String, Object> reviewData = new HashMap<>();
         reviewData.put("title", title);
         reviewData.put("description", description);
@@ -58,79 +59,65 @@ public class ReviewDaoImpl implements ReviewDao{
         reviewData.put("experienceId", experienceId);
         reviewData.put("reviewDate", reviewDate);
         reviewData.put("userId", userId);
-        final long reviewId = jdbcInsert.executeAndReturnKey(reviewData).longValue();
+        final Long reviewId = jdbcInsert.executeAndReturnKey(reviewData).longValue();
 
-        LOGGER.debug("Created new review with id {} of user with id {}", reviewId, userId);
+        LOGGER.debug("Created new review with id {} by user with id {}", reviewId, userId);
 
-        return new ReviewModel(reviewId, title, description,score, experienceId, reviewDate, userId);
+        return new ReviewModel(reviewId, title, description, score, experienceId, reviewDate, userId);
     }
 
     @Override
-    public List<ReviewModel> getReviewsFromId(long experienceId) {
+    public List<ReviewModel> getReviewsByExperienceId(Long experienceId) {
         final String query = "SELECT * FROM reviews WHERE experienceId = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{experienceId}, REVIEW_MODEL_ROW_MAPPER);
     }
 
     @Override
-    public Long getAverageScore(long experienceId) {
+    public Long getReviewAverageScore(Long experienceId) {
         final String query = "SELECT CEILING(AVG(score)) FROM reviews WHERE experienceId = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.queryForObject(query, new Object[]{experienceId}, Long.class);
     }
 
     @Override
-    public Integer getReviewCount(long experienceId) {
+    public Integer getReviewCount(Long experienceId) {
         final String query = "SELECT COUNT(*) FROM reviews WHERE experienceId = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.queryForObject(query, new Object[]{experienceId}, Integer.class);
     }
 
-    //    @Override
-//    List<ReviewUserModel> getReviewAndUser(long experienceId, int page, page_size){
-//    final String query = "SELECT * FROM reviews NATURAL JOIN users WHERE experienceId = ? LIMIT ? OFFSET ?";
-//            LOGGER.debug("Executing query: {}", query);
-//     return jdbcTemplate.query(query, new Object[]{experienceId, page_size, (page-1)*page_size}, REVIEW_USER_ROW_MAPPER);
-//      }
-
     @Override
-    public List<ReviewUserModel> getReviewAndUser(long experienceId) {
+    public List<ReviewUserModel> getReviewAndUser(Long experienceId) {
         final String query = "SELECT * FROM reviews NATURAL JOIN users WHERE experienceId = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{experienceId}, REVIEW_USER_ROW_MAPPER);
     }
 
     @Override
-    public Optional<ReviewModel> getById(long reviewId) {
+    public Optional<ReviewModel> getReviewById(Long reviewId) {
         final String query = "SELECT * FROM reviews WHERE reviewId = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{reviewId}, REVIEW_MODEL_ROW_MAPPER)
                 .stream().findFirst();
     }
 
-    //    @Override
-//    List<ReviewUserModel> getByUserId(long userId, int page, page_size){
-//    final String query = "SELECT * FROM reviews NATURAL JOIN users WHERE userId = ? LIMIT ? OFFSET ?";
-//            LOGGER.debug("Executing query: {}", query);
-//     return jdbcTemplate.query(query, new Object[]{experienceId, page_size, (page-1)*page_size}, REVIEW_USER_ROW_MAPPER);
-//      }
-
     @Override
-    public List<ReviewUserModel> getByUserId(long userId) {
+    public List<ReviewUserModel> getReviewsByUserId(Long userId) {
         final String query = "SELECT * FROM reviews  NATURAL JOIN users WHERE userid = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{userId}, REVIEW_USER_ROW_MAPPER);
     }
 
     @Override
-    public boolean delete(long reviewId) {
+    public boolean deleteReview(Long reviewId) {
         final String query = "DELETE FROM reviews WHERE reviewId = ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.update(query, reviewId) == 1;
     }
 
     @Override
-    public boolean update(long reviewId, ReviewModel reviewModel) {
+    public boolean updateReview(Long reviewId, ReviewModel reviewModel) {
         LOGGER.debug("Executing query to update review with id: {}", reviewId);
         return jdbcTemplate.update("UPDATE reviews " +
                         "SET title = ?, " +

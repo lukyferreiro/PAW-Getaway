@@ -1,10 +1,10 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
-import ar.edu.itba.getaway.services.*;
-import ar.edu.itba.getaway.exceptions.CategoryNotFoundException;
-import ar.edu.itba.getaway.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.FilterForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
@@ -42,17 +42,17 @@ public class ExperienceController {
 
     @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.GET})
     public ModelAndView experienceGet(@PathVariable("categoryName") final String categoryName,
-                                   @ModelAttribute("filterForm") final FilterForm form,
-                                   @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
-                                   Principal principal,
-                                   HttpServletRequest request,
-                                   @RequestParam Optional<OrderByModel> orderBy,
-                                   @RequestParam Optional<Long> cityId,
-                                   @RequestParam Optional<Double> maxPrice,
-                                   @RequestParam Optional<Long> score,
-                                   @RequestParam Optional<Long> experience,
-                                   @RequestParam Optional<Boolean> set,
-                                   @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum) {
+                                      @ModelAttribute("filterForm") final FilterForm form,
+                                      @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                                      Principal principal,
+                                      HttpServletRequest request,
+                                      @RequestParam Optional<OrderByModel> orderBy,
+                                      @RequestParam Optional<Long> cityId,
+                                      @RequestParam Optional<Double> maxPrice,
+                                      @RequestParam Optional<Long> score,
+                                      @RequestParam Optional<Long> experience,
+                                      @RequestParam Optional<Boolean> set,
+                                      @RequestParam(value = "pageNum", defaultValue = "1") final Integer pageNum) {
         final ModelAndView mav = new ModelAndView("experiences");
         final Page<ExperienceModel> currentPage;
 
@@ -66,7 +66,7 @@ public class ExperienceController {
         }
 
         final String dbCategoryName = category.toString();
-        final int id = category.ordinal() + 1;
+        final Long id = (long) (category.ordinal() + 1);
 
         // Order By
         final OrderByModel[] orderByModels = OrderByModel.values();
@@ -77,8 +77,8 @@ public class ExperienceController {
         }
 
         // Price
-        final Optional<Double> maxPriceOpt = experienceService.getMaxPrice(id);
-        double max = maxPriceOpt.get();
+        final Optional<Double> maxPriceOpt = experienceService.getMaxPriceByCategoryId(id);
+        Double max = maxPriceOpt.get();
         mav.addObject("max", max);
         if(maxPrice.isPresent()){
             request.setAttribute("maxPrice", max);
@@ -87,7 +87,7 @@ public class ExperienceController {
         mav.addObject("maxPrice", max);
 
         // Score
-        long scoreVal = 0;
+        Long scoreVal = 0L;
         if (score.isPresent() && score.get() != -1) {
             request.setAttribute("score", score.get());
             scoreVal = score.get();
@@ -98,11 +98,11 @@ public class ExperienceController {
         final List<CityModel> cityModels = locationService.listAllCities();
 
         if (cityId.isPresent()) {
-            currentPage = experienceService.listByFilter(id, max, scoreVal, cityId.get(), orderBy, pageNum);
+            currentPage = experienceService.listExperiencesByFilter(id, max, scoreVal, cityId.get(), orderBy, pageNum);
             request.setAttribute("cityId", cityId.get());
             mav.addObject("cityId", cityId.get());
         } else {
-            currentPage = experienceService.listByFilter(id, max, scoreVal, new Long(-1), orderBy, pageNum);
+            currentPage = experienceService.listExperiencesByFilter(id, max, scoreVal, (long) -1, orderBy, pageNum);
             request.setAttribute("cityId", -1);
             mav.addObject("cityId", -1);
         }
@@ -112,12 +112,12 @@ public class ExperienceController {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
 
             if (user.isPresent()) {
-                final long userId = user.get().getId();
+                final Long userId = user.get().getUserId();
 
                 if(set.isPresent()){
                     favExperienceService.setFav(userId, set, experience);
                 }
-                final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
+                final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
                 mav.addObject("favExperienceModels", favExperienceModels);
             }
         } else {
@@ -129,10 +129,13 @@ public class ExperienceController {
         final List<Long> avgReviews = new ArrayList<>();
         final List<Integer> listReviewsCount = new ArrayList<>();
         for (ExperienceModel exp : currentExperiences) {
-            avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
+            avgReviews.add(reviewService.getReviewAverageScore(exp.getExperienceId()));
             listReviewsCount.add(reviewService.getReviewCount(exp.getExperienceId()));
         }
         request.setAttribute("pageNum", pageNum);
+
+        String path = "/experiences/" + categoryName;
+        mav.addObject("path", path);
 
         // mav info
         mav.addObject("orderByModels", orderByModels);
@@ -162,13 +165,13 @@ public class ExperienceController {
             return experienceGet(categoryName, form, searchForm, principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
         }
 
-        final Optional<CityModel> cityModel = locationService.getCityByName(form.getActivityCity());
+        final Optional<CityModel> cityModel = locationService.getCityByName(form.getExperienceCity());
         if (cityModel.isPresent()) {
-            final long cityId = cityModel.get().getId();
+            final Long cityId = cityModel.get().getCityId();
             mav.addObject("cityId", cityId);
         }
 
-        final Double priceMax = form.getActivityPriceMax();
+        final Double priceMax = form.getExperiencePriceMax();
         if (priceMax != null) {
             mav.addObject("maxPrice", priceMax);
         }
@@ -184,28 +187,32 @@ public class ExperienceController {
     @RequestMapping("/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}")
     public ModelAndView experienceView(Principal principal,
                                        @PathVariable("categoryName") final String categoryName,
-                                       @PathVariable("experienceId") final long experienceId,
+                                       @PathVariable("experienceId") final Long experienceId,
                                        @RequestParam Optional<Boolean> set,
                                        @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
-        final ModelAndView mav = new ModelAndView("experience_details");
+        final ModelAndView mav = new ModelAndView("experienceDetails");
 
-        final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
+        final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final String dbCategoryName = ExperienceCategory.valueOf(categoryName).name();
         final List<ReviewUserModel> reviews = reviewService.getReviewAndUser(experienceId);
 
         final List<Boolean> listReviewsHasImages = new ArrayList<>();
         for(ReviewUserModel review : reviews){
-            listReviewsHasImages.add(imageService.getImgById(review.getImgId()).get().getImage() != null);
+            Optional<ImageModel> img = imageService.getImgById(review.getImgId());
+            if(img.isPresent()){
+                listReviewsHasImages.add(img.get().getImage() != null);
+            }else{
+                listReviewsHasImages.add(false);
+            }
         }
 
-        final Long avgScore = reviewService.getAverageScore(experienceId);
+        final Long avgScore = reviewService.getReviewAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
         final CityModel cityModel = locationService.getCityById(experience.getCityId()).get();
-        final String city = cityModel.getName();
-        final String country = locationService.getCountryById(cityModel.getCountryId()).get().getName();
+        final String city = cityModel.getCityName();
+        final String country = locationService.getCountryById(cityModel.getCountryId()).get().getCountryName();
 
         LOGGER.debug("AVGSCORE reviewService {}", avgScore);
-//        experienceAvgReview.ifPresent(aLong -> mav.addObject("reviewAvg", aLong));
 
         mav.addObject("reviewAvg", avgScore);
         mav.addObject("dbCategoryName", dbCategoryName);
@@ -222,11 +229,11 @@ public class ExperienceController {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
 
             if (user.isPresent()) {
-                final long userId = user.get().getId();
+                final Long userId = user.get().getUserId();
                 if(set.isPresent()){
                     favExperienceService.setFav(userId, set, Optional.of(experienceId));
                 }
-                final List<Long> favExperienceModels = favExperienceService.listByUserId(userId);
+                final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
 
                 mav.addObject("favExperienceModels", favExperienceModels);
             }
@@ -236,6 +243,5 @@ public class ExperienceController {
 
         return mav;
     }
-
 
 }

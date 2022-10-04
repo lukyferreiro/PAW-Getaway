@@ -2,7 +2,8 @@ package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.ImageExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
-import ar.edu.itba.getaway.persistence.ImageDao;
+import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
+import ar.edu.itba.getaway.interfaces.services.ImageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,37 +22,37 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ImageModel createImg(byte[] image) {
         final ImageModel img = imageDao.createImg(image);
-        LOGGER.info("Created image with id {}", img.getId());
+        LOGGER.info("Created image with id {}", img.getImageId());
         return img;
     }
 
     @Override
-    public boolean updateImg(byte[] image, long imageId) {
+    public void updateImg(byte[] image, Long imageId) {
         LOGGER.debug("Updating image with id {}", imageId);
-        return imageDao.updateImg(image, imageId);
+        imageDao.updateImg(image, imageId);
     }
 
     @Override
-    public boolean deleteImg(long imageId) {
+    public void deleteImg(Long imageId) {
         LOGGER.debug("Delete image with id {}", imageId);
-        return imageDao.deleteImg(imageId);
+        imageDao.deleteImg(imageId);
     }
 
     @Override
-    public Optional<ImageModel> getImgById(long imageId) {
+    public Optional<ImageModel> getImgById(Long imageId) {
         LOGGER.debug("Retrieving image with id {}", imageId);
         return imageDao.getImgById(imageId);
     }
 
     @Override
-    public ImageExperienceModel createExperienceImg(byte[] image, long experienceId, boolean isCover) {
+    public ImageExperienceModel createExperienceImg(byte[] image, Long experienceId, boolean isCover) {
         final ImageExperienceModel imgExp = imageDao.createExperienceImg(image, experienceId, isCover);
         LOGGER.debug("Creating image {} to experience with id {}", imgExp.getImageId(), experienceId);
         return imgExp;
     }
 
     @Override
-    public Optional<ImageModel> getImgByExperienceId(long experienceId) {
+    public Optional<ImageModel> getImgByExperienceId(Long experienceId) {
         LOGGER.debug("Retrieving image of experience with id {}", experienceId);
         return imageDao.getImgByExperienceId(experienceId);
     }

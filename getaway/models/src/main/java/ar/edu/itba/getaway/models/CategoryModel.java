@@ -1,18 +1,18 @@
 package ar.edu.itba.getaway.models;
 
 public class CategoryModel{
-    private final long categoryId;
+    private final Long categoryId;
     private final String categoryName;
 
-    public CategoryModel(long categoryId, String categoryName) {
+    public CategoryModel(Long categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
     }
 
-    public long getId() {
+    public Long getCategoryId() {
         return categoryId;
     }
-    public String getName() {
+    public String getCategoryName() {
         return categoryName;
     }
 
@@ -25,6 +25,6 @@ public class CategoryModel{
             return false;
         }
         CategoryModel other = (CategoryModel) o;
-        return this.categoryId == other.categoryId;
+        return this.categoryId.equals(other.categoryId);
     }
 }

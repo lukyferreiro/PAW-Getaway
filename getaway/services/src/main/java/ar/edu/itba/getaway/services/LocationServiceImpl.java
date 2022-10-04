@@ -2,7 +2,8 @@ package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.CityModel;
 import ar.edu.itba.getaway.models.CountryModel;
-import ar.edu.itba.getaway.persistence.LocationDao;
+import ar.edu.itba.getaway.interfaces.persistence.LocationDao;
+import ar.edu.itba.getaway.interfaces.services.LocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ public class LocationServiceImpl implements LocationService {
     private LocationDao locationDao;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LocationServiceImpl.class);
+    private final String ARGENTINA = "Argentina";
 
     @Override
     public List<CityModel> listAllCities() {
@@ -56,8 +58,8 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Optional<CountryModel> getCountryByName(String countryName) {
-        LOGGER.debug("Retrieving country with name {}", countryName);
-        return locationDao.getCountryByName(countryName);
+    public Optional<CountryModel> getCountryByName() {
+        LOGGER.debug("Retrieving country with name {}", ARGENTINA);
+        return locationDao.getCountryByName(ARGENTINA);
     }
 }

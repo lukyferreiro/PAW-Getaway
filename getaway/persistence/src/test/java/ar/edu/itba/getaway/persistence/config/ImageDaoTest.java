@@ -1,9 +1,8 @@
 package ar.edu.itba.getaway.persistence.config;
 
-import ar.edu.itba.getaway.models.ImageExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
-import ar.edu.itba.getaway.persistence.ExperienceDao;
-import ar.edu.itba.getaway.persistence.ImageDao;
+import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
+import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +16,6 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import java.util.List;
 import java.util.Optional;
 import static org.junit.Assert.*;
 
@@ -53,7 +51,7 @@ public class ImageDaoTest {
         final ImageModel imageModel = imageDao.createImg(imgInfo1);
         assertNotNull(imageModel);
         assertEquals(imgInfo1, imageModel.getImage());
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "images", "imgId = " + imageModel.getId()));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "images", "imgId = " + imageModel.getImageId()));
     }
 
 //    @Test
@@ -67,13 +65,13 @@ public class ImageDaoTest {
     @Test
     @Rollback
     public void testDeleteImg() {
-        assertTrue(imageDao.deleteImg(8));
+        assertTrue(imageDao.deleteImg(8L));
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "images", "imgId = 8"));
     }
 
     @Test
     public void getImgById() {
-        final Optional<ImageModel> imageModel = imageDao.getImgById(8);
+        final Optional<ImageModel> imageModel = imageDao.getImgById(8L);
         assertTrue(imageModel.isPresent());
         assertNull(imageModel.get().getImage());
     }

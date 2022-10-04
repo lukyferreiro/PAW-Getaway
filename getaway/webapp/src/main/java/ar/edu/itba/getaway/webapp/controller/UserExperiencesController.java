@@ -1,11 +1,13 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.getaway.exceptions.*;
+import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.getaway.services.*;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
+import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.ImageNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,22 +56,22 @@ public class UserExperiencesController {
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set,
                                    @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
-        final ModelAndView mav = new ModelAndView("user_favourites");
+        final ModelAndView mav = new ModelAndView("userFavourites");
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
-        favExperienceService.setFav(user.getId(), set, experience);
-        final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
+        favExperienceService.setFav(user.getUserId(), set, experience);
+        final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(user.getUserId());
         mav.addObject("favExperienceModels", favExperienceModels);
 
         final OrderByModel[] orderByModels = OrderByModel.values();
 
-        List<ExperienceModel> experienceList = experienceService.listFavsByUserId(user.getId(), orderBy);
+        final List<ExperienceModel> experienceList = experienceService.listExperiencesFavsByUserId(user.getUserId(), orderBy);
 
         final List<Long> avgReviews = new ArrayList<>();
         final List<Integer> listReviewsCount = new ArrayList<>();
         for (ExperienceModel exp : experienceList) {
-            avgReviews.add(reviewService.getAverageScore(exp.getExperienceId()));
+            avgReviews.add(reviewService.getReviewAverageScore(exp.getExperienceId()));
             listReviewsCount.add(reviewService.getReviewCount(exp.getExperienceId()));
         }
 
@@ -87,12 +89,12 @@ public class UserExperiencesController {
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set,
                                    @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
-        final ModelAndView mav = new ModelAndView("user_experiences");
+        final ModelAndView mav = new ModelAndView("userExperiences");
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
-        favExperienceService.setFav(user.getId(), set, experience);
-        final List<Long> favExperienceModels = favExperienceService.listByUserId(user.getId());
+        favExperienceService.setFav(user.getUserId(), set, experience);
+        final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(user.getUserId());
         mav.addObject("favExperienceModels", favExperienceModels);
 
         final List<List<Long>> avgReviews = new ArrayList<>();
@@ -106,16 +108,14 @@ public class UserExperiencesController {
             avgReviews.add(new ArrayList<>());
             listReviewsCount.add(new ArrayList<>());
 
-            listByCategory.get(i).addAll(experienceService.listByUserId(user.getId(), new Long(i + 1)));
-
+            listByCategory.get(i).addAll(experienceService.listExperiencesByUserId(user.getUserId(), (long) (i + 1)));
 
             for (ExperienceModel exp : listByCategory.get(i)) {
-                avgReviews.get(i).add(reviewService.getAverageScore(exp.getExperienceId()));
+                avgReviews.get(i).add(reviewService.getReviewAverageScore(exp.getExperienceId()));
                 listReviewsCount.get(i).add(reviewService.getReviewCount(exp.getExperienceId()));
 
             }
         }
-
         mav.addObject("listByCategory", listByCategory);
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("listReviewsCount", listReviewsCount);
@@ -128,9 +128,9 @@ public class UserExperiencesController {
     @RequestMapping(value = "/user/experiences/delete/{experienceId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView experienceDelete(@PathVariable("experienceId") final long experienceId,
                                          @ModelAttribute("deleteForm") final DeleteForm form,
-                                         Principal principal) {
+                                         @ModelAttribute("searchForm") final SearchForm searchForm) {
         final ModelAndView mav = new ModelAndView("deleteExperience");
-        final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
+        final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
 
         mav.addObject("experience", experience);
         return mav;
@@ -141,12 +141,12 @@ public class UserExperiencesController {
     public ModelAndView experienceDeletePost(@PathVariable(value = "experienceId") final long experienceId,
                                              @ModelAttribute("deleteForm") final DeleteForm form,
                                              final BindingResult errors,
-                                             Principal principal) {
+                                             @ModelAttribute("searchForm") final SearchForm searchForm) {
         if (errors.hasErrors()) {
-            return experienceDelete(experienceId, form, principal);
+            return experienceDelete(experienceId, form, searchForm);
         }
 
-        experienceService.delete(experienceId);
+        experienceService.deleteExperience(experienceId);
         return new ModelAndView("redirect:/user/experiences");
     }
 
@@ -154,40 +154,36 @@ public class UserExperiencesController {
     @RequestMapping(value = "/user/experiences/edit/{experienceId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView experienceEdit(@PathVariable("experienceId") final long experienceId,
                                        @ModelAttribute("experienceForm") final ExperienceForm form,
-                                       @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
+                                       @ModelAttribute("searchForm") final SearchForm searchForm) {
 
-        final ModelAndView mav = new ModelAndView("experience_form");
+        final ModelAndView mav = new ModelAndView("experienceForm");
 
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
-        final String country = locationService.getCountryByName("Argentina").get().getName();
+        final String country = locationService.getCountryByName().get().getCountryName();
         final List<CityModel> cityModels = locationService.listAllCities();
-        final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
+        final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final CityModel city = locationService.getCityById(experience.getCityId()).get();
-        final String cityName = city.getName();
+        final String cityName = city.getCityName();
 
-        //TODO no se como hacer para detectar que la primera vez que entro a la edicion
-        //me traiga los datos de la experiencia, pero si cuando le doy a guardar
-        //y tengo datos mal y me vuelve a llevar al form de edicion, me ponga los datos que
-        //estaban bien y que cambie durante la edicion y NO me traiga los datos de la
-        //experiencia otra vez :(
-        if (form == null) {
-            form.setActivityName(experience.getExperienceName());
-            if (experience.getPrice() != null) {
-                form.setActivityPrice(experience.getPrice().toString());
+
+        if(form.getExperienceName() == null){
+            form.setExperienceName(experience.getExperienceName());
+            if(experience.getPrice() != null){
+                form.setExperiencePrice(experience.getPrice().toString());
             }
-            form.setActivityInfo(experience.getDescription());
-            form.setActivityMail(experience.getEmail());
-            form.setActivityUrl(experience.getSiteUrl());
-            form.setActivityAddress(experience.getAddress());
+            form.setExperienceInfo(experience.getDescription());
+            form.setExperienceMail(experience.getEmail());
+            form.setExperienceUrl(experience.getSiteUrl());
+            form.setExperienceAddress(experience.getAddress());
         } else {
-            form.setActivityName(form.getActivityName());
-            if (experience.getPrice() != null) {
-                form.setActivityPrice(form.getActivityPrice());
+            form.setExperienceName(form.getExperienceName());
+            if(experience.getPrice() != null){
+                form.setExperiencePrice(form.getExperiencePrice());
             }
-            form.setActivityInfo(form.getActivityInfo());
-            form.setActivityMail(form.getActivityMail());
-            form.setActivityUrl(form.getActivityUrl());
-            form.setActivityAddress(form.getActivityAddress());
+            form.setExperienceInfo(form.getExperienceInfo());
+            form.setExperienceMail(form.getExperienceMail());
+            form.setExperienceUrl(form.getExperienceUrl());
+            form.setExperienceAddress(form.getExperienceAddress());
         }
 
         final String endpoint = "/user/experiences/edit/" + experience.getExperienceId();
@@ -207,43 +203,43 @@ public class UserExperiencesController {
 
     @PreAuthorize("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
     @RequestMapping(value = "/user/experiences/edit/{experienceId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView experienceEditPost(@PathVariable(value = "experienceId") final long experienceId,
+    public ModelAndView experienceEditPost(@PathVariable(value="experienceId") final long experienceId,
                                            @Valid @ModelAttribute("experienceForm") final ExperienceForm form,
-                                           @ModelAttribute("searchForm") final SearchForm searchForm,
-                                           final BindingResult errors) throws IOException {
+                                           final BindingResult errors,
+                                           @ModelAttribute("searchForm") final SearchForm searchForm) throws IOException {
         if (errors.hasErrors()) {
             return experienceEdit(experienceId, form, searchForm);
         }
 
-        final long categoryId = form.getActivityCategory();
+        final Long categoryId = form.getExperienceCategory();
 
-        final CityModel city = locationService.getCityByName(form.getActivityCity()).get();
-        final Long cityId = city.getId();
+        final CityModel city = locationService.getCityByName(form.getExperienceCity()).get();
+        final Long cityId = city.getCityId();
 
-        final ExperienceModel experience = experienceService.getById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final long userId = experience.getUserId();
+        final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
+        final Long userId = experience.getUserId();
 
-        final Double price = (form.getActivityPrice().isEmpty()) ? null : Double.parseDouble(form.getActivityPrice());
-        final String description = (form.getActivityInfo().isEmpty()) ? null : form.getActivityInfo();
-        final String url = (form.getActivityUrl().isEmpty()) ? null : form.getActivityUrl();
+        final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
+        final String description = (form.getExperienceInfo().isEmpty()) ? null : form.getExperienceInfo();
+        final String url = (form.getExperienceUrl().isEmpty()) ? null : form.getExperienceUrl();
 
         final ImageModel imageModel = imageService.getImgByExperienceId(experienceId).orElseThrow(ImageNotFoundException::new);
-        final Long imgId = imageModel.getId();
+        final Long imgId = imageModel.getImageId();
 
-        final MultipartFile experienceImg = form.getActivityImg();
-        if (!experienceImg.isEmpty()) {
+        final MultipartFile experienceImg = form.getExperienceImg();
+        if(!experienceImg.isEmpty()) {
             if (!contentTypes.contains(experienceImg.getContentType())) {
-                errors.rejectValue("activityImg", "experienceForm.validation.imageFormat");
+                errors.rejectValue("experienceImg", "experienceForm.validation.imageFormat");
                 return experienceEdit(experienceId, form, searchForm);
             }
         }
 
         final byte[] image = (experienceImg.isEmpty()) ? null : experienceImg.getBytes();
 
-        final ExperienceModel experienceModel = new ExperienceModel(experienceId, form.getActivityName(), form.getActivityAddress(),
-                description, form.getActivityMail(), url, price, cityId, categoryId + 1, userId, imgId, image != null);
+        final ExperienceModel experienceModel = new ExperienceModel(experienceId, form.getExperienceName(), form.getExperienceAddress(),
+                description, form.getExperienceMail(), url, price, cityId, categoryId + 1, userId, imgId, image!=null);
 
-        experienceService.update(experienceModel, image);
+        experienceService.updateExperience(experienceModel, image);
 
         return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
     }

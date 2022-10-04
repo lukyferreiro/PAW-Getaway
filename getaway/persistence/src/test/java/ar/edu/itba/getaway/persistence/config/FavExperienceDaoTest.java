@@ -1,8 +1,7 @@
 package ar.edu.itba.getaway.persistence.config;
 
-
 import ar.edu.itba.getaway.models.FavExperienceModel;
-import ar.edu.itba.getaway.persistence.FavExperienceDao;
+import ar.edu.itba.getaway.interfaces.persistence.FavExperienceDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +27,7 @@ import static org.junit.Assert.*;
 public class FavExperienceDaoTest {
     /** Data for tests **/
 
-    private final List<Long> USER_FAVOURITES = new ArrayList<>(Arrays.asList(new Long(1), new Long(5)));
+    private final List<Long> USER_FAVOURITES = new ArrayList<>(Arrays.asList(1L, 5L));
 
     /****/
 
@@ -48,35 +47,35 @@ public class FavExperienceDaoTest {
     @Test
     @Rollback
     public void testCreate() {
-        final FavExperienceModel favExperienceModel = favExperienceDao.create(2, 8);
+        final FavExperienceModel favExperienceModel = favExperienceDao.createFav(2L, 8L);
         assertNotNull(favExperienceModel);
-        assertEquals(2, favExperienceModel.getUserId());
-        assertEquals(8, favExperienceModel.getExperienceId());
+        assertEquals(new Long(2), favExperienceModel.getUserId());
+        assertEquals(new Long(8), favExperienceModel.getExperienceId());
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "favuserexperience", "experienceId = " + favExperienceModel.getExperienceId() + " AND userId = " + favExperienceModel.getUserId()));
     }
 
     @Test
     @Rollback
     public void testDelete() {
-        assertTrue(favExperienceDao.delete(1,1));
+        assertTrue(favExperienceDao.deleteFav(1L,1L));
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "favuserexperience", "experienceId = " + 1 + " AND userId = " + 1));
 
     }
 
     @Test
     public void testListByUserId() {
-        List<Long> experiencesIds = favExperienceDao.listByUserId(new Long(1));
+        List<Long> experiencesIds = favExperienceDao.listFavsByUserId(1L);
         assertFalse(experiencesIds.isEmpty());
         assertTrue(experiencesIds.containsAll(USER_FAVOURITES));
     }
 
     @Test
     public void testIsFavTrue() {
-        assertTrue(favExperienceDao.isFav(1,new Long(1)));
+        assertTrue(favExperienceDao.isFav(1L, 1L));
     }
 
     @Test
     public void testIsFavFalse() {
-        assertFalse(favExperienceDao.isFav(1, new Long(8)));
+        assertFalse(favExperienceDao.isFav(1L, 8L));
     }
 }

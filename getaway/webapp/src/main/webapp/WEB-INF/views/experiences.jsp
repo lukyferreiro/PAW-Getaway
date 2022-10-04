@@ -24,19 +24,19 @@
                <c:url value="/experiences/${categoryName}" var="postPath"/>
                <form:form modelAttribute="filterForm" action="${postPath}" cssClass="filter-form" id="submitForm" method="post" acceptCharset="UTF-8">
                   <div>
-                     <form:label path="activityCity" class="form-label"><spring:message code="filters.city"/></form:label>
-                     <form:select path="activityCity" class="form-select">
+                     <form:label path="experienceCity" class="form-label"><spring:message code="filters.city"/></form:label>
+                     <form:select path="experienceCity" class="form-select" cssStyle="box-shadow: none;">
                         <option disabled selected value><spring:message code="filters.city.placeholder"/></option>
                         <c:forEach var="city" items="${cities}">
-                           <option <c:if test="${city.id == cityId}"> selected </c:if> >
-                              <c:out value="${city.name}"/></option>
+                           <option <c:if test="${city.cityId == cityId}"> selected </c:if> >
+                              <c:out value="${city.cityName}"/></option>
                         </c:forEach>
                      </form:select>
-                     <form:errors path="activityCity" element="p" cssClass="form-error-label"/>
+                     <form:errors path="experienceCity" element="p" cssClass="form-error-label"/>
                   </div>
 
                   <div class="container-slider-price">
-                     <form:label path="activityPriceMax" class="form-label"><spring:message code="filters.price.title"/></form:label>
+                     <form:label path="experiencePriceMax" class="form-label"><spring:message code="filters.price.title"/></form:label>
                      <output id="priceRange" name="priceRange" for="customRange">
                            ${maxPrice}
                      </output>
@@ -45,7 +45,7 @@
                            <spring:message code="filters.price.min"/>
                         </div>
                         <div class="slider">
-                           <form:input id="customRange" path="activityPriceMax"
+                           <form:input id="customRange" path="experiencePriceMax"
                                        type="range" min="0" max="${max}" value="${maxPrice}"
                                        oninput="document.getElementById('priceRange').value = this.value"/>
                         </div>
@@ -57,7 +57,7 @@
 
                   <div>
                      <form:label path="score" class="form-label"><spring:message code="review.scoreAssign"/></form:label>
-                     <jsp:include page="/WEB-INF/components/star_form.jsp"/>
+                     <jsp:include page="/WEB-INF/components/starForm.jsp"/>
                      <form:input value="${score}" path="score" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="scoreInput"/>
                      <form:errors path="score" element="p" cssClass="form-error-label"/>
                   </div>
@@ -67,22 +67,6 @@
                   <spring:message code="filters.btn.submit"/>
                </button>
 
-               <button class="btn btn-search my-2 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                  <spring:message code="order.title"/>
-               </button>
-               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  <c:forEach var="orderBy" items="${orderByModels}">
-                     <a class="dropdown-item" href="
-                        <c:url value="/experiences/${categoryName}">
-                           <c:param name = "orderBy" value = "${orderBy}"/>
-                           <c:param name = "score" value = "${score}"/>
-                           <c:param name = "cityId" value = "${cityId}"/>
-                           <c:param name = "maxPrice" value = "${maxPrice}"/>
-                        </c:url>">
-                        <spring:message code="order.${orderBy.toString()}"/>
-                     </a>
-                  </c:forEach>
-               </ul>
 
                <a href="<c:url value = "/experiences/${categoryName}"/>">
                   <button class="btn btn-clean-filter px-3 py-2 my-2" type="button" id="cleanFilterFormButton" form="submitForm">
@@ -93,6 +77,15 @@
 
             <div class="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex flex-column justify-content-center align-content-center"
                  style="min-height: 650px;">
+               <div>
+                  <jsp:include page="/WEB-INF/components/orderDropdown.jsp">
+                     <jsp:param name="orderByModels" value="${orderByModels}"/>
+                     <jsp:param name="path" value="${path}"/>
+                     <jsp:param name = "score" value = "${score}"/>
+                     <jsp:param name = "cityId" value = "${cityId}"/>
+                     <jsp:param name = "maxPrice" value = "${maxPrice}"/>
+                  </jsp:include>
+               </div>
                <c:choose>
                   <c:when test="${experiences.size() == 0}">
                      <div class="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
@@ -107,7 +100,7 @@
                   <c:otherwise>
                      <div class="d-flex flex-wrap justify-content-center">
                         <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
-                           <jsp:include page="/WEB-INF/components/card_experience.jsp">
+                           <jsp:include page="/WEB-INF/components/cardExperience.jsp">
                               <jsp:param name="hasImage" value="${experience.hasImage}"/>
                               <jsp:param name="categoryName" value="${experience.categoryName}"/>
                               <jsp:param name="id" value="${experience.experienceId}"/>

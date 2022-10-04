@@ -18,7 +18,7 @@
                <div class="row w-100 h-100 m-0 align-items-center justify-content-center">
                   <div class="col-12">
                      <h1 class="text-center title">
-                        <spring:message code="review.deleteQuestion"/>
+                        <spring:message code="review.deleteQuestion" arguments="${review.title}"/>
                      </h1>
                   </div>
                   <div class="col-12 px-0 d-flex align-items-center justify-content-center">
