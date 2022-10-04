@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
@@ -55,7 +57,9 @@ public class UserExperiencesController {
                                    @RequestParam Optional<OrderByModel> orderBy,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set,
-                                   @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
+                                   @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum,
+                                   @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                                   HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("userFavourites");
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
@@ -66,15 +70,28 @@ public class UserExperiencesController {
 
         final OrderByModel[] orderByModels = OrderByModel.values();
 
-        final List<ExperienceModel> experienceList = experienceService.listExperiencesFavsByUserId(user.getUserId(), orderBy);
+        final Page<ExperienceModel> currentPage = experienceService.listExperiencesFavsByUserId(user.getUserId(), orderBy, pageNum);
 
         final List<Long> avgReviews = new ArrayList<>();
+
+        List<ExperienceModel> experienceList = currentPage.getContent();
+
         final List<Integer> listReviewsCount = new ArrayList<>();
         for (ExperienceModel exp : experienceList) {
             avgReviews.add(reviewService.getReviewAverageScore(exp.getExperienceId()));
             listReviewsCount.add(reviewService.getReviewCount(exp.getExperienceId()));
         }
 
+        if(orderBy.isPresent()){
+            request.setAttribute("orderBy", orderBy);
+            mav.addObject("orderBy", orderBy.get());
+        }
+
+        mav.addObject("path", request.getServletPath());
+        mav.addObject("currentPage", currentPage.getCurrentPage());
+        mav.addObject("minPage", currentPage.getMinPage());
+        mav.addObject("maxPage", currentPage.getMaxPage());
+        mav.addObject("totalPages", currentPage.getTotalPages());
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("experiences", experienceList);
         mav.addObject("avgReviews", avgReviews);

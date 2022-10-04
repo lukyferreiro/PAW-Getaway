@@ -232,7 +232,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListFavsByUserId() {
-        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesFavsByUserId(1L, NO_ORDER);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesFavsByUserId(1L, NO_ORDER, 1, 6);
 
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
@@ -242,7 +242,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testGetByName() {
-        List<ExperienceModel> experienceModelList = experienceDao.getExperiencesByName("testave", NO_ORDER,1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByName("testave", NO_ORDER,1, PAGE_SIZE);
 
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));

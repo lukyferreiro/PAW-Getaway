@@ -16,10 +16,13 @@
                 <c:when test="${param.query != null}">
                     <c:param name="query" value="${param.query}"/>
                 </c:when>
-                <c:otherwise>
-                    <c:param name="score" value="${param.score}"/>
+                <c:when test="${param.cityId != null}">
+                 <c:param name="score" value="${param.score}"/>
                     <c:param name="cityId" value="${param.cityId}"/>
                     <c:param name="maxPrice" value="${param.maxPrice}"/>
+                >
+                </c:when>
+                <c:otherwise>
                 </c:otherwise>
             </c:choose>
             <c:param name="orderBy" value="${orderBy}"/>

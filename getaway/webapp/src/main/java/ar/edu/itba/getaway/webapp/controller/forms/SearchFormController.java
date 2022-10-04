@@ -85,7 +85,7 @@ public class SearchFormController {
         mav.addObject("path", request.getServletPath());
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("currentPage", currentPage.getCurrentPage());
-        mav.addObject("totalPages", currentPage.getMaxPage());
+        mav.addObject("totalPages", currentPage.getTotalPages());
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("set", set);
         mav.addObject("experience", experience);

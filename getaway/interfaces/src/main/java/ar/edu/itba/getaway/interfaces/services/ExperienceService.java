@@ -17,6 +17,6 @@ public interface ExperienceService {
     List<ExperienceModel> listExperiencesByBestRanked(Long categoryId);
 
     Optional<Double> getMaxPriceByCategoryId(Long categoryId);
-    List<ExperienceModel> listExperiencesFavsByUserId(Long userId, Optional<OrderByModel> order);
+    Page<ExperienceModel> listExperiencesFavsByUserId(Long userId, Optional<OrderByModel> order, Integer page);
     Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page);
 }

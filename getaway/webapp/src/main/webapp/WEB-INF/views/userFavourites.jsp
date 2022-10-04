@@ -23,10 +23,10 @@
                <c:otherwise>
                   <div class="d-flex justify-content-center align-content-center">
                      <div style="margin: 0 auto 0 20px; flex:1;">
-<%--                        <jsp:include page="/WEB-INF/components/orderDropdown.jsp">--%>
-<%--                           <jsp:param name="orderByModels" value="${orderByModels}"/>--%>
-<%--                           <jsp:param name="path" value="/user/favourites"/>--%>
-<%--                        </jsp:include>--%>
+                        <jsp:include page="/WEB-INF/components/orderDropdown.jsp">
+                           <jsp:param name="orderByModels" value="${orderByModels}"/>
+                           <jsp:param name="path" value="/user/favourites"/>
+                        </jsp:include>
                      </div>
                      <h3 class="title m-0"><spring:message code="favourite.description"/></h3>
                      <div style="margin: 0 20px 0 auto; flex:1;"></div>
@@ -50,6 +50,41 @@
                         </jsp:include>
                      </c:forEach>
                   </div>
+
+                  <div class="mt-auto d-flex justify-content-center align-items-center">
+                     <ul class="pagination m-0">
+                        <li class="page-item">
+                           <a class="page-link "
+                              href=" <c:url value="/user/favourites">
+                                        <c:param name="pageNum" value="1"/>
+                                        <c:param name="orderBy" value="${orderBy}"/> </c:url>"
+                           >
+                              <spring:message code="pagination.start"/>
+                           </a>
+                        </li>
+                        <c:forEach var="i" begin="${minPage}" end="${maxPage}">
+                           <li class="page-item">
+                              <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
+                                 href=" <c:url value="/user/favourites">
+                                        <c:param name="pageNum" value="${i}"/>
+                                        <c:param name="orderBy" value="${orderBy}"/> </c:url>"
+                              >
+                                 <c:out value="${i}"/>
+                              </a>
+                           </li>
+                        </c:forEach>
+                        <li class="page-item">
+                           <a class="page-link "
+                              href=" <c:url value="/user/favourites">
+                                        <c:param name="pageNum" value="${totalPages}"/>
+                                        <c:param name="orderBy" value="${orderBy}"/> </c:url>"
+                           >
+                              <spring:message code="pagination.end"/>
+                           </a>
+                        </li>
+                     </ul>
+                  </div>
+
                </c:otherwise>
             </c:choose>
          </div>

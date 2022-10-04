@@ -145,8 +145,10 @@ public class ExperienceController {
         mav.addObject("experiences", currentExperiences);
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("listReviewsCount", listReviewsCount);
-        mav.addObject("totalPages", currentPage.getMaxPage());
+        mav.addObject("totalPages", currentPage.getTotalPages());
         mav.addObject("currentPage", currentPage.getCurrentPage());
+        mav.addObject("minPage", currentPage.getMinPage());
+        mav.addObject("maxPage", currentPage.getMaxPage());
         mav.addObject("isEditing", false);
 
         return mav;
