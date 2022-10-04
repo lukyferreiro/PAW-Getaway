@@ -26,7 +26,7 @@ public class ForceLogin {
     //This method is used to update the SpringContextHolder
     //https://stackoverflow.com/questions/9910252/how-to-reload-authorities-on-user-update-with-spring-security
     public void forceLogin(UserModel user, HttpServletRequest request) {
-        //generate authentication
+
         final PreAuthenticatedAuthenticationToken token =
                 new PreAuthenticatedAuthenticationToken(user.getEmail(), user.getPassword(), getAuthorities(user.getRoles()));
 

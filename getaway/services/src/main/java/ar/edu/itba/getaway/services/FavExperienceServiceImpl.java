@@ -43,15 +43,15 @@ public class FavExperienceServiceImpl implements FavExperienceService {
     }
 
     @Override
-    public void setFav(Long userId, Optional<Boolean> set, Optional<Long> experience){
-        if (experience.isPresent() && set.isPresent()) {
+    public void setFav(Long userId, Optional<Boolean> set, Optional<Long> experienceId){
+        if (experienceId.isPresent() && set.isPresent()) {
             if (set.get() ) {
-                if(!isFav(userId, experience.get())){
-                    createFav(userId, experience.get());
+                if(!isFav(userId, experienceId.get())){
+                    createFav(userId, experienceId.get());
                 }
             }
             else {
-                deleteFav(userId, experience.get());
+                deleteFav(userId, experienceId.get());
             }
         }
     }

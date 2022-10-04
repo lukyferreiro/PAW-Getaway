@@ -4,7 +4,7 @@ import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.services.ImageService;
 import ar.edu.itba.getaway.interfaces.services.UserService;
-import ar.edu.itba.getaway.webapp.forms.RegisterForm;
+import ar.edu.itba.getaway.webapp.forms.EditProfileForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Arrays;
@@ -36,7 +37,10 @@ public class UserProfileController {
 
     @RequestMapping(value = "/user/profile", method = {RequestMethod.GET})
     public ModelAndView profile(Principal principal,
-                                @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
+                                @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                                HttpServletRequest request) {
+        LOGGER.debug("Endpoint GET {}", request.getServletPath());
+
         final ModelAndView mav = new ModelAndView("userProfile");
 
         final UserModel userModel = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
@@ -49,38 +53,48 @@ public class UserProfileController {
     }
 
     @RequestMapping(value = "/user/profile/edit", method = {RequestMethod.GET})
-    public ModelAndView editProfileGet(Principal principal,
-                                       @ModelAttribute ("registerForm") final RegisterForm registerForm){
+    public ModelAndView editProfileGet(@ModelAttribute ("editProfileForm") final EditProfileForm editProfileForm,
+                                       @ModelAttribute("searchForm") final SearchForm searchForm,
+                                       Principal principal,
+                                       HttpServletRequest request){
+        LOGGER.debug("Endpoint GET {}", request.getServletPath());
+
         final ModelAndView mav = new ModelAndView("userProfileEdit");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
-        registerForm.setName(user.getName());
-        registerForm.setSurname(user.getSurname());
-        registerForm.setEmail(user.getEmail());
+        editProfileForm.setName(user.getName());
+        editProfileForm.setSurname(user.getSurname());
+        editProfileForm.setEmail(user.getEmail());
 
         return mav;
     }
 
     @RequestMapping(value = "/user/profile/edit", method = {RequestMethod.POST})
-    public ModelAndView editProfilePost(Principal principal,
-                                        @ModelAttribute ("registerForm") final RegisterForm registerForm,
-                                        final BindingResult errors) throws Exception {
+    public ModelAndView editProfilePost(@Valid @ModelAttribute ("editProfileForm") final EditProfileForm editProfileForm,
+                                        final BindingResult errors,
+                                        @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                                        Principal principal,
+                                        HttpServletRequest request) throws Exception {
+        LOGGER.debug("Endpoint GET {}", request.getServletPath());
+
+        if (errors.hasErrors()) {
+            return editProfileGet(editProfileForm, searchForm, principal, request);
+        }
+
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-
-        userService.updateUserInfo(user.getUserId(), new UserInfo(registerForm.getName(), registerForm.getSurname()));
-//        userService.updateProfileImage();
-
-        final MultipartFile profileImg = registerForm.getProfileImg();
+        final MultipartFile profileImg = editProfileForm.getProfileImg();
 
         if(!profileImg.isEmpty()){
             if (contentTypes.contains(profileImg.getContentType())) {
                 imageService.updateImg(profileImg.getBytes(), user.getProfileImageId());
             } else {
-                //Todo: Enviar mensaje de formato de imagen inválido
-                errors.rejectValue("profileImg", "experienceForm.validation.imageFormat");
-                return editProfileGet(principal, registerForm);
+                //Enviar mensaje de formato de imagen inválido
+                errors.rejectValue("profileImg", "editProfileForm.validation.imageFormat");
+                return editProfileGet(editProfileForm, searchForm, principal, request);
             }
         }
+
+        userService.updateUserInfo(user.getUserId(), new UserInfo(editProfileForm.getName(), editProfileForm.getSurname()));
 
         return new ModelAndView("redirect:/user/profile");
     }

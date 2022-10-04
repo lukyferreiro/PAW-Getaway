@@ -42,8 +42,9 @@ public class ExperienceFormController {
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createExperienceForm(@ModelAttribute("experienceForm") final ExperienceForm form,
-                                             @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
-        LOGGER.debug("Endpoint GET /create_experience");
+                                             @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                                             HttpServletRequest request) {
+        LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("experienceForm");
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
         final List<CityModel> cities = locationService.listAllCities();
@@ -66,18 +67,18 @@ public class ExperienceFormController {
                                          @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                          Principal principal,
                                          HttpServletRequest request) throws Exception {
-        LOGGER.debug("Endpoint POST /create_experience");
+        LOGGER.debug("Endpoint POST {}", request.getServletPath());
         LOGGER.debug("User tries to create an experience with category id: {}", form.getExperienceCategory());
 
         if (errors.hasErrors()) {
-            return createExperienceForm(form, searchForm);
+            return createExperienceForm(form, searchForm, request);
         }
 
         final MultipartFile experienceImg = form.getExperienceImg();
         if (!experienceImg.isEmpty()) {
             if (!contentTypes.contains(experienceImg.getContentType())) {
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageFormat");
-                return createExperienceForm(form, searchForm);
+                return createExperienceForm(form, searchForm, request);
             }
         }
 

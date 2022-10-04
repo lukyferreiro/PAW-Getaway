@@ -36,4 +36,10 @@ public class CategoryServiceImpl implements CategoryService {
         LOGGER.debug("Retrieving category with name {}", categoryName);
         return categoryDao.getCategoryByName(categoryName);
     }
+
+    @Override
+    public Integer getCategoriesCount (){
+        LOGGER.debug("Retrieving cant of categories");
+        return categoryDao.getCategoriesCount();
+    }
 }

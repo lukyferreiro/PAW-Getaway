@@ -50,5 +50,11 @@ public class CategoryDaoImpl implements CategoryDao {
                 .stream().findFirst();
     }
 
+    @Override
+    public Integer getCategoriesCount (){
+        final String query = "SELECT COUNT(*) FROM categories";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.queryForObject(query, new Object[]{}, Integer.class);
+    }
 
 }

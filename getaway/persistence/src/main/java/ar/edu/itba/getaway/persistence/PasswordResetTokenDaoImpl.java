@@ -45,7 +45,7 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao {
         passTokenData.put("passTokenExpirationDate", expirationDate);
         final Long tokenId = simpleJdbcInsert.executeAndReturnKey(passTokenData).longValue();;
 
-        LOGGER.debug("Created new password reset token with id {}", tokenId);
+        LOGGER.debug("Created new password reset token with id {} for user with id {}", tokenId, userId);
 
         return new PasswordResetToken(tokenId, token, userId, expirationDate);
     }

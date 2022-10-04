@@ -15,8 +15,9 @@ public interface ExperienceService {
     List<ExperienceModel> listExperiencesByUserId(Long userId, Long categoryId);
     Page<ExperienceModel> listExperiencesByFilter(Long categoryId, Double max, Long score, Long city, Optional<OrderByModel> order, Integer page);
     List<ExperienceModel> listExperiencesByBestRanked(Long categoryId);
-
     Optional<Double> getMaxPriceByCategoryId(Long categoryId);
     Page<ExperienceModel> listExperiencesFavsByUserId(Long userId, Optional<OrderByModel> order, Integer page);
     Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page);
+    List<List<ExperienceModel>> getExperiencesListByCategories();
+    List<List<ExperienceModel>> getExperiencesListByCategoriesByUserId(Long userId);
 }

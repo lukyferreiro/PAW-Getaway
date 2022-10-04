@@ -45,7 +45,7 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
         verifTokenData.put("verifExpirationDate", expirationDate);
         final Long tokenId = simpleJdbcInsert.executeAndReturnKey(verifTokenData).longValue();
 
-        LOGGER.info("Created new verification token for user with id {}", userId);
+        LOGGER.info("Created new verification token with id {} for user with id {}", tokenId, userId);
 
         return new VerificationToken(tokenId, token, userId, expirationDate);
     }

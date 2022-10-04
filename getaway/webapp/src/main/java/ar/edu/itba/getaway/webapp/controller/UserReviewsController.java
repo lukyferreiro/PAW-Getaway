@@ -6,8 +6,6 @@ import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
-import ar.edu.itba.getaway.interfaces.services.ExperienceService;
-import ar.edu.itba.getaway.interfaces.services.ImageService;
 import ar.edu.itba.getaway.interfaces.services.ReviewService;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import org.slf4j.Logger;
@@ -22,13 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.swing.text.html.Option;
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class UserReviewsController {
@@ -36,34 +32,21 @@ public class UserReviewsController {
     @Autowired
     private UserService userService;
     @Autowired
-    private ImageService imageService;
-    @Autowired
-    private ExperienceService experienceService;
-    @Autowired
     private ReviewService reviewService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserReviewsController.class);
 
     @RequestMapping(value = "/user/reviews", method = {RequestMethod.GET})
     public ModelAndView review(Principal principal,
-                               @ModelAttribute("searchForm") final SearchForm searchForm) {
-        final ModelAndView mav = new ModelAndView("userReviews");
+                               @ModelAttribute("searchForm") final SearchForm searchForm,
+                               HttpServletRequest request) {
+        LOGGER.debug("Endpoint GET {}", request.getServletPath());
 
+        final ModelAndView mav = new ModelAndView("userReviews");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final List<ReviewUserModel> reviewList = reviewService.getReviewsByUserId(user.getUserId());
-
-        final List<Boolean> listReviewsHasImages = new ArrayList<>();
-        final List<ExperienceModel> listExperiencesOfReviews = new ArrayList<>();
-        for(ReviewUserModel review : reviewList){
-            Optional<ImageModel> img = imageService.getImgById(review.getImgId());
-            if(img.isPresent()){
-                listReviewsHasImages.add(img.get().getImage() != null);
-            }else{
-                listReviewsHasImages.add(false);
-            }
-            Optional<ExperienceModel> experienceModel = experienceService.getExperienceById(review.getExperienceId());
-            experienceModel.ifPresent(listExperiencesOfReviews::add);
-        }
+        final List<Boolean> listReviewsHasImages = reviewService.getListOfReviewHasImages(reviewList);
+        final List<ExperienceModel> listExperiencesOfReviews = reviewService.getListExperiencesOfReviewsList(reviewList);
 
         mav.addObject("reviews", reviewList);
         mav.addObject("listReviewsHasImages", listReviewsHasImages);
@@ -77,7 +60,10 @@ public class UserReviewsController {
     @RequestMapping(value = "/user/reviews/delete/{reviewId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewDelete(@PathVariable("reviewId") final Long reviewId,
                                      @ModelAttribute("deleteForm") final DeleteForm form,
-                                     @ModelAttribute("searchForm") final SearchForm searchForm) {
+                                     @ModelAttribute("searchForm") final SearchForm searchForm,
+                                     HttpServletRequest request) {
+        LOGGER.debug("Endpoint GET {}", request.getServletPath());
+
         final ModelAndView mav = new ModelAndView("deleteReview");
         final ReviewModel review = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
 
@@ -91,9 +77,12 @@ public class UserReviewsController {
     public ModelAndView reviewDeletePost(@PathVariable(value = "reviewId") final Long reviewId,
                                          @ModelAttribute("deleteForm") final DeleteForm form,
                                          @ModelAttribute("searchForm") final SearchForm searchForm,
-                                         final BindingResult errors) {
+                                         final BindingResult errors,
+                                         HttpServletRequest request) {
+        LOGGER.debug("Endpoint POST {}", request.getServletPath());
+
         if (errors.hasErrors()) {
-            return reviewDelete(reviewId, form,searchForm);
+            return reviewDelete(reviewId, form, searchForm, request);
         }
 
         reviewService.deleteReview(reviewId);
@@ -104,17 +93,18 @@ public class UserReviewsController {
     @RequestMapping(value = "/user/reviews/edit/{reviewId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewEdit(@PathVariable("reviewId") final Long reviewId,
                                    @ModelAttribute("reviewForm") final ReviewForm form,
-                                   @ModelAttribute("searchForm") final SearchForm searchForm) {
-        final ModelAndView mav = new ModelAndView("reviewEditForm");
+                                   @ModelAttribute("searchForm") final SearchForm searchForm,
+                                   HttpServletRequest request) {
+        LOGGER.debug("Endpoint GET {}", request.getServletPath());
 
+        final ModelAndView mav = new ModelAndView("reviewEditForm");
         final ReviewModel review = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
 
         form.setTitle(review.getTitle());
         form.setScore(review.getStringScore());
         form.setDescription(review.getDescription());
 
-        final String endpoint = "/user/reviews/edit/" + reviewId;
-        mav.addObject("endpoint", endpoint);
+        mav.addObject("endpoint", request.getServletPath());
         mav.addObject("review", review);
 
         return mav;
@@ -126,15 +116,17 @@ public class UserReviewsController {
                                        @ModelAttribute("reviewForm") final ReviewForm form,
                                        Principal principal,
                                        @ModelAttribute("searchForm") final SearchForm searchForm,
-                                       final BindingResult errors) {
+                                       final BindingResult errors,
+                                       HttpServletRequest request) {
+        LOGGER.debug("Endpoint POST {}", request.getServletPath());
+
         if (errors.hasErrors()) {
-            return reviewEdit(reviewId, form,searchForm);
+            return reviewEdit(reviewId, form, searchForm, request);
         }
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final Long userId = user.getUserId();
         final ReviewModel review = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
-
         final ReviewModel newReviewModel = new ReviewModel(reviewId, form.getTitle(), form.getDescription(),
                 form.getLongScore(),review.getExperienceId(), Date.from(Instant.now()), userId);
 

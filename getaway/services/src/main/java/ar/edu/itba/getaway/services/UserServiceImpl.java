@@ -73,7 +73,6 @@ public class UserServiceImpl implements UserService {
         final UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES, imageModel.getImageId());
         LOGGER.debug("Creating verification token to user with id {}", userModel.getUserId());
         final VerificationToken token = tokensService.generateVerificationToken(userModel.getUserId());
-        LOGGER.debug("Created verification token with id {}", token.getId());
         tokensService.sendVerificationToken(userModel, token);
         return userModel;
     }
@@ -107,7 +106,6 @@ public class UserServiceImpl implements UserService {
         LOGGER.debug("Removing verification token for user with id {}", userModel.getUserId());
         verificationTokenDao.removeTokenByUserId(userModel.getUserId());
         final VerificationToken verificationToken = tokensService.generateVerificationToken(userModel.getUserId());
-        LOGGER.debug("Created verification token with id {}", verificationToken.getId());
         tokensService.sendVerificationToken(userModel, verificationToken);
     }
 
@@ -130,7 +128,6 @@ public class UserServiceImpl implements UserService {
         LOGGER.debug("Removing password reset token for user {}", userModel.getUserId());
         passwordResetTokenDao.removeTokenByUserId(userModel.getUserId());
         final PasswordResetToken passwordResetToken = tokensService.generatePasswordResetToken(userModel.getUserId());
-        LOGGER.info("Created password reset token for user {}", userModel.getUserId());
         tokensService.sendPasswordResetToken(userModel, passwordResetToken);
     }
 

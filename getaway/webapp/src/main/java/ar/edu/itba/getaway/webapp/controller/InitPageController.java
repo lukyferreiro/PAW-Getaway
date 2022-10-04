@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -38,43 +39,29 @@ public class InitPageController {
     public ModelAndView init(Principal principal,
                              @RequestParam Optional<Long> experience,
                              @RequestParam Optional<Boolean> set,
-                             @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
+                             @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                             HttpServletRequest request) {
+        LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("mainPage");
 
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-
             if (user.isPresent()) {
                 final Long userId = user.get().getUserId();
 
                 if (set.isPresent()) {
                     favExperienceService.setFav(userId, set, experience);
                 }
-
-                List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
+                final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
                 mav.addObject("favExperienceModels", favExperienceModels);
             } else {
                 mav.addObject("favExperienceModels", new ArrayList<>());
             }
-
         }
 
-        final List<List<Long>> avgReviews = new ArrayList<>();
-        final List<List<Integer>> listReviewsCount = new ArrayList<>();
-        final List<List<ExperienceModel>> listByCategory = new ArrayList<>();
-
-        for (int i = 0; i <= 5; i++) {
-            listByCategory.add(new ArrayList<>());
-            avgReviews.add(new ArrayList<>());
-            listReviewsCount.add(new ArrayList<>());
-
-            listByCategory.get(i).addAll(experienceService.listExperiencesByBestRanked((long) (i + 1)));
-
-            for(ExperienceModel experienceModel : listByCategory.get(i)){
-                avgReviews.get(i).add(reviewService.getReviewAverageScore(experienceModel.getExperienceId()));
-                listReviewsCount.get(i).add(reviewService.getReviewCount(experienceModel.getExperienceId()));
-            }
-        }
+        final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategories();
+        final List<List<Long>> avgReviews = reviewService.getListOfAverageScoreByExperienceListAndCategoryId(listByCategory);
+        final List<List<Integer>> listReviewsCount = reviewService.getListOfReviewCountByExperienceListAndCategoryId(listByCategory);
 
         mav.addObject("isEditing",false);
         mav.addObject("listByCategory", listByCategory);

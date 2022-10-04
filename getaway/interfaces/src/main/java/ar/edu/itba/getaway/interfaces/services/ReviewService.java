@@ -13,12 +13,16 @@ public interface ReviewService {
     List<ReviewModel> getReviewsByExperienceId (Long experienceId);
     Long getReviewAverageScore (Long experienceId);
     List<Long> getListOfAverageScoreByExperienceList(List<ExperienceModel> experienceModelList);
+    List<List<Long>> getListOfAverageScoreByExperienceListAndCategoryId(List<List<ExperienceModel>> experienceModelList);
     Integer getReviewCount (Long experienceId);
     List<Integer> getListOfReviewCountByExperienceList(List<ExperienceModel> experienceModelList);
+    List<List<Integer>> getListOfReviewCountByExperienceListAndCategoryId(List<List<ExperienceModel>> experienceModelList);
+    List<Boolean> getListOfReviewHasImages(List<ReviewUserModel> reviewUserModelList);
     List<ReviewUserModel> getReviewAndUser (Long experienceId);
     Optional<ReviewModel> getReviewById (Long reviewId);
     List<ReviewUserModel> getReviewsByUserId (Long userId);
     void deleteReview (Long reviewId);
     void updateReview (Long reviewId, ReviewModel reviewModel);
+    List<ExperienceModel> getListExperiencesOfReviewsList(List<ReviewUserModel> reviewModelList);
 
 }
