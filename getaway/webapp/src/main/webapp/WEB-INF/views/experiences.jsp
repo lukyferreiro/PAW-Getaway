@@ -114,6 +114,7 @@
                               <jsp:param name = "cityId" value = "${cityId}"/>
                               <jsp:param name = "maxPrice" value = "${maxPrice}"/>
                               <jsp:param name="filter" value="${true}"/>
+                              <jsp:param name="pageNum" value="${currentPage}"/>
                               <jsp:param name="orderBy" value="${orderBy}"/>
                               <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
                               <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>

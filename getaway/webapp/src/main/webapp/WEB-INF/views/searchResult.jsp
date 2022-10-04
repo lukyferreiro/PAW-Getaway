@@ -55,6 +55,7 @@
                            <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
                            <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
                            <jsp:param name="isEditing" value="${isEditing}"/>
+                           <jsp:param name="pageNum" value="${currentPage}"/>
                         </jsp:include>
                      </c:forEach>
                   </div>
