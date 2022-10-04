@@ -121,19 +121,11 @@ public class ExperienceController {
             mav.addObject("favExperienceModels", new ArrayList<>());
         }
 
-        List<ExperienceModel> currentExperiences = currentPage.getContent();
-
+        final List<ExperienceModel> currentExperiences = currentPage.getContent();
         final List<Long> avgReviews = reviewService.getListOfAverageScoreByExperienceList(currentExperiences);
         final List<Integer> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(currentExperiences);
-//        final List<Long> avgReviews = new ArrayList<>();
-//        final List<Integer> listReviewsCount = new ArrayList<>();
-//        for (ExperienceModel exp : currentExperiences) {
-//            avgReviews.add(reviewService.getReviewAverageScore(exp.getExperienceId()));
-//            listReviewsCount.add(reviewService.getReviewCount(exp.getExperienceId()));
-//        }
-        request.setAttribute("pageNum", pageNum);
 
-//        String path = "/experiences/" + categoryName;
+        request.setAttribute("pageNum", pageNum);
         final String path = request.getServletPath();
 
         mav.addObject("path", path);
@@ -158,6 +150,7 @@ public class ExperienceController {
                                        @Valid @ModelAttribute("filterForm") final FilterForm form,
                                        final BindingResult errors,
                                        Principal principal) {
+        LOGGER.debug("Endpoint POST {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
@@ -188,24 +181,15 @@ public class ExperienceController {
                                        @PathVariable("categoryName") final String categoryName,
                                        @PathVariable("experienceId") final Long experienceId,
                                        @RequestParam Optional<Boolean> set,
-                                       @Valid @ModelAttribute("searchForm") final SearchForm searchForm) {
+                                       @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                                       HttpServletRequest request) {
+        LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final String dbCategoryName = ExperienceCategory.valueOf(categoryName).name();
         final List<ReviewUserModel> reviews = reviewService.getReviewAndUser(experienceId);
-
         final List<Boolean> listReviewsHasImages = reviewService.getListOfReviewHasImages(reviews);
-//        final List<Boolean> listReviewsHasImages = new ArrayList<>();
-//        for(ReviewUserModel review : reviews){
-//            Optional<ImageModel> img = imageService.getImgById(review.getImgId());
-//            if(img.isPresent()){
-//                listReviewsHasImages.add(img.get().getImage() != null);
-//            }else{
-//                listReviewsHasImages.add(false);
-//            }
-//        }
-
         final Long avgScore = reviewService.getReviewAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
         final CityModel cityModel = locationService.getCityById(experience.getCityId()).get();

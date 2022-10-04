@@ -5,26 +5,27 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> <c:if test="${query != null}">- <spring:message code="searchResult.title" arguments="${query}"/></c:if>  </title>
+      <title><spring:message code="pageName"/> <c:if test="${query != null}">-
+         <spring:message code="searchResult.title" arguments="${query}"/></c:if></title>
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
    <body>
       <div class="container-main">
          <%@ include file="../components/navbar.jsp" %>
 
-         <div class="container-fluid p-0 my-3 d-flex flex-column justify-content-center align-content-center">
-            <c:choose>
-               <c:when test="${experiences.size() == 0}">
-                  <div class="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
-                     <div class="d-flex justify-content-center align-content-center">
-                        <img src="<c:url value="/resources/images/ic_no_search.jpeg"/>" alt="Imagen lupa" style="width: 150px; height:150px; min-width: 150px; min-height: 150px; margin-right: 5px;">
-                        <h4 class="d-flex align-self-center">
-                           <spring:message code="experience.emptyResult"/>
-                        </h4>
-                     </div>
+         <c:choose>
+            <c:when test="${experiences.size() == 0}">
+               <div class="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
+                  <div class="d-flex justify-content-center align-content-center">
+                     <img src="<c:url value="/resources/images/ic_no_search.jpeg"/>" alt="Imagen lupa" style="width: 150px; height:150px; min-width: 150px; min-height: 150px; margin-right: 5px;">
+                     <h4 class="d-flex align-self-center">
+                        <spring:message code="experience.emptyResult"/>
+                     </h4>
                   </div>
-               </c:when>
-               <c:otherwise>
+               </div>
+            </c:when>
+            <c:otherwise>
+               <div class="container-fluid p-0 my-3 d-flex flex-column justify-content-center align-content-center">
                   <div class="d-flex justify-content-center align-content-center">
                      <div style="margin: 0 auto 0 20px; flex:1;">
                         <jsp:include page="/WEB-INF/components/orderDropdown.jsp">
@@ -33,7 +34,8 @@
                            <jsp:param name="query" value="${query}"/>
                         </jsp:include>
                      </div>
-                     <h3 class="my-2"><spring:message code="searchResult.description" arguments="${experiences.size()},${query}"/></h3>
+                     <h3 class="my-2">
+                        <spring:message code="searchResult.description" arguments="${experiences.size()},${query}"/></h3>
                      <div style="margin: 0 20px 0 auto; flex:1;"></div>
                   </div>
 
@@ -71,9 +73,9 @@
                            <li class="page-item">
                               <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
                                  href=" <c:url value="/search_result">
-                                           <c:param name="pageNum" value="${i}"/>
-                                           <c:param name="query" value="${query}"/>
-                                           <c:param name="orderBy" value="${orderBy}"/> </c:url>"
+                                                 <c:param name="pageNum" value="${i}"/>
+                                                 <c:param name="query" value="${query}"/>
+                                                 <c:param name="orderBy" value="${orderBy}"/> </c:url>"
                               >
                                  <c:out value="${i}"/>
                               </a>
@@ -91,14 +93,13 @@
                            <%--                     </li>--%>
                      </ul>
                   </div>
+               </div>
                </c:otherwise>
             </c:choose>
+
+            <%@ include file="../components/footer.jsp" %>
          </div>
-         <%@ include file="../components/footer.jsp" %>
-      </div>
-
-      <%@ include file="../components/includes/bottomScripts.jsp" %>
-      <script src='<c:url value="/resources/js/submitStarsButton.js"/>'></script>
-
+         <%@ include file="../components/includes/bottomScripts.jsp" %>
+         <script src='<c:url value="/resources/js/submitStarsButton.js"/>'></script>
    </body>
 </html>

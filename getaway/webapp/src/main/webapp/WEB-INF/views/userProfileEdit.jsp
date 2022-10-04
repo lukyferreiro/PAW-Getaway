@@ -23,7 +23,7 @@
                      <div class="container-lg">
                         <div class="row">
                            <c:url value="/user/profile/edit" var="postPath"/>
-                           <form:form modelAttribute="registerForm" action="${postPath}" id="registerForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
+                           <form:form modelAttribute="editProfileForm" action="${postPath}" id="editProfileForm" method="post" acceptCharset="UTF-8" enctype="multipart/form-data">
                               <div class="form-group my-2"> <!--Email-->
                                  <spring:message code="editProfile.email.placeholder" var="emailPlaceholder"/>
                                  <form:label path="email" class="form-label">
@@ -56,10 +56,10 @@
 
                               <%--                                    <div class="form-group"> <!--Contraseña-->--%>
                               <%--                                        <form:label path="password" class="form-label">--%>
-                              <%--                                            <spring:message code="registerForm.password.title"/> <span class="required-field">*</span>--%>
+                              <%--                                            <spring:message code="editProfileForm.password.title"/> <span class="required-field">*</span>--%>
                               <%--                                        </form:label>--%>
                               <%--                                        <div class="input-group d-flex justify-content-start align-items-center">--%>
-                              <%--                                            <spring:message code="registerForm.password.placeholder" var="passwordPlaceholder"/>--%>
+                              <%--                                            <spring:message code="editProfileForm.password.placeholder" var="passwordPlaceholder"/>--%>
                               <%--                                            <form:input type="password" path="password" cssClass="form-control"--%>
                               <%--                                                        id="password1" name="password" cssErrorClass="form-control is-invalid"--%>
                               <%--                                                        aria-describedby="password input" placeholder="${passwordPlaceholder}"/>--%>
@@ -75,7 +75,7 @@
 
                               <%--                                    <div class="form-group"> <!--Confirmar contraseña-->--%>
                               <%--                                        <form:label path="confirmPassword" class="form-label">--%>
-                              <%--                                            <spring:message code="registerForm.confirmPassword.title"/> <span class="required-field">*</span>--%>
+                              <%--                                            <spring:message code="editProfileForm.confirmPassword.title"/> <span class="required-field">*</span>--%>
                               <%--                                        </form:label>--%>
                               <%--                                        <div class="input-group d-flex justify-content-start align-items-center">--%>
                               <%--                                            <form:input type="password" path="confirmPassword" cssClass="form-control"--%>
@@ -101,7 +101,7 @@
                               </div>
 
                               <div class="form-group my-2">
-                                 <spring:hasBindErrors name="registerForm">
+                                 <spring:hasBindErrors name="editProfileForm">
                                     <c:if test="${errors.globalErrorCount > 0}">
                                        <div class="alert alert-danger"><form:errors/></div>
                                     </c:if>
@@ -114,7 +114,7 @@
                                        <spring:message code="editProfile.cancel"/>
                                     </button>
                                  </a>
-                                 <button type="submit" class="btn btn-submit-form px-3 py-2" id="editExperienceFormButton" form="registerForm">
+                                 <button type="submit" class="btn btn-submit-form px-3 py-2" id="editProfileFormButton" form="editProfileForm">
                                     <spring:message code="editProfile.submit"/>
                                  </button>
                               </div>
@@ -130,6 +130,6 @@
       </div>
 
       <%@ include file="../components/includes/bottomScripts.jsp" %>
-      <script src='<c:url value="/resources/js/register.js"/>'></script>
+      <script src='<c:url value="/resources/js/editProfile.js"/>'></script>
    </body>
 </html>

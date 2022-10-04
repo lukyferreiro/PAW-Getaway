@@ -39,11 +39,11 @@ public class ReviewFormController {
                                          @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                          @ModelAttribute("reviewForm") final ReviewForm form,
                                          HttpServletRequest request) {
+        LOGGER.debug("Endpoint GET {}", request.getServletPath());
+
         final ModelAndView mav = new ModelAndView("reviewForm");
 
-        final String endpoint = request.getServletPath();
-        LOGGER.debug("Endpoint GET {}", endpoint);
-        mav.addObject("endpoint", endpoint);
+        mav.addObject("endpoint", request.getServletPath());
 
         return mav;
     }

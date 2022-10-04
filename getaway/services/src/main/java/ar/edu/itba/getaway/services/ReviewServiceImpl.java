@@ -155,4 +155,14 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 
+    @Override
+    public List<ExperienceModel> getListExperiencesOfReviewsList(List<ReviewUserModel> reviewModelList){
+        final List<ExperienceModel> listExperiencesOfReviews = new ArrayList<>();
+        for(ReviewUserModel review : reviewModelList){
+            final Optional<ExperienceModel> experienceModel = experienceService.getExperienceById(review.getExperienceId());
+            experienceModel.ifPresent(listExperiencesOfReviews::add);
+        }
+        return listExperiencesOfReviews;
+    }
+
 }

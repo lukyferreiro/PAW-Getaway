@@ -4,7 +4,6 @@ import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -24,5 +23,6 @@ public interface ReviewService {
     List<ReviewUserModel> getReviewsByUserId (Long userId);
     void deleteReview (Long reviewId);
     void updateReview (Long reviewId, ReviewModel reviewModel);
+    List<ExperienceModel> getListExperiencesOfReviewsList(List<ReviewUserModel> reviewModelList);
 
 }

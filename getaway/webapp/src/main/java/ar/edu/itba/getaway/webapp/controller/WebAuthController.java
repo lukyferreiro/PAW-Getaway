@@ -4,6 +4,7 @@ import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.exceptions.AccessDeniedException;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.webapp.auth.ForceLogin;
 import ar.edu.itba.getaway.webapp.forms.*;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import org.slf4j.Logger;
@@ -12,13 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +22,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 public class WebAuthController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ForceLogin forceLogin;
     @Autowired
     private MessageSource messageSource;
 
@@ -75,7 +70,7 @@ public class WebAuthController {
         final UserModel user;
         try {
             user = userService.createUser(form.getPassword(), form.getName(), form.getSurname(), form.getEmail());
-            forceLogin(user, request);
+            forceLogin.forceLogin(user, request);
         } catch (DuplicateUserException e) {
             errors.rejectValue("email", "validation.user.DuplicateEmail");
             return register(form);
@@ -103,7 +98,7 @@ public class WebAuthController {
         final Optional<UserModel> userOptional = userService.verifyAccount(token);
 
         if (userOptional.isPresent()) {
-            forceLogin(userOptional.get(), request);
+            forceLogin.forceLogin(userOptional.get(), request);
             mav = new ModelAndView("redirect:/user/verifyAccount/result/successfully");
             return mav ;
         }
@@ -195,37 +190,12 @@ public class WebAuthController {
 
         if (userOptional.isPresent()) {
             success = true;
-            UserModel user = userOptional.get();
-            forceLogin(user, request);
+            final UserModel user = userOptional.get();
+            forceLogin.forceLogin(user, request);
         }
 
         mav.addObject("success", success);
         return mav;
-    }
-
-    /*------------------------------------------------------------------------------------
-    --------------------------------------------------------------------------------------
-     ------------------------------------------------------------------------------------*/
-
-    //This method is used to update the SpringContextHolder
-    //https://stackoverflow.com/questions/9910252/how-to-reload-authorities-on-user-update-with-spring-security
-    private void forceLogin(UserModel user, HttpServletRequest request) {
-        //generate authentication
-        final PreAuthenticatedAuthenticationToken token =
-                new PreAuthenticatedAuthenticationToken(user.getEmail(), user.getPassword(), getAuthorities(user.getRoles()));
-
-        token.setDetails(new WebAuthenticationDetails(request));
-
-        final SecurityContext securityContext = SecurityContextHolder.getContext();
-        securityContext.setAuthentication(token);
-
-        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
-    }
-
-    private Collection<? extends GrantedAuthority> getAuthorities(Collection<Roles> roles) {
-        return roles.stream()
-                .map((role) -> new SimpleGrantedAuthority("ROLE_" + role.name()))
-                .collect(Collectors.toList());
     }
 
 }
