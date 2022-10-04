@@ -157,8 +157,8 @@ public class ExperienceController {
                                        HttpServletRequest request,
                                        @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                        @Valid @ModelAttribute("filterForm") final FilterForm form,
-                                       Principal principal,
-                                       final BindingResult errors) {
+                                       final BindingResult errors,
+                                       Principal principal) {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
