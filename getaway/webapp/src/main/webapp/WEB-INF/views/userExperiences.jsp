@@ -32,16 +32,14 @@
                      <div style="margin: 0 20px 0 auto; flex:1;"></div>
                   </div>
 
-                  <div class="container-fluid my-3 d-flex flex-wrap justify-content-center">
-                     <jsp:include page="/WEB-INF/components/carousel.jsp">
-                        <jsp:param name="listByCategory" value="${listByCategory}"/>
-                        <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
-                        <jsp:param name="avgReviews" value="${avgReviews}"/>
-                        <jsp:param name="listReviewsCount" value="${listReviewsCount}"/>
-                        <jsp:param name="isEditing" value="${isEditing}"/>
-                        <jsp:param name="path" value="/user/experiences"/>
-                     </jsp:include>
-                  </div>
+                  <jsp:include page="/WEB-INF/components/carousel.jsp">
+                     <jsp:param name="listByCategory" value="${listByCategory}"/>
+                     <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
+                     <jsp:param name="avgReviews" value="${avgReviews}"/>
+                     <jsp:param name="listReviewsCount" value="${listReviewsCount}"/>
+                     <jsp:param name="isEditing" value="${isEditing}"/>
+                     <jsp:param name="path" value="/user/experiences"/>
+                  </jsp:include>
                </c:otherwise>
             </c:choose>
          </div>
