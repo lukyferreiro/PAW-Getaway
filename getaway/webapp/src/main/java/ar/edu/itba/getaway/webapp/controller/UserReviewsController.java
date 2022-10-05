@@ -3,6 +3,7 @@ package ar.edu.itba.getaway.webapp.controller;
 import ar.edu.itba.getaway.interfaces.exceptions.ReviewNotFoundException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ReviewForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
@@ -14,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,12 +41,15 @@ public class UserReviewsController {
                                @ModelAttribute("searchForm") final SearchForm searchForm,
                                HttpServletRequest request,
                                Optional<Boolean> successReview,
-                               Optional<Boolean> deleteReview) {
+                               Optional<Boolean> deleteReview,
+                               @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum) {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
 
         final ModelAndView mav = new ModelAndView("userReviews");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        final List<ReviewUserModel> reviewList = reviewService.getReviewsByUserId(user.getUserId());
+
+        final Page<ReviewUserModel> currentPage = reviewService.getReviewsByUserId(user.getUserId(), pageNum);
+        final List<ReviewUserModel> reviewList = currentPage.getContent();
         final List<Boolean> listReviewsHasImages = reviewService.getListOfReviewHasImages(reviewList);
         final List<ExperienceModel> listExperiencesOfReviews = reviewService.getListExperiencesOfReviewsList(reviewList);
 
@@ -58,6 +59,11 @@ public class UserReviewsController {
         mav.addObject("isEditing", true);
         mav.addObject("successReview", successReview.isPresent());
         mav.addObject("deleteReview", deleteReview.isPresent());
+
+        mav.addObject("currentPage", currentPage.getCurrentPage());
+        mav.addObject("minPage", currentPage.getMinPage());
+        mav.addObject("maxPage", currentPage.getMaxPage());
+        mav.addObject("totalPages", currentPage.getTotalPages());
 
         return mav;
     }

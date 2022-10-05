@@ -180,7 +180,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public List<ExperienceModel> listExperiencesByBestRanked(Long categoryId){
-        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? GROUP BY experiences.experienceid ORDER BY AVG(COALESCE(score,0)) DESC ";
+        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? GROUP BY experiences.experienceid ORDER BY AVG(COALESCE(score,0)) DESC LIMIT 12 ";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
     }

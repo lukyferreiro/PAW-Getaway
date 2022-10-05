@@ -3,6 +3,7 @@ package ar.edu.itba.getaway.interfaces.services;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
+import ar.edu.itba.getaway.models.pagination.Page;
 
 import java.util.Date;
 import java.util.List;
@@ -18,9 +19,9 @@ public interface ReviewService {
     List<Integer> getListOfReviewCountByExperienceList(List<ExperienceModel> experienceModelList);
     List<List<Integer>> getListOfReviewCountByExperienceListAndCategoryId(List<List<ExperienceModel>> experienceModelList);
     List<Boolean> getListOfReviewHasImages(List<ReviewUserModel> reviewUserModelList);
-    List<ReviewUserModel> getReviewAndUser (Long experienceId);
+    Page<ReviewUserModel> getReviewAndUser (Long experienceId, Integer page);
     Optional<ReviewModel> getReviewById (Long reviewId);
-    List<ReviewUserModel> getReviewsByUserId (Long userId);
+    Page<ReviewUserModel> getReviewsByUserId (Long userId, Integer page);
     void deleteReview (Long reviewId);
     void updateReview (Long reviewId, ReviewModel reviewModel);
     List<ExperienceModel> getListExperiencesOfReviewsList(List<ReviewUserModel> reviewModelList);

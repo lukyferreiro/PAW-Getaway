@@ -71,7 +71,6 @@ public class ExperienceController {
         final OrderByModel[] orderByModels = OrderByModel.values();
 
         if (orderBy.isPresent()){
-            request.setAttribute("orderBy", orderBy);
             mav.addObject("orderBy", orderBy.get());
         }
 
@@ -80,7 +79,6 @@ public class ExperienceController {
         Double max = maxPriceOpt.get();
         mav.addObject("max", max);
         if(maxPrice.isPresent()){
-            request.setAttribute("maxPrice", max);
             max = maxPrice.get();
         }
         mav.addObject("maxPrice", max);
@@ -88,7 +86,6 @@ public class ExperienceController {
         // Score
         Long scoreVal = 0L;
         if (score.isPresent() && score.get() != -1) {
-            request.setAttribute("score", score.get());
             scoreVal = score.get();
         }
         mav.addObject("score", scoreVal);
@@ -98,11 +95,9 @@ public class ExperienceController {
 
         if (cityId.isPresent()) {
             currentPage = experienceService.listExperiencesByFilter(categoryId, max, scoreVal, cityId.get(), orderBy, pageNum);
-            request.setAttribute("cityId", cityId.get());
             mav.addObject("cityId", cityId.get());
         } else {
             currentPage = experienceService.listExperiencesByFilter(categoryId, max, scoreVal, (long) -1, orderBy, pageNum);
-            request.setAttribute("cityId", -1);
             mav.addObject("cityId", -1);
         }
 
@@ -184,13 +179,16 @@ public class ExperienceController {
                                        @RequestParam Optional<Boolean> success,
                                        @RequestParam Optional<Boolean> successReview,
                                        @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
-                                       HttpServletRequest request) {
+                                       HttpServletRequest request,
+                                       @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum) {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final String dbCategoryName = ExperienceCategory.valueOf(categoryName).name();
-        final List<ReviewUserModel> reviews = reviewService.getReviewAndUser(experienceId);
+
+        final Page<ReviewUserModel> currentPage = reviewService.getReviewAndUser(experienceId, pageNum);
+        final List<ReviewUserModel> reviews = currentPage.getContent();
         final List<Boolean> listReviewsHasImages = reviewService.getListOfReviewHasImages(reviews);
         final Long avgScore = reviewService.getReviewAverageScore(experienceId);
         final Integer reviewCount = reviewService.getReviewCount(experienceId);
@@ -199,6 +197,8 @@ public class ExperienceController {
         final String country = locationService.getCountryById(cityModel.getCountryId()).get().getCountryName();
 
         LOGGER.debug("Experience with id {} has an average score of {}", experienceId, avgScore);
+
+        request.setAttribute("pageNum", pageNum);
 
         mav.addObject("reviewAvg", avgScore);
         mav.addObject("dbCategoryName", dbCategoryName);
@@ -212,6 +212,11 @@ public class ExperienceController {
         mav.addObject("country", country);
         mav.addObject("success", success.isPresent());
         mav.addObject("successReview", successReview.isPresent());
+
+        mav.addObject("currentPage", currentPage.getCurrentPage());
+        mav.addObject("minPage", currentPage.getMinPage());
+        mav.addObject("maxPage", currentPage.getMaxPage());
+        mav.addObject("totalPages", currentPage.getTotalPages());
 
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());

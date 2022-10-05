@@ -8,6 +8,7 @@ import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.ReviewUserModel;
 import ar.edu.itba.getaway.interfaces.persistence.ReviewDao;
 import ar.edu.itba.getaway.interfaces.services.ReviewService;
+import ar.edu.itba.getaway.models.pagination.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class ReviewServiceImpl implements ReviewService {
     private ExperienceService experienceService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImpl.class);
+    private static final Integer PAGE_SIZE = 6;
+    private static final Integer USER_PAGE_SIZE = 12;
 
     @Override
     public ReviewModel createReview(String title, String description, Long score, Long experienceId, Date reviewDate, Long userId) {
@@ -116,9 +119,34 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewUserModel> getReviewAndUser(Long experienceId) {
+    public Page<ReviewUserModel> getReviewAndUser(Long experienceId, Integer page) {
         LOGGER.debug("Retrieving all reviews and user of experience with id {}", experienceId);
-        return reviewDao.getReviewAndUser(experienceId);
+        int total_pages;
+        List<ReviewUserModel> reviewUserModelList = new ArrayList<>();
+
+        LOGGER.debug("Requested page {}", page);
+
+        int total = reviewDao.getReviewCount(experienceId);
+
+        if (total > 0) {
+            LOGGER.debug("Total pages found: {}", total);
+
+            total_pages = (int) Math.ceil((double) total / PAGE_SIZE);
+
+            LOGGER.debug("Max page calculated: {}", total_pages);
+
+            if (page > total_pages) {
+                page = total_pages;
+            } else if (page < 0) {
+                page = 1;
+            }
+            reviewUserModelList = reviewDao.getReviewAndUser(experienceId, page, PAGE_SIZE);
+        } else {
+            total_pages = 1;
+        }
+
+        LOGGER.debug("Max page value service: {}", total_pages);
+        return new Page<>(reviewUserModelList, page, total_pages);
     }
 
     @Override
@@ -128,9 +156,34 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewUserModel> getReviewsByUserId(Long userId) {
+    public Page<ReviewUserModel> getReviewsByUserId(Long userId, Integer page) {
         LOGGER.debug("Retrieving all reviews of user with id {}", userId);
-        return reviewDao.getReviewsByUserId(userId);
+        int total_pages;
+        List<ReviewUserModel> reviewUserModelList = new ArrayList<>();
+
+        LOGGER.debug("Requested page {}", page);
+
+        int total = reviewDao.getReviewByUserCount(userId);
+
+        if (total > 0) {
+            LOGGER.debug("Total pages found: {}", total);
+
+            total_pages = (int) Math.ceil((double) total / PAGE_SIZE);
+
+            LOGGER.debug("Max page calculated: {}", total_pages);
+
+            if (page > total_pages) {
+                page = total_pages;
+            } else if (page < 0) {
+                page = 1;
+            }
+            reviewUserModelList = reviewDao.getReviewsByUserId(userId, page, PAGE_SIZE);
+        } else {
+            total_pages = 1;
+        }
+
+        LOGGER.debug("Max page value service: {}", total_pages);
+        return new Page<>(reviewUserModelList, page, total_pages);
     }
 
     @Override

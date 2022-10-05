@@ -52,6 +52,38 @@
                         </div>
                      </c:forEach>
                   </div>
+
+                  <div class="mt-auto d-flex justify-content-center align-items-center">
+                     <ul class="pagination m-0">
+                        <li class="page-item">
+                           <a class="page-link "
+                              href="<c:url value = "/user/reviews">
+                                       <c:param name = "pageNum" value = "1"/>
+                                 </c:url>">
+                              <spring:message code="pagination.start"/>
+                           </a>
+                        </li>
+                        <c:forEach var="i" begin="${minPage}" end="${maxPage}">
+                           <li class="page-item">
+                              <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
+                                 href="<c:url value = "/user/reviews">
+                                       <c:param name = "pageNum" value = "${i}"/>
+                                       </c:url>">
+                                 <c:out value="${i}"/>
+                              </a>
+                           </li>
+                        </c:forEach>
+                        <li class="page-item">
+                           <a class="page-link "
+                              href="<c:url value = "/user/reviews">
+                                       <c:param name = "pageNum" value = "${totalPages}"/>
+                                 </c:url>">
+                              <spring:message code="pagination.end"/>
+                           </a>
+                        </li>
+                     </ul>
+                  </div>
+
                </c:otherwise>
             </c:choose>
          </div>

@@ -88,10 +88,10 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     @Override
-    public List<ReviewUserModel> getReviewAndUser(Long experienceId) {
-        final String query = "SELECT * FROM reviews NATURAL JOIN users WHERE experienceId = ?";
+    public List<ReviewUserModel> getReviewAndUser(Long experienceId, Integer page, Integer page_size) {
+        final String query = "SELECT * FROM reviews NATURAL JOIN users WHERE experienceId = ? ORDER BY reviewid ASC LIMIT ? OFFSET ? ";
         LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{experienceId}, REVIEW_USER_ROW_MAPPER);
+        return jdbcTemplate.query(query, new Object[]{experienceId, page_size, (page-1)*page_size}, REVIEW_USER_ROW_MAPPER);
     }
 
     @Override
@@ -103,10 +103,17 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     @Override
-    public List<ReviewUserModel> getReviewsByUserId(Long userId) {
-        final String query = "SELECT * FROM reviews  NATURAL JOIN users WHERE userid = ?";
+    public List<ReviewUserModel> getReviewsByUserId(Long userId, Integer page, Integer page_size) {
+        final String query = "SELECT * FROM reviews  NATURAL JOIN users WHERE userid = ?  ORDER BY reviewid ASC LIMIT ? OFFSET ?";
         LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{userId}, REVIEW_USER_ROW_MAPPER);
+        return jdbcTemplate.query(query, new Object[]{userId, page_size, (page-1)*page_size}, REVIEW_USER_ROW_MAPPER);
+    }
+
+    @Override
+    public Integer getReviewByUserCount(Long userId) {
+        final String query = "SELECT COUNT(*) FROM reviews WHERE userId = ?";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.queryForObject(query, new Object[]{userId}, Integer.class);
     }
 
     @Override

@@ -37,6 +37,8 @@ public class ReviewDaoTest {
     private final Long ADV2_REV = 4L;
     private final Long ADV3_REV = 5L;
 
+    private final Integer PAGE_SIZE = 12;
+
     private final ReviewUserModel U1R1 = new ReviewUserModel(1L, "Title1", "Desc1", 1L, 1L, new Date(2022,1,1), 1L, "owner", "user", 0L);
     private final ReviewUserModel U1R4 = new ReviewUserModel(4L, "Title4", "Desc4", 3L, 7L, new Date(2022,1,1), 1L, "owner", "user", 0L);
     private final ReviewUserModel U1R7 = new ReviewUserModel(7L, "Title7", "Desc7", 5L, 8L, new Date(2022,1,1), 1L, "owner", "user", 0L);
@@ -101,7 +103,7 @@ public class ReviewDaoTest {
 
     @Test
     public void testGetReviewAndUser() {
-        final List<ReviewUserModel> reviewUserModelList = reviewDao.getReviewAndUser(1L);
+        final List<ReviewUserModel> reviewUserModelList = reviewDao.getReviewAndUser(1L,1,PAGE_SIZE);
         assertNotNull(reviewUserModelList);
         assertFalse(reviewUserModelList.isEmpty());
 
@@ -119,7 +121,7 @@ public class ReviewDaoTest {
 
     @Test
     public void testGetByUserId() {
-        final List<ReviewUserModel> reviewModelList = reviewDao.getReviewsByUserId(1L);
+        final List<ReviewUserModel> reviewModelList = reviewDao.getReviewsByUserId(1L,1,PAGE_SIZE);
         assertFalse(reviewModelList.isEmpty());
         assertTrue(reviewModelList.contains(U1R1));
         assertTrue(reviewModelList.contains(U1R4));
