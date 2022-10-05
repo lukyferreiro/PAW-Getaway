@@ -34,7 +34,7 @@ public class PasswordResetTokenDaoTest {
     private final String token1 = "12345";
     private final String token2 = "6789x";
     private final Long id1 = Long.valueOf(1);
-    private final Long Uid2 = Long.valueOf(2);
+    private final Long Uid1 = Long.valueOf(2);
 
     private static final LocalDateTime EXPIRATION_DATE = LocalDateTime.of(2021, 5, 29, 12, 30);
 
@@ -51,7 +51,7 @@ public class PasswordResetTokenDaoTest {
     @Test
     @Rollback
     public void testCreateToken() {
-        final PasswordResetToken resetToken = passwordResetTokenDao.createToken(Uid2, token2, EXPIRATION_DATE);
+        final PasswordResetToken resetToken = passwordResetTokenDao.createToken(Uid1, token2, EXPIRATION_DATE);
 //        assertNotNull(resetToken);
 //        assertEquals(Uid2, resetToken.getUserId());
 //        assertEquals(token2, passwordResetTokenDao.getTokenByValue(token1));
@@ -78,7 +78,7 @@ public class PasswordResetTokenDaoTest {
     @Test
     @Rollback
     public void testRemoveTokenByUserId() {
-        passwordResetTokenDao.removeTokenById(id1);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "passwordresettoken", "passtokenuserid = " + id1));
+        passwordResetTokenDao.removeTokenByUserId(Uid1);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "passwordresettoken", "passtokenuserid = " + Uid1));
     }
 }
