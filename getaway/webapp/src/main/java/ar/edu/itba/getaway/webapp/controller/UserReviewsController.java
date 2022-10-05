@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.time.Instant;
 import java.util.Date;
@@ -104,6 +105,16 @@ public class UserReviewsController {
         form.setScore(review.getStringScore());
         form.setDescription(review.getDescription());
 
+        if(form.getTitle() == null){
+            form.setTitle(review.getTitle());
+            form.setDescription(review.getDescription());
+            form.setScore(review.getStringScore());
+        } else {
+            form.setTitle(form.getTitle());
+            form.setDescription(form.getDescription());
+            form.setScore(form.getScore());
+        }
+
         mav.addObject("endpoint", request.getServletPath());
         mav.addObject("review", review);
 
@@ -113,10 +124,10 @@ public class UserReviewsController {
     @PreAuthorize("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/edit/{reviewId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView reviewEditPost(@PathVariable(value = "reviewId") final Long reviewId,
-                                       @ModelAttribute("reviewForm") final ReviewForm form,
-                                       Principal principal,
-                                       @ModelAttribute("searchForm") final SearchForm searchForm,
+                                       @Valid @ModelAttribute("reviewForm") final ReviewForm form,
                                        final BindingResult errors,
+                                       @ModelAttribute("searchForm") final SearchForm searchForm,
+                                       Principal principal,
                                        HttpServletRequest request) {
         LOGGER.debug("Endpoint POST {}", request.getServletPath());
 
