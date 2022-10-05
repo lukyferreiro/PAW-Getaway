@@ -24,10 +24,10 @@
          </div>
          <div id="recipeCarousel<c:out value="${categoryIndex.index}"/>" class="carousel slide" data-bs-interval="false">
             <div class="carousel-inner">
-               <c:forEach begin="0" step="4" end="${categoryList.size() - 1}" var="index">
+               <c:forEach begin="0" step="3" end="${categoryList.size() - 1}" var="index">
                   <div class="carousel-item <c:if test="${index == 0}">active</c:if>">
                      <div class="d-flex justify-content-center align-content-center">
-                        <c:forEach begin="${index}" step="1" end="${categoryList.size()-1 < 3 + index ? categoryList.size() - 1 : 3 + index}" var="experience" varStatus="myIndex">
+                        <c:forEach begin="${index}" step="1" end="${categoryList.size()-1 < 2 + index ? categoryList.size() - 1 : 2 + index}" var="experience" varStatus="myIndex">
                            <jsp:include page="/WEB-INF/components/cardExperience.jsp">
                               <jsp:param name="hasImage" value="${categoryList.get(experience).hasImage}"/>
                               <jsp:param name="categoryName" value="${categoryList.get(experience).categoryName}"/>
