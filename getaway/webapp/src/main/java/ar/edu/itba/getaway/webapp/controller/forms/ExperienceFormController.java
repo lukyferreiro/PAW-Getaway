@@ -104,7 +104,10 @@ public class ExperienceFormController {
         LOGGER.debug("Updating SpringContextHolder");
         forceLogin(userModelProvider, request);
 //        }
-        return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
+
+        ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
+        mav.addObject("success", true);
+        return mav;
     }
 
     //This method is used to update the SpringContextHolder

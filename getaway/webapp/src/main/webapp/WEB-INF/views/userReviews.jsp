@@ -7,6 +7,8 @@
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="review.profile.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
+      <link href="<c:url value = "/resources/css/snackbar.css"/>" rel="stylesheet" type="text/css"/>
+
    </head>
 
    <body>
@@ -21,6 +23,13 @@
                   </div>
                </c:when>
                <c:otherwise>
+                  <c:if test="${param.successReview}">
+                     <div id="snackbar"><spring:message code="reviewDetail.success"/></div>
+                  </c:if>
+                  <c:if test="${param.deleteReview}">
+                     <div id="snackbar"><spring:message code="reviewDetail.delete"/></div>
+                  </c:if>
+
                   <div class="d-flex justify-content-around align-content-center">
                      <h3 class="title"><spring:message code="review.profile.description"/></h3>
                   </div>
@@ -50,5 +59,6 @@
       </div>
 
       <%@ include file="../components/includes/bottomScripts.jsp" %>
+      <script src='<c:url value="/resources/js/snackbar.js"/>'></script>
    </body>
 </html>

@@ -26,6 +26,7 @@ import java.security.Principal;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class UserReviewsController {
@@ -40,7 +41,9 @@ public class UserReviewsController {
     @RequestMapping(value = "/user/reviews", method = {RequestMethod.GET})
     public ModelAndView review(Principal principal,
                                @ModelAttribute("searchForm") final SearchForm searchForm,
-                               HttpServletRequest request) {
+                               HttpServletRequest request,
+                               Optional<Boolean> successReview,
+                               Optional<Boolean> deleteReview) {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
 
         final ModelAndView mav = new ModelAndView("userReviews");
@@ -53,6 +56,8 @@ public class UserReviewsController {
         mav.addObject("listReviewsHasImages", listReviewsHasImages);
         mav.addObject("listExperiencesOfReviews", listExperiencesOfReviews);
         mav.addObject("isEditing", true);
+        mav.addObject("successReview", successReview.isPresent());
+        mav.addObject("deleteReview", deleteReview.isPresent());
 
         return mav;
     }
@@ -87,7 +92,10 @@ public class UserReviewsController {
         }
 
         reviewService.deleteReview(reviewId);
-        return new ModelAndView("redirect:/user/reviews");
+
+        ModelAndView mav = new ModelAndView("redirect:/user/reviews");
+        mav.addObject("deleteReview", true);
+        return mav;
     }
 
     @PreAuthorize("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
@@ -143,7 +151,10 @@ public class UserReviewsController {
 
         reviewService.updateReview(reviewId,newReviewModel);
 
-        return new ModelAndView("redirect:/user/reviews");
+        ModelAndView mav = new ModelAndView("redirect:/user/reviews");
+        mav.addObject("successReview", true);
+
+        return mav;
     }
 
 }

@@ -99,7 +99,8 @@ public class UserExperiencesController {
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set,
                                    @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
-                                   HttpServletRequest request) {
+                                   HttpServletRequest request,
+                                   Optional<Boolean> delete) {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
 
         final ModelAndView mav = new ModelAndView("userExperiences");
@@ -117,6 +118,7 @@ public class UserExperiencesController {
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("listReviewsCount", listReviewsCount);
         mav.addObject("isEditing", true);
+        mav.addObject("delete", delete.isPresent());
 
         return mav;
     }
@@ -150,7 +152,9 @@ public class UserExperiencesController {
         LOGGER.debug("Endpoint POST {}", request.getServletPath());
 
         experienceService.deleteExperience(experienceId);
-        return new ModelAndView("redirect:/user/experiences");
+        ModelAndView mav = new ModelAndView("redirect:/user/experiences");
+        mav.addObject("delete", true);
+        return mav;
     }
 
     @PreAuthorize("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
@@ -245,6 +249,8 @@ public class UserExperiencesController {
 
         experienceService.updateExperience(experienceModel, image);
 
-        return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
+        ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
+        mav.addObject("success", true);
+        return mav;
     }
 }

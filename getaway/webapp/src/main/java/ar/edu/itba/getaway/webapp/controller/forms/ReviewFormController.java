@@ -70,6 +70,9 @@ public class ReviewFormController {
 
         reviewService.createReview(form.getTitle(), form.getDescription(), form.getLongScore(), experienceId ,date, userId);
 
-        return new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
+        ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
+        mav.addObject("successReview", true);
+
+        return mav;
     }
 }

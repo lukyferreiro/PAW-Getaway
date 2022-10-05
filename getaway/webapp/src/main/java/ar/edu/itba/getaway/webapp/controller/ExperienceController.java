@@ -181,6 +181,8 @@ public class ExperienceController {
                                        @PathVariable("categoryName") final String categoryName,
                                        @PathVariable("experienceId") final Long experienceId,
                                        @RequestParam Optional<Boolean> set,
+                                       @RequestParam Optional<Boolean> success,
+                                       @RequestParam Optional<Boolean> successReview,
                                        @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                        HttpServletRequest request) {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
@@ -208,6 +210,8 @@ public class ExperienceController {
         mav.addObject("reviewCount", reviewCount);
         mav.addObject("city", city);
         mav.addObject("country", country);
+        mav.addObject("success", success.isPresent());
+        mav.addObject("successReview", successReview.isPresent());
 
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());

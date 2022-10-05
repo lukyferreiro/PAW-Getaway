@@ -31,6 +31,8 @@
                <jsp:param name="reviewAvg" value="${reviewAvg}"/>
                <jsp:param name="reviewCount" value="${reviewCount}"/>
                <jsp:param name="path" value="/experiences/${categoryName}/${experience.experienceId}"/>
+               <jsp:param name="success" value="${success}"/>
+               <jsp:param name="successReview" value="${successReview}"/>
             </jsp:include>
 
             <!-- --------------RESEÑAS-------------- -->

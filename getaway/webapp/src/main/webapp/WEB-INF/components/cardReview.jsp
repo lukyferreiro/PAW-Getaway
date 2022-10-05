@@ -45,10 +45,6 @@
          <h6 style="font-size: medium" id="reviewDescription">
             <c:out value="${param.description}"/>
          </h6>
-         <script>
-             let reviewDescription = document.getElementById('reviewDescription').innerHTML
-             reviewDescription = marked.parse(reviewDescription);
-         </script>
       </div>
    </div>
 
@@ -66,4 +62,7 @@
          </a>
       </div>
    </c:if>
+
+   <script src='<c:url value="/resources/js/revParse.js"/>'></script>
+
 </div>

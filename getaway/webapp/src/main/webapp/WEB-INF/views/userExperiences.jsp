@@ -7,6 +7,8 @@
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="experience.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
+      <link href="<c:url value = "/resources/css/snackbar.css"/>" rel="stylesheet" type="text/css"/>
+
    </head>
 
    <body>
@@ -21,6 +23,10 @@
                   </div>
                </c:when>
                <c:otherwise>
+                  <c:if test="${param.delete}">
+                     <div id="snackbar"><spring:message code="experienceDetail.delete"/></div>
+                  </c:if>
+
                   <div class="d-flex justify-content-center align-content-center">
                      <div style="margin: 0 auto 0 20px; flex:1;"></div>
                      <h3 class="title m-0"><spring:message code="experience.description"/></h3>
@@ -44,6 +50,7 @@
          <%@ include file="../components/footer.jsp" %>
       </div>
 
+      <script src='<c:url value="/resources/js/snackbar.js"/>'></script>
       <%@ include file="../components/includes/bottomScripts.jsp" %>
    </body>
 </html>
