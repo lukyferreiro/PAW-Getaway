@@ -72,10 +72,6 @@ public class ReviewFormController {
 
         ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
 
-        final int total = reviewService.getReviewCount(experienceId);
-        final int lastPage = (int) Math.ceil((double) total / 6);
-
-        mav.addObject("pageNum", lastPage);
         mav.addObject("successReview", true);
 
         return mav;

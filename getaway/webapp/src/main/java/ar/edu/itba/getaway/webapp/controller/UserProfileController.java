@@ -34,6 +34,7 @@ public class UserProfileController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileController.class);
 
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif", "image/jpg");
+    private static final int MAX_SIZE_PER_FILE = 10000000;
 
     @RequestMapping(value = "/user/profile", method = {RequestMethod.GET})
     public ModelAndView profile(Principal principal,
@@ -85,12 +86,17 @@ public class UserProfileController {
         final MultipartFile profileImg = editProfileForm.getProfileImg();
 
         if(!profileImg.isEmpty()){
-            if (contentTypes.contains(profileImg.getContentType())) {
-                imageService.updateImg(profileImg.getBytes(), user.getProfileImageId());
-            } else {
+            if (!contentTypes.contains(profileImg.getContentType())) {
                 //Enviar mensaje de formato de imagen inválido
                 errors.rejectValue("profileImg", "editProfileForm.validation.imageFormat");
                 return editProfileGet(editProfileForm, searchForm, principal, request);
+            }
+            else if(profileImg.getSize()>MAX_SIZE_PER_FILE) {
+                errors.rejectValue("experienceImg", "editProfileForm.validation.imageSize");
+                return editProfileGet(editProfileForm, searchForm, principal, request);
+            }
+            else {
+                imageService.updateImg(profileImg.getBytes(), user.getProfileImageId());
             }
         }
 

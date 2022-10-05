@@ -22,6 +22,7 @@
 <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
 <link href="<c:url value = "/resources/css/icons.css" />" rel="stylesheet">
 <link href="<c:url value = "/resources/css/error.css" />" rel="stylesheet">
+<link href="<c:url value = "/resources/css/snackbar.css"/>" rel="stylesheet" type="text/css"/>
 
 <script src="https://kit.fontawesome.com/a4ef34ae89.js" crossorigin="anonymous"></script>
 

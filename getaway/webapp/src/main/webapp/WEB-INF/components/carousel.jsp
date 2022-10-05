@@ -46,14 +46,14 @@
                      </div>
                   </div>
                </c:forEach>
-            </div>
-            <div class="nav">
-               <a class="carousel-control-prev bg-transparent w-aut" href="#recipeCarousel<c:out value="${categoryIndex.index}"/>" role="button" data-bs-slide="prev">
-                  <button class="prev"><i class="fas fa-arrow-left fa-2x"></i></button>
-               </a>
-               <a class="carousel-control-next bg-transparent w-aut" href="#recipeCarousel<c:out value="${categoryIndex.index}"/>" role="button" data-bs-slide="next">
-                  <button class="next"><i class="fas fa-arrow-right fa-2x"></i></button>
-               </a>
+               <div class="nav">
+                  <a class="carousel-control-prev bg-transparent" href="#recipeCarousel<c:out value="${categoryIndex.index}"/>" role="button" data-bs-slide="prev">
+                     <button class="prev"><i class="fas fa-arrow-left fa-2x"></i></button>
+                  </a>
+                  <a class="carousel-control-next bg-transparent" href="#recipeCarousel<c:out value="${categoryIndex.index}"/>" role="button" data-bs-slide="next">
+                     <button class="next"><i class="fas fa-arrow-right fa-2x"></i></button>
+                  </a>
+               </div>
             </div>
          </div>
       </c:if>

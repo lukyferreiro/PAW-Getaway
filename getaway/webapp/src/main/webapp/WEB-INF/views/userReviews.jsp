@@ -7,8 +7,6 @@
    <head>
       <title><spring:message code="pageName"/> - <spring:message code="review.profile.title"/></title>
       <%@ include file="../components/includes/headers.jsp" %>
-      <link href="<c:url value = "/resources/css/snackbar.css"/>" rel="stylesheet" type="text/css"/>
-
    </head>
 
    <body>

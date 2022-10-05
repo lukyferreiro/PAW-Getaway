@@ -31,9 +31,14 @@
                <jsp:param name="reviewAvg" value="${reviewAvg}"/>
                <jsp:param name="reviewCount" value="${reviewCount}"/>
                <jsp:param name="path" value="/experiences/${categoryName}/${experience.experienceId}"/>
-               <jsp:param name="success" value="${success}"/>
-               <jsp:param name="successReview" value="${successReview}"/>
             </jsp:include>
+
+            <c:if test="${success}">
+               <div id="snackbar"><spring:message code="experienceDetail.success"/></div>
+            </c:if>
+            <c:if test="${successReview}">
+               <div id="snackbar"><spring:message code="reviewDetail.success"/></div>
+            </c:if>
 
             <!-- --------------RESEÑAS-------------- -->
             <div class="mx-5 my-3">
@@ -51,65 +56,66 @@
                </div>
             </div>
 
-            <div class="mx-5 my-2 d-flex flex-wrap">
-               <c:choose>
-                  <c:when test="${reviews.size()!=0}">
-                     <c:forEach var="review" varStatus="myIndex" items="${reviews}">
-                        <div class="pl-5 pr-2 w-50" style="min-width: 400px; min-height: 150px; height: fit-content;">
-                           <jsp:include page="/WEB-INF/components/cardReview.jsp">
-                              <jsp:param name="userName" value="${review.userName}"/>
-                              <jsp:param name="userSurname" value="${review.userSurname}"/>
-                              <jsp:param name="title" value="${review.title}"/>
-                              <jsp:param name="description" value="${review.description}"/>
-                              <jsp:param name="reviewDate" value="${review.reviewDate}"/>
-                              <jsp:param name="score" value="${review.score}"/>
-                              <jsp:param name="hasImage" value="${listReviewsHasImages[myIndex.index]}"/>
-                              <jsp:param name="userId" value="${reviews[myIndex.index].imgId}"/>
-                              <jsp:param name="reviewId" value="${review.reviewId}"/>
-                              <jsp:param name="isEditing" value="${isEditing}"/>
-                           </jsp:include>
+            <div class="d-flex mb-3 flex-column">
+               <div class="mx-5 my-2 d-flex flex-wrap">
+                  <c:choose>
+                     <c:when test="${reviews.size()!=0}">
+                        <c:forEach var="review" varStatus="myIndex" items="${reviews}">
+                           <div class="pl-5 pr-2 w-50" style="min-width: 400px; min-height: 150px; height: fit-content;">
+                              <jsp:include page="/WEB-INF/components/cardReview.jsp">
+                                 <jsp:param name="userName" value="${review.userName}"/>
+                                 <jsp:param name="userSurname" value="${review.userSurname}"/>
+                                 <jsp:param name="title" value="${review.title}"/>
+                                 <jsp:param name="description" value="${review.description}"/>
+                                 <jsp:param name="reviewDate" value="${review.reviewDate}"/>
+                                 <jsp:param name="score" value="${review.score}"/>
+                                 <jsp:param name="hasImage" value="${listReviewsHasImages[myIndex.index]}"/>
+                                 <jsp:param name="userId" value="${reviews[myIndex.index].imgId}"/>
+                                 <jsp:param name="reviewId" value="${review.reviewId}"/>
+                                 <jsp:param name="isEditing" value="${isEditing}"/>
+                              </jsp:include>
+                           </div>
+                        </c:forEach>
+                     </c:when>
+                     <c:otherwise>
+                        <div class="d-flex justify-content-center mb-2" style="font-size: x-large;">
+                           <spring:message code="review.noReviews"/>
                         </div>
-                     </c:forEach>
-
-                     <div class="d-flex justify-content-center align-content-center">
-                        <ul class="pagination m-0">
+                     </c:otherwise>
+                  </c:choose>
+               </div>
+               <c:if test="${reviews.size()!=0}">
+                  <div class="d-flex justify-content-center align-content-center">
+                     <ul class="pagination m-0">
+                        <li class="page-item">
+                           <a class="page-link "
+                              href="<c:url value = "/experiences/${categoryName}/${experience.experienceId}">
+                                          <c:param name = "pageNum" value = "1"/>
+                                    </c:url>">
+                              <spring:message code="pagination.start"/>
+                           </a>
+                        </li>
+                        <c:forEach var="i" begin="${minPage}" end="${maxPage}">
                            <li class="page-item">
-                              <a class="page-link "
+                              <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
                                  href="<c:url value = "/experiences/${categoryName}/${experience.experienceId}">
-                                       <c:param name = "pageNum" value = "1"/>
-                                 </c:url>">
-                                 <spring:message code="pagination.start"/>
+                                          <c:param name = "pageNum" value = "${i}"/>
+                                          </c:url>">
+                                 <c:out value="${i}"/>
                               </a>
                            </li>
-                           <c:forEach var="i" begin="${minPage}" end="${maxPage}">
-                              <li class="page-item">
-                                 <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
-                                    href="<c:url value = "/experiences/${categoryName}/${experience.experienceId}">
-                                       <c:param name = "pageNum" value = "${i}"/>
-                                       </c:url>">
-                                    <c:out value="${i}"/>
-                                 </a>
-                              </li>
-                           </c:forEach>
-                           <li class="page-item">
-                              <a class="page-link "
-                                 href="<c:url value = "/experiences/${categoryName}/${experience.experienceId}">
-                                       <c:param name = "pageNum" value = "${totalPages}"/>
-                                 </c:url>">
-                                 <spring:message code="pagination.end"/>
-                              </a>
-                           </li>
-                        </ul>
-                     </div>
-
-
-                  </c:when>
-                  <c:otherwise>
-                     <div class="d-flex justify-content-center mb-2" style="font-size: x-large;">
-                        <spring:message code="review.noReviews"/>
-                     </div>
-                  </c:otherwise>
-               </c:choose>
+                        </c:forEach>
+                        <li class="page-item">
+                           <a class="page-link "
+                              href="<c:url value = "/experiences/${categoryName}/${experience.experienceId}">
+                                          <c:param name = "pageNum" value = "${totalPages}"/>
+                                    </c:url>">
+                              <spring:message code="pagination.end"/>
+                           </a>
+                        </li>
+                     </ul>
+                  </div>
+               </c:if>
             </div>
          </div>
 

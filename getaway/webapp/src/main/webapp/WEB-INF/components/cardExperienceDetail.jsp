@@ -5,13 +5,6 @@
 <div class="card mx-5 my-3 p-4">
    <div class="card-title d-flex justify-content-center align-content-center">
 
-      <c:if test="${param.success}">
-         <div id="snackbar"><spring:message code="experienceDetail.success"/></div>
-      </c:if>
-      <c:if test="${param.successReview}">
-         <div id="snackbar"><spring:message code="reviewDetail.success"/></div>
-      </c:if>
-
       <h1>
          <c:out value="${param.name}"/>
       </h1>
@@ -129,6 +122,6 @@
    </div>
 </div>
 
-<link href="<c:url value = "/resources/css/snackbar.css"/>" rel="stylesheet" type="text/css"/>
+
 <script src='<c:url value="/resources/js/expParse.js"/>'></script>
 <script src='<c:url value="/resources/js/snackbar.js"/>'></script>
