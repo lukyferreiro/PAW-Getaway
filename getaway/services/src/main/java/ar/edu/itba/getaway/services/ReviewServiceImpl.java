@@ -168,7 +168,7 @@ public class ReviewServiceImpl implements ReviewService {
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
 
-            total_pages = (int) Math.ceil((double) total / PAGE_SIZE);
+            total_pages = (int) Math.ceil((double) total / USER_PAGE_SIZE);
 
             LOGGER.debug("Max page calculated: {}", total_pages);
 
@@ -177,7 +177,7 @@ public class ReviewServiceImpl implements ReviewService {
             } else if (page < 0) {
                 page = 1;
             }
-            reviewUserModelList = reviewDao.getReviewsByUserId(userId, page, PAGE_SIZE);
+            reviewUserModelList = reviewDao.getReviewsByUserId(userId, page, USER_PAGE_SIZE);
         } else {
             total_pages = 1;
         }

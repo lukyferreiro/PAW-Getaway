@@ -71,7 +71,7 @@
                         </div>
                      </c:forEach>
 
-                     <div class="mt-auto d-flex justify-content-center align-items-center">
+                     <div class="d-flex justify-content-center align-content-center">
                         <ul class="pagination m-0">
                            <li class="page-item">
                               <a class="page-link "
