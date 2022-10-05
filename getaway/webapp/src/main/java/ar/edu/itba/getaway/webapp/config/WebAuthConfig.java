@@ -93,12 +93,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //User
                 .antMatchers(HttpMethod.GET,"/search_result/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/search_result/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/user/profile/**").authenticated()
                 .antMatchers(HttpMethod.GET,"/user/profile/edit/**").hasRole("VERIFIED")
                 .antMatchers(HttpMethod.POST,"/user/profile/edit/**").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.GET,"/user/profile/**").authenticated()
                 .antMatchers(HttpMethod.GET,"/user/experiences/**").hasRole("PROVIDER")
                 .antMatchers(HttpMethod.GET,"/user/favourites/**").authenticated()
-                .antMatchers(HttpMethod.GET,"/user/reviews/**").authenticated()
+                .antMatchers(HttpMethod.GET,"/user/reviews/**").hasRole("VERIFIED")
                 .antMatchers("/user/profileImage/{imageId:[0-9]+}/**").permitAll()
 //              ------------------------------SE USA @PreAuthorize-------------------------------
 //                .antMatchers(HttpMethod.GET,"/user/experiences/delete/{experienceId:[0-9]+").access("...")
@@ -112,16 +112,16 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //Experiences
                 .antMatchers(HttpMethod.GET,"/create_experience/**").hasRole("VERIFIED")
                 .antMatchers(HttpMethod.POST,"/create_experience/**").hasRole("VERIFIED")
-                .antMatchers(HttpMethod.GET,"/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/experiences/{experienceId:[0-9]+}/image/**").permitAll()
                 //Reviews
                 .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review/**").hasRole("VERIFIED")
                 .antMatchers(HttpMethod.POST, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review/**").hasRole("VERIFIED")
+                //PermitAll Experiences
+                .antMatchers(HttpMethod.GET,"/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/experiences/{experienceId:[0-9]+}/image/**").permitAll()
                 //else
                 .antMatchers("/**").permitAll()
-
             .and().formLogin()
                 .loginPage("/login")
                 .usernameParameter("email")

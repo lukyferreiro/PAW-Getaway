@@ -48,10 +48,12 @@
                         <img src="<c:url value="/resources/images/ic_fav.svg"/>" alt="Icono favoritos">
                         <spring:message code="navbar.favourites"/>
                      </a>
-                     <a class="dropdown-item" href="<c:url value="/user/reviews"/>">
-                        <img src="<c:url value="/resources/images/ic_review.svg"/>" alt="Icono reseñas">
-                        <spring:message code="navbar.reviews"/>
-                     </a>
+                     <c:if test="${loggedUser.hasRole('VERIFIED')}">
+                        <a class="dropdown-item" href="<c:url value="/user/reviews"/>">
+                           <img src="<c:url value="/resources/images/ic_review.svg"/>" alt="Icono reseñas">
+                           <spring:message code="navbar.reviews"/>
+                        </a>
+                     </c:if>
                      <a class="dropdown-item" href="<c:url value="/logout"/>">
                         <img src="<c:url value="/resources/images/ic_logout.svg"/>" alt="Icono cerrar sesion">
                         <spring:message code="navbar.logout"/>
