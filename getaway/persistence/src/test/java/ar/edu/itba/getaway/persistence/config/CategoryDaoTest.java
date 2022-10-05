@@ -69,4 +69,8 @@ public class CategoryDaoTest {
         assertTrue(categoryModel.isPresent());
         assertEquals(CATEGORY_5, categoryModel.get());
     }
+
+    @Test public void getCategoriesCount() {
+        assertEquals(Optional.of(CATEGORIES.size()).get(), categoryDao.getCategoriesCount());
+    }
 }

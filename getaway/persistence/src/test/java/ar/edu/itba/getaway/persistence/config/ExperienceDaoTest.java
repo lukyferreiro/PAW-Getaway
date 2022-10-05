@@ -75,7 +75,6 @@ public class ExperienceDaoTest {
         assertNull(experienceModel.getSiteUrl());
         assertNull(experienceModel.getPrice());
         assertEquals("owner@mail.com", experienceModel.getEmail());
-        //TODO corregir
         assertEquals(new Long(1), experienceModel.getCityId());
         assertEquals(new Long(1), experienceModel.getCategoryId());
         assertEquals(new Long(1), experienceModel.getUserId());
@@ -95,7 +94,6 @@ public class ExperienceDaoTest {
         assertEquals("newsite", experienceModel.getSiteUrl());
         assertEquals("newemail", experienceModel.getEmail());
         assertEquals(new Double(235), experienceModel.getPrice());
-        //TODO check
         assertEquals(new Long(2), experienceModel.getCityId());
         assertEquals(new Long(2), experienceModel.getCategoryId());
         assertEquals(new Long(1), experienceModel.getUserId());
@@ -213,7 +211,6 @@ public class ExperienceDaoTest {
         List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, 1750.0, 3L, 2L, NO_ORDER, 1, PAGE_SIZE);
 
         assertTrue(experienceModelList.isEmpty());
-        //TODO CHECK
         assertFalse(experienceModelList.contains(DEFAULT_ADV));
         assertFalse(experienceModelList.contains(DEFAULT_ADV2));
         assertFalse(experienceModelList.contains(DEFAULT_ADV3));
@@ -223,7 +220,6 @@ public class ExperienceDaoTest {
     public void testListByBestRanked() {
         List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByBestRanked(1L);
 
-        //TODO CHEQUEAR
         assertFalse(experienceModelList.isEmpty());
         assertEquals( DEFAULT_ADV3, experienceModelList.get(0));
         assertEquals( DEFAULT_ADV2, experienceModelList.get(1));
@@ -231,13 +227,19 @@ public class ExperienceDaoTest {
     }
 
     @Test
-    public void testListFavsByUserId() {
+    public void testListExperiencesFavsByUserId() {
         List<ExperienceModel> experienceModelList = experienceDao.listExperiencesFavsByUserId(1L, NO_ORDER, 1, 6);
 
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
         assertTrue(experienceModelList.contains(DEFAULT_NIG));
         assertFalse(experienceModelList.contains(DEFAULT_ADV2));
+    }
+
+    @Test
+    public void testGetCountExperiencesFavsByUserId() {
+        Integer count = experienceDao.getCountExperiencesFavsByUserId(1L);
+        assertEquals(Optional.of(2).get(), count );
     }
 
     @Test
@@ -256,4 +258,13 @@ public class ExperienceDaoTest {
         assertEquals(new Integer(3), experienceDao.getCountByName("testave"));
     }
 
+    @Test
+    public void testHasExperiencesByUserIdTrue(){
+        assertFalse(experienceDao.hasExperiencesByUserId(1L));
+    }
+
+    @Test
+    public void testHasExperiencesByUserIdFalse() {
+        assertTrue(experienceDao.hasExperiencesByUserId(3L));
+    }
 }
