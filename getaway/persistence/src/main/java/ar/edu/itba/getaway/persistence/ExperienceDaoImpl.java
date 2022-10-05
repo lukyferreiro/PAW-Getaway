@@ -218,14 +218,14 @@ public class ExperienceDaoImpl implements ExperienceDao {
         else {
             orderQuery = " ";
         }
-        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experienceName LIKE ? GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=0 " + orderQuery + " LIMIT ? OFFSET ?";
+        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE LOWER(experienceName) LIKE LOWER(?) GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=0 " + orderQuery + " LIMIT ? OFFSET ?";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.query(query, new Object[]{'%'+name+'%', page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
     }
 
     @Override
     public Integer getCountByName(String name) {
-        final String query = "SELECT COALESCE(COUNT (experienceName), 1) FROM experiences WHERE experienceName LIKE ? ";
+        final String query = "SELECT COALESCE(COUNT (experienceName), 1) FROM experiences WHERE LOWER(experienceName) LIKE LOWER(?) ";
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.queryForObject(query, new Object[]{'%'+name+'%'}, Integer.class);
     }
