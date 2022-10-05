@@ -13,7 +13,7 @@
       <div class="container-main">
          <%@ include file="../components/navbar.jsp" %>
 
-         <div class="container-fluid p-0 h-100 w-100 d-flex justify-content-center align-items-center">
+         <div class="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
             <div class="container-lg w-100 modalContainer d-flex flex-column justify-content-center align-items-center">
                <c:url value="${endpoint}" var="postPath"/>
                <form:form modelAttribute="reviewForm" action="${postPath}" id="submitForm" method="post" acceptCharset="UTF-8"

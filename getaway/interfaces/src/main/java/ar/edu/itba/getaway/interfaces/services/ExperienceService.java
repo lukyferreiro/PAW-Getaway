@@ -20,4 +20,5 @@ public interface ExperienceService {
     Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page);
     List<List<ExperienceModel>> getExperiencesListByCategories();
     List<List<ExperienceModel>> getExperiencesListByCategoriesByUserId(Long userId);
+    boolean hasExperiencesByUserId(Long userId);
 }

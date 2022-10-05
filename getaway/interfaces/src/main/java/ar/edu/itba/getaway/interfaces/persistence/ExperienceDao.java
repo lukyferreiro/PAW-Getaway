@@ -20,4 +20,5 @@ public interface ExperienceDao {
     Integer getCountExperiencesFavsByUserId(Long userId);
     List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, Integer page_size);
     Integer getCountByName(String name);
+    boolean hasExperiencesByUserId(Long userId);
 }

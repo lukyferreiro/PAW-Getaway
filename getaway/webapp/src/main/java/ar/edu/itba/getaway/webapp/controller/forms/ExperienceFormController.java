@@ -40,8 +40,6 @@ public class ExperienceFormController {
     private LocationService locationService;
     @Autowired
     private UserService userService;
-//    @Autowired
-//    private ForceLogin forceLogin;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceFormController.class);
 
@@ -101,10 +99,11 @@ public class ExperienceFormController {
         final byte[] image = (experienceImg.isEmpty()) ? null : experienceImg.getBytes();
         final ExperienceModel experienceModel = experienceService.createExperience(form.getExperienceName(), form.getExperienceAddress(), description,
                 form.getExperienceMail(), url, price, cityId, categoryId + 1, userId, image);
-        if(!user.hasRole("PROVIDER")){
-            LOGGER.debug("Updating SpringContextHolder");
-            forceLogin(user, request);
-        }
+//        if(!user.hasRole("PROVIDER")){
+        final UserModel userModelProvider = userService.getUserByExperienceId(experienceService.getExperienceById(experienceModel.getExperienceId()).get().getExperienceId()).get();
+        LOGGER.debug("Updating SpringContextHolder");
+        forceLogin(userModelProvider, request);
+//        }
         return new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
     }
 

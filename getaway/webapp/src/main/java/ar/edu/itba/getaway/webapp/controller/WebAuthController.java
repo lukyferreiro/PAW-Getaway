@@ -35,8 +35,6 @@ public class WebAuthController {
 
     @Autowired
     private UserService userService;
-//    @Autowired
-//    private ForceLogin forceLogin;
     @Autowired
     private MessageSource messageSource;
 

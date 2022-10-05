@@ -106,13 +106,12 @@ public class UserExperiencesController {
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         favExperienceService.setFav(user.getUserId(), set, experience);
         final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(user.getUserId());
-        mav.addObject("favExperienceModels", favExperienceModels);
-
-
         final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategoriesByUserId(user.getUserId());
         final List<List<Long>> avgReviews = reviewService.getListOfAverageScoreByExperienceListAndCategoryId(listByCategory);
         final List<List<Integer>> listReviewsCount = reviewService.getListOfReviewCountByExperienceListAndCategoryId(listByCategory);
+        final boolean hasExperiences = experienceService.hasExperiencesByUserId(user.getUserId());
 
+        mav.addObject("hasExperiences", hasExperiences);
         mav.addObject("listByCategory", listByCategory);
         mav.addObject("favExperienceModels", favExperienceModels);
         mav.addObject("avgReviews", avgReviews);

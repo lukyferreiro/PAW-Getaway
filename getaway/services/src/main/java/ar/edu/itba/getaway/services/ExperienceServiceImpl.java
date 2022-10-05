@@ -35,14 +35,14 @@ public class ExperienceServiceImpl implements ExperienceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 
     @Override
-    public ExperienceModel createExperience (String name, String address, String description, String email, String url, Double price, Long cityId, Long categoryId, Long userId, byte[] image) {
+    public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, Long cityId, Long categoryId, Long userId, byte[] image) {
         LOGGER.debug("Creating experience with name {}", name);
         final ExperienceModel experienceModel = experienceDao.createExperience(name, address, description, email, url, price, cityId, categoryId, userId);
         final ImageExperienceModel imageExperienceModel = imageService.createExperienceImg(image, experienceModel.getExperienceId(), true);
         experienceModel.setHasImage(image != null);
         experienceModel.setImageExperienceId(imageExperienceModel.getImageId());
         final UserModel usermodel = userService.getUserById(experienceModel.getUserId()).get();
-        if(!usermodel.getRoles().contains(Roles.PROVIDER)){
+        if (!usermodel.getRoles().contains(Roles.PROVIDER)) {
             LOGGER.debug("User gains role provider when creates an experience for first time");
             userService.addRole(userId, Roles.PROVIDER);
         }
@@ -82,7 +82,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public List<ExperienceModel> listExperiencesByUserId(Long userId, Long categoryId) {
         LOGGER.debug("Retrieving experiences created by user with id {}", userId);
-        return experienceDao.listExperiencesByUserId(userId,  categoryId);
+        return experienceDao.listExperiencesByUserId(userId, categoryId);
     }
 
     @Override
@@ -91,20 +91,19 @@ public class ExperienceServiceImpl implements ExperienceService {
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {} ", page);
-        try{
+        try {
             int total = experienceDao.countListByFilter(categoryId, max, score, city);
-            total_pages = (int) Math.ceil( (double) total/ PAGE_SIZE);
+            total_pages = (int) Math.ceil((double) total / PAGE_SIZE);
 
             LOGGER.debug("Total pages calculated: {}", total_pages);
 
             if (page > total_pages) {
                 page = total_pages;
-            }
-            else if (page < 0){
+            } else if (page < 0) {
                 page = 1;
             }
 
-            experienceModelList  = experienceDao.listExperiencesByFilter(categoryId, max, score, city, order, page, PAGE_SIZE);
+            experienceModelList = experienceDao.listExperiencesByFilter(categoryId, max, score, city, order, page, PAGE_SIZE);
         } catch (EmptyResultDataAccessException e) {
             total_pages = 1;
         }
@@ -134,22 +133,20 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         Integer total = experienceDao.getCountExperiencesFavsByUserId(userId);
 
-        if(total>0){
+        if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
 
-            total_pages = (int) Math.ceil( (double) total/ RESULT_PAGE_SIZE);
+            total_pages = (int) Math.ceil((double) total / RESULT_PAGE_SIZE);
 
             LOGGER.debug("Max page calculated: {}", total_pages);
 
             if (page > total_pages) {
                 page = total_pages;
-            }
-            else if (page < 0){
+            } else if (page < 0) {
                 page = 1;
             }
-            experienceModelList  = experienceDao.listExperiencesFavsByUserId(userId, order, page, RESULT_PAGE_SIZE);
-        }
-        else {
+            experienceModelList = experienceDao.listExperiencesFavsByUserId(userId, order, page, RESULT_PAGE_SIZE);
+        } else {
             total_pages = 1;
         }
 
@@ -158,7 +155,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page){
+    public Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page) {
         int total_pages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
@@ -166,22 +163,20 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         int total = experienceDao.getCountByName(name);
 
-        if(total>0){
+        if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
 
-            total_pages = (int) Math.ceil( (double) total/ RESULT_PAGE_SIZE);
+            total_pages = (int) Math.ceil((double) total / RESULT_PAGE_SIZE);
 
             LOGGER.debug("Max page calculated: {}", total_pages);
 
             if (page > total_pages) {
                 page = total_pages;
-            }
-            else if (page < 0){
+            } else if (page < 0) {
                 page = 1;
             }
-            experienceModelList  = experienceDao.listExperiencesByName(name, order, page, RESULT_PAGE_SIZE);
-        }
-        else {
+            experienceModelList = experienceDao.listExperiencesByName(name, order, page, RESULT_PAGE_SIZE);
+        } else {
             total_pages = 1;
         }
 
@@ -192,6 +187,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public List<List<ExperienceModel>> getExperiencesListByCategories() {
         final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
+        LOGGER.debug("Retrieving all experiences listed by categories");
         for (int i = 0; i < categoryService.getCategoriesCount(); i++) {
             listExperiencesByCategory.add(new ArrayList<>());
             listExperiencesByCategory.get(i).addAll(listExperiencesByBestRanked((long) (i + 1)));
@@ -202,11 +198,18 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public List<List<ExperienceModel>> getExperiencesListByCategoriesByUserId(Long userId) {
         final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
+        LOGGER.debug("Retrieving all experiences listed by categories of the user with id {}", userId);
         for (int i = 0; i < categoryService.getCategoriesCount(); i++) {
             listExperiencesByCategory.add(new ArrayList<>());
             listExperiencesByCategory.get(i).addAll(listExperiencesByUserId(userId, (long) (i + 1)));
         }
         return listExperiencesByCategory;
+    }
+
+    @Override
+    public boolean hasExperiencesByUserId(Long userId) {
+        LOGGER.debug("Retrieving whether the user with id {} has experiences l", userId);
+        return experienceDao.hasExperiencesByUserId(userId);
     }
 
 }
