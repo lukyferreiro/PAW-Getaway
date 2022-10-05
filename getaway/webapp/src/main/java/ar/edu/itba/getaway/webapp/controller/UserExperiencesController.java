@@ -242,7 +242,7 @@ public class UserExperiencesController {
         final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
         final String description = (form.getExperienceInfo().isEmpty()) ? null : form.getExperienceInfo();
         final String url = (form.getExperienceUrl().isEmpty()) ? null : form.getExperienceUrl();
-        final byte[] image = (experienceImg.isEmpty()) ? null : experienceImg.getBytes();
+        final byte[] image = (experienceImg.isEmpty()) ? imageModel.getImage() : experienceImg.getBytes();
 
         final ExperienceModel experienceModel = new ExperienceModel(experienceId, form.getExperienceName(), form.getExperienceAddress(),
                 description, form.getExperienceMail(), url, price, cityId, categoryId + 1, userId, imgId, image!=null);
