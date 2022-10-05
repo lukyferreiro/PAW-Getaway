@@ -2,7 +2,6 @@ package ar.edu.itba.getaway.persistence.config;
 
 import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
 import ar.edu.itba.getaway.models.PasswordResetToken;
-import net.bytebuddy.asm.Advice;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,17 +25,17 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = TestConfig.class)
 @Sql(scripts = "classpath:password-reset-token-dao-test.sql")
 public class PasswordResetTokenDaoTest {
-
-    @Autowired
-    private PasswordResetTokenDao passwordResetTokenDao;
-
-
+    /**Data for tests**/
     private final String token1 = "12345";
     private final String token2 = "6789x";
     private final Long id1 = Long.valueOf(1);
     private final Long Uid2 = Long.valueOf(2);
 
     private static final LocalDateTime EXPIRATION_DATE = LocalDateTime.of(2021, 5, 29, 12, 30);
+    /****/
+
+    @Autowired
+    private PasswordResetTokenDao passwordResetTokenDao;
 
     @Autowired
     private DataSource ds;
@@ -78,7 +77,7 @@ public class PasswordResetTokenDaoTest {
     @Test
     @Rollback
     public void testRemoveTokenByUserId() {
-        passwordResetTokenDao.removeTokenById(id1);
+        passwordResetTokenDao.removeTokenByUserId(id1);
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "passwordresettoken", "passtokenuserid = " + id1));
     }
 }
