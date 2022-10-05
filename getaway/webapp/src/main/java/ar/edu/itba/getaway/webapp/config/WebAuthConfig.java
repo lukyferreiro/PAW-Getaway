@@ -79,11 +79,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/register/**").anonymous()
                 .antMatchers("/access-denied/**").permitAll()
                 //Verify Account
-                .antMatchers("/user/verifyAccount/{token}/**").permitAll()
-                .antMatchers("/user/verifyAccount/status/send/**").hasRole("NOT_VERIFIED")
-                .antMatchers("/user/verifyAccount/status/resend/**").hasRole("NOT_VERIFIED")
                 .antMatchers("/user/verifyAccount/result/unsuccessfully/**").hasRole("NOT_VERIFIED")
+                .antMatchers("/user/verifyAccount/status/resend/**").hasRole("NOT_VERIFIED")
+                .antMatchers("/user/verifyAccount/status/send/**").hasRole("NOT_VERIFIED")
                 .antMatchers("/user/verifyAccount/result/successfully/**").hasRole("VERIFIED")
+                .antMatchers("/user/verifyAccount/{token}/**").permitAll()
                 //Reset Password
                 .antMatchers(HttpMethod.GET,"/user/resetPasswordRequest/**").anonymous()
                 .antMatchers(HttpMethod.POST,"/user/resetPasswordRequest/**").anonymous()
