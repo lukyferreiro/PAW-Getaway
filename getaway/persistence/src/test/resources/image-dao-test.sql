@@ -6,9 +6,11 @@ TRUNCATE TABLE categories RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE images RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE imagesExperiences RESTART IDENTITY AND COMMIT NO CHECK;
 
--- Add at least three users (in case we limit 1 review per experience per user)
-INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (1, 'owner', 'user', 'owner@mail.com', null, 'contra1');
-INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (2, 'owner2', 'user2', 'owner2@mail.com', null, 'contra2');
+INSERT INTO images(imgid, imageObject) VALUES(10, null);
+INSERT INTO images(imgid, imageObject) VALUES(11, null);
+
+INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (1, 'owner', 'user', 'owner@mail.com', 10, 'contra1');
+INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (2, 'owner2', 'user2', 'owner2@mail.com', 11, 'contra2');
 
 -- Populate categories
 INSERT INTO categories(categoryname) VALUES ('Aventura');
@@ -30,8 +32,6 @@ INSERT INTO images(imgid, imageObject) VALUES(1, null);
 INSERT INTO images(imgid, imageObject) VALUES(5, null);
 INSERT INTO images(imgid, imageObject) VALUES(8, null);
 
--- Add 1 experience of each category
--- Add 3 to adventure with different price ranges and cities for filter testing
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
 VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 1, 'owner@mail.com');
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
@@ -42,3 +42,4 @@ VALUES (8, 'testaventura3', 2000, 'diraventura3', null, null, 2, 1, 2, 'owner2@m
 -- Add imagesExperiences for consistency
 INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (1,1,true);
 INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (5,5,true);
+INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (8,8,true);

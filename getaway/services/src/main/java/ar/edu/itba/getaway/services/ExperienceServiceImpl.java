@@ -43,7 +43,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         experienceModel.setImageExperienceId(imageExperienceModel.getImageId());
         final UserModel usermodel = userService.getUserById(experienceModel.getUserId()).get();
         if (!usermodel.getRoles().contains(Roles.PROVIDER)) {
-            LOGGER.debug("User gains role provider when creates an experience for first time");
+            LOGGER.debug("User gains role provider when they creates an experience for first time");
             userService.addRole(userId, Roles.PROVIDER);
         }
         return experienceModel;

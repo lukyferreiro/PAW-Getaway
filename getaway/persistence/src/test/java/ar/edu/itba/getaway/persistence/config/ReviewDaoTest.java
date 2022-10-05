@@ -83,7 +83,7 @@ public class ReviewDaoTest {
     }
 
     @Test
-    public void testGetAverageScore() {
+    public void testGetReviewAverageScore() {
         Long adv1Review = reviewDao.getReviewAverageScore(1L);
         Long adv2Review = reviewDao.getReviewAverageScore(7L);
         Long adv3Review = reviewDao.getReviewAverageScore(8L);
@@ -113,14 +113,14 @@ public class ReviewDaoTest {
     }
 
     @Test
-    public void testGetById() {
+    public void testGetReviewById() {
         final Optional<ReviewModel> reviewModel = reviewDao.getReviewById(1L);
         assertTrue(reviewModel.isPresent());
         assertEquals(R1, reviewModel.get());
     }
 
     @Test
-    public void testGetByUserId() {
+    public void testGetReviewsByUserId() {
         final List<ReviewUserModel> reviewModelList = reviewDao.getReviewsByUserId(1L,1,PAGE_SIZE);
         assertFalse(reviewModelList.isEmpty());
         assertTrue(reviewModelList.contains(U1R1));
