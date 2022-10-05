@@ -217,6 +217,7 @@ public class UserExperiencesController {
         LOGGER.debug("Endpoint POST {}", request.getServletPath());
 
         if (errors.hasErrors()) {
+            form.setExperienceCategory(form.getExperienceCategory()+1);
             return experienceEdit(experienceId, form, searchForm, request);
         }
 
@@ -224,9 +225,11 @@ public class UserExperiencesController {
         if(!experienceImg.isEmpty()) {
             if (!contentTypes.contains(experienceImg.getContentType())) {
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageFormat");
+                form.setExperienceCategory(form.getExperienceCategory()+1);
                 return experienceEdit(experienceId, form, searchForm ,request);
             }
             if(experienceImg.getSize()>MAX_SIZE_PER_FILE){
+                form.setExperienceCategory(form.getExperienceCategory()+1);
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageSize");
                 return experienceEdit(experienceId, form, searchForm ,request);
             }

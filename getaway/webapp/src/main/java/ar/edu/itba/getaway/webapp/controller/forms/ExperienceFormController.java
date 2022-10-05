@@ -76,12 +76,14 @@ public class ExperienceFormController {
         LOGGER.debug("User tries to create an experience with category id: {}", form.getExperienceCategory());
 
         if (errors.hasErrors()) {
+            form.setExperienceCategory(form.getExperienceCategory()+1);
             return createExperienceForm(form, searchForm, request);
         }
 
         final MultipartFile experienceImg = form.getExperienceImg();
         if (!experienceImg.isEmpty()) {
             if (!contentTypes.contains(experienceImg.getContentType())) {
+                form.setExperienceCategory(form.getExperienceCategory()+1);
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageFormat");
                 return createExperienceForm(form, searchForm, request);
             }
