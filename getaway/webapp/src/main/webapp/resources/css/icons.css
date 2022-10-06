@@ -34,12 +34,12 @@
     color: lightgrey;
 }
 
-.fas.fa-heart.heart-color {
+.fas.fa-heart.heart-color, .fa.fa-heart-o:hover {
     color: red;
     font-size: xx-large;
 }
 
-.fas.fa-heart {
+.fa-light.fa-heart {
     color: grey;
     font-size: xx-large;
 }

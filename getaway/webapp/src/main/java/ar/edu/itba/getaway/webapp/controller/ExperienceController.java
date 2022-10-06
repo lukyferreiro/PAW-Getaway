@@ -32,6 +32,8 @@ public class ExperienceController {
     @Autowired
     private LocationService locationService;
     @Autowired
+    private CategoryService categoryService;
+    @Autowired
     private ReviewService reviewService;
     @Autowired
     private FavExperienceService favExperienceService;
@@ -184,6 +186,8 @@ public class ExperienceController {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
+        //This declaration of category is in order to check if the categoryName it's valid
+        final CategoryModel category = categoryService.getCategoryByName(categoryName).orElseThrow(CategoryNotFoundException::new);
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final String dbCategoryName = ExperienceCategory.valueOf(categoryName).name();
 

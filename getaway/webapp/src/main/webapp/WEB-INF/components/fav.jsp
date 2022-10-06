@@ -13,30 +13,30 @@
 <c:choose>
    <c:when test="${fav}">
       <a href="<c:url value="${param.path}">
-                 <c:choose>
-                    <c:when test="${param.search}">
-                       <c:param name="query" value="${param.query}"/>
-                    </c:when>
-                    <c:when test="${param.filter}">
-                       <c:param name="score" value="${param.score}"/>
-                       <c:param name="cityId" value="${param.cityId}"/>
-                       <c:param name="maxPrice" value="${param.maxPrice}"/>
-                    </c:when>
-                    <c:otherwise>
-                    </c:otherwise>
-                 </c:choose>
-                 <c:choose>
-                     <c:when test="${param.pageNum != null}">
-                        <c:param name="orderBy" value="${param.orderBy}"/>
-                       <c:param name="pageNum" value="${param.pageNum}"/>
-                    </c:when>
-                    <c:otherwise>
-                    </c:otherwise>
-                 </c:choose>
+           <c:choose>
+              <c:when test="${param.search}">
+                 <c:param name="query" value="${param.query}"/>
+              </c:when>
+              <c:when test="${param.filter}">
+                 <c:param name="score" value="${param.score}"/>
+                 <c:param name="cityId" value="${param.cityId}"/>
+                 <c:param name="maxPrice" value="${param.maxPrice}"/>
+              </c:when>
+              <c:otherwise>
+              </c:otherwise>
+           </c:choose>
+           <c:choose>
+               <c:when test="${param.pageNum != null}">
+                  <c:param name="orderBy" value="${param.orderBy}"/>
+                 <c:param name="pageNum" value="${param.pageNum}"/>
+              </c:when>
+              <c:otherwise>
+              </c:otherwise>
+           </c:choose>
 
-                  <c:param name="set" value="${false}"/>
-                  <c:param name="experience" value="${param.experienceId}"/>
-              </c:url>"
+            <c:param name="set" value="${false}"/>
+            <c:param name="experience" value="${param.experienceId}"/>
+        </c:url>"
       >
          <button type="button" class="btn btn-fav" id="setFalse">
             <i class="fas fa-heart heart-color"></i>
@@ -45,27 +45,27 @@
    </c:when>
    <c:otherwise>
       <a href="<c:url value="${param.path}">
-                 <c:choose>
-                    <c:when test="${param.search}">
-                       <c:param name="query" value="${param.query}"/>
-                    </c:when>
-                    <c:when test="${param.filter}">
-                       <c:param name="score" value="${param.score}"/>
-                       <c:param name="cityId" value="${param.cityId}"/>
-                       <c:param name="maxPrice" value="${param.maxPrice}"/>
-                    </c:when>
-                 </c:choose>
-                     <c:if test="${param.pageNum != null}">
-                        <c:param name="orderBy" value="${param.orderBy}"/>
-                       <c:param name="pageNum" value="${param.pageNum}"/>
-                    </c:if>
+           <c:choose>
+              <c:when test="${param.search}">
+                 <c:param name="query" value="${param.query}"/>
+              </c:when>
+              <c:when test="${param.filter}">
+                 <c:param name="score" value="${param.score}"/>
+                 <c:param name="cityId" value="${param.cityId}"/>
+                 <c:param name="maxPrice" value="${param.maxPrice}"/>
+              </c:when>
+           </c:choose>
+               <c:if test="${param.pageNum != null}">
+                  <c:param name="orderBy" value="${param.orderBy}"/>
+                 <c:param name="pageNum" value="${param.pageNum}"/>
+              </c:if>
 
-                  <c:param name="set" value="${true}"/>
-                  <c:param name="experience" value="${param.experienceId}"/>
-              </c:url>"
+            <c:param name="set" value="${true}"/>
+            <c:param name="experience" value="${param.experienceId}"/>
+        </c:url>"
       >
          <button type="button" class="btn btn-fav" id="setTrue">
-            <i class="fas fa-heart"></i>
+            <i class="fa fa-heart-o"></i>
          </button>
       </a>
    </c:otherwise>

@@ -14,7 +14,7 @@
          <%@ include file="../components/navbar.jsp" %>
 
          <c:choose>
-            <c:when test="${experiences.size() == 0}">
+            <c:when test="${experiences.size() == 0 || query == null}">
                <div class="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
                   <div class="d-flex justify-content-center align-content-center">
                      <img src="<c:url value="/resources/images/ic_no_search.jpeg"/>" alt="Imagen lupa" style="width: 150px; height:150px; min-width: 150px; min-height: 150px; margin-right: 5px;">
