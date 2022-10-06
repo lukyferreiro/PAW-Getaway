@@ -65,7 +65,8 @@
         </c:url>"
       >
          <button type="button" class="btn btn-fav" id="setTrue">
-            <i class="fa fa-heart-o"></i>
+            <i class="fa fa-heart-o" onmouseover="this.className = 'fas fa-heart heart-color';"
+                                     onmouseleave="this.className = 'fa fa-heart-o';"></i>
          </button>
       </a>
    </c:otherwise>
