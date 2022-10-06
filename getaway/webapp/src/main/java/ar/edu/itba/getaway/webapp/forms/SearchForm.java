@@ -1,12 +1,10 @@
 package ar.edu.itba.getaway.webapp.forms;
 
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class SearchForm {
 
-    @Size(max = 255)
-    @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'·#$%&=:¿?!¡/.-]*$")
+    @Size(min=1, max = 255)
     private String query;
 
     public String getQuery() {
