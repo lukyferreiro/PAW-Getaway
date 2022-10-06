@@ -208,7 +208,6 @@ public class ExperienceController {
         mav.addObject("dbCategoryName", dbCategoryName);
         mav.addObject("experience", experience);
         mav.addObject("reviews", reviews);
-        mav.addObject("isEditing", false);
         mav.addObject("listReviewsHasImages", listReviewsHasImages);
         mav.addObject("avgScore", avgScore);
         mav.addObject("reviewCount", reviewCount);
@@ -224,15 +223,20 @@ public class ExperienceController {
 
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+            boolean belongsToUser;
             if (user.isPresent()) {
                 final Long userId = user.get().getUserId();
                 favExperienceService.setFav(userId, set, Optional.of(experienceId));
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
 
                 mav.addObject("favExperienceModels", favExperienceModels);
+                mav.addObject("isEditing", experienceService.experiencesBelongsToId(userId,experienceId));
+            }else {
+                mav.addObject("isEditing", false);
             }
         } else {
             mav.addObject("favExperienceModels", new ArrayList<>());
+            mav.addObject("isEditing", false);
         }
 
         return mav;

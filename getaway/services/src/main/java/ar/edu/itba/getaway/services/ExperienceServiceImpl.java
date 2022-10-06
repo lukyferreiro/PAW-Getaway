@@ -212,4 +212,9 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.hasExperiencesByUserId(userId);
     }
 
+    @Override
+    public boolean experiencesBelongsToId(Long userId, Long experienceId) {
+        return experienceDao.experiencesBelongsToId(userId,experienceId);
+    }
+
 }

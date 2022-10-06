@@ -236,4 +236,11 @@ public class ExperienceDaoImpl implements ExperienceDao {
         LOGGER.debug("Executing query: {}", query);
         return jdbcTemplate.queryForObject(query, new Object[]{userId}, Integer.class) == 0;
     }
+
+    @Override
+    public boolean experiencesBelongsToId(Long userId, Long experienceId){
+        final String query = "SELECT COUNT(*) FROM experiences WHERE userId = ? AND experienceid = ? ";
+        LOGGER.debug("Executing query: {}", query);
+        return jdbcTemplate.queryForObject(query, new Object[]{userId, experienceId}, Integer.class) == 0;
+    }
 }

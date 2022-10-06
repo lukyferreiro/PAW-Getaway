@@ -3,18 +3,8 @@
     height: fit-content;
 }
 
-.card-experience:hover {
-    transform: scale(1.02);
-    transition: 0.3s;
-    box-shadow: -0.5rem 0 2rem grey;
-}
-
 .card-link {
     text-decoration: none;
-    color: black;
-}
-
-.card-link:hover, .card-link:focus {
     color: black;
 }
 
@@ -29,4 +19,15 @@
     bottom: 5px;
     right: 5px;
     padding: 3px;
+}
+
+.card-title:hover{
+    transform: scale(1.02);
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.card-title{
+    color: black;
+    text-decoration: none;
 }

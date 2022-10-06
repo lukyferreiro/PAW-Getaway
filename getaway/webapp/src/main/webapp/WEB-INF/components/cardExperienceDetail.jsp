@@ -115,6 +115,21 @@
                      <jsp:param name="avgReview" value="${param.reviewAvg}"/>
                   </jsp:include>
                </div>
+
+               <c:if test="${param.isEditing}">
+                  <div class="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
+                     <a href="<c:url value="/user/experiences/edit/${param.id}"/>">
+                        <button type="button" class="btn btn-pencil" style="font-size: x-large">
+                           <i class="bi bi-pencil"></i>
+                        </button>
+                     </a>
+                     <a href="<c:url value="/user/experiences/delete/${param.id}"/>">
+                        <button type="button" class="btn btn-trash" style="font-size: x-large">
+                           <i class="bi bi-trash"></i>
+                        </button>
+                     </a>
+                  </div>
+               </c:if>
             </div>
             <div class="col-2 p-0"></div>
          </div>

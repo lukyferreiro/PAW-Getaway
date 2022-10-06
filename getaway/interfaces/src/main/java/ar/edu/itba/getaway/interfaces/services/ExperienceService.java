@@ -21,4 +21,5 @@ public interface ExperienceService {
     List<List<ExperienceModel>> getExperiencesListByCategories();
     List<List<ExperienceModel>> getExperiencesListByCategoriesByUserId(Long userId);
     boolean hasExperiencesByUserId(Long userId);
+    boolean experiencesBelongsToId(Long userId, Long experienceId);
 }

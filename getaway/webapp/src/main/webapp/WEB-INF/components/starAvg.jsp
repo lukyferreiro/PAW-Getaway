@@ -4,13 +4,13 @@
 
 <div class="star-rating my-1">
    <c:choose>
-      <c:when test="${param.avgReview == null || param.avgReview == ''}">
-         <i class="fas fa-star"></i>
-         <i class="fas fa-star"></i>
-         <i class="fas fa-star"></i>
-         <i class="fas fa-star"></i>
-         <i class="fas fa-star"></i>
-      </c:when>
+<%--      <c:when test="${param.avgReview == null || param.avgReview == ''}">--%>
+<%--         <i class="fas fa-star"></i>--%>
+<%--         <i class="fas fa-star"></i>--%>
+<%--         <i class="fas fa-star"></i>--%>
+<%--         <i class="fas fa-star"></i>--%>
+<%--         <i class="fas fa-star"></i>--%>
+<%--      </c:when>--%>
       <c:when test="${param.avgReview == 1 || param.avgReview == '1'}">
          <i class="fas fa-star"></i>
          <i class="fas fa-star"></i>

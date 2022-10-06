@@ -21,4 +21,5 @@ public interface ExperienceDao {
     List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, Integer page_size);
     Integer getCountByName(String name);
     boolean hasExperiencesByUserId(Long userId);
+    boolean experiencesBelongsToId(Long userId, Long experienceId);
 }
