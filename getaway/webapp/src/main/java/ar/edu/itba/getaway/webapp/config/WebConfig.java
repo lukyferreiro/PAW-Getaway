@@ -12,6 +12,10 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -23,8 +27,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 @EnableTransactionManagement
 @EnableAsync
@@ -33,8 +39,14 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-    @Value("classpath:schema.sql")
-    private Resource schemaSql;
+//    @Value("classpath:schema.sql")
+//    private Resource schemaSql;
+
+    @Bean(name = "appBaseUrl")
+    public String appBaseUrl() {
+//        return "localhost";
+        return "pawserver.it.itba.edu.ar";
+    }
 
     private static final int MAX_SIZE_PER_FILE = 10000000;
 
@@ -82,19 +94,24 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return ds;
     }
 
-    @Bean
-    public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
-        final DataSourceInitializer dsi = new DataSourceInitializer();
-        dsi.setDataSource(ds);
-        dsi.setDatabasePopulator(databasePopulator());
-        return dsi;
-    }
 
-    private DatabasePopulator databasePopulator() {
-        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-        dbp.addScript(schemaSql);
-        return dbp;
-    }
+    // TODO databasePopulator y databaseInitializer pueden eliminarse de momento, mientras
+    // dejamos que hibernate administre la base de datos.
+    // Si estuviesemos usandolos para otra cosa además del setup de la base
+    // de datos, podríamos mantenerlos.
+//    @Bean
+//    public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
+//        final DataSourceInitializer dsi = new DataSourceInitializer();
+//        dsi.setDataSource(ds);
+//        dsi.setDatabasePopulator(databasePopulator());
+//        return dsi;
+//    }
+//
+//    private DatabasePopulator databasePopulator() {
+//        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
+//        dbp.addScript(schemaSql);
+//        return dbp;
+//    }
 
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
@@ -105,15 +122,38 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return multipartResolver;
     }
 
+//    @Bean
+//    public PlatformTransactionManager transactionManager(final DataSource ds) {
+//        return new DataSourceTransactionManager(ds);
+//    }
+
+
+    //-------------------------------------------
+    //----------Para la segunda entrega----------
+    //-------------------------------------------
+
+    // Cambiamos el transaction manager por uno que entienda de JPA
     @Bean
-    public PlatformTransactionManager transactionManager(final DataSource ds) {
-        return new DataSourceTransactionManager(ds);
+    public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
     }
 
-    @Bean(name = "appBaseUrl")
-    public String appBaseUrl() {
-//        return "localhost";
-        return "pawserver.it.itba.edu.ar";
+    //Para definir nuestro entity manager usando JPA, y Hibernate como implementación concreta
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+        factoryBean.setPackagesToScan("ar.edu.itba.getaway.models");
+        factoryBean.setDataSource(dataSource());
+        final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        factoryBean.setJpaVendorAdapter(vendorAdapter);
+        final Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
+        // TODO comentar esta linea para produccion
+        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("format_sql", "true");
+        factoryBean.setJpaProperties(properties);
+        return factoryBean;
     }
 
 }

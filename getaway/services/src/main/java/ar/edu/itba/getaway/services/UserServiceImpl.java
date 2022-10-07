@@ -172,4 +172,19 @@ public class UserServiceImpl implements UserService {
         userDao.addRole(userId, newRole);
     }
 
+
+    //TODO
+    //Implementamos un métodoen la capa de servicio para ordener los issues de un usuario por prioridad
+//    @Transactional
+//    @Override
+//    public void orderIssuesByPriority(final long id) {
+//        final UserHibernate user = userDao.findById(id);
+//        Collections.sort(user.getPendingFixes(), new Comparator<IssueTPE>() {
+//            @Override
+//            public int compare(final IssueTPE o1, final IssueTPE o2) {
+//                return o2.getPriority().ordinal() - o1.getPriority().ordinal();
+//            }
+//        });
+//    }
+
 }
