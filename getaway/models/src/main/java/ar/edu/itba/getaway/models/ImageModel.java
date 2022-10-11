@@ -1,18 +1,57 @@
 package ar.edu.itba.getaway.models;
 
-public class ImageModel {
-    private final Long imageId;
-    private final byte[] image;
+import javax.persistence.*;
+import java.util.Objects;
 
-    public ImageModel(Long imageId, byte[] image ) {
-        this.imageId = imageId;
+@Entity
+@Table(name = "images")
+public class ImageModel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "images_imgId_seq")
+    @SequenceGenerator(sequenceName = "images_imgId_seq", name = "images_imgId_seq", allocationSize = 1)
+    @Column(name = "imgId", nullable = false)
+    private Long imageId;
+    @Column(name = "imageObject", nullable = true, length = 30000000)
+    @Basic(fetch = FetchType.LAZY, optional = false)
+    private byte[] image;
+
+    /* default */
+    protected ImageModel() {
+        // Just for Hibernate
+    }
+
+    public ImageModel(byte[] image ) {
         this.image = image;
     }
 
     public Long getImageId() {
         return imageId;
     }
+    public void setImageId(Long imageId) {
+        this.imageId = imageId;
+    }
     public byte[] getImage() {
         return image;
+    }
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){
+            return true;
+        }
+        if (!(o instanceof ImageModel)){
+            return false;
+        }
+        ImageModel image = (ImageModel) o;
+        return this.imageId.equals(image.imageId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(imageId);
     }
 }

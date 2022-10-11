@@ -1,32 +1,69 @@
 package ar.edu.itba.getaway.models;
 
-public class ExperienceModel {
-    private final Long experienceId;
-    private String experienceName, address, description, siteUrl, categoryName, email;
-    private Double price;
-    private Long cityId, categoryId;
-    private final Long userId;
-    private Long imageExperienceId;
-    private boolean hasImage;
+import javax.persistence.*;
+import java.util.Objects;
 
-    public ExperienceModel(Long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, Long cityId, Long categoryId, Long userId, Long imageExperienceId, boolean hasImage) {
-        this.experienceId = experienceId;
+@Entity
+@Table(name = "experiences")
+public class ExperienceModel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "experiences_experienceId_seq")
+    @SequenceGenerator(sequenceName = "experiences_categoryId_seq", name = "experiences_experienceId_seq", allocationSize = 1)
+    @Column(name = "categoryId")
+    private Long experienceId;
+    @Column(name = "experienceName", nullable = false, unique = true)
+    private String experienceName;
+    @Column(name = "price", nullable = true)
+    private Double price;
+    @Column(name = "address", nullable = false, unique = true)
+    private String address;
+    @Column(name = "email", nullable = false)
+    private String email;
+    @Column(name = "description", nullable = true)
+    private String description;
+    @Column(name = "siteUrl", nullable = true)
+    private String siteUrl;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cityId", unique = true)
+    private CityModel city;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoryId")
+    private CategoryModel category;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private UserModel user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoryId")
+    private ImageExperienceModel imageExperience;
+
+    /* default */
+    protected ExperienceModel() {
+        // Just for Hibernate
+    }
+
+    public ExperienceModel(String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageExperienceModel imageExperience) {
         this.experienceName = experienceName;
         this.address = address;
         this.description = description;
         this.siteUrl = siteUrl;
         this.email = email;
-        this.categoryName = ExperienceCategory.values()[(int) (categoryId - 1)].name();
+        this.category = category;
         this.price = price;
-        this.cityId = cityId;
-        this.categoryId = categoryId;
-        this.userId = userId;
-        this.imageExperienceId = imageExperienceId;
-        this.hasImage = hasImage;
+        this.city = city;
+        this.user = user;
+        this.imageExperience = imageExperience;
     }
 
     public Long getExperienceId() {
         return experienceId;
+    }
+    public void setExperienceId(Long experienceId) {
+        this.experienceId = experienceId;
     }
     public String getExperienceName() {
         return experienceName;
@@ -34,11 +71,23 @@ public class ExperienceModel {
     public void setExperienceName(String experienceName) {
         this.experienceName = experienceName;
     }
+    public Double getPrice() {
+        return price;
+    }
+    public void setPrice(Double price) {
+        this.price = price;
+    }
     public String getAddress() {
         return address;
     }
     public void setAddress(String address) {
         this.address = address;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
     }
     public String getDescription() {
         return description;
@@ -52,50 +101,29 @@ public class ExperienceModel {
     public void setSiteUrl(String siteUrl) {
         this.siteUrl = siteUrl;
     }
-    public String getCategoryName() {
-        return categoryName;
+    public CityModel getCity() {
+        return city;
     }
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setCity(CityModel city) {
+        this.city = city;
     }
-    public String getEmail() {
-        return email;
+    public CategoryModel getCategory() {
+        return category;
     }
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCategory(CategoryModel category) {
+        this.category = category;
     }
-    public Double getPrice() {
-        return price;
+    public UserModel getUserId() {
+        return user;
     }
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setUser(UserModel user) {
+        this.user = user;
     }
-    public Long getCityId() {
-        return cityId;
+    public ImageExperienceModel getImageExperience() {
+        return imageExperience;
     }
-    public void setCityId(Long cityId) {
-        this.cityId = cityId;
-    }
-    public Long getCategoryId() {
-        return categoryId;
-    }
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-    public Long getUserId() {
-        return userId;
-    }
-    public Long getImageExperienceId() {
-        return imageExperienceId;
-    }
-    public void setImageExperienceId(Long imageExperienceId) {
-        this.imageExperienceId = imageExperienceId;
-    }
-    public boolean isHasImage() {
-        return hasImage;
-    }
-    public void setHasImage(boolean hasImage) {
-        this.hasImage = hasImage;
+    public void setImageExperience(ImageExperienceModel imageExperience) {
+        this.imageExperience = imageExperience;
     }
 
     @Override
@@ -108,6 +136,11 @@ public class ExperienceModel {
         }
         ExperienceModel other = (ExperienceModel) o;
         return this.experienceId.equals(other.experienceId) && this.experienceName.equals(other.experienceName) &&
-                this.address.equals(other.address) && this.cityId.equals(other.cityId);
+                this.address.equals(other.address) && this.city.equals(other.city);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(experienceId);
     }
 }

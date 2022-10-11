@@ -1,12 +1,24 @@
 package ar.edu.itba.getaway.models;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
+@Entity
+@Table(name = "passwordResetToken")
 public class PasswordResetToken {
 
-    private String value;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "passwordResetToken_passTokenId_seq")
+    @SequenceGenerator(sequenceName = "passwordResetToken_passTokenId_seq", name = "passwordResetToken_passTokenId_seq", allocationSize = 1)
+    @Column(name = "passTokenId")
     private Long id;
-    private Long userId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "passTokenUserId")
+    private UserModel user;
+    @Column(name = "passToken", nullable = false)
+    private String value;
+    @Column(name = "passTokenExpirationDate", nullable = false)
     private LocalDateTime expirationDate;
 
     private static final Integer TOKEN_DURATION_DAYS = 1;
@@ -15,10 +27,14 @@ public class PasswordResetToken {
         return LocalDateTime.now().plusDays(TOKEN_DURATION_DAYS);
     }
 
-    public PasswordResetToken(Long id, String value, Long userId, LocalDateTime expirationDate) {
+    /* default */
+    protected PasswordResetToken() {
+        // Just for Hibernate
+    }
+
+    public PasswordResetToken(String value, UserModel user, LocalDateTime expirationDate) {
         this.value = value;
-        this.id = id;
-        this.userId = userId;
+        this.user = user;
         this.expirationDate = expirationDate;
     }
 
@@ -37,11 +53,11 @@ public class PasswordResetToken {
     public void setId(Long id) {
         this.id = id;
     }
-    public Long getUserId() {
-        return userId;
+    public UserModel getUser() {
+        return user;
     }
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(UserModel user) {
+        this.user = user;
     }
     public LocalDateTime getExpirationDate() {
         return expirationDate;
@@ -49,4 +65,22 @@ public class PasswordResetToken {
     public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){
+            return true;
+        }
+        if (!(o instanceof PasswordResetToken)){
+            return false;
+        }
+        PasswordResetToken passwordResetToken = (PasswordResetToken) o;
+        return this.id.equals(passwordResetToken.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }

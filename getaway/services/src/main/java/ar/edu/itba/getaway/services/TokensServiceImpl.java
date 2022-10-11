@@ -40,17 +40,17 @@ public class TokensServiceImpl implements TokensService {
     private final Locale locale = LocaleContextHolder.getLocale();
 
     @Override
-    public VerificationToken generateVerificationToken(Long userId) {
+    public VerificationToken generateVerificationToken(UserModel user) {
         String token = UUID.randomUUID().toString();
         LOGGER.debug("Created verification token {}", token);
-        return verificationTokenDao.createVerificationToken(userId, token, VerificationToken.generateTokenExpirationDate());
+        return verificationTokenDao.createVerificationToken(user, token, VerificationToken.generateTokenExpirationDate());
     }
 
     @Override
-    public PasswordResetToken generatePasswordResetToken(Long userId) {
+    public PasswordResetToken generatePasswordResetToken(UserModel user) {
         String token = UUID.randomUUID().toString();
         LOGGER.debug("Created password token {}", token);
-        return passwordResetTokenDao.createToken(userId, token, PasswordResetToken.generateTokenExpirationDate());
+        return passwordResetTokenDao.createToken(user, token, PasswordResetToken.generateTokenExpirationDate());
     }
 
     @Override

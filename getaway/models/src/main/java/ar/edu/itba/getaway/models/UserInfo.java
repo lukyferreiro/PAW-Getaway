@@ -1,7 +1,8 @@
 package ar.edu.itba.getaway.models;
 
 public class UserInfo {
-    private String name, surname;
+    private String name;
+    private String surname;
 
     public UserInfo(String name, String surname) {
         this.name = name;

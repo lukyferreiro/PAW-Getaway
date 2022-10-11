@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
         LOGGER.debug("Creating user with email {}", email);
         final UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES, imageModel.getImageId());
         LOGGER.debug("Creating verification token to user with id {}", userModel.getUserId());
-        final VerificationToken token = tokensService.generateVerificationToken(userModel.getUserId());
+        final VerificationToken token = tokensService.generateVerificationToken(userModel);
         tokensService.sendVerificationToken(userModel, token);
         return userModel;
     }
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
         }
 
         final VerificationToken verificationToken = verificationTokenOptional.get();
-        verificationTokenDao.removeTokenById(verificationToken.getId());
+        verificationTokenDao.removeToken(verificationToken);
         LOGGER.debug("Removed verification token with id {}", verificationToken.getId());
 
         if (!verificationToken.isValid()) {
@@ -96,16 +96,17 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
         }
 
-        LOGGER.debug("Validating user with id {}", verificationToken.getUserId());
-        return userDao.updateRoles(verificationToken.getUserId(), Roles.NOT_VERIFIED, Roles.VERIFIED);
+        LOGGER.debug("Validating user with id {}", verificationToken.getUser().getUserId());
+        return userDao.updateRoles(verificationToken.getUser().getUserId(), Roles.NOT_VERIFIED, Roles.VERIFIED);
     }
 
     @Transactional
     @Override
     public void resendVerificationToken(UserModel userModel) {
         LOGGER.debug("Removing verification token for user with id {}", userModel.getUserId());
-        verificationTokenDao.removeTokenByUserId(userModel.getUserId());
-        final VerificationToken verificationToken = tokensService.generateVerificationToken(userModel.getUserId());
+        final Optional<VerificationToken> verificationTokenOptional = verificationTokenDao.getTokenByUser(userModel);
+        verificationTokenOptional.ifPresent(verificationToken -> verificationTokenDao.removeToken(verificationToken));
+        final VerificationToken verificationToken = tokensService.generateVerificationToken(userModel);
         tokensService.sendVerificationToken(userModel, verificationToken);
     }
 
@@ -126,8 +127,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void generateNewPassword(UserModel userModel) {
         LOGGER.debug("Removing password reset token for user {}", userModel.getUserId());
-        passwordResetTokenDao.removeTokenByUserId(userModel.getUserId());
-        final PasswordResetToken passwordResetToken = tokensService.generatePasswordResetToken(userModel.getUserId());
+        final Optional<PasswordResetToken> passwordResetTokenOptional = passwordResetTokenDao.getTokenByUser(userModel);
+        passwordResetTokenOptional.ifPresent(passwordResetToken -> passwordResetTokenDao.removeToken(passwordResetToken));
+        final PasswordResetToken passwordResetToken = tokensService.generatePasswordResetToken(userModel);
         tokensService.sendPasswordResetToken(userModel, passwordResetToken);
     }
 
@@ -142,7 +144,7 @@ public class UserServiceImpl implements UserService {
         }
 
         final PasswordResetToken passwordResetToken = passwordResetTokenOptional.get();
-        passwordResetTokenDao.removeTokenById(passwordResetToken.getId());
+        passwordResetTokenDao.removeToken(passwordResetToken);
         LOGGER.debug("Removed password reset token with id {}", passwordResetToken.getId());
 
         if (!passwordResetToken.isValid()) {
@@ -150,8 +152,8 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
         }
 
-        LOGGER.debug("Updating password for user {}", passwordResetToken.getUserId());
-        return userDao.updatePassword(passwordResetToken.getUserId(), passwordEncoder.encode(password));
+        LOGGER.debug("Updating password for user {}", passwordResetToken.getUser().getUserId());
+        return userDao.updatePassword(passwordResetToken.getUser().getUserId(), passwordEncoder.encode(password));
     }
 
     @Override
@@ -162,8 +164,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateProfileImage(UserModel userModel, byte[] image) {
-        LOGGER.debug("Updating user {} profile image of id {}", userModel.getUserId(), userModel.getProfileImageId());
-        imageService.updateImg(image, userModel.getProfileImageId());
+        LOGGER.debug("Updating user {} profile image of id {}", userModel.getUserId(), userModel.getProfileImage().getImageId());
+        imageService.updateImg(image, userModel.getProfileImage().getImageId());
     }
 
     @Override
@@ -171,20 +173,5 @@ public class UserServiceImpl implements UserService {
         LOGGER.debug("Adding role {} to user with id {}", newRole.name(), userId);
         userDao.addRole(userId, newRole);
     }
-
-
-    //TODO
-    //Implementamos un métodoen la capa de servicio para ordener los issues de un usuario por prioridad
-//    @Transactional
-//    @Override
-//    public void orderIssuesByPriority(final long id) {
-//        final UserHibernate user = userDao.findById(id);
-//        Collections.sort(user.getPendingFixes(), new Comparator<IssueTPE>() {
-//            @Override
-//            public int compare(final IssueTPE o1, final IssueTPE o2) {
-//                return o2.getPriority().ordinal() - o1.getPriority().ordinal();
-//            }
-//        });
-//    }
 
 }

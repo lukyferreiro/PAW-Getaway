@@ -7,11 +7,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,8 +27,8 @@ import java.util.Optional;
 @ContextConfiguration(classes = TestConfig.class)
 @Sql(scripts = "classpath:category-dao-test.sql")
 public class CategoryDaoTest {
-    /** Data for tests **/
 
+    /** Data for tests **/
     private final static CategoryModel CATEGORY_1 = new CategoryModel(1L, "Aventura");
     private final static CategoryModel CATEGORY_2 = new CategoryModel(2L, "Gastronomia");
     private final static CategoryModel CATEGORY_3 = new CategoryModel(3L, "Hoteleria");
@@ -33,8 +37,10 @@ public class CategoryDaoTest {
     private final static CategoryModel CATEGORY_6 = new CategoryModel(6L, "Historico");
 
     private final static List<CategoryModel> CATEGORIES = new ArrayList<>(Arrays.asList(CATEGORY_1, CATEGORY_2, CATEGORY_3, CATEGORY_4, CATEGORY_5, CATEGORY_6));
-
     /****/
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Autowired
     private DataSource ds;
