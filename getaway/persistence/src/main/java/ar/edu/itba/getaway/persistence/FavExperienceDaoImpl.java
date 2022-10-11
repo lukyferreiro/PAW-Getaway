@@ -1,76 +1,76 @@
-package ar.edu.itba.getaway.persistence;
-
-import ar.edu.itba.getaway.models.FavExperienceModel;
-import ar.edu.itba.getaway.interfaces.persistence.FavExperienceDao;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.stereotype.Repository;
-
-import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-@Repository
-public class FavExperienceDaoImpl implements FavExperienceDao {
-    private final JdbcTemplate jdbcTemplate;
-    private final SimpleJdbcInsert jdbcInsert;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(FavExperienceDaoImpl.class);
-
-    private static final RowMapper<FavExperienceModel> FAV_EXPERIENCE_ROW_MAPPER = (rs, rowNum) ->
-            new FavExperienceModel(rs.getLong("userid"),
-                    rs.getLong("experienceid"));
-
-    private static final RowMapper<Long> FAV_EXPERIENCEID_ROW_MAPPER = (rs, rowNum) ->
-            rs.getLong("experienceid");
-
-
-    @Autowired
-    public FavExperienceDaoImpl(final DataSource ds) {
-        this.jdbcTemplate = new JdbcTemplate(ds);
-        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("favuserexperience");
-    }
-
-    @Override
-    public FavExperienceModel createFav(Long userId, Long experienceId) {
-        final Map<String, Object> favExperienceData = new HashMap<>();
-        favExperienceData.put("userId", userId);
-        favExperienceData.put("experienceId", experienceId);
-
-        LOGGER.info("Setting experience with {} as fav of user with id {}", experienceId, userId);
-
-        jdbcInsert.execute(favExperienceData);
-
-        return new FavExperienceModel(userId, experienceId);
-    }
-
-    @Override
-    public boolean deleteFav(Long userId, Long experienceId){
-        final String query = "DELETE FROM favuserexperience WHERE experienceId = ? AND userid = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.update(query, experienceId, userId) == 1;
-    }
-
-    @Override
-    public List<Long> listFavsByUserId(Long userId) {
-        final String query = "SELECT experienceid FROM favuserexperience WHERE userid = ? ";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{userId}, FAV_EXPERIENCEID_ROW_MAPPER);
-    }
-
-    @Override
-    public boolean isFav(Long userId, Long experienceId) {
-        final String query = "SELECT * FROM favuserexperience WHERE userid = ? AND experienceId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        Optional<FavExperienceModel> fav = jdbcTemplate.query(query, new Object[]{userId, experienceId}, FAV_EXPERIENCE_ROW_MAPPER)
-                .stream().findFirst();
-        return fav.isPresent();
-    }
-}
+//package ar.edu.itba.getaway.persistence;
+//
+//import ar.edu.itba.getaway.models.FavExperienceModel;
+//import ar.edu.itba.getaway.interfaces.persistence.FavExperienceDao;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.jdbc.core.JdbcTemplate;
+//import org.springframework.jdbc.core.RowMapper;
+//import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+//import org.springframework.stereotype.Repository;
+//
+//import javax.sql.DataSource;
+//import java.util.HashMap;
+//import java.util.List;
+//import java.util.Map;
+//import java.util.Optional;
+//
+//@Repository
+//public class FavExperienceDaoImpl implements FavExperienceDao {
+//    private final JdbcTemplate jdbcTemplate;
+//    private final SimpleJdbcInsert jdbcInsert;
+//
+//    private static final Logger LOGGER = LoggerFactory.getLogger(FavExperienceDaoImpl.class);
+//
+//    private static final RowMapper<FavExperienceModel> FAV_EXPERIENCE_ROW_MAPPER = (rs, rowNum) ->
+//            new FavExperienceModel(rs.getLong("userid"),
+//                    rs.getLong("experienceid"));
+//
+//    private static final RowMapper<Long> FAV_EXPERIENCEID_ROW_MAPPER = (rs, rowNum) ->
+//            rs.getLong("experienceid");
+//
+//
+//    @Autowired
+//    public FavExperienceDaoImpl(final DataSource ds) {
+//        this.jdbcTemplate = new JdbcTemplate(ds);
+//        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+//                .withTableName("favuserexperience");
+//    }
+//
+//    @Override
+//    public FavExperienceModel createFav(Long userId, Long experienceId) {
+//        final Map<String, Object> favExperienceData = new HashMap<>();
+//        favExperienceData.put("userId", userId);
+//        favExperienceData.put("experienceId", experienceId);
+//
+//        LOGGER.info("Setting experience with {} as fav of user with id {}", experienceId, userId);
+//
+//        jdbcInsert.execute(favExperienceData);
+//
+//        return new FavExperienceModel(userId, experienceId);
+//    }
+//
+//    @Override
+//    public boolean deleteFav(Long userId, Long experienceId){
+//        final String query = "DELETE FROM favuserexperience WHERE experienceId = ? AND userid = ?";
+//        LOGGER.debug("Executing query: {}", query);
+//        return jdbcTemplate.update(query, experienceId, userId) == 1;
+//    }
+//
+//    @Override
+//    public List<Long> listFavsByUserId(Long userId) {
+//        final String query = "SELECT experienceid FROM favuserexperience WHERE userid = ? ";
+//        LOGGER.debug("Executing query: {}", query);
+//        return jdbcTemplate.query(query, new Object[]{userId}, FAV_EXPERIENCEID_ROW_MAPPER);
+//    }
+//
+//    @Override
+//    public boolean isFav(Long userId, Long experienceId) {
+//        final String query = "SELECT * FROM favuserexperience WHERE userid = ? AND experienceId = ?";
+//        LOGGER.debug("Executing query: {}", query);
+//        Optional<FavExperienceModel> fav = jdbcTemplate.query(query, new Object[]{userId, experienceId}, FAV_EXPERIENCE_ROW_MAPPER)
+//                .stream().findFirst();
+//        return fav.isPresent();
+//    }
+//}

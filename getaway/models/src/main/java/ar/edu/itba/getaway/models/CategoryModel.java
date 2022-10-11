@@ -24,6 +24,13 @@ public class CategoryModel{
         this.categoryName = categoryName;
     }
 
+    //Constructor used in testing
+    public CategoryModel(Long categoryId, String categoryName) {
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+    }
+
+
     public Long getCategoryId() {
         return categoryId;
     }
