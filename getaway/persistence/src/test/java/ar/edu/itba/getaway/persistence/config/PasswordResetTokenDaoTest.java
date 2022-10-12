@@ -25,7 +25,7 @@
 //@ContextConfiguration(classes = TestConfig.class)
 //@Sql(scripts = "classpath:password-reset-token-dao-test.sql")
 //public class PasswordResetTokenDaoTest {
-//    /**Data for tests**/
+//    /** Data for tests **/
 //    private final String token1 = "12345";
 //    private final String token2 = "6789x";
 //    private final Long id1 = Long.valueOf(1);
@@ -64,7 +64,7 @@
 //        assertTrue(resetTokenOptional.isPresent());
 //        assertEquals(token1, resetTokenOptional.get().getValue());
 //        assertEquals(new Long(1), resetTokenOptional.get().getId());
-//        assertEquals(new Long(1), resetTokenOptional.get().getUserId());
+//        assertEquals(new Long(1), resetTokenOptional.get().getUser());
 //    }
 //
 //    @Test

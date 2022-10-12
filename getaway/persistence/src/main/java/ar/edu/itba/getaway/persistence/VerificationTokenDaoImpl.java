@@ -22,6 +22,7 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
 
     @Override
     public VerificationToken createVerificationToken(UserModel user, String token, LocalDateTime expirationDate) {
+        LOGGER.debug("Create verification token for user with id {}", user.getUserId());
         final VerificationToken verificationToken = new VerificationToken(token, user, expirationDate);
         em.persist(verificationToken);
         return verificationToken;
@@ -29,7 +30,8 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
 
     @Override
     public Optional<VerificationToken> getTokenByValue(String token) {
-        return em.createQuery("FROM VerificationToken where value = :token",
+        LOGGER.debug("Get verification token with value {}", token);
+        return em.createQuery("FROM VerificationToken where verifToken = :token",
                         VerificationToken.class)
                 .setParameter("token", token)
                 .getResultList()
@@ -40,14 +42,16 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
 
     @Override
     public void removeToken(VerificationToken verificationToken) {
+        LOGGER.debug("Removing verification token with id {}", verificationToken.getId());
         em.remove(verificationToken);
     }
 
     @Override
     public Optional<VerificationToken> getTokenByUser(UserModel user) {
-        return em.createQuery("FROM VerificationToken vt WHERE vt.user.id = :userId",
+        LOGGER.debug("Get verification token for user with id {}", user.getUserId());
+        return em.createQuery("FROM VerificationToken WHERE user = :user",
                         VerificationToken.class)
-                .setParameter("userId", user.getUserId())
+                .setParameter("user", user)
                 .getResultList()
                 .stream()
                 .findFirst();

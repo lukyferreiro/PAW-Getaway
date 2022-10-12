@@ -11,5 +11,4 @@ public interface PasswordResetTokenDao {
     Optional<PasswordResetToken> getTokenByValue (String token);
     void removeToken (PasswordResetToken passwordResetToken);
     Optional<PasswordResetToken> getTokenByUser(UserModel user);
-
 }

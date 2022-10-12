@@ -12,6 +12,7 @@ public class ImageModel {
     @SequenceGenerator(sequenceName = "images_imgId_seq", name = "images_imgId_seq", allocationSize = 1)
     @Column(name = "imgId", nullable = false)
     private Long imageId;
+
     @Column(name = "imageObject", nullable = true, length = 30000000)
     @Basic(fetch = FetchType.LAZY, optional = false)
     private byte[] image;
@@ -23,6 +24,11 @@ public class ImageModel {
 
     public ImageModel(byte[] image ) {
         this.image = image;
+    }
+
+    public ImageModel(byte[] image, Long imageId) {
+        this.image = image;
+        this.imageId = imageId;
     }
 
     public Long getImageId() {

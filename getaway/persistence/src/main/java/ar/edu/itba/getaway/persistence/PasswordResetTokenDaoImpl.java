@@ -22,6 +22,7 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao {
 
     @Override
     public PasswordResetToken createToken(UserModel user, String token, LocalDateTime expirationDate) {
+        LOGGER.debug("Create password reset token for user with id {}", user.getUserId());
         final PasswordResetToken resetToken = new PasswordResetToken(token, user, expirationDate);
         em.persist(resetToken);
         return resetToken;
@@ -29,7 +30,8 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao {
 
     @Override
     public Optional<PasswordResetToken> getTokenByValue(String token) {
-        return em.createQuery("FROM PasswordResetToken WHERE value = :token",
+        LOGGER.debug("Get password reset token with value {}", token);
+        return em.createQuery("FROM PasswordResetToken WHERE passtoken = :token",
                         PasswordResetToken.class)
                 .setParameter("token", token)
                 .getResultList()
@@ -39,18 +41,19 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao {
 
     @Override
     public void removeToken(PasswordResetToken passwordResetToken) {
+        LOGGER.debug("Removing password reset token with id {}", passwordResetToken.getId());
         em.remove(passwordResetToken);
     }
 
     @Override
     public Optional<PasswordResetToken> getTokenByUser(UserModel user) {
-        return em.createQuery("FROM PasswordResetToken prt WHERE prt.user.id = :userId",
+        LOGGER.debug("Get password reset token for user with id {}", user.getUserId());
+        return em.createQuery("FROM PasswordResetToken WHERE user = :user",
                         PasswordResetToken.class)
-                .setParameter("userId", user.getUserId())
+                .setParameter("user", user)
                 .getResultList()
                 .stream()
                 .findFirst();
-
     }
 
 }

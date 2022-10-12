@@ -10,6 +10,5 @@ public interface VerificationTokenDao {
     VerificationToken createVerificationToken (UserModel user, String token, LocalDateTime expirationDate);
     Optional<VerificationToken> getTokenByValue (String token);
     void removeToken(VerificationToken verificationToken);
-
     Optional<VerificationToken> getTokenByUser(UserModel user);
 }

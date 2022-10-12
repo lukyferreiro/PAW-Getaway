@@ -10,9 +10,11 @@
 //    @OneToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "imgId")
 //    private ImageModel image;
+//
 //    @OneToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "experienceId")
 //    private ExperienceModel experience;
+//
 //    @Column(name = "isCover", nullable = false)
 //    private boolean isCover;
 //
