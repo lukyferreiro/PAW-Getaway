@@ -24,6 +24,12 @@ public class CountryModel {
         this.countryName = countryName;
     }
 
+    //Constructor used in testing
+    public CountryModel(Long countryId, String countryName) {
+        this.countryId = countryId;
+        this.countryName = countryName;
+    }
+
     public Long getCountryId() {
         return countryId;
     }

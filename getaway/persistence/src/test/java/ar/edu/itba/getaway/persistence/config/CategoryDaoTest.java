@@ -39,9 +39,6 @@ public class CategoryDaoTest {
     private final static List<CategoryModel> CATEGORIES = new ArrayList<>(Arrays.asList(CATEGORY_1, CATEGORY_2, CATEGORY_3, CATEGORY_4, CATEGORY_5, CATEGORY_6));
     /****/
 
-    @PersistenceContext
-    private EntityManager em;
-
     @Autowired
     private DataSource ds;
 

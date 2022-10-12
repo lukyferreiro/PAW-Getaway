@@ -12,11 +12,13 @@ public class CityModel {
     @SequenceGenerator(sequenceName = "cities_cityId_seq", name = "cities_cityId_seq", allocationSize = 1)
     @Column(name = "cityId")
     private Long cityId;
+
+    @Column(name = "cityName", nullable = false)
+    private String cityName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "countryId")
     private CountryModel country;
-    @Column(name = "cityName", nullable = false)
-    private String cityName;
 
     /* default */
     protected CityModel() {
@@ -26,6 +28,13 @@ public class CityModel {
     public CityModel(CountryModel country, String cityName) {
         this.country = country;
         this.cityName = cityName;
+    }
+
+    //Constructor used in testing
+    public CityModel(Long cityId, CountryModel country,String cityName) {
+        this.cityId = cityId;
+        this.cityName = cityName;
+        this.country = country;
     }
 
     public Long getCityId() {
