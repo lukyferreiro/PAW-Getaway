@@ -1,36 +1,33 @@
-//package ar.edu.itba.getaway.persistence;
-//
-//import ar.edu.itba.getaway.models.ExperienceModel;
-//import ar.edu.itba.getaway.models.OrderByModel;
-//import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
-//import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.jdbc.core.JdbcTemplate;
-//import org.springframework.jdbc.core.RowMapper;
-//import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-//import org.springframework.stereotype.Repository;
-//
-//import javax.sql.DataSource;
-//import java.util.*;
-//
-//import java.util.HashMap;
-//import java.util.Map;
-//
-//@Repository
-//public class ExperienceDaoImpl implements ExperienceDao {
-//
-//    @Autowired
-//    private ImageDao imageDao;
-//    private final JdbcTemplate jdbcTemplate;
-//    private final SimpleJdbcInsert jdbcInsert;
-//
-//    private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
-//
-//    private static final RowMapper<Double> PRICE_EXPERIENCE_ROW_MAPPER = (rs,rowNum) ->
-//            rs.getDouble("max_price");
-//
+package ar.edu.itba.getaway.persistence;
+
+import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
+import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.sql.DataSource;
+import java.util.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Repository
+public class ExperienceDaoImpl implements ExperienceDao {
+
+    @PersistenceContext
+    private EntityManager em;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
+
 //    private final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
 //            new ExperienceModel(rs.getLong("experienceid"),
 //                    rs.getString("experienceName"),
@@ -52,88 +49,57 @@
 //    private boolean getHasImage(Long experienceId){
 //        return imageDao.getImgByExperienceId(experienceId).get().getImage() != null;
 //    }
-//
-//    @Autowired
-//    public ExperienceDaoImpl(final DataSource ds) {
-//        this.jdbcTemplate = new JdbcTemplate(ds);
-//        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-//                .withTableName("experiences")
-//                .usingGeneratedKeyColumns("experienceid");
-//    }
-//
-//    @Override
-//    public ExperienceModel createExperience(String name, String address, String description, String email, String url,
-//                                  Double price, Long cityId, Long categoryId, Long userId) {
-//        final Map<String, Object> experienceData = new HashMap<>();
-//        experienceData.put("experienceName", name);
-//        experienceData.put("address", address);
-//        experienceData.put("description", description);
-//        experienceData.put("email", email);
-//        experienceData.put("siteUrl", url);
-//        experienceData.put("price", price);
-//        experienceData.put("cityId", cityId);
-//        experienceData.put("categoryId", categoryId);
-//        experienceData.put("userId", userId);
-//
+
+    @Override
+    public ExperienceModel createExperience(String name, String address, String description, String email, String url,
+                                            Double price, CityModel city, CategoryModel category, UserModel user) {
+
+        final ExperienceModel experience = new ExperienceModel(name, address, description, email, url, price, city, category, user, null);
+        em.persist(experience);
+        return experience;
+
 //        final Long experienceId = jdbcInsert.executeAndReturnKey(experienceData).longValue();
 //
 //        LOGGER.info("Created new experience with id {}", experienceId);
 //
 //        return new ExperienceModel(experienceId, name, address, description, email, url, price, cityId, categoryId, userId, null, false);
-//    }
-//
-//    @Override
-//    public boolean updateExperience(ExperienceModel experienceModel) {
-//        LOGGER.debug("Executing query to update experience with id: {}", experienceModel.getExperienceId());
-//        return jdbcTemplate.update("UPDATE experiences " +
-//                        "SET experienceName = ?, " +
-//                        "price = ?, " +
-//                        "address = ?, " +
-//                        "email = ?, " +
-//                        "description = ?, " +
-//                        "siteUrl = ?, " +
-//                        "cityId = ?, " +
-//                        "categoryId = ?," +
-//                        "userId = ?" +
-//                        "WHERE experienceId = ?",
-//                experienceModel.getExperienceName(), experienceModel.getPrice(),
-//                experienceModel.getAddress(), experienceModel.getEmail(),
-//                experienceModel.getDescription(), experienceModel.getSiteUrl(),
-//                experienceModel.getCityId(), experienceModel.getCategoryId(),
-//                experienceModel.getUserId(),
-//                experienceModel.getExperienceId()) == 1;
-//    }
-//
-//    @Override
-//    public boolean deleteExperience(Long experienceId) {
-//        final String query = "DELETE FROM experiences WHERE experienceId = ?";
-//        LOGGER.debug("Executing query: {}", query);
-//        return jdbcTemplate.update(query, experienceId) == 1;
-//    }
-//
-//    @Override
-//    public Optional<ExperienceModel> getExperienceById(Long experienceId) {
-//        final String query = "SELECT * FROM experiences WHERE experienceId = ?";
-//        LOGGER.debug("Executing query: {}", query);
-//        return jdbcTemplate.query(query, new Object[]{experienceId}, EXPERIENCE_MODEL_ROW_MAPPER)
-//                .stream().findFirst();
-//    }
-//
-//    @Override
-//    public List<ExperienceModel> listExperiencesByUserId(Long userId, Long categoryId) {
-//        final String query = "SELECT * FROM experiences WHERE userId = ? AND categoryId = ? ";
-//        LOGGER.debug("Executing query: {}", query);
-//        return jdbcTemplate.query(query, new Object[]{userId,categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
-//    }
-//
-//    @Override
-//    public Optional<Double> getMaxPriceByCategoryId(Long categoryId){
-//        final String query = "SELECT MAX(COALESCE(price,0)) as max_price FROM experiences WHERE categoryid = ?";
-//        LOGGER.debug("Executing query: {}", query);
-//        return jdbcTemplate.query(query, new Object[]{categoryId}, PRICE_EXPERIENCE_ROW_MAPPER )
-//                .stream().findFirst();
-//    }
-//
+    }
+
+    @Override
+    public void updateExperience(ExperienceModel experienceModel) {
+        LOGGER.debug("Executing query to update experience with id: {}", experienceModel.getExperienceId());
+
+    }
+
+    @Override
+    public void deleteExperience(ExperienceModel experience) {
+        LOGGER.debug("Delete experience with id {}", experience.getExperienceId());
+        em.remove(experience);
+    }
+
+    @Override
+    public Optional<ExperienceModel> getExperienceById(Long experienceId) {
+        LOGGER.debug("Get experience with id {}", experienceId);
+        return Optional.ofNullable(em.find(ExperienceModel.class, experienceId));
+    }
+
+    @Override
+    public List<ExperienceModel> listExperiencesByUser(UserModel user, CategoryModel category) {
+        LOGGER.debug("Get experiences of category {} of user with id {}", category.getCategoryName(),user.getUserId());
+        final TypedQuery<ExperienceModel> query = em.createQuery("FROM ExperienceModel WHERE user = :user AND category = :category", ExperienceModel.class);
+        query.setParameter("user", user);
+        query.setParameter("category", category);
+        return query.getResultList();
+    }
+
+    @Override
+    public Optional<Double> getMaxPriceByCategory (CategoryModel category){
+        LOGGER.debug("Get maxprice of category {}", category.getCategoryName());
+        final TypedQuery<Double> query = em.createQuery("SELECT Max(exp.price) FROM ExperienceModel exp WHERE exp.category = :category", Double.class);
+        query.setParameter("category", category);
+        return Optional.ofNullable(query.getSingleResult());
+    }
+
 //    @Override
 //    public List<ExperienceModel> listExperiencesByFilter(Long categoryId, Double max, Long score, Long city, Optional<OrderByModel> order, Integer page, Integer page_size) {
 //        String orderQuery;
@@ -243,4 +209,4 @@
 //        LOGGER.debug("Executing query: {}", query);
 //        return jdbcTemplate.queryForObject(query, new Object[]{userId, experienceId}, Integer.class) == 1;
 //    }
-//}
+}

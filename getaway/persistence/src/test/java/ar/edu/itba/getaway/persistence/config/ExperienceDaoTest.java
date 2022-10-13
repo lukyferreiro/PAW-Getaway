@@ -29,14 +29,14 @@
 //public class ExperienceDaoTest {
 //    /** Data for tests **/
 //
-//    private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, null, null, (double) 0, 1L, 1L, 1L, 1L, false);
-//    private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2L, "testgastro", "dirgastro", null, null, null, 1000.0, 1L, 2L, 1L, 2L, false);
-//    private final ExperienceModel DEFAULT_HOT = new ExperienceModel(3L, "testhotel", "dirhotel", null, null, null, 1000.0, 1L, 3L, 1L, 3L, false);
-//    private final ExperienceModel DEFAULT_REL = new ExperienceModel(4L, "testrelax", "dirrelax", null, null, null, 10000.0, 2L, 4L, 1L, 4L, false);
-//    private final ExperienceModel DEFAULT_NIG = new ExperienceModel(5L, "testnight", "dirnight", null, null, null, null,2L, 5L, 1L,  5L, false);
-//    private final ExperienceModel DEFAULT_HIS = new ExperienceModel(6L, "testhist", "dirhist", null, null, null, 5000.0, 2L, 6L, 2L,  6L, false);
-//    private final ExperienceModel DEFAULT_ADV2 = new ExperienceModel(7L, "testaventura2", "diraventura2", null, null, null, 1500.0, 1L, 1L, 2L,  7L, false);
-//    private final ExperienceModel DEFAULT_ADV3 = new ExperienceModel(8L, "testaventura3", "diraventura3", null, null, null, 2000.0, 2L, 1L, 2L,  8L, false);
+//    private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, null, null, 0.0, 1L, 1L, 1L, 1L);
+//    private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2L, "testgastro", "dirgastro", null, null, null, 1000.0, 1L, 2L, 1L, 2L);
+//    private final ExperienceModel DEFAULT_HOT = new ExperienceModel(3L, "testhotel", "dirhotel", null, null, null, 1000.0, 1L, 3L, 1L, 3L);
+//    private final ExperienceModel DEFAULT_REL = new ExperienceModel(4L, "testrelax", "dirrelax", null, null, null, 10000.0, 2L, 4L, 1L, 4L);
+//    private final ExperienceModel DEFAULT_NIG = new ExperienceModel(5L, "testnight", "dirnight", null, null, null, null,2L, 5L, 1L,  5L);
+//    private final ExperienceModel DEFAULT_HIS = new ExperienceModel(6L, "testhist", "dirhist", null, null, null, 5000.0, 2L, 6L, 2L,  6L);
+//    private final ExperienceModel DEFAULT_ADV2 = new ExperienceModel(7L, "testaventura2", "diraventura2", null, null, null, 1500.0, 1L, 1L, 2L,  7L);
+//    private final ExperienceModel DEFAULT_ADV3 = new ExperienceModel(8L, "testaventura3", "diraventura3", null, null, null, 2000.0, 2L, 1L, 2L,  8L);
 //
 //    private final List<ExperienceModel> DEF_LIST_ALL = new ArrayList<>(Arrays.asList(DEFAULT_ADV, DEFAULT_GAS, DEFAULT_HOT, DEFAULT_REL, DEFAULT_NIG, DEFAULT_HIS, DEFAULT_ADV2, DEFAULT_ADV3));
 //

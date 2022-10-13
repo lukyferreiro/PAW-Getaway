@@ -1,8 +1,7 @@
 package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
-import ar.edu.itba.getaway.models.ImageModel;
-import ar.edu.itba.getaway.models.UserModel;
+import ar.edu.itba.getaway.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -27,18 +26,14 @@ public class ImageDaoImpl implements ImageDao {
     }
 
 //    @Override
-//    public ImageExperienceModel createExperienceImg(byte[] image, Long experienceId, boolean isCover) {
+//    public ImageExperienceModel createExperienceImg(byte[] image, ExperienceModel experience, boolean isCover) {
 //        final ImageModel imageData = createImg(image);
 //
-//        final Map<String, Object> imageExperienceData = new HashMap<>();
-//        imageExperienceData.put("experienceId", experienceId);
-//        imageExperienceData.put("isCover", isCover);
-//        imageExperienceData.put("imgId", imageData.getImageId());
-//        imageExperienceSimplejdbcInsert.execute(imageExperienceData);
-//
+//        final ImageExperienceModel imageExperienceModel = new ImageExperienceModel(imageData, experience, isCover);
+//        em.persist(imageExperienceModel);
 //        LOGGER.info("Created new image experience with id {}", imageData.getImageId());
 //
-//        return new ImageExperienceModel(imageData.getImageId(), experienceId, isCover);
+//        return imageExperienceModel;
 //    }
 
     @Override
@@ -61,12 +56,12 @@ public class ImageDaoImpl implements ImageDao {
         return Optional.ofNullable(em.find(ImageModel.class, imageId));
     }
 
-//    @Override
-//    public Optional<ImageModel> getImgByExperienceId(Long experienceId) {
-//        final String query = "SELECT imgId, imageObject FROM imagesExperiences NATURAL JOIN images WHERE experienceId = ?";
-//        LOGGER.debug("Executing query: {}", query);
-//        return jdbcTemplate.query(query, new Object[]{experienceId}, IMAGE_MODEL_ROW_MAPPER)
-//                .stream().findFirst();
-//    }
+    @Override
+    public Optional<ImageModel> getImgByExperience (ExperienceModel experience) {
+        LOGGER.debug("Get image for experience with id {}", experience.getExperienceId());
+        final TypedQuery<ImageModel> query = em.createQuery("FROM ImageModel WHERE experience = :experience", ImageModel.class);
+        query.setParameter("experience", experience);
+        return query.getResultList().stream().findFirst();
+    }
 
 }

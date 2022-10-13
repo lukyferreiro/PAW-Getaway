@@ -35,7 +35,9 @@ public class UserDaoTest {
     private final static ImageModel IMAGE = new ImageModel( null, 15L);
 
     private static final Collection<Roles> DEFAULT_ROLES = new ArrayList<>(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
-    private static final Collection<RoleModel> DEFAULT_ROLES_MODELS = new ArrayList<>(Arrays.asList(new RoleModel(2L, Roles.USER), new RoleModel(4L, Roles.NOT_VERIFIED)));
+    private static final RoleModel USER_MODEL = new RoleModel(2L, Roles.USER);
+    private static final RoleModel NOT_VERIFIED_MODEL = new RoleModel(4L, Roles.NOT_VERIFIED);
+    private static final Collection<RoleModel> DEFAULT_ROLES_MODELS = new ArrayList<>(Arrays.asList(USER_MODEL, NOT_VERIFIED_MODEL));
 
     private final static UserModel DEFAULT_USER = new UserModel(1L, PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES, IMAGE);
 
@@ -78,8 +80,9 @@ public class UserDaoTest {
         //Assert to check every user is created with a profile image pointing to null
         assertTrue(imageDao.getImgById(user.getProfileImage().getImageId()).isPresent());
         assertEquals(IMAGE, imageDao.getImgById(user.getProfileImage().getImageId()).get());
-        assertNull(imageDao.getImgById(user.getProfileImage().getImageId()).get().getImage());
+//        assertNull(imageDao.getImgById(user.getProfileImage().getImageId()).get().getImage());
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "userId = " + user.getUserId()));
+        assertEquals(2, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", "userId = " + user.getUserId()));
     }
 
     @Test(expected = DuplicateUserException.class)
@@ -132,14 +135,14 @@ public class UserDaoTest {
         assertEquals(DEFAULT_ROLES, roles);
     }
 
-//    @Test
-//    public void testGetUserRolesModels() {
-//        final Collection<UserRoleModel> roleModels = userDao.getUserRolesModels(DEFAULT_USER);
-//        assertEquals(DEFAULT_ROLES_MODELS.size(), roleModels.size());
-//        final ArrayList<RoleModel> arrayRoles = new ArrayList<>(roleModels);
-//        assertTrue(arrayRoles.contains(new RoleModel(2L, Roles.USER)));
-//        assertTrue(arrayRoles.contains(new RoleModel(4L, Roles.NOT_VERIFIED)));
-//    }
+    @Test
+    public void testGetUserRolesModels() {
+        final Collection<UserRoleModel> roleModels = userDao.getUserRolesModels(DEFAULT_USER);
+        assertEquals(DEFAULT_ROLES_MODELS.size(), roleModels.size());
+        final ArrayList<UserRoleModel> arrayRoles = new ArrayList<>(roleModels);
+        assertTrue(arrayRoles.contains(new UserRoleModel(DEFAULT_USER, USER_MODEL)));
+        assertTrue(arrayRoles.contains(new UserRoleModel(DEFAULT_USER, NOT_VERIFIED_MODEL)));
+    }
 
     @Test
     public void testGetRoleByNameProvider(){

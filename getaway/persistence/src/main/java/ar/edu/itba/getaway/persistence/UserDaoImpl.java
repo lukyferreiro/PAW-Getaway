@@ -85,9 +85,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Collection<Roles> getUserRoles(UserModel user) {
-
-
-        return new ArrayList<>();
+        return user.getRoles();
     }
 
     @Override
@@ -181,6 +179,5 @@ public class UserDaoImpl implements UserDao {
         final RoleModel roleModel = getRoleByName(newRole).get();
         final UserRoleModel userRoleModel = new UserRoleModel(user, roleModel);
         em.persist(userRoleModel);
-
     }
 }
