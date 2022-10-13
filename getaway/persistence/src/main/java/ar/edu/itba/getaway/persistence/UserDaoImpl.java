@@ -12,10 +12,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.sql.DataSource;
 import java.util.*;
 
@@ -158,24 +155,32 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void updateUserInfo(Long userId, UserInfo userInfo) {
-        final String query = "UPDATE users SET userName = ?, userSurname = ? WHERE userId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        if (jdbcTemplate.update(query, userInfo.getName(), userInfo.getSurname(), userId) == 1) {
-            LOGGER.debug("User info updated");
-        }
-        else {
-            LOGGER.debug("User info not updated");
-        }
+    public void updateUserInfo(UserModel user, UserInfo userInfo) {
+//        final String query = "UPDATE users SET userName = ?, userSurname = ? WHERE userId = ?";
+//        LOGGER.debug("Executing query: {}", query);
+//        if (jdbcTemplate.update(query, userInfo.getName(), userInfo.getSurname(), userId) == 1) {
+//            LOGGER.debug("User info updated");
+//        }
+//        else {
+//            LOGGER.debug("User info not updated");
+//        }
+        user.setName(userInfo.getName());
+        user.setSurname(userInfo.getSurname());
+        em.merge(user);
     }
 
     @Override
-    public void addRole(Long userId, Roles newRole) {
-        final Map<String, Object> userRolesData = new HashMap<>();
-        userRolesData.put("userId", userId);
-        final Optional<RoleModel> roleModel = getRoleByName(newRole);
-        userRolesData.put("roleId", roleModel.get().getRoleId());
-        userRolesSimpleJdbcInsert.execute(userRolesData);
-        LOGGER.info("Added role {} to user {}", newRole.name(), userId);
+    public void addRole(UserModel user, Roles newRole) {
+//        final Map<String, Object> userRolesData = new HashMap<>();
+//        userRolesData.put("userId", userId);
+//        final Optional<RoleModel> roleModel = getRoleByName(newRole);
+//        userRolesData.put("roleId", roleModel.get().getRoleId());
+//        userRolesSimpleJdbcInsert.execute(userRolesData);
+//        LOGGER.info("Added role {} to user {}", newRole.name(), userId);
+
+        final RoleModel roleModel = getRoleByName(newRole).get();
+        final UserRoleModel userRoleModel = new UserRoleModel(user, roleModel);
+        em.persist(userRoleModel);
+
     }
 }
