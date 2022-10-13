@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
 import ar.edu.itba.getaway.models.ImageModel;
+import ar.edu.itba.getaway.models.UserModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -41,9 +42,10 @@ public class ImageDaoImpl implements ImageDao {
 //    }
 
     @Override
-    public void updateImg(byte[] image, Long imageId) {
-        LOGGER.debug("Delete image with id {}", imageId);
-        final ImageModel imageModel = new ImageModel(image, imageId);
+    public void updateImg(byte[] image, ImageModel imageModel) {
+        LOGGER.debug("Update image with id {}", imageModel.getImageId());
+//        final ImageModel imageModel = new ImageModel(image, imageId);
+        imageModel.setImage(image);
         em.merge(imageModel);
     }
 
@@ -56,10 +58,7 @@ public class ImageDaoImpl implements ImageDao {
     @Override
     public Optional<ImageModel> getImgById(Long imageId) {
         LOGGER.debug("Get image with id {}", imageId);
-        final TypedQuery<ImageModel> query = em.createQuery("FROM ImageModel WHERE imgId = :imgId", ImageModel.class);
-        query.setParameter("imgId", imageId);
-        em.find(ImageModel.class, imageId);
-        return query.getResultList().stream().findFirst();
+        return Optional.ofNullable(em.find(ImageModel.class, imageId));
     }
 
 //    @Override

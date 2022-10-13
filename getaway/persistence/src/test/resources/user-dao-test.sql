@@ -3,14 +3,14 @@ TRUNCATE TABLE roles RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE images RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE userRoles RESTART IDENTITY AND COMMIT NO CHECK;
 
-INSERT INTO roles(roleName) VALUES ('PROVIDER');
-INSERT INTO roles(roleName) VALUES ('USER');
-INSERT INTO roles(roleName) VALUES ('VERIFIED');
-INSERT INTO roles(roleName) VALUES ('NOT_VERIFIED');
+INSERT INTO roles(roleId, roleName) VALUES (1, 'PROVIDER');
+INSERT INTO roles(roleId, roleName) VALUES (2, 'USER');
+INSERT INTO roles(roleId, roleName) VALUES (3, 'VERIFIED');
+INSERT INTO roles(roleId, roleName) VALUES (4, 'NOT_VERIFIED');
 
 -- Adding an image for updateProfileImg test
-INSERT INTO images(imgid, imageobject) VALUES (1, null)
-    INSERT INTO images(imgid, imageobject) VALUES (15, null)
+INSERT INTO images(imgid, imageobject) VALUES (1, '0x1234');
+INSERT INTO images(imgid, imageobject) VALUES (15, '0x5678');
 
 -- Creating user with userid 1
 INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (1, 'usuario', 'uno', 'uno@mail.com', 15, 'contra1');

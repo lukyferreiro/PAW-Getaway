@@ -21,9 +21,10 @@ public class UserModel {
     private String email;
     @Column(name = "password", length = 255, nullable = false)
     private String password;
-//    @OneToOne
+
+    @OneToOne
     @JoinColumn(name = "imgId")
-    private Long profileImage;
+    private ImageModel profileImage;
 
     @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "userRoles", joinColumns = @JoinColumn(name = "userId"))
@@ -36,7 +37,16 @@ public class UserModel {
         // Just for Hibernate
     }
 
-    public UserModel(Long userId, String password, String name, String surname, String email, Collection<Roles> roles, Long profileImage) {
+    public UserModel( String password, String name, String surname, String email, Collection<Roles> roles, ImageModel profileImage) {
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.roles = roles;
+        this.profileImage = profileImage;
+    }
+
+    public UserModel(Long userId, String password, String name, String surname, String email, Collection<Roles> roles, ImageModel profileImage) {
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -46,10 +56,10 @@ public class UserModel {
         this.profileImage = profileImage;
     }
 
-    public Long getProfileImage() {
+    public ImageModel getProfileImage() {
         return profileImage;
     }
-    public void setProfileImageId(Long profileImage) {
+    public void setProfileImageId(ImageModel profileImage) {
         this.profileImage = profileImage;
     }
     public String getName() {

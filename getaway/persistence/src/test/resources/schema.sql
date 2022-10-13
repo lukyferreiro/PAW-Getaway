@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS categories
 (
+    -- crear sequence aparte para que no falle
     categoryId SERIAL NOT NULL,
     categoryName VARCHAR(20) NOT NULL,
     PRIMARY KEY (categoryId),
