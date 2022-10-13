@@ -27,13 +27,13 @@ public class ReviewDaoImpl implements ReviewDao {
     private EntityManager em;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewDaoImpl.class);
 
-    @Autowired
-    public ReviewDaoImpl(final DataSource ds) {
-        this.jdbcTemplate = new JdbcTemplate(ds);
-        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("reviews")
-                .usingGeneratedKeyColumns("reviewid");
-    }
+//    @Autowired
+//    public ReviewDaoImpl(final DataSource ds) {
+//        this.jdbcTemplate = new JdbcTemplate(ds);
+//        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+//                .withTableName("reviews")
+//                .usingGeneratedKeyColumns("reviewid");
+//    }
 
     @Override
     public ReviewModel createReview(String title, String description, Long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel) {
@@ -111,7 +111,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public void updateReview(Long reviewId, ReviewModel reviewModel) {
-        LOGGER.debug("Updating review with id: {}", reviewModel.getReviewId());
+        LOGGER.debug("Updating review with id: {}", reviewId);
         em.merge(reviewModel);
     }
 }
