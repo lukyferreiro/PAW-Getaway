@@ -6,9 +6,9 @@
 //import java.util.Optional;
 //
 //public interface FavExperienceService {
-//    FavExperienceModel createFav (Long userId, Long experienceId);
-//    void deleteFav (Long userId, Long experienceId);
-//    List<Long> listFavsByUserId (Long userId);
-//    boolean isFav (Long userId, Long experienceId);
-//    void setFav (Long userId, Optional<Boolean> set, Optional<Long> experienceId);
+//    FavExperienceModel createFav (UserModel user, ExperienceModel experience);
+//    void deleteFav (UserModel user, ExperienceModel experience);
+//    List<Long> listFavsByUser (UserModel user);
+//    boolean isFav (UserModel user, ExperienceModel experience);
+//    void setFav (UserModel user, Optional<Boolean> set, Optional<ExperienceModel> experience);
 //}

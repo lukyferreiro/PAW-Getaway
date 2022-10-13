@@ -10,8 +10,8 @@ public interface UserDao {
     UserModel createUser (String password, String name, String surname, String email, Collection<Roles> roles, ImageModel image) throws DuplicateUserException;
     Optional<UserModel> getUserById (Long userId);
     Optional<UserModel> getUserByEmail (String email);
-//    Optional<UserModel> getUserByExperienceId(ExperienceModel experience);
-//    Optional<UserModel> getUserByReviewId(ReviewModel review);
+//    Optional<UserModel> getUserByExperience(ExperienceModel experience);
+//    Optional<UserModel> getUserByReview(ReviewModel review);
     Collection<Roles> getUserRoles (UserModel user);
     Collection<UserRoleModel> getUserRolesModels(UserModel user);
     Optional<RoleModel> getRoleByName (Roles role);

@@ -9,13 +9,13 @@
 //
 //public interface ReviewDao {
 //    ReviewModel createReview (String title, String description, Long score, Long experienceId, Date reviewDate, Long userId);
-//    List<ReviewModel> getReviewsByExperienceId (Long experienceId);
-//    Long getReviewAverageScore (Long experienceId);
-//    Integer getReviewCount (Long experienceId);
-//    List<ReviewUserModel> getReviewAndUser (Long experienceId, Integer page, Integer page_size);
+//    List<ReviewModel> getReviewsByExperience (ExperienceModel experience);
+//    Long getReviewAverageScore (ExperienceModel experience);
+//    Integer getReviewCount (ExperienceModel experience);
+//    List<ReviewUserModel> getReviewAndUser (ExperienceModel experience, Integer page, Integer page_size);
 //    Optional<ReviewModel> getReviewById (Long reviewId);
-//    List<ReviewUserModel> getReviewsByUserId (Long userId,  Integer page, Integer page_size);
-//    Integer getReviewByUserCount(Long userId);
-//    boolean deleteReview (Long reviewId);
+//    List<ReviewUserModel> getReviewsByUser (UserModel user, Integer page, Integer page_size);
+//    Integer getReviewByUserCount(UserModel user);
+//    boolean deleteReview (ReviewModel review);
 //    boolean updateReview (Long reviewId, ReviewModel reviewModel);
 //}

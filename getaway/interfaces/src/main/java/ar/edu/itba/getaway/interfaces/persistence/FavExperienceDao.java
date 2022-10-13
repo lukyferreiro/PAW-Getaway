@@ -5,8 +5,8 @@
 //import java.util.List;
 //
 //public interface FavExperienceDao {
-//    FavExperienceModel createFav (Long userId, Long experienceId);
-//    boolean deleteFav (Long userId, Long experienceId);
-//    List<Long> listFavsByUserId(Long userId);
-//    boolean isFav(Long userId, Long experienceId);
+//    FavExperienceModel createFav (UserModel user, ExperienceModel experience);
+//    void deleteFav (UserModel user, ExperienceModel experience);
+//    List<Long> listFavsByUser (UserModel user);
+//    boolean isFav (UserModel user, ExperienceModel experience);
 //}
