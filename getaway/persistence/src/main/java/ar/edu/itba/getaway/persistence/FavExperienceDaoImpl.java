@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,8 +68,11 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
 
     @Override
     public boolean isFav(UserModel user, ExperienceModel experience) {
-        final String query = "SELECT * FROM favuserexperience WHERE userid = ? AND experienceId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return fav.isPresent();
+        //final String query = "SELECT * FROM favuserexperience WHERE userid = ? AND experienceId = ?";
+        final TypedQuery<FavExperienceModel> query = em.createQuery("FROM FavExperienceModel WHERE user =: user AND experience =: experience", FavExperienceModel.class);
+        query.setParameter("user", user);
+        query.setParameter("experience", experience);
+        return query.getSingleResult() != null;
+
     }
 }
