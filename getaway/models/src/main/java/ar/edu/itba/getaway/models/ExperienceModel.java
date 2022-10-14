@@ -37,16 +37,16 @@ public class ExperienceModel {
     @JoinColumn(name = "userId")
     private UserModel user;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "imgId")
-    private ImageExperienceModel imageExperience;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "imgId")
+//    private ImageExperienceModel imageExperience;
 
     /* default */
     protected ExperienceModel() {
         // Just for Hibernate
     }
 
-    public ExperienceModel(String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageExperienceModel imageExperience) {
+    public ExperienceModel(String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user) {
         this.experienceName = experienceName;
         this.address = address;
         this.description = description;
@@ -56,10 +56,10 @@ public class ExperienceModel {
         this.price = price;
         this.city = city;
         this.user = user;
-        this.imageExperience = imageExperience;
+//        this.imageExperience = imageExperience;
     }
 
-    public ExperienceModel(Long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageExperienceModel imageExperience) {
+    public ExperienceModel(Long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user) {
         this.experienceId = experienceId;
         this.experienceName = experienceName;
         this.address = address;
@@ -70,7 +70,7 @@ public class ExperienceModel {
         this.price = price;
         this.city = city;
         this.user = user;
-        this.imageExperience = imageExperience;
+//        this.imageExperience = imageExperience;
     }
 
     public Long getExperienceId() {
@@ -133,12 +133,12 @@ public class ExperienceModel {
     public void setUser(UserModel user) {
         this.user = user;
     }
-    public ImageExperienceModel getImageExperience() {
-        return imageExperience;
-    }
-    public void setImageExperience(ImageExperienceModel imageExperience) {
-        this.imageExperience = imageExperience;
-    }
+//    public ImageExperienceModel getImageExperience() {
+//        return imageExperience;
+//    }
+//    public void setImageExperience(ImageExperienceModel imageExperience) {
+//        this.imageExperience = imageExperience;
+//    }
 
     @Override
     public boolean equals(Object o){

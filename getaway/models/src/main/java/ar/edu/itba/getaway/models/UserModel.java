@@ -26,7 +26,7 @@ public class UserModel {
     @JoinColumn(name = "imgId")
     private ImageModel profileImage;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "userroles",
         joinColumns = @JoinColumn(name = "userId"),
         inverseJoinColumns = @JoinColumn(name = "roleId")
