@@ -127,7 +127,7 @@ public class ExperienceModel {
     public void setCategory(CategoryModel category) {
         this.category = category;
     }
-    public UserModel getUserId() {
+    public UserModel getUser() {
         return user;
     }
     public void setUser(UserModel user) {

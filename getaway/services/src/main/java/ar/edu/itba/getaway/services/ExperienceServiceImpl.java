@@ -44,7 +44,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         final UserModel usermodel = userService.getUserById(experienceModel.getUserId()).get();
         if (!usermodel.getRoles().contains(Roles.PROVIDER)) {
             LOGGER.debug("User gains role provider when they creates an experience for first time");
-            userService.addRole(userId, Roles.PROVIDER);
+            userService.addRole(usermodel, Roles.PROVIDER);
         }
         return experienceModel;
     }

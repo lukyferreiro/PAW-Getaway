@@ -1,7 +1,6 @@
 //package ar.edu.itba.getaway.persistence.config;
 //
-//import ar.edu.itba.getaway.models.ExperienceModel;
-//import ar.edu.itba.getaway.models.OrderByModel;
+//import ar.edu.itba.getaway.models.*;
 //import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
 //import org.junit.Before;
 //import org.junit.Test;
@@ -28,21 +27,28 @@
 //@Sql(scripts = "classpath:experience-dao-test.sql")
 //public class ExperienceDaoTest {
 //    /** Data for tests **/
+//    private final static CategoryModel CATEGORY_1 = new CategoryModel(1L, "Aventura");
+//    private final static CategoryModel CATEGORY_2 = new CategoryModel(2L, "Gastronomia");
+//    private final static CategoryModel CATEGORY_3 = new CategoryModel(3L, "Hoteleria");
+//    private final static CategoryModel CATEGORY_4 = new CategoryModel(4L, "Relax");
+//    private final static CategoryModel CATEGORY_5 = new CategoryModel(5L, "Vida_nocturna");
+//    private final static CategoryModel CATEGORY_6 = new CategoryModel(6L, "Historico");
 //
-//    private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, null, null, 0.0, 1L, 1L, 1L, 1L);
-//    private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2L, "testgastro", "dirgastro", null, null, null, 1000.0, 1L, 2L, 1L, 2L);
-//    private final ExperienceModel DEFAULT_HOT = new ExperienceModel(3L, "testhotel", "dirhotel", null, null, null, 1000.0, 1L, 3L, 1L, 3L);
-//    private final ExperienceModel DEFAULT_REL = new ExperienceModel(4L, "testrelax", "dirrelax", null, null, null, 10000.0, 2L, 4L, 1L, 4L);
-//    private final ExperienceModel DEFAULT_NIG = new ExperienceModel(5L, "testnight", "dirnight", null, null, null, null,2L, 5L, 1L,  5L);
-//    private final ExperienceModel DEFAULT_HIS = new ExperienceModel(6L, "testhist", "dirhist", null, null, null, 5000.0, 2L, 6L, 2L,  6L);
-//    private final ExperienceModel DEFAULT_ADV2 = new ExperienceModel(7L, "testaventura2", "diraventura2", null, null, null, 1500.0, 1L, 1L, 2L,  7L);
-//    private final ExperienceModel DEFAULT_ADV3 = new ExperienceModel(8L, "testaventura3", "diraventura3", null, null, null, 2000.0, 2L, 1L, 2L,  8L);
+//    private final static CountryModel COUNTRY_1 = new CountryModel(1L, "Test Country");
+//
+//    private final static CityModel CITY_1 = new CityModel(1L, COUNTRY_1, "Test City One");
+//    private final static CityModel CITY_2 = new CityModel(2L, COUNTRY_1, "Test City Two");
+//
+//    private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, null, null, 0.0, CITY_1, CATEGORY_1, 1L, null);
+//    private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2L, "testgastro", "dirgastro", null, null, null, 1000.0, CITY_1, CATEGORY_2, 1L, null);
+//    private final ExperienceModel DEFAULT_HOT = new ExperienceModel(3L, "testhotel", "dirhotel", null, null, null, 1000.0, CITY_1, CATEGORY_3, 1L, null);
+//    private final ExperienceModel DEFAULT_REL = new ExperienceModel(4L, "testrelax", "dirrelax", null, null, null, 10000.0, CITY_2, CATEGORY_4, 1L, null);
+//    private final ExperienceModel DEFAULT_NIG = new ExperienceModel(5L, "testnight", "dirnight", null, null, null, null,CITY_2, CATEGORY_5, 1L,  null);
+//    private final ExperienceModel DEFAULT_HIS = new ExperienceModel(6L, "testhist", "dirhist", null, null, null, 5000.0, CITY_2, CATEGORY_6, 2L,  null);
+//    private final ExperienceModel DEFAULT_ADV2 = new ExperienceModel(7L, "testaventura2", "diraventura2", null, null, null, 1500.0, CITY_1, CATEGORY_1, 2L,  null);
+//    private final ExperienceModel DEFAULT_ADV3 = new ExperienceModel(8L, "testaventura3", "diraventura3", null, null, null, 2000.0, CITY_2, CATEGORY_1, 2L,  null);
 //
 //    private final List<ExperienceModel> DEF_LIST_ALL = new ArrayList<>(Arrays.asList(DEFAULT_ADV, DEFAULT_GAS, DEFAULT_HOT, DEFAULT_REL, DEFAULT_NIG, DEFAULT_HIS, DEFAULT_ADV2, DEFAULT_ADV3));
-//
-//    private final Long ADV1_REV = 2L;
-//    private final Long ADV2_REV = 4L;
-//    private final Long ADV3_REV = 5L;
 //
 //    private final Long DEFAULT_SCORE = 0L;
 //    private final Optional<OrderByModel> NO_ORDER = Optional.empty();
@@ -67,7 +73,7 @@
 //    @Test
 //    @Rollback
 //    public void testCreateExperience(){
-//        final ExperienceModel experienceModel= experienceDao.createExperience("TestCreate", "DirectionCreate", null, "owner@mail.com", null, null, 1L, 1L, 1L);
+//        final ExperienceModel experienceModel= experienceDao.createExperience("TestCreate", "DirectionCreate", null, "owner@mail.com", null, null, CITY_1, CATEGORY_1, 1L);
 //        assertNotNull(experienceModel);
 //        assertEquals("TestCreate", experienceModel.getExperienceName());
 //        assertEquals("DirectionCreate", experienceModel.getAddress());
@@ -75,28 +81,28 @@
 //        assertNull(experienceModel.getSiteUrl());
 //        assertNull(experienceModel.getPrice());
 //        assertEquals("owner@mail.com", experienceModel.getEmail());
-//        assertEquals(new Long(1), experienceModel.getCityId());
-//        assertEquals(new Long(1), experienceModel.getCategoryId());
-//        assertEquals(new Long(1), experienceModel.getUserId());
-//        assertFalse(experienceModel.isHasImage());
+//        assertEquals(CITY_1, experienceModel.getCity());
+//        assertEquals(CATEGORY_1, experienceModel.getCategory());
+//        assertEquals(new Long(1), experienceModel.getUser());
+//        assertFalse(experienceModel.hasImage());
 //        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "experiences", "experienceId = " + experienceModel.getExperienceId()));
 //    }
 //
 //    @Test
 //    @Rollback
 //    public void testUpdateExperience() {
-//        final ExperienceModel experienceModel = new ExperienceModel(1L, "TestUpdate", "DirectionUpdate", "newdesc", "newemail", "newsite", 235.0, 2L, 2L, 1L, 1L, false);
+//        final ExperienceModel experienceModel = new ExperienceModel(1L, "TestUpdate", "DirectionUpdate", "newdesc", "newemail", "newsite", 235.0, CITY_2, CATEGORY_2, 1L, null);
 //
-//        assertTrue(experienceDao.updateExperience( experienceModel));
+//        experienceDao.updateExperience(experienceModel);
 //        assertEquals("TestUpdate", experienceModel.getExperienceName());
 //        assertEquals("DirectionUpdate", experienceModel.getAddress());
 //        assertEquals("newdesc", experienceModel.getDescription());
 //        assertEquals("newsite", experienceModel.getSiteUrl());
 //        assertEquals("newemail", experienceModel.getEmail());
 //        assertEquals(new Double(235), experienceModel.getPrice());
-//        assertEquals(new Long(2), experienceModel.getCityId());
-//        assertEquals(new Long(2), experienceModel.getCategoryId());
-//        assertEquals(new Long(1), experienceModel.getUserId());
+//        assertEquals(CITY_2, experienceModel.getCity());
+//        assertEquals(CATEGORY_2, experienceModel.getCategory());
+//        assertEquals(new Long(1), experienceModel.getUser());
 //        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "experiences", "experienceId = " + experienceModel.getExperienceId()));
 //    }
 //
@@ -116,7 +122,7 @@
 //
 //    @Test
 //    public void testListByCategory() {
-//        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategoryId(1L);
+//        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategory(CATEGORY_1);
 //        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, maxPrice.get(), DEFAULT_SCORE, NO_CITY, NO_ORDER, 1, PAGE_SIZE);
 //        assertFalse(experienceModelList.isEmpty());
 //        assertTrue(experienceModelList.contains(DEFAULT_ADV));
@@ -126,7 +132,7 @@
 //
 //    @Test
 //    public void testListByCategoryAndCity() {
-//        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategoryId(1L);
+//        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategory(CATEGORY_1);
 //        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, maxPrice.get(), DEFAULT_SCORE, 1L, NO_ORDER, 1, PAGE_SIZE);
 //        assertFalse(experienceModelList.isEmpty());
 //        assertTrue(experienceModelList.contains(DEFAULT_ADV));
@@ -166,7 +172,7 @@
 //
 //    @Test
 //    public void testListByCategoryAndScore(){
-//        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategoryId(1L);
+//        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategory(CATEGORY_1);
 //        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, maxPrice.get(), 3L, NO_CITY, NO_ORDER, 1, PAGE_SIZE);
 //
 //        assertFalse(experienceModelList.isEmpty());
@@ -177,7 +183,7 @@
 //
 //    @Test
 //    public void testListByCategoryCityAndScore() {
-//        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategoryId(1L);
+//        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategory(CATEGORY_1);
 //        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(1L, maxPrice.get(), 3L, 1L, NO_ORDER, 1, PAGE_SIZE);
 //
 //        assertFalse(experienceModelList.isEmpty());

@@ -220,10 +220,9 @@ public class UserDaoTest {
 
 
         //Asserts to check changes in userroles table
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId() + " AND roleId = " + NOT_VERIFIED_MODEL.getRoleId())));
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId()) + " AND roleId = " + USER_MODEL.getRoleId()));
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId()) + " AND roleId = " + VERIFIED_MODEL.getRoleId()));
-
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId() + " AND roleId = " + NOT_VERIFIED_MODEL.getRoleId())));
     }
 
     @Test
@@ -284,8 +283,8 @@ public class UserDaoTest {
         assertTrue(arrayRoles.contains(NOT_VERIFIED_MODEL));
         assertTrue(arrayRoles.contains(PROVIDER_MODEL));
 
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId() + " AND roleId = " + PROVIDER_MODEL.getRoleId())));
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId()) + " AND roleId = " + USER_MODEL.getRoleId()));
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId()) + " AND roleId = " + VERIFIED_MODEL.getRoleId()));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId()) + " AND roleId = " + NOT_VERIFIED_MODEL.getRoleId()));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId() + " AND roleId = " + PROVIDER_MODEL.getRoleId())));
     }
 }

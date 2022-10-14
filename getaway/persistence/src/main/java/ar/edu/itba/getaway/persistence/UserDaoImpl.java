@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
 import javax.sql.DataSource;
 import java.util.*;
@@ -115,41 +116,60 @@ public class UserDaoImpl implements UserDao {
 //    }
 
     @Override
-    public void updateRoles(UserModel user, Roles oldVal, Roles newVal) {
+    public Optional<UserModel> updateRoles(UserModel user, Roles oldVal, Roles newVal) {
         final RoleModel oldRole = getRoleByName(oldVal).get();
-//        UserRoleModel userRoleModel = getUserRole(user, oldRole).get();
         user.removeRole(oldRole);
-//        em.remove(userRoleModel);
-        em.merge(user);
+
+        System.out.println("Elimino role oldRole");
+        for (RoleModel role : user.getRoles()
+             ) {
+            System.out.println(role.getRoleName());
+        }
 
         final RoleModel newRole = getRoleByName(newVal).get();
         addRole(user, newRole);
         user.addRole(newRole);
 
-        em.merge(user);
+        System.out.println("Agrego role newRole");
+        for (RoleModel role : user.getRoles()
+        ) {
+            System.out.println(role.getRoleName());
+        }
+
+        em.remove(oldRole);
+        return Optional.ofNullable(em.merge(user));
     }
 
     @Override
-    public void updatePassword(UserModel user, String password) {
+    public Optional<UserModel> updatePassword(UserModel user, String password) {
         user.setPassword(password);
-        em.merge(user);
+        return Optional.ofNullable(em.merge(user));
     }
 
     @Override
-    public void updateUserInfo(UserModel user, UserInfo userInfo) {
+    public Optional<UserModel> updateUserInfo(UserModel user, UserInfo userInfo) {
         user.setName(userInfo.getName());
         user.setSurname(userInfo.getSurname());
-        em.merge(user);
+        return Optional.ofNullable(em.merge(user));
     }
 
     @Override
-    public void addRole(UserModel user, Roles newRole) {
+    public Optional<UserModel> addRole(UserModel user, Roles newRole) {
         final RoleModel roleModel = getRoleByName(newRole).get();
         user.addRole(roleModel);
-        em.merge(user);
+
+        System.out.println("Agrego role newRole");
+        for (RoleModel role : user.getRoles()
+        ) {
+            System.out.println(role.getRoleName());
+        }
+
+        return Optional.ofNullable(em.merge(user));
 //        final UserRoleModel userRoleModel = new UserRoleModel(user, roleModel);
 //        em.persist(userRoleModel);
     }
+
+
 
     private void addRole(UserModel user, RoleModel newRole) {
 //        final UserRoleModel userRoleModel = new UserRoleModel(user, newRole);

@@ -33,6 +33,13 @@ public class UserModel {
     )
     private Collection<RoleModel> roles;
 
+    @ManyToMany
+    @JoinTable(name = "favuserexperience",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "experienceId")
+    )
+    private Collection<ExperienceModel> favExperiences;
+
     /* default */
     protected UserModel() {
         // Just for Hibernate
@@ -93,21 +100,40 @@ public class UserModel {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+
+    // Role methods
     public Collection<RoleModel> getRoles() {
         return roles;
     }
-    public void setRoles(Collection<RoleModel> roles) {
-        this.roles = roles;
-    }
+//    public void setRoles(Collection<RoleModel> roles) {
+//        this.roles = roles;
+//    }
     public void addRole(RoleModel role) {
         roles.add(role);
     }
     public void removeRole(RoleModel role) {
         roles.remove(role);
     }
-//    public boolean hasRole(String role) {
-//        return roles.stream().anyMatch(p -> p.name().equals(role));
+    public boolean hasRole(String role) {
+        return roles.stream().anyMatch(p -> p.getRoleName().name().equals(role));
+    }
+
+    // Favs methods
+    public Collection<ExperienceModel> getFavExperiences() {
+        return favExperiences;
+    }
+//    public void setFavexperiences(Collection<ExperienceModel> favexperiences) {
+//        this.favexperiences = favexperiences;
 //    }
+    public void addFav(ExperienceModel experience) {
+        favExperiences.add(experience);
+    }
+    public void removeFav(ExperienceModel experience) {
+        favExperiences.remove(experience);
+    }
+    public boolean isFav(ExperienceModel experience) {
+        return favExperiences.contains(experience);
+    }
 
     @Override
     public boolean equals(Object o){

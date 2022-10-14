@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface ReviewService {
     ReviewModel createReview(String title, String description, Long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel);
-    List<ReviewModel> getReviewsByExperienceId(ExperienceModel experience);
+    List<ReviewModel> getReviewsByExperience(ExperienceModel experience);
     Long getReviewAverageScore(ExperienceModel experience);
     List<Long> getListOfAverageScoreByExperienceList(List<ExperienceModel> experienceModelList);
     List<List<Long>> getListOfAverageScoreByExperienceListAndCategoryId(List<List<ExperienceModel>> experienceModelList);
@@ -19,9 +19,9 @@ public interface ReviewService {
     List<Integer> getListOfReviewCountByExperienceList(List<ExperienceModel> experienceModelList);
     List<List<Integer>> getListOfReviewCountByExperienceListAndCategoryId(List<List<ExperienceModel>> experienceModelList);
     List<Boolean> getListOfReviewHasImages(List<ReviewModel> reviewUserModelList);
-    Page<ReviewModel> getReviewAndUser(Long experienceId, Integer page);
+    Page<ReviewModel> getReviewAndUser(ExperienceModel experience, Integer page);
     Optional<ReviewModel> getReviewById(Long reviewId);
-    Page<ReviewModel> getReviewsByUserId(Long userId, Integer page);
+    Page<ReviewModel> getReviewsByUser(UserModel user, Integer page);
     void deleteReview(ReviewModel review);
     void updateReview(Long reviewId, ReviewModel reviewModel);
     List<ExperienceModel> getListExperiencesOfReviewsList(List<ReviewModel> reviewModelList);

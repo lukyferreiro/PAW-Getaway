@@ -106,7 +106,7 @@ public class ExperienceFormController {
         forceLogin(userModelProvider, request);
 //        }
 
-        ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
+        ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategory().getCategoryName() + "/" + experienceModel.getExperienceId());
         mav.addObject("success", true);
         return mav;
     }

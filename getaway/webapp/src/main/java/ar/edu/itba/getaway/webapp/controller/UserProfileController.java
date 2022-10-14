@@ -45,7 +45,7 @@ public class UserProfileController {
         final ModelAndView mav = new ModelAndView("userProfile");
 
         final UserModel userModel = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        final ImageModel imageModel = imageService.getImgById(userModel.getProfileImageId()).get();
+        final ImageModel imageModel = userModel.getProfileImage();
 
         mav.addObject("user", userModel);
         mav.addObject("hasImage", imageModel.getImage() != null);
@@ -96,11 +96,11 @@ public class UserProfileController {
                 return editProfileGet(editProfileForm, searchForm, principal, request);
             }
             else {
-                imageService.updateImg(profileImg.getBytes(), user.getProfileImageId());
+                imageService.updateImg(profileImg.getBytes(), user.getProfileImage());
             }
         }
 
-        userService.updateUserInfo(user.getUserId(), new UserInfo(editProfileForm.getName(), editProfileForm.getSurname()));
+        userService.updateUserInfo(user, new UserInfo(editProfileForm.getName(), editProfileForm.getSurname()));
 
         return new ModelAndView("redirect:/user/profile");
     }

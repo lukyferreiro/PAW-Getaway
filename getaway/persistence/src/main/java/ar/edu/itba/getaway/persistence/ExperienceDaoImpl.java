@@ -56,19 +56,14 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
         final ExperienceModel experience = new ExperienceModel(name, address, description, email, url, price, city, category, user, null);
         em.persist(experience);
+        LOGGER.debug("Create experience with id: {}", experience.getExperienceId());
         return experience;
-
-//        final Long experienceId = jdbcInsert.executeAndReturnKey(experienceData).longValue();
-//
-//        LOGGER.info("Created new experience with id {}", experienceId);
-//
-//        return new ExperienceModel(experienceId, name, address, description, email, url, price, cityId, categoryId, userId, null, false);
     }
 
     @Override
     public void updateExperience(ExperienceModel experienceModel) {
-        LOGGER.debug("Executing query to update experience with id: {}", experienceModel.getExperienceId());
-
+        LOGGER.debug("Update experience with id: {}", experienceModel.getExperienceId());
+        em.merge(experienceModel);
     }
 
     @Override
