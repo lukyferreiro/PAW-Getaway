@@ -26,18 +26,19 @@ public class UserModel {
     @JoinColumn(name = "imgId")
     private ImageModel profileImage;
 
-    @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "userRoles", joinColumns = @JoinColumn(name = "userId"))
-    @Column(name = "roleId", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Collection<Roles> roles;
+    @ManyToMany
+    @JoinTable(name = "userroles",
+        joinColumns = @JoinColumn(name = "userId"),
+        inverseJoinColumns = @JoinColumn(name = "roleId")
+    )
+    private Collection<RoleModel> roles;
 
     /* default */
     protected UserModel() {
         // Just for Hibernate
     }
 
-    public UserModel( String password, String name, String surname, String email, Collection<Roles> roles, ImageModel profileImage) {
+    public UserModel( String password, String name, String surname, String email, Collection<RoleModel> roles, ImageModel profileImage) {
         this.password = password;
         this.name = name;
         this.surname = surname;
@@ -46,7 +47,7 @@ public class UserModel {
         this.profileImage = profileImage;
     }
 
-    public UserModel(Long userId, String password, String name, String surname, String email, Collection<Roles> roles, ImageModel profileImage) {
+    public UserModel(Long userId, String password, String name, String surname, String email, Collection<RoleModel> roles, ImageModel profileImage) {
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -92,21 +93,21 @@ public class UserModel {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-    public Collection<Roles> getRoles() {
+    public Collection<RoleModel> getRoles() {
         return roles;
     }
-    public void setRoles(Collection<Roles> roles) {
+    public void setRoles(Collection<RoleModel> roles) {
         this.roles = roles;
     }
-    public void addRole(Roles role) {
+    public void addRole(RoleModel role) {
         roles.add(role);
     }
-    public void removeRole(Roles role) {
+    public void removeRole(RoleModel role) {
         roles.remove(role);
     }
-    public boolean hasRole(String role) {
-        return roles.stream().anyMatch(p -> p.name().equals(role));
-    }
+//    public boolean hasRole(String role) {
+//        return roles.stream().anyMatch(p -> p.name().equals(role));
+//    }
 
     @Override
     public boolean equals(Object o){

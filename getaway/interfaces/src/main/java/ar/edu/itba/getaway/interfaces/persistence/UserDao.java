@@ -12,11 +12,11 @@ public interface UserDao {
     Optional<UserModel> getUserByEmail (String email);
 //    Optional<UserModel> getUserByExperience(ExperienceModel experience);
 //    Optional<UserModel> getUserByReview(ReviewModel review);
-    Collection<Roles> getUserRoles (UserModel user);
-    Collection<UserRoleModel> getUserRolesModels(UserModel user);
+    Collection<RoleModel> getUserRoles (UserModel user);
+//    Collection<UserRoleModel> getUserRolesModels(UserModel user);
     Optional<RoleModel> getRoleByName (Roles role);
-    Optional<UserModel> updateRoles (UserModel user, Roles oldVal, Roles newVal);
-    Optional<UserModel> updatePassword (UserModel user, String password);
+    void updateRoles (UserModel user, Roles oldVal, Roles newVal);
+    void updatePassword (UserModel user, String password);
     void updateUserInfo (UserModel user, UserInfo userInfo);
     void addRole (UserModel user, Roles newRole);
 }

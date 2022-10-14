@@ -22,9 +22,11 @@ public class ReviewModel {
     //TODO change tipo DATE
     @Column(name = "reviewDate", nullable = false)
     private Date reviewDate;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "experienceId", nullable = false)
     private ExperienceModel experience;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false)
     private UserModel user;
@@ -34,7 +36,7 @@ public class ReviewModel {
         // Just for Hibernate
     }
 
-    public ReviewModel(String title, String description, Long score, ExperienceModel experience, Date reviewDate, UserModel user) {
+    public  ReviewModel(String title, String description, Long score, ExperienceModel experience, Date reviewDate, UserModel user) {
         this.title = title;
         this.description = description;
         this.score = score;

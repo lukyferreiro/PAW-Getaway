@@ -5,7 +5,6 @@ import ar.edu.itba.getaway.interfaces.services.ImageService;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
 import ar.edu.itba.getaway.models.ReviewModel;
-import ar.edu.itba.getaway.models.ReviewUserModel;
 import ar.edu.itba.getaway.interfaces.persistence.ReviewDao;
 import ar.edu.itba.getaway.interfaces.services.ReviewService;
 import ar.edu.itba.getaway.models.UserModel;
@@ -105,10 +104,10 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Boolean> getListOfReviewHasImages(List<ReviewUserModel> reviewUserModelList) {
+    public List<Boolean> getListOfReviewHasImages(List<ReviewModel> reviewUserModelList) {
         final List<Boolean> listReviewsHasImages = new ArrayList<>();
         LOGGER.debug("Retrieving list of whether has images of all next's reviews");
-        for (ReviewUserModel review : reviewUserModelList) {
+        for (ReviewModel review : reviewUserModelList) {
             LOGGER.debug("Added has image value of review with id {}", review.getImgId());
             final Optional<ImageModel> img = imageService.getImgById(review.getImgId());
             if (img.isPresent()) {
@@ -120,10 +119,10 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewUserModel> getReviewAndUser(Long experienceId, Integer page) {
+    public Page<ReviewModel> getReviewAndUser(Long experienceId, Integer page) {
         LOGGER.debug("Retrieving all reviews and user of experience with id {}", experienceId);
         int total_pages;
-        List<ReviewUserModel> reviewUserModelList = new ArrayList<>();
+        List<ReviewModel> reviewUserModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {}", page);
 
@@ -157,10 +156,10 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewUserModel> getReviewsByUserId(Long userId, Integer page) {
+    public Page<ReviewModel> getReviewsByUserId(Long userId, Integer page) {
         LOGGER.debug("Retrieving all reviews of user with id {}", userId);
         int total_pages;
-        List<ReviewUserModel> reviewUserModelList = new ArrayList<>();
+        List<ReviewModel> reviewUserModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {}", page);
 
@@ -178,7 +177,7 @@ public class ReviewServiceImpl implements ReviewService {
             } else if (page < 0) {
                 page = 1;
             }
-            reviewUserModelList = reviewDao.getReviewsByUserId(userId, page, USER_PAGE_SIZE);
+            reviewUserModelList = reviewDao.getReviewsByUser(userId, page, USER_PAGE_SIZE);
         } else {
             total_pages = 1;
         }
@@ -210,9 +209,9 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ExperienceModel> getListExperiencesOfReviewsList(List<ReviewUserModel> reviewModelList){
+    public List<ExperienceModel> getListExperiencesOfReviewsList(List<ReviewModel> reviewModelList){
         final List<ExperienceModel> listExperiencesOfReviews = new ArrayList<>();
-        for(ReviewUserModel review : reviewModelList){
+        for(ReviewModel review : reviewModelList){
             final Optional<ExperienceModel> experienceModel = experienceService.getExperienceById(review.getExperienceId());
             experienceModel.ifPresent(listExperiencesOfReviews::add);
         }

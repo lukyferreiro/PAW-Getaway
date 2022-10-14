@@ -33,20 +33,23 @@ public class UserDaoImpl implements UserDao {
             throw new DuplicateUserException();
         }
 
-        final UserModel userModel = new UserModel(password, name, surname, email, roles, image);
+        Collection<RoleModel> roleModels = new ArrayList<>();
+        for (Roles role: roles) {
+            roleModels.add(getRoleByName(role).get());
+        }
+
+        final UserModel userModel = new UserModel(password, name, surname, email, roleModels, image);
         em.persist(userModel);
         LOGGER.info("Created user with id {}", userModel.getUserId());
 
-        Optional<RoleModel> roleModel;
-        for (Roles role : roles) {
-            roleModel = getRoleByName(role);
-
-            addRole(userModel, roleModel.get().getRoleName());
-
-//            UserRoleModel userRoleModel = new UserRoleModel(userModel, roleModel.get());
-//            em.persist(userRoleModel);
-//            LOGGER.debug("Added role {} to user with id {}", role, userModel.getUserId());
-        }
+//        Optional<RoleModel> roleModel;
+//        for (RoleModel roleModel : roleModels) {
+////            roleModel = getRoleByName(role);
+//            addRole(userModel, roleModel);
+////            UserRoleModel userRoleModel = new UserRoleModel(userModel, roleModel.get());
+////            em.persist(userRoleModel);
+////            LOGGER.debug("Added role {} to user with id {}", role, userModel.getUserId());
+//        }
 
         return userModel;
     }
@@ -84,17 +87,17 @@ public class UserDaoImpl implements UserDao {
 //    }
 
     @Override
-    public Collection<Roles> getUserRoles(UserModel user) {
+    public Collection<RoleModel> getUserRoles(UserModel user) {
         return user.getRoles();
     }
 
-    @Override
-    public Collection<UserRoleModel> getUserRolesModels(UserModel user){
-        LOGGER.debug("Get roles of user with id {}", user.getUserId());
-        final TypedQuery<UserRoleModel> query = em.createQuery("FROM UserRoleModel WHERE user = :user", UserRoleModel.class);
-        query.setParameter("user", user);
-        return query.getResultList();
-    }
+//    @Override
+//    public Collection<UserRoleModel> getUserRolesModels(UserModel user){
+//        LOGGER.debug("Get roles of user with id {}", user.getUserId());
+//        final TypedQuery<UserRoleModel> query = em.createQuery("FROM UserRoleModel WHERE user = :user", UserRoleModel.class);
+//        query.setParameter("user", user);
+//        return query.getResultList();
+//    }
 
     @Override
     public Optional<RoleModel> getRoleByName(Roles role) {
@@ -104,64 +107,36 @@ public class UserDaoImpl implements UserDao {
         return query.getResultList().stream().findFirst();
     }
 
-    private Optional<UserRoleModel> getUserRole(UserModel user, RoleModel role) {
-        final TypedQuery<UserRoleModel> query = em.createQuery("FROM UserRoleModel WHERE user = :user AND role = :role", UserRoleModel.class);
-        query.setParameter("user", user);
-        query.setParameter("role", role);
-        return query.getResultList().stream().findFirst();
-    }
+//    private Optional<UserRoleModel> getUserRole(UserModel user, RoleModel role) {
+//        final TypedQuery<UserRoleModel> query = em.createQuery("FROM UserRoleModel WHERE user = :user AND role = :role", UserRoleModel.class);
+//        query.setParameter("user", user);
+//        query.setParameter("role", role);
+//        return query.getResultList().stream().findFirst();
+//    }
 
     @Override
-    public Optional<UserModel> updateRoles(UserModel user, Roles oldVal, Roles newVal) {
-//        final String query = "UPDATE userroles SET roleid = ? WHERE userid = ? AND roleid = ?";
-//        LOGGER.debug("Executing query: {}", query);
-//        final Long oldValueID = getRoleByName(oldVal).get().getRoleId();
-//        final Long newValueID = getRoleByName(newVal).get().getRoleId();
-//        if (jdbcTemplate.update(query, newValueID, userId, oldValueID) == 1) {
-//            LOGGER.debug("Roles updated");
-//            return getUserById(userId);
-//        }
-//        LOGGER.debug("Roles not updated");
-//        return Optional.empty();
-
+    public void updateRoles(UserModel user, Roles oldVal, Roles newVal) {
         final RoleModel oldRole = getRoleByName(oldVal).get();
-        Optional<UserRoleModel> userRoleModel = getUserRole(user, oldRole);
+//        UserRoleModel userRoleModel = getUserRole(user, oldRole).get();
+        user.removeRole(oldRole);
+//        em.remove(userRoleModel);
+        em.merge(user);
 
         final RoleModel newRole = getRoleByName(newVal).get();
-        userRoleModel.get().setRole(newRole);
+        addRole(user, newRole);
+        user.addRole(newRole);
 
-//        return Optional.ofNullable(em.merge(userRoleModel).get().getUser());
-
-        return Optional.empty();
+        em.merge(user);
     }
 
     @Override
-    public Optional<UserModel> updatePassword(UserModel user, String password) {
-//        final String query = "UPDATE users SET password = ? WHERE userId = ?";
-//        LOGGER.debug("Executing query: {}", query);
-//        if (jdbcTemplate.update(query, password, userId) == 1) {
-//            LOGGER.debug("Password updated");
-//            return getUserById(userId);
-//        }
-//        LOGGER.debug("Password not updated");
-//        return Optional.empty();
-
+    public void updatePassword(UserModel user, String password) {
         user.setPassword(password);
-        return Optional.ofNullable(em.merge(user));
-
-//        return Optional.empty();
+        em.merge(user);
     }
 
     @Override
     public void updateUserInfo(UserModel user, UserInfo userInfo) {
-//        final String query = "UPDATE users SET userName = ?, userSurname = ? WHERE userId = ?";
-//        LOGGER.debug("Executing query: {}", query);
-//        if (jdbcTemplate.update(query, userInfo.getName(), userInfo.getSurname(), userId) == 1) {
-//            LOGGER.debug("User info updated");
-//        }
-//        else {
-//            LOGGER.debug("User info not updated");
-//        }
         user.setName(userInfo.getName());
         user.setSurname(userInfo.getSurname());
         em.merge(user);
@@ -169,15 +144,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void addRole(UserModel user, Roles newRole) {
-//        final Map<String, Object> userRolesData = new HashMap<>();
-//        userRolesData.put("userId", userId);
-//        final Optional<RoleModel> roleModel = getRoleByName(newRole);
-//        userRolesData.put("roleId", roleModel.get().getRoleId());
-//        userRolesSimpleJdbcInsert.execute(userRolesData);
-//        LOGGER.info("Added role {} to user {}", newRole.name(), userId);
-
         final RoleModel roleModel = getRoleByName(newRole).get();
-        final UserRoleModel userRoleModel = new UserRoleModel(user, roleModel);
-        em.persist(userRoleModel);
+        user.addRole(roleModel);
+        em.merge(user);
+//        final UserRoleModel userRoleModel = new UserRoleModel(user, roleModel);
+//        em.persist(userRoleModel);
+    }
+
+    private void addRole(UserModel user, RoleModel newRole) {
+//        final UserRoleModel userRoleModel = new UserRoleModel(user, newRole);
+//        em.persist(userRoleModel);
     }
 }

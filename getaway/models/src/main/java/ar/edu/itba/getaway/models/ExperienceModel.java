@@ -9,7 +9,7 @@ public class ExperienceModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "experiences_experienceId_seq")
-    @SequenceGenerator(sequenceName = "experiences_categoryId_seq", name = "experiences_experienceId_seq", allocationSize = 1)
+    @SequenceGenerator(sequenceName = "experiences_experienceId_seq", name = "experiences_experienceId_seq", allocationSize = 1)
     @Column(name = "experienceId")
     private Long experienceId;
     @Column(name = "experienceName", nullable = false, unique = true)
