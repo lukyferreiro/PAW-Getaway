@@ -5,16 +5,9 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.persistence.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
-import javax.sql.DataSource;
 import java.util.*;
 
 @Repository
@@ -84,6 +77,16 @@ public class UserDaoImpl implements UserDao {
         return user.getRoles();
     }
 
+    @Override
+    public Collection<Roles> getRolesByUser (UserModel user){
+        final List<Roles> userRoles = new ArrayList<>();
+        final Collection<RoleModel> userRoleModels = user.getRoles();
+        for (RoleModel role: userRoleModels) {
+            userRoles.add(role.getRoleName());
+        }
+        return userRoles;
+    }
+
 //    @Override
 //    public Collection<UserRoleModel> getUserRolesModels(UserModel user){
 //        LOGGER.debug("Get roles of user with id {}", user.getUserId());
@@ -151,8 +154,7 @@ public class UserDaoImpl implements UserDao {
         user.addRole(roleModel);
 
         System.out.println("Agrego role newRole");
-        for (RoleModel role : user.getRoles()
-        ) {
+        for (RoleModel role : user.getRoles()) {
             System.out.println(role.getRoleName());
         }
 
@@ -161,10 +163,4 @@ public class UserDaoImpl implements UserDao {
 //        em.persist(userRoleModel);
     }
 
-
-
-    private void addRole(UserModel user, RoleModel newRole) {
-//        final UserRoleModel userRoleModel = new UserRoleModel(user, newRole);
-//        em.persist(userRoleModel);
-    }
 }

@@ -36,7 +36,7 @@ public class ReviewModel {
         // Just for Hibernate
     }
 
-    public  ReviewModel(String title, String description, Long score, ExperienceModel experience, Date reviewDate, UserModel user) {
+    public ReviewModel(String title, String description, Long score, ExperienceModel experience, Date reviewDate, UserModel user) {
         this.title = title;
         this.description = description;
         this.score = score;
@@ -45,7 +45,7 @@ public class ReviewModel {
         this.user = user;
     }
 
-    public  ReviewModel(Long reviewId, String title, String description, Long score, ExperienceModel experience, Date reviewDate, UserModel user) {
+    public ReviewModel(Long reviewId, String title, String description, Long score, ExperienceModel experience, Date reviewDate, UserModel user) {
         this.reviewId = reviewId;
         this.title = title;
         this.description = description;

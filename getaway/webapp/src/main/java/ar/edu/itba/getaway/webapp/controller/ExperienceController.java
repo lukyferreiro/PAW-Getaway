@@ -68,14 +68,10 @@ public class ExperienceController {
 
         final String dbCategoryName = category.toString();
         final CategoryModel categoryModel = categoryService.getCategoryByName(categoryName).get();
-//        final Long categoryId = (long) (category.ordinal() + 1);
 
         // Order By
         final OrderByModel[] orderByModels = OrderByModel.values();
-
-        if (orderBy.isPresent()){
-            mav.addObject("orderBy", orderBy.get());
-        }
+        orderBy.ifPresent(orderByModel -> mav.addObject("orderBy", orderByModel));
 
         // Price
         final Optional<Double> maxPriceOpt = experienceService.getMaxPriceByCategory(categoryModel);
@@ -187,7 +183,7 @@ public class ExperienceController {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("experienceDetails");
 
-        //This declaration of category is in order to check if the categoryName it's valid
+        //This declaration of category is in order to check if the categoryName is valid
         final CategoryModel category = categoryService.getCategoryByName(categoryName).orElseThrow(CategoryNotFoundException::new);
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final String dbCategoryName = ExperienceCategory.valueOf(categoryName).name();
@@ -216,7 +212,6 @@ public class ExperienceController {
         mav.addObject("country", country);
         mav.addObject("success", success.isPresent());
         mav.addObject("successReview", successReview.isPresent());
-
         mav.addObject("currentPage", currentPage.getCurrentPage());
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
@@ -224,14 +219,12 @@ public class ExperienceController {
 
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-            boolean belongsToUser;
             if (user.isPresent()) {
                 favExperienceService.setFav(user.get(), set, Optional.of(experience));
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
-
                 mav.addObject("favExperienceModels", favExperienceModels);
-                mav.addObject("isEditing", experienceService.experiencesBelongsToId(user.get(),experience));
-            }else {
+                mav.addObject("isEditing", experienceService.experiencesBelongsToId(user.get(), experience));
+            } else {
                 mav.addObject("isEditing", false);
             }
         } else {

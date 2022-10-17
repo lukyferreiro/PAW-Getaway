@@ -47,7 +47,7 @@ public class UserModel {
         // Just for Hibernate
     }
 
-    public UserModel( String password, String name, String surname, String email, Collection<RoleModel> roles, ImageModel profileImage) {
+    public UserModel(String password, String name, String surname, String email, Collection<RoleModel> roles, ImageModel profileImage) {
         this.password = password;
         this.name = name;
         this.surname = surname;
@@ -107,9 +107,6 @@ public class UserModel {
     public Collection<RoleModel> getRoles() {
         return roles;
     }
-//    public void setRoles(Collection<RoleModel> roles) {
-//        this.roles = roles;
-//    }
     public void addRole(RoleModel role) {
         roles.add(role);
     }
@@ -124,9 +121,6 @@ public class UserModel {
     public Collection<ExperienceModel> getFavExperiences() {
         return favExperiences;
     }
-//    public void setFavexperiences(Collection<ExperienceModel> favexperiences) {
-//        this.favexperiences = favexperiences;
-//    }
     public void addFav(ExperienceModel experience) {
         favExperiences.add(experience);
     }

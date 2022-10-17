@@ -87,11 +87,10 @@ public class UserProfileController {
 
         if(!profileImg.isEmpty()){
             if (!contentTypes.contains(profileImg.getContentType())) {
-                //Enviar mensaje de formato de imagen inválido
                 errors.rejectValue("profileImg", "editProfileForm.validation.imageFormat");
                 return editProfileGet(editProfileForm, searchForm, principal, request);
             }
-            else if(profileImg.getSize()>MAX_SIZE_PER_FILE) {
+            else if(profileImg.getSize() > MAX_SIZE_PER_FILE) {
                 errors.rejectValue("experienceImg", "editProfileForm.validation.imageSize");
                 return editProfileGet(editProfileForm, searchForm, principal, request);
             }

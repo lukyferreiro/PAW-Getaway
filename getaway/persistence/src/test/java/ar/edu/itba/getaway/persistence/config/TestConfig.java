@@ -65,7 +65,6 @@ public class TestConfig {
 
     @Bean
     public DataSource dataSource() {
-
         final SingleConnectionDataSource ds = new SingleConnectionDataSource();
 
         ds.setSuppressClose(true);

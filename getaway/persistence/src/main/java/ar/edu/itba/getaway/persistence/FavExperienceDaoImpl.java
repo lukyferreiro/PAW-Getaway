@@ -20,43 +20,27 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
     private EntityManager em;
     private static final Logger LOGGER = LoggerFactory.getLogger(FavExperienceDaoImpl.class);
 
-
-
-  /*  @Autowired
-    public FavExperienceDaoImpl(final DataSource ds) {
-        this.jdbcTemplate = new JdbcTemplate(ds);
-        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("favuserexperience");
-    }*/
-
     @Override
     public void addFav(UserModel user, ExperienceModel experience) {
-//        final FavExperienceModel favExperienceModel = new FavExperienceModel(user, experience);
-
         LOGGER.debug("Setting experience with {} as fav of user with id {}", experience.getExperienceId(), user.getUserId());
-
         user.addFav(experience);
         em.persist(user);
-//        em.persist(favExperienceModel);
-//        return favExperienceModel;
     }
 
     @Override
     public void deleteFav(UserModel user, ExperienceModel experience) {
         LOGGER.debug("Removing experience with {} as fav of user with id {}", experience.getExperienceId(), user.getUserId());
-
         user.removeFav(experience);
         em.persist(user);
     }
 
     @Override
     public List<Long> listFavsByUser(UserModel user) {
-        List<Long> toRet = new ArrayList<>();
-        Collection<ExperienceModel> favExperiences = user.getFavExperiences();
+        final List<Long> toRet = new ArrayList<>();
+        final Collection<ExperienceModel> favExperiences = user.getFavExperiences();
         for (ExperienceModel exp: favExperiences) {
             toRet.add(exp.getExperienceId());
         }
-
         return toRet;
     }
 

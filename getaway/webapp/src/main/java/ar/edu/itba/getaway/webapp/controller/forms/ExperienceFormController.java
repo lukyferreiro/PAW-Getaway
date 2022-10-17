@@ -49,6 +49,7 @@ public class ExperienceFormController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceFormController.class);
 
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif", "image/jpg");
+    private static final int MAX_SIZE_PER_FILE = 10000000;
 
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createExperienceForm(@ModelAttribute("experienceForm") final ExperienceForm form,
@@ -91,13 +92,15 @@ public class ExperienceFormController {
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageFormat");
                 return createExperienceForm(form, searchForm, request);
             }
+            if(experienceImg.getSize() > MAX_SIZE_PER_FILE){
+                errors.rejectValue("experienceImg", "experienceForm.validation.imageSize");
+                return createExperienceForm(form, searchForm ,request);
+            }
         }
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-//        final Long userId = user.getUserId();
         final CategoryModel category = categoryService.getCategoryById(form.getExperienceCategory()+1).orElseThrow(CategoryNotFoundException::new);
         final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).get();
-//        final Long cityId = cityModel.getCityId();
         final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
         final String description = (form.getExperienceInfo().isEmpty()) ? null : form.getExperienceInfo();
         final String url = (form.getExperienceUrl().isEmpty()) ? null : form.getExperienceUrl();
@@ -112,7 +115,7 @@ public class ExperienceFormController {
         forceLogin(userModelProvider, request);
 //        }
 
-        ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategory().getCategoryName() + "/" + experienceModel.getExperienceId());
+        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategory().getCategoryName() + "/" + experienceModel.getExperienceId());
         mav.addObject("success", true);
         return mav;
     }
@@ -120,11 +123,7 @@ public class ExperienceFormController {
     //This method is used to update the SpringContextHolder
     //https://stackoverflow.com/questions/9910252/how-to-reload-authorities-on-user-update-with-spring-security
     private void forceLogin(UserModel user, HttpServletRequest request) {
-        List<Roles> userRoles = new ArrayList<>();
-        Collection<RoleModel> userRoleModels = user.getRoles();
-        for (RoleModel role: userRoleModels) {
-            userRoles.add(role.getRoleName());
-        }
+        final Collection<Roles> userRoles = userService.getRolesByUser(user);
 
         final PreAuthenticatedAuthenticationToken token =
                 new PreAuthenticatedAuthenticationToken(user.getEmail(), user.getPassword(), getAuthorities(userRoles));

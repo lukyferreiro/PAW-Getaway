@@ -54,13 +54,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserModel> getUserByExperience(ExperienceModel experience){
+    public Optional<UserModel> getUserByExperience(ExperienceModel experience) {
         LOGGER.debug("Retrieving user who creates experience with id {}", experience.getExperienceId());
         return userDao.getUserByExperience(experience);
     }
 
     @Override
-    public Optional<UserModel> getUserByReview(ReviewModel review){
+    public Optional<UserModel> getUserByReview(ReviewModel review) {
         LOGGER.debug("Retrieving user who creates review with id {}", review.getReviewId());
         return userDao.getUserByReview(review);
     }
@@ -169,9 +169,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addRole(UserModel user, Roles newRole){
+    public void addRole(UserModel user, Roles newRole) {
         LOGGER.debug("Adding role {} to user with id {}", newRole.name(), user.getUserId());
         userDao.addRole(user, newRole);
+    }
+
+    @Override
+    public Collection<Roles> getRolesByUser(UserModel user) {
+        return userDao.getRolesByUser(user);
     }
 
 }

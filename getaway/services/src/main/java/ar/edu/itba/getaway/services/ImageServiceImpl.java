@@ -53,7 +53,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Optional<ImageExperienceModel> getImgByExperience (ExperienceModel experience) {
+    public Optional<ImageExperienceModel> getImgByExperience(ExperienceModel experience) {
         LOGGER.debug("Retrieving image of experience with id {}", experience.getExperienceId());
         return imageDao.getImgByExperience(experience);
     }

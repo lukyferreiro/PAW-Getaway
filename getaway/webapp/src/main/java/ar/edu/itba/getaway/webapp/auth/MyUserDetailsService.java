@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.webapp.auth;
 
-import ar.edu.itba.getaway.models.RoleModel;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.interfaces.services.UserService;
@@ -16,10 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Collection;
-
-import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -27,7 +23,7 @@ import java.util.stream.Collectors;
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserService us;
+    private UserService userService;
     @Autowired
     private MessageSource messageSource;
     private final Locale locale = LocaleContextHolder.getLocale();
@@ -36,13 +32,8 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         String message = messageSource.getMessage("error.invalidEmail2", new Object[]{}, locale);
-        final UserModel userModel = us.getUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(message + email));
-
-        List<Roles> userRoles = new ArrayList<>();
-        Collection<RoleModel> userRoleModels = userModel.getRoles();
-        for (RoleModel role: userRoleModels) {
-            userRoles.add(role.getRoleName());
-        }
+        final UserModel userModel = userService.getUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(message + email));
+        final Collection<Roles> userRoles = userService.getRolesByUser(userModel);
         Collection<? extends GrantedAuthority> authorities = getAuthorities(userRoles);
         LOGGER.debug("Logged user with email {} and authorities {}", email, authorities);
         return new MyUserDetails(email, userModel.getPassword(), authorities);

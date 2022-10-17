@@ -73,6 +73,7 @@ public class UserExperiencesController {
             final Optional<ExperienceModel> addFavExperience = experienceService.getExperienceById(experience.get());
             favExperienceService.setFav(user, set, addFavExperience);
         }
+
         final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user);
         final OrderByModel[] orderByModels = OrderByModel.values();
 
@@ -112,10 +113,12 @@ public class UserExperiencesController {
 
         final ModelAndView mav = new ModelAndView("userExperiences");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
+
         if(experience.isPresent()){
             final Optional<ExperienceModel> addFavExperience = experienceService.getExperienceById(experience.get());
             favExperienceService.setFav(user, set, addFavExperience);
         }
+
         final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user);
         final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategoriesByUserId(user);
         final List<List<Long>> avgReviews = reviewService.getListOfAverageScoreByExperienceListAndCategoryId(listByCategory);
@@ -155,14 +158,15 @@ public class UserExperiencesController {
                                              final BindingResult errors,
                                              @ModelAttribute("searchForm") final SearchForm searchForm,
                                              HttpServletRequest request) {
+        LOGGER.debug("Endpoint POST {}", request.getServletPath());
+
         if (errors.hasErrors()) {
             return experienceDelete(experienceId, form, searchForm, request);
         }
 
-        LOGGER.debug("Endpoint POST {}", request.getServletPath());
         final ExperienceModel toDeleteExperience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         experienceService.deleteExperience(toDeleteExperience);
-        ModelAndView mav = new ModelAndView("redirect:/user/experiences");
+        final ModelAndView mav = new ModelAndView("redirect:/user/experiences");
         mav.addObject("delete", true);
         return mav;
     }
@@ -236,7 +240,7 @@ public class UserExperiencesController {
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageFormat");
                 return experienceEdit(experienceId, form, searchForm ,request);
             }
-            if(experienceImg.getSize()>MAX_SIZE_PER_FILE){
+            if(experienceImg.getSize() > MAX_SIZE_PER_FILE){
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageSize");
                 return experienceEdit(experienceId, form, searchForm ,request);
             }
@@ -246,7 +250,6 @@ public class UserExperiencesController {
         final ImageExperienceModel imageExperienceModel = imageService.getImgByExperience(experience).orElseThrow(ImageNotFoundException::new);
         final ImageModel imageModel = imageExperienceModel.getImage();
         final UserModel user = experience.getUser();
-        final Long imgId = imageModel.getImageId();
         final CategoryModel category = categoryService.getCategoryById(form.getExperienceCategory()).orElseThrow(CategoryNotFoundException::new);
         final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).get();
         final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
@@ -259,7 +262,7 @@ public class UserExperiencesController {
 
         experienceService.updateExperience(experienceModel, image);
 
-        ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategory().getCategoryName() + "/" + experienceModel.getExperienceId());
+        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategory().getCategoryName() + "/" + experienceModel.getExperienceId());
         mav.addObject("success", true);
         return mav;
     }

@@ -39,7 +39,6 @@ public class ImageDaoImpl implements ImageDao {
     @Override
     public void updateImg(byte[] image, ImageModel imageModel) {
         LOGGER.debug("Update image with id {}", imageModel.getImageId());
-//        final ImageModel imageModel = new ImageModel(image, imageId);
         imageModel.setImage(image);
         em.merge(imageModel);
     }

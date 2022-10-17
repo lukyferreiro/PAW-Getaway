@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -31,12 +32,9 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
     @Override
     public Optional<VerificationToken> getTokenByValue(String token) {
         LOGGER.debug("Get verification token with value {}", token);
-        return em.createQuery("FROM VerificationToken where verifToken = :token",
-                        VerificationToken.class)
-                .setParameter("token", token)
-                .getResultList()
-                .stream()
-                .findFirst();
+        final TypedQuery<VerificationToken> query = em.createQuery("FROM VerificationToken where verifToken = :token", VerificationToken.class);
+        query.setParameter("token", token);
+        return query.getResultList().stream().findFirst();
     }
 
 
@@ -49,12 +47,9 @@ public class VerificationTokenDaoImpl implements VerificationTokenDao {
     @Override
     public Optional<VerificationToken> getTokenByUser(UserModel user) {
         LOGGER.debug("Get verification token for user with id {}", user.getUserId());
-        return em.createQuery("FROM VerificationToken WHERE user = :user",
-                        VerificationToken.class)
-                .setParameter("user", user)
-                .getResultList()
-                .stream()
-                .findFirst();
+        final TypedQuery<VerificationToken> query = em.createQuery("FROM VerificationToken WHERE user = :user", VerificationToken.class);
+        query.setParameter("user", user);
+        return query.getResultList().stream().findFirst();
     }
 
 }

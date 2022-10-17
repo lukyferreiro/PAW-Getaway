@@ -62,6 +62,7 @@ public class ReviewFormController {
                                              Principal principal,
                                              HttpServletRequest request) {
         LOGGER.debug("Endpoint POST {}", request.getServletPath());
+
         if (errors.hasErrors()) {
             LOGGER.debug("Error in some input of create review form");
             return createReviewForm(categoryName, experienceId, searchForm, form, request);
@@ -69,14 +70,13 @@ public class ReviewFormController {
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-//        final Long userId = user.getUserId();
 
         //TODO cambiar el tipo DATE
         final Date date = Date.from(Instant.now());
 
-        reviewService.createReview(form.getTitle(), form.getDescription(), form.getLongScore(), experience ,date, user);
+        reviewService.createReview(form.getTitle(), form.getDescription(), form.getLongScore(), experience, date, user);
 
-        ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
+        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
 
         mav.addObject("successReview", true);
 

@@ -2,23 +2,14 @@ package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
-import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.sql.DataSource;
 import java.util.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Repository
 public class ExperienceDaoImpl implements ExperienceDao {
@@ -27,28 +18,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
     private EntityManager em;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
-
-//    private final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
-//            new ExperienceModel(rs.getLong("experienceid"),
-//                    rs.getString("experienceName"),
-//                    rs.getString("address"),
-//                    rs.getString("description"),
-//                    rs.getString("email"),
-//                    rs.getString("siteUrl"),
-//                    (rs.getObject("price") == null) ? null : rs.getBigDecimal("price").doubleValue(),
-//                    rs.getLong("cityId"),
-//                    rs.getLong("categoryId"),
-//                    rs.getLong("userId"),
-//                    getImageIdByExperienceId(rs.getLong("experienceid")),
-//                    getHasImage(rs.getLong("experienceid")));
-//
-//    //TODO ver si se pueden sacar estos metodos de aca
-//    private Long getImageIdByExperienceId(Long experienceId){
-//        return imageDao.getImgByExperienceId(experienceId).get().getImageId();
-//    }
-//    private boolean getHasImage(Long experienceId){
-//        return imageDao.getImgByExperienceId(experienceId).get().getImage() != null;
-//    }
 
     @Override
     public ExperienceModel createExperience(String name, String address, String description, String email, String url,

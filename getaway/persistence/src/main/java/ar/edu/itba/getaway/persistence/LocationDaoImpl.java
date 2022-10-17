@@ -36,9 +36,6 @@ public class LocationDaoImpl implements LocationDao {
 
     @Override
     public List<CityModel> getCitiesByCountry(CountryModel country) {
-//        final String query = "SELECT * FROM cities WHERE countryid = ? ORDER BY cityname ASC";
-//        LOGGER.debug("Executing query: {}", query);
-//        return new ArrayList<>(jdbcTemplate.query(query, new Object[]{countryId}, CITY_MODEL_ROW_MAPPER));
         LOGGER.debug("Get cities from country with countryId {}", country.getCountryId());
         final TypedQuery<CityModel> query = em.createQuery("FROM CityModel WHERE country = :country", CityModel.class);
         query.setParameter("country", country);

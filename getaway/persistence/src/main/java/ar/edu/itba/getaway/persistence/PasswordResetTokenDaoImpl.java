@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.persistence;
 
+import ar.edu.itba.getaway.models.CountryModel;
 import ar.edu.itba.getaway.models.PasswordResetToken;
 import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
 import ar.edu.itba.getaway.models.UserModel;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -31,12 +33,9 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao {
     @Override
     public Optional<PasswordResetToken> getTokenByValue(String token) {
         LOGGER.debug("Get password reset token with value {}", token);
-        return em.createQuery("FROM PasswordResetToken WHERE passtoken = :token",
-                        PasswordResetToken.class)
-                .setParameter("token", token)
-                .getResultList()
-                .stream()
-                .findFirst();
+        final TypedQuery<PasswordResetToken> query = em.createQuery("FROM PasswordResetToken WHERE passtoken = :token", PasswordResetToken.class);
+        query.setParameter("token", token);
+        return query.getResultList().stream().findFirst();
     }
 
     @Override
@@ -48,12 +47,9 @@ public class PasswordResetTokenDaoImpl implements PasswordResetTokenDao {
     @Override
     public Optional<PasswordResetToken> getTokenByUser(UserModel user) {
         LOGGER.debug("Get password reset token for user with id {}", user.getUserId());
-        return em.createQuery("FROM PasswordResetToken WHERE user = :user",
-                        PasswordResetToken.class)
-                .setParameter("user", user)
-                .getResultList()
-                .stream()
-                .findFirst();
+        final TypedQuery<PasswordResetToken> query = em.createQuery("FROM PasswordResetToken WHERE user = :user", PasswordResetToken.class);
+        query.setParameter("user", user);
+        return query.getResultList().stream().findFirst();
     }
 
 }

@@ -33,25 +33,24 @@ public class FavExperienceServiceImpl implements FavExperienceService {
     }
 
     @Override
-    public boolean isFav(UserModel user, ExperienceModel experience){
+    public boolean isFav(UserModel user, ExperienceModel experience) {
         return favExperienceDao.isFav(user, experience);
     }
 
     @Override
     public List<Long> listFavsByUser(UserModel user) {
-            LOGGER.debug("Retrieving all favs of user with id {}", user.getUserId());
+        LOGGER.debug("Retrieving all favs of user with id {}", user.getUserId());
         return favExperienceDao.listFavsByUser(user);
     }
 
     @Override
-    public void setFav(UserModel user, Optional<Boolean> set, Optional<ExperienceModel> experience){
+    public void setFav(UserModel user, Optional<Boolean> set, Optional<ExperienceModel> experience) {
         if (experience.isPresent() && set.isPresent()) {
-            if (set.get() ) {
-                if(!isFav(user, experience.get())){
+            if (set.get()) {
+                if (!isFav(user, experience.get())) {
                     addFav(user, experience.get());
                 }
-            }
-            else {
+            } else {
                 deleteFav(user, experience.get());
             }
         }

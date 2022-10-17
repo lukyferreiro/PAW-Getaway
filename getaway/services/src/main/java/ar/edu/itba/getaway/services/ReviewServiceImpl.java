@@ -40,7 +40,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewModel> getReviewsByExperience (ExperienceModel experience) {
+    public List<ReviewModel> getReviewsByExperience(ExperienceModel experience) {
         LOGGER.debug("Retrieving all reviews of experience with id {}", experience.getExperienceId());
         return reviewDao.getReviewsByExperience(experience);
     }
@@ -52,7 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Long> getListOfAverageScoreByExperienceList(List<ExperienceModel> experienceModelList){
+    public List<Long> getListOfAverageScoreByExperienceList(List<ExperienceModel> experienceModelList) {
         final List<Long> avgReviews = new ArrayList<>();
         LOGGER.debug("Retrieving list of average score of all next's experiences");
         for (ExperienceModel experienceModel : experienceModelList) {
@@ -81,7 +81,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Integer> getListOfReviewCountByExperienceList(List<ExperienceModel> experienceModelList){
+    public List<Integer> getListOfReviewCountByExperienceList(List<ExperienceModel> experienceModelList) {
         final List<Integer> listReviewsCount = new ArrayList<>();
         LOGGER.debug("Retrieving list of review count of all next's experiences");
         for (ExperienceModel experienceModel : experienceModelList) {
@@ -115,12 +115,13 @@ public class ReviewServiceImpl implements ReviewService {
             } else {
                 listReviewsHasImages.add(false);
             }
-        } return listReviewsHasImages;
+        }
+        return listReviewsHasImages;
     }
 
     @Override
     public Page<ReviewModel> getReviewAndUser(ExperienceModel experience, Integer page) {
-        LOGGER.debug("Retrieving all reviews and user of experience with id {}", experienceId);
+        LOGGER.debug("Retrieving all reviews and user of experience with id {}", experience.getExperienceId());
         int total_pages;
         List<ReviewModel> reviewUserModelList = new ArrayList<>();
 
@@ -156,7 +157,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewModel> getReviewsByUser (UserModel user, Integer page) {
+    public Page<ReviewModel> getReviewsByUser(UserModel user, Integer page) {
         LOGGER.debug("Retrieving all reviews of user with id {}", user.getUserId());
         int total_pages;
         List<ReviewModel> reviewUserModelList = new ArrayList<>();
@@ -193,7 +194,7 @@ public class ReviewServiceImpl implements ReviewService {
 //            LOGGER.debug("Review {} updated", reviewId);
 //        } else {
 //            LOGGER.warn("Review {} NOT updated", reviewId);
-     //   }
+        //   }
         reviewDao.deleteReview(review);
     }
 
@@ -205,16 +206,16 @@ public class ReviewServiceImpl implements ReviewService {
 //        } else {
 //            LOGGER.warn("Review {} NOT deleted", reviewId);
 //        }
-        reviewDao.updateReview(reviewId,reviewModel);
+        reviewDao.updateReview(reviewId, reviewModel);
     }
 
     //TODO: delete unnecessary method.
     // ReviewModel now internally has its experienceMode
     @Override
-    public List<ExperienceModel> getListExperiencesOfReviewsList(List<ReviewModel> reviewModelList){
+    public List<ExperienceModel> getListExperiencesOfReviewsList(List<ReviewModel> reviewModelList) {
         final List<ExperienceModel> listExperiencesOfReviews = new ArrayList<>();
-        for(ReviewModel review : reviewModelList){
-            final Optional<ExperienceModel> experienceModel = experienceService.getExperienceById(review.getExperienceId());
+        for (ReviewModel review : reviewModelList) {
+            final Optional<ExperienceModel> experienceModel = experienceService.getExperienceById(review.getExperience().getExperienceId());
             experienceModel.ifPresent(listExperiencesOfReviews::add);
         }
         return listExperiencesOfReviews;

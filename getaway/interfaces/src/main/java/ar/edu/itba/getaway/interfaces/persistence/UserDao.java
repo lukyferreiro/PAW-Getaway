@@ -13,6 +13,7 @@ public interface UserDao {
     Optional<UserModel> getUserByExperience(ExperienceModel experience);
     Optional<UserModel> getUserByReview(ReviewModel review);
     Collection<RoleModel> getUserRoles (UserModel user);
+    Collection<Roles> getRolesByUser (UserModel user);
     Optional<RoleModel> getRoleByName (Roles role);
     Optional<UserModel> updateRoles (UserModel user, Roles oldVal, Roles newVal);
     Optional<UserModel> updatePassword (UserModel user, String password);
