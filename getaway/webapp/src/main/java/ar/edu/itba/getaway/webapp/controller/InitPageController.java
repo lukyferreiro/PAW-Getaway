@@ -50,11 +50,7 @@ public class InitPageController {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if (user.isPresent()) {
                 final Long userId = user.get().getUserId();
-                if(user.get().hasRole("VERIFIED")){
-                    favExperienceService.setFav(userId, set, experience);
-                }else if(set.isPresent()){
-                    return new ModelAndView("pleaseVerify");
-                }
+                favExperienceService.setFav(userId, set, experience);
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
                 mav.addObject("favExperienceModels", favExperienceModels);
             }else if(set.isPresent()){

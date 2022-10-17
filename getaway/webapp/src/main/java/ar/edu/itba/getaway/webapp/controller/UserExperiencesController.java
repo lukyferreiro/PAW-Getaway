@@ -64,11 +64,7 @@ public class UserExperiencesController {
 
         final ModelAndView mav = new ModelAndView("userFavourites");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        if(user.hasRole("VERIFIED")){
-            favExperienceService.setFav(user.getUserId(), set, experience);
-        }else {
-            return new ModelAndView("pleaseVerify");
-        }
+        favExperienceService.setFav(user.getUserId(), set, experience);
         final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(user.getUserId());
         final OrderByModel[] orderByModels = OrderByModel.values();
 
@@ -108,11 +104,7 @@ public class UserExperiencesController {
 
         final ModelAndView mav = new ModelAndView("userExperiences");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        if(user.hasRole("VERIFIED")){
-            favExperienceService.setFav(user.getUserId(), set, experience);
-        }else {
-            return new ModelAndView("pleaseVerify");
-        }
+        favExperienceService.setFav(user.getUserId(), set, experience);
         final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(user.getUserId());
         final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategoriesByUserId(user.getUserId());
         final List<List<Long>> avgReviews = reviewService.getListOfAverageScoreByExperienceListAndCategoryId(listByCategory);
