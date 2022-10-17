@@ -40,6 +40,8 @@ public class UserModel {
     )
     private Collection<ExperienceModel> favExperiences;
 
+    //Repeat for reviews and experiences ???
+
     /* default */
     protected UserModel() {
         // Just for Hibernate

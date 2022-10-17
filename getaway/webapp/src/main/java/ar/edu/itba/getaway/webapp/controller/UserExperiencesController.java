@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.interfaces.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
@@ -46,6 +47,8 @@ public class UserExperiencesController {
     private FavExperienceService favExperienceService;
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private CategoryService categoryService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserExperiencesController.class);
 
@@ -65,11 +68,15 @@ public class UserExperiencesController {
 
         final ModelAndView mav = new ModelAndView("userFavourites");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        favExperienceService.setFav(user.getUserId(), set, experience);
-        final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(user.getUserId());
+
+        if(experience.isPresent()){
+            final Optional<ExperienceModel> addFavExperience = experienceService.getExperienceById(experience.get());
+            favExperienceService.setFav(user, set, addFavExperience);
+        }
+        final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user);
         final OrderByModel[] orderByModels = OrderByModel.values();
 
-        final Page<ExperienceModel> currentPage = experienceService.listExperiencesFavsByUserId(user.getUserId(), orderBy, pageNum);
+        final Page<ExperienceModel> currentPage = experienceService.listExperiencesFavsByUser(user, orderBy, pageNum);
         final List<ExperienceModel> experienceList = currentPage.getContent();
         final List<Long> avgReviews = reviewService.getListOfAverageScoreByExperienceList(experienceList);
         final List<Integer> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(experienceList);
@@ -105,12 +112,15 @@ public class UserExperiencesController {
 
         final ModelAndView mav = new ModelAndView("userExperiences");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        favExperienceService.setFav(user.getUserId(), set, experience);
-        final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(user.getUserId());
-        final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategoriesByUserId(user.getUserId());
+        if(experience.isPresent()){
+            final Optional<ExperienceModel> addFavExperience = experienceService.getExperienceById(experience.get());
+            favExperienceService.setFav(user, set, addFavExperience);
+        }
+        final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user);
+        final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategoriesByUserId(user);
         final List<List<Long>> avgReviews = reviewService.getListOfAverageScoreByExperienceListAndCategoryId(listByCategory);
         final List<List<Integer>> listReviewsCount = reviewService.getListOfReviewCountByExperienceListAndCategoryId(listByCategory);
-        final boolean hasExperiences = experienceService.hasExperiencesByUserId(user.getUserId());
+        final boolean hasExperiences = experienceService.hasExperiencesByUserId(user);
 
         mav.addObject("hasExperiences", hasExperiences);
         mav.addObject("listByCategory", listByCategory);
@@ -150,8 +160,8 @@ public class UserExperiencesController {
         }
 
         LOGGER.debug("Endpoint POST {}", request.getServletPath());
-
-        experienceService.deleteExperience(experienceId);
+        final ExperienceModel toDeleteExperience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
+        experienceService.deleteExperience(toDeleteExperience);
         ModelAndView mav = new ModelAndView("redirect:/user/experiences");
         mav.addObject("delete", true);
         return mav;
@@ -171,7 +181,7 @@ public class UserExperiencesController {
         final String country = locationService.getCountryByName().get().getCountryName();
         final List<CityModel> cityModels = locationService.listAllCities();
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final CityModel city = locationService.getCityById(experience.getCityId()).get();
+        final CityModel city = experience.getCity();
         final String cityName = city.getCityName();
 
         if(form.getExperienceName() == null){
@@ -202,7 +212,7 @@ public class UserExperiencesController {
         mav.addObject("cities", cityModels);
         mav.addObject("country", country);
         mav.addObject("formCity", cityName);
-        mav.addObject("formCategory", experience.getCategoryId());
+        mav.addObject("formCategory", experience.getCategory().getCategoryId());
 
         return mav;
     }
@@ -232,24 +242,24 @@ public class UserExperiencesController {
             }
         }
 
-        final ImageModel imageModel = imageService.getImgByExperienceId(experienceId).orElseThrow(ImageNotFoundException::new);
-        final Long imgId = imageModel.getImageId();
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final Long userId = experience.getUserId();
-        final Long categoryId = form.getExperienceCategory();
-        final CityModel city = locationService.getCityByName(form.getExperienceCity()).get();
-        final Long cityId = city.getCityId();
+        final ImageExperienceModel imageExperienceModel = imageService.getImgByExperience(experience).orElseThrow(ImageNotFoundException::new);
+        final ImageModel imageModel = imageExperienceModel.getImage();
+        final UserModel user = experience.getUser();
+        final Long imgId = imageModel.getImageId();
+        final CategoryModel category = categoryService.getCategoryById(form.getExperienceCategory()).orElseThrow(CategoryNotFoundException::new);
+        final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).get();
         final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
         final String description = (form.getExperienceInfo().isEmpty()) ? null : form.getExperienceInfo();
         final String url = (form.getExperienceUrl().isEmpty()) ? null : form.getExperienceUrl();
         final byte[] image = (experienceImg.isEmpty()) ? imageModel.getImage() : experienceImg.getBytes();
 
-        final ExperienceModel experienceModel = new ExperienceModel(experienceId, form.getExperienceName(), form.getExperienceAddress(),
-                description, form.getExperienceMail(), url, price, cityId, categoryId + 1, userId, imgId, image!=null);
+        final ExperienceModel experienceModel = experienceService.createExperience(form.getExperienceName(), form.getExperienceAddress(), description,
+                form.getExperienceMail(), url, price, cityModel, category, user, image);
 
         experienceService.updateExperience(experienceModel, image);
 
-        ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategoryName() + "/" + experienceModel.getExperienceId());
+        ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategory().getCategoryName() + "/" + experienceModel.getExperienceId());
         mav.addObject("success", true);
         return mav;
     }

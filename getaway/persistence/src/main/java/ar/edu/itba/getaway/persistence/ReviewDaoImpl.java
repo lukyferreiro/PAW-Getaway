@@ -30,12 +30,9 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public ReviewModel createReview(String title, String description, Long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel) {
-
-        LOGGER.debug("Creating review for an experience");
         final ReviewModel reviewModel = new ReviewModel(title, description, score, experienceModel, reviewDate, userModel);
         em.persist(reviewModel);
         LOGGER.debug("Created new review with id {} by user with id {}", reviewModel.getReviewId(), userModel.getUserId());
-
         return reviewModel;
     }
 
@@ -47,6 +44,7 @@ public class ReviewDaoImpl implements ReviewDao {
         return query.getResultList();
     }
 
+    //TODO: check aggregate function usage
     @Override
     public Long getReviewAverageScore(ExperienceModel experience) {
         final TypedQuery<Long> query = em.createQuery("SELECT CEILING(AVG(score)) FROM ReviewModel WHERE experience = :experience", Long.class);
@@ -54,6 +52,7 @@ public class ReviewDaoImpl implements ReviewDao {
         return query.getSingleResult();
     }
 
+    //TODO: check aggregate function usage
     @Override
     public Integer getReviewCount(ExperienceModel experience) {
         final TypedQuery<Integer> query = em.createQuery("SELECT COUNT (r.experience) FROM ReviewModel r WHERE r.experience = :experience", Integer.class);
@@ -61,7 +60,6 @@ public class ReviewDaoImpl implements ReviewDao {
         return query.getSingleResult();
     }
 
-    //TODO paginacion + hibernate
     @Override
     public List<ReviewModel> getReviewAndUser(ExperienceModel experience, Integer page, Integer page_size) {
         final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE experience = :experience", ReviewModel.class);
@@ -77,7 +75,6 @@ public class ReviewDaoImpl implements ReviewDao {
         return Optional.ofNullable(em.find(ReviewModel.class, reviewId));
     }
 
-    //TODO paginacion + hibernate
     @Override
     public List<ReviewModel> getReviewsByUser(UserModel user, Integer page, Integer page_size) {
         final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE user = :user", ReviewModel.class);

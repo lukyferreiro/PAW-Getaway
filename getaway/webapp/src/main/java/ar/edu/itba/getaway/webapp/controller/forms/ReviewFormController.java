@@ -1,5 +1,8 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
+import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.interfaces.services.ExperienceService;
+import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.interfaces.services.ReviewService;
 import ar.edu.itba.getaway.interfaces.services.UserService;
@@ -30,6 +33,8 @@ public class ReviewFormController {
     private UserService userService;
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private ExperienceService experienceService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewFormController.class);
 
@@ -63,12 +68,13 @@ public class ReviewFormController {
         }
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        final Long userId = user.getUserId();
+        final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
+//        final Long userId = user.getUserId();
 
         //TODO cambiar el tipo DATE
         final Date date = Date.from(Instant.now());
 
-        reviewService.createReview(form.getTitle(), form.getDescription(), form.getLongScore(), experienceId ,date, userId);
+        reviewService.createReview(form.getTitle(), form.getDescription(), form.getLongScore(), experience ,date, user);
 
         ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
 

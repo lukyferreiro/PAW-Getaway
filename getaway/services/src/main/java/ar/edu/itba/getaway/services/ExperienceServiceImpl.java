@@ -35,16 +35,16 @@ public class ExperienceServiceImpl implements ExperienceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 
     @Override
-    public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, Long cityId, Long categoryId, Long userId, byte[] image) {
+    public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, byte[] image) {
         LOGGER.debug("Creating experience with name {}", name);
-        final ExperienceModel experienceModel = experienceDao.createExperience(name, address, description, email, url, price, cityId, categoryId, userId);
-        final ImageExperienceModel imageExperienceModel = imageService.createExperienceImg(image, experienceModel.getExperienceId(), true);
-        experienceModel.setHasImage(image != null);
-        experienceModel.setImageExperienceId(imageExperienceModel.getImageId());
-        final UserModel usermodel = userService.getUserById(experienceModel.getUserId()).get();
-        if (!usermodel.getRoles().contains(Roles.PROVIDER)) {
+        final ExperienceModel experienceModel = experienceDao.createExperience(name, address, description, email, url, price, city, category, user);
+        final ImageExperienceModel imageExperienceModel = imageService.createExperienceImg(image, experienceModel, true);
+//        experienceModel.setHasImage(image != null);
+//        experienceModel.setImageExperienceId(imageExperienceModel.getImageId());
+//        final UserModel usermodel = userService.getUserById(experienceModel.getUserId()).get();
+        if (!user.hasRole(Roles.PROVIDER.name())) {
             LOGGER.debug("User gains role provider when they creates an experience for first time");
-            userService.addRole(usermodel, Roles.PROVIDER);
+            userService.addRole(user, Roles.PROVIDER);
         }
         return experienceModel;
     }
@@ -52,25 +52,26 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public void updateExperience(ExperienceModel experienceModel, byte[] image) {
         LOGGER.debug("Updating experience with id {}", experienceModel.getExperienceId());
-        if (experienceDao.updateExperience(experienceModel)) {
-            imageService.updateImg(image, experienceModel.getImageExperienceId());
-            LOGGER.debug("Experience {} updated", experienceModel.getExperienceId());
-        } else {
-            LOGGER.warn("Fail to update experience {}", experienceModel.getExperienceId());
-        }
+        experienceDao.updateExperience(experienceModel);
+        imageService.updateImg(image, imageService.getImgByExperience(experienceModel).get().getImage());
+        LOGGER.debug("Experience {} updated", experienceModel.getExperienceId());
     }
 
     @Override
-    public void deleteExperience(Long experienceId) {
-        LOGGER.debug("Deleting experience with id {}", experienceId);
-        final Optional<ExperienceModel> experienceModelOptional = getExperienceById(experienceId);
-        if (experienceModelOptional.isPresent()) {
-            experienceDao.deleteExperience(experienceId);
-            imageService.deleteImg(experienceModelOptional.get().getImageExperienceId());
-            LOGGER.debug("Experience {} deleted", experienceId);
-        } else {
-            LOGGER.warn("Experience {} NOT deleted", experienceId);
-        }
+    public void deleteExperience(ExperienceModel experienceModel) {
+        LOGGER.debug("Deleting experience with id {}", experienceModel.getExperienceId());
+        ImageModel toDeleteImg = imageService.getImgByExperience(experienceModel).get().getImage();
+        experienceDao.deleteExperience(experienceModel);
+        imageService.deleteImg(toDeleteImg);
+//        imageService.deleteImg();
+//        final Optional<ExperienceModel> experienceModelOptional = getExperienceById(experienceId);
+//        if (experienceModelOptional.isPresent()) {
+//            experienceDao.deleteExperience(experienceId);
+//            imageService.deleteImg(experienceModelOptional.get().getImageExperienceId());
+//            LOGGER.debug("Experience {} deleted", experienceId);
+//        } else {
+//            LOGGER.warn("Experience {} NOT deleted", experienceId);
+//        }
     }
 
     @Override
@@ -80,9 +81,9 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByUserId(Long userId, Long categoryId) {
-        LOGGER.debug("Retrieving experiences created by user with id {}", userId);
-        return experienceDao.listExperiencesByUserId(userId, categoryId);
+    public List<ExperienceModel> listExperiencesByUserId(UserModel user, CategoryModel category) {
+        LOGGER.debug("Retrieving experiences of category {} created by user with id {}", category.getCategoryId(), user.getUserId());
+        return experienceDao.listExperiencesByUser(user, category);
     }
 
     @Override
@@ -119,9 +120,9 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Optional<Double> getMaxPriceByCategoryId(Long categoryId) {
-        LOGGER.debug("Retrieving max price of category with id {}", categoryId);
-        return experienceDao.getMaxPriceByCategoryId(categoryId);
+    public Optional<Double> getMaxPriceByCategory (CategoryModel category) {
+        LOGGER.debug("Retrieving max price of category with id {}", category.getCategoryId());
+        return experienceDao.getMaxPriceByCategory (category);
     }
 
     @Override
@@ -131,7 +132,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         LOGGER.debug("Requested page {}", page);
 
-        Integer total = experienceDao.getCountExperiencesFavsByUserId(userId);
+        Integer total = experienceDao.getCountExperiencesFavsByUser(userId);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);

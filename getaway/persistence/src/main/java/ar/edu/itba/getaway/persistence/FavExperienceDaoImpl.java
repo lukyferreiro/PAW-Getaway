@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Repository
 public class FavExperienceDaoImpl implements FavExperienceDao {
@@ -46,10 +49,16 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
         em.persist(user);
     }
 
-//    @Override
-//    public List<Long> listFavsByUser(UserModel user) {
-//        return new ArrayList<>(user.getFavExperiences());
-//    }
+    @Override
+    public List<Long> listFavsByUser(UserModel user) {
+        List<Long> toRet = new ArrayList<>();
+        Collection<ExperienceModel> favExperiences = user.getFavExperiences();
+        for (ExperienceModel exp: favExperiences) {
+            toRet.add(exp.getExperienceId());
+        }
+
+        return toRet;
+    }
 
     @Override
     public boolean isFav(UserModel user, ExperienceModel experience) {

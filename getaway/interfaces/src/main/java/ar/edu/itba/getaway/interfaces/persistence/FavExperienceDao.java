@@ -8,6 +8,6 @@ import java.util.List;
 public interface FavExperienceDao {
     void addFav (UserModel user, ExperienceModel experience);
     void deleteFav (UserModel user, ExperienceModel experience);
-//    List<Long> listFavsByUser (UserModel user);
+    List<Long> listFavsByUser (UserModel user);
     boolean isFav (UserModel user, ExperienceModel experience);
 }

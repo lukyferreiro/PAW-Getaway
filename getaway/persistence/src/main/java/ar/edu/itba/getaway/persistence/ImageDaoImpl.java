@@ -25,16 +25,16 @@ public class ImageDaoImpl implements ImageDao {
         return imageModel;
     }
 
-//    @Override
-//    public ImageExperienceModel createExperienceImg(byte[] image, ExperienceModel experience, boolean isCover) {
-//        final ImageModel imageData = createImg(image);
-//
-//        final ImageExperienceModel imageExperienceModel = new ImageExperienceModel(imageData, experience, isCover);
-//        em.persist(imageExperienceModel);
-//        LOGGER.info("Created new image experience with id {}", imageData.getImageId());
-//
-//        return imageExperienceModel;
-//    }
+    @Override
+    public ImageExperienceModel createExperienceImg(byte[] image, ExperienceModel experience, boolean isCover) {
+        final ImageModel imageData = createImg(image);
+
+        final ImageExperienceModel imageExperienceModel = new ImageExperienceModel(imageData, experience, isCover);
+        em.persist(imageExperienceModel);
+        LOGGER.info("Created new image experience with id {}", imageData.getImageId());
+
+        return imageExperienceModel;
+    }
 
     @Override
     public void updateImg(byte[] image, ImageModel imageModel) {
@@ -57,9 +57,9 @@ public class ImageDaoImpl implements ImageDao {
     }
 
     @Override
-    public Optional<ImageModel> getImgByExperience (ExperienceModel experience) {
+    public Optional<ImageExperienceModel> getImgByExperience (ExperienceModel experience) {
         LOGGER.debug("Get image for experience with id {}", experience.getExperienceId());
-        final TypedQuery<ImageModel> query = em.createQuery("FROM ImageModel WHERE experience = :experience", ImageModel.class);
+        final TypedQuery<ImageExperienceModel> query = em.createQuery("FROM ImageExperienceModel WHERE experience = :experience", ImageExperienceModel.class);
         query.setParameter("experience", experience);
         return query.getResultList().stream().findFirst();
     }

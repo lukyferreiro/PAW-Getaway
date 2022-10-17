@@ -1,8 +1,9 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.getaway.models.FavExperienceModel;
+import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.interfaces.persistence.FavExperienceDao;
 import ar.edu.itba.getaway.interfaces.services.FavExperienceService;
+import ar.edu.itba.getaway.models.UserModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,38 +21,38 @@ public class FavExperienceServiceImpl implements FavExperienceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(FavExperienceServiceImpl.class);
 
     @Override
-    public FavExperienceModel createFav(Long userId, Long experienceId) {
-        LOGGER.debug("User with id {} fav experience with id {}", userId, experienceId);
-        return favExperienceDao.createFav(userId, experienceId);
+    public void addFav(UserModel user, ExperienceModel experience) {
+        LOGGER.debug("User with id {} fav experience with id {}", user.getUserId(), experience.getExperienceId());
+        favExperienceDao.addFav(user, experience);
     }
 
     @Override
-    public void deleteFav(Long userId, Long experienceId) {
-        LOGGER.debug("User with id {} remove from fav experience with id {}", userId, experienceId);
-        favExperienceDao.deleteFav(userId, experienceId);
+    public void deleteFav(UserModel user, ExperienceModel experience) {
+        LOGGER.debug("User with id {} remove from fav experience with id {}", user.getUserId(), experience.getExperienceId());
+        favExperienceDao.deleteFav(user, experience);
     }
 
     @Override
-    public boolean isFav(Long userId, Long experienceId){
-        return favExperienceDao.isFav(userId, experienceId);
+    public boolean isFav(UserModel user, ExperienceModel experience){
+        return favExperienceDao.isFav(user, experience);
     }
 
     @Override
-    public List<Long> listFavsByUserId(Long userId) {
-        LOGGER.debug("Retrieving all favs of user with id {}", userId);
-        return favExperienceDao.listFavsByUserId(userId);
+    public List<Long> listFavsByUser(UserModel user) {
+            LOGGER.debug("Retrieving all favs of user with id {}", user.getUserId());
+        return favExperienceDao.listFavsByUser(user);
     }
 
     @Override
-    public void setFav(Long userId, Optional<Boolean> set, Optional<Long> experienceId){
-        if (experienceId.isPresent() && set.isPresent()) {
+    public void setFav(UserModel user, Optional<Boolean> set, Optional<ExperienceModel> experience){
+        if (experience.isPresent() && set.isPresent()) {
             if (set.get() ) {
-                if(!isFav(userId, experienceId.get())){
-                    createFav(userId, experienceId.get());
+                if(!isFav(user, experience.get())){
+                    addFav(user, experience.get());
                 }
             }
             else {
-                deleteFav(userId, experienceId.get());
+                deleteFav(user, experience.get());
             }
         }
     }

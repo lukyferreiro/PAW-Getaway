@@ -34,9 +34,9 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<CityModel> getCitiesByCountryId(Long countryId) {
-        LOGGER.debug("Retrieving all cities of country with id {}", countryId);
-        return locationDao.getCitiesByCountryId(countryId);
+    public List<CityModel> getCitiesByCountry(CountryModel country) {
+        LOGGER.debug("Retrieving all cities of country with id {}", country);
+        return locationDao.getCitiesByCountry(country);
     }
 
     @Override

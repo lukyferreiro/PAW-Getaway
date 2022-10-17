@@ -40,7 +40,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewModel> getReviewsByExperienceId(ExperienceModel experience) {
+    public List<ReviewModel> getReviewsByExperience (ExperienceModel experience) {
         LOGGER.debug("Retrieving all reviews of experience with id {}", experience.getExperienceId());
         return reviewDao.getReviewsByExperience(experience);
     }
@@ -119,14 +119,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewModel> getReviewAndUser(Long experienceId, Integer page) {
+    public Page<ReviewModel> getReviewAndUser(ExperienceModel experience, Integer page) {
         LOGGER.debug("Retrieving all reviews and user of experience with id {}", experienceId);
         int total_pages;
         List<ReviewModel> reviewUserModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {}", page);
 
-        int total = reviewDao.getReviewCount(experienceId);
+        int total = reviewDao.getReviewCount(experience);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -140,7 +140,7 @@ public class ReviewServiceImpl implements ReviewService {
             } else if (page < 0) {
                 page = 1;
             }
-            reviewUserModelList = reviewDao.getReviewAndUser(experienceId, page, PAGE_SIZE);
+            reviewUserModelList = reviewDao.getReviewAndUser(experience, page, PAGE_SIZE);
         } else {
             total_pages = 1;
         }
@@ -156,14 +156,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewModel> getReviewsByUserId(Long userId, Integer page) {
-        LOGGER.debug("Retrieving all reviews of user with id {}", userId);
+    public Page<ReviewModel> getReviewsByUser (UserModel user, Integer page) {
+        LOGGER.debug("Retrieving all reviews of user with id {}", user.getUserId());
         int total_pages;
         List<ReviewModel> reviewUserModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {}", page);
 
-        int total = reviewDao.getReviewByUserCount(userId);
+        int total = reviewDao.getReviewByUserCount(user);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -177,7 +177,7 @@ public class ReviewServiceImpl implements ReviewService {
             } else if (page < 0) {
                 page = 1;
             }
-            reviewUserModelList = reviewDao.getReviewsByUser(userId, page, USER_PAGE_SIZE);
+            reviewUserModelList = reviewDao.getReviewsByUser(user, page, USER_PAGE_SIZE);
         } else {
             total_pages = 1;
         }
@@ -208,6 +208,8 @@ public class ReviewServiceImpl implements ReviewService {
         reviewDao.updateReview(reviewId,reviewModel);
     }
 
+    //TODO: delete unnecessary method.
+    // ReviewModel now internally has its experienceMode
     @Override
     public List<ExperienceModel> getListExperiencesOfReviewsList(List<ReviewModel> reviewModelList){
         final List<ExperienceModel> listExperiencesOfReviews = new ArrayList<>();

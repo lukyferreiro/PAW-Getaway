@@ -11,6 +11,6 @@ public interface ImageDao {
     void updateImg(byte[] image, ImageModel imageModel) ;
     void deleteImg (ImageModel imageModel);
     Optional<ImageModel> getImgById (Long imageId);
-//    ImageExperienceModel createExperienceImg (byte[] image, ExperienceModel experience, boolean isCover);
-    Optional<ImageModel> getImgByExperience (ExperienceModel experience);
+    ImageExperienceModel createExperienceImg (byte[] image, ExperienceModel experience, boolean isCover);
+    Optional<ImageExperienceModel> getImgByExperience (ExperienceModel experience);
 }

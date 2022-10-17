@@ -36,7 +36,6 @@ public class SearchFormController {
     @Autowired
     private ReviewService reviewService;
 
-    //TODO PAGINARLO
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchFormController.class);
 
     @RequestMapping(value = "/search_result", method = {RequestMethod.GET})
@@ -58,10 +57,10 @@ public class SearchFormController {
 
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-            if (user.isPresent()) {
-                final Long userId = user.get().getUserId();
-                favExperienceService.setFav(userId, set, experience);
-                final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
+            if(experience.isPresent() && user.isPresent()){
+                final Optional<ExperienceModel> addFavExperience = experienceService.getExperienceById(experience.get());
+                favExperienceService.setFav(user.get(), set, addFavExperience);
+                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
                 mav.addObject("favExperienceModels", favExperienceModels);
             }
         } else {

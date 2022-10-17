@@ -1,5 +1,7 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
+import ar.edu.itba.getaway.interfaces.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.interfaces.services.CategoryService;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -38,6 +41,8 @@ public class ExperienceFormController {
     private ExperienceService experienceService;
     @Autowired
     private LocationService locationService;
+    @Autowired
+    private CategoryService categoryService;
     @Autowired
     private UserService userService;
 
@@ -89,19 +94,20 @@ public class ExperienceFormController {
         }
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        final Long userId = user.getUserId();
-        final Long categoryId = form.getExperienceCategory();
+//        final Long userId = user.getUserId();
+        final CategoryModel category = categoryService.getCategoryById(form.getExperienceCategory()+1).orElseThrow(CategoryNotFoundException::new);
         final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).get();
-        final Long cityId = cityModel.getCityId();
+//        final Long cityId = cityModel.getCityId();
         final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
         final String description = (form.getExperienceInfo().isEmpty()) ? null : form.getExperienceInfo();
         final String url = (form.getExperienceUrl().isEmpty()) ? null : form.getExperienceUrl();
 
         final byte[] image = (experienceImg.isEmpty()) ? null : experienceImg.getBytes();
         final ExperienceModel experienceModel = experienceService.createExperience(form.getExperienceName(), form.getExperienceAddress(), description,
-                form.getExperienceMail(), url, price, cityId, categoryId + 1, userId, image);
+                form.getExperienceMail(), url, price, cityModel, category, user, image);
 //        if(!user.hasRole("PROVIDER")){
-        final UserModel userModelProvider = userService.getUserByExperienceId(experienceService.getExperienceById(experienceModel.getExperienceId()).get().getExperienceId()).get();
+        //TODO CHECK
+        final UserModel userModelProvider = userService.getUserByExperience(experienceModel).get();
         LOGGER.debug("Updating SpringContextHolder");
         forceLogin(userModelProvider, request);
 //        }
@@ -114,9 +120,14 @@ public class ExperienceFormController {
     //This method is used to update the SpringContextHolder
     //https://stackoverflow.com/questions/9910252/how-to-reload-authorities-on-user-update-with-spring-security
     private void forceLogin(UserModel user, HttpServletRequest request) {
+        List<Roles> userRoles = new ArrayList<>();
+        Collection<RoleModel> userRoleModels = user.getRoles();
+        for (RoleModel role: userRoleModels) {
+            userRoles.add(role.getRoleName());
+        }
 
         final PreAuthenticatedAuthenticationToken token =
-                new PreAuthenticatedAuthenticationToken(user.getEmail(), user.getPassword(), getAuthorities(user.getRoles()));
+                new PreAuthenticatedAuthenticationToken(user.getEmail(), user.getPassword(), getAuthorities(userRoles));
 
         token.setDetails(new WebAuthenticationDetails(request));
 

@@ -1,16 +1,13 @@
 package ar.edu.itba.getaway.interfaces.services;
 
-import ar.edu.itba.getaway.models.CategoryModel;
-import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.OrderByModel;
-import ar.edu.itba.getaway.models.UserModel;
+import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ExperienceService {
-    ExperienceModel createExperience (String name, String address, String description, String email, String url, Double price, Long cityId, Long categoryId, Long userId, byte[] image);
+    ExperienceModel createExperience (String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, byte[] image);
     void updateExperience (ExperienceModel experienceModel, byte[] image);
     void deleteExperience (ExperienceModel experienceModel);
     Optional<ExperienceModel> getExperienceById(Long experienceId);

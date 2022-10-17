@@ -48,8 +48,8 @@ public class UserReviewsController {
         final ModelAndView mav = new ModelAndView("userReviews");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
-        final Page<ReviewUserModel> currentPage = reviewService.getReviewsByUserId(user.getUserId(), pageNum);
-        final List<ReviewUserModel> reviewList = currentPage.getContent();
+        final Page<ReviewModel> currentPage = reviewService.getReviewsByUser(user, pageNum);
+        final List<ReviewModel> reviewList = currentPage.getContent();
         final List<Boolean> listReviewsHasImages = reviewService.getListOfReviewHasImages(reviewList);
         final List<ExperienceModel> listExperiencesOfReviews = reviewService.getListExperiencesOfReviewsList(reviewList);
 
@@ -59,7 +59,6 @@ public class UserReviewsController {
         mav.addObject("isEditing", true);
         mav.addObject("successReview", successReview.isPresent());
         mav.addObject("deleteReview", deleteReview.isPresent());
-
         mav.addObject("currentPage", currentPage.getCurrentPage());
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
@@ -97,7 +96,8 @@ public class UserReviewsController {
             return reviewDelete(reviewId, form, searchForm, request);
         }
 
-        reviewService.deleteReview(reviewId);
+        final ReviewModel toDeleteReview = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
+        reviewService.deleteReview(toDeleteReview);
 
         ModelAndView mav = new ModelAndView("redirect:/user/reviews");
         mav.addObject("deleteReview", true);
@@ -150,10 +150,9 @@ public class UserReviewsController {
         }
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        final Long userId = user.getUserId();
         final ReviewModel review = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
         final ReviewModel newReviewModel = new ReviewModel(reviewId, form.getTitle(), form.getDescription(),
-                form.getLongScore(),review.getExperienceId(), Date.from(Instant.now()), userId);
+                form.getLongScore(),review.getExperience(), Date.from(Instant.now()), user);
 
         reviewService.updateReview(reviewId,newReviewModel);
 
