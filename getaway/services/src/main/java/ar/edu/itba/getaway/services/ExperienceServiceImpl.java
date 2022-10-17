@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByUserId(UserModel user, CategoryModel category) {
+    public List<ExperienceModel> listExperiencesByUser(UserModel user, CategoryModel category) {
         LOGGER.debug("Retrieving experiences of category {} created by user with id {}", category.getCategoryId(), user.getUserId());
         return experienceDao.listExperiencesByUser(user, category);
     }
@@ -114,9 +115,9 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByBestRanked(Long categoryId) {
-        LOGGER.debug("Retrieving all experiences by best ranked of category with id {}", categoryId);
-        return experienceDao.listExperiencesByBestRanked(categoryId);
+    public List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category) {
+        LOGGER.debug("Retrieving all experiences by best ranked of category with id {}", category.getCategoryId());
+        return experienceDao.listExperiencesByBestRanked(category);
     }
 
     @Override
@@ -126,13 +127,13 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> listExperiencesFavsByUserId(Long userId, Optional<OrderByModel> order, Integer page) {
+    public Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, Integer page) {
         int total_pages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {}", page);
 
-        Integer total = experienceDao.getCountExperiencesFavsByUser(userId);
+        Integer total = experienceDao.getCountExperiencesFavsByUser(user);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -146,7 +147,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             } else if (page < 0) {
                 page = 1;
             }
-            experienceModelList = experienceDao.listExperiencesFavsByUserId(userId, order, page, RESULT_PAGE_SIZE);
+            experienceModelList = experienceDao.listExperiencesFavsByUserId(user, order, page, RESULT_PAGE_SIZE);
         } else {
             total_pages = 1;
         }
@@ -191,31 +192,31 @@ public class ExperienceServiceImpl implements ExperienceService {
         LOGGER.debug("Retrieving all experiences listed by categories");
         for (int i = 0; i < categoryService.getCategoriesCount(); i++) {
             listExperiencesByCategory.add(new ArrayList<>());
-            listExperiencesByCategory.get(i).addAll(listExperiencesByBestRanked((long) (i + 1)));
+            listExperiencesByCategory.get(i).addAll(listExperiencesByBestRanked(categoryService.getCategoryById((long)(i + 1)).get()));
         }
         return listExperiencesByCategory;
     }
 
     @Override
-    public List<List<ExperienceModel>> getExperiencesListByCategoriesByUserId(Long userId) {
+    public List<List<ExperienceModel>> getExperiencesListByCategoriesByUserId(UserModel user) {
         final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
-        LOGGER.debug("Retrieving all experiences listed by categories of the user with id {}", userId);
+        LOGGER.debug("Retrieving all experiences listed by categories of the user with id {}", user.getUserId());
         for (int i = 0; i < categoryService.getCategoriesCount(); i++) {
             listExperiencesByCategory.add(new ArrayList<>());
-            listExperiencesByCategory.get(i).addAll(listExperiencesByUserId(userId, (long) (i + 1)));
+            listExperiencesByCategory.get(i).addAll(listExperiencesByUser(user, categoryService.getCategoryById((long)(i + 1)).get()));
         }
         return listExperiencesByCategory;
     }
 
     @Override
-    public boolean hasExperiencesByUserId(Long userId) {
-        LOGGER.debug("Retrieving whether the user with id {} has experiences l", userId);
-        return experienceDao.hasExperiencesByUserId(userId);
+    public boolean hasExperiencesByUserId(UserModel user) {
+        LOGGER.debug("Retrieving whether the user with id {} has experiences l", user.getUserId());
+        return experienceDao.hasExperiencesByUserId(user);
     }
 
     @Override
-    public boolean experiencesBelongsToId(Long userId, Long experienceId) {
-        return experienceDao.experiencesBelongsToId(userId,experienceId);
+    public boolean experiencesBelongsToId(UserModel user, ExperienceModel experience) {
+        return experienceDao.experiencesBelongsToId(user, experience);
     }
 
 }
