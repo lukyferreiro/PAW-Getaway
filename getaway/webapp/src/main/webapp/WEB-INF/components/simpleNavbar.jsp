@@ -11,13 +11,12 @@
          </span>
       </a>
       <div class="container-navbar-buttons d-flex justify-content-between align-items-center">
-         <c:if test="${loggedUser.hasRole('VERIFIED')}">
-            <a href="<c:url value="/create_experience"/>" style="margin-right: 40px;">
-               <button type="button" class="btn button-primary">
-                  <spring:message code="navbar.createExperience"/>
-               </button>
-            </a>
-         </c:if>
+         <a href="<c:url value="/create_experience"/>" style="margin-right: 40px;">
+            <button type="button" class="btn button-primary">
+               <spring:message code="navbar.createExperience"/>
+            </button>
+         </a>
+
          <c:choose>
             <c:when test="${loggedUser == null}">
                <a href="<c:url value="/login"/>">

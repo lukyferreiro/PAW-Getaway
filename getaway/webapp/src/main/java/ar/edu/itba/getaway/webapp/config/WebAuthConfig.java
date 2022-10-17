@@ -117,6 +117,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review/**").hasRole("VERIFIED")
                 //PermitAll Experiences
                 .antMatchers(HttpMethod.GET,"/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/experiences/{categoryName:[A-Za-z_]+}/**/*{set:[a-z]+}*").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.GET,"/searchResult/{categoryName:[A-Za-z_]+}/**/*{set:[a-z]+}*").hasRole("VERIFIED")
                 .antMatchers(HttpMethod.GET,"/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/experiences/{experienceId:[0-9]+}/image/**").permitAll()

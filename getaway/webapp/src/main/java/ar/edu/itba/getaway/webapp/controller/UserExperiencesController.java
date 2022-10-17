@@ -52,7 +52,6 @@ public class UserExperiencesController {
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif", "image/jpg");
     private static final int MAX_SIZE_PER_FILE = 10000000;
 
-
     @RequestMapping(value = "/user/favourites")
     public ModelAndView favourites(Principal principal,
                                    @RequestParam Optional<OrderByModel> orderBy,
@@ -65,7 +64,11 @@ public class UserExperiencesController {
 
         final ModelAndView mav = new ModelAndView("userFavourites");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        favExperienceService.setFav(user.getUserId(), set, experience);
+        if(user.hasRole("VERIFIED")){
+            favExperienceService.setFav(user.getUserId(), set, experience);
+        }else {
+            return new ModelAndView("pleaseVerify");
+        }
         final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(user.getUserId());
         final OrderByModel[] orderByModels = OrderByModel.values();
 
@@ -105,7 +108,11 @@ public class UserExperiencesController {
 
         final ModelAndView mav = new ModelAndView("userExperiences");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        favExperienceService.setFav(user.getUserId(), set, experience);
+        if(user.hasRole("VERIFIED")){
+            favExperienceService.setFav(user.getUserId(), set, experience);
+        }else {
+            return new ModelAndView("pleaseVerify");
+        }
         final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(user.getUserId());
         final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategoriesByUserId(user.getUserId());
         final List<List<Long>> avgReviews = reviewService.getListOfAverageScoreByExperienceListAndCategoryId(listByCategory);

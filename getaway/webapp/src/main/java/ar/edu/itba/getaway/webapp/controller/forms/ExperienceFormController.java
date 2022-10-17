@@ -29,6 +29,7 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -48,7 +49,16 @@ public class ExperienceFormController {
     @RequestMapping(value = "/create_experience", method = {RequestMethod.GET})
     public ModelAndView createExperienceForm(@ModelAttribute("experienceForm") final ExperienceForm form,
                                              @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                                             Principal principal,
                                              HttpServletRequest request) {
+        if (principal != null) {
+            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+            if(user.isPresent()){
+                if(!user.get().hasRole("VERIFIED")){
+                    return new ModelAndView("pleaseVerify");
+                }
+            }
+        }
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("experienceForm");
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
@@ -76,7 +86,7 @@ public class ExperienceFormController {
         LOGGER.debug("User tries to create an experience with category id: {}", form.getExperienceCategory());
 
         if (errors.hasErrors()) {
-            return createExperienceForm(form, searchForm, request);
+            return createExperienceForm(form, searchForm, principal, request);
         }
 
         final MultipartFile experienceImg = form.getExperienceImg();
@@ -84,7 +94,7 @@ public class ExperienceFormController {
             if (!contentTypes.contains(experienceImg.getContentType())) {
                 form.setExperienceCategory(form.getExperienceCategory()+1);
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageFormat");
-                return createExperienceForm(form, searchForm, request);
+                return createExperienceForm(form, searchForm, principal, request);
             }
         }
 
