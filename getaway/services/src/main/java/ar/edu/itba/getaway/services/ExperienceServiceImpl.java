@@ -52,6 +52,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceModel;
     }
 
+    @Transactional
     @Override
     public void updateExperience(ExperienceModel experienceModel, byte[] image) {
         LOGGER.debug("Updating experience with id {}", experienceModel.getExperienceId());
@@ -60,6 +61,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         LOGGER.debug("Experience {} updated", experienceModel.getExperienceId());
     }
 
+    @Transactional
     @Override
     public void deleteExperience(ExperienceModel experienceModel) {
         LOGGER.debug("Deleting experience with id {}", experienceModel.getExperienceId());

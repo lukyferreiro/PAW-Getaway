@@ -42,7 +42,7 @@ public class ReviewDaoImpl implements ReviewDao {
 //        final TypedQuery<Long> query = em.createQuery("SELECT CEILING(AVG(rev.score)) FROM ReviewModel rev WHERE rev.experience = :experience", Long.class);
 //        query.setParameter("experience", experience);
 //        return query.getSingleResult();
-        return 1L;
+        return 0L;
     }
 
     //TODO: check aggregate function usage
@@ -78,8 +78,8 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     @Override
-    public Integer getReviewByUserCount(UserModel user) {
-        final TypedQuery<Integer> query = em.createQuery("SELECT COUNT(r.user) FROM ReviewModel r WHERE r.user = :user", Integer.class);
+    public Long getReviewByUserCount(UserModel user) {
+        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.user) FROM ReviewModel r WHERE r.user = :user", Long.class);
         query.setParameter("user", user);
         return query.getSingleResult();
     }

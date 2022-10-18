@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -164,7 +165,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         LOGGER.debug("Requested page {}", page);
 
-        int total = reviewDao.getReviewByUserCount(user);
+        Long total = reviewDao.getReviewByUserCount(user);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -187,9 +188,10 @@ public class ReviewServiceImpl implements ReviewService {
         return new Page<>(reviewUserModelList, page, total_pages);
     }
 
+    @Transactional
     @Override
     public void deleteReview(ReviewModel review) {
-        LOGGER.debug("Updating review with id {}", review.getReviewId());
+        LOGGER.debug("Deleting review with id {}", review.getReviewId());
 //        if(reviewDao.deleteReview(review)){
 //            LOGGER.debug("Review {} updated", reviewId);
 //        } else {
@@ -198,9 +200,10 @@ public class ReviewServiceImpl implements ReviewService {
         reviewDao.deleteReview(review);
     }
 
+    @Transactional
     @Override
     public void updateReview(Long reviewId, ReviewModel reviewModel) {
-        LOGGER.debug("Deleting review with id {}", reviewId);
+        LOGGER.debug("Updating review with id {}", reviewId);
 //        if(reviewDao.updateReview(reviewId, reviewModel)){
 //            LOGGER.debug("Review {} deleted", reviewId);
 //        } else {

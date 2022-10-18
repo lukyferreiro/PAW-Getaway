@@ -193,7 +193,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
 //        final String query = "SELECT COUNT(*) FROM experiences WHERE userId = ? ";
 //        LOGGER.debug("Executing query: {}", query);
 //        return jdbcTemplate.queryForObject(query, new Object[]{userId}, Integer.class) == 0;
-        final TypedQuery<UserModel> query = em.createQuery("SELECT exp.user FROM ExperienceModel exp WHERE exp.user = :user ", UserModel.class);
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.user = :user ", ExperienceModel.class);
+        query.setParameter("user", user);
         return query.getResultList().size() != 0;
     }
 

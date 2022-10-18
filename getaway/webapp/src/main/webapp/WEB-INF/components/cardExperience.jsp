@@ -60,7 +60,7 @@
          </div>
       </div>
 
-      <div class="card-body container-fluid d-flex p-2 mb-1 align-items-end">p
+      <div class="card-body container-fluid d-flex p-2 mb-1 align-items-end">
          <h5 class="mb-1">
             <spring:message code="experience.reviews" arguments="${param.reviewCount}"/>
          </h5>
