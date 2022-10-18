@@ -30,6 +30,7 @@ public class ImageDaoImpl implements ImageDao {
         final ImageModel imageData = createImg(image);
 
         final ImageExperienceModel imageExperienceModel = new ImageExperienceModel(imageData, experience, isCover);
+        imageExperienceModel.setImgId(imageData.getImageId());
         em.persist(imageExperienceModel);
         LOGGER.info("Created new image experience with id {}", imageData.getImageId());
 

@@ -24,14 +24,14 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
     public void addFav(UserModel user, ExperienceModel experience) {
         LOGGER.debug("Setting experience with {} as fav of user with id {}", experience.getExperienceId(), user.getUserId());
         user.addFav(experience);
-        em.persist(user);
+        em.merge(user);
     }
 
     @Override
     public void deleteFav(UserModel user, ExperienceModel experience) {
         LOGGER.debug("Removing experience with {} as fav of user with id {}", experience.getExperienceId(), user.getUserId());
         user.removeFav(experience);
-        em.persist(user);
+        em.merge(user);
     }
 
     @Override

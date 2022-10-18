@@ -122,7 +122,6 @@ public class UserDaoImpl implements UserDao {
         }
 
         final RoleModel newRole = getRoleByName(newVal).get();
-        addRole(user, newRole.getRoleName());
         user.addRole(newRole);
 
         System.out.println("Agrego role newRole");

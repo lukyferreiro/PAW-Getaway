@@ -18,7 +18,7 @@
             <jsp:include page="/WEB-INF/components/cardExperienceDetail.jsp">
                <jsp:param name="name" value="${experience.experienceName}"/>
                <jsp:param name="id" value="${experience.experienceId}"/>
-               <jsp:param name="experienceCategoryName" value="${experience.categoryName}"/>
+               <jsp:param name="experienceCategoryName" value="${experience.category.categoryName}"/>
                <jsp:param name="categoryName" value="${categoryName}"/>
                <jsp:param name="address" value="${experience.address}"/>
                <jsp:param name="city" value="${city}"/>
@@ -27,7 +27,7 @@
                <jsp:param name="description" value="${experience.description}"/>
                <jsp:param name="siteUrl" value="${experience.siteUrl}"/>
                <jsp:param name="email" value="${experience.email}"/>
-               <jsp:param name="hasImage" value="${experience.hasImage}"/>
+               <jsp:param name="hasImage" value="${false}"/>
                <jsp:param name="reviewAvg" value="${reviewAvg}"/>
                <jsp:param name="reviewCount" value="${reviewCount}"/>
                 <jsp:param name="isEditing" value="${isEditing}"/>

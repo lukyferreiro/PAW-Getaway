@@ -156,6 +156,7 @@ public class UserServiceImpl implements UserService {
         return userDao.updatePassword(passwordResetToken.getUser(), passwordEncoder.encode(password));
     }
 
+    @Transactional
     @Override
     public void updateUserInfo(UserModel user, UserInfo userInfo) {
         LOGGER.debug("Updating user info for user {}", user.getUserId());

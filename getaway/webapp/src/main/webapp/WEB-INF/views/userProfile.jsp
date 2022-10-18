@@ -20,7 +20,7 @@
                <div class="m-2" style="max-width: 200px;">
                   <c:choose>
                      <c:when test="${hasImage}">
-                        <img class="container-fluid p-0" src="<c:url value='/user/profileImage/${user.profileImageId}'/>" alt="Imagen perfil"/>
+                        <img class="container-fluid p-0" src="<c:url value='/user/profileImage/${user.profileImage.imageId}'/>" alt="Imagen perfil"/>
                      </c:when>
                      <c:otherwise>
                         <img class="container-fluid p-0" style="height: fit-content" alt="Imagen ${user.email}"

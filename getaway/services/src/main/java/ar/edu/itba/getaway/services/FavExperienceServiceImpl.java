@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +21,14 @@ public class FavExperienceServiceImpl implements FavExperienceService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FavExperienceServiceImpl.class);
 
+    @Transactional
     @Override
     public void addFav(UserModel user, ExperienceModel experience) {
         LOGGER.debug("User with id {} fav experience with id {}", user.getUserId(), experience.getExperienceId());
         favExperienceDao.addFav(user, experience);
     }
 
+    @Transactional
     @Override
     public void deleteFav(UserModel user, ExperienceModel experience) {
         LOGGER.debug("User with id {} remove from fav experience with id {}", user.getUserId(), experience.getExperienceId());
@@ -43,6 +46,7 @@ public class FavExperienceServiceImpl implements FavExperienceService {
         return favExperienceDao.listFavsByUser(user);
     }
 
+    @Transactional
     @Override
     public void setFav(UserModel user, Optional<Boolean> set, Optional<ExperienceModel> experience) {
         if (experience.isPresent() && set.isPresent()) {

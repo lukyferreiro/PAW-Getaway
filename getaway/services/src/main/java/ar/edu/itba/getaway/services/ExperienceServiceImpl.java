@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 
     @Override
+    @Transactional
     public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, byte[] image) {
         LOGGER.debug("Creating experience with name {}", name);
         final ExperienceModel experienceModel = experienceDao.createExperience(name, address, description, email, url, price, city, category, user);
