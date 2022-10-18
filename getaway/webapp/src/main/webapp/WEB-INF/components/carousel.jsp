@@ -7,6 +7,7 @@
    <jsp:useBean id="listByCategory" scope="request" type="java.util.List"/>
    <jsp:useBean id="avgReviews" scope="request" type="java.util.List"/>
    <jsp:useBean id="listReviewsCount" scope="request" type="java.util.List"/>
+   <jsp:useBean id="favExperienceModels" scope="request" type="java.util.List"/>
 
    <c:forEach varStatus="categoryIndex" var="categoryList" items="${listByCategory}">
       <c:if test="${categoryList.size() != 0}">

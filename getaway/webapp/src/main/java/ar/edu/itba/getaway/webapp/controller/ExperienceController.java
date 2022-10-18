@@ -104,9 +104,11 @@ public class ExperienceController {
         // FavExperiences
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-            if(experience.isPresent() && user.isPresent()){
-                final Optional<ExperienceModel> addFavExperience = experienceService.getExperienceById(experience.get());
-                favExperienceService.setFav(user.get(), set, addFavExperience);
+            if(user.isPresent()){
+                if(experience.isPresent()){
+                    final Optional<ExperienceModel> addFavExperience = experienceService.getExperienceById(experience.get());
+                    favExperienceService.setFav(user.get(), set, addFavExperience);
+                }
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
                 mav.addObject("favExperienceModels", favExperienceModels);
             }
