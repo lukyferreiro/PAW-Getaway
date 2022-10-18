@@ -70,7 +70,7 @@ public class SearchFormController {
         final OrderByModel[] orderByModels = OrderByModel.values();
         final List<ExperienceModel> experienceModels = currentPage.getContent();
         final List<Long> avgReviews = reviewService.getListOfAverageScoreByExperienceList(experienceModels);
-        final List<Integer> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(experienceModels);
+        final List<Long> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(experienceModels);
 
         if(query.isPresent()){
             request.setAttribute("query", query);

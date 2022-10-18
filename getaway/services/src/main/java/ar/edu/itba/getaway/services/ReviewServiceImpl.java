@@ -75,14 +75,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Integer getReviewCount(ExperienceModel experience) {
+    public Long getReviewCount(ExperienceModel experience) {
         LOGGER.debug("Retrieving count of reviews of experience with id {}", experience.getExperienceId());
         return reviewDao.getReviewCount(experience);
     }
 
     @Override
-    public List<Integer> getListOfReviewCountByExperienceList(List<ExperienceModel> experienceModelList) {
-        final List<Integer> listReviewsCount = new ArrayList<>();
+    public List<Long> getListOfReviewCountByExperienceList(List<ExperienceModel> experienceModelList) {
+        final List<Long> listReviewsCount = new ArrayList<>();
         LOGGER.debug("Retrieving list of review count of all next's experiences");
         for (ExperienceModel experienceModel : experienceModelList) {
             LOGGER.debug("Added review count of experience with id {}", experienceModel.getExperienceId());
@@ -92,8 +92,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<List<Integer>> getListOfReviewCountByExperienceListAndCategoryId(List<List<ExperienceModel>> experienceModelList) {
-        final List<List<Integer>> listExperiencesReviewCountByCategory = new ArrayList<>();
+    public List<List<Long>> getListOfReviewCountByExperienceListAndCategoryId(List<List<ExperienceModel>> experienceModelList) {
+        final List<List<Long>> listExperiencesReviewCountByCategory = new ArrayList<>();
         for (int i = 0; i < experienceModelList.size(); i++) {
             listExperiencesReviewCountByCategory.add(new ArrayList<>());
             for (ExperienceModel experienceModel : experienceModelList.get(i)) {
@@ -127,7 +127,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         LOGGER.debug("Requested page {}", page);
 
-        int total = reviewDao.getReviewCount(experience);
+        Long total = reviewDao.getReviewCount(experience);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);

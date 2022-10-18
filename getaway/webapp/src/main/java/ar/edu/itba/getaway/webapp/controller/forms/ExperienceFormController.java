@@ -60,6 +60,7 @@ public class ExperienceFormController {
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
         final List<CityModel> cities = locationService.listAllCities();
         final String country = locationService.getCountryByName().get().getCountryName();
+
         mav.addObject("title", "createExperience.title");
         mav.addObject("description", "createExperience.description");
         mav.addObject("endpoint", "/create_experience");

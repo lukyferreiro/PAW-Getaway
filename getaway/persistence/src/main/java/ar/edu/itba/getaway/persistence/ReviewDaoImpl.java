@@ -39,15 +39,16 @@ public class ReviewDaoImpl implements ReviewDao {
     //TODO: check aggregate function usage
     @Override
     public Long getReviewAverageScore(ExperienceModel experience) {
-        final TypedQuery<Long> query = em.createQuery("SELECT CEILING(AVG(score)) FROM ReviewModel WHERE experience = :experience", Long.class);
-        query.setParameter("experience", experience);
-        return query.getSingleResult();
+//        final TypedQuery<Long> query = em.createQuery("SELECT CEILING(AVG(rev.score)) FROM ReviewModel rev WHERE rev.experience = :experience", Long.class);
+//        query.setParameter("experience", experience);
+//        return query.getSingleResult();
+        return 1L;
     }
 
     //TODO: check aggregate function usage
     @Override
-    public Integer getReviewCount(ExperienceModel experience) {
-        final TypedQuery<Integer> query = em.createQuery("SELECT COUNT (r.experience) FROM ReviewModel r WHERE r.experience = :experience", Integer.class);
+    public Long getReviewCount(ExperienceModel experience) {
+        final TypedQuery<Long> query = em.createQuery("SELECT COUNT (r.experience) FROM ReviewModel r WHERE r.experience = :experience", Long.class);
         query.setParameter("experience", experience);
         return query.getSingleResult();
     }

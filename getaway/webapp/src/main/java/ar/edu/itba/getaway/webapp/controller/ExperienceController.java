@@ -93,10 +93,11 @@ public class ExperienceController {
         final List<CityModel> cityModels = locationService.listAllCities();
 
         if (cityId.isPresent()) {
-            currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, cityId.get(), orderBy, pageNum);
+            CityModel city = locationService.getCityById(cityId.get()).get();
+            currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, city, orderBy, pageNum);
             mav.addObject("cityId", cityId.get());
         } else {
-            currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, (long) -1, orderBy, pageNum);
+            currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, null, orderBy, pageNum);
             mav.addObject("cityId", -1);
         }
 
@@ -115,7 +116,7 @@ public class ExperienceController {
 
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
         final List<Long> avgReviews = reviewService.getListOfAverageScoreByExperienceList(currentExperiences);
-        final List<Integer> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(currentExperiences);
+        final List<Long> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(currentExperiences);
 
         request.setAttribute("pageNum", pageNum);
         final String path = request.getServletPath();
@@ -192,7 +193,7 @@ public class ExperienceController {
         final List<ReviewModel> reviews = currentPage.getContent();
         final List<Boolean> listReviewsHasImages = reviewService.getListOfReviewHasImages(reviews);
         final Long avgScore = reviewService.getReviewAverageScore(experience);
-        final Integer reviewCount = reviewService.getReviewCount(experience);
+        final Long reviewCount = reviewService.getReviewCount(experience);
         final CityModel cityModel = experience.getCity();
         final String city = cityModel.getCityName();
         final String country = cityModel.getCountry().getCountryName();
@@ -223,7 +224,7 @@ public class ExperienceController {
                 favExperienceService.setFav(user.get(), set, Optional.of(experience));
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
                 mav.addObject("favExperienceModels", favExperienceModels);
-                mav.addObject("isEditing", experienceService.experiencesBelongsToId(user.get(), experience));
+                mav.addObject("isEditing", experienceService.experienceBelongsToUser(user.get(), experience));
             } else {
                 mav.addObject("isEditing", false);
             }

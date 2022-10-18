@@ -80,7 +80,7 @@ public class UserExperiencesController {
         final Page<ExperienceModel> currentPage = experienceService.listExperiencesFavsByUser(user, orderBy, pageNum);
         final List<ExperienceModel> experienceList = currentPage.getContent();
         final List<Long> avgReviews = reviewService.getListOfAverageScoreByExperienceList(experienceList);
-        final List<Integer> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(experienceList);
+        final List<Long> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(experienceList);
 
         if(orderBy.isPresent()){
             request.setAttribute("orderBy", orderBy);
@@ -122,8 +122,8 @@ public class UserExperiencesController {
         final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user);
         final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategoriesByUserId(user);
         final List<List<Long>> avgReviews = reviewService.getListOfAverageScoreByExperienceListAndCategoryId(listByCategory);
-        final List<List<Integer>> listReviewsCount = reviewService.getListOfReviewCountByExperienceListAndCategoryId(listByCategory);
-        final boolean hasExperiences = experienceService.hasExperiencesByUserId(user);
+        final List<List<Long>> listReviewsCount = reviewService.getListOfReviewCountByExperienceListAndCategoryId(listByCategory);
+        final boolean hasExperiences = experienceService.hasExperiencesByUser(user);
 
         mav.addObject("hasExperiences", hasExperiences);
         mav.addObject("listByCategory", listByCategory);

@@ -12,7 +12,7 @@ public interface ReviewDao {
     ReviewModel createReview (String title, String description, Long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel);
     List<ReviewModel> getReviewsByExperience (ExperienceModel experience);
     Long getReviewAverageScore (ExperienceModel experienceModel);
-    Integer getReviewCount (ExperienceModel experience);
+    Long getReviewCount (ExperienceModel experience);
     List<ReviewModel> getReviewAndUser (ExperienceModel experience, Integer page, Integer page_size);
     Optional<ReviewModel> getReviewById (Long reviewId);
     List<ReviewModel> getReviewsByUser (UserModel user, Integer page, Integer page_size);

@@ -50,16 +50,17 @@ public class InitPageController {
                 final Optional<ExperienceModel> addFavExperience = experienceService.getExperienceById(experience.get());
                 favExperienceService.setFav(user.get(), set, addFavExperience);
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
-                mav.addObject("favExperienceModels", favExperienceModels);
+//                mav.addObject("favExperienceModels", favExperienceModels);
             }
         } else {
-            mav.addObject("favExperienceModels", new ArrayList<>());
+//            mav.addObject("favExperienceModels", new ArrayList<>());
         }
 
         final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategories();
         final List<List<Long>> avgReviews = reviewService.getListOfAverageScoreByExperienceListAndCategoryId(listByCategory);
-        final List<List<Integer>> listReviewsCount = reviewService.getListOfReviewCountByExperienceListAndCategoryId(listByCategory);
+        final List<List<Long>> listReviewsCount = reviewService.getListOfReviewCountByExperienceListAndCategoryId(listByCategory);
 
+        mav.addObject("favExperienceModels", new ArrayList<>());
         mav.addObject("isEditing",false);
         mav.addObject("listByCategory", listByCategory);
         mav.addObject("avgReviews", avgReviews);

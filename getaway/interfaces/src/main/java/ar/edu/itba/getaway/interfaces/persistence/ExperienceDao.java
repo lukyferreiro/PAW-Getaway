@@ -14,13 +14,14 @@ public interface ExperienceDao {
     Optional<Double> getMaxPriceByCategory(CategoryModel category);
 
     // Capaz podría dejarse como el sql
-    List<ExperienceModel> listExperiencesByFilter(Long categoryId, Double max, Long score, Long city, Optional<OrderByModel> order, Integer page, Integer page_size);
-    Integer countListByFilter(Long categoryId, Double max, Long score, Long city);
+    List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page, Integer page_size);
+
+    Long countListByFilter(CategoryModel categoryId, Double max, Long score, CityModel city);
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category);
-    List<ExperienceModel> listExperiencesFavsByUserId(UserModel user, Optional<OrderByModel> order, Integer page, Integer page_size);
+    List<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, Integer page, Integer page_size);
     Integer getCountExperiencesFavsByUser(UserModel user);
     List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, Integer page_size);
     Integer getCountByName(String name);
-    boolean hasExperiencesByUserId(UserModel user);
-    boolean experiencesBelongsToId(UserModel user, ExperienceModel experience);
+    boolean hasExperiencesByUser(UserModel user);
+    boolean experienceBelongsToUser(UserModel user, ExperienceModel experience);
 }

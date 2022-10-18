@@ -14,10 +14,10 @@
             <h2 style="font-weight: 600; text-decoration: underline">
             <c:choose>
                <c:when test="${isEditing}">
-                  <spring:message code="myExperiences.${categoryList.get(0).categoryName}"/>
+                  <spring:message code="myExperiences.${categoryList.get(0).getCategory().categoryName}"/>
                </c:when>
                <c:otherwise>
-                  <spring:message code="mainPage.bestRanked.${categoryList.get(0).categoryName}"/>
+                  <spring:message code="mainPage.bestRanked.${categoryList.get(0).getCategory().categoryName}"/>
                </c:otherwise>
             </c:choose>
             </h2>
@@ -29,8 +29,8 @@
                      <div class="d-flex justify-content-center align-content-center">
                         <c:forEach begin="${index}" step="1" end="${categoryList.size()-1 < 2 + index ? categoryList.size() - 1 : 2 + index}" var="experience" varStatus="myIndex">
                            <jsp:include page="/WEB-INF/components/cardExperience.jsp">
-                              <jsp:param name="hasImage" value="${categoryList.get(experience).hasImage}"/>
-                              <jsp:param name="categoryName" value="${categoryList.get(experience).categoryName}"/>
+                              <jsp:param name="hasImage" value="${false}"/>
+                              <jsp:param name="categoryName" value="${categoryList.get(experience).getCategory().categoryName}"/>
                               <jsp:param name="id" value="${categoryList.get(experience).experienceId}"/>
                               <jsp:param name="name" value="${categoryList.get(experience).experienceName}"/>
                               <jsp:param name="description" value="${categoryList.get(experience).description}"/>
