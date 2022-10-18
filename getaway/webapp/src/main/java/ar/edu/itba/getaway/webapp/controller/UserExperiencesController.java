@@ -250,19 +250,20 @@ public class UserExperiencesController {
         final ImageExperienceModel imageExperienceModel = imageService.getImgByExperience(experience).orElseThrow(ImageNotFoundException::new);
         final ImageModel imageModel = imageExperienceModel.getImage();
         final UserModel user = experience.getUser();
-        final CategoryModel category = categoryService.getCategoryById(form.getExperienceCategory()).orElseThrow(CategoryNotFoundException::new);
+        final CategoryModel category = categoryService.getCategoryById(form.getExperienceCategory()+1).orElseThrow(CategoryNotFoundException::new);
         final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).get();
         final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
         final String description = (form.getExperienceInfo().isEmpty()) ? null : form.getExperienceInfo();
         final String url = (form.getExperienceUrl().isEmpty()) ? null : form.getExperienceUrl();
         final byte[] image = (experienceImg.isEmpty()) ? imageModel.getImage() : experienceImg.getBytes();
 
-        final ExperienceModel experienceModel = experienceService.createExperience(form.getExperienceName(), form.getExperienceAddress(), description,
-                form.getExperienceMail(), url, price, cityModel, category, user, image);
+        final ExperienceModel toUpdateExperience = new ExperienceModel(experienceId,form.getExperienceName(), form.getExperienceAddress(), description,
+                form.getExperienceMail(), url, price, cityModel, category, user);
 
-        experienceService.updateExperience(experienceModel, image);
+        experienceService.updateExperience(toUpdateExperience, image);
 
-        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategory().getCategoryName() + "/" + experienceModel.getExperienceId());
+
+        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + toUpdateExperience.getCategory().getCategoryName() + "/" + toUpdateExperience.getExperienceId());
         mav.addObject("success", true);
         return mav;
     }
