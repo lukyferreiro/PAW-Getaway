@@ -3,8 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <c:set var="fav" value="${false}"/>
-<jsp:useBean id="favExperienceModels" scope="request" type="java.util.List"/>
-<c:forEach var="favExperience" items="${favExperienceModels}">
+<c:forEach var="favExperience" items="${param.favExperienceModels}">
    <c:if test="${favExperience == param.experienceId}">
       <c:set var="fav" value="${true}"/>
    </c:if>

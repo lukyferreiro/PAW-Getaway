@@ -34,6 +34,7 @@ public class ReviewServiceImpl implements ReviewService {
     private static final Integer PAGE_SIZE = 6;
     private static final Integer USER_PAGE_SIZE = 12;
 
+    @Transactional
     @Override
     public ReviewModel createReview(String title, String description, Long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel) {
         LOGGER.debug("Creating review with title {}", title);
@@ -168,7 +169,7 @@ public class ReviewServiceImpl implements ReviewService {
         Long total = reviewDao.getReviewByUserCount(user);
 
         if (total > 0) {
-            LOGGER.debug("Total pages found: {}", total);
+            LOGGER.debug("Total reviews found: {}", total);
 
             total_pages = (int) Math.ceil((double) total / USER_PAGE_SIZE);
 

@@ -48,7 +48,7 @@
                      <spring:message code="review.start"/>
                   </h2>
                   <c:if test="${loggedUser.hasRole('VERIFIED')}">
-                     <a href="<c:url value = "/experiences/${experience.categoryName}/${experience.experienceId}/create_review"/>">
+                     <a href="<c:url value = "/experiences/${experience.category.categoryName}/${experience.experienceId}/create_review"/>">
                         <button type="button" class="btn btn-create-review">
                            <spring:message code="review.createReview"/>
                         </button>
@@ -64,14 +64,14 @@
                         <c:forEach var="review" varStatus="myIndex" items="${reviews}">
                            <div class="pl-5 pr-2 w-50" style="min-width: 400px; min-height: 150px; height: fit-content;">
                               <jsp:include page="/WEB-INF/components/cardReview.jsp">
-                                 <jsp:param name="userName" value="${review.userName}"/>
-                                 <jsp:param name="userSurname" value="${review.userSurname}"/>
+                                 <jsp:param name="userName" value="${review.user.name}"/>
+                                 <jsp:param name="userSurname" value="${review.user.surname}"/>
                                  <jsp:param name="title" value="${review.title}"/>
                                  <jsp:param name="description" value="${review.description}"/>
                                  <jsp:param name="reviewDate" value="${review.reviewDate}"/>
                                  <jsp:param name="score" value="${review.score}"/>
                                  <jsp:param name="hasImage" value="${listReviewsHasImages[myIndex.index]}"/>
-                                 <jsp:param name="userId" value="${reviews[myIndex.index].imgId}"/>
+                                 <jsp:param name="userId" value="${reviews[myIndex.index].user.profileImage.imageId}"/>
                                  <jsp:param name="reviewId" value="${review.reviewId}"/>
                                  <jsp:param name="isEditing" value="${isEditing}"/>
                               </jsp:include>

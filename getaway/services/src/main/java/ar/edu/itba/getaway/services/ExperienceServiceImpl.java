@@ -97,8 +97,10 @@ public class ExperienceServiceImpl implements ExperienceService {
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {} ", page);
-        try {
-            Long total = experienceDao.countListByFilter(category, max, score, city);
+        Long total = experienceDao.countListByFilter(category, max, score, city);
+        if (total > 0){
+            LOGGER.debug("Total experiences found: {}", total);
+
             total_pages = (int) Math.ceil((double) total / PAGE_SIZE);
 
             LOGGER.debug("Total pages calculated: {}", total_pages);
@@ -110,7 +112,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             }
 
             experienceModelList = experienceDao.listExperiencesByFilter(category, max, score, city, order, page, PAGE_SIZE);
-        } catch (EmptyResultDataAccessException e) {
+        } else {
             total_pages = 1;
         }
 
@@ -167,7 +169,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         LOGGER.debug("Requested page {}", page);
 
-        int total = experienceDao.getCountByName(name);
+        Long total = experienceDao.getCountByName(name);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);

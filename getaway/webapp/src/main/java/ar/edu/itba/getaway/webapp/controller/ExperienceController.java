@@ -92,7 +92,7 @@ public class ExperienceController {
         // City
         final List<CityModel> cityModels = locationService.listAllCities();
 
-        if (cityId.isPresent()) {
+        if (cityId.isPresent() && cityId.get()>0) {
             CityModel city = locationService.getCityById(cityId.get()).get();
             currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, city, orderBy, pageNum);
             mav.addObject("cityId", cityId.get());
@@ -187,7 +187,6 @@ public class ExperienceController {
         //This declaration of category is in order to check if the categoryName is valid
         final CategoryModel category = categoryService.getCategoryByName(categoryName).orElseThrow(CategoryNotFoundException::new);
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final String dbCategoryName = ExperienceCategory.valueOf(categoryName).name();
 
         final Page<ReviewModel> currentPage = reviewService.getReviewAndUser(experience, pageNum);
         final List<ReviewModel> reviews = currentPage.getContent();
@@ -203,7 +202,7 @@ public class ExperienceController {
         request.setAttribute("pageNum", pageNum);
 
         mav.addObject("reviewAvg", avgScore);
-        mav.addObject("dbCategoryName", dbCategoryName);
+        mav.addObject("dbCategoryName", category.getCategoryName());
         mav.addObject("experience", experience);
         mav.addObject("reviews", reviews);
         mav.addObject("listReviewsHasImages", listReviewsHasImages);

@@ -48,7 +48,7 @@ public class ReviewDaoImpl implements ReviewDao {
     //TODO: check aggregate function usage
     @Override
     public Long getReviewCount(ExperienceModel experience) {
-        final TypedQuery<Long> query = em.createQuery("SELECT COUNT (r.experience) FROM ReviewModel r WHERE r.experience = :experience", Long.class);
+        final TypedQuery<Long> query = em.createQuery("SELECT COUNT (r) FROM ReviewModel r WHERE r.experience = :experience", Long.class);
         query.setParameter("experience", experience);
         return query.getSingleResult();
     }
