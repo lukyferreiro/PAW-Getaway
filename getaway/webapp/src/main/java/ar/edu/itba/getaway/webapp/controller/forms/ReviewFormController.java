@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.time.Instant;
 import java.util.Date;
+import java.util.Optional;
 
 @Controller
 public class ReviewFormController {
@@ -43,8 +44,18 @@ public class ReviewFormController {
                                          @PathVariable("experienceId") final long experienceId,
                                          @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                          @ModelAttribute("reviewForm") final ReviewForm form,
+                                         Principal principal,
                                          HttpServletRequest request) {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
+
+        if (principal != null) {
+            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+            if(user.isPresent()){
+                if(!user.get().hasRole("VERIFIED")){
+                    return new ModelAndView("pleaseVerify");
+                }
+            }
+        }
 
         final ModelAndView mav = new ModelAndView("reviewForm");
 
@@ -65,7 +76,7 @@ public class ReviewFormController {
 
         if (errors.hasErrors()) {
             LOGGER.debug("Error in some input of create review form");
-            return createReviewForm(categoryName, experienceId, searchForm, form, request);
+            return createReviewForm(categoryName, experienceId, searchForm, form, principal, request);
         }
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);

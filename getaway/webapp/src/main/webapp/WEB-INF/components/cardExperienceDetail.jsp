@@ -8,14 +8,14 @@
       <h1>
          <c:out value="${param.name}"/>
       </h1>
-      <c:if test="${loggedUser != null}">
+<%--      <c:if test="${loggedUser != null}">--%>
          <jsp:useBean id="favExperienceModels" scope="request" type="java.util.List"/>
          <jsp:include page="/WEB-INF/components/fav.jsp">
             <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
             <jsp:param name="experienceId" value="${param.id}"/>
             <jsp:param name="path" value="${param.path}"/>
          </jsp:include>
-      </c:if>
+<%--      </c:if>--%>
    </div>
 
    <div class="d-flex flex-wrap justify-content-center align-content-center">

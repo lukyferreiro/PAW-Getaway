@@ -4,7 +4,7 @@
 
 <div class="card card-experience h-auto mx-3 my-2 p-0">
 
-   <c:if test="${loggedUser != null}">
+<%--   <c:if test="${loggedUser != null}">--%>
       <div class="btn-fav">
          <jsp:include page="/WEB-INF/components/fav.jsp">
             <jsp:param name="favExperienceModels" value="${param.favExperienceModels}"/>
@@ -19,7 +19,7 @@
             <jsp:param name="search" value="${param.search}"/>
          </jsp:include>
       </div>
-   </c:if>
+<%--   </c:if>--%>
 
    <div class="card-link h-100 d-flex flex-column">
       <div>

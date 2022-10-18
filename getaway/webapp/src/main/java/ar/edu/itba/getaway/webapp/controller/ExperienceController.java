@@ -10,6 +10,7 @@ import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -102,6 +103,7 @@ public class ExperienceController {
         }
 
         // FavExperiences
+        mav.addObject("favExperienceModels", new ArrayList<>());
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if(user.isPresent()){
@@ -111,9 +113,11 @@ public class ExperienceController {
                 }
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
                 mav.addObject("favExperienceModels", favExperienceModels);
+            }else if(set.isPresent()){
+                return new ModelAndView("redirect:/login");
             }
-        } else {
-            mav.addObject("favExperienceModels", new ArrayList<>());
+        }else if(set.isPresent()){
+            return new ModelAndView("redirect:/login");
         }
 
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
@@ -219,6 +223,7 @@ public class ExperienceController {
         mav.addObject("maxPage", currentPage.getMaxPage());
         mav.addObject("totalPages", currentPage.getTotalPages());
 
+        mav.addObject("favExperienceModels", new ArrayList<>());
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if (user.isPresent()) {
@@ -227,10 +232,15 @@ public class ExperienceController {
                 mav.addObject("favExperienceModels", favExperienceModels);
                 mav.addObject("isEditing", experienceService.experienceBelongsToUser(user.get(), experience));
             } else {
+                if(set.isPresent()){
+                    return new ModelAndView("redirect:/login");
+                }
                 mav.addObject("isEditing", false);
             }
         } else {
-            mav.addObject("favExperienceModels", new ArrayList<>());
+            if(set.isPresent()){
+                return new ModelAndView("redirect:/login");
+            }
             mav.addObject("isEditing", false);
         }
 

@@ -47,13 +47,12 @@
                   <h2 class="align-self-center">
                      <spring:message code="review.start"/>
                   </h2>
-                  <c:if test="${loggedUser.hasRole('VERIFIED')}">
-                     <a href="<c:url value = "/experiences/${experience.category.categoryName}/${experience.experienceId}/create_review"/>">
-                        <button type="button" class="btn btn-create-review">
-                           <spring:message code="review.createReview"/>
-                        </button>
-                     </a>
-                  </c:if>
+
+                  <a href="<c:url value = "/experiences/${experience.category.categoryName}/${experience.experienceId}/create_review"/>">
+                     <button type="button" class="btn btn-create-review">
+                        <spring:message code="review.createReview"/>
+                     </button>
+                  </a>
                </div>
             </div>
 

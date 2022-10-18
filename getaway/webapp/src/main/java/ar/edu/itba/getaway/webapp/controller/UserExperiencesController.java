@@ -55,7 +55,6 @@ public class UserExperiencesController {
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif", "image/jpg");
     private static final int MAX_SIZE_PER_FILE = 10000000;
 
-
     @RequestMapping(value = "/user/favourites")
     public ModelAndView favourites(Principal principal,
                                    @RequestParam Optional<OrderByModel> orderBy,

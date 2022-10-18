@@ -10,6 +10,7 @@ import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -44,6 +45,7 @@ public class InitPageController {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("mainPage");
 
+        mav.addObject("favExperienceModels", new ArrayList<>());
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if(user.isPresent()){
@@ -53,9 +55,14 @@ public class InitPageController {
                 }
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
                 mav.addObject("favExperienceModels", favExperienceModels);
+            }else if(set.isPresent()){
+            return new ModelAndView("redirect:/login");
             }
         } else {
             mav.addObject("favExperienceModels", new ArrayList<>());
+            if (set.isPresent()) {
+                return new ModelAndView("redirect:/login");
+            }
         }
 
         final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategories();
