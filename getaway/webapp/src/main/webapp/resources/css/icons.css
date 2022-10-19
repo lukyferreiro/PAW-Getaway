@@ -45,7 +45,10 @@
 }
 
 .btn-fav:hover, .btn-fav:focus,
-.btn-pencil:hover, .btn-pencil:focus,
-.btn-trash:hover, .btn-trash:focus {
+.btn-pencil:hover, .btn-pencil:focus {
     border-color: transparent;
+}
+
+.btn-trash:hover, .btn-trash:focus {
+    color: red;
 }

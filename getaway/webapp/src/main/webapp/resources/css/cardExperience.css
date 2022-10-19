@@ -21,15 +21,14 @@
     padding: 3px;
 }
 
-
-.card-title:hover {
-    color: black;
-    text-decoration: none;
-    transition: 0.3s;
-    font-weight: bold;
-}
-
 .title-link a {
     color: black;
     text-decoration: none;
+}
+
+.card-title:hover {
+    color: black;
+    text-decoration: underline;
+    transition: 0.3s;
+    transform: scale(1.01);
 }
