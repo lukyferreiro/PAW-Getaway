@@ -134,6 +134,11 @@ public class WebAuthController {
         return new ModelAndView("/verifyAccount/verifySuccessfully");
     }
 
+    @RequestMapping(path ="/pleaseVerify")
+    public ModelAndView pleaseVerify() {
+        return new ModelAndView("verifyAccount/pleaseVerify");
+    }
+
     /*------------------------------------------------------------------------------------
     ------------------------------------Reset Password------------------------------------
      ------------------------------------------------------------------------------------*/

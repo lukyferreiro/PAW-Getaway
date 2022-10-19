@@ -25,21 +25,21 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exc) throws IOException {
 
-//        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null) {
-//            LOGGER.warn("User: " + auth.getName() + " attempted to access the protected URL: " + request.getRequestURI());
-//            LOGGER.warn("User: " + auth.getName() + " has roles " + auth.getAuthorities());
-//
-//            final Collection<GrantedAuthority> authorities = createAuthorities(Collections.singletonList(Roles.VERIFIED));
-//            final Collection<? extends GrantedAuthority> currentAuthorities = auth.getAuthorities();
-//            for (final GrantedAuthority grantedAuthority : authorities) {
-//                //Si el usuario no esta verificado
-//                if (!currentAuthorities.contains(grantedAuthority)) {
-//                    response.sendRedirect(request.getContextPath() + "/access-denied");
-//                    return;
-//                }
-//            }
-//        }
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            LOGGER.warn("User: " + auth.getName() + " attempted to access the protected URL: " + request.getRequestURI());
+            LOGGER.warn("User: " + auth.getName() + " has roles " + auth.getAuthorities());
+
+            final Collection<GrantedAuthority> authorities = createAuthorities(Collections.singletonList(Roles.VERIFIED));
+            final Collection<? extends GrantedAuthority> currentAuthorities = auth.getAuthorities();
+            for (final GrantedAuthority grantedAuthority : authorities) {
+                //Si el usuario no esta verificado
+                if (!currentAuthorities.contains(grantedAuthority)) {
+                    response.sendRedirect(request.getContextPath() + "/pleaseVerify");
+                    return;
+                }
+            }
+        }
 
         response.sendRedirect(request.getContextPath() + "/access-denied");
     }

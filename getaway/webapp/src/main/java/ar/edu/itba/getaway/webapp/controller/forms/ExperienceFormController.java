@@ -51,14 +51,14 @@ public class ExperienceFormController {
                                              @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                              Principal principal,
                                              HttpServletRequest request) {
-        if (principal != null) {
-            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-            if(user.isPresent()){
-                if(!user.get().hasRole("VERIFIED")){
-                    return new ModelAndView("pleaseVerify");
-                }
-            }
-        }
+//        if (principal != null) {
+//            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+//            if(user.isPresent()){
+//                if(!user.get().hasRole("VERIFIED")){
+//                    return new ModelAndView("pleaseVerify");
+//                }
+//            }
+//        }
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("experienceForm");
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
