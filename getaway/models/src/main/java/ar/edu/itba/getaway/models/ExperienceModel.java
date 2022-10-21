@@ -37,18 +37,18 @@ public class ExperienceModel {
     @JoinColumn(name = "userId")
     private UserModel user;
 
-    // Bring also Collection<Reviews>???
+    @OneToOne
+    @JoinColumn(name = "imgId")
+    private ImageModel experienceImage;
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "imgId")
-//    private ImageExperienceModel imageExperience;
+    // Bring also Collection<Reviews>???
 
     /* default */
     protected ExperienceModel() {
         // Just for Hibernate
     }
 
-    public ExperienceModel(String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user) {
+    public ExperienceModel(String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
         this.experienceName = experienceName;
         this.address = address;
         this.description = description;
@@ -58,9 +58,10 @@ public class ExperienceModel {
         this.price = price;
         this.city = city;
         this.user = user;
+        this.experienceImage = experienceImage;
     }
 
-    public ExperienceModel(Long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user) {
+    public ExperienceModel(Long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
         this.experienceId = experienceId;
         this.experienceName = experienceName;
         this.address = address;
@@ -71,6 +72,7 @@ public class ExperienceModel {
         this.price = price;
         this.city = city;
         this.user = user;
+        this.experienceImage = experienceImage;
     }
 
     public Long getExperienceId() {
@@ -150,5 +152,13 @@ public class ExperienceModel {
     @Override
     public int hashCode() {
         return Objects.hash(experienceId);
+    }
+
+    public ImageModel getExperienceImage() {
+        return experienceImage;
+    }
+
+    public void setExperienceImage(ImageModel experienceImage) {
+        this.experienceImage = experienceImage;
     }
 }

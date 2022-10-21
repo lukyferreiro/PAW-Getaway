@@ -21,9 +21,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public ExperienceModel createExperience(String name, String address, String description, String email, String url,
-                                            Double price, CityModel city, CategoryModel category, UserModel user) {
+                                            Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
 
-        final ExperienceModel experience = new ExperienceModel(name, address, description, email, url, price, city, category, user);
+        final ExperienceModel experience = new ExperienceModel(name, address, description, email, url, price, city, category, user, experienceImage);
         em.persist(experience);
         LOGGER.debug("Create experience with id: {}", experience.getExperienceId());
         return experience;

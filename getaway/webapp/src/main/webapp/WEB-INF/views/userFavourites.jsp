@@ -35,7 +35,7 @@
                   <div class="container-fluid my-3 d-flex flex-wrap justify-content-center">
                      <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                         <jsp:include page="/WEB-INF/components/cardExperience.jsp">
-                           <jsp:param name="hasImage" value="${false}"/>
+                           <jsp:param name="hasImage" value="${experience.experienceImage.image != null}"/>
                            <jsp:param name="categoryName" value="${experience.category.categoryName}"/>
                            <jsp:param name="id" value="${experience.experienceId}"/>
                            <jsp:param name="name" value="${experience.experienceName}"/>

@@ -246,8 +246,8 @@ public class UserExperiencesController {
         }
 
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final ImageExperienceModel imageExperienceModel = imageService.getImgByExperience(experience).orElseThrow(ImageNotFoundException::new);
-        final ImageModel imageModel = imageExperienceModel.getImage();
+//        final ImageExperienceModel imageExperienceModel = imageService.getImgByExperience(experience).orElseThrow(ImageNotFoundException::new);
+        final ImageModel imageModel = experience.getExperienceImage();
         final UserModel user = experience.getUser();
         final CategoryModel category = categoryService.getCategoryById(form.getExperienceCategory()+1).orElseThrow(CategoryNotFoundException::new);
         final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).get();
@@ -257,7 +257,7 @@ public class UserExperiencesController {
         final byte[] image = (experienceImg.isEmpty()) ? imageModel.getImage() : experienceImg.getBytes();
 
         final ExperienceModel toUpdateExperience = new ExperienceModel(experienceId,form.getExperienceName(), form.getExperienceAddress(), description,
-                form.getExperienceMail(), url, price, cityModel, category, user);
+                form.getExperienceMail(), url, price, cityModel, category, user, imageModel);
 
         experienceService.updateExperience(toUpdateExperience, image);
 

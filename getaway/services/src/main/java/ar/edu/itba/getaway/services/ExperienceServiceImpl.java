@@ -40,8 +40,9 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Transactional
     public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, byte[] image) {
         LOGGER.debug("Creating experience with name {}", name);
-        final ExperienceModel experienceModel = experienceDao.createExperience(name, address, description, email, url, price, city, category, user);
-        final ImageExperienceModel imageExperienceModel = imageService.createExperienceImg(image, experienceModel, true);
+        final ImageModel experienceImage = imageService.createImg(image);
+        final ExperienceModel experienceModel = experienceDao.createExperience(name, address, description, email, url, price, city, category, user, experienceImage);
+//        final ImageExperienceModel imageExperienceModel = imageService.createExperienceImg(image, experienceModel, true);
 //        experienceModel.setHasImage(image != null);
 //        experienceModel.setImageExperienceId(imageExperienceModel.getImageId());
 //        final UserModel usermodel = userService.getUserById(experienceModel.getUserId()).get();
@@ -57,7 +58,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     public void updateExperience(ExperienceModel experienceModel, byte[] image) {
         LOGGER.debug("Updating experience with id {}", experienceModel.getExperienceId());
         experienceDao.updateExperience(experienceModel);
-        imageService.updateImg(image, imageService.getImgByExperience(experienceModel).get().getImage());
+        imageService.updateImg(image, experienceModel.getExperienceImage());
         LOGGER.debug("Experience {} updated", experienceModel.getExperienceId());
     }
 
@@ -65,7 +66,8 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public void deleteExperience(ExperienceModel experienceModel) {
         LOGGER.debug("Deleting experience with id {}", experienceModel.getExperienceId());
-        ImageModel toDeleteImg = imageService.getImgByExperience(experienceModel).get().getImage();
+//        ImageModel toDeleteImg = imageService.getImgByExperience(experienceModel).get().getImage();
+        ImageModel toDeleteImg = experienceModel.getExperienceImage();
         experienceDao.deleteExperience(experienceModel);
         imageService.deleteImg(toDeleteImg);
 //        imageService.deleteImg();

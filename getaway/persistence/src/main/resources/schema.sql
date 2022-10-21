@@ -55,12 +55,14 @@ CREATE TABLE IF NOT EXISTS experiences
     cityId INT NOT NULL,
     categoryId INT NOT NULL,
     userId INT NOT NULL,
+    imgId INT,
     PRIMARY KEY (experienceId),
     UNIQUE(experienceName, address, cityId),
     FOREIGN KEY (cityId) REFERENCES cities (cityId) ON DELETE CASCADE,
     FOREIGN KEY (categoryId) REFERENCES categories (categoryId) ON DELETE CASCADE,
-    FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE
-);
+    FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE,
+    FOREIGN KEY (imgId) REFERENCES images (imgId) ON DELETE CASCADE
+    );
 
 CREATE TABLE IF NOT EXISTS views
 (
@@ -70,15 +72,15 @@ CREATE TABLE IF NOT EXISTS views
     FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS imagesExperiences
-(
-    imgId INT NOT NULL,
-    experienceId INT NOT NULL,
-    isCover BOOLEAN NOT NULL,
-    PRIMARY KEY (imgId),
-    FOREIGN KEY (imgId) REFERENCES images (imgId) ON DELETE CASCADE,
-    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
-);
+-- CREATE TABLE IF NOT EXISTS imagesExperiences
+-- (
+--     imgId INT NOT NULL,
+--     experienceId INT NOT NULL,
+--     isCover BOOLEAN NOT NULL,
+--     PRIMARY KEY (imgId),
+--     FOREIGN KEY (imgId) REFERENCES images (imgId) ON DELETE CASCADE,
+--     FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
+-- );
 
 CREATE TABLE IF NOT EXISTS reviews
 (

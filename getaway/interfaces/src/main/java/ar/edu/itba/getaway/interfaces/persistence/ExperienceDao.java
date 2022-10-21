@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ExperienceDao {
-    ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel cityId, CategoryModel categoryId, UserModel userId);
+    ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel cityId, CategoryModel categoryId, UserModel userId, ImageModel experienceImage);
     void updateExperience(ExperienceModel experienceModel);
     void deleteExperience(ExperienceModel experienceModel);
     Optional<ExperienceModel> getExperienceById (Long experienceId);

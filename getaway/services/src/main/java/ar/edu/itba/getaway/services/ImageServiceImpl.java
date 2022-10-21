@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.ImageExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
 import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
 import ar.edu.itba.getaway.interfaces.services.ImageService;
@@ -47,16 +46,16 @@ public class ImageServiceImpl implements ImageService {
         return imageDao.getImgById(imageId);
     }
 
-    @Override
-    public ImageExperienceModel createExperienceImg(byte[] image, ExperienceModel experience, boolean isCover) {
-        final ImageExperienceModel imgExp = imageDao.createExperienceImg(image, experience, isCover);
-        LOGGER.debug("Creating image {} to experience with id {}", imgExp.getImage().getImageId(), experience.getExperienceId());
-        return imgExp;
-    }
-
-    @Override
-    public Optional<ImageExperienceModel> getImgByExperience(ExperienceModel experience) {
-        LOGGER.debug("Retrieving image of experience with id {}", experience.getExperienceId());
-        return imageDao.getImgByExperience(experience);
-    }
+//    @Override
+//    public ImageExperienceModel createExperienceImg(byte[] image, ExperienceModel experience, boolean isCover) {
+//        final ImageExperienceModel imgExp = imageDao.createExperienceImg(image, experience, isCover);
+//        LOGGER.debug("Creating image {} to experience with id {}", imgExp.getImage().getImageId(), experience.getExperienceId());
+//        return imgExp;
+//    }
+//
+//    @Override
+//    public Optional<ImageExperienceModel> getImgByExperience(ExperienceModel experience) {
+//        LOGGER.debug("Retrieving image of experience with id {}", experience.getExperienceId());
+//        return imageDao.getImgByExperience(experience);
+//    }
 }

@@ -30,8 +30,8 @@
                      <div class="d-flex justify-content-center align-content-center">
                         <c:forEach begin="${index}" step="1" end="${categoryList.size()-1 < 2 + index ? categoryList.size() - 1 : 2 + index}" var="experience" varStatus="myIndex">
                            <jsp:include page="/WEB-INF/components/cardExperience.jsp">
-                              <jsp:param name="hasImage" value="${false}"/>
-                              <jsp:param name="categoryName" value="${categoryList.get(experience).getCategory().categoryName}"/>
+                              <jsp:param name="hasImage" value="${categoryList.get(experience).experienceImage.image != null}"/>
+                              <jsp:param name="categoryName" value="${categoryList.get(experience).category.categoryName}"/>
                               <jsp:param name="id" value="${categoryList.get(experience).experienceId}"/>
                               <jsp:param name="name" value="${categoryList.get(experience).experienceName}"/>
                               <jsp:param name="description" value="${categoryList.get(experience).description}"/>

@@ -4,7 +4,6 @@ import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
 import ar.edu.itba.getaway.interfaces.exceptions.ImageNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.ExperienceService;
 import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.ImageExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
 import ar.edu.itba.getaway.interfaces.services.ImageService;
 import org.slf4j.Logger;
@@ -34,9 +33,9 @@ public class ImagesController {
     public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
         LOGGER.info("Accessed experiences/{}/image GET controller", experienceId);
         final ExperienceModel experienceModel = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final ImageExperienceModel imageExperienceModel = imageService.getImgByExperience(experienceModel).orElseThrow(ImageNotFoundException::new);
-        //TODO change name maybe
-        return imageExperienceModel.getImage().getImage();
+//        final ImageExperienceModel imageExperienceModel = imageService.getImgByExperience(experienceModel).orElseThrow(ImageNotFoundException::new);
+//        return imageExperienceModel.getImage().getImage();
+        return experienceModel.getExperienceImage().getImage();
     }
 
     @ResponseBody

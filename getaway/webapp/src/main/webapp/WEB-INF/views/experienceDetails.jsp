@@ -27,7 +27,7 @@
                <jsp:param name="description" value="${experience.description}"/>
                <jsp:param name="siteUrl" value="${experience.siteUrl}"/>
                <jsp:param name="email" value="${experience.email}"/>
-               <jsp:param name="hasImage" value="${false}"/>
+               <jsp:param name="hasImage" value="${experience.experienceImage.image != null}"/>
                <jsp:param name="reviewAvg" value="${reviewAvg}"/>
                <jsp:param name="reviewCount" value="${reviewCount}"/>
                 <jsp:param name="isEditing" value="${isEditing}"/>
