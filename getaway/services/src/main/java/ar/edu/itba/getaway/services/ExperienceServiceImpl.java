@@ -227,4 +227,35 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.experienceBelongsToUser(user, experience);
     }
 
+    @Override
+    public Page<ExperienceModel> getExperiencesListByUserId(UserModel user, Optional<OrderByModel> order, Integer page) {
+        int total_pages;
+        List<ExperienceModel> experienceModelList = new ArrayList<>();
+
+        LOGGER.debug("Requested page {}", page);
+
+        Integer total = experienceDao.getCountExperiencesByUser(user);
+
+        if (total > 0) {
+            LOGGER.debug("Total pages found: {}", total);
+
+            total_pages = (int) Math.ceil((double) total / RESULT_PAGE_SIZE);
+
+            LOGGER.debug("Max page calculated: {}", total_pages);
+
+            if (page > total_pages) {
+                page = total_pages;
+            } else if (page < 0) {
+                page = 1;
+            }
+            experienceModelList = experienceDao.getExperiencesListByUserId(user, order, page, RESULT_PAGE_SIZE);
+        } else {
+            total_pages = 1;
+        }
+
+        LOGGER.debug("Max page value service: {}", total_pages);
+        return new Page<>(experienceModelList, page, total_pages);
+//        return experienceDao.getExperiencesListByUserId(user, order, page);
+    }
+
 }

@@ -211,4 +211,26 @@ public class ExperienceDaoImpl implements ExperienceDao {
 //        return jdbcTemplate.queryForObject(query, new Object[]{userId, experienceId}, Integer.class) == 1;
         return experience.getUser().equals(user);
     }
+
+    @Override
+    public List<ExperienceModel> getExperiencesListByUserId(UserModel user, Optional<OrderByModel> order, Integer page, Integer page_size) {
+        LOGGER.debug("Get experiences of user with id {}", user.getUserId());
+
+        final TypedQuery<ExperienceModel> query = em.createQuery("FROM ExperienceModel WHERE user =:user", ExperienceModel.class);
+        query.setFirstResult((page - 1) * page_size);
+        query.setMaxResults(page_size);
+        query.setParameter("user", user);
+        return query.getResultList();
+    }
+
+    @Override
+    public Integer getCountExperiencesByUser(UserModel user){
+//        final String query = "SELECT COALESCE(COUNT (experienceId), 1) FROM favuserexperience WHERE userId = ? ";
+//        LOGGER.debug("Executing query: {}", query);
+//        return jdbcTemplate.queryForObject(query, new Object[]{userId}, Integer.class);
+        final TypedQuery<ExperienceModel> query = em.createQuery("FROM ExperienceModel WHERE user =:user", ExperienceModel.class);
+        query.setParameter("user", user);
+
+        return query.getResultList().size();
+    }
 }

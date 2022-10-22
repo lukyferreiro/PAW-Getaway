@@ -21,4 +21,5 @@ public interface ExperienceService {
     List<List<ExperienceModel>> getExperiencesListByCategoriesByUserId(UserModel user);
     boolean hasExperiencesByUser(UserModel user);
     boolean experienceBelongsToUser(UserModel user, ExperienceModel experience);
+    Page<ExperienceModel> getExperiencesListByUserId(UserModel user, Optional<OrderByModel> order, Integer page);
 }
