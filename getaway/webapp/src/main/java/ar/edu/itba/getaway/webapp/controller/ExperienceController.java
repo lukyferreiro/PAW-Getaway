@@ -182,6 +182,7 @@ public class ExperienceController {
                                        @PathVariable("categoryName") final String categoryName,
                                        @PathVariable("experienceId") final Long experienceId,
                                        @RequestParam Optional<Boolean> set,
+                                       @RequestParam Optional<Boolean> setObs,
                                        @RequestParam Optional<Boolean> success,
                                        @RequestParam Optional<Boolean> successReview,
                                        @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
@@ -227,10 +228,16 @@ public class ExperienceController {
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if (user.isPresent()) {
-                favExperienceService.setFav(user.get(), set, Optional.of(experience));
-                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
+                final UserModel userModel = user.get();
+
+                final ExperienceModel toUpdateExperience = new ExperienceModel(experience.getExperienceId(),experience.getExperienceName(), experience.getAddress(), experience.getDescription(),
+                        experience.getEmail(), experience.getSiteUrl(), experience.getPrice(), experience.getCity(), experience.getCategory(), userModel, experience.getExperienceImage(), setObs.get() );
+                experienceService.updateExperienceWithoutImg(toUpdateExperience);
+
+                favExperienceService.setFav(userModel, set, Optional.of(experience));
+                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(userModel);
                 mav.addObject("favExperienceModels", favExperienceModels);
-                mav.addObject("isEditing", experienceService.experienceBelongsToUser(user.get(), experience));
+                mav.addObject("isEditing", experienceService.experienceBelongsToUser(userModel, experience));
             } else {
                 if(set.isPresent()){
                     return new ModelAndView("redirect:/login");

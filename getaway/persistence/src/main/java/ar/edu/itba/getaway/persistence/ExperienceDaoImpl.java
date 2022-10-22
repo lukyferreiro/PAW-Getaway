@@ -23,7 +23,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public ExperienceModel createExperience(String name, String address, String description, String email, String url,
                                             Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
 
-        final ExperienceModel experience = new ExperienceModel(name, address, description, email, url, price, city, category, user, experienceImage);
+        final ExperienceModel experience = new ExperienceModel(name, address, description, email, url, price, city, category, user, experienceImage, true, 0);
         em.persist(experience);
         LOGGER.debug("Create experience with id: {}", experience.getExperienceId());
         return experience;
@@ -44,7 +44,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
     @Override
     public Optional<ExperienceModel> getExperienceById(Long experienceId) {
         LOGGER.debug("Get experience with id {}", experienceId);
-        return Optional.ofNullable(em.find(ExperienceModel.class, experienceId));
+        final TypedQuery<ExperienceModel> query = em.createQuery("FROM ExperienceModel WHERE experienceId = :experienceId AND observable = true", ExperienceModel.class);
+        query.setParameter("experienceId", experienceId);
+        return Optional.ofNullable(query.getSingleResult());
     }
 
     @Override
@@ -76,7 +78,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
 
         if (city != null){
-            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city ", ExperienceModel.class);
+            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city AND exp.observable=true", ExperienceModel.class);
 //                    query = "SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityId = ?" +
 //                    " HAVING AVG(COALESCE(score,0))>=?";
 //            LOGGER.debug("Executing query: {}", query);
@@ -92,7 +94,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 //                    " HAVING AVG(COALESCE(score,0))>=?";
 //            LOGGER.debug("Executing query: {}", query);
 //            return jdbcTemplate.queryForObject(query, new Object[]{categoryId, max, score}, Integer.class);
-            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category", ExperienceModel.class);
+            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND exp.observable=true", ExperienceModel.class);
             query.setParameter("category", category);
 //            query.setParameter("price", max);
             query.setFirstResult((page - 1) * page_size);
@@ -105,7 +107,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public Long countListByFilter(CategoryModel category, Double max, Long score, CityModel city) {
         if (city != null){
             //Add
-            final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city ", Long.class);
+            final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city AND exp.observable=true", Long.class);
 //                    query = "SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityId = ?" +
 //                    " HAVING AVG(COALESCE(score,0))>=?";
 //            LOGGER.debug("Executing query: {}", query);
@@ -120,7 +122,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 //                    " HAVING AVG(COALESCE(score,0))>=?";
 //            LOGGER.debug("Executing query: {}", query);
 //            return jdbcTemplate.queryForObject(query, new Object[]{categoryId, max, score}, Integer.class);
-            final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category", Long.class);
+            final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category AND exp.observable=true", Long.class);
             query.setParameter("category", category);
 //            query.setParameter("price", max);
             return query.getSingleResult();
@@ -132,7 +134,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 //        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? GROUP BY experiences.experienceid ORDER BY AVG(COALESCE(score,0)) DESC LIMIT 12 ";
 //        LOGGER.debug("Executing query: {}", query);
 //        return jdbcTemplate.query(query, new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
-        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category = :category", ExperienceModel.class);
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category = :category AND exp.observable=true", ExperienceModel.class);
         query.setMaxResults(6);
         query.setParameter("category", category);
         return query.getResultList();
@@ -177,7 +179,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 //        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE LOWER(experienceName) LIKE LOWER(?) GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=0 " + orderQuery + " LIMIT ? OFFSET ?";
 //        LOGGER.debug("Executing query: {}", query);
 //        return jdbcTemplate.query(query, new Object[]{'%'+name+'%', page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
-        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%'))", ExperienceModel.class);
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.observable=true", ExperienceModel.class);
         query.setParameter("name", name);
         query.setFirstResult((page - 1) * page_size);
         query.setMaxResults(page_size);
@@ -189,7 +191,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 //        final String query = "SELECT COALESCE(COUNT (experienceName), 1) FROM experiences WHERE LOWER(experienceName) LIKE LOWER(?) ";
 //        LOGGER.debug("Executing query: {}", query);
 //        return jdbcTemplate.queryForObject(query, new Object[]{'%'+name+'%'}, Integer.class);
-        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%'))", Long.class);
+        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.observable=true", Long.class);
         query.setParameter("name", name);
         return query.getSingleResult();
     }

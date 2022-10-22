@@ -56,6 +56,8 @@ CREATE TABLE IF NOT EXISTS experiences
     categoryId INT NOT NULL,
     userId INT NOT NULL,
     imgId INT,
+    observable BOOLEAN NOT NULL,
+    views INT NOT NULL,
     PRIMARY KEY (experienceId),
     UNIQUE(experienceName, address, cityId),
     FOREIGN KEY (cityId) REFERENCES cities (cityId) ON DELETE CASCADE,

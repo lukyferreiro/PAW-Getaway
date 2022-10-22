@@ -28,7 +28,7 @@
                   <div class="d-flex justify-content-center align-content-center">
                      <h3 class="title m-0"><spring:message code="experience.description"/></h3>
                   </div>
-               <div>
+               <div class="mt-5 mx-5">
                   <table class="table table-bordered table-hover">
                      <thead class="table-light">
                      <tr>
@@ -74,6 +74,29 @@
                            </td>
                            <td>
                               <div class="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
+                                 <c:choose>
+                                    <c:when test="${experience.observable}">
+                                       <a href="<c:url value="/user/experiences">
+                                          <c:param name="set" value="${false}"/>
+                                          <c:param name="experience" value="${experience.experienceId}"/>
+                                       </c:url>">
+                                          <button type="button" class="btn btn-eye" style="font-size: x-large" id="setFalse">
+                                             <i class="bi bi-eye"></i>
+                                          </button>
+                                       </a>
+                                    </c:when>
+                                    <c:otherwise>
+                                    <a href="<c:url value="/user/experiences">
+                                          <c:param name="set" value="${true}"/>
+                                          <c:param name="experience" value="${experience.experienceId}"/>
+                                       </c:url>">
+                                       <button type="button" class="btn btn-eye" style="font-size: x-large" id="setTrue">
+                                          <i class="bi bi-eye-slash"></i>
+                                       </button>
+                                    </a>
+                                    </c:otherwise>
+                                 </c:choose>
+
                                  <a href="<c:url value="/user/experiences/edit/${experience.experienceId}"/>">
                                     <button type="button" class="btn btn-pencil" style="font-size: x-large">
                                        <i class="bi bi-pencil"></i>

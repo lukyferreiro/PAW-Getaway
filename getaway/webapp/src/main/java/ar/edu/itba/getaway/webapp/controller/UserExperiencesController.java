@@ -121,21 +121,21 @@ public class UserExperiencesController {
         final OrderByModel[] orderByModels = OrderByModel.values();
         orderBy.ifPresent(orderByModel -> mav.addObject("orderBy", orderByModel));
 
-        if(experience.isPresent()){
-            final Optional<ExperienceModel> addFavExperience = experienceService.getExperienceById(experience.get());
-            favExperienceService.setFav(user, set, addFavExperience);
-        }
+        //Observable
+        if(experience.isPresent() && set.isPresent()){
+            ExperienceModel myExperience = experienceService.getExperienceById(experience.get()).get();
+            final ExperienceModel toUpdateExperience = new ExperienceModel(myExperience.getExperienceId(),myExperience.getExperienceName(), myExperience.getAddress(), myExperience.getDescription(),
+                    myExperience.getEmail(), myExperience.getSiteUrl(), myExperience.getPrice(), myExperience.getCity(), myExperience.getCategory(), user, myExperience.getExperienceImage(), set.get(), myExperience.getViews() );
 
-        final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user);
+            experienceService.updateExperienceWithoutImg(toUpdateExperience);
+
+        }
 
         currentPage = experienceService.getExperiencesListByUserId(user, orderBy, pageNum);
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
         final List<Long> avgReviews = reviewService.getListOfAverageScoreByExperienceList(currentExperiences);
         final List<Long> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(currentExperiences);
 
-//        final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategoriesByUserId(user);
-//        final List<List<Long>> avgReviews = reviewService.getListOfAverageScoreByExperienceListAndCategoryId(listByCategory);
-//        final List<List<Long>> listReviewsCount = reviewService.getListOfReviewCountByExperienceListAndCategoryId(listByCategory);
         final boolean hasExperiences = experienceService.hasExperiencesByUser(user);
 
         mav.addObject("hasExperiences", hasExperiences);
@@ -145,10 +145,6 @@ public class UserExperiencesController {
         mav.addObject("currentPage", currentPage.getCurrentPage());
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
-
-
-//        mav.addObject("listByCategory", listByCategory);
-        mav.addObject("favExperienceModels", favExperienceModels);
         mav.addObject("avgReviews", avgReviews);
         mav.addObject("listReviewsCount", listReviewsCount);
         mav.addObject("isEditing", true);
@@ -279,7 +275,7 @@ public class UserExperiencesController {
         final byte[] image = (experienceImg.isEmpty()) ? imageModel.getImage() : experienceImg.getBytes();
 
         final ExperienceModel toUpdateExperience = new ExperienceModel(experienceId,form.getExperienceName(), form.getExperienceAddress(), description,
-                form.getExperienceMail(), url, price, cityModel, category, user, imageModel);
+                form.getExperienceMail(), url, price, cityModel, category, user, imageModel, experience.getObservable(), experience.getViews());
 
         experienceService.updateExperience(toUpdateExperience, image);
 

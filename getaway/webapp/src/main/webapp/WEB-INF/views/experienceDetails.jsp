@@ -30,7 +30,8 @@
                <jsp:param name="hasImage" value="${experience.experienceImage.image != null}"/>
                <jsp:param name="reviewAvg" value="${reviewAvg}"/>
                <jsp:param name="reviewCount" value="${reviewCount}"/>
-                <jsp:param name="isEditing" value="${isEditing}"/>
+               <jsp:param name="isEditing" value="${isEditing}"/>
+               <jsp:param name="observable" value="${experience.observable}"/>
                <jsp:param name="path" value="/experiences/${categoryName}/${experience.experienceId}"/>
             </jsp:include>
 

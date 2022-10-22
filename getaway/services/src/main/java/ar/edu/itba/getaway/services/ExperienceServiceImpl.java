@@ -62,6 +62,15 @@ public class ExperienceServiceImpl implements ExperienceService {
         LOGGER.debug("Experience {} updated", experienceModel.getExperienceId());
     }
 
+
+    @Transactional
+    @Override
+    public void updateExperienceWithoutImg(ExperienceModel toUpdateExperience) {
+        LOGGER.debug("Updating experience with id {}", toUpdateExperience.getExperienceId());
+        experienceDao.updateExperience(toUpdateExperience);
+        LOGGER.debug("Experience {} updated", toUpdateExperience.getExperienceId());
+    }
+
     @Transactional
     @Override
     public void deleteExperience(ExperienceModel experienceModel) {
@@ -257,5 +266,6 @@ public class ExperienceServiceImpl implements ExperienceService {
         return new Page<>(experienceModelList, page, total_pages);
 //        return experienceDao.getExperiencesListByUserId(user, order, page);
     }
+
 
 }
