@@ -231,7 +231,7 @@ public class ExperienceController {
                 final UserModel userModel = user.get();
 
                 final ExperienceModel toUpdateExperience = new ExperienceModel(experience.getExperienceId(),experience.getExperienceName(), experience.getAddress(), experience.getDescription(),
-                        experience.getEmail(), experience.getSiteUrl(), experience.getPrice(), experience.getCity(), experience.getCategory(), userModel, experience.getExperienceImage(), setObs.get() );
+                        experience.getEmail(), experience.getSiteUrl(), experience.getPrice(), experience.getCity(), experience.getCategory(), userModel, experience.getExperienceImage(), setObs.get(), experience.getViews() );
                 experienceService.updateExperienceWithoutImg(toUpdateExperience);
 
                 favExperienceService.setFav(userModel, set, Optional.of(experience));
