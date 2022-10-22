@@ -59,10 +59,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
     @Override
     public Optional<Double> getMaxPriceByCategory (CategoryModel category){
         LOGGER.debug("Get maxprice of category {}", category.getCategoryName());
-//        final TypedQuery<Double> query = em.createQuery("SELECT Max(exp.price) FROM ExperienceModel exp WHERE exp.category = :category", Double.class);
-//        query.setParameter("category", category);
-//        return Optional.ofNullable(query.getSingleResult());
-        return Optional.ofNullable(0D);
+        final TypedQuery<Double> query = em.createQuery("SELECT Max(exp.price) FROM ExperienceModel exp WHERE exp.category = :category", Double.class);
+        query.setParameter("category", category);
+        return Optional.ofNullable(query.getSingleResult());
     }
 
     @Override
@@ -76,13 +75,14 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
 
         if (city != null){
-            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city ", ExperienceModel.class);
+            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city AND COALESCE(exp.price,0)<=:max " + orderQuery, ExperienceModel.class);
 //                    query = "SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityId = ?" +
 //                    " HAVING AVG(COALESCE(score,0))>=?";
 //            LOGGER.debug("Executing query: {}", query);
 //            return jdbcTemplate.queryForObject(query, new Object[]{categoryId, max, city, score}, Integer.class);
             query.setParameter("category", category);
             query.setParameter("city", city);
+            query.setParameter("max", max);
             query.setFirstResult((page - 1) * page_size);
             query.setMaxResults(page_size);
             return query.getResultList();
@@ -92,9 +92,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
 //                    " HAVING AVG(COALESCE(score,0))>=?";
 //            LOGGER.debug("Executing query: {}", query);
 //            return jdbcTemplate.queryForObject(query, new Object[]{categoryId, max, score}, Integer.class);
-            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category", ExperienceModel.class);
+            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND COALESCE(exp.price,0)<=:max " + orderQuery, ExperienceModel.class);
             query.setParameter("category", category);
-//            query.setParameter("price", max);
+            query.setParameter("max", max);
             query.setFirstResult((page - 1) * page_size);
             query.setMaxResults(page_size);
             return query.getResultList();
@@ -105,13 +105,13 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public Long countListByFilter(CategoryModel category, Double max, Long score, CityModel city) {
         if (city != null){
             //Add
-            final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city ", Long.class);
+            final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city AND COALESCE(exp.price,0)<=:max ", Long.class);
 //                    query = "SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityId = ?" +
 //                    " HAVING AVG(COALESCE(score,0))>=?";
 //            LOGGER.debug("Executing query: {}", query);
 //            return jdbcTemplate.queryForObject(query, new Object[]{categoryId, max, city, score}, Integer.class);
             query.setParameter("category", category);
-//            query.setParameter("price", max);
+            query.setParameter("max", max);
             query.setParameter("city", city);
             return query.getSingleResult();
         }
@@ -120,9 +120,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
 //                    " HAVING AVG(COALESCE(score,0))>=?";
 //            LOGGER.debug("Executing query: {}", query);
 //            return jdbcTemplate.queryForObject(query, new Object[]{categoryId, max, score}, Integer.class);
-            final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category", Long.class);
+            final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category AND COALESCE(exp.price,0)<=:max", Long.class);
             query.setParameter("category", category);
-//            query.setParameter("price", max);
+            query.setParameter("max", max);
             return query.getSingleResult();
         }
     }

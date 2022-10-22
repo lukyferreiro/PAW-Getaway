@@ -129,7 +129,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         LOGGER.debug("Requested page {}", page);
 
-        Long total = reviewDao.getReviewCount(experience);
+//        Long total = reviewDao.getReviewCount(experience);
+        Long total = experience.getReviewCount();
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -143,7 +144,8 @@ public class ReviewServiceImpl implements ReviewService {
             } else if (page < 0) {
                 page = 1;
             }
-            reviewUserModelList = reviewDao.getReviewAndUser(experience, page, PAGE_SIZE);
+//            reviewUserModelList = reviewDao.getReviewAndUser(experience, page, PAGE_SIZE);
+            reviewUserModelList = experience.getExperienceReviews(page, PAGE_SIZE);
         } else {
             total_pages = 1;
         }

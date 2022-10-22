@@ -116,8 +116,8 @@
                               <jsp:param name="filter" value="true"/>
                               <jsp:param name="pageNum" value="${currentPage}"/>
                               <jsp:param name="orderBy" value="${orderBy}"/>
-                              <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
-                              <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
+                              <jsp:param name="avgReviews" value="${experience.getAverageScore()}"/>
+                              <jsp:param name="reviewCount" value="${experience.getReviewCount()}"/>
                               <jsp:param name="isEditing" value="${isEditing}"/>
                            </jsp:include>
                         </c:forEach>

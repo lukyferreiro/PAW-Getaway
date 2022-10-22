@@ -1,6 +1,10 @@
 package ar.edu.itba.getaway.models;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -40,6 +44,13 @@ public class ExperienceModel {
     @OneToOne
     @JoinColumn(name = "imgId")
     private ImageModel experienceImage;
+
+//    @Formula("select count(*) from ReviewModel rm where rm.experience.experienceId = id")
+//    private Long reviewCount;
+
+    @OneToMany
+    @JoinColumn(name="experienceId")
+    private List<ReviewModel> experienceReviews;
 
     // Bring also Collection<Reviews>???
 
@@ -136,6 +147,32 @@ public class ExperienceModel {
         this.user = user;
     }
 
+    public ImageModel getExperienceImage() {
+        return experienceImage;
+    }
+
+    public void setExperienceImage(ImageModel experienceImage) {
+        this.experienceImage = experienceImage;
+    }
+
+    public List<ReviewModel> getExperienceReviews(Integer page, Integer page_size) {
+        Integer fromIndex = (page-1) * page_size;
+        Integer toIndex= Math.min((fromIndex + page_size), experienceReviews.size());
+        return experienceReviews.subList(fromIndex, toIndex);
+    }
+
+    public Long getReviewCount() {
+        return (long) experienceReviews.size();
+    }
+
+    public Long getAverageScore() {
+        Long toRet=0L;
+        for (ReviewModel review: experienceReviews) {
+            toRet+=review.getScore();
+        }
+        return (long) Math.ceil((double) toRet / experienceReviews.size());
+    }
+
     @Override
     public boolean equals(Object o){
         if(this == o){
@@ -152,13 +189,5 @@ public class ExperienceModel {
     @Override
     public int hashCode() {
         return Objects.hash(experienceId);
-    }
-
-    public ImageModel getExperienceImage() {
-        return experienceImage;
-    }
-
-    public void setExperienceImage(ImageModel experienceImage) {
-        this.experienceImage = experienceImage;
     }
 }

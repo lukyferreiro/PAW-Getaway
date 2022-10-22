@@ -28,8 +28,8 @@
                <jsp:param name="siteUrl" value="${experience.siteUrl}"/>
                <jsp:param name="email" value="${experience.email}"/>
                <jsp:param name="hasImage" value="${experience.experienceImage.image != null}"/>
-               <jsp:param name="reviewAvg" value="${reviewAvg}"/>
-               <jsp:param name="reviewCount" value="${reviewCount}"/>
+               <jsp:param name="reviewAvg" value="${experience.getAverageScore()}"/>
+               <jsp:param name="reviewCount" value="${experience.getReviewCount()}"/>
                 <jsp:param name="isEditing" value="${isEditing}"/>
                <jsp:param name="path" value="/experiences/${categoryName}/${experience.experienceId}"/>
             </jsp:include>

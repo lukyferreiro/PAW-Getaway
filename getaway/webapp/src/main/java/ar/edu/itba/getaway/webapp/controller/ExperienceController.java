@@ -75,8 +75,7 @@ public class ExperienceController {
         orderBy.ifPresent(orderByModel -> mav.addObject("orderBy", orderByModel));
 
         // Price
-        final Optional<Double> maxPriceOpt = experienceService.getMaxPriceByCategory(categoryModel);
-        Double max = maxPriceOpt.get();
+        Double max = experienceService.getMaxPriceByCategory(categoryModel).orElse(0D);
         mav.addObject("max", max);
         if(maxPrice.isPresent()){
             max = maxPrice.get();
@@ -95,6 +94,7 @@ public class ExperienceController {
 
         if (cityId.isPresent() && cityId.get()>0) {
             CityModel city = locationService.getCityById(cityId.get()).get();
+            LOGGER.debug("MAXPRICE: {}", max);
             currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, city, orderBy, pageNum);
             mav.addObject("cityId", cityId.get());
         } else {
