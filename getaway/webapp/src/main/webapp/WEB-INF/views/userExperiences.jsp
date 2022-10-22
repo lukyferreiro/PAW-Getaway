@@ -29,7 +29,7 @@
                      <h3 class="title m-0"><spring:message code="experience.description"/></h3>
                   </div>
                <div class="mt-5 mx-5">
-                  <table class="table table-bordered table-hover">
+                  <table class="table table-bordered table-hover table-fit">
                      <thead class="table-light">
                      <tr>
                         <th scope="col"><h4 class="table-title"><spring:message code="experience.title"/></h4></th>

@@ -16,6 +16,7 @@
 <link href="<c:url value = "/resources/css/styles.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/navbar.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/cardExperience.css"/>" rel="stylesheet" type="text/css">
+<link href="<c:url value = "/resources/css/table.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/filtersSection.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/experienceDetail.css"/>" rel="stylesheet" type="text/css">
 <link href="<c:url value = "/resources/css/form.css"/>" rel="stylesheet" type="text/css">
