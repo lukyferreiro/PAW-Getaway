@@ -235,4 +235,11 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
         return query.getResultList().size();
     }
+
+    @Override
+    public ExperienceModel getViewAmount(Long experienceId){
+        final TypedQuery<ExperienceModel> query = em.createQuery("FROM ExperienceModel  WHERE experienceId = :experienceId", ExperienceModel.class);
+        query.setParameter("experienceId", experienceId);
+        return query.getSingleResult();
+    }
 }

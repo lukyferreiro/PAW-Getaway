@@ -67,8 +67,7 @@
                            <td>
                               <div class="container-fluid d-flex p-2 mb-1 align-items-end">
                                  <h5 class="mb-1">
-                                    Vistas
-                                       <%--                <spring:message arguments="${param.viewCount}"/>--%>
+                                    <c:out value="${viewsAmount[myIndex.index]}"/>
                                  </h5>
                               </div>
                            </td>

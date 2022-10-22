@@ -33,7 +33,9 @@
 
          <div class="card-body container-fluid p-2">
             <div class="title-link">
-               <a href="<c:url value="/experiences/${param.categoryName}/${param.id}"/>">
+               <a href="<c:url value="/experiences/${param.categoryName}/${param.id}">
+                           <c:param name="view" value="${true}"/>
+                  </c:url>">
                   <h2 class="card-title container-fluid p-0"><c:out value="${param.name}"/></h2>
                </a>
             </div>

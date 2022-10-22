@@ -25,4 +25,5 @@ public interface ExperienceDao {
     boolean experienceBelongsToUser(UserModel user, ExperienceModel experience);
     Integer getCountExperiencesByUser(UserModel user);
     List<ExperienceModel> getExperiencesListByUserId(UserModel user, Optional<OrderByModel> order, Integer page, Integer page_size);
+    ExperienceModel getViewAmount(Long experienceId);
 }

@@ -133,6 +133,7 @@ public class UserExperiencesController {
 
         currentPage = experienceService.getExperiencesListByUserId(user, orderBy, pageNum);
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
+        final List<Integer> viewsAmount = experienceService.getViewAmountList(currentExperiences);
         final List<Long> avgReviews = reviewService.getListOfAverageScoreByExperienceList(currentExperiences);
         final List<Long> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(currentExperiences);
 
@@ -146,6 +147,7 @@ public class UserExperiencesController {
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
         mav.addObject("avgReviews", avgReviews);
+        mav.addObject("viewsAmount", viewsAmount);
         mav.addObject("listReviewsCount", listReviewsCount);
         mav.addObject("isEditing", true);
         mav.addObject("delete", delete.isPresent());

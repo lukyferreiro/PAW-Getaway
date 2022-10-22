@@ -10,8 +10,6 @@ import ar.edu.itba.getaway.interfaces.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,6 +67,17 @@ public class ExperienceServiceImpl implements ExperienceService {
         LOGGER.debug("Updating experience with id {}", toUpdateExperience.getExperienceId());
         experienceDao.updateExperience(toUpdateExperience);
         LOGGER.debug("Experience {} updated", toUpdateExperience.getExperienceId());
+    }
+
+    @Override
+    public List<Integer> getViewAmountList(List<ExperienceModel> experienceModelList) {
+        final List<Integer> views = new ArrayList<>();
+        LOGGER.debug("Retrieving list of views of all next's experiences");
+        for (ExperienceModel experienceModel : experienceModelList) {
+            LOGGER.debug("Added view amount of experience with id {}", experienceModel.getExperienceId());
+            views.add(experienceDao.getViewAmount(experienceModel.getExperienceId()).getViews());
+        }
+        return views;
     }
 
     @Transactional
