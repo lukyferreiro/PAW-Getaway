@@ -107,27 +107,47 @@ public class UserExperiencesController {
                                    @RequestParam Optional<Boolean> set,
                                    @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                    HttpServletRequest request,
-                                   Optional<Boolean> delete) {
+                                   Optional<Boolean> delete,
+                                   @RequestParam Optional<OrderByModel> orderBy,
+                                   @RequestParam(value = "pageNum", defaultValue = "1") final Integer pageNum) {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
+        final Page<ExperienceModel> currentPage;
+
 
         final ModelAndView mav = new ModelAndView("userExperiences");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
-        if(experience.isPresent()){
-            final Optional<ExperienceModel> addFavExperience = experienceService.getExperienceById(experience.get());
-            favExperienceService.setFav(user, set, addFavExperience);
+        //Order by
+        final OrderByModel[] orderByModels = OrderByModel.values();
+        orderBy.ifPresent(orderByModel -> mav.addObject("orderBy", orderByModel));
+
+        //Observable
+        if(experience.isPresent() && set.isPresent()){
+            ExperienceModel myExperience = experienceService.getExperienceById(experience.get()).get();
+            final ExperienceModel toUpdateExperience = new ExperienceModel(myExperience.getExperienceId(),myExperience.getExperienceName(), myExperience.getAddress(), myExperience.getDescription(),
+                    myExperience.getEmail(), myExperience.getSiteUrl(), myExperience.getPrice(), myExperience.getCity(), myExperience.getCategory(), user, myExperience.getExperienceImage(), set.get(), myExperience.getViews() );
+
+            experienceService.updateExperienceWithoutImg(toUpdateExperience);
+
         }
 
-        final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user);
-        final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategoriesByUserId(user);
-        final List<List<Long>> avgReviews = reviewService.getListOfAverageScoreByExperienceListAndCategoryId(listByCategory);
-        final List<List<Long>> listReviewsCount = reviewService.getListOfReviewCountByExperienceListAndCategoryId(listByCategory);
+        currentPage = experienceService.getExperiencesListByUserId(user, orderBy, pageNum);
+        final List<ExperienceModel> currentExperiences = currentPage.getContent();
+        final List<Integer> viewsAmount = experienceService.getViewAmountList(currentExperiences);
+        final List<Long> avgReviews = reviewService.getListOfAverageScoreByExperienceList(currentExperiences);
+        final List<Long> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(currentExperiences);
+
         final boolean hasExperiences = experienceService.hasExperiencesByUser(user);
 
         mav.addObject("hasExperiences", hasExperiences);
-        mav.addObject("listByCategory", listByCategory);
-        mav.addObject("favExperienceModels", favExperienceModels);
+        mav.addObject("experienceList", currentExperiences);
+        request.setAttribute("pageNum", pageNum);
+        mav.addObject("totalPages", currentPage.getTotalPages());
+        mav.addObject("currentPage", currentPage.getCurrentPage());
+        mav.addObject("minPage", currentPage.getMinPage());
+        mav.addObject("maxPage", currentPage.getMaxPage());
         mav.addObject("avgReviews", avgReviews);
+        mav.addObject("viewsAmount", viewsAmount);
         mav.addObject("listReviewsCount", listReviewsCount);
         mav.addObject("isEditing", true);
         mav.addObject("delete", delete.isPresent());
@@ -257,7 +277,7 @@ public class UserExperiencesController {
         final byte[] image = (experienceImg.isEmpty()) ? imageModel.getImage() : experienceImg.getBytes();
 
         final ExperienceModel toUpdateExperience = new ExperienceModel(experienceId,form.getExperienceName(), form.getExperienceAddress(), description,
-                form.getExperienceMail(), url, price, cityModel, category, user, imageModel);
+                form.getExperienceMail(), url, price, cityModel, category, user, imageModel, experience.getObservable(), experience.getViews());
 
         experienceService.updateExperience(toUpdateExperience, image);
 

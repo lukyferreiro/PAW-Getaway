@@ -4,7 +4,6 @@
 
 <div class="card card-experience h-auto mx-3 my-2 p-0">
 
-<%--   <c:if test="${loggedUser != null}">--%>
       <div class="btn-fav">
          <jsp:include page="/WEB-INF/components/fav.jsp">
             <jsp:param name="favExperienceModels" value="${param.favExperienceModels}"/>
@@ -19,7 +18,6 @@
             <jsp:param name="search" value="${param.search}"/>
          </jsp:include>
       </div>
-<%--   </c:if>--%>
 
    <div class="card-link h-100 d-flex flex-column">
       <div>
@@ -35,7 +33,9 @@
 
          <div class="card-body container-fluid p-2">
             <div class="title-link">
-               <a href="<c:url value="/experiences/${param.categoryName}/${param.id}"/>">
+               <a href="<c:url value="/experiences/${param.categoryName}/${param.id}">
+                           <c:param name="view" value="${true}"/>
+                  </c:url>">
                   <h2 class="card-title container-fluid p-0"><c:out value="${param.name}"/></h2>
                </a>
             </div>

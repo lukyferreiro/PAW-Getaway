@@ -1,9 +1,6 @@
 package ar.edu.itba.getaway.models;
 
-import org.hibernate.annotations.Formula;
-
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -52,6 +49,13 @@ public class ExperienceModel {
     @JoinColumn(name="experienceId")
     private List<ReviewModel> experienceReviews;
 
+
+    @Column(name = "observable", nullable = false)
+    private Boolean observable;
+
+    @Column(name = "views", nullable = false)
+    private Integer views;
+
     // Bring also Collection<Reviews>???
 
     /* default */
@@ -59,7 +63,7 @@ public class ExperienceModel {
         // Just for Hibernate
     }
 
-    public ExperienceModel(String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
+    public ExperienceModel(String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage, Boolean observable, Integer views) {
         this.experienceName = experienceName;
         this.address = address;
         this.description = description;
@@ -70,9 +74,11 @@ public class ExperienceModel {
         this.city = city;
         this.user = user;
         this.experienceImage = experienceImage;
+        this.observable = observable;
+        this.views = views;
     }
 
-    public ExperienceModel(Long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
+    public ExperienceModel(Long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage, Boolean observable, Integer views) {
         this.experienceId = experienceId;
         this.experienceName = experienceName;
         this.address = address;
@@ -84,6 +90,8 @@ public class ExperienceModel {
         this.city = city;
         this.user = user;
         this.experienceImage = experienceImage;
+        this.observable = observable;
+        this.views = views;
     }
 
     public Long getExperienceId() {
@@ -146,6 +154,10 @@ public class ExperienceModel {
     public void setUser(UserModel user) {
         this.user = user;
     }
+    public Boolean getObservable() { return observable; }
+    public void setObservable(Boolean observable) { this.observable = observable; }
+    public Integer getViews() { return views; }
+    public void setViews(Integer views) { this.views = views; }
 
     public ImageModel getExperienceImage() {
         return experienceImage;

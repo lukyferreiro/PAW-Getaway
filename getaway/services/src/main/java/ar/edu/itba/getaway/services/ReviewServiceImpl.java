@@ -111,12 +111,17 @@ public class ReviewServiceImpl implements ReviewService {
         LOGGER.debug("Retrieving list of whether has images of all next's reviews");
         for (ReviewModel review : reviewUserModelList) {
             LOGGER.debug("Added has image value of review with id {}", review.getUser().getProfileImage());
-            final Optional<ImageModel> img = imageService.getImgById(review.getUser().getProfileImage().getImageId());
-            if (img.isPresent()) {
-                listReviewsHasImages.add(img.get().getImage() != null);
-            } else {
+            if(review.getUser().getProfileImage() == null){
                 listReviewsHasImages.add(false);
+            }else{
+                final Optional<ImageModel> img = imageService.getImgById(review.getUser().getProfileImage().getImageId());
+                if (img.isPresent()) {
+                    listReviewsHasImages.add(img.get().getImage() != null);
+                } else {
+                    listReviewsHasImages.add(false);
+                }
             }
+
         }
         return listReviewsHasImages;
     }
