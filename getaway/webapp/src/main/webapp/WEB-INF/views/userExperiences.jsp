@@ -26,8 +26,7 @@
                   </c:if>
 
                   <%--SEARCH--%>
-                  <div class="d-flex justify-items-center align-items-center" style="margin-right: 40px;">
-
+                  <div class="d-flex align-items-center p-3">
                      <button class="btn btn-search-navbar p-0" type="submit" form="searchExperiencePrivateForm">
                         <img src="<c:url value="/resources/images/ic_lupa.svg"/>" alt="Icono lupa">
                      </button>
@@ -44,16 +43,7 @@
                      <h3 class="title m-0"><spring:message code="experience.description"/></h3>
                   </div>
                <div class="mt-5 mx-5">
-                  <table class="table table-bordered table-hover table-fit">
-                     <thead class="table-light">
-                     <tr>
-                        <th scope="col"><h4 class="table-title"><spring:message code="experience.title"/></h4></th>
-                        <th scope="col"><h4 class="table-title"><spring:message code="experienceForm.experienceCategory"/></h4></th>
-                        <th scope="col"><h4 class="table-title"><spring:message code="review.scoreAssign"/></h4></th>
-                        <th scope="col"><h4 class="table-title"><spring:message code="experience.viewsAmount"/></h4></th>
-                        <th scope="col"><h4 class="table-title"><spring:message code="experience.actions"/></h4></th>
-                     </tr>
-                     </thead>
+
                      <c:choose>
                         <c:when test="${experienceList.size() == 0}">
                            <div class="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
@@ -66,6 +56,16 @@
                            </div>
                         </c:when>
                         <c:otherwise>
+                        <table class="table table-bordered table-hover table-fit">
+                           <thead class="table-light">
+                              <tr>
+                                 <th scope="col"><h4 class="table-title"><spring:message code="experience.title"/></h4></th>
+                                 <th scope="col"><h4 class="table-title"><spring:message code="experienceForm.experienceCategory"/></h4></th>
+                                 <th scope="col"><h4 class="table-title"><spring:message code="review.scoreAssign"/></h4></th>
+                                 <th scope="col"><h4 class="table-title"><spring:message code="experience.viewsAmount"/></h4></th>
+                                 <th scope="col"><h4 class="table-title"><spring:message code="experience.actions"/></h4></th>
+                              </tr>
+                           </thead>
                            <tbody>
                            <c:forEach var="experience" items="${experienceList}" varStatus="myIndex">
                               <tr>
@@ -138,10 +138,10 @@
                               </tr>
                            </c:forEach>
                            </tbody>
+
+                        </table>
                         </c:otherwise>
                      </c:choose>
-
-                  </table>
 
                   <div class="mt-auto d-flex justify-content-center align-items-center">
                      <ul class="pagination m-0">
