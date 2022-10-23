@@ -217,10 +217,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> getExperiencesListByUserId(UserModel user, Optional<OrderByModel> order, Integer page, Integer page_size) {
+    public List<ExperienceModel> getExperiencesListByUserId(String name, UserModel user, Optional<OrderByModel> order, Integer page, Integer page_size) {
         LOGGER.debug("Get experiences of user with id {}", user.getUserId());
-
-        final TypedQuery<ExperienceModel> query = em.createQuery("FROM ExperienceModel WHERE user =:user", ExperienceModel.class);
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user", ExperienceModel.class);
+        query.setParameter("name", name);
         query.setFirstResult((page - 1) * page_size);
         query.setMaxResults(page_size);
         query.setParameter("user", user);
@@ -228,14 +228,11 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public Integer getCountExperiencesByUser(UserModel user){
-//        final String query = "SELECT COALESCE(COUNT (experienceId), 1) FROM favuserexperience WHERE userId = ? ";
-//        LOGGER.debug("Executing query: {}", query);
-//        return jdbcTemplate.queryForObject(query, new Object[]{userId}, Integer.class);
-        final TypedQuery<ExperienceModel> query = em.createQuery("FROM ExperienceModel WHERE user =:user", ExperienceModel.class);
+    public Long getCountExperiencesByUser(String name, UserModel user){
+        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user", Long.class);
+        query.setParameter("name", name);
         query.setParameter("user", user);
-
-        return query.getResultList().size();
+        return query.getSingleResult();
     }
 
     @Override

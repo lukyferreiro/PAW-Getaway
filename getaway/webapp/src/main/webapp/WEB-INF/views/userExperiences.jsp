@@ -25,6 +25,21 @@
                      <div id="snackbar"><spring:message code="experienceDetail.delete"/></div>
                   </c:if>
 
+                  <%--SEARCH--%>
+                  <div class="d-flex justify-items-center align-items-center" style="margin-right: 40px;">
+
+                     <button class="btn btn-search-navbar p-0" type="submit" form="searchExperiencePrivateForm">
+                        <img src="<c:url value="/resources/images/ic_lupa.svg"/>" alt="Icono lupa">
+                     </button>
+                     <spring:message code="navbar.search" var="placeholder"/>
+                     <c:url value="/user/experiences" var="searchPrivatePostPath"/>
+                     <form:form modelAttribute="searchFormPrivate" action="${searchPrivatePostPath}" id="searchExperiencePrivateForm" method="post"
+                                acceptCharset="UTF-8" cssClass="my-auto">
+                        <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>
+                        <form:errors path="query" element="p" cssClass="form-error-label"/>
+                     </form:form>
+                  </div>
+
                   <div class="d-flex justify-content-center align-content-center">
                      <h3 class="title m-0"><spring:message code="experience.description"/></h3>
                   </div>
@@ -39,78 +54,93 @@
                         <th scope="col"><h4 class="table-title"><spring:message code="experience.actions"/></h4></th>
                      </tr>
                      </thead>
-                     <tbody>
-                     <c:forEach var="experience" items="${experienceList}" varStatus="myIndex">
-                        <tr>
-                           <th scope="row">
-                              <div class="title-link">
-                                 <a href="<c:url value="/experiences/${experience.category.categoryName}/${experience.experienceId}"/>">
-                                    <h4 class="card-title container-fluid p-0"><c:out value="${experience.experienceName}"/></h4>
-                                 </a>
+                     <c:choose>
+                        <c:when test="${experienceList.size() == 0}">
+                           <div class="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
+                              <div class="d-flex justify-content-center align-content-center">
+                                 <img src="<c:url value="/resources/images/ic_no_search.jpeg"/>" alt="Imagen lupa" style="width: 150px; height:150px; min-width: 150px; min-height: 150px; margin-right: 5px;">
+                                 <h4 class="d-flex align-self-center">
+                                    <spring:message code="experience.emptyResult"/>
+                                 </h4>
                               </div>
-                           </th>
-                           <td>
-                              <div class="container-fluid d-flex p-2 mb-1 align-items-end">
-                                 <h4 class="container-fluid p-0"><c:out value="${experience.category.categoryName}"/></h4>
-                              </div>
-                           </td>
-                           <td>
-                              <div class="container-fluid d-flex p-2 mb-1 align-items-end">
-                                 <h5 class="mb-1">
-                                    <spring:message code="experience.reviews" arguments="${listReviewsCount[myIndex.index]}"/>
-                                 </h5>
-                                 <jsp:include page="/WEB-INF/components/starAvg.jsp">
-                                    <jsp:param name="avgReview" value="${avgReviews[myIndex.index]}"/>
-                                 </jsp:include>
-                              </div>
-                           </td>
-                           <td>
-                              <div class="container-fluid d-flex p-2 mb-1 align-items-end">
-                                 <h5 class="mb-1">
-                                    <c:out value="${viewsAmount[myIndex.index]}"/>
-                                 </h5>
-                              </div>
-                           </td>
-                           <td>
-                              <div class="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
-                                 <c:choose>
-                                    <c:when test="${experience.observable}">
-                                       <a href="<c:url value="/user/experiences">
+                           </div>
+                        </c:when>
+                        <c:otherwise>
+                           <tbody>
+                           <c:forEach var="experience" items="${experienceList}" varStatus="myIndex">
+                              <tr>
+                                 <th scope="row">
+                                    <div class="title-link">
+                                       <a href="<c:url value="/experiences/${experience.category.categoryName}/${experience.experienceId}"/>">
+                                          <h4 class="card-title container-fluid p-0"><c:out value="${experience.experienceName}"/></h4>
+                                       </a>
+                                    </div>
+                                 </th>
+                                 <td>
+                                    <div class="container-fluid d-flex p-2 mb-1 align-items-end">
+                                       <h4 class="container-fluid p-0"><c:out value="${experience.category.categoryName}"/></h4>
+                                    </div>
+                                 </td>
+                                 <td>
+                                    <div class="container-fluid d-flex p-2 mb-1 align-items-end">
+                                       <h5 class="mb-1">
+                                          <spring:message code="experience.reviews" arguments="${listReviewsCount[myIndex.index]}"/>
+                                       </h5>
+                                       <jsp:include page="/WEB-INF/components/starAvg.jsp">
+                                          <jsp:param name="avgReview" value="${avgReviews[myIndex.index]}"/>
+                                       </jsp:include>
+                                    </div>
+                                 </td>
+                                 <td>
+                                    <div class="container-fluid d-flex p-2 mb-1 align-items-end">
+                                       <h5 class="mb-1">
+                                          <c:out value="${viewsAmount[myIndex.index]}"/>
+                                       </h5>
+                                    </div>
+                                 </td>
+                                 <td>
+                                    <div class="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
+                                       <c:choose>
+                                          <c:when test="${experience.observable}">
+                                             <a href="<c:url value="/user/experiences">
                                           <c:param name="set" value="${false}"/>
                                           <c:param name="experience" value="${experience.experienceId}"/>
                                        </c:url>">
-                                          <button type="button" class="btn btn-eye" style="font-size: x-large" id="setFalse">
-                                             <i class="bi bi-eye"></i>
-                                          </button>
-                                       </a>
-                                    </c:when>
-                                    <c:otherwise>
-                                    <a href="<c:url value="/user/experiences">
+                                                <button type="button" class="btn btn-eye" style="font-size: x-large" id="setFalse">
+                                                   <i class="bi bi-eye"></i>
+                                                </button>
+                                             </a>
+                                          </c:when>
+                                          <c:otherwise>
+                                             <a href="<c:url value="/user/experiences">
                                           <c:param name="set" value="${true}"/>
                                           <c:param name="experience" value="${experience.experienceId}"/>
                                        </c:url>">
-                                       <button type="button" class="btn btn-eye" style="font-size: x-large" id="setTrue">
-                                          <i class="bi bi-eye-slash"></i>
-                                       </button>
-                                    </a>
-                                    </c:otherwise>
-                                 </c:choose>
+                                                <button type="button" class="btn btn-eye" style="font-size: x-large" id="setTrue">
+                                                   <i class="bi bi-eye-slash"></i>
+                                                </button>
+                                             </a>
+                                          </c:otherwise>
+                                       </c:choose>
 
-                                 <a href="<c:url value="/user/experiences/edit/${experience.experienceId}"/>">
-                                    <button type="button" class="btn btn-pencil" style="font-size: x-large">
-                                       <i class="bi bi-pencil"></i>
-                                    </button>
-                                 </a>
-                                 <a href="<c:url value="/user/experiences/delete/${experience.experienceId}"/>">
-                                    <button type="button" class="btn btn-trash" style="font-size: x-large">
-                                       <i class="bi bi-trash"></i>
-                                    </button>
-                                 </a>
-                              </div>
-                           </td>
-                        </tr>
-                     </c:forEach>
-                     </tbody>
+                                       <a href="<c:url value="/user/experiences/edit/${experience.experienceId}"/>">
+                                          <button type="button" class="btn btn-pencil" style="font-size: x-large">
+                                             <i class="bi bi-pencil"></i>
+                                          </button>
+                                       </a>
+                                       <a href="<c:url value="/user/experiences/delete/${experience.experienceId}"/>">
+                                          <button type="button" class="btn btn-trash" style="font-size: x-large">
+                                             <i class="bi bi-trash"></i>
+                                          </button>
+                                       </a>
+                                    </div>
+                                 </td>
+                              </tr>
+                           </c:forEach>
+                           </tbody>
+                        </c:otherwise>
+                     </c:choose>
+
                   </table>
 
                   <div class="mt-auto d-flex justify-content-center align-items-center">

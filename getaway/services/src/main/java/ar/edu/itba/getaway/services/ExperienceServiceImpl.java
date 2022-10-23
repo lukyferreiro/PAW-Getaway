@@ -246,13 +246,13 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> getExperiencesListByUserId(UserModel user, Optional<OrderByModel> order, Integer page) {
+    public Page<ExperienceModel> getExperiencesListByUserId(String name, UserModel user, Optional<OrderByModel> order, Integer page) {
         int total_pages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {}", page);
 
-        Integer total = experienceDao.getCountExperiencesByUser(user);
+        Long total = experienceDao.getCountExperiencesByUser(name, user);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -266,7 +266,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             } else if (page < 0) {
                 page = 1;
             }
-            experienceModelList = experienceDao.getExperiencesListByUserId(user, order, page, RESULT_PAGE_SIZE);
+            experienceModelList = experienceDao.getExperiencesListByUserId(name, user, order, page, RESULT_PAGE_SIZE);
         } else {
             total_pages = 1;
         }

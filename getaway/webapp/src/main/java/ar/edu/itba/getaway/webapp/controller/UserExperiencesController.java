@@ -101,11 +101,13 @@ public class UserExperiencesController {
         return mav;
     }
 
-    @RequestMapping(value = "/user/experiences")
+    @RequestMapping(value = "/user/experiences",method = {RequestMethod.GET} )
     public ModelAndView experience(Principal principal,
+                                   @RequestParam Optional<String> query,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set,
                                    @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                                   @Valid @ModelAttribute("searchFormPrivate") final SearchForm searchFormPrivate,
                                    HttpServletRequest request,
                                    Optional<Boolean> delete,
                                    @RequestParam Optional<OrderByModel> orderBy,
@@ -131,7 +133,7 @@ public class UserExperiencesController {
 
         }
 
-        currentPage = experienceService.getExperiencesListByUserId(user, orderBy, pageNum);
+        currentPage = experienceService.getExperiencesListByUserId(query.orElse(""), user, orderBy, pageNum);
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
         final List<Integer> viewsAmount = experienceService.getViewAmountList(currentExperiences);
         final List<Long> avgReviews = reviewService.getListOfAverageScoreByExperienceList(currentExperiences);
@@ -151,6 +153,23 @@ public class UserExperiencesController {
         mav.addObject("listReviewsCount", listReviewsCount);
         mav.addObject("isEditing", true);
         mav.addObject("delete", delete.isPresent());
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/user/experiences",method = {RequestMethod.POST} )
+    public ModelAndView experiencePost(Principal principal,
+                                       @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
+                                       @Valid @ModelAttribute("searchFormPrivate") final SearchForm searchFormPrivate,
+                                       final BindingResult errors,
+                                       HttpServletRequest request) {
+        if (errors.hasErrors()) {
+            LOGGER.debug("Error in the search input");
+            return experience(principal, Optional.empty(),Optional.empty(),Optional.empty(), searchForm, searchFormPrivate, request,Optional.empty(),Optional.empty(),1);
+        }
+        LOGGER.debug("Endpoint POST /user/experiences");
+        ModelAndView mav = new ModelAndView("redirect:/user/experiences");
+        mav.addObject("query", searchForm.getQuery());
 
         return mav;
     }
