@@ -31,6 +31,7 @@
                <jsp:param name="reviewAvg" value="${experience.getAverageScore()}"/>
                <jsp:param name="reviewCount" value="${experience.getReviewCount()}"/>
                 <jsp:param name="isEditing" value="${isEditing}"/>
+               <jsp:param name="observable" value="${experience.observable}"/>
                <jsp:param name="path" value="/experiences/${categoryName}/${experience.experienceId}"/>
             </jsp:include>
 

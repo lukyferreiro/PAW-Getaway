@@ -4,7 +4,7 @@ import javax.validation.constraints.Size;
 
 public class SearchForm {
 
-    @Size(min=1, max = 255)
+    @Size(max = 255)
     private String query;
 
     public String getQuery() {

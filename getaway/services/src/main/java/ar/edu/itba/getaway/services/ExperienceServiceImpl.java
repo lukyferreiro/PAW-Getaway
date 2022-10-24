@@ -10,8 +10,6 @@ import ar.edu.itba.getaway.interfaces.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,6 +58,26 @@ public class ExperienceServiceImpl implements ExperienceService {
         experienceDao.updateExperience(experienceModel);
         imageService.updateImg(image, experienceModel.getExperienceImage());
         LOGGER.debug("Experience {} updated", experienceModel.getExperienceId());
+    }
+
+
+    @Transactional
+    @Override
+    public void updateExperienceWithoutImg(ExperienceModel toUpdateExperience) {
+        LOGGER.debug("Updating experience with id {}", toUpdateExperience.getExperienceId());
+        experienceDao.updateExperience(toUpdateExperience);
+        LOGGER.debug("Experience {} updated", toUpdateExperience.getExperienceId());
+    }
+
+    @Override
+    public List<Integer> getViewAmountList(List<ExperienceModel> experienceModelList) {
+        final List<Integer> views = new ArrayList<>();
+        LOGGER.debug("Retrieving list of views of all next's experiences");
+        for (ExperienceModel experienceModel : experienceModelList) {
+            LOGGER.debug("Added view amount of experience with id {}", experienceModel.getExperienceId());
+            views.add(experienceDao.getViewAmount(experienceModel.getExperienceId()).getViews());
+        }
+        return views;
     }
 
     @Transactional
@@ -226,5 +244,37 @@ public class ExperienceServiceImpl implements ExperienceService {
     public boolean experienceBelongsToUser(UserModel user, ExperienceModel experience) {
         return experienceDao.experienceBelongsToUser(user, experience);
     }
+
+    @Override
+    public Page<ExperienceModel> getExperiencesListByUserId(String name, UserModel user, Optional<OrderByModel> order, Integer page) {
+        int total_pages;
+        List<ExperienceModel> experienceModelList = new ArrayList<>();
+
+        LOGGER.debug("Requested page {}", page);
+
+        Long total = experienceDao.getCountExperiencesByUser(name, user);
+
+        if (total > 0) {
+            LOGGER.debug("Total pages found: {}", total);
+
+            total_pages = (int) Math.ceil((double) total / RESULT_PAGE_SIZE);
+
+            LOGGER.debug("Max page calculated: {}", total_pages);
+
+            if (page > total_pages) {
+                page = total_pages;
+            } else if (page < 0) {
+                page = 1;
+            }
+            experienceModelList = experienceDao.getExperiencesListByUserId(name, user, order, page, RESULT_PAGE_SIZE);
+        } else {
+            total_pages = 1;
+        }
+
+        LOGGER.debug("Max page value service: {}", total_pages);
+        return new Page<>(experienceModelList, page, total_pages);
+//        return experienceDao.getExperiencesListByUserId(user, order, page);
+    }
+
 
 }

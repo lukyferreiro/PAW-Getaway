@@ -21,4 +21,7 @@ public interface ExperienceService {
     List<List<ExperienceModel>> getExperiencesListByCategoriesByUserId(UserModel user);
     boolean hasExperiencesByUser(UserModel user);
     boolean experienceBelongsToUser(UserModel user, ExperienceModel experience);
+    Page<ExperienceModel> getExperiencesListByUserId(String name, UserModel user, Optional<OrderByModel> order, Integer page);
+    void updateExperienceWithoutImg(ExperienceModel toUpdateExperience);
+    List<Integer> getViewAmountList(List<ExperienceModel> experienceModelList);
 }
