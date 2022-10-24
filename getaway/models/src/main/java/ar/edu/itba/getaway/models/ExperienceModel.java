@@ -3,7 +3,6 @@ package ar.edu.itba.getaway.models;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,21 +44,29 @@ public class ExperienceModel {
     @JoinColumn(name = "imgId")
     private ImageModel experienceImage;
 
-//    @Formula("select count(*) from ReviewModel rm where rm.experience.experienceId = id")
-//    private Long reviewCount;
-
     @OneToMany
-    @JoinColumn(name="experienceId")
+    @JoinColumn(name = "experienceId")
     private List<ReviewModel> experienceReviews;
 
-    // Bring also Collection<Reviews>???
+    @Column(name = "observable", nullable = false)
+    private Boolean observable;
+
+    @Column(name = "views", nullable = false)
+    private Integer views;
+
+    @Formula(value = "(select ceiling(avg(reviews.score)) from reviews where reviews.experienceId = experienceId)")
+    private Long avgReviewScore;
+
+    @Formula(value = "(select count(*) from reviews where reviews.experienceId = experienceId)")
+    private Long reviewCount;
+
 
     /* default */
     protected ExperienceModel() {
         // Just for Hibernate
     }
 
-    public ExperienceModel(String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
+    public ExperienceModel(String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage, Boolean observable, Integer views) {
         this.experienceName = experienceName;
         this.address = address;
         this.description = description;
@@ -70,9 +77,11 @@ public class ExperienceModel {
         this.city = city;
         this.user = user;
         this.experienceImage = experienceImage;
+        this.observable = observable;
+        this.views = views;
     }
 
-    public ExperienceModel(Long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
+    public ExperienceModel(Long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage, Boolean observable, Integer views) {
         this.experienceId = experienceId;
         this.experienceName = experienceName;
         this.address = address;
@@ -84,67 +93,104 @@ public class ExperienceModel {
         this.city = city;
         this.user = user;
         this.experienceImage = experienceImage;
+        this.observable = observable;
+        this.views = views;
     }
 
     public Long getExperienceId() {
         return experienceId;
     }
+
     public void setExperienceId(Long experienceId) {
         this.experienceId = experienceId;
     }
+
     public String getExperienceName() {
         return experienceName;
     }
+
     public void setExperienceName(String experienceName) {
         this.experienceName = experienceName;
     }
+
     public Double getPrice() {
         return price;
     }
+
     public void setPrice(Double price) {
         this.price = price;
     }
+
     public String getAddress() {
         return address;
     }
+
     public void setAddress(String address) {
         this.address = address;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
+
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
     public String getSiteUrl() {
         return siteUrl;
     }
+
     public void setSiteUrl(String siteUrl) {
         this.siteUrl = siteUrl;
     }
+
     public CityModel getCity() {
         return city;
     }
+
     public void setCity(CityModel city) {
         this.city = city;
     }
+
     public CategoryModel getCategory() {
         return category;
     }
+
     public void setCategory(CategoryModel category) {
         this.category = category;
     }
+
     public UserModel getUser() {
         return user;
     }
+
     public void setUser(UserModel user) {
         this.user = user;
+    }
+
+    public Boolean getObservable() {
+        return observable;
+    }
+
+    public void setObservable(Boolean observable) {
+        this.observable = observable;
+    }
+
+    public Integer getViews() {
+        return views;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
     }
 
     public ImageModel getExperienceImage() {
@@ -156,29 +202,27 @@ public class ExperienceModel {
     }
 
     public List<ReviewModel> getExperienceReviews(Integer page, Integer page_size) {
-        Integer fromIndex = (page-1) * page_size;
-        Integer toIndex= Math.min((fromIndex + page_size), experienceReviews.size());
+        Integer fromIndex = (page - 1) * page_size;
+        Integer toIndex = Math.min((fromIndex + page_size), experienceReviews.size());
         return experienceReviews.subList(fromIndex, toIndex);
     }
 
+    @Transient
     public Long getReviewCount() {
-        return (long) experienceReviews.size();
+        return reviewCount;
     }
 
+    @Transient
     public Long getAverageScore() {
-        Long toRet=0L;
-        for (ReviewModel review: experienceReviews) {
-            toRet+=review.getScore();
-        }
-        return (long) Math.ceil((double) toRet / experienceReviews.size());
+        return avgReviewScore;
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o){
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (!(o instanceof ExperienceModel)){
+        if (!(o instanceof ExperienceModel)) {
             return false;
         }
         ExperienceModel other = (ExperienceModel) o;
