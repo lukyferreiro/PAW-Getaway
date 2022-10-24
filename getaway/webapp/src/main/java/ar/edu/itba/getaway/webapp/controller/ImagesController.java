@@ -33,8 +33,6 @@ public class ImagesController {
     public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
         LOGGER.info("Accessed experiences/{}/image GET controller", experienceId);
         final ExperienceModel experienceModel = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-//        final ImageExperienceModel imageExperienceModel = imageService.getImgByExperience(experienceModel).orElseThrow(ImageNotFoundException::new);
-//        return imageExperienceModel.getImage().getImage();
         return experienceModel.getExperienceImage().getImage();
     }
 

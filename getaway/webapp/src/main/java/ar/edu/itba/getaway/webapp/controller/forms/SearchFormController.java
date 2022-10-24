@@ -52,10 +52,6 @@ public class SearchFormController {
         final Page<ExperienceModel> currentPage = experienceService.listExperiencesByName(searchForm.getQuery(), orderBy, pageNum);
         final ModelAndView mav = new ModelAndView("searchResult");
 
-        LOGGER.debug("Pagination");
-        LOGGER.debug("CurrentPage {}", currentPage.getCurrentPage());
-        LOGGER.debug("TotalPages {}", currentPage.getMaxPage());
-
         mav.addObject("favExperienceModels", new ArrayList<>());
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
@@ -75,8 +71,6 @@ public class SearchFormController {
 
         final OrderByModel[] orderByModels = OrderByModel.values();
         final List<ExperienceModel> experienceModels = currentPage.getContent();
-        final List<Long> avgReviews = reviewService.getListOfAverageScoreByExperienceList(experienceModels);
-        final List<Long> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(experienceModels);
 
         if(query.isPresent()){
             request.setAttribute("query", query);
@@ -93,11 +87,9 @@ public class SearchFormController {
         mav.addObject("totalPages", currentPage.getTotalPages());
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
-        mav.addObject("avgReviews", avgReviews);
         mav.addObject("set", set);
         mav.addObject("experience", experience);
         mav.addObject("experiences", experienceModels);
-        mav.addObject("listReviewsCount", listReviewsCount);
         mav.addObject("isEditing", false);
 
         return mav;

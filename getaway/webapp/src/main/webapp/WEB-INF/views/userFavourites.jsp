@@ -44,8 +44,8 @@
                            <jsp:param name="price" value="${experience.price}"/>
                            <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
                            <jsp:param name="path" value="/user/favourites"/>
-                           <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
-                           <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
+                           <jsp:param name="avgReviews" value="${experience.getAverageScore()}"/>
+                           <jsp:param name="reviewCount" value="${experience.getReviewCount()}"/>
                            <jsp:param name="isEditing" value="${isEditing}"/>
                            <jsp:param name="orderBY" value="${orderBy}"/>
                            <jsp:param name="pageNum" value="${currentPage}"/>

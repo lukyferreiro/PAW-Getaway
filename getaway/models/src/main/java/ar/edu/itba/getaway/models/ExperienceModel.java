@@ -44,7 +44,7 @@ public class ExperienceModel {
     @JoinColumn(name = "imgId")
     private ImageModel experienceImage;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "experienceId")
     private List<ReviewModel> experienceReviews;
 
@@ -54,8 +54,8 @@ public class ExperienceModel {
     @Column(name = "views", nullable = false)
     private Integer views;
 
-    @Formula(value = "(select ceiling(avg(reviews.score)) from reviews where reviews.experienceId = experienceId)")
-    private Long avgReviewScore;
+    @Formula(value = "(select coalesce(ceiling(avg(reviews.score)),0)from reviews where reviews.experienceId = experienceId)")
+    private Long averageScore;
 
     @Formula(value = "(select count(*) from reviews where reviews.experienceId = experienceId)")
     private Long reviewCount;
@@ -214,7 +214,7 @@ public class ExperienceModel {
 
     @Transient
     public Long getAverageScore() {
-        return avgReviewScore;
+        return averageScore;
     }
 
     @Override

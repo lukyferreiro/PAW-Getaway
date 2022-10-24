@@ -28,8 +28,8 @@
                <jsp:param name="siteUrl" value="${experience.siteUrl}"/>
                <jsp:param name="email" value="${experience.email}"/>
                <jsp:param name="hasImage" value="${experience.experienceImage.image != null}"/>
-               <jsp:param name="reviewAvg" value="${experience.getAverageScore()}"/>
-               <jsp:param name="reviewCount" value="${experience.getReviewCount()}"/>
+               <jsp:param name="reviewAvg" value="${experience.averageScore}"/>
+               <jsp:param name="reviewCount" value="${experience.reviewCount}"/>
                 <jsp:param name="isEditing" value="${isEditing}"/>
                <jsp:param name="observable" value="${experience.observable}"/>
                <jsp:param name="path" value="/experiences/${categoryName}/${experience.experienceId}"/>
@@ -70,8 +70,8 @@
                                  <jsp:param name="description" value="${review.description}"/>
                                  <jsp:param name="reviewDate" value="${review.reviewDate}"/>
                                  <jsp:param name="score" value="${review.score}"/>
-                                 <jsp:param name="hasImage" value="${listReviewsHasImages[myIndex.index]}"/>
-                                 <jsp:param name="userId" value="${reviews[myIndex.index].user.profileImage.imageId}"/>
+                                 <jsp:param name="hasImage" value="${review.user.profileImage.image!=null}"/>
+                                 <jsp:param name="userId" value="${review.user.profileImage.imageId}"/>
                                  <jsp:param name="reviewId" value="${review.reviewId}"/>
                                  <jsp:param name="isEditing" value="${isEditing}"/>
                               </jsp:include>

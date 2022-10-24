@@ -47,8 +47,6 @@ public class InitPageController {
 
 
         final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategories();
-//        final List<List<Long>> avgReviews = reviewService.getListOfAverageScoreByExperienceListAndCategoryId(listByCategory);
-//        final List<List<Long>> listReviewsCount = reviewService.getListOfReviewCountByExperienceListAndCategoryId(listByCategory);
 
         mav.addObject("favExperienceModels", new ArrayList<>());
         if (principal != null) {
@@ -72,9 +70,6 @@ public class InitPageController {
 
         mav.addObject("isEditing", false);
         mav.addObject("listByCategory", listByCategory);
-//        mav.addObject("avgReviews", avgReviews);
-//        mav.addObject("listReviewsCount", listReviewsCount);
-
         return mav;
     }
 

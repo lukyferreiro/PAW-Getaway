@@ -57,8 +57,8 @@
                            <jsp:param name="query" value="${query}"/>
                            <jsp:param name="orderBy" value="${orderBy}"/>
                            <jsp:param name="search" value="true"/>
-                           <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
-                           <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
+                           <jsp:param name="avgReviews" value="${experience.averageScore}"/>
+                           <jsp:param name="reviewCount" value="${experience.reviewCount}"/>
                            <jsp:param name="isEditing" value="${isEditing}"/>
                            <jsp:param name="pageNum" value="${currentPage}"/>
                         </jsp:include>

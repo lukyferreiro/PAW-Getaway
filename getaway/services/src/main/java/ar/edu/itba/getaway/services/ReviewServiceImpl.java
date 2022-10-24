@@ -41,89 +41,18 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewDao.createReview(title, description, score, experienceModel, reviewDate, userModel);
     }
 
+    @Transactional
     @Override
-    public List<ReviewModel> getReviewsByExperience(ExperienceModel experience) {
-        LOGGER.debug("Retrieving all reviews of experience with id {}", experience.getExperienceId());
-        return reviewDao.getReviewsByExperience(experience);
+    public void updateReview(Long reviewId, ReviewModel reviewModel) {
+        LOGGER.debug("Updating review with id {}", reviewId);
+        reviewDao.updateReview(reviewId, reviewModel);
     }
 
+    @Transactional
     @Override
-    public Long getReviewAverageScore(ExperienceModel experience) {
-        LOGGER.debug("Retrieving average score of experience with id {}", experience.getExperienceId());
-        return reviewDao.getReviewAverageScore(experience);
-    }
-
-    @Override
-    public List<Long> getListOfAverageScoreByExperienceList(List<ExperienceModel> experienceModelList) {
-        final List<Long> avgReviews = new ArrayList<>();
-        LOGGER.debug("Retrieving list of average score of all next's experiences");
-        for (ExperienceModel experienceModel : experienceModelList) {
-            LOGGER.debug("Added average score of experience with id {}", experienceModel.getExperienceId());
-            avgReviews.add(reviewDao.getReviewAverageScore(experienceModel));
-        }
-        return avgReviews;
-    }
-
-    @Override
-    public List<List<Long>> getListOfAverageScoreByExperienceListAndCategoryId(List<List<ExperienceModel>> experienceModelList) {
-        final List<List<Long>> listExperiencesAvgReviewsByCategory = new ArrayList<>();
-        for (int i = 0; i < experienceModelList.size(); i++) {
-            listExperiencesAvgReviewsByCategory.add(new ArrayList<>());
-            for (ExperienceModel experienceModel : experienceModelList.get(i)) {
-                listExperiencesAvgReviewsByCategory.get(i).add(getReviewAverageScore(experienceModel));
-            }
-        }
-        return listExperiencesAvgReviewsByCategory;
-    }
-
-    @Override
-    public Long getReviewCount(ExperienceModel experience) {
-        LOGGER.debug("Retrieving count of reviews of experience with id {}", experience.getExperienceId());
-        return reviewDao.getReviewCount(experience);
-    }
-
-    @Override
-    public List<Long> getListOfReviewCountByExperienceList(List<ExperienceModel> experienceModelList) {
-        final List<Long> listReviewsCount = new ArrayList<>();
-        LOGGER.debug("Retrieving list of review count of all next's experiences");
-        for (ExperienceModel experienceModel : experienceModelList) {
-            LOGGER.debug("Added review count of experience with id {}", experienceModel.getExperienceId());
-            listReviewsCount.add(reviewDao.getReviewCount(experienceModel));
-        }
-        return listReviewsCount;
-    }
-
-    @Override
-    public List<List<Long>> getListOfReviewCountByExperienceListAndCategoryId(List<List<ExperienceModel>> experienceModelList) {
-        final List<List<Long>> listExperiencesReviewCountByCategory = new ArrayList<>();
-        for (int i = 0; i < experienceModelList.size(); i++) {
-            listExperiencesReviewCountByCategory.add(new ArrayList<>());
-            for (ExperienceModel experienceModel : experienceModelList.get(i)) {
-                listExperiencesReviewCountByCategory.get(i).add(getReviewCount(experienceModel));
-            }
-        }
-        return listExperiencesReviewCountByCategory;
-    }
-
-    @Override
-    public List<Boolean> getListOfReviewHasImages(List<ReviewModel> reviewUserModelList) {
-        final List<Boolean> listReviewsHasImages = new ArrayList<>();
-        LOGGER.debug("Retrieving list of whether has images of all next's reviews");
-        for (ReviewModel review : reviewUserModelList) {
-            LOGGER.debug("Added has image value of review with id {}", review.getUser().getProfileImage());
-            if(review.getUser().getProfileImage() == null){
-                listReviewsHasImages.add(false);
-            }else{
-                final Optional<ImageModel> img = imageService.getImgById(review.getUser().getProfileImage().getImageId());
-                if (img.isPresent()) {
-                    listReviewsHasImages.add(img.get().getImage() != null);
-                } else {
-                    listReviewsHasImages.add(false);
-                }
-            }
-
-        }
-        return listReviewsHasImages;
+    public void deleteReview(ReviewModel review) {
+        LOGGER.debug("Deleting review with id {}", review.getReviewId());
+        reviewDao.deleteReview(review);
     }
 
     @Override
@@ -149,7 +78,6 @@ public class ReviewServiceImpl implements ReviewService {
             } else if (page < 0) {
                 page = 1;
             }
-//            reviewUserModelList = reviewDao.getReviewAndUser(experience, page, PAGE_SIZE);
             reviewUserModelList = experience.getExperienceReviews(page, PAGE_SIZE);
         } else {
             total_pages = 1;
@@ -195,41 +123,4 @@ public class ReviewServiceImpl implements ReviewService {
         LOGGER.debug("Max page value service: {}", total_pages);
         return new Page<>(reviewUserModelList, page, total_pages);
     }
-
-    @Transactional
-    @Override
-    public void deleteReview(ReviewModel review) {
-        LOGGER.debug("Deleting review with id {}", review.getReviewId());
-//        if(reviewDao.deleteReview(review)){
-//            LOGGER.debug("Review {} updated", reviewId);
-//        } else {
-//            LOGGER.warn("Review {} NOT updated", reviewId);
-        //   }
-        reviewDao.deleteReview(review);
-    }
-
-    @Transactional
-    @Override
-    public void updateReview(Long reviewId, ReviewModel reviewModel) {
-        LOGGER.debug("Updating review with id {}", reviewId);
-//        if(reviewDao.updateReview(reviewId, reviewModel)){
-//            LOGGER.debug("Review {} deleted", reviewId);
-//        } else {
-//            LOGGER.warn("Review {} NOT deleted", reviewId);
-//        }
-        reviewDao.updateReview(reviewId, reviewModel);
-    }
-
-    //TODO: delete unnecessary method.
-    // ReviewModel now internally has its experienceMode
-    @Override
-    public List<ExperienceModel> getListExperiencesOfReviewsList(List<ReviewModel> reviewModelList) {
-        final List<ExperienceModel> listExperiencesOfReviews = new ArrayList<>();
-        for (ReviewModel review : reviewModelList) {
-            final Optional<ExperienceModel> experienceModel = experienceService.getExperienceById(review.getExperience().getExperienceId());
-            experienceModel.ifPresent(listExperiencesOfReviews::add);
-        }
-        return listExperiencesOfReviews;
-    }
-
 }

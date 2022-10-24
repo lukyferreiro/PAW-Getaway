@@ -41,11 +41,11 @@
                               <jsp:param name="description" value="${review.description}"/>
                               <jsp:param name="reviewDate" value="${review.reviewDate}"/>
                               <jsp:param name="score" value="${review.score}"/>
-                              <jsp:param name="hasImage" value="${false}"/>
-                              <jsp:param name="userId" value="${reviews[myIndex.index].user.profileImage.imageId}"/>
+                              <jsp:param name="hasImage" value="${hasImage}"/>
+                              <jsp:param name="profileImageId" value="${profileImageId}"/>
                               <jsp:param name="reviewId" value="${review.reviewId}"/>
                               <jsp:param name="isEditing" value="${isEditing}"/>
-                              <jsp:param name="experienceName" value="${listExperiencesOfReviews[myIndex.index].experienceName}"/>
+                              <jsp:param name="experienceName" value="${review.experience.experienceName}"/>
                            </jsp:include>
                         </div>
                      </c:forEach>

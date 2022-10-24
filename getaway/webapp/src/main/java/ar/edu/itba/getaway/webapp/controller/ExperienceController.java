@@ -60,15 +60,12 @@ public class ExperienceController {
 
         // Category
         // Ordinal empieza en 0
-        final ExperienceCategory category;
-        try {
-            category = ExperienceCategory.valueOf(categoryName);
-        } catch (Exception e) {
-            throw new CategoryNotFoundException();
-        }
-
-        final String dbCategoryName = category.toString();
-        final CategoryModel categoryModel = categoryService.getCategoryByName(categoryName).get();
+        final CategoryModel categoryModel = categoryService.getCategoryByName(categoryName).orElseThrow(CategoryNotFoundException::new);
+//        try {
+//            categoryModel = categoryService.getCategoryByName(categoryName).get();
+//        } catch (Exception e) {
+//            throw new CategoryNotFoundException();
+//        }
 
         // Order By
         final OrderByModel[] orderByModels = OrderByModel.values();
@@ -93,8 +90,8 @@ public class ExperienceController {
         final List<CityModel> cityModels = locationService.listAllCities();
 
         if (cityId.isPresent() && cityId.get()>0) {
+            //TODO add cityNotFoundException
             CityModel city = locationService.getCityById(cityId.get()).get();
-            LOGGER.debug("MAXPRICE: {}", max);
             currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, city, orderBy, pageNum);
             mav.addObject("cityId", cityId.get());
         } else {
@@ -121,8 +118,6 @@ public class ExperienceController {
         }
 
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
-        final List<Long> avgReviews = reviewService.getListOfAverageScoreByExperienceList(currentExperiences);
-        final List<Long> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(currentExperiences);
 
         request.setAttribute("pageNum", pageNum);
         final String path = request.getServletPath();
@@ -130,11 +125,9 @@ public class ExperienceController {
         mav.addObject("path", path);
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("cities", cityModels);
-        mav.addObject("dbCategoryName", dbCategoryName);
+        mav.addObject("dbCategoryName", categoryModel.getCategoryName());
         mav.addObject("categoryName", categoryName);
         mav.addObject("experiences", currentExperiences);
-        mav.addObject("avgReviews", avgReviews);
-        mav.addObject("listReviewsCount", listReviewsCount);
         mav.addObject("totalPages", currentPage.getTotalPages());
         mav.addObject("currentPage", currentPage.getCurrentPage());
         mav.addObject("minPage", currentPage.getMinPage());
@@ -158,6 +151,7 @@ public class ExperienceController {
             return experienceGet(categoryName, form, searchForm, principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
         }
 
+        //TODO: check add only city and then access cityid. Multiple db access
         final Optional<CityModel> cityModel = locationService.getCityByName(form.getExperienceCity());
         if (cityModel.isPresent()) {
             final Long cityId = cityModel.get().getCityId();
@@ -198,24 +192,23 @@ public class ExperienceController {
 
         final Page<ReviewModel> currentPage = reviewService.getReviewAndUser(experience, pageNum);
         final List<ReviewModel> reviews = currentPage.getContent();
-        final List<Boolean> listReviewsHasImages = reviewService.getListOfReviewHasImages(reviews);
-        final Long avgScore = reviewService.getReviewAverageScore(experience);
-        final Long reviewCount = reviewService.getReviewCount(experience);
+//        final List<Boolean> listReviewsHasImages = reviewService.getListOfReviewHasImages(reviews);
+//        final Long avgScore = reviewService.getReviewAverageScore(experience);
+//        final Long reviewCount = reviewService.getReviewCount(experience);
         final CityModel cityModel = experience.getCity();
         final String city = cityModel.getCityName();
         final String country = cityModel.getCountry().getCountryName();
 
-        LOGGER.debug("Experience with id {} has an average score of {}", experienceId, avgScore);
+        LOGGER.debug("Experience with id {} has an average score of {}", experienceId, experience.getAverageScore());
 
         request.setAttribute("pageNum", pageNum);
 
-//        mav.addObject("reviewAvg", avgScore);
         mav.addObject("dbCategoryName", category.getCategoryName());
         mav.addObject("experience", experience);
         mav.addObject("reviews", reviews);
-        mav.addObject("listReviewsHasImages", listReviewsHasImages);
-        mav.addObject("avgScore", avgScore);
-//        mav.addObject("reviewCount", reviewCount);
+//        mav.addObject("listReviewsHasImages", listReviewsHasImages);
+//        mav.addObject("avgScore", experience.getAverageScore());
+//        mav.addObject("reviewCount", experience.getReviewCount());
         mav.addObject("city", city);
         mav.addObject("country", country);
         mav.addObject("success", success.isPresent());

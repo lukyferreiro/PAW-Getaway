@@ -29,37 +29,15 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     @Override
-    public List<ReviewModel> getReviewsByExperience(ExperienceModel experience) {
-        LOGGER.debug("Get reviews with experience {}", experience.getExperienceName());
-        final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE experience = :experience", ReviewModel.class);
-        query.setParameter("experience", experience);
-        return query.getResultList();
-    }
-
-    //TODO: check aggregate function usage
-    @Override
-    public Long getReviewAverageScore(ExperienceModel experience) {
-//        final TypedQuery<Long> query = em.createQuery("SELECT CEILING(AVG(rev.score)) FROM ReviewModel rev WHERE rev.experience = :experience", Long.class);
-//        query.setParameter("experience", experience);
-//        return query.getSingleResult();
-        return 0L;
-    }
-
-    //TODO: check aggregate function usage
-    @Override
-    public Long getReviewCount(ExperienceModel experience) {
-        final TypedQuery<Long> query = em.createQuery("SELECT COUNT (r) FROM ReviewModel r WHERE r.experience = :experience", Long.class);
-        query.setParameter("experience", experience);
-        return query.getSingleResult();
+    public void updateReview(Long reviewId, ReviewModel reviewModel) {
+        LOGGER.debug("Updating review with id: {}", reviewId);
+        em.merge(reviewModel);
     }
 
     @Override
-    public List<ReviewModel> getReviewAndUser(ExperienceModel experience, Integer page, Integer page_size) {
-        final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE experience = :experience", ReviewModel.class);
-        query.setParameter("experience", experience);
-        query.setFirstResult((page - 1) * page_size);
-        query.setMaxResults(page_size);
-        return query.getResultList();
+    public void deleteReview(ReviewModel review) {
+        LOGGER.debug("Delete review with id {}", review.getReviewId());
+        em.remove(review);
     }
 
     @Override
@@ -82,17 +60,5 @@ public class ReviewDaoImpl implements ReviewDao {
         final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.user) FROM ReviewModel r WHERE r.user = :user", Long.class);
         query.setParameter("user", user);
         return query.getSingleResult();
-    }
-
-    @Override
-    public void deleteReview(ReviewModel review) {
-        LOGGER.debug("Delete review with id {}", review.getReviewId());
-        em.remove(review);
-    }
-
-    @Override
-    public void updateReview(Long reviewId, ReviewModel reviewModel) {
-        LOGGER.debug("Updating review with id: {}", reviewId);
-        em.merge(reviewModel);
     }
 }

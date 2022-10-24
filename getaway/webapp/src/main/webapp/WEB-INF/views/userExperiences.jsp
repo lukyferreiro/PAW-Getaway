@@ -77,6 +77,9 @@
                                     </div>
                                  </th>
                                  <td>
+
+<%--                                    Change to spring messagfe value--%>
+
                                     <div class="container-fluid d-flex p-2 mb-1 align-items-end">
                                        <h4 class="container-fluid p-0"><c:out value="${experience.category.categoryName}"/></h4>
                                     </div>
@@ -84,17 +87,17 @@
                                  <td>
                                     <div class="container-fluid d-flex p-2 mb-1 align-items-end">
                                        <h5 class="mb-1">
-                                          <spring:message code="experience.reviews" arguments="${listReviewsCount[myIndex.index]}"/>
+                                          <spring:message code="experience.reviews" arguments="${experience.reviewCount}"/>
                                        </h5>
                                        <jsp:include page="/WEB-INF/components/starAvg.jsp">
-                                          <jsp:param name="avgReview" value="${avgReviews[myIndex.index]}"/>
+                                          <jsp:param name="avgReview" value="${experience.averageScore}"/>
                                        </jsp:include>
                                     </div>
                                  </td>
                                  <td>
                                     <div class="container-fluid d-flex p-2 mb-1 align-items-end">
                                        <h5 class="mb-1">
-                                          <c:out value="${viewsAmount[myIndex.index]}"/>
+                                          <c:out value="${experience.views}"/>
                                        </h5>
                                     </div>
                                  </td>
