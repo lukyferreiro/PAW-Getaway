@@ -30,7 +30,7 @@
                            <spring:message code="experienceForm.experienceName"/>
                            <span class="required-field">*</span>
                         </form:label>
-                        <form:input path="experienceName" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
+                        <form:input maxlength="50" path="experienceName" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
                         <form:errors path="experienceName" element="p" cssClass="form-error-label"/>
                      </div>
                      <div class="col m-2"> <!--Categoria-->
@@ -73,7 +73,7 @@
                         <spring:message code="experienceForm.experienceInfo"/>
                         <span class="optional-text"><spring:message code="inputField.optional"/></span>
                      </form:label>
-                     <form:textarea path="experienceInfo" class="form-control" cssErrorClass="form-control is-invalid" rows="4" cssStyle="max-height: 300px;"/>
+                     <form:textarea maxlength="500" path="experienceInfo" class="form-control" cssErrorClass="form-control is-invalid" rows="4" cssStyle="max-height: 300px;"/>
                      <form:errors path="experienceInfo" element="p" cssClass="form-error-label"/>
                   </div>
 
@@ -138,7 +138,7 @@
                            <spring:message code="experienceForm.experienceAddress"/>
                            <span class="required-field">*</span>
                         </form:label>
-                        <form:input path="experienceAddress" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
+                        <form:input maxlength="100" path="experienceAddress" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
                         <form:errors path="experienceAddress" element="p" cssClass="form-error-label"/>
                      </div>
                   </div>
