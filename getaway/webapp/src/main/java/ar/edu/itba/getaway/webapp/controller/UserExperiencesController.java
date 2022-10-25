@@ -96,7 +96,7 @@ public class UserExperiencesController {
 
     @RequestMapping(value = "/user/experiences",method = {RequestMethod.GET} )
     public ModelAndView experience(Principal principal,
-                                   @RequestParam Optional<String> query,
+                                   @RequestParam Optional<String> userQuery,
                                    @RequestParam Optional<Long> experience,
                                    @RequestParam Optional<Boolean> set,
                                    @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
@@ -126,7 +126,8 @@ public class UserExperiencesController {
             experienceService.updateExperienceWithoutImg(myExperience);
         }
 
-        currentPage = experienceService.getExperiencesListByUser(query.orElse(""), user, orderBy, pageNum);
+        userQuery.ifPresent(searchFormPrivate::setQuery);
+        currentPage = experienceService.getExperiencesListByUser(userQuery.orElse(""), user, orderBy, pageNum);
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
         final boolean hasExperiences = experienceService.hasExperiencesByUser(user);
 
@@ -155,7 +156,7 @@ public class UserExperiencesController {
         }
         LOGGER.debug("Endpoint POST /user/experiences");
         ModelAndView mav = new ModelAndView("redirect:/user/experiences");
-        mav.addObject("query", searchForm.getQuery());
+        mav.addObject("userQuery", searchForm.getQuery());
 
         return mav;
     }
