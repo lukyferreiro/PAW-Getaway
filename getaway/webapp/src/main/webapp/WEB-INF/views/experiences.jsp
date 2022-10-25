@@ -85,6 +85,28 @@
                      <jsp:param name = "cityId" value = "${cityId}"/>
                      <jsp:param name = "maxPrice" value = "${maxPrice}"/>
                   </jsp:include>
+                  <c:if test="${orderBy != null}">
+                     <c:choose>
+                        <c:when test="${orderBy.id == '1'}">
+                           <h5><spring:message code="order.OrderByRankAsc"/></h5>
+                        </c:when>
+                        <c:when test="${orderBy.id == '2'}">
+                           <h5><spring:message code="order.OrderByRankDesc"/></h5>
+                        </c:when>
+                        <c:when test="${orderBy.id == '3'}">
+                           <h5><spring:message code="order.OrderByAZ"/></h5>
+                        </c:when>
+                        <c:when test="${orderBy.id == '4'}">
+                           <h5><spring:message code="order.OrderByZA"/></h5>
+                        </c:when>
+                        <c:when test="${orderBy.id == '5'}">
+                           <h5><spring:message code="order.OrderByLowPrice"/></h5>
+                        </c:when>
+                        <c:when test="${orderBy.id == '6'}">
+                           <h5><spring:message code="order.OrderByHighPrice"/></h5>
+                        </c:when>
+                     </c:choose>
+                  </c:if>
                </div>
                <c:choose>
                   <c:when test="${experiences.size() == 0}">
