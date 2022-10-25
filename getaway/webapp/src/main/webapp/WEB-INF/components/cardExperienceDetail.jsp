@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <div class="card mx-5 my-3 p-4">
-   <div class="card-title d-flex justify-content-center align-content-center">
+   <div class="experience card-title d-flex justify-content-center align-content-center">
 
       <h1>
          <c:out value="${param.name}"/>

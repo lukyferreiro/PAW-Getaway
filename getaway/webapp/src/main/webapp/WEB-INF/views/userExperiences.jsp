@@ -81,7 +81,7 @@
                                  <th scope="row">
                                     <div class="title-link">
                                        <a href="<c:url value="/experiences/${experience.category.categoryName}/${experience.experienceId}"/>">
-                                          <h4 class="card-title container-fluid p-0"><c:out value="${experience.experienceName}"/></h4>
+                                          <h4 class="experience card-title container-fluid p-0"><c:out value="${experience.experienceName}"/></h4>
                                        </a>
                                     </div>
                                  </th>

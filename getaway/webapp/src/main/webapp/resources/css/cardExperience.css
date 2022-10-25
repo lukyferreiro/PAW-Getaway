@@ -22,7 +22,7 @@
 }
 
 
-.card-title:hover {
+.experience.card-title:hover {
     color: black;
     text-decoration: none;
     transition: 0.3s;
