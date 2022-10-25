@@ -106,6 +106,7 @@
                                        <c:choose>
                                           <c:when test="${experience.observable}">
                                              <a href="<c:url value="/user/experiences">
+                                          <c:param name="pageNum" value="${currentPage}"/>
                                           <c:param name="set" value="${false}"/>
                                           <c:param name="experience" value="${experience.experienceId}"/>
                                        </c:url>">
@@ -116,6 +117,7 @@
                                           </c:when>
                                           <c:otherwise>
                                              <a href="<c:url value="/user/experiences">
+                                          <c:param name="pageNum" value="${currentPage}"/>
                                           <c:param name="set" value="${true}"/>
                                           <c:param name="experience" value="${experience.experienceId}"/>
                                        </c:url>">

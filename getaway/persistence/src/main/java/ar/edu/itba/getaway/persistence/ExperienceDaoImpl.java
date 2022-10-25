@@ -192,7 +192,14 @@ public class ExperienceDaoImpl implements ExperienceDao {
     @Override
     public List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, Integer page, Integer page_size) {
         LOGGER.debug("Get experiences of user with id {}", user.getUserId());
-        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user", ExperienceModel.class);
+        String orderQuery;
+        if (order.isPresent()){
+            orderQuery = order.get().getSqlQuery();
+        }
+        else {
+            orderQuery = "ORDER BY exp.experienceName ASC";
+        }
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user " + orderQuery, ExperienceModel.class);
         query.setParameter("name", name);
         query.setFirstResult((page - 1) * page_size);
         query.setMaxResults(page_size);
