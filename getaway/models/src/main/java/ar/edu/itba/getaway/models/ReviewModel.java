@@ -23,7 +23,7 @@ public class ReviewModel {
     @Column(name = "reviewDate", nullable = false)
     private Date reviewDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "experienceId", nullable = false)
     private ExperienceModel experience;
 

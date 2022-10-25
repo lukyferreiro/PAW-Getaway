@@ -44,6 +44,12 @@ public class ExperienceDaoImpl implements ExperienceDao {
     @Override
     public Optional<ExperienceModel> getExperienceById(Long experienceId) {
         LOGGER.debug("Get experience with id {}", experienceId);
+        return Optional.ofNullable(em.find(ExperienceModel.class, experienceId));
+    }
+
+    @Override
+    public Optional<ExperienceModel> getVisibleExperienceById(Long experienceId) {
+        LOGGER.debug("Get experience with id {}", experienceId);
         final TypedQuery<ExperienceModel> query = em.createQuery("FROM ExperienceModel WHERE experienceId = :experienceId AND observable = true", ExperienceModel.class);
         query.setParameter("experienceId", experienceId);
         return Optional.ofNullable(query.getSingleResult());

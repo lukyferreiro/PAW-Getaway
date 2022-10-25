@@ -1,15 +1,12 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.getaway.interfaces.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.*;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.forms.DeleteForm;
 import ar.edu.itba.getaway.webapp.forms.ExperienceForm;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
-import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
-import ar.edu.itba.getaway.interfaces.exceptions.ImageNotFoundException;
-import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +66,7 @@ public class UserExperiencesController {
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
         if(experience.isPresent()){
-            final Optional<ExperienceModel> addFavExperience = experienceService.getExperienceById(experience.get());
+            final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get());
             favExperienceService.setFav(user, set, addFavExperience);
         }
 
@@ -121,11 +118,12 @@ public class UserExperiencesController {
 
         //Observable
         if(experience.isPresent() && set.isPresent()){
-            ExperienceModel myExperience = experienceService.getExperienceById(experience.get()).get();
-            final ExperienceModel toUpdateExperience = new ExperienceModel(myExperience.getExperienceId(),myExperience.getExperienceName(), myExperience.getAddress(), myExperience.getDescription(),
-                    myExperience.getEmail(), myExperience.getSiteUrl(), myExperience.getPrice(), myExperience.getCity(), myExperience.getCategory(), user, myExperience.getExperienceImage(), set.get(), myExperience.getViews() );
+            final ExperienceModel myExperience = experienceService.getExperienceById(experience.get()).orElseThrow(ExperienceNotFoundException::new);
+//            final ExperienceModel toUpdateExperience = new ExperienceModel(myExperience.getExperienceId(),myExperience.getExperienceName(), myExperience.getAddress(), myExperience.getDescription(),
+//                    myExperience.getEmail(), myExperience.getSiteUrl(), myExperience.getPrice(), myExperience.getCity(), myExperience.getCategory(), user, myExperience.getExperienceImage(), set.get(), myExperience.getViews() );
 
-            experienceService.updateExperienceWithoutImg(toUpdateExperience);
+            myExperience.setObservable(set.get());
+            experienceService.updateExperienceWithoutImg(myExperience);
         }
 
         currentPage = experienceService.getExperiencesListByUser(query.orElse(""), user, orderBy, pageNum);
@@ -273,11 +271,10 @@ public class UserExperiencesController {
         }
 
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-//        final ImageExperienceModel imageExperienceModel = imageService.getImgByExperience(experience).orElseThrow(ImageNotFoundException::new);
         final ImageModel imageModel = experience.getExperienceImage();
         final UserModel user = experience.getUser();
         final CategoryModel category = categoryService.getCategoryById(form.getExperienceCategory()+1).orElseThrow(CategoryNotFoundException::new);
-        final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).get();
+        final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).orElseThrow(CityNotFoundException::new);
         final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
         final String description = (form.getExperienceInfo().isEmpty()) ? null : form.getExperienceInfo();
         final String url = (form.getExperienceUrl().isEmpty()) ? null : form.getExperienceUrl();

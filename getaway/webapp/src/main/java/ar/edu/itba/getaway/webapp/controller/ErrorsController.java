@@ -91,6 +91,34 @@ public class ErrorsController {
         return mav;
     }
 
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = CityNotFoundException.class)
+    public ModelAndView cityNotFound() {
+        LOGGER.error("Error cityNotFound caught");
+        final Locale locale = LocaleContextHolder.getLocale();
+        final String error = messageSource.getMessage("errors.NotFound.city", null, locale);
+        final Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
+        mav.addObject("description", error);
+        mav.addObject("code", code);
+        return mav;
+    }
+
+    /* https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/NoHandlerFoundException.html
+   https://stackoverflow.com/questions/13356549/handle-error-404-with-spring-controller/46704230 */
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = NoHandlerFoundException.class)
+    public ModelAndView resourceNotFoundException() {
+        LOGGER.error("Error resourceNotFoundException caught");
+        final Locale locale = LocaleContextHolder.getLocale();
+        final String error = messageSource.getMessage("errors.NotFound.Resource", null, locale);
+        final Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
+        mav.addObject("description", error);
+        mav.addObject("code", code);
+        return mav;
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = MultipartException.class)
     public ModelAndView maxUploadSizeException() {
@@ -102,21 +130,6 @@ public class ErrorsController {
         mav.addObject("description", error);
         mav.addObject("code", code);
 
-        return mav;
-    }
-
-    /* https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/NoHandlerFoundException.html
-       https://stackoverflow.com/questions/13356549/handle-error-404-with-spring-controller/46704230 */
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    @ExceptionHandler(value = NoHandlerFoundException.class)
-    public ModelAndView resourceNotFoundException() {
-        LOGGER.error("Error resourceNotFoundException caught");
-        final Locale locale = LocaleContextHolder.getLocale();
-        final String error = messageSource.getMessage("errors.NotFound.Resource", null, locale);
-        final Long code = Long.valueOf(HttpStatus.NOT_FOUND.toString());
-        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-        mav.addObject("description", error);
-        mav.addObject("code", code);
         return mav;
     }
 

@@ -11,6 +11,7 @@ public interface ExperienceService {
     void updateExperience (ExperienceModel experienceModel, byte[] image);
     void deleteExperience (ExperienceModel experienceModel);
     Optional<ExperienceModel> getExperienceById(Long experienceId);
+    Optional<ExperienceModel> getVisibleExperienceById(Long experienceId);
     List<ExperienceModel> listExperiencesByUser(UserModel user, CategoryModel category);
     Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page);
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category);

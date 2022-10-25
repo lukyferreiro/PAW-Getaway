@@ -79,6 +79,13 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getExperienceById(experienceId);
     }
 
+
+    @Override
+    public Optional<ExperienceModel> getVisibleExperienceById(Long experienceId) {
+        LOGGER.debug("Retrieving experience with id {}", experienceId);
+        return experienceDao.getVisibleExperienceById(experienceId);
+    }
+
     @Override
     public List<ExperienceModel> listExperiencesByUser(UserModel user, CategoryModel category) {
         LOGGER.debug("Retrieving experiences of category {} created by user with id {}", category.getCategoryId(), user.getUserId());

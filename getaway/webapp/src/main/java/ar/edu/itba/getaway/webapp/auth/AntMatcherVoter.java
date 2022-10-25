@@ -21,7 +21,6 @@ public class AntMatcherVoter {
     @Autowired
     private ReviewService reviewService;
 
-    //TODO: Check with @LukyFerreiro
     public boolean canEditExperienceById(Authentication authentication, Long experienceId){
         if (authentication instanceof AnonymousAuthenticationToken) return false;
         final ExperienceModel experienceModel = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);

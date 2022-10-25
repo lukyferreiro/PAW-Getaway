@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
 import ar.edu.itba.getaway.interfaces.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.CategoryService;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
@@ -111,7 +112,7 @@ public class ExperienceFormController {
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final CategoryModel category = categoryService.getCategoryById(form.getExperienceCategory()+1).orElseThrow(CategoryNotFoundException::new);
-        final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).get();
+        final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).orElseThrow(CityNotFoundException::new);
         final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
         final String description = (form.getExperienceInfo().isEmpty()) ? null : form.getExperienceInfo();
         final String url = (form.getExperienceUrl().isEmpty()) ? null : form.getExperienceUrl();

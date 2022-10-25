@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
@@ -61,11 +62,6 @@ public class ExperienceController {
         // Category
         // Ordinal empieza en 0
         final CategoryModel categoryModel = categoryService.getCategoryByName(categoryName).orElseThrow(CategoryNotFoundException::new);
-//        try {
-//            categoryModel = categoryService.getCategoryByName(categoryName).get();
-//        } catch (Exception e) {
-//            throw new CategoryNotFoundException();
-//        }
 
         // Order By
         final OrderByModel[] orderByModels = OrderByModel.values();
@@ -91,7 +87,7 @@ public class ExperienceController {
 
         if (cityId.isPresent() && cityId.get()>0) {
             //TODO add cityNotFoundException
-            CityModel city = locationService.getCityById(cityId.get()).get();
+            CityModel city = locationService.getCityById(cityId.get()).orElseThrow(CityNotFoundException::new);
             currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, city, orderBy, pageNum);
             mav.addObject("cityId", cityId.get());
         } else {
@@ -105,7 +101,7 @@ public class ExperienceController {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if(user.isPresent()){
                 if(experience.isPresent()){
-                    final Optional<ExperienceModel> addFavExperience = experienceService.getExperienceById(experience.get());
+                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get());
                     favExperienceService.setFav(user.get(), set, addFavExperience);
                 }
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
@@ -188,13 +184,10 @@ public class ExperienceController {
 
         //This declaration of category is in order to check if the categoryName is valid
         final CategoryModel category = categoryService.getCategoryByName(categoryName).orElseThrow(CategoryNotFoundException::new);
-        final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
 
         final Page<ReviewModel> currentPage = reviewService.getReviewAndUser(experience, pageNum);
         final List<ReviewModel> reviews = currentPage.getContent();
-//        final List<Boolean> listReviewsHasImages = reviewService.getListOfReviewHasImages(reviews);
-//        final Long avgScore = reviewService.getReviewAverageScore(experience);
-//        final Long reviewCount = reviewService.getReviewCount(experience);
         final CityModel cityModel = experience.getCity();
         final String city = cityModel.getCityName();
         final String country = cityModel.getCountry().getCountryName();
@@ -206,9 +199,6 @@ public class ExperienceController {
         mav.addObject("dbCategoryName", category.getCategoryName());
         mav.addObject("experience", experience);
         mav.addObject("reviews", reviews);
-//        mav.addObject("listReviewsHasImages", listReviewsHasImages);
-//        mav.addObject("avgScore", experience.getAverageScore());
-//        mav.addObject("reviewCount", experience.getReviewCount());
         mav.addObject("city", city);
         mav.addObject("country", country);
         mav.addObject("success", success.isPresent());

@@ -10,6 +10,7 @@ public interface ExperienceDao {
     void updateExperience(ExperienceModel experienceModel);
     void deleteExperience(ExperienceModel experienceModel);
     Optional<ExperienceModel> getExperienceById (Long experienceId);
+    Optional<ExperienceModel> getVisibleExperienceById(Long experienceId);
     List<ExperienceModel> listExperiencesByUser(UserModel user, CategoryModel category);
     Optional<Double> getMaxPriceByCategory(CategoryModel category);
     List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page, Integer page_size);

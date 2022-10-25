@@ -50,12 +50,8 @@ public class UserReviewsController {
 
         final Page<ReviewModel> currentPage = reviewService.getReviewsByUser(user, pageNum);
         final List<ReviewModel> reviewList = currentPage.getContent();
-//        final List<Boolean> listReviewsHasImages = reviewService.getListOfReviewHasImages(reviewList);
-//        final List<ExperienceModel> listExperiencesOfReviews = reviewService.getListExperiencesOfReviewsList(reviewList);
 
         mav.addObject("reviews", reviewList);
-//        mav.addObject("listReviewsHasImages", listReviewsHasImages);
-//        mav.addObject("listExperiencesOfReviews", listExperiencesOfReviews);
         mav.addObject("isEditing", true);
         mav.addObject("successReview", successReview.isPresent());
         mav.addObject("deleteReview", deleteReview.isPresent());

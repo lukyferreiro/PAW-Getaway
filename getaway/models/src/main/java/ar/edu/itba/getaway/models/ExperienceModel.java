@@ -54,7 +54,7 @@ public class ExperienceModel {
     @Column(name = "views", nullable = false)
     private Integer views;
 
-    @Formula(value = "(select coalesce(ceiling(avg(reviews.score)),0)from reviews where reviews.experienceId = experienceId)")
+    @Formula(value = "(select coalesce(ceiling(avg(reviews.score)),0) from reviews where reviews.experienceId = experienceId)")
     private Long averageScore;
 
     @Formula(value = "(select count(*) from reviews where reviews.experienceId = experienceId)")

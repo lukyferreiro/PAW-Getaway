@@ -34,8 +34,6 @@ public class SearchFormController {
     private UserService userService;
     @Autowired
     private FavExperienceService favExperienceService;
-    @Autowired
-    private ReviewService reviewService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchFormController.class);
 
@@ -57,7 +55,7 @@ public class SearchFormController {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if(user.isPresent()){
                 if(experience.isPresent()){
-                    final Optional<ExperienceModel> addFavExperience = experienceService.getExperienceById(experience.get());
+                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get());
                     favExperienceService.setFav(user.get(), set, addFavExperience);
                 }
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());

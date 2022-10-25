@@ -32,7 +32,7 @@ public class ImagesController {
             produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
         LOGGER.info("Accessed experiences/{}/image GET controller", experienceId);
-        final ExperienceModel experienceModel = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
+        final ExperienceModel experienceModel = experienceService.getVisibleExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         return experienceModel.getExperienceImage().getImage();
     }
 
