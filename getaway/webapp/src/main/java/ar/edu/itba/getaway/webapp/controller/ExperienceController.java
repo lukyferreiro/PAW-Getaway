@@ -150,8 +150,7 @@ public class ExperienceController {
         //TODO: check add only city and then access cityid. Multiple db access
         final Optional<CityModel> cityModel = locationService.getCityByName(form.getExperienceCity());
         if (cityModel.isPresent()) {
-            final Long cityId = cityModel.get().getCityId();
-            mav.addObject("cityId", cityId);
+            mav.addObject("cityId", cityModel.get().getCityId());
         }
 
         final Double priceMax = form.getExperiencePriceMax();
@@ -217,11 +216,9 @@ public class ExperienceController {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if (user.isPresent()) {
                 final UserModel userModel = user.get();
-
                 if(view.isPresent() || setObs.isPresent()){
-
                     //si soy el usuario owner puedo edit la visibilidad
-                    if(experience.getUser().getUserId().equals(userModel.getUserId())){
+                    if(experience.getUser().equals(userModel)){
                         if(setObs.isPresent()){
                             obs = setObs.get();
                         }

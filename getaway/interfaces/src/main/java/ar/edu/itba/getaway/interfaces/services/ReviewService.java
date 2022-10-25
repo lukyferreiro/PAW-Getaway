@@ -3,7 +3,7 @@ package ar.edu.itba.getaway.interfaces.services;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.getaway.models.UserModelWithReviews;
+//import ar.edu.itba.getaway.models.UserModelWithReviews;
 import ar.edu.itba.getaway.models.pagination.Page;
 
 import java.util.Date;

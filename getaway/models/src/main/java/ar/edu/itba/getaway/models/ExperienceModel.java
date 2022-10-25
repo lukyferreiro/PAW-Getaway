@@ -44,9 +44,9 @@ public class ExperienceModel {
     @JoinColumn(name = "imgId")
     private ImageModel experienceImage;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "experienceId")
-    private List<ReviewModel> experienceReviews;
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "experienceId")
+//    private List<ReviewModel> experienceReviews;
 
     @Column(name = "observable", nullable = false)
     private Boolean observable;
@@ -201,11 +201,11 @@ public class ExperienceModel {
         this.experienceImage = experienceImage;
     }
 
-    public List<ReviewModel> getExperienceReviews(Integer page, Integer page_size) {
-        Integer fromIndex = (page - 1) * page_size;
-        Integer toIndex = Math.min((fromIndex + page_size), experienceReviews.size());
-        return experienceReviews.subList(fromIndex, toIndex);
-    }
+//    public List<ReviewModel> getExperienceReviews(Integer page, Integer page_size) {
+//        Integer fromIndex = (page - 1) * page_size;
+//        Integer toIndex = Math.min((fromIndex + page_size), experienceReviews.size());
+//        return experienceReviews.subList(fromIndex, toIndex);
+//    }
 
     @Transient
     public Long getReviewCount() {

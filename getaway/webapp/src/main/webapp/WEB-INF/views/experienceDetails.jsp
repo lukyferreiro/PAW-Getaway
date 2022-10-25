@@ -71,7 +71,7 @@
                                  <jsp:param name="reviewDate" value="${review.reviewDate}"/>
                                  <jsp:param name="score" value="${review.score}"/>
                                  <jsp:param name="hasImage" value="${review.user.profileImage.image!=null}"/>
-                                 <jsp:param name="userId" value="${review.user.profileImage.imageId}"/>
+                                 <jsp:param name="profileImageId" value="${review.user.profileImage.imageId}"/>
                                  <jsp:param name="reviewId" value="${review.reviewId}"/>
                                  <jsp:param name="isEditing" value="${isEditing}"/>
                               </jsp:include>

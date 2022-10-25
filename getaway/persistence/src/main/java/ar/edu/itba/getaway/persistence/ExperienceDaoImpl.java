@@ -79,7 +79,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
             orderQuery = order.get().getSqlQuery();
         }
         else {
-            orderQuery = " ";
+            orderQuery = OrderByModel.OrderByRankDesc.getSqlQuery();
         }
 
         if (city != null){
@@ -138,7 +138,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
             orderQuery = order.get().getSqlQuery();
         }
         else {
-            orderQuery = " ";
+            orderQuery = OrderByModel.OrderByRankDesc.getSqlQuery();
         }
 
 //        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.experienceId IN ( SELECT favuserexperience.experienceId FROM favuserexperience WHERE userId = ? ) GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=0 " + orderQuery
@@ -166,7 +166,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
             orderQuery = order.get().getSqlQuery();
         }
         else {
-            orderQuery = " ";
+            orderQuery = OrderByModel.OrderByRankDesc.getSqlQuery();
         }
         final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.observable=true " + orderQuery, ExperienceModel.class);
         query.setParameter("name", name);
@@ -197,7 +197,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
             orderQuery = order.get().getSqlQuery();
         }
         else {
-            orderQuery = "ORDER BY exp.experienceName ASC";
+            orderQuery = OrderByModel.OrderByAZ.getSqlQuery();
         }
         final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user " + orderQuery, ExperienceModel.class);
         query.setParameter("name", name);
