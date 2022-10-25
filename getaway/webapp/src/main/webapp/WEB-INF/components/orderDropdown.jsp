@@ -23,6 +23,9 @@
                 >
                 </c:when>
                 <c:otherwise>
+                    <c:if test="${param.userQuery != null}">
+                        <c:param name="userQuery" value="${param.userQuery}"/>
+                    </c:if>
                 </c:otherwise>
             </c:choose>
             <c:param name="orderBy" value="${orderBy}"/>

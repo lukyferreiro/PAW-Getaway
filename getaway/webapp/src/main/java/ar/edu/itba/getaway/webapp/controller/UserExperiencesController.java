@@ -112,9 +112,11 @@ public class UserExperiencesController {
         final ModelAndView mav = new ModelAndView("userExperiences");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
-        //Order by
+        // Order By
         final OrderByModel[] orderByModels = OrderByModel.values();
         orderBy.ifPresent(orderByModel -> mav.addObject("orderBy", orderByModel));
+        mav.addObject("orderByModels", orderByModels);
+
 
         //Observable
         if(experience.isPresent() && set.isPresent()){
@@ -130,6 +132,10 @@ public class UserExperiencesController {
         currentPage = experienceService.getExperiencesListByUser(userQuery.orElse(""), user, orderBy, pageNum);
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
         final boolean hasExperiences = experienceService.hasExperiencesByUser(user);
+
+        final String path = request.getServletPath();
+
+        mav.addObject("path", path);
 
         mav.addObject("hasExperiences", hasExperiences);
         mav.addObject("experienceList", currentExperiences);

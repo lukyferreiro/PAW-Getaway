@@ -25,7 +25,7 @@
                      <div id="snackbar"><spring:message code="experienceDetail.delete"/></div>
                   </c:if>
 
-                  <%--SEARCH--%>
+                  <%--SEARCH and ORDER--%>
                   <div class="d-flex align-items-center p-3">
                      <button class="btn btn-search-navbar p-0" type="submit" form="searchExperiencePrivateForm">
                         <img src="<c:url value="/resources/images/ic_lupa.svg"/>" alt="Icono lupa">
@@ -37,7 +37,16 @@
                         <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>
                         <form:errors path="query" element="p" cssClass="form-error-label"/>
                      </form:form>
+
+                     <div>
+                        <jsp:include page="/WEB-INF/components/orderDropdown.jsp">
+                           <jsp:param name="orderByModels" value="${orderByModels}"/>
+                           <jsp:param name="path" value="${path}"/>
+                           <jsp:param name="userQuery" value="${userQuery}"/>
+                        </jsp:include>
+                     </div>
                   </div>
+
 
                   <div class="d-flex justify-content-center align-content-center">
                      <h3 class="title m-0"><spring:message code="experience.description"/></h3>
@@ -108,6 +117,7 @@
                                              <a href="<c:url value="/user/experiences">
                                           <c:param name="pageNum" value="${currentPage}"/>
                                           <c:param name="set" value="${false}"/>
+                                          <c:param name = "orderBy" value = "${orderBy}" />
                                           <c:param name="experience" value="${experience.experienceId}"/>
                                        </c:url>">
                                                 <button type="button" class="btn btn-eye" style="font-size: x-large" id="setFalse">
@@ -119,6 +129,7 @@
                                              <a href="<c:url value="/user/experiences">
                                           <c:param name="pageNum" value="${currentPage}"/>
                                           <c:param name="set" value="${true}"/>
+                                          <c:param name = "orderBy" value = "${orderBy}" />
                                           <c:param name="experience" value="${experience.experienceId}"/>
                                        </c:url>">
                                                 <button type="button" class="btn btn-eye" style="font-size: x-large" id="setTrue">
@@ -152,11 +163,8 @@
                      <ul class="pagination m-0">
                         <li class="page-item">
                            <a class="page-link "
-                              href="<c:url value = "/experiences/${categoryName}">
+                              href="<c:url value = "/user/experiences">
                                        <c:param name = "pageNum" value = "1"/>
-                                       <c:param name = "score" value = "${score}"/>
-                                       <c:param name = "cityId" value = "${cityId}"/>
-                                       <c:param name = "maxPrice" value = "${maxPrice}"/>
                                        <c:param name = "orderBy" value = "${orderBy}" />
                                  </c:url>">
                               <spring:message code="pagination.start"/>
