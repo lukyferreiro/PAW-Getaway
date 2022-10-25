@@ -26,31 +26,9 @@
                         <jsp:include page="/WEB-INF/components/orderDropdown.jsp">
                            <jsp:param name="orderByModels" value="${orderByModels}"/>
                            <jsp:param name="path" value="/user/favourites"/>
+                           <jsp:param name="orderPrev" value="${orderBy == null ? null : orderBy.id}"/>
                         </jsp:include>
                      </div>
-
-                     <c:if test="${orderBy != null}">
-                        <c:choose>
-                           <c:when test="${orderBy.id == '1'}">
-                              <h5><spring:message code="order.OrderByRankAsc"/></h5>
-                           </c:when>
-                           <c:when test="${orderBy.id == '2'}">
-                              <h5><spring:message code="order.OrderByRankDesc"/></h5>
-                           </c:when>
-                           <c:when test="${orderBy.id == '3'}">
-                              <h5><spring:message code="order.OrderByAZ"/></h5>
-                           </c:when>
-                           <c:when test="${orderBy.id == '4'}">
-                              <h5><spring:message code="order.OrderByZA"/></h5>
-                           </c:when>
-                           <c:when test="${orderBy.id == '5'}">
-                              <h5><spring:message code="order.OrderByLowPrice"/></h5>
-                           </c:when>
-                           <c:when test="${orderBy.id == '6'}">
-                              <h5><spring:message code="order.OrderByHighPrice"/></h5>
-                           </c:when>
-                        </c:choose>
-                     </c:if>
                      <h3 class="title m-0"><spring:message code="favourite.description"/></h3>
                      <div style="margin: 0 20px 0 auto; flex:1;"></div>
                   </div>

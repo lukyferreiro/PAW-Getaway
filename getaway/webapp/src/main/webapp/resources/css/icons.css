@@ -50,3 +50,7 @@
 .btn-trash:hover, .btn-trash:focus {
     border-color: transparent;
 }
+
+.btn-close{
+    color: black;
+}
