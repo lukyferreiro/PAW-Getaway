@@ -46,19 +46,19 @@ public class ReviewDaoImpl implements ReviewDao {
         return Optional.ofNullable(em.find(ReviewModel.class, reviewId));
     }
 
-    @Override
-    public List<ReviewModel> getReviewsByUser(UserModel user, Integer page, Integer page_size) {
-        final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE user = :user", ReviewModel.class);
-        query.setParameter("user", user);
-        query.setFirstResult((page - 1) * page_size);
-        query.setMaxResults(page_size);
-        return query.getResultList();
-    }
-
-    @Override
-    public Long getReviewByUserCount(UserModel user) {
-        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.user) FROM ReviewModel r WHERE r.user = :user", Long.class);
-        query.setParameter("user", user);
-        return query.getSingleResult();
-    }
+//    @Override
+//    public List<ReviewModel> getReviewsByUser(UserModel user, Integer page, Integer page_size) {
+//        final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE user = :user", ReviewModel.class);
+//        query.setParameter("user", user);
+//        query.setFirstResult((page - 1) * page_size);
+//        query.setMaxResults(page_size);
+//        return query.getResultList();
+//    }
+//
+//    @Override
+//    public Long getReviewByUserCount(UserModel user) {
+//        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.user) FROM ReviewModel r WHERE r.user = :user", Long.class);
+//        query.setParameter("user", user);
+//        return query.getSingleResult();
+//    }
 }

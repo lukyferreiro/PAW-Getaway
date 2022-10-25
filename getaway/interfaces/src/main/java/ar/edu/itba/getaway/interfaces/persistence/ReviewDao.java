@@ -14,6 +14,6 @@ public interface ReviewDao {
     void deleteReview (ReviewModel review);
     Optional<ReviewModel> getReviewById (Long reviewId);
     //TODO move this logic to a new UserModel
-    List<ReviewModel> getReviewsByUser (UserModel user, Integer page, Integer page_size);
-    Long getReviewByUserCount(UserModel user);
+//    List<ReviewModel> getReviewsByUser (UserModel user, Integer page, Integer page_size);
+//    Long getReviewByUserCount(UserModel user);
 }

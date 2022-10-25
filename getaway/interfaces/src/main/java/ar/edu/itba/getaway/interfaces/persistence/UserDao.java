@@ -19,4 +19,7 @@ public interface UserDao {
     Optional<UserModel> updatePassword (UserModel user, String password);
     Optional<UserModel> updateUserInfo (UserModel user, UserInfo userInfo);
     Optional<UserModel> addRole (UserModel user, Roles newRole);
+
+//    Optional<UserModelWithReviews> getUserWithReviewsByEmail (String email);
+
 }

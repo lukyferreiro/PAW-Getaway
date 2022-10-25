@@ -22,4 +22,6 @@ public interface UserService {
     void updateProfileImage (UserModel userModel, byte[] image);
     void addRole(UserModel user, Roles newRole);
     Collection<Roles> getRolesByUser (UserModel user);
+
+//    Optional<UserModelWithReviews> getUserWithReviewsByEmail (String email);
 }

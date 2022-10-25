@@ -180,4 +180,9 @@ public class UserServiceImpl implements UserService {
         return userDao.getRolesByUser(user);
     }
 
+    @Override
+    public Optional<UserModelWithReviews> getUserWithReviewsByEmail(String email) {
+        LOGGER.debug("Retrieving user with email {}", email);
+        return userDao.getUserWithReviewsByEmail(email);
+    }
 }

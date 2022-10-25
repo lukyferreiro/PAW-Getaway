@@ -162,4 +162,11 @@ public class UserDaoImpl implements UserDao {
 //        em.persist(userRoleModel);
     }
 
+//    @Override
+//    public Optional<UserModelWithReviews> getUserWithReviewsByEmail (String email){
+//        LOGGER.debug("Get user and reviews with email {}", email);
+//        final TypedQuery<UserModelWithReviews> query = em.createQuery("FROM UserModelWithReviews WHERE email = :email", UserModelWithReviews.class);
+//        query.setParameter("email", email);
+//        return query.getResultList().stream().findFirst();
+//    }
 }
