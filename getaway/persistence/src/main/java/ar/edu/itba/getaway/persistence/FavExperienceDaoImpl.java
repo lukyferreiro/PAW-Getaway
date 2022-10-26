@@ -37,7 +37,7 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
     @Override
     public List<Long> listFavsByUser(UserModel user) {
         final List<Long> toRet = new ArrayList<>();
-        final Collection<ExperienceModel> favExperiences = user.getFavExperiences();
+        final List<ExperienceModel> favExperiences = user.getFavExperiences();
         for (ExperienceModel exp: favExperiences) {
             toRet.add(exp.getExperienceId());
         }

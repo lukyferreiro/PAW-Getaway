@@ -91,7 +91,9 @@
 <%--                                    Change to spring messagfe value--%>
 
                                     <div class="container-fluid d-flex p-2 mb-1 align-items-end">
-                                       <h4 class="container-fluid p-0"><c:out value="${experience.category.categoryName}"/></h4>
+                                       <h4 class="container-fluid p-0">
+                                          <spring:message code="experienceForm.${experience.category.categoryName}"/>
+                                          </h4>
                                     </div>
                                  </td>
                                  <td>

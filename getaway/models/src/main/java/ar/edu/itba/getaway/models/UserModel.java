@@ -1,8 +1,7 @@
 package ar.edu.itba.getaway.models;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -38,7 +37,7 @@ public class UserModel {
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "experienceId")
     )
-    private Collection<ExperienceModel> favExperiences;
+    private List<ExperienceModel> favExperiences;
 
     //Repeat for reviews and experiences ???
 
@@ -118,8 +117,24 @@ public class UserModel {
     }
 
     // Favs methods
-    public Collection<ExperienceModel> getFavExperiences() {
+    public Integer getFavCount() {
+        return favExperiences.size();
+    }
+    public List<ExperienceModel> getFavExperiences() {
         return favExperiences;
+    }
+
+    public List<ExperienceModel> getFavExperiences(Integer page, Integer page_size, Optional<OrderByModel> orderByModel) {
+        if(orderByModel.isPresent()){
+            favExperiences.sort(orderByModel.get().comparator);
+        }
+        else {
+            favExperiences.sort(OrderByModel.OrderByAZ.comparator);
+        }
+
+        Integer fromIndex = (page - 1) * page_size;
+        Integer toIndex = Math.min((fromIndex + page_size), favExperiences.size());
+        return favExperiences.subList(fromIndex, toIndex);
     }
     public void addFav(ExperienceModel experience) {
         favExperiences.add(experience);

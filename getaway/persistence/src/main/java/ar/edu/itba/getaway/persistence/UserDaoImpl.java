@@ -115,22 +115,9 @@ public class UserDaoImpl implements UserDao {
         final RoleModel oldRole = getRoleByName(oldVal).get();
         user.removeRole(oldRole);
 
-        System.out.println("Elimino role oldRole");
-        for (RoleModel role : user.getRoles()
-             ) {
-            System.out.println(role.getRoleName());
-        }
-
         final RoleModel newRole = getRoleByName(newVal).get();
         user.addRole(newRole);
 
-        System.out.println("Agrego role newRole");
-        for (RoleModel role : user.getRoles()
-        ) {
-            System.out.println(role.getRoleName());
-        }
-
-        em.remove(oldRole);
         return Optional.ofNullable(em.merge(user));
     }
 
@@ -151,12 +138,6 @@ public class UserDaoImpl implements UserDao {
     public Optional<UserModel> addRole(UserModel user, Roles newRole) {
         final RoleModel roleModel = getRoleByName(newRole).get();
         user.addRole(roleModel);
-
-        System.out.println("Agrego role newRole");
-        for (RoleModel role : user.getRoles()) {
-            System.out.println(role.getRoleName());
-        }
-
         return Optional.ofNullable(em.merge(user));
 //        final UserRoleModel userRoleModel = new UserRoleModel(user, roleModel);
 //        em.persist(userRoleModel);

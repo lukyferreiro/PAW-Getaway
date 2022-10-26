@@ -121,11 +121,12 @@ public class UserExperiencesController {
         //Observable
         if(experience.isPresent() && set.isPresent()){
             final ExperienceModel myExperience = experienceService.getExperienceById(experience.get()).orElseThrow(ExperienceNotFoundException::new);
-            final ExperienceModel toUpdateExperience = new ExperienceModel(myExperience.getExperienceId(),myExperience.getExperienceName(), myExperience.getAddress(), myExperience.getDescription(),
-                    myExperience.getEmail(), myExperience.getSiteUrl(), myExperience.getPrice(), myExperience.getCity(), myExperience.getCategory(), user, myExperience.getExperienceImage(), set.get(), myExperience.getViews() );
-
-            myExperience.setObservable(set.get());
-            experienceService.updateExperienceWithoutImg(myExperience);
+//            final ExperienceModel toUpdateExperience = new ExperienceModel(myExperience.getExperienceId(),myExperience.getExperienceName(), myExperience.getAddress(), myExperience.getDescription(),
+//                    myExperience.getEmail(), myExperience.getSiteUrl(), myExperience.getPrice(), myExperience.getCity(), myExperience.getCategory(), user, myExperience.getExperienceImage(), set.get(), myExperience.getViews() );
+//
+//            myExperience.setObservable(set.get());
+//            experienceService.updateExperienceWithoutImg(myExperience);
+            experienceService.changeVisibility(myExperience, set.get());
         }
 
         userQuery.ifPresent(searchFormPrivate::setQuery);

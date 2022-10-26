@@ -28,7 +28,6 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Autowired
     private CategoryService categoryService;
 
-    //TODO: limit page number to total_pages amount
     private static final int PAGE_SIZE = 6;
     private static final int RESULT_PAGE_SIZE = 9;
 
@@ -140,7 +139,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         LOGGER.debug("Requested page {}", page);
 
-        Integer total = experienceDao.getCountExperiencesFavsByUser(user);
+        Integer total = user.getFavCount();
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -154,7 +153,8 @@ public class ExperienceServiceImpl implements ExperienceService {
             } else if (page < 0) {
                 page = 1;
             }
-            experienceModelList = experienceDao.listExperiencesFavsByUser(user, order, page, RESULT_PAGE_SIZE);
+//            experienceModelList = experienceDao.listExperiencesFavsByUser(user, order, page, RESULT_PAGE_SIZE);
+                experienceModelList = user.getFavExperiences(page, RESULT_PAGE_SIZE, order);
         } else {
             total_pages = 1;
         }
@@ -262,5 +262,18 @@ public class ExperienceServiceImpl implements ExperienceService {
         return new Page<>(experienceModelList, page, total_pages);
     }
 
+    @Transactional
+    @Override
+    public void increaseViews(ExperienceModel experience){
+        experience.increaseViews();
+        updateExperienceWithoutImg(experience);
+    }
+
+    @Transactional
+    @Override
+    public void changeVisibility(ExperienceModel experience, Boolean obs){
+        experience.setObservable(obs);
+        updateExperienceWithoutImg(experience);
+    }
 
 }

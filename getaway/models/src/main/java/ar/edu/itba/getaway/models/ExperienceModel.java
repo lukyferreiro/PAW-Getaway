@@ -189,8 +189,8 @@ public class ExperienceModel {
         return views;
     }
 
-    public void setViews(Integer views) {
-        this.views = views;
+    public void increaseViews() {
+        this.views++ ;
     }
 
     public ImageModel getExperienceImage() {

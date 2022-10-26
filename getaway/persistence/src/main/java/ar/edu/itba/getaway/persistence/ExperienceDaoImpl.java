@@ -52,7 +52,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         LOGGER.debug("Get experience with id {}", experienceId);
         final TypedQuery<ExperienceModel> query = em.createQuery("FROM ExperienceModel WHERE experienceId = :experienceId AND observable = true", ExperienceModel.class);
         query.setParameter("experienceId", experienceId);
-        return Optional.ofNullable(query.getSingleResult());
+        return query.getResultList().stream().findFirst();
     }
 
     @Override
@@ -131,33 +131,33 @@ public class ExperienceDaoImpl implements ExperienceDao {
         return query.getResultList();
     }
 
-    @Override
-    public List<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, Integer page, Integer page_size) {
-        String orderQuery;
-        if (order.isPresent()){
-            orderQuery = order.get().getSqlQuery();
-        }
-        else {
-            orderQuery = OrderByModel.OrderByRankDesc.getSqlQuery();
-        }
-
-//        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.experienceId IN ( SELECT favuserexperience.experienceId FROM favuserexperience WHERE userId = ? ) GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=0 " + orderQuery
-//                + " LIMIT ? OFFSET ?";
-//        LOGGER.debug("Executing query: {}", query);
-//        return jdbcTemplate.query(query, new Object[]{userId, page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
-//        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (SELECT experienceId FROM favuserexperience WHERE userid = :userid) " + orderQuery, ExperienceModel.class);
+//    @Override
+//    public List<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, Integer page, Integer page_size) {
+//        String orderQuery;
+//        if (order.isPresent()){
+//            orderQuery = order.get().getSqlQuery();
+//        }
+//        else {
+//            orderQuery = OrderByModel.OrderByRankDesc.getSqlQuery();
+//        }
 //
-//        query.setParameter("userId", user.getUserId());
-//        query.setFirstResult((page - 1) * page_size);
-//        query.setMaxResults(page_size);
-//        return query.getResultList();
-        return new ArrayList<>(user.getFavExperiences());
-    }
+////        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.experienceId IN ( SELECT favuserexperience.experienceId FROM favuserexperience WHERE userId = ? ) GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=0 " + orderQuery
+////                + " LIMIT ? OFFSET ?";
+////        LOGGER.debug("Executing query: {}", query);
+////        return jdbcTemplate.query(query, new Object[]{userId, page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
+////        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (SELECT experienceId FROM favuserexperience WHERE userid = :userid) " + orderQuery, ExperienceModel.class);
+////
+////        query.setParameter("userId", user.getUserId());
+////        query.setFirstResult((page - 1) * page_size);
+////        query.setMaxResults(page_size);
+////        return query.getResultList();
+//        return new ArrayList<>(user.getFavExperiences());
+//    }
 
-    @Override
-    public Integer getCountExperiencesFavsByUser(UserModel user){
-        return user.getFavExperiences().size();
-    }
+//    @Override
+//    public Integer getCountExperiencesFavsByUser(UserModel user){
+//        return user.getFavExperiences().size();
+//    }
 
     @Override
     public List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, Integer page_size) {

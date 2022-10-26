@@ -24,5 +24,6 @@ public interface ExperienceService {
     boolean experienceBelongsToUser(UserModel user, ExperienceModel experience);
     Page<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, Integer page);
     void updateExperienceWithoutImg(ExperienceModel toUpdateExperience);
-//    void increaseView(ExperienceModel experience);
+    void increaseViews(ExperienceModel experience);
+    void changeVisibility(ExperienceModel experience, Boolean obs);
 }
