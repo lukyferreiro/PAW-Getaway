@@ -201,9 +201,9 @@ public class ExperienceModel {
         this.experienceImage = experienceImage;
     }
 
-//    public List<ReviewModel> getExperienceReviews(Integer page, Integer page_size) {
-//        Integer fromIndex = (page - 1) * page_size;
-//        Integer toIndex = Math.min((fromIndex + page_size), experienceReviews.size());
+//    public List<ReviewModel> getExperienceReviews(Integer page, Integer pageSize) {
+//        Integer fromIndex = (page - 1) * pageSize;
+//        Integer toIndex = Math.min((fromIndex + pageSize), experienceReviews.size());
 //        return experienceReviews.subList(fromIndex, toIndex);
 //    }
 

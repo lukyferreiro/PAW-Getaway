@@ -47,11 +47,11 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     @Override
-    public List<ReviewModel> getReviewsByUser(UserModel user, Integer page, Integer page_size) {
+    public List<ReviewModel> getReviewsByUser(UserModel user, Integer page, Integer pageSize) {
         final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE user = :user", ReviewModel.class);
         query.setParameter("user", user);
-        query.setFirstResult((page - 1) * page_size);
-        query.setMaxResults(page_size);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
         return query.getResultList();
     }
 
@@ -63,11 +63,11 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     @Override
-    public List<ReviewModel> getReviewsByExperience(ExperienceModel experience, Integer page, Integer page_size) {
+    public List<ReviewModel> getReviewsByExperience(ExperienceModel experience, Integer page, Integer pageSize) {
         final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE experience = :experience", ReviewModel.class);
         query.setParameter("experience", experience);
-        query.setFirstResult((page - 1) * page_size);
-        query.setMaxResults(page_size);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
         return query.getResultList();
     }
 

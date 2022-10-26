@@ -124,7 +124,7 @@ public class UserModel {
         return favExperiences;
     }
 
-    public List<ExperienceModel> getFavExperiences(Integer page, Integer page_size, Optional<OrderByModel> orderByModel) {
+    public List<ExperienceModel> getFavExperiences(Integer page, Integer pageSize, Optional<OrderByModel> orderByModel) {
         if(orderByModel.isPresent()){
             favExperiences.sort(orderByModel.get().comparator);
         }
@@ -132,8 +132,8 @@ public class UserModel {
             favExperiences.sort(OrderByModel.OrderByAZ.comparator);
         }
 
-        Integer fromIndex = (page - 1) * page_size;
-        Integer toIndex = Math.min((fromIndex + page_size), favExperiences.size());
+        Integer fromIndex = (page - 1) * pageSize;
+        Integer toIndex = Math.min((fromIndex + pageSize), favExperiences.size());
         return favExperiences.subList(fromIndex, toIndex);
     }
     public void addFav(ExperienceModel experience) {

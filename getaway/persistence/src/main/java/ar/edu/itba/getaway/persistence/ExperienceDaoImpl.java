@@ -73,7 +73,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page, Integer page_size) {
+    public List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page, Integer pageSize) {
         String orderQuery;
         if (order.isPresent()){
             orderQuery = order.get().getSqlQuery();
@@ -88,8 +88,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
             query.setParameter("city", city);
             query.setParameter("max", max);
             query.setParameter("score", score);
-            query.setFirstResult((page - 1) * page_size);
-            query.setMaxResults(page_size);
+            query.setFirstResult((page - 1) * pageSize);
+            query.setMaxResults(pageSize);
             return query.getResultList();
         }
         else {
@@ -97,8 +97,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
             query.setParameter("category", category);
             query.setParameter("max", max);
             query.setParameter("score", score);
-            query.setFirstResult((page - 1) * page_size);
-            query.setMaxResults(page_size);
+            query.setFirstResult((page - 1) * pageSize);
+            query.setMaxResults(pageSize);
             return query.getResultList();
         }
     }
@@ -160,7 +160,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 //    }
 
     @Override
-    public List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, Integer page_size) {
+    public List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, Integer pageSize) {
         String orderQuery;
         if (order.isPresent()){
             orderQuery = order.get().getSqlQuery();
@@ -170,8 +170,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
         final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.observable=true " + orderQuery, ExperienceModel.class);
         query.setParameter("name", name);
-        query.setFirstResult((page - 1) * page_size);
-        query.setMaxResults(page_size);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
         return query.getResultList();
     }
 
@@ -190,7 +190,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, Integer page, Integer page_size) {
+    public List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, Integer page, Integer pageSize) {
         LOGGER.debug("Get experiences of user with id {}", user.getUserId());
         String orderQuery;
         if (order.isPresent()){
@@ -201,8 +201,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
         final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user " + orderQuery, ExperienceModel.class);
         query.setParameter("name", name);
-        query.setFirstResult((page - 1) * page_size);
-        query.setMaxResults(page_size);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
         query.setParameter("user", user);
         return query.getResultList();
     }

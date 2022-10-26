@@ -93,7 +93,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     public Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page) {
-        int total_pages;
+        int totalPages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {} ", page);
@@ -101,23 +101,23 @@ public class ExperienceServiceImpl implements ExperienceService {
         if (total > 0){
             LOGGER.debug("Total experiences found: {}", total);
 
-            total_pages = (int) Math.ceil((double) total / PAGE_SIZE);
+            totalPages = (int) Math.ceil((double) total / PAGE_SIZE);
 
-            LOGGER.debug("Total pages calculated: {}", total_pages);
+            LOGGER.debug("Total pages calculated: {}", totalPages);
 
-            if (page > total_pages) {
-                page = total_pages;
+            if (page > totalPages) {
+                page = totalPages;
             } else if (page < 0) {
                 page = 1;
             }
 
             experienceModelList = experienceDao.listExperiencesByFilter(category, max, score, city, order, page, PAGE_SIZE);
         } else {
-            total_pages = 1;
+            totalPages = 1;
         }
 
-        LOGGER.debug("Max page value service: {}", total_pages);
-        return new Page<>(experienceModelList, page, total_pages);
+        LOGGER.debug("Max page value service: {}", totalPages);
+        return new Page<>(experienceModelList, page, totalPages);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     public Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, Integer page) {
-        int total_pages;
+        int totalPages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {}", page);
@@ -144,28 +144,28 @@ public class ExperienceServiceImpl implements ExperienceService {
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
 
-            total_pages = (int) Math.ceil((double) total / RESULT_PAGE_SIZE);
+            totalPages = (int) Math.ceil((double) total / RESULT_PAGE_SIZE);
 
-            LOGGER.debug("Max page calculated: {}", total_pages);
+            LOGGER.debug("Max page calculated: {}", totalPages);
 
-            if (page > total_pages) {
-                page = total_pages;
+            if (page > totalPages) {
+                page = totalPages;
             } else if (page < 0) {
                 page = 1;
             }
 //            experienceModelList = experienceDao.listExperiencesFavsByUser(user, order, page, RESULT_PAGE_SIZE);
                 experienceModelList = user.getFavExperiences(page, RESULT_PAGE_SIZE, order);
         } else {
-            total_pages = 1;
+            totalPages = 1;
         }
 
-        LOGGER.debug("Max page value service: {}", total_pages);
-        return new Page<>(experienceModelList, page, total_pages);
+        LOGGER.debug("Max page value service: {}", totalPages);
+        return new Page<>(experienceModelList, page, totalPages);
     }
 
     @Override
     public Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page) {
-        int total_pages;
+        int totalPages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {}", page);
@@ -175,47 +175,33 @@ public class ExperienceServiceImpl implements ExperienceService {
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
 
-            total_pages = (int) Math.ceil((double) total / RESULT_PAGE_SIZE);
+            totalPages = (int) Math.ceil((double) total / RESULT_PAGE_SIZE);
 
-            LOGGER.debug("Max page calculated: {}", total_pages);
+            LOGGER.debug("Max page calculated: {}", totalPages);
 
-            if (page > total_pages) {
-                page = total_pages;
+            if (page > totalPages) {
+                page = totalPages;
             } else if (page < 0) {
                 page = 1;
             }
             experienceModelList = experienceDao.listExperiencesByName(name, order, page, RESULT_PAGE_SIZE);
         } else {
-            total_pages = 1;
+            totalPages = 1;
         }
 
-        LOGGER.debug("Max page value service: {}", total_pages);
-        return new Page<>(experienceModelList, page, total_pages);
+        LOGGER.debug("Max page value service: {}", totalPages);
+        return new Page<>(experienceModelList, page, totalPages);
     }
 
     @Override
     public List<List<ExperienceModel>> getExperiencesListByCategories() {
         final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
         LOGGER.debug("Retrieving all experiences listed by categories");
-        final Integer categoriesCount = categoryService.getCategoriesCount();
+        final List<CategoryModel> categories = categoryService.listAllCategories();
 
-        for (int i = 0; i < categoriesCount; i++) {
+        for (int i = 0; i < categories.size(); i++) {
             listExperiencesByCategory.add(new ArrayList<>());
-            listExperiencesByCategory.get(i).addAll(listExperiencesByBestRanked(categoryService.getCategoryById((long)(i + 1)).get()));
-        }
-        return listExperiencesByCategory;
-    }
-
-    //TODO: maybe pass as parameter all categories and not do 6 getcategorybyid
-    @Override
-    public List<List<ExperienceModel>> getExperiencesListByCategoriesByUserId(UserModel user) {
-        final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
-        LOGGER.debug("Retrieving all experiences listed by categories of the user with id {}", user.getUserId());
-        final Integer categoriesCount = categoryService.getCategoriesCount();
-
-        for (int i = 0; i < categoriesCount; i++) {
-            listExperiencesByCategory.add(new ArrayList<>());
-            listExperiencesByCategory.get(i).addAll(listExperiencesByUser(user, categoryService.getCategoryById((long)(i + 1)).get()));
+            listExperiencesByCategory.get(i).addAll(listExperiencesByBestRanked(categories.get(i)));
         }
         return listExperiencesByCategory;
     }
@@ -234,7 +220,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     public Page<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, Integer page) {
-        int total_pages;
+        int totalPages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {}", page);
@@ -244,22 +230,22 @@ public class ExperienceServiceImpl implements ExperienceService {
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
 
-            total_pages = (int) Math.ceil((double) total / RESULT_PAGE_SIZE);
+            totalPages = (int) Math.ceil((double) total / RESULT_PAGE_SIZE);
 
-            LOGGER.debug("Max page calculated: {}", total_pages);
+            LOGGER.debug("Max page calculated: {}", totalPages);
 
-            if (page > total_pages) {
-                page = total_pages;
+            if (page > totalPages) {
+                page = totalPages;
             } else if (page < 0) {
                 page = 1;
             }
             experienceModelList = experienceDao.getExperiencesListByUser(name, user, order, page, RESULT_PAGE_SIZE);
         } else {
-            total_pages = 1;
+            totalPages = 1;
         }
 
-        LOGGER.debug("Max page value service: {}", total_pages);
-        return new Page<>(experienceModelList, page, total_pages);
+        LOGGER.debug("Max page value service: {}", totalPages);
+        return new Page<>(experienceModelList, page, totalPages);
     }
 
     @Transactional

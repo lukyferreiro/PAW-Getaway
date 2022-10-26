@@ -19,7 +19,6 @@ public interface ExperienceService {
     Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, Integer page);
     Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page);
     List<List<ExperienceModel>> getExperiencesListByCategories();
-    List<List<ExperienceModel>> getExperiencesListByCategoriesByUserId(UserModel user);
     boolean hasExperiencesByUser(UserModel user);
     boolean experienceBelongsToUser(UserModel user, ExperienceModel experience);
     Page<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, Integer page);
