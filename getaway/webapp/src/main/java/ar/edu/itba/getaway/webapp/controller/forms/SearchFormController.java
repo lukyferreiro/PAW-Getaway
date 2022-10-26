@@ -79,6 +79,7 @@ public class SearchFormController {
         final Page<ExperienceModel> currentPage = experienceService.listExperiencesByName(searchForm.getQuery(), orderBy, pageNum, owner );
 
         final OrderByModel[] orderByModels = OrderByModel.values();
+        mav.addObject("orderBy", OrderByModel.OrderByRankDesc);
         final List<ExperienceModel> experienceModels = currentPage.getContent();
 
         if(query.isPresent()){

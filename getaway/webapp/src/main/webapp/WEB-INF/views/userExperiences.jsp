@@ -43,7 +43,7 @@
                            <jsp:param name="orderByModels" value="${orderByModels}"/>
                            <jsp:param name="path" value="${path}"/>
                            <jsp:param name="userQuery" value="${userQuery}"/>
-                           <jsp:param name="orderPrev" value="${orderBy == null ? null : orderBy.id}"/>
+                           <jsp:param name="orderPrev" value="${orderBy == null ? null : orderBy}"/>
                         </jsp:include>
                      </div>
                   </div>

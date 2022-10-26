@@ -86,7 +86,7 @@
                      <jsp:param name = "score" value = "${score}"/>
                      <jsp:param name = "cityId" value = "${cityId}"/>
                      <jsp:param name = "maxPrice" value = "${maxPrice}"/>
-                     <jsp:param name="orderPrev" value="${orderBy == null ? null : orderBy.id}"/>
+                     <jsp:param name="orderPrev" value="${orderBy == null ? null : orderBy}"/>
                   </jsp:include>
                </div>
                <c:choose>

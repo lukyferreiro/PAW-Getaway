@@ -65,6 +65,7 @@ public class ExperienceController {
 
         // Order By
         final OrderByModel[] orderByModels = OrderByModel.values();
+        mav.addObject("orderBy", OrderByModel.OrderByRankDesc);
         orderBy.ifPresent(orderByModel -> mav.addObject("orderBy", orderByModel));
 
         // Price

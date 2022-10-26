@@ -37,28 +37,11 @@
         </ul>
     </div>
     <div>
-        <c:if test="${param.orderPrev != null}">
+
+
+    <c:if test="${param.orderPrev != null}">
             <span class="orderInfo">
-                <c:choose>
-                    <c:when test="${param.orderPrev == '1'}">
-                        <span><spring:message code="order.OrderByRankAsc"/></span>
-                    </c:when>
-                    <c:when test="${param.orderPrev == '2'}">
-                        <span><spring:message code="order.OrderByRankDesc"/></span>
-                    </c:when>
-                    <c:when test="${param.orderPrev == '3'}">
-                        <span><spring:message code="order.OrderByAZ"/></span>
-                    </c:when>
-                    <c:when test="${param.orderPrev == '4'}">
-                        <span><spring:message code="order.OrderByZA"/></span>
-                    </c:when>
-                    <c:when test="${param.orderPrev == '5'}">
-                        <span><spring:message code="order.OrderByLowPrice"/></span>
-                    </c:when>
-                    <c:when test="${param.orderPrev == '6'}">
-                        <span><spring:message code="order.OrderByHighPrice"/></span>
-                    </c:when>
-                </c:choose>
+                <span><spring:message code="order.${param.orderPrev.toString()}"/></span>
                 <a href="<c:url value="${param.path}">
                     <c:choose>
                         <c:when test="${param.query != null}">
