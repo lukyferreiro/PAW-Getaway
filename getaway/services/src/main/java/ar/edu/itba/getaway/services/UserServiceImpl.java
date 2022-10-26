@@ -36,9 +36,9 @@ public class UserServiceImpl implements UserService {
     private final Collection<Roles> DEFAULT_ROLES = Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     @Override
-    public Collection<RoleModel> getUserRolesModels(Long userId) {
-        LOGGER.debug("Retrieving roles of user with id {}", userId);
-        return userDao.getUserRolesModels(userId);
+    public Collection<RoleModel> getUserRolesModels(UserModel user) {
+        LOGGER.debug("Retrieving roles of user with id {}", user.getUserId());
+        return userDao.getUserRoles(user);
     }
 
     @Override
@@ -54,15 +54,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserModel> getUserByExperienceId(Long experienceId){
-        LOGGER.debug("Retrieving user who creates experience with id {}", experienceId);
-        return userDao.getUserByExperienceId(experienceId);
+    public Optional<UserModel> getUserByExperience(ExperienceModel experience) {
+        LOGGER.debug("Retrieving user who creates experience with id {}", experience.getExperienceId());
+        return userDao.getUserByExperience(experience);
     }
 
     @Override
-    public Optional<UserModel> getUserByReviewId(Long reviewId){
-        LOGGER.debug("Retrieving user who creates review with id {}", reviewId);
-        return userDao.getUserByReviewId(reviewId);
+    public Optional<UserModel> getUserByReview(ReviewModel review) {
+        LOGGER.debug("Retrieving user who creates review with id {}", review.getReviewId());
+        return userDao.getUserByReview(review);
     }
 
     @Transactional
@@ -70,9 +70,9 @@ public class UserServiceImpl implements UserService {
     public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException {
         final ImageModel imageModel = imageService.createImg(null);
         LOGGER.debug("Creating user with email {}", email);
-        final UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES, imageModel.getImageId());
+        final UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES, imageModel);
         LOGGER.debug("Creating verification token to user with id {}", userModel.getUserId());
-        final VerificationToken token = tokensService.generateVerificationToken(userModel.getUserId());
+        final VerificationToken token = tokensService.generateVerificationToken(userModel);
         tokensService.sendVerificationToken(userModel, token);
         return userModel;
     }
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
         }
 
         final VerificationToken verificationToken = verificationTokenOptional.get();
-        verificationTokenDao.removeTokenById(verificationToken.getId());
+        verificationTokenDao.removeToken(verificationToken);
         LOGGER.debug("Removed verification token with id {}", verificationToken.getId());
 
         if (!verificationToken.isValid()) {
@@ -96,16 +96,17 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
         }
 
-        LOGGER.debug("Validating user with id {}", verificationToken.getUserId());
-        return userDao.updateRoles(verificationToken.getUserId(), Roles.NOT_VERIFIED, Roles.VERIFIED);
+        LOGGER.debug("Validating user with id {}", verificationToken.getUser().getUserId());
+        return userDao.updateRoles(verificationToken.getUser(), Roles.NOT_VERIFIED, Roles.VERIFIED);
     }
 
     @Transactional
     @Override
     public void resendVerificationToken(UserModel userModel) {
         LOGGER.debug("Removing verification token for user with id {}", userModel.getUserId());
-        verificationTokenDao.removeTokenByUserId(userModel.getUserId());
-        final VerificationToken verificationToken = tokensService.generateVerificationToken(userModel.getUserId());
+        final Optional<VerificationToken> verificationTokenOptional = verificationTokenDao.getTokenByUser(userModel);
+        verificationTokenOptional.ifPresent(verificationToken -> verificationTokenDao.removeToken(verificationToken));
+        final VerificationToken verificationToken = tokensService.generateVerificationToken(userModel);
         tokensService.sendVerificationToken(userModel, verificationToken);
     }
 
@@ -126,8 +127,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void generateNewPassword(UserModel userModel) {
         LOGGER.debug("Removing password reset token for user {}", userModel.getUserId());
-        passwordResetTokenDao.removeTokenByUserId(userModel.getUserId());
-        final PasswordResetToken passwordResetToken = tokensService.generatePasswordResetToken(userModel.getUserId());
+        final Optional<PasswordResetToken> passwordResetTokenOptional = passwordResetTokenDao.getTokenByUser(userModel);
+        passwordResetTokenOptional.ifPresent(passwordResetToken -> passwordResetTokenDao.removeToken(passwordResetToken));
+        final PasswordResetToken passwordResetToken = tokensService.generatePasswordResetToken(userModel);
         tokensService.sendPasswordResetToken(userModel, passwordResetToken);
     }
 
@@ -142,7 +144,7 @@ public class UserServiceImpl implements UserService {
         }
 
         final PasswordResetToken passwordResetToken = passwordResetTokenOptional.get();
-        passwordResetTokenDao.removeTokenById(passwordResetToken.getId());
+        passwordResetTokenDao.removeToken(passwordResetToken);
         LOGGER.debug("Removed password reset token with id {}", passwordResetToken.getId());
 
         if (!passwordResetToken.isValid()) {
@@ -150,26 +152,37 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
         }
 
-        LOGGER.debug("Updating password for user {}", passwordResetToken.getUserId());
-        return userDao.updatePassword(passwordResetToken.getUserId(), passwordEncoder.encode(password));
+        LOGGER.debug("Updating password for user {}", passwordResetToken.getUser().getUserId());
+        return userDao.updatePassword(passwordResetToken.getUser(), passwordEncoder.encode(password));
     }
 
+    @Transactional
     @Override
-    public void updateUserInfo(Long userId, UserInfo userInfo) {
-        LOGGER.debug("Updating user info for user {}", userId);
-        userDao.updateUserInfo(userId, userInfo);
+    public void updateUserInfo(UserModel user, UserInfo userInfo) {
+        LOGGER.debug("Updating user info for user {}", user.getUserId());
+        userDao.updateUserInfo(user, userInfo);
     }
 
     @Override
     public void updateProfileImage(UserModel userModel, byte[] image) {
-        LOGGER.debug("Updating user {} profile image of id {}", userModel.getUserId(), userModel.getProfileImageId());
-        imageService.updateImg(image, userModel.getProfileImageId());
+        LOGGER.debug("Updating user {} profile image of id {}", userModel.getUserId(), userModel.getProfileImage().getImageId());
+        imageService.updateImg(image, userModel.getProfileImage());
     }
 
     @Override
-    public void addRole(Long userId, Roles newRole){
-        LOGGER.debug("Adding role {} to user with id {}", newRole.name(), userId);
-        userDao.addRole(userId, newRole);
+    public void addRole(UserModel user, Roles newRole) {
+        LOGGER.debug("Adding role {} to user with id {}", newRole.name(), user.getUserId());
+        userDao.addRole(user, newRole);
     }
 
+    @Override
+    public Collection<Roles> getRolesByUser(UserModel user) {
+        return userDao.getRolesByUser(user);
+    }
+
+//    @Override
+//    public Optional<UserModelWithReviews> getUserWithReviewsByEmail(String email) {
+//        LOGGER.debug("Retrieving user with email {}", email);
+//        return userDao.getUserWithReviewsByEmail(email);
+//    }
 }

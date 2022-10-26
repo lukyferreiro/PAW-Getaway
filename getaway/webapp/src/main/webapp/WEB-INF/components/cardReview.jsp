@@ -15,7 +15,7 @@
       <div class="d-flex">
          <c:choose>
             <c:when test="${param.hasImage}">
-               <img class="user-img" src="<c:url value='/user/profileImage/${param.userId}'/>" alt="Imagen" style="margin-right: 8px"/>
+               <img class="user-img" src="<c:url value='/user/profileImage/${param.profileImageId}'/>" alt="Imagen" style="margin-right: 8px"/>
             </c:when>
             <c:otherwise>
                <img class="user-img" src="<c:url value="/resources/images/user_default.png" />" alt="Imagen"/>

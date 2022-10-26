@@ -27,18 +27,17 @@ import static org.junit.Assert.*;
 @Sql(scripts = "classpath:location-dao-test.sql")
 public class LocationDaoTest {
     /** Data for tests **/
-
-    private final static CityModel CITY_1 = new CityModel(1L, 1L, "Test FirstOne");
-    private final static CityModel CITY_2 = new CityModel(2L, 1L, "Test FirstTwo");
-    private final static CityModel CITY_3 = new CityModel(3L, 2L, "Test SecondOne");
-    private final static CityModel CITY_4 = new CityModel(4L, 2L, "Test SecondTwo");
-
-    private final static List<CityModel> CITY_LIST = new ArrayList<>(Arrays.asList(CITY_1,CITY_2, CITY_3, CITY_4));
-
     private final static CountryModel COUNTRY_1 = new CountryModel(1L, "TestCountryFirst");
     private final static CountryModel COUNTRY_2 = new CountryModel(2L, "TestCountrySecond");
 
     private final static List<CountryModel> COUNTRY_LIST = new ArrayList<>(Arrays.asList(COUNTRY_1, COUNTRY_2));
+
+    private final static CityModel CITY_1 = new CityModel(1L, COUNTRY_1, "Test FirstOne");
+    private final static CityModel CITY_2 = new CityModel(2L, COUNTRY_1, "Test FirstTwo");
+    private final static CityModel CITY_3 = new CityModel(3L, COUNTRY_2, "Test SecondOne");
+    private final static CityModel CITY_4 = new CityModel(4L, COUNTRY_2, "Test SecondTwo");
+
+    private final static List<CityModel> CITY_LIST = new ArrayList<>(Arrays.asList(CITY_1,CITY_2, CITY_3, CITY_4));
     /****/
 
     @Autowired
@@ -76,8 +75,8 @@ public class LocationDaoTest {
     }
 
     @Test
-    public void testGetCitiesByCountryId() {
-        List<CityModel> cityModels = locationDao.getCitiesByCountryId(1L);
+    public void testGetCitiesByCountry() {
+        List<CityModel> cityModels = locationDao.getCitiesByCountry(COUNTRY_1);
         assertEquals(2, cityModels.size());
         assertTrue(cityModels.contains(CITY_1));
         assertTrue(cityModels.contains(CITY_2));

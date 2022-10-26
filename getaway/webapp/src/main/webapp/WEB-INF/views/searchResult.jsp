@@ -32,8 +32,12 @@
                            <jsp:param name="orderByModels" value="${orderByModels}"/>
                            <jsp:param name="path" value="${path}"/>
                            <jsp:param name="query" value="${query}"/>
+                           <jsp:param name="orderPrev" value="${orderBy == null ? null : orderBy.id}"/>
                         </jsp:include>
                      </div>
+
+<%--                     Cambiar a tamaño global no de página --%>
+
                      <h3 class="my-2">
                         <spring:message code="searchResult.description" arguments="${experiences.size()},${query}"/></h3>
                      <div style="margin: 0 20px 0 auto; flex:1;"></div>
@@ -42,8 +46,8 @@
                   <div class="d-flex flex-wrap justify-content-center">
                      <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                         <jsp:include page="/WEB-INF/components/cardExperience.jsp">
-                           <jsp:param name="hasImage" value="${experience.hasImage}"/>
-                           <jsp:param name="categoryName" value="${experience.categoryName}"/>
+                           <jsp:param name="hasImage" value="${experience.experienceImage.image != null}"/>
+                           <jsp:param name="categoryName" value="${experience.category.categoryName}"/>
                            <jsp:param name="id" value="${experience.experienceId}"/>
                            <jsp:param name="name" value="${experience.experienceName}"/>
                            <jsp:param name="description" value="${experience.description}"/>
@@ -54,8 +58,8 @@
                            <jsp:param name="query" value="${query}"/>
                            <jsp:param name="orderBy" value="${orderBy}"/>
                            <jsp:param name="search" value="true"/>
-                           <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
-                           <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
+                           <jsp:param name="avgReviews" value="${experience.averageScore}"/>
+                           <jsp:param name="reviewCount" value="${experience.reviewCount}"/>
                            <jsp:param name="isEditing" value="${isEditing}"/>
                            <jsp:param name="pageNum" value="${currentPage}"/>
                         </jsp:include>

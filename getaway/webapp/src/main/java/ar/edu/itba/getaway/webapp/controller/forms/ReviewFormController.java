@@ -1,5 +1,8 @@
 package ar.edu.itba.getaway.webapp.controller.forms;
 
+import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.interfaces.services.ExperienceService;
+import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.interfaces.services.ReviewService;
 import ar.edu.itba.getaway.interfaces.services.UserService;
@@ -31,6 +34,8 @@ public class ReviewFormController {
     private UserService userService;
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private ExperienceService experienceService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewFormController.class);
 
@@ -68,20 +73,21 @@ public class ReviewFormController {
                                              Principal principal,
                                              HttpServletRequest request) {
         LOGGER.debug("Endpoint POST {}", request.getServletPath());
+
         if (errors.hasErrors()) {
             LOGGER.debug("Error in some input of create review form");
             return createReviewForm(categoryName, experienceId, searchForm, form, principal, request);
         }
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        final Long userId = user.getUserId();
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
 
         //TODO cambiar el tipo DATE
         final Date date = Date.from(Instant.now());
 
-        reviewService.createReview(form.getTitle(), form.getDescription(), form.getLongScore(), experienceId ,date, userId);
+        reviewService.createReview(form.getTitle(), form.getDescription(), form.getLongScore(), experience, date, user);
 
-        ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
+        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName + "/" + experienceId);
 
         mav.addObject("successReview", true);
 

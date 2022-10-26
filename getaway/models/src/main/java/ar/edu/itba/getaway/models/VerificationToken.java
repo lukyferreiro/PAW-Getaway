@@ -1,12 +1,24 @@
 package ar.edu.itba.getaway.models;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
+@Entity
+@Table(name = "verificationToken")
 public class VerificationToken {
 
-    private String value;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "verificationToken_verifId_seq")
+    @SequenceGenerator(sequenceName = "verificationToken_verifId_seq", name = "verificationToken_verifId_seq", allocationSize = 1)
+    @Column(name = "verifId")
     private Long id;
-    private Long userId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "verifUserId")
+    private UserModel user;
+    @Column(name = "verifToken", nullable = false)
+    private String value;
+    @Column(name = "verifExpirationDate", nullable = false)
     private LocalDateTime expirationDate;
     private static final Integer TOKEN_DURATION_DAYS = 1;
 
@@ -14,10 +26,14 @@ public class VerificationToken {
         return LocalDateTime.now().plusDays(TOKEN_DURATION_DAYS);
     }
 
-    public VerificationToken(Long id, String value, Long userId, LocalDateTime expirationDate) {
+    /* default */
+    protected VerificationToken() {
+        // Just for Hibernate
+    }
+
+    public VerificationToken(String value, UserModel user, LocalDateTime expirationDate) {
         this.value = value;
-        this.id = id;
-        this.userId = userId;
+        this.user = user;
         this.expirationDate = expirationDate;
     }
 
@@ -36,11 +52,11 @@ public class VerificationToken {
     public void setId(Long id) {
         this.id = id;
     }
-    public Long getUserId() {
-        return userId;
+    public UserModel getUser() {
+        return user;
     }
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(UserModel user) {
+        this.user = user;
     }
     public LocalDateTime getExpirationDate() {
         return expirationDate;
@@ -48,4 +64,22 @@ public class VerificationToken {
     public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){
+            return true;
+        }
+        if (!(o instanceof VerificationToken)){
+            return false;
+        }
+        VerificationToken verificationToken = (VerificationToken) o;
+        return this.id.equals(verificationToken.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }

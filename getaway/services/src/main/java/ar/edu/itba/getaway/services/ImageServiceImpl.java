@@ -1,6 +1,6 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.getaway.models.ImageExperienceModel;
+import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
 import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
 import ar.edu.itba.getaway.interfaces.services.ImageService;
@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -26,34 +27,22 @@ public class ImageServiceImpl implements ImageService {
         return img;
     }
 
+    @Transactional
     @Override
-    public void updateImg(byte[] image, Long imageId) {
-        LOGGER.debug("Updating image with id {}", imageId);
-        imageDao.updateImg(image, imageId);
+    public void updateImg(byte[] image, ImageModel imageModel) {
+        LOGGER.debug("Updating image with id {}", imageModel.getImageId());
+        imageDao.updateImg(image, imageModel);
     }
 
     @Override
-    public void deleteImg(Long imageId) {
-        LOGGER.debug("Delete image with id {}", imageId);
-        imageDao.deleteImg(imageId);
+    public void deleteImg(ImageModel imageModel) {
+        LOGGER.debug("Delete image with id {}", imageModel.getImageId());
+        imageDao.deleteImg(imageModel);
     }
 
     @Override
     public Optional<ImageModel> getImgById(Long imageId) {
         LOGGER.debug("Retrieving image with id {}", imageId);
         return imageDao.getImgById(imageId);
-    }
-
-    @Override
-    public ImageExperienceModel createExperienceImg(byte[] image, Long experienceId, boolean isCover) {
-        final ImageExperienceModel imgExp = imageDao.createExperienceImg(image, experienceId, isCover);
-        LOGGER.debug("Creating image {} to experience with id {}", imgExp.getImageId(), experienceId);
-        return imgExp;
-    }
-
-    @Override
-    public Optional<ImageModel> getImgByExperienceId(Long experienceId) {
-        LOGGER.debug("Retrieving image of experience with id {}", experienceId);
-        return imageDao.getImgByExperienceId(experienceId);
     }
 }

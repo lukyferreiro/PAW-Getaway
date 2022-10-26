@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 public class  ExperienceForm {
 
     @NotEmpty
-    @Size(min = 3, max = 255)
+    @Size(min = 3, max = 50)
     @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'·#$%&=:¿?!¡/.-]*$")
     private String experienceName;
 
@@ -24,7 +24,7 @@ public class  ExperienceForm {
     private String experienceCity;
 
     @NotEmpty
-    @Size(min = 5, max = 200)
+    @Size(min = 5, max = 100)
     @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'·#$%&=:¿?!¡/.-]*$")
     private String experienceAddress;
 

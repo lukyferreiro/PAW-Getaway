@@ -3,88 +3,74 @@ package ar.edu.itba.getaway.persistence;
 import ar.edu.itba.getaway.models.CityModel;
 import ar.edu.itba.getaway.models.CountryModel;
 import ar.edu.itba.getaway.interfaces.persistence.LocationDao;
+import ar.edu.itba.getaway.models.ImageModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class LocationDaoImpl implements LocationDao {
+    @PersistenceContext
+    private EntityManager em;
 
-    private final JdbcTemplate jdbcTemplate;
-    private static final Logger LOGGER = LoggerFactory.getLogger(LocationDao.class);
-
-    private static final RowMapper<CityModel> CITY_MODEL_ROW_MAPPER = (rs, rowNum) ->
-            new CityModel(rs.getLong("cityId"),
-                    rs.getLong("countryId"),
-                    rs.getString("cityName"));
-
-    private static final RowMapper<CountryModel> COUNTRY_MODEL_ROW_MAPPER = (rs, rowNum) ->
-            new CountryModel(rs.getLong("countryId"),
-                    rs.getString("countryName"));
-
-    @Autowired
-    public LocationDaoImpl(final DataSource ds){
-        this.jdbcTemplate = new JdbcTemplate(ds);
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(LocationDaoImpl.class);
 
     @Override
     public List<CityModel> listAllCities() {
-        final String query = "SELECT * FROM cities ORDER BY cityname ASC";
-        LOGGER.debug("Executing query: {}", query);
-        return new ArrayList<>(jdbcTemplate.query(query, CITY_MODEL_ROW_MAPPER));
+        LOGGER.debug("List all cities");
+        return em.createQuery("FROM CityModel ORDER BY cityname ASC", CityModel.class).getResultList();
     }
 
     @Override
     public Optional<CityModel> getCityById(Long cityId) {
-        final String query = "SELECT * FROM cities WHERE cityId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{cityId}, CITY_MODEL_ROW_MAPPER)
-                .stream().findFirst();
+        LOGGER.debug("Get city with id {}", cityId);
+//        final TypedQuery<CityModel> query = em.createQuery("FROM CityModel WHERE cityId = :cityId", CityModel.class);
+//        query.setParameter("cityId", cityId);
+//        return query.getResultList().stream().findFirst();
+        return Optional.ofNullable(em.find(CityModel.class, cityId));
     }
 
     @Override
-    public List<CityModel> getCitiesByCountryId(Long countryId) {
-        final String query = "SELECT * FROM cities WHERE countryid = ? ORDER BY cityname ASC";
-        LOGGER.debug("Executing query: {}", query);
-        return new ArrayList<>(jdbcTemplate.query(query, new Object[]{countryId}, CITY_MODEL_ROW_MAPPER));
+    public List<CityModel> getCitiesByCountry(CountryModel country) {
+        LOGGER.debug("Get cities from country with countryId {}", country.getCountryId());
+        final TypedQuery<CityModel> query = em.createQuery("FROM CityModel WHERE country = :country", CityModel.class);
+        query.setParameter("country", country);
+        return query.getResultList();
     }
 
     @Override
     public Optional<CityModel> getCityByName(String cityName) {
-        final String query = "SELECT * FROM cities WHERE cityname = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{cityName}, CITY_MODEL_ROW_MAPPER)
-                .stream().findFirst();
+        LOGGER.debug("Get city with name {}", cityName);
+        final TypedQuery<CityModel> query = em.createQuery("FROM CityModel WHERE cityName = :cityName", CityModel.class);
+        query.setParameter("cityName", cityName);
+        return query.getResultList().stream().findFirst();
     }
 
     @Override
     public List<CountryModel> listAllCountries() {
-        final String query = "SELECT * FROM countries ORDER BY countryname ASC";
-        LOGGER.debug("Executing query: {}", query);
-        return new ArrayList<>(jdbcTemplate.query(query, COUNTRY_MODEL_ROW_MAPPER));
+        LOGGER.debug("List all countries");
+        return em.createQuery("FROM CountryModel ORDER BY countryname ASC", CountryModel.class).getResultList();
     }
 
     @Override
     public Optional<CountryModel> getCountryById(Long countryId) {
-        final String query = "SELECT * FROM countries WHERE countryId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{countryId}, COUNTRY_MODEL_ROW_MAPPER)
-                .stream().findFirst();
+        LOGGER.debug("Get country with id {}", countryId);
+//        final TypedQuery<CountryModel> query = em.createQuery("FROM CountryModel WHERE countryId = :countryId", CountryModel.class);
+//        query.setParameter("countryId", countryId);
+        return Optional.ofNullable(em.find(CountryModel.class, countryId));
     }
 
     @Override
     public Optional<CountryModel> getCountryByName(String countryName) {
-        final String query = "SELECT * FROM countries WHERE countryname = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{countryName}, COUNTRY_MODEL_ROW_MAPPER)
-                .stream().findFirst();
+        LOGGER.debug("Get country with name {}", countryName);
+        final TypedQuery<CountryModel> query = em.createQuery("FROM CountryModel WHERE countryName = :countryName", CountryModel.class);
+        query.setParameter("countryName", countryName);
+        return query.getResultList().stream().findFirst();
     }
 }

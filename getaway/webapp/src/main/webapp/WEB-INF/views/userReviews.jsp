@@ -35,17 +35,17 @@
                      <c:forEach var="review" varStatus="myIndex" items="${reviews}">
                         <div style="min-width: 500px; min-height: 150px; height: fit-content;">
                            <jsp:include page="/WEB-INF/components/cardReview.jsp">
-                              <jsp:param name="userName" value="${review.userName}"/>
-                              <jsp:param name="userSurname" value="${review.userSurname}"/>
+                              <jsp:param name="userName" value="${review.user.name}"/>
+                              <jsp:param name="userSurname" value="${review.user.surname}"/>
                               <jsp:param name="title" value="${review.title}"/>
                               <jsp:param name="description" value="${review.description}"/>
                               <jsp:param name="reviewDate" value="${review.reviewDate}"/>
                               <jsp:param name="score" value="${review.score}"/>
-                              <jsp:param name="hasImage" value="${listReviewsHasImages[myIndex.index]}"/>
-                              <jsp:param name="userId" value="${reviews[myIndex.index].imgId}"/>
+                              <jsp:param name="hasImage" value="${hasImage}"/>
+                              <jsp:param name="profileImageId" value="${profileImageId}"/>
                               <jsp:param name="reviewId" value="${review.reviewId}"/>
                               <jsp:param name="isEditing" value="${isEditing}"/>
-                              <jsp:param name="experienceName" value="${listExperiencesOfReviews[myIndex.index].experienceName}"/>
+                              <jsp:param name="experienceName" value="${review.experience.experienceName}"/>
                            </jsp:include>
                         </div>
                      </c:forEach>

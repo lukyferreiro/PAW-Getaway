@@ -1,246 +1,217 @@
 package ar.edu.itba.getaway.persistence;
 
-import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.OrderByModel;
+import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
-import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Repository
 public class ExperienceDaoImpl implements ExperienceDao {
 
-    @Autowired
-    private ImageDao imageDao;
-    private final JdbcTemplate jdbcTemplate;
-    private final SimpleJdbcInsert jdbcInsert;
+    @PersistenceContext
+    private EntityManager em;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
 
-    private static final RowMapper<Double> PRICE_EXPERIENCE_ROW_MAPPER = (rs,rowNum) ->
-            rs.getDouble("max_price");
-
-    private final RowMapper<ExperienceModel> EXPERIENCE_MODEL_ROW_MAPPER = (rs, rowNum) ->
-            new ExperienceModel(rs.getLong("experienceid"),
-                    rs.getString("experienceName"),
-                    rs.getString("address"),
-                    rs.getString("description"),
-                    rs.getString("email"),
-                    rs.getString("siteUrl"),
-                    (rs.getObject("price") == null) ? null : rs.getBigDecimal("price").doubleValue(),
-                    rs.getLong("cityId"),
-                    rs.getLong("categoryId"),
-                    rs.getLong("userId"),
-                    getImageIdByExperienceId(rs.getLong("experienceid")),
-                    getHasImage(rs.getLong("experienceid")));
-
-    //TODO ver si se pueden sacar estos metodos de aca
-    private Long getImageIdByExperienceId(Long experienceId){
-        return imageDao.getImgByExperienceId(experienceId).get().getImageId();
-    }
-    private boolean getHasImage(Long experienceId){
-        return imageDao.getImgByExperienceId(experienceId).get().getImage() != null;
-    }
-
-    @Autowired
-    public ExperienceDaoImpl(final DataSource ds) {
-        this.jdbcTemplate = new JdbcTemplate(ds);
-        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("experiences")
-                .usingGeneratedKeyColumns("experienceid");
-    }
-
     @Override
     public ExperienceModel createExperience(String name, String address, String description, String email, String url,
-                                  Double price, Long cityId, Long categoryId, Long userId) {
-        final Map<String, Object> experienceData = new HashMap<>();
-        experienceData.put("experienceName", name);
-        experienceData.put("address", address);
-        experienceData.put("description", description);
-        experienceData.put("email", email);
-        experienceData.put("siteUrl", url);
-        experienceData.put("price", price);
-        experienceData.put("cityId", cityId);
-        experienceData.put("categoryId", categoryId);
-        experienceData.put("userId", userId);
+                                            Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
 
-        final Long experienceId = jdbcInsert.executeAndReturnKey(experienceData).longValue();
-
-        LOGGER.info("Created new experience with id {}", experienceId);
-
-        return new ExperienceModel(experienceId, name, address, description, email, url, price, cityId, categoryId, userId, null, false);
+        final ExperienceModel experience = new ExperienceModel(name, address, description, email, url, price, city, category, user, experienceImage, true, 0);
+        em.persist(experience);
+        LOGGER.debug("Create experience with id: {}", experience.getExperienceId());
+        return experience;
     }
 
     @Override
-    public boolean updateExperience(ExperienceModel experienceModel) {
-        LOGGER.debug("Executing query to update experience with id: {}", experienceModel.getExperienceId());
-        return jdbcTemplate.update("UPDATE experiences " +
-                        "SET experienceName = ?, " +
-                        "price = ?, " +
-                        "address = ?, " +
-                        "email = ?, " +
-                        "description = ?, " +
-                        "siteUrl = ?, " +
-                        "cityId = ?, " +
-                        "categoryId = ?," +
-                        "userId = ?" +
-                        "WHERE experienceId = ?",
-                experienceModel.getExperienceName(), experienceModel.getPrice(),
-                experienceModel.getAddress(), experienceModel.getEmail(),
-                experienceModel.getDescription(), experienceModel.getSiteUrl(),
-                experienceModel.getCityId(), experienceModel.getCategoryId(),
-                experienceModel.getUserId(),
-                experienceModel.getExperienceId()) == 1;
+    public void updateExperience(ExperienceModel experienceModel) {
+        LOGGER.debug("Update experience with id: {}", experienceModel.getExperienceId());
+        em.merge(experienceModel);
     }
 
     @Override
-    public boolean deleteExperience(Long experienceId) {
-        final String query = "DELETE FROM experiences WHERE experienceId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.update(query, experienceId) == 1;
+    public void deleteExperience(ExperienceModel experience) {
+        LOGGER.debug("Delete experience with id {}", experience.getExperienceId());
+        em.remove(experience);
     }
 
     @Override
     public Optional<ExperienceModel> getExperienceById(Long experienceId) {
-        final String query = "SELECT * FROM experiences WHERE experienceId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{experienceId}, EXPERIENCE_MODEL_ROW_MAPPER)
-                .stream().findFirst();
+        LOGGER.debug("Get experience with id {}", experienceId);
+        return Optional.ofNullable(em.find(ExperienceModel.class, experienceId));
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByUserId(Long userId, Long categoryId) {
-        final String query = "SELECT * FROM experiences WHERE userId = ? AND categoryId = ? ";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{userId,categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
+    public Optional<ExperienceModel> getVisibleExperienceById(Long experienceId) {
+        LOGGER.debug("Get experience with id {}", experienceId);
+        final TypedQuery<ExperienceModel> query = em.createQuery("FROM ExperienceModel WHERE experienceId = :experienceId AND observable = true", ExperienceModel.class);
+        query.setParameter("experienceId", experienceId);
+        return query.getResultList().stream().findFirst();
     }
 
     @Override
-    public Optional<Double> getMaxPriceByCategoryId(Long categoryId){
-        final String query = "SELECT MAX(COALESCE(price,0)) as max_price FROM experiences WHERE categoryid = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{categoryId}, PRICE_EXPERIENCE_ROW_MAPPER )
-                .stream().findFirst();
+    public List<ExperienceModel> listExperiencesByUser(UserModel user, CategoryModel category) {
+        LOGGER.debug("Get experiences of category {} of user with id {}", category.getCategoryName(),user.getUserId());
+        final TypedQuery<ExperienceModel> query = em.createQuery("FROM ExperienceModel WHERE user = :user AND category = :category", ExperienceModel.class);
+        query.setParameter("user", user);
+        query.setParameter("category", category);
+        return query.getResultList();
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByFilter(Long categoryId, Double max, Long score, Long city, Optional<OrderByModel> order, Integer page, Integer page_size) {
+    public Optional<Double> getMaxPriceByCategory (CategoryModel category){
+        LOGGER.debug("Get maxprice of category {}", category.getCategoryName());
+        final TypedQuery<Double> query = em.createQuery("SELECT Max(exp.price) FROM ExperienceModel exp WHERE exp.category = :category", Double.class);
+        query.setParameter("category", category);
+        return Optional.ofNullable(query.getSingleResult());
+    }
+
+    @Override
+    public List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page, Integer pageSize) {
         String orderQuery;
         if (order.isPresent()){
             orderQuery = order.get().getSqlQuery();
         }
         else {
-            orderQuery = " ";
+            orderQuery = OrderByModel.OrderByRankDesc.getSqlQuery();
         }
 
-        String query;
-        if (city > 0){
-            query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityId = ? " +
-                    "GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=? " + orderQuery
-                    + " LIMIT ? OFFSET ?";
-            LOGGER.debug("Executing query: {}", query);
-            return jdbcTemplate.query(query, new Object[]{categoryId, max, city, score, page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
+        if (city != null){
+            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city AND COALESCE(exp.price,0)<=:max AND exp.averageScore>=:score AND exp.observable=true " + orderQuery, ExperienceModel.class);
+            query.setParameter("category", category);
+            query.setParameter("city", city);
+            query.setParameter("max", max);
+            query.setParameter("score", score);
+            query.setFirstResult((page - 1) * pageSize);
+            query.setMaxResults(pageSize);
+            return query.getResultList();
         }
         else {
-            query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? " +
-                    "GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=?" + orderQuery
-                    + " LIMIT ? OFFSET ?";
-            LOGGER.debug("Executing query: {}", query);
-            return jdbcTemplate.query(query, new Object[]{categoryId, max, score, page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
+            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND COALESCE(exp.price,0)<=:max AND exp.averageScore>=:score AND exp.observable=true " + orderQuery, ExperienceModel.class);
+            query.setParameter("category", category);
+            query.setParameter("max", max);
+            query.setParameter("score", score);
+            query.setFirstResult((page - 1) * pageSize);
+            query.setMaxResults(pageSize);
+            return query.getResultList();
         }
     }
 
     @Override
-    public Integer countListByFilter(Long categoryId, Double max, Long score, Long city) {
-        String query;
-        if (city > 0){
-            query = "SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? AND cityId = ?" +
-                    " HAVING AVG(COALESCE(score,0))>=?";
-            LOGGER.debug("Executing query: {}", query);
-            return jdbcTemplate.queryForObject(query, new Object[]{categoryId, max, city, score}, Integer.class);
+    public Long countListByFilter(CategoryModel category, Double max, Long score, CityModel city) {
+        if (city != null){
+            //Add
+            final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city AND COALESCE(exp.price,0)<=:max AND exp.averageScore>=:score AND exp.observable=true", Long.class);
+            query.setParameter("category", category);
+            query.setParameter("max", max);
+            query.setParameter("score", score);
+            query.setParameter("city", city);
+            return query.getSingleResult();
         }
         else {
-            query = "SELECT COALESCE(COUNT (experienceName), 0) FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? AND COALESCE(price,0) <=? " +
-                    " HAVING AVG(COALESCE(score,0))>=?";
-            LOGGER.debug("Executing query: {}", query);
-            return jdbcTemplate.queryForObject(query, new Object[]{categoryId, max, score}, Integer.class);
+            final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category AND COALESCE(exp.price,0)<=:max  AND exp.averageScore>=:score AND exp.observable=true", Long.class);
+            query.setParameter("category", category);
+            query.setParameter("max", max);
+            query.setParameter("score", score);
+            return query.getSingleResult();
         }
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByBestRanked(Long categoryId){
-        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE categoryid = ? GROUP BY experiences.experienceid ORDER BY AVG(COALESCE(score,0)) DESC LIMIT 12 ";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{categoryId}, EXPERIENCE_MODEL_ROW_MAPPER);
+    public List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category){
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category = :category AND exp.observable=true ORDER BY exp.averageScore DESC", ExperienceModel.class);
+        query.setMaxResults(6);
+        query.setParameter("category", category);
+        return query.getResultList();
     }
 
+//    @Override
+//    public List<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, Integer page, Integer page_size) {
+//        String orderQuery;
+//        if (order.isPresent()){
+//            orderQuery = order.get().getSqlQuery();
+//        }
+//        else {
+//            orderQuery = OrderByModel.OrderByRankDesc.getSqlQuery();
+//        }
+//
+////        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.experienceId IN ( SELECT favuserexperience.experienceId FROM favuserexperience WHERE userId = ? ) GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=0 " + orderQuery
+////                + " LIMIT ? OFFSET ?";
+////        LOGGER.debug("Executing query: {}", query);
+////        return jdbcTemplate.query(query, new Object[]{userId, page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
+////        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (SELECT experienceId FROM favuserexperience WHERE userid = :userid) " + orderQuery, ExperienceModel.class);
+////
+////        query.setParameter("userId", user.getUserId());
+////        query.setFirstResult((page - 1) * page_size);
+////        query.setMaxResults(page_size);
+////        return query.getResultList();
+//        return new ArrayList<>(user.getFavExperiences());
+//    }
+
+//    @Override
+//    public Integer getCountExperiencesFavsByUser(UserModel user){
+//        return user.getFavExperiences().size();
+//    }
+
     @Override
-    public List<ExperienceModel> listExperiencesFavsByUserId(Long userId, Optional<OrderByModel> order, Integer page, Integer page_size) {
+    public List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, Integer pageSize) {
         String orderQuery;
         if (order.isPresent()){
             orderQuery = order.get().getSqlQuery();
         }
         else {
-            orderQuery = " ";
+            orderQuery = OrderByModel.OrderByRankDesc.getSqlQuery();
         }
-
-        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE experiences.experienceId IN ( SELECT favuserexperience.experienceId FROM favuserexperience WHERE userId = ? ) GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=0 " + orderQuery
-                + " LIMIT ? OFFSET ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{userId, page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.observable=true " + orderQuery, ExperienceModel.class);
+        query.setParameter("name", name);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
     }
 
     @Override
-    public Integer getCountExperiencesFavsByUserId(Long userId){
-        final String query = "SELECT COALESCE(COUNT (experienceId), 1) FROM favuserexperience WHERE userId = ? ";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.queryForObject(query, new Object[]{userId}, Integer.class);
+    public Long getCountByName(String name) {
+        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.observable=true", Long.class);
+        query.setParameter("name", name);
+        return query.getSingleResult();
     }
 
+    @Override
+    public boolean hasExperiencesByUser(UserModel user){
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.user = :user ", ExperienceModel.class);
+        query.setParameter("user", user);
+        return query.getResultList().size() != 0;
+    }
 
     @Override
-    public List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, Integer page_size) {
+    public List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, Integer page, Integer pageSize) {
+        LOGGER.debug("Get experiences of user with id {}", user.getUserId());
         String orderQuery;
         if (order.isPresent()){
             orderQuery = order.get().getSqlQuery();
         }
         else {
-            orderQuery = " ";
+            orderQuery = OrderByModel.OrderByAZ.getSqlQuery();
         }
-        final String query = "SELECT experiences.experienceId, experienceName, address, experiences.description, email, siteUrl, price, cityId, categoryId, experiences.userId FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid WHERE LOWER(experienceName) LIKE LOWER(?) GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=0 " + orderQuery + " LIMIT ? OFFSET ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{'%'+name+'%', page_size, (page-1)*page_size}, EXPERIENCE_MODEL_ROW_MAPPER);
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user " + orderQuery, ExperienceModel.class);
+        query.setParameter("name", name);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        query.setParameter("user", user);
+        return query.getResultList();
     }
 
     @Override
-    public Integer getCountByName(String name) {
-        final String query = "SELECT COALESCE(COUNT (experienceName), 1) FROM experiences WHERE LOWER(experienceName) LIKE LOWER(?) ";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.queryForObject(query, new Object[]{'%'+name+'%'}, Integer.class);
-    }
-
-    @Override
-    public boolean hasExperiencesByUserId(Long userId){
-        final String query = "SELECT COUNT(*) FROM experiences WHERE userId = ? ";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.queryForObject(query, new Object[]{userId}, Integer.class) == 0;
-    }
-
-    @Override
-    public boolean experiencesBelongsToId(Long userId, Long experienceId){
-        final String query = "SELECT COUNT(*) FROM experiences WHERE userId = ? AND experienceid = ? ";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.queryForObject(query, new Object[]{userId, experienceId}, Integer.class) == 1;
+    public Long getCountExperiencesByUser(String name, UserModel user){
+        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user", Long.class);
+        query.setParameter("name", name);
+        query.setParameter("user", user);
+        return query.getSingleResult();
     }
 }

@@ -211,9 +211,10 @@ public class WebAuthController {
     //This method is used to update the SpringContextHolder
     //https://stackoverflow.com/questions/9910252/how-to-reload-authorities-on-user-update-with-spring-security
     private void forceLogin(UserModel user, HttpServletRequest request) {
+        final Collection<Roles> userRoles = userService.getRolesByUser(user);
 
         final PreAuthenticatedAuthenticationToken token =
-                new PreAuthenticatedAuthenticationToken(user.getEmail(), user.getPassword(), getAuthorities(user.getRoles()));
+                new PreAuthenticatedAuthenticationToken(user.getEmail(), user.getPassword(), getAuthorities(userRoles));
 
         token.setDetails(new WebAuthenticationDetails(request));
 

@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserService us;
+    private UserService userService;
     @Autowired
     private MessageSource messageSource;
     private final Locale locale = LocaleContextHolder.getLocale();
@@ -33,8 +32,9 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         String message = messageSource.getMessage("error.invalidEmail2", new Object[]{}, locale);
-        final UserModel userModel = us.getUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(message + email));
-        Collection<? extends GrantedAuthority> authorities = getAuthorities(userModel.getRoles());
+        final UserModel userModel = userService.getUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(message + email));
+        final Collection<Roles> userRoles = userService.getRolesByUser(userModel);
+        Collection<? extends GrantedAuthority> authorities = getAuthorities(userRoles);
         LOGGER.debug("Logged user with email {} and authorities {}", email, authorities);
         return new MyUserDetails(email, userModel.getPassword(), authorities);
     }

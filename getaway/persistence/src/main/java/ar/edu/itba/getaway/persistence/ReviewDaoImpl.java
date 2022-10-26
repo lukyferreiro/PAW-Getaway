@@ -1,143 +1,80 @@
 package ar.edu.itba.getaway.persistence;
 
+import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
-import ar.edu.itba.getaway.models.ReviewUserModel;
 import ar.edu.itba.getaway.interfaces.persistence.ReviewDao;
+import ar.edu.itba.getaway.models.UserModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.*;
 
 @Repository
 public class ReviewDaoImpl implements ReviewDao {
 
-    private final JdbcTemplate jdbcTemplate;
-    private final SimpleJdbcInsert jdbcInsert;
+    @PersistenceContext
+    private EntityManager em;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewDaoImpl.class);
 
-    private static final RowMapper<ReviewModel> REVIEW_MODEL_ROW_MAPPER = (rs, rowNum) ->
-            new ReviewModel(rs.getLong("reviewid"),
-                    rs.getString("title"),
-                    rs.getString("description"),
-                    rs.getLong("score"),
-                    rs.getLong("experienceid"),
-                    rs.getDate("reviewdate"),
-                    rs.getLong("userid"));
-
-    private static final RowMapper<ReviewUserModel> REVIEW_USER_ROW_MAPPER = (rs, rowNum) ->
-            new ReviewUserModel(rs.getLong("reviewid"),
-                    rs.getString("title"),
-                    rs.getString("description"),
-                    rs.getLong("score"),
-                    rs.getLong("experienceid"),
-                    rs.getDate("reviewdate"),
-                    rs.getLong("userid"),
-                    rs.getString("username"),
-                    rs.getString("usersurname"),
-                    rs.getLong("imgid"));
-
-    @Autowired
-    public ReviewDaoImpl(final DataSource ds) {
-        this.jdbcTemplate = new JdbcTemplate(ds);
-        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("reviews")
-                .usingGeneratedKeyColumns("reviewid");
+    @Override
+    public ReviewModel createReview(String title, String description, Long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel) {
+        final ReviewModel reviewModel = new ReviewModel(title, description, score, experienceModel, reviewDate, userModel);
+        em.persist(reviewModel);
+        LOGGER.debug("Created new review with id {} by user with id {}", reviewModel.getReviewId(), userModel.getUserId());
+        return reviewModel;
     }
 
     @Override
-    public ReviewModel createReview (String title, String description, Long score, Long experienceId, Date reviewDate, Long userId) {
-        final Map<String, Object> reviewData = new HashMap<>();
-        reviewData.put("title", title);
-        reviewData.put("description", description);
-        reviewData.put("score", score);
-        reviewData.put("experienceId", experienceId);
-        reviewData.put("reviewDate", reviewDate);
-        reviewData.put("userId", userId);
-        final Long reviewId = jdbcInsert.executeAndReturnKey(reviewData).longValue();
-
-        LOGGER.debug("Created new review with id {} by user with id {}", reviewId, userId);
-
-        return new ReviewModel(reviewId, title, description, score, experienceId, reviewDate, userId);
+    public void updateReview(Long reviewId, ReviewModel reviewModel) {
+        LOGGER.debug("Updating review with id: {}", reviewId);
+        em.merge(reviewModel);
     }
 
     @Override
-    public List<ReviewModel> getReviewsByExperienceId(Long experienceId) {
-        final String query = "SELECT * FROM reviews WHERE experienceId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{experienceId}, REVIEW_MODEL_ROW_MAPPER);
-    }
-
-    @Override
-    public Long getReviewAverageScore(Long experienceId) {
-        final String query = "SELECT CEILING(AVG(score)) FROM reviews WHERE experienceId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.queryForObject(query, new Object[]{experienceId}, Long.class);
-    }
-
-    @Override
-    public Integer getReviewCount(Long experienceId) {
-        final String query = "SELECT COUNT(*) FROM reviews WHERE experienceId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.queryForObject(query, new Object[]{experienceId}, Integer.class);
-    }
-
-    @Override
-    public List<ReviewUserModel> getReviewAndUser(Long experienceId, Integer page, Integer page_size) {
-        final String query = "SELECT * FROM reviews NATURAL JOIN users WHERE experienceId = ? ORDER BY reviewid DESC LIMIT ? OFFSET ? ";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{experienceId, page_size, (page-1)*page_size}, REVIEW_USER_ROW_MAPPER);
+    public void deleteReview(ReviewModel review) {
+        LOGGER.debug("Delete review with id {}", review.getReviewId());
+        em.remove(review);
     }
 
     @Override
     public Optional<ReviewModel> getReviewById(Long reviewId) {
-        final String query = "SELECT * FROM reviews WHERE reviewId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{reviewId}, REVIEW_MODEL_ROW_MAPPER)
-                .stream().findFirst();
+        LOGGER.debug("Get review with id {}", reviewId);
+        return Optional.ofNullable(em.find(ReviewModel.class, reviewId));
     }
 
     @Override
-    public List<ReviewUserModel> getReviewsByUserId(Long userId, Integer page, Integer page_size) {
-        final String query = "SELECT * FROM reviews  NATURAL JOIN users WHERE userid = ?  ORDER BY reviewid DESC LIMIT ? OFFSET ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{userId, page_size, (page-1)*page_size}, REVIEW_USER_ROW_MAPPER);
+    public List<ReviewModel> getReviewsByUser(UserModel user, Integer page, Integer pageSize) {
+        final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE user = :user", ReviewModel.class);
+        query.setParameter("user", user);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
     }
 
     @Override
-    public Integer getReviewByUserCount(Long userId) {
-        final String query = "SELECT COUNT(*) FROM reviews WHERE userId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.queryForObject(query, new Object[]{userId}, Integer.class);
+    public Long getReviewByUserCount(UserModel user) {
+        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.user) FROM ReviewModel r WHERE r.user = :user", Long.class);
+        query.setParameter("user", user);
+        return query.getSingleResult();
     }
 
     @Override
-    public boolean deleteReview(Long reviewId) {
-        final String query = "DELETE FROM reviews WHERE reviewId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.update(query, reviewId) == 1;
+    public List<ReviewModel> getReviewsByExperience(ExperienceModel experience, Integer page, Integer pageSize) {
+        final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE experience = :experience", ReviewModel.class);
+        query.setParameter("experience", experience);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
     }
 
     @Override
-    public boolean updateReview(Long reviewId, ReviewModel reviewModel) {
-        LOGGER.debug("Executing query to update review with id: {}", reviewId);
-        return jdbcTemplate.update("UPDATE reviews " +
-                        "SET title = ?, " +
-                        "description = ?, " +
-                        "score = ?, " +
-                        "experienceid = ?, " +
-                        "reviewdate = ?, " +
-                        "userid = ? " +
-                        "WHERE reviewId = ?",
-                reviewModel.getTitle(), reviewModel.getDescription(),
-                reviewModel.getScore(), reviewModel.getExperienceId(),
-                reviewModel.getReviewDate(),
-                reviewModel.getUserId(),
-                reviewId) == 1;
+    public Long getReviewByExperienceCount(ExperienceModel experience) {
+        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.experience) FROM ReviewModel r WHERE r.experience = :experience", Long.class);
+        query.setParameter("experience", experience);
+        return query.getSingleResult();
     }
 }

@@ -5,185 +5,149 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.persistence.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
+import javax.persistence.*;
 import java.util.*;
 
 @Repository
 public class UserDaoImpl implements UserDao {
+    @PersistenceContext
+    private EntityManager em;
 
-    private final JdbcTemplate jdbcTemplate;
-    private final SimpleJdbcInsert userSimpleJdbcInsert;
-    private final SimpleJdbcInsert userRolesSimpleJdbcInsert;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
-
-    private final RowMapper<UserModel> USER_MODEL_ROW_MAPPER = (rs, rowNum) ->
-            new UserModel(rs.getLong("userid"),
-                    rs.getString("password"),
-                    rs.getString("userName"),
-                    rs.getString("userSurname"),
-                    rs.getString("email"),
-                    getUserRoles(rs.getLong("userid")),
-                    rs.getLong("imgId"));
-
-    private static final RowMapper<RoleModel> ROLE_MODEL_ROW_MAPPER = (rs, rowNum) ->
-            new RoleModel(rs.getLong("roleid"),
-                    Roles.valueOf(rs.getString("roleName")));
-
-
-    @Autowired
-    public UserDaoImpl(final DataSource ds) {
-        this.jdbcTemplate = new JdbcTemplate(ds);
-        this.userSimpleJdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("users")
-                .usingGeneratedKeyColumns("userid");
-        this.userRolesSimpleJdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("userRoles");
-    }
 
     @Override
     public UserModel createUser(String password, String name, String surname, String email,
-                                Collection<Roles> roles, Long imageId) throws DuplicateUserException {
-        final Map<String, Object> userData = new HashMap<>();
-        userData.put("userName", name);
-        userData.put("userSurname", surname);
-        userData.put("email", email);
-        userData.put("password", password);
-        userData.put("imgId", imageId);
+                                Collection<Roles> roles, ImageModel image) throws DuplicateUserException {
 
-        final Long userId;
-        try {
-            userId = userSimpleJdbcInsert.executeAndReturnKey(userData).longValue();
-            LOGGER.info("Created user with id {}", userId);
-        } catch (DuplicateKeyException e) {
+        Optional<UserModel> user = getUserByEmail(email);
+
+        if(user.isPresent()){
             throw new DuplicateUserException();
         }
 
-        final Map<String, Object> userRolesData = new HashMap<>();
-        userRolesData.put("userId", userId);
-
-        Optional<RoleModel> roleModel;
-        for (Roles role : roles) {
-            roleModel = getRoleByName(role);
-            userRolesData.put("roleId", roleModel.get().getRoleId());
-            userRolesSimpleJdbcInsert.execute(userRolesData);
-            LOGGER.info("Added role {} to user {}", roleModel.get().getRoleName().name() , userId);
+        Collection<RoleModel> roleModels = new ArrayList<>();
+        for (Roles role: roles) {
+            roleModels.add(getRoleByName(role).get());
         }
 
-        return new UserModel(userId, password, name, surname, email, roles, imageId);
+        final UserModel userModel = new UserModel(password, name, surname, email, roleModels, image);
+        em.persist(userModel);
+        LOGGER.info("Created user with id {}", userModel.getUserId());
+
+//        Optional<RoleModel> roleModel;
+//        for (RoleModel roleModel : roleModels) {
+////            roleModel = getRoleByName(role);
+//            addRole(userModel, roleModel);
+////            UserRoleModel userRoleModel = new UserRoleModel(userModel, roleModel.get());
+////            em.persist(userRoleModel);
+////            LOGGER.debug("Added role {} to user with id {}", role, userModel.getUserId());
+//        }
+
+        return userModel;
     }
 
     @Override
     public Optional<UserModel> getUserById(Long userId) {
-        final String query = "SELECT * FROM users WHERE userId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{userId}, USER_MODEL_ROW_MAPPER)
-                .stream().findFirst();
+        LOGGER.debug("Get user with id {}", userId);
+        return Optional.ofNullable(em.find(UserModel.class, userId));
     }
 
     @Override
     public Optional<UserModel> getUserByEmail(String email) {
-        final String query = "SELECT * FROM users WHERE email = ?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{email}, USER_MODEL_ROW_MAPPER)
-                .stream().findFirst();
+        LOGGER.debug("Get user with email {}", email);
+        final TypedQuery<UserModel> query = em.createQuery("FROM UserModel WHERE email = :email", UserModel.class);
+        query.setParameter("email", email);
+        return query.getResultList().stream().findFirst();
     }
 
     @Override
-    public Optional<UserModel> getUserByExperienceId(Long experienceId){
-        final String query = "SELECT * FROM users WHERE userid = (SELECT userid FROM experiences WHERE experienceid = ?)";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{experienceId}, USER_MODEL_ROW_MAPPER)
-                .stream().findFirst();
+    public Optional<UserModel> getUserByExperience(ExperienceModel experience){
+        return Optional.ofNullable(experience.getUser());
     }
 
     @Override
-    public Optional<UserModel> getUserByReviewId(Long reviewId){
-        final String query = "SELECT * FROM users WHERE userid = (SELECT userid FROM reviews WHERE reviewId = ?)";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query, new Object[]{reviewId}, USER_MODEL_ROW_MAPPER)
-                .stream().findFirst();
+    public Optional<UserModel> getUserByReview(ReviewModel review){
+        return Optional.ofNullable(review.getUser());
     }
 
     @Override
-    public Collection<Roles> getUserRoles(Long userId) {
-        final Collection<RoleModel> rolesModel = getUserRolesModels(userId);
-        final Collection<Roles> rolesCollection = new ArrayList<>();
-        for(RoleModel roleModel : rolesModel){
-            rolesCollection.add(roleModel.getRoleName());
+    public Collection<RoleModel> getUserRoles(UserModel user) {
+        return user.getRoles();
+    }
+
+    @Override
+    public Collection<Roles> getRolesByUser (UserModel user){
+        final List<Roles> userRoles = new ArrayList<>();
+        final Collection<RoleModel> userRoleModels = user.getRoles();
+        for (RoleModel role: userRoleModels) {
+            userRoles.add(role.getRoleName());
         }
-        LOGGER.debug("Executing query to get roles of user with id: {}", userId);
-        return rolesCollection;
+        return userRoles;
     }
 
-    @Override
-    public Collection<RoleModel> getUserRolesModels(Long userId){
-        final String query = "SELECT roleid, rolename FROM users NATURAL JOIN userroles NATURAL JOIN roles WHERE userid=?";
-        LOGGER.debug("Executing query: {}", query);
-        return jdbcTemplate.query(query,
-                new Object[]{userId}, ROLE_MODEL_ROW_MAPPER);
-    }
+//    @Override
+//    public Collection<UserRoleModel> getUserRolesModels(UserModel user){
+//        LOGGER.debug("Get roles of user with id {}", user.getUserId());
+//        final TypedQuery<UserRoleModel> query = em.createQuery("FROM UserRoleModel WHERE user = :user", UserRoleModel.class);
+//        query.setParameter("user", user);
+//        return query.getResultList();
+//    }
 
     @Override
     public Optional<RoleModel> getRoleByName(Roles role) {
-        final String query = "SELECT * FROM roles WHERE roleName = ?";
-        LOGGER.debug("Executing query: {}", query);
-        final String roleName = role.name();
-        return jdbcTemplate.query(query, new Object[]{roleName}, ROLE_MODEL_ROW_MAPPER)
-                .stream().findFirst();
+        LOGGER.debug("Get role with name {}", role.name());
+        final TypedQuery<RoleModel> query = em.createQuery("FROM RoleModel WHERE roleName = :roleName", RoleModel.class);
+        query.setParameter("roleName", role);
+        return query.getResultList().stream().findFirst();
+    }
+
+//    private Optional<UserRoleModel> getUserRole(UserModel user, RoleModel role) {
+//        final TypedQuery<UserRoleModel> query = em.createQuery("FROM UserRoleModel WHERE user = :user AND role = :role", UserRoleModel.class);
+//        query.setParameter("user", user);
+//        query.setParameter("role", role);
+//        return query.getResultList().stream().findFirst();
+//    }
+
+    @Override
+    public Optional<UserModel> updateRoles(UserModel user, Roles oldVal, Roles newVal) {
+        final RoleModel oldRole = getRoleByName(oldVal).get();
+        user.removeRole(oldRole);
+
+        final RoleModel newRole = getRoleByName(newVal).get();
+        user.addRole(newRole);
+
+        return Optional.ofNullable(em.merge(user));
     }
 
     @Override
-    public Optional<UserModel> updateRoles(Long userId, Roles oldVal, Roles newVal) {
-        final String query = "UPDATE userroles SET roleid = ? WHERE userid = ? AND roleid = ?";
-        LOGGER.debug("Executing query: {}", query);
-        final Long oldValueID = getRoleByName(oldVal).get().getRoleId();
-        final Long newValueID = getRoleByName(newVal).get().getRoleId();
-        if (jdbcTemplate.update(query, newValueID, userId, oldValueID) == 1) {
-            LOGGER.debug("Roles updated");
-            return getUserById(userId);
-        }
-        LOGGER.debug("Roles not updated");
-        return Optional.empty();
+    public Optional<UserModel> updatePassword(UserModel user, String password) {
+        user.setPassword(password);
+        return Optional.ofNullable(em.merge(user));
     }
 
     @Override
-    public Optional<UserModel> updatePassword(Long userId, String password) {
-        final String query = "UPDATE users SET password = ? WHERE userId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        if (jdbcTemplate.update(query, password, userId) == 1) {
-            LOGGER.debug("Password updated");
-            return getUserById(userId);
-        }
-        LOGGER.debug("Password not updated");
-        return Optional.empty();
+    public Optional<UserModel> updateUserInfo(UserModel user, UserInfo userInfo) {
+        user.setName(userInfo.getName());
+        user.setSurname(userInfo.getSurname());
+        return Optional.ofNullable(em.merge(user));
     }
 
     @Override
-    public void updateUserInfo(Long userId, UserInfo userInfo) {
-        final String query = "UPDATE users SET userName = ?, userSurname = ? WHERE userId = ?";
-        LOGGER.debug("Executing query: {}", query);
-        if (jdbcTemplate.update(query, userInfo.getName(), userInfo.getSurname(), userId) == 1) {
-            LOGGER.debug("User info updated");
-        }
-        else {
-            LOGGER.debug("User info not updated");
-        }
+    public Optional<UserModel> addRole(UserModel user, Roles newRole) {
+        final RoleModel roleModel = getRoleByName(newRole).get();
+        user.addRole(roleModel);
+        return Optional.ofNullable(em.merge(user));
+//        final UserRoleModel userRoleModel = new UserRoleModel(user, roleModel);
+//        em.persist(userRoleModel);
     }
 
-    @Override
-    public void addRole(Long userId, Roles newRole) {
-        final Map<String, Object> userRolesData = new HashMap<>();
-        userRolesData.put("userId", userId);
-        final Optional<RoleModel> roleModel = getRoleByName(newRole);
-        userRolesData.put("roleId", roleModel.get().getRoleId());
-        userRolesSimpleJdbcInsert.execute(userRolesData);
-        LOGGER.info("Added role {} to user {}", newRole.name(), userId);
-    }
+//    @Override
+//    public Optional<UserModelWithReviews> getUserWithReviewsByEmail (String email){
+//        LOGGER.debug("Get user and reviews with email {}", email);
+//        final TypedQuery<UserModelWithReviews> query = em.createQuery("FROM UserModelWithReviews WHERE email = :email", UserModelWithReviews.class);
+//        query.setParameter("email", email);
+//        return query.getResultList().stream().findFirst();
+//    }
 }

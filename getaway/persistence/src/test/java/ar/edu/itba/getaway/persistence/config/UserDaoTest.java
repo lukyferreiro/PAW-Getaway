@@ -1,10 +1,7 @@
 package ar.edu.itba.getaway.persistence.config;
 
 import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
-import ar.edu.itba.getaway.models.RoleModel;
-import ar.edu.itba.getaway.models.Roles;
-import ar.edu.itba.getaway.models.UserInfo;
-import ar.edu.itba.getaway.models.UserModel;
+import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
 import ar.edu.itba.getaway.interfaces.persistence.UserDao;
 import org.junit.Before;
@@ -35,6 +32,19 @@ public class UserDaoTest {
     private final static String NAME = "NAME";
     private final static String SURNAME = "SURNAME";
     private final static String EMAIL = "e@mail.com";
+    private final static ImageModel IMAGE = new ImageModel( null, 15L);
+
+    private static final Collection<Roles> DEFAULT_ROLES = new ArrayList<>(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
+
+    private static final RoleModel PROVIDER_MODEL = new RoleModel(1L, Roles.PROVIDER);
+    private static final RoleModel USER_MODEL = new RoleModel(2L, Roles.USER);
+    private static final RoleModel VERIFIED_MODEL = new RoleModel(3L, Roles.VERIFIED);
+    private static final RoleModel NOT_VERIFIED_MODEL = new RoleModel(4L, Roles.NOT_VERIFIED);
+
+    private static final Collection<RoleModel> DEFAULT_ROLES_MODELS = new ArrayList<>(Arrays.asList(USER_MODEL, NOT_VERIFIED_MODEL));
+
+    private final static UserModel DEFAULT_USER = new UserModel(1L, PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES_MODELS, IMAGE);
+
     /****/
 
     @Autowired
@@ -42,11 +52,9 @@ public class UserDaoTest {
 
     @Autowired
     private UserDao userDao;
+
     @Autowired
     private ImageDao imageDao;
-
-    private static final Collection<Roles> DEFAULT_ROLES = new ArrayList<>(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
-    private static final Collection<RoleModel> DEFAULT_ROLES_MODELS = new ArrayList<>(Arrays.asList(new RoleModel(2L, Roles.USER), new RoleModel(4L, Roles.NOT_VERIFIED)));
 
     private JdbcTemplate jdbcTemplate;
 
@@ -60,33 +68,42 @@ public class UserDaoTest {
     public void testCreateUser() {
         UserModel user = null;
         try {
-            user = userDao.createUser(PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES, 1L);
+            user = userDao.createUser(PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES, IMAGE);
             assertNotNull(user);
         } catch (DuplicateUserException e) {
             e.printStackTrace();
         }
+
+        assertNotNull(user);
         assertEquals(PASSWORD, user.getPassword());
         assertEquals(NAME, user.getName());
         assertEquals(SURNAME, user.getSurname());
         assertEquals(EMAIL, user.getEmail());
 
         //Assert to check every user is created with a profile image pointing to null
-        assertTrue(imageDao.getImgById(user.getProfileImageId()).isPresent());
-        assertNull(imageDao.getImgById(user.getProfileImageId()).get().getImage());
+        assertTrue(imageDao.getImgById(user.getProfileImage().getImageId()).isPresent());
+        assertEquals(IMAGE, imageDao.getImgById(user.getProfileImage().getImageId()).get());
+//        assertNull(imageDao.getImgById(user.getProfileImage().getImageId()).get().getImage());
+
+        //Check new row added to table
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "userId = " + user.getUserId()));
+
+        //Check user was created with the two default roles only
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + user.getUserId()) + " AND roleId = " + NOT_VERIFIED_MODEL.getRoleId()));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + user.getUserId()) + " AND roleId = " + USER_MODEL.getRoleId()));
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + user.getUserId()) + " AND roleId = " + VERIFIED_MODEL.getRoleId()));
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + user.getUserId()) + " AND roleId = " + PROVIDER_MODEL.getRoleId()));
     }
 
     @Test(expected = DuplicateUserException.class)
     @Rollback
     public void testCreateDuplicateUser() throws DuplicateUserException {
-        userDao.createUser("contra1", "usuario", "uno", "uno@mail.com", DEFAULT_ROLES, 0L);
+        userDao.createUser("contra1", "usuario", "uno", "uno@mail.com", DEFAULT_ROLES, IMAGE);
     }
 
     @Test
     public void testGetUserById() {
         final Optional<UserModel> user = userDao.getUserById(1L);
-
-        ArrayList<Roles> arrayRoles = new ArrayList<>(user.get().getRoles());
 
         assertNotNull(user);
         assertTrue(user.isPresent());
@@ -94,9 +111,12 @@ public class UserDaoTest {
         assertEquals("usuario", user.get().getName());
         assertEquals("uno", user.get().getSurname());
         assertEquals("uno@mail.com", user.get().getEmail());
-        assertEquals(new Long(15), user.get().getProfileImageId());
-        assertTrue(arrayRoles.contains(Roles.USER));
-        assertTrue(arrayRoles.contains(Roles.NOT_VERIFIED));
+        assertEquals(IMAGE, user.get().getProfileImage());
+
+        ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.get().getRoles());
+
+        assertTrue(arrayRoles.contains(USER_MODEL));
+        assertTrue(arrayRoles.contains(NOT_VERIFIED_MODEL));
     }
 
     @Test
@@ -116,24 +136,31 @@ public class UserDaoTest {
         assertEquals("usuario", user.get().getName());
         assertEquals("uno", user.get().getSurname());
         assertEquals("uno@mail.com", user.get().getEmail());
-        assertEquals(new Long(15), user.get().getProfileImageId());
-        assertEquals(DEFAULT_ROLES, user.get().getRoles());
+        assertEquals(IMAGE , user.get().getProfileImage());
+
+        assertEquals(DEFAULT_ROLES_MODELS, user.get().getRoles());
     }
 
     @Test
     public void testGetUserRoles() {
-        final Collection<Roles> roles = userDao.getUserRoles(1L);
-        assertEquals(DEFAULT_ROLES, roles);
+        final Collection<RoleModel> roles = userDao.getUserRoles(DEFAULT_USER);
+        assertEquals(DEFAULT_ROLES_MODELS, roles);
+        assertTrue(roles.contains(USER_MODEL));
+        assertTrue(roles.contains(NOT_VERIFIED_MODEL));
+        assertFalse(roles.contains(VERIFIED_MODEL));
+        assertFalse(roles.contains(PROVIDER_MODEL));
     }
 
-    @Test
-    public void testGetUserRolesModels() {
-        final Collection<RoleModel> roleModels = userDao.getUserRolesModels(1L);
-        assertEquals(DEFAULT_ROLES_MODELS.size(), roleModels.size());
-        final ArrayList<RoleModel> arrayRoles = new ArrayList<>(roleModels);
-        assertTrue(arrayRoles.contains(new RoleModel(2L, Roles.USER)));
-        assertTrue(arrayRoles.contains(new RoleModel(4L, Roles.NOT_VERIFIED)));
-    }
+//    @Test
+//    public void testGetUserRolesModels() {
+//        final Collection<UserRoleModel> roleModels = userDao.getUserRolesModels(DEFAULT_USER);
+//
+//        assertEquals(Arrays.asList(USER_MODEL, NOT_VERIFIED_MODEL).size(), roleModels.size());
+//
+//        final ArrayList<UserRoleModel> arrayRoles = new ArrayList<>(roleModels);
+//        assertTrue(arrayRoles.contains(new UserRoleModel(DEFAULT_USER, USER_MODEL)));
+//        assertTrue(arrayRoles.contains(new UserRoleModel(DEFAULT_USER, NOT_VERIFIED_MODEL)));
+//    }
 
     @Test
     public void testGetRoleByNameProvider(){
@@ -168,27 +195,36 @@ public class UserDaoTest {
     @Rollback
     public void testUpdateRoles(){
         final Optional<UserModel> userBeforeUpdate = userDao.getUserById(1L);
-        final Optional<UserModel> user = userDao.updateRoles(1L, Roles.NOT_VERIFIED, Roles.VERIFIED);
+        userDao.updateRoles(DEFAULT_USER, Roles.NOT_VERIFIED, Roles.VERIFIED);
+        final Optional<UserModel> user = userDao.getUserById(1L);
         assertTrue(user.isPresent());
-        final ArrayList<Roles> arrayRoles = new ArrayList<>(user.get().getRoles());
+        final ArrayList<RoleModel> arrayRoles = new ArrayList<>(userDao.getUserRoles(DEFAULT_USER));
 
         //Check if all the other info is the same
         assertEquals(userBeforeUpdate.get().getEmail(), user.get().getEmail());
         assertEquals(userBeforeUpdate.get().getName(), user.get().getName());
         assertEquals(userBeforeUpdate.get().getSurname(), user.get().getSurname());
         assertEquals(userBeforeUpdate.get().getPassword(), user.get().getPassword());
-        assertEquals(userBeforeUpdate.get().getProfileImageId(), user.get().getProfileImageId());
+        assertEquals(userBeforeUpdate.get().getProfileImage(), user.get().getProfileImage());
 
-        assertTrue(arrayRoles.contains(Roles.USER));
-        assertTrue(arrayRoles.contains(Roles.VERIFIED));
-        assertFalse(arrayRoles.contains(Roles.NOT_VERIFIED));
+        //Asserts to check changes in userModel
+        assertTrue(arrayRoles.contains(USER_MODEL));
+        assertTrue(arrayRoles.contains(VERIFIED_MODEL));
+        assertFalse(arrayRoles.contains(NOT_VERIFIED_MODEL));
+        assertFalse(arrayRoles.contains(PROVIDER_MODEL));
+
+        //Asserts to check changes in userroles table
+//        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId()) + " AND roleId = " + USER_MODEL.getRoleId()));
+//        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId()) + " AND roleId = " + VERIFIED_MODEL.getRoleId()));
+//        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId() + " AND roleId = " + NOT_VERIFIED_MODEL.getRoleId())));
     }
 
     @Test
     @Rollback
     public void testUpdatePassword(){
         final Optional<UserModel> userBeforeUpdate = userDao.getUserById(1L);
-        final Optional<UserModel> user = userDao.updatePassword(1L, "newpwd");
+        userDao.updatePassword(DEFAULT_USER, "newpwd");
+        final Optional<UserModel> user = userDao.getUserById(1L);
         assertTrue(user.isPresent());
 
         //Check if all the other info is the same
@@ -196,7 +232,7 @@ public class UserDaoTest {
         assertEquals(userBeforeUpdate.get().getName(), user.get().getName());
         assertEquals(userBeforeUpdate.get().getSurname(), user.get().getSurname());
         assertEquals(userBeforeUpdate.get().getRoles(), user.get().getRoles());
-        assertEquals(userBeforeUpdate.get().getProfileImageId(), user.get().getProfileImageId());
+        assertEquals(userBeforeUpdate.get().getProfileImage(), user.get().getProfileImage());
 
         assertEquals("newpwd",user.get().getPassword());
     }
@@ -205,7 +241,7 @@ public class UserDaoTest {
     @Rollback
     public void testUpdateUserInfo() {
         final Optional<UserModel> userBeforeUpdate = userDao.getUserById(1L);
-        userDao.updateUserInfo(1L, new UserInfo("newusuario", "newuno"));
+        userDao.updateUserInfo(DEFAULT_USER, new UserInfo("newusuario", "newuno"));
         final Optional<UserModel> user = userDao.getUserById(1L);
         assertTrue(user.isPresent());
 
@@ -213,7 +249,7 @@ public class UserDaoTest {
         assertEquals(userBeforeUpdate.get().getEmail(), user.get().getEmail());
         assertEquals(userBeforeUpdate.get().getRoles(), user.get().getRoles());
         assertEquals(userBeforeUpdate.get().getPassword(), user.get().getPassword());
-        assertEquals(userBeforeUpdate.get().getProfileImageId(), user.get().getProfileImageId());
+        assertEquals(userBeforeUpdate.get().getProfileImage(), user.get().getProfileImage());
 
         assertEquals("newusuario", user.get().getName());
         assertEquals("newuno", user.get().getSurname());
@@ -223,22 +259,26 @@ public class UserDaoTest {
     @Rollback
     public void testAddRole() {
         final Optional<UserModel> userBeforeUpdate = userDao.getUserById(1L);
-        userDao.addRole(1L, Roles.PROVIDER);
+        userDao.addRole(DEFAULT_USER, Roles.PROVIDER);
         final Optional<UserModel> user = userDao.getUserById(1L);
-
         assertTrue(user.isPresent());
 
-        final ArrayList<Roles> arrayRoles = new ArrayList<>(user.get().getRoles());
+        final ArrayList<RoleModel> arrayRoles = new ArrayList<>(userDao.getUserRoles(user.get()));
 
         //Check if all the other info is the same
+        assertTrue(userBeforeUpdate.isPresent());
         assertEquals(userBeforeUpdate.get().getEmail(), user.get().getEmail());
         assertEquals(userBeforeUpdate.get().getName(), user.get().getName());
         assertEquals(userBeforeUpdate.get().getSurname(), user.get().getSurname());
         assertEquals(userBeforeUpdate.get().getPassword(), user.get().getPassword());
-        assertEquals(userBeforeUpdate.get().getProfileImageId(), user.get().getProfileImageId());
+        assertEquals(userBeforeUpdate.get().getProfileImage(), user.get().getProfileImage());
 
-        assertTrue(arrayRoles.contains(Roles.USER));
-        assertTrue(arrayRoles.contains(Roles.NOT_VERIFIED));
-        assertTrue(arrayRoles.contains(Roles.PROVIDER));
+        assertTrue(arrayRoles.contains(USER_MODEL));
+        assertTrue(arrayRoles.contains(NOT_VERIFIED_MODEL));
+        assertTrue(arrayRoles.contains(PROVIDER_MODEL));
+
+//        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId()) + " AND roleId = " + USER_MODEL.getRoleId()));
+//        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId()) + " AND roleId = " + NOT_VERIFIED_MODEL.getRoleId()));
+//        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId() + " AND roleId = " + PROVIDER_MODEL.getRoleId())));
     }
 }

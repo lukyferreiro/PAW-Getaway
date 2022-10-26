@@ -45,30 +45,31 @@ public class InitPageController {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("mainPage");
 
+
+        final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategories();
+
         mav.addObject("favExperienceModels", new ArrayList<>());
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if (user.isPresent()) {
-                final Long userId = user.get().getUserId();
-                favExperienceService.setFav(userId, set, experience);
-                final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
+                if (experience.isPresent()) {
+                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get());
+                    favExperienceService.setFav(user.get(), set, addFavExperience);
+                }
+                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
                 mav.addObject("favExperienceModels", favExperienceModels);
-            }else if(set.isPresent()){
+            } else if (set.isPresent()) {
                 return new ModelAndView("redirect:/login");
             }
-        }else if(set.isPresent()){
-            return new ModelAndView("redirect:/login");
+        } else {
+            mav.addObject("favExperienceModels", new ArrayList<>());
+            if (set.isPresent()) {
+                return new ModelAndView("redirect:/login");
+            }
         }
 
-        final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategories();
-        final List<List<Long>> avgReviews = reviewService.getListOfAverageScoreByExperienceListAndCategoryId(listByCategory);
-        final List<List<Integer>> listReviewsCount = reviewService.getListOfReviewCountByExperienceListAndCategoryId(listByCategory);
-
-        mav.addObject("isEditing",false);
+        mav.addObject("isEditing", false);
         mav.addObject("listByCategory", listByCategory);
-        mav.addObject("avgReviews", avgReviews);
-        mav.addObject("listReviewsCount", listReviewsCount);
-
         return mav;
     }
 

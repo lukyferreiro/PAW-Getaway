@@ -34,10 +34,7 @@ public class SearchFormController {
     private UserService userService;
     @Autowired
     private FavExperienceService favExperienceService;
-    @Autowired
-    private ReviewService reviewService;
 
-    //TODO PAGINARLO
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchFormController.class);
 
     @RequestMapping(value = "/search_result", method = {RequestMethod.GET})
@@ -53,17 +50,15 @@ public class SearchFormController {
         final Page<ExperienceModel> currentPage = experienceService.listExperiencesByName(searchForm.getQuery(), orderBy, pageNum);
         final ModelAndView mav = new ModelAndView("searchResult");
 
-        LOGGER.debug("Pagination");
-        LOGGER.debug("CurrentPage {}", currentPage.getCurrentPage());
-        LOGGER.debug("TotalPages {}", currentPage.getMaxPage());
-
         mav.addObject("favExperienceModels", new ArrayList<>());
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-            if (user.isPresent()) {
-                final Long userId = user.get().getUserId();
-                favExperienceService.setFav(userId, set, experience);
-                final List<Long> favExperienceModels = favExperienceService.listFavsByUserId(userId);
+            if(user.isPresent()){
+                if(experience.isPresent()){
+                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get());
+                    favExperienceService.setFav(user.get(), set, addFavExperience);
+                }
+                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
                 mav.addObject("favExperienceModels", favExperienceModels);
             }else if(set.isPresent()){
                 return new ModelAndView("redirect:/login");
@@ -74,8 +69,6 @@ public class SearchFormController {
 
         final OrderByModel[] orderByModels = OrderByModel.values();
         final List<ExperienceModel> experienceModels = currentPage.getContent();
-        final List<Long> avgReviews = reviewService.getListOfAverageScoreByExperienceList(experienceModels);
-        final List<Integer> listReviewsCount = reviewService.getListOfReviewCountByExperienceList(experienceModels);
 
         if(query.isPresent()){
             request.setAttribute("query", query);
@@ -92,11 +85,9 @@ public class SearchFormController {
         mav.addObject("totalPages", currentPage.getTotalPages());
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
-        mav.addObject("avgReviews", avgReviews);
         mav.addObject("set", set);
         mav.addObject("experience", experience);
         mav.addObject("experiences", experienceModels);
-        mav.addObject("listReviewsCount", listReviewsCount);
         mav.addObject("isEditing", false);
 
         return mav;

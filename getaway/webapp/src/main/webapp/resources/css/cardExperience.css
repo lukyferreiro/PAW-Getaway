@@ -21,7 +21,8 @@
     padding: 3px;
 }
 
-.title-link a {
+
+.experience.card-title:hover {
     color: black;
     text-decoration: none;
 }
@@ -31,4 +32,8 @@
     text-decoration: underline;
     transition: 0.3s;
     transform: scale(1.01);
+}
+
+.table-title{
+    font-weight: bold;
 }

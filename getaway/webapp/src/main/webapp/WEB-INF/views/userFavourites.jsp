@@ -26,6 +26,7 @@
                         <jsp:include page="/WEB-INF/components/orderDropdown.jsp">
                            <jsp:param name="orderByModels" value="${orderByModels}"/>
                            <jsp:param name="path" value="/user/favourites"/>
+                           <jsp:param name="orderPrev" value="${orderBy == null ? null : orderBy.id}"/>
                         </jsp:include>
                      </div>
                      <h3 class="title m-0"><spring:message code="favourite.description"/></h3>
@@ -35,8 +36,8 @@
                   <div class="container-fluid my-3 d-flex flex-wrap justify-content-center">
                      <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                         <jsp:include page="/WEB-INF/components/cardExperience.jsp">
-                           <jsp:param name="hasImage" value="${experience.hasImage}"/>
-                           <jsp:param name="categoryName" value="${experience.categoryName}"/>
+                           <jsp:param name="hasImage" value="${experience.experienceImage.image != null}"/>
+                           <jsp:param name="categoryName" value="${experience.category.categoryName}"/>
                            <jsp:param name="id" value="${experience.experienceId}"/>
                            <jsp:param name="name" value="${experience.experienceName}"/>
                            <jsp:param name="description" value="${experience.description}"/>
@@ -44,8 +45,8 @@
                            <jsp:param name="price" value="${experience.price}"/>
                            <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
                            <jsp:param name="path" value="/user/favourites"/>
-                           <jsp:param name="avgReviews" value="${avgReviews[myIndex.index]}"/>
-                           <jsp:param name="reviewCount" value="${listReviewsCount[myIndex.index]}"/>
+                           <jsp:param name="avgReviews" value="${experience.getAverageScore()}"/>
+                           <jsp:param name="reviewCount" value="${experience.getReviewCount()}"/>
                            <jsp:param name="isEditing" value="${isEditing}"/>
                            <jsp:param name="orderBY" value="${orderBy}"/>
                            <jsp:param name="pageNum" value="${currentPage}"/>

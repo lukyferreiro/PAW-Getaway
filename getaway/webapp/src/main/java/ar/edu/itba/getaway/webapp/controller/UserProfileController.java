@@ -45,10 +45,9 @@ public class UserProfileController {
         final ModelAndView mav = new ModelAndView("userProfile");
 
         final UserModel userModel = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        final ImageModel imageModel = imageService.getImgById(userModel.getProfileImageId()).get();
 
         mav.addObject("user", userModel);
-        mav.addObject("hasImage", imageModel.getImage() != null);
+        mav.addObject("hasImage", userModel.getProfileImage().getImage() != null);
 
         return mav;
     }
@@ -87,20 +86,19 @@ public class UserProfileController {
 
         if(!profileImg.isEmpty()){
             if (!contentTypes.contains(profileImg.getContentType())) {
-                //Enviar mensaje de formato de imagen inválido
                 errors.rejectValue("profileImg", "editProfileForm.validation.imageFormat");
                 return editProfileGet(editProfileForm, searchForm, principal, request);
             }
-            else if(profileImg.getSize()>MAX_SIZE_PER_FILE) {
+            else if(profileImg.getSize() > MAX_SIZE_PER_FILE) {
                 errors.rejectValue("experienceImg", "editProfileForm.validation.imageSize");
                 return editProfileGet(editProfileForm, searchForm, principal, request);
             }
             else {
-                imageService.updateImg(profileImg.getBytes(), user.getProfileImageId());
+                imageService.updateImg(profileImg.getBytes(), user.getProfileImage());
             }
         }
 
-        userService.updateUserInfo(user.getUserId(), new UserInfo(editProfileForm.getName(), editProfileForm.getSurname()));
+        userService.updateUserInfo(user, new UserInfo(editProfileForm.getName(), editProfileForm.getSurname()));
 
         return new ModelAndView("redirect:/user/profile");
     }

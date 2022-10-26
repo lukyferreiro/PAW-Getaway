@@ -7,18 +7,21 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface UserService {
-    Collection<RoleModel> getUserRolesModels(Long userId);
+    UserModel createUser (String password, String name, String surname, String email) throws DuplicateUserException;
+    Collection<RoleModel> getUserRolesModels(UserModel user);
     Optional<UserModel> getUserById (Long userId);
     Optional<UserModel> getUserByEmail (String email);
-    Optional<UserModel> getUserByExperienceId(Long experienceId);
-    Optional<UserModel> getUserByReviewId(Long reviewId);
-    UserModel createUser (String password, String name, String surname, String email) throws DuplicateUserException;
+    Optional<UserModel> getUserByExperience(ExperienceModel experience);
+    Optional<UserModel> getUserByReview(ReviewModel review);
     Optional<UserModel> verifyAccount (String token);
     void resendVerificationToken (UserModel userModel);
     boolean validatePasswordReset (String token);
     void generateNewPassword (UserModel userModel);
     Optional<UserModel> updatePassword (String token, String password);
-    void updateUserInfo (Long userId, UserInfo userInfo);
+    void updateUserInfo (UserModel userModel, UserInfo userInfo);
     void updateProfileImage (UserModel userModel, byte[] image);
-    void addRole(Long userId, Roles newRole);
+    void addRole(UserModel user, Roles newRole);
+    Collection<Roles> getRolesByUser (UserModel user);
+
+//    Optional<UserModelWithReviews> getUserWithReviewsByEmail (String email);
 }

@@ -6,31 +6,31 @@ TRUNCATE TABLE categories RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE images RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE imagesExperiences RESTART IDENTITY AND COMMIT NO CHECK;
 
-INSERT INTO images(imgid, imageObject) VALUES(10, null);
-INSERT INTO images(imgid, imageObject) VALUES(11, null);
+INSERT INTO images(imgid, imageObject) VALUES(10, '0x1234');
+INSERT INTO images(imgid, imageObject) VALUES(11, '0x5678');
 
 INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (1, 'owner', 'user', 'owner@mail.com', 10, 'contra1');
 INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (2, 'owner2', 'user2', 'owner2@mail.com', 11, 'contra2');
 
 -- Populate categories
-INSERT INTO categories(categoryname) VALUES ('Aventura');
-INSERT INTO categories(categoryname) VALUES ('Gastronomia');
-INSERT INTO categories(categoryname) VALUES ('Hoteleria');
-INSERT INTO categories(categoryname) VALUES ('Relax');
-INSERT INTO categories(categoryname) VALUES ('Vida_nocturna');
-INSERT INTO categories(categoryname) VALUES ('Historico');
+INSERT INTO categories(categoryid, categoryname) VALUES (1, 'Aventura');
+INSERT INTO categories(categoryid, categoryname) VALUES (2, 'Gastronomia');
+INSERT INTO categories(categoryid, categoryname) VALUES (3, 'Hoteleria');
+INSERT INTO categories(categoryid, categoryname) VALUES (4, 'Relax');
+INSERT INTO categories(categoryid, categoryname) VALUES (5, 'Vida_nocturna');
+INSERT INTO categories(categoryid, categoryname) VALUES (6, 'Historico');
 
 -- Add country
-INSERT INTO countries(countryname) VALUES ('Test Country');
+INSERT INTO countries(countryid, countryname) VALUES (1, 'Test Country');
 
 -- Add at least two cities
-INSERT INTO cities(cityname, countryid) VALUES('Test City One', 1);
-INSERT INTO cities(cityname, countryid) VALUES('Test City Two', 1);
+INSERT INTO cities(cityid, cityname, countryid) VALUES(1, 'Test City One', 1);
+INSERT INTO cities(cityid, cityname, countryid) VALUES(2, 'Test City Two', 1);
 
 -- Add images (with value null) for consistency
-INSERT INTO images(imgid, imageObject) VALUES(1, null);
-INSERT INTO images(imgid, imageObject) VALUES(5, null);
-INSERT INTO images(imgid, imageObject) VALUES(8, null);
+INSERT INTO images(imgid, imageObject) VALUES(1, '0x9123');
+INSERT INTO images(imgid, imageObject) VALUES(5, '0x4567');
+INSERT INTO images(imgid, imageObject) VALUES(8, '0x8912');
 
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
 VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 1, 'owner@mail.com');

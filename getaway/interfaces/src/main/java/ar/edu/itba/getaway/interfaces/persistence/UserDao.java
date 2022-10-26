@@ -1,25 +1,25 @@
 package ar.edu.itba.getaway.interfaces.persistence;
 
 import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
-import ar.edu.itba.getaway.models.RoleModel;
-import ar.edu.itba.getaway.models.Roles;
-import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.getaway.models.UserInfo;
+import ar.edu.itba.getaway.models.*;
 
 import java.util.Collection;
 import java.util.Optional;
 
 public interface UserDao {
+    UserModel createUser (String password, String name, String surname, String email, Collection<Roles> roles, ImageModel image) throws DuplicateUserException;
     Optional<UserModel> getUserById (Long userId);
     Optional<UserModel> getUserByEmail (String email);
-    Optional<UserModel> getUserByExperienceId(Long experienceId);
-    Optional<UserModel> getUserByReviewId(Long reviewId);
-    UserModel createUser (String password, String name, String surname, String email, Collection<Roles> roles, Long imageId) throws DuplicateUserException;
-    Collection<Roles> getUserRoles (Long userId);
-    Collection<RoleModel> getUserRolesModels(Long userId);
+    Optional<UserModel> getUserByExperience(ExperienceModel experience);
+    Optional<UserModel> getUserByReview(ReviewModel review);
+    Collection<RoleModel> getUserRoles (UserModel user);
+    Collection<Roles> getRolesByUser (UserModel user);
     Optional<RoleModel> getRoleByName (Roles role);
-    Optional<UserModel> updateRoles (Long userId, Roles oldVal, Roles newVal);
-    Optional<UserModel> updatePassword (Long userId, String password);
-    void updateUserInfo (Long userId, UserInfo userInfo);
-    void addRole (Long userId, Roles newRole);
+    Optional<UserModel> updateRoles (UserModel user, Roles oldVal, Roles newVal);
+    Optional<UserModel> updatePassword (UserModel user, String password);
+    Optional<UserModel> updateUserInfo (UserModel user, UserInfo userInfo);
+    Optional<UserModel> addRole (UserModel user, Roles newRole);
+
+//    Optional<UserModelWithReviews> getUserWithReviewsByEmail (String email);
+
 }

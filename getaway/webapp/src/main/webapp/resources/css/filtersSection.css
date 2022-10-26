@@ -116,3 +116,8 @@
     color: black;
     --bs-btn-focus-shadow-rgb: none;
 }
+
+.orderInfo{
+    display: inline-block;
+    vertical-align:middle
+}
