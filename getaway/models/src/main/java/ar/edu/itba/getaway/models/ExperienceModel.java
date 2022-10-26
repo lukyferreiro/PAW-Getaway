@@ -206,6 +206,9 @@ public class ExperienceModel {
 //        Integer toIndex = Math.min((fromIndex + pageSize), experienceReviews.size());
 //        return experienceReviews.subList(fromIndex, toIndex);
 //    }
+    public boolean isFav(UserModel user){
+        return user.isFav(this);
+    }
 
     @Transient
     public Long getReviewCount() {
