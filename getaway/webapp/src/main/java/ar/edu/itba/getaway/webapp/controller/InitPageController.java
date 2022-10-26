@@ -68,7 +68,6 @@ public class InitPageController {
             }
         }
 
-        mav.addObject("isEditing", false);
         mav.addObject("listByCategory", listByCategory);
         return mav;
     }

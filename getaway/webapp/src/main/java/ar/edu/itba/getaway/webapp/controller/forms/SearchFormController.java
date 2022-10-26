@@ -88,7 +88,6 @@ public class SearchFormController {
         mav.addObject("set", set);
         mav.addObject("experience", experience);
         mav.addObject("experiences", experienceModels);
-        mav.addObject("isEditing", false);
 
         return mav;
     }

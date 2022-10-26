@@ -60,7 +60,6 @@
                            <jsp:param name="search" value="true"/>
                            <jsp:param name="avgReviews" value="${experience.averageScore}"/>
                            <jsp:param name="reviewCount" value="${experience.reviewCount}"/>
-                           <jsp:param name="isEditing" value="${isEditing}"/>
                            <jsp:param name="pageNum" value="${currentPage}"/>
                         </jsp:include>
                      </c:forEach>

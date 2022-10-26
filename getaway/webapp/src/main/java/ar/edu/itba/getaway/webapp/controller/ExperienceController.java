@@ -135,7 +135,6 @@ public class ExperienceController {
         mav.addObject("currentPage", currentPage.getCurrentPage());
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
-        mav.addObject("isEditing", false);
 
         return mav;
     }

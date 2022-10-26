@@ -16,7 +16,6 @@
     <jsp:include page="/WEB-INF/components/carousel.jsp">
         <jsp:param name="listByCategory" value="${listByCategory}"/>
         <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
-        <jsp:param name="isEditing" value="${isEditing}"/>
         <jsp:param name="path" value="/"/>
     </jsp:include>
 

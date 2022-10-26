@@ -89,7 +89,6 @@ public class UserExperiencesController {
         mav.addObject("favExperienceModels", favExperienceModels);
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("experiences", experienceList);
-        mav.addObject("isEditing", false);
 
         return mav;
     }

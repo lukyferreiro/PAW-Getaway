@@ -48,7 +48,6 @@
                                                    value="${categoryList.get(experience).getAverageScore()}"/>
                                         <jsp:param name="reviewCount"
                                                    value="${categoryList.get(experience).getReviewCount()}"/>
-                                        <jsp:param name="isEditing" value="${param.isEditing}"/>
                                     </jsp:include>
                                 </c:forEach>
                             </div>

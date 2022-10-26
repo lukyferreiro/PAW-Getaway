@@ -47,7 +47,6 @@
                            <jsp:param name="path" value="/user/favourites"/>
                            <jsp:param name="avgReviews" value="${experience.getAverageScore()}"/>
                            <jsp:param name="reviewCount" value="${experience.getReviewCount()}"/>
-                           <jsp:param name="isEditing" value="${isEditing}"/>
                            <jsp:param name="orderBY" value="${orderBy}"/>
                            <jsp:param name="pageNum" value="${currentPage}"/>
                         </jsp:include>
