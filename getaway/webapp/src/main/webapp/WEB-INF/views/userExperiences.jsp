@@ -124,7 +124,7 @@
                                           <c:param name = "userQuery" value = "${userQuery}" />
                                           <c:param name="experience" value="${experience.experienceId}"/>
                                        </c:url>">
-                                                <button type="button" class="btn btn-eye" style="font-size: x-large" id="setFalse">
+                                                <button type="button" class="btn btn-observable" style="font-size: x-large" id="setFalse">
                                                    <i class="bi bi-eye"></i>
                                                 </button>
                                              </a>
@@ -137,7 +137,7 @@
                                           <c:param name = "userQuery" value = "${userQuery}" />
                                           <c:param name="experience" value="${experience.experienceId}"/>
                                        </c:url>">
-                                                <button type="button" class="btn btn-eye" style="font-size: x-large" id="setTrue">
+                                                <button type="button" class="btn btn-observable" style="font-size: x-large" id="setTrue">
                                                    <i class="bi bi-eye-slash"></i>
                                                 </button>
                                              </a>

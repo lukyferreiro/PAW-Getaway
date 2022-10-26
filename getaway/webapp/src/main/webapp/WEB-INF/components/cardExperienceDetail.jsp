@@ -121,7 +121,7 @@
                            <a href="<c:url value="${param.path}">
                                           <c:param name="setObs" value="${false}"/>
                                        </c:url>">
-                              <button type="button" class="btn btn-eye" style="font-size: x-large" id="setFalse">
+                              <button type="button" class="btn btn-observable" style="font-size: x-large" id="setFalse">
                                  <i class="bi bi-eye"></i>
                               </button>
                            </a>
@@ -130,7 +130,7 @@
                            <a href="<c:url value="${param.path}">
                                           <c:param name="setObs" value="${true}"/>
                                        </c:url>">
-                              <button type="button" class="btn btn-eye" style="font-size: x-large" id="setTrue">
+                              <button type="button" class="btn btn-observable" style="font-size: x-large" id="setTrue">
                                  <i class="bi bi-eye-slash"></i>
                               </button>
                            </a>
