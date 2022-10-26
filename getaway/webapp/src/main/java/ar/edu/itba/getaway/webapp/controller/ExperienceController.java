@@ -85,12 +85,20 @@ public class ExperienceController {
         // City
         final List<CityModel> cityModels = locationService.listAllCities();
 
+        UserModel owner = null;
+        if (principal != null) {
+            Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+            if(user.isPresent()){
+                owner = user.get();
+            }
+        }
+
         if (cityId.isPresent() && cityId.get()>0) {
             CityModel city = locationService.getCityById(cityId.get()).orElseThrow(CityNotFoundException::new);
-            currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, city, orderBy, pageNum);
+            currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, city, orderBy, pageNum, owner);
             mav.addObject("cityId", cityId.get());
         } else {
-            currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, null, orderBy, pageNum);
+            currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, null, orderBy, pageNum, owner);
             mav.addObject("cityId", -1);
         }
 
@@ -100,7 +108,7 @@ public class ExperienceController {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if(user.isPresent()){
                 if(experience.isPresent()){
-                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get());
+                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), user.get());
                     favExperienceService.setFav(user.get(), set, addFavExperience);
                 }
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
@@ -133,7 +141,7 @@ public class ExperienceController {
     }
 
     @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.POST})
-    public ModelAndView experiencePost(@PathVariable("categoryName") final String categoryName,
+    public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
                                        HttpServletRequest request,
                                        @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                        @Valid @ModelAttribute("filterForm") final FilterForm form,
@@ -182,7 +190,14 @@ public class ExperienceController {
 
         //This declaration of category is in order to check if the categoryName is valid
         final CategoryModel category = categoryService.getCategoryByName(categoryName).orElseThrow(CategoryNotFoundException::new);
-        final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
+        UserModel owner = null;
+        if (principal != null) {
+            Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+            if(user.isPresent()){
+                owner = user.get();
+            }
+        }
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId, owner).orElseThrow(ExperienceNotFoundException::new);
 
         final Page<ReviewModel> currentPage = reviewService.getReviewAndUser(experience, pageNum);
         final List<ReviewModel> reviews = currentPage.getContent();
@@ -256,11 +271,5 @@ public class ExperienceController {
 
         return mav;
     }
-
-//    void updateExperience(Long experienceId, String experienceName, String experienceAddress, String experienceDescription, String experienceEmail, String experienceUrl, Double experiencePrice, CityModel experienceCity, CategoryModel experienceCategory, UserModel user, ImageModel experienceImage, Boolean observable, Integer views){
-//        final ExperienceModel toUpdateExperience = new ExperienceModel(experienceId,experienceName, experienceAddress, experienceDescription,
-//                experienceEmail, experienceUrl, experiencePrice, experienceCity, experienceCategory, user, experienceImage, observable, views );
-//        experienceService.updateExperienceWithoutImg(toUpdateExperience);
-//    }
 
 }

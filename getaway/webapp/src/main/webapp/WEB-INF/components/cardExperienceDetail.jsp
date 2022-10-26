@@ -118,7 +118,7 @@
                   <div class="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
                      <c:choose>
                         <c:when test="${param.observable}">
-                           <a href="<c:url value="/user/experiences">
+                           <a href="<c:url value="${param.path}">
                                           <c:param name="setObs" value="${false}"/>
                                        </c:url>">
                               <button type="button" class="btn btn-eye" style="font-size: x-large" id="setFalse">
@@ -127,7 +127,7 @@
                            </a>
                         </c:when>
                         <c:otherwise>
-                           <a href="<c:url value="/user/experiences">
+                           <a href="<c:url value="${param.path}">
                                           <c:param name="setObs" value="${true}"/>
                                        </c:url>">
                               <button type="button" class="btn btn-eye" style="font-size: x-large" id="setTrue">

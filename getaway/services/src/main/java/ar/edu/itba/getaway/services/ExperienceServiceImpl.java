@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -80,9 +81,9 @@ public class ExperienceServiceImpl implements ExperienceService {
 
 
     @Override
-    public Optional<ExperienceModel> getVisibleExperienceById(Long experienceId) {
+    public Optional<ExperienceModel> getVisibleExperienceById(Long experienceId, UserModel user) {
         LOGGER.debug("Retrieving experience with id {}", experienceId);
-        return experienceDao.getVisibleExperienceById(experienceId);
+        return experienceDao.getVisibleExperienceById(experienceId, user);
     }
 
     @Override
@@ -92,12 +93,12 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page) {
+    public Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page, UserModel user) {
         int totalPages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {} ", page);
-        Long total = experienceDao.countListByFilter(category, max, score, city);
+        Long total = experienceDao.countListByFilter(category, max, score, city,user);
         if (total > 0){
             LOGGER.debug("Total experiences found: {}", total);
 
@@ -111,7 +112,7 @@ public class ExperienceServiceImpl implements ExperienceService {
                 page = 1;
             }
 
-            experienceModelList = experienceDao.listExperiencesByFilter(category, max, score, city, order, page, PAGE_SIZE);
+            experienceModelList = experienceDao.listExperiencesByFilter(category, max, score, city, order, page, PAGE_SIZE, user);
         } else {
             totalPages = 1;
         }

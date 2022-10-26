@@ -6,6 +6,7 @@ import ar.edu.itba.getaway.interfaces.services.ExperienceService;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
 import ar.edu.itba.getaway.interfaces.services.ImageService;
+import ar.edu.itba.getaway.models.UserModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,9 @@ public class ImagesController {
     @RequestMapping(path = "/experiences/{experienceId:[0-9]+}/image",
             method = RequestMethod.GET,
             produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId) {
+    public byte[] getExperiencesImages(@PathVariable("experienceId") final long experienceId, UserModel user) {
         LOGGER.info("Accessed experiences/{}/image GET controller", experienceId);
-        final ExperienceModel experienceModel = experienceService.getVisibleExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
+        final ExperienceModel experienceModel = experienceService.getVisibleExperienceById(experienceId, user).orElseThrow(ExperienceNotFoundException::new);
         return experienceModel.getExperienceImage().getImage();
     }
 

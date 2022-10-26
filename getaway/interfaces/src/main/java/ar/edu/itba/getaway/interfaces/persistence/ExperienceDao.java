@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.interfaces.persistence;
 
 import ar.edu.itba.getaway.models.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,11 +11,11 @@ public interface ExperienceDao {
     void updateExperience(ExperienceModel experienceModel);
     void deleteExperience(ExperienceModel experienceModel);
     Optional<ExperienceModel> getExperienceById (Long experienceId);
-    Optional<ExperienceModel> getVisibleExperienceById(Long experienceId);
+    Optional<ExperienceModel> getVisibleExperienceById(Long experienceId, UserModel user);
     List<ExperienceModel> listExperiencesByUser(UserModel user, CategoryModel category);
     Optional<Double> getMaxPriceByCategory(CategoryModel category);
-    List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page, Integer pageSize);
-    Long countListByFilter(CategoryModel categoryId, Double max, Long score, CityModel city);
+    List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page, Integer pageSize, UserModel user);
+    Long countListByFilter(CategoryModel categoryId, Double max, Long score, CityModel city, UserModel user);
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category);
 //    List<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, Integer page, Integer page_size);
 //    Integer getCountExperiencesFavsByUser(UserModel user);

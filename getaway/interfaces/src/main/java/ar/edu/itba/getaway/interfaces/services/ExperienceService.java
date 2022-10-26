@@ -3,6 +3,7 @@ package ar.edu.itba.getaway.interfaces.services;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,9 +12,9 @@ public interface ExperienceService {
     void updateExperience (ExperienceModel experienceModel, byte[] image);
     void deleteExperience (ExperienceModel experienceModel);
     Optional<ExperienceModel> getExperienceById(Long experienceId);
-    Optional<ExperienceModel> getVisibleExperienceById(Long experienceId);
+    Optional<ExperienceModel> getVisibleExperienceById(Long experienceId, UserModel user);
     List<ExperienceModel> listExperiencesByUser(UserModel user, CategoryModel category);
-    Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page);
+    Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page, UserModel user);
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category);
     Optional<Double> getMaxPriceByCategory(CategoryModel category);
     Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, Integer page);

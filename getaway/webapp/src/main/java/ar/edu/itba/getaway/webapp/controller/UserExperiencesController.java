@@ -66,7 +66,7 @@ public class UserExperiencesController {
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
         if(experience.isPresent()){
-            final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get());
+            final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), user);
             favExperienceService.setFav(user, set, addFavExperience);
         }
 
@@ -145,7 +145,6 @@ public class UserExperiencesController {
         mav.addObject("currentPage", currentPage.getCurrentPage());
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
-        mav.addObject("isEditing", true);
         mav.addObject("delete", delete.isPresent());
 
         return mav;

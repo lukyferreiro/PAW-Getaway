@@ -55,7 +55,7 @@ public class SearchFormController {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if(user.isPresent()){
                 if(experience.isPresent()){
-                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get());
+                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), user.get());
                     favExperienceService.setFav(user.get(), set, addFavExperience);
                 }
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
