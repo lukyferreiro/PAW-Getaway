@@ -118,7 +118,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         }
 
         LOGGER.debug("Max page value service: {}", totalPages);
-        return new Page<>(experienceModelList, page, totalPages);
+        return new Page<>(experienceModelList, page, totalPages, total);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         LOGGER.debug("Requested page {}", page);
 
-        Integer total = user.getFavCount();
+        Long total = Long.valueOf(user.getFavCount());
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -161,17 +161,17 @@ public class ExperienceServiceImpl implements ExperienceService {
         }
 
         LOGGER.debug("Max page value service: {}", totalPages);
-        return new Page<>(experienceModelList, page, totalPages);
+        return new Page<>(experienceModelList, page, totalPages, total);
     }
 
     @Override
-    public Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page) {
+    public Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, UserModel user) {
         int totalPages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {}", page);
 
-        Long total = experienceDao.getCountByName(name);
+        Long total = experienceDao.getCountByName(name, user);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -185,13 +185,13 @@ public class ExperienceServiceImpl implements ExperienceService {
             } else if (page < 0) {
                 page = 1;
             }
-            experienceModelList = experienceDao.listExperiencesByName(name, order, page, RESULT_PAGE_SIZE);
+            experienceModelList = experienceDao.listExperiencesByName(name, order, page, RESULT_PAGE_SIZE, user);
         } else {
             totalPages = 1;
         }
 
         LOGGER.debug("Max page value service: {}", totalPages);
-        return new Page<>(experienceModelList, page, totalPages);
+        return new Page<>(experienceModelList, page, totalPages, total);
     }
 
     @Override
@@ -246,7 +246,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         }
 
         LOGGER.debug("Max page value service: {}", totalPages);
-        return new Page<>(experienceModelList, page, totalPages);
+        return new Page<>(experienceModelList, page, totalPages, total);
     }
 
     @Transactional

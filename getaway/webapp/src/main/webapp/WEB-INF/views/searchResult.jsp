@@ -39,7 +39,7 @@
 <%--                     Cambiar a tamaño global no de página --%>
 
                      <h3 class="my-2">
-                        <spring:message code="searchResult.description" arguments="${experiences.size()},${query}"/></h3>
+                        <spring:message code="searchResult.description" arguments="${totalResults},${query}"/></h3>
                      <div style="margin: 0 20px 0 auto; flex:1;"></div>
                   </div>
 

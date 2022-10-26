@@ -6,11 +6,13 @@ public class Page<T> {
 
     private final List<T> content;
     private final Integer currentPage, totalPages;
+    private final Long totalResults;
 
-    public Page(List<T> content, Integer currentPage, Integer totalPages) {
+    public Page(List<T> content, Integer currentPage, Integer totalPages, Long totalResults) {
         this.content = content;
         this.currentPage = currentPage;
         this.totalPages = totalPages;
+        this.totalResults = totalResults;
     }
 
     public List<T> getContent() {
@@ -43,5 +45,9 @@ public class Page<T> {
             maxPage = currentPage + 1;
         }
         return maxPage;
+    }
+
+    public Long getTotalResults() {
+        return totalResults;
     }
 }

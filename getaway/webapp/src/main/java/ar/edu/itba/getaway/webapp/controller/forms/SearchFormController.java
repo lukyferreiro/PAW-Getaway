@@ -47,25 +47,36 @@ public class SearchFormController {
                                          Principal principal,
                                          HttpServletRequest request) {
         LOGGER.debug("Endpoint GET /search_result?query={}", query);
-        final Page<ExperienceModel> currentPage = experienceService.listExperiencesByName(searchForm.getQuery(), orderBy, pageNum);
         final ModelAndView mav = new ModelAndView("searchResult");
 
-        mav.addObject("favExperienceModels", new ArrayList<>());
+        UserModel owner = null;
         if (principal != null) {
-            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-            if(user.isPresent()){
-                if(experience.isPresent()){
-                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), user.get());
-                    favExperienceService.setFav(user.get(), set, addFavExperience);
-                }
-                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
-                mav.addObject("favExperienceModels", favExperienceModels);
-            }else if(set.isPresent()){
-                return new ModelAndView("redirect:/login");
+            Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+            if (user.isPresent()) {
+                owner = user.get();
             }
+        }
+
+        mav.addObject("favExperienceModels", new ArrayList<>());
+        if (owner != null) {
+//            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+//            if(user.isPresent()){
+            if (experience.isPresent()) {
+                final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), owner);
+                favExperienceService.setFav(owner, set, addFavExperience);
+            }
+            final List<Long> favExperienceModels = favExperienceService.listFavsByUser(owner);
+            mav.addObject("favExperienceModels", favExperienceModels);
+//            }else if(set.isPresent()){
+//                return new ModelAndView("redirect:/login");
+//            }
+//        }else if(set.isPresent()){
+//            return new ModelAndView("redirect:/login");
         }else if(set.isPresent()){
             return new ModelAndView("redirect:/login");
         }
+
+        final Page<ExperienceModel> currentPage = experienceService.listExperiencesByName(searchForm.getQuery(), orderBy, pageNum, owner );
 
         final OrderByModel[] orderByModels = OrderByModel.values();
         final List<ExperienceModel> experienceModels = currentPage.getContent();
@@ -79,6 +90,7 @@ public class SearchFormController {
             mav.addObject("orderBy", orderBy.get());
         }
 
+        mav.addObject("totalResults", currentPage.getTotalResults());
         mav.addObject("path", request.getServletPath());
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("currentPage", currentPage.getCurrentPage());

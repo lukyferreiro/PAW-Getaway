@@ -18,7 +18,7 @@ public interface ExperienceService {
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category);
     Optional<Double> getMaxPriceByCategory(CategoryModel category);
     Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, Integer page);
-    Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page);
+    Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, UserModel user);
     List<List<ExperienceModel>> getExperiencesListByCategories();
     boolean hasExperiencesByUser(UserModel user);
     boolean experienceBelongsToUser(UserModel user, ExperienceModel experience);

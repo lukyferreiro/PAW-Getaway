@@ -85,7 +85,7 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         LOGGER.debug("Max page value service: {}", totalPages);
-        return new Page<>(reviewUserModelList, page, totalPages);
+        return new Page<>(reviewUserModelList, page, totalPages, total);
     }
 
     @Override
@@ -122,6 +122,6 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         LOGGER.debug("Max page value service: {}", totalPages);
-        return new Page<>(reviewUserModelList, page, totalPages);
+        return new Page<>(reviewUserModelList, page, totalPages, total);
     }
 }

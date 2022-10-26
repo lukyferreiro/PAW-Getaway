@@ -51,7 +51,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     @Override
     public Optional<ExperienceModel> getVisibleExperienceById(Long experienceId, UserModel user) {
         LOGGER.debug("Get experience with id {}", experienceId);
-        final TypedQuery<ExperienceModel> query = em.createQuery("FROM ExperienceModel WHERE experienceId = :experienceId AND (observable = true OR user = :user)", ExperienceModel.class);
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId = :experienceId AND (exp.observable = true OR exp.user = :user)", ExperienceModel.class);
         query.setParameter("experienceId", experienceId);
         query.setParameter("user", user);
         return query.getResultList().stream().findFirst();
@@ -166,7 +166,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 //    }
 
     @Override
-    public List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, Integer pageSize) {
+    public List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, Integer pageSize, UserModel user) {
         String orderQuery;
         if (order.isPresent()){
             orderQuery = order.get().getSqlQuery();
@@ -174,17 +174,19 @@ public class ExperienceDaoImpl implements ExperienceDao {
         else {
             orderQuery = OrderByModel.OrderByRankDesc.getSqlQuery();
         }
-        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.observable=true " + orderQuery, ExperienceModel.class);
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND (exp.observable=true OR exp.user=:user)" + orderQuery, ExperienceModel.class);
         query.setParameter("name", name);
+        query.setParameter("user", user);
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
         return query.getResultList();
     }
 
     @Override
-    public Long getCountByName(String name) {
-        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.observable=true", Long.class);
+    public Long getCountByName(String name, UserModel user) {
+        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND (exp.observable=true OR exp.user=:user)", Long.class);
         query.setParameter("name", name);
+        query.setParameter("user", user);
         return query.getSingleResult();
     }
 

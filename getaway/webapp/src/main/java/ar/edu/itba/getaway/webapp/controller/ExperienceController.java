@@ -104,18 +104,18 @@ public class ExperienceController {
 
         // FavExperiences
         mav.addObject("favExperienceModels", new ArrayList<>());
-        if (principal != null) {
-            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-            if(user.isPresent()){
+        if (owner != null) {
+//            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+//            if(user.isPresent()){
                 if(experience.isPresent()){
-                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), user.get());
-                    favExperienceService.setFav(user.get(), set, addFavExperience);
+                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(),owner);
+                    favExperienceService.setFav(owner, set, addFavExperience);
                 }
-                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
+                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(owner);
                 mav.addObject("favExperienceModels", favExperienceModels);
-            }else if(set.isPresent()){
-                return new ModelAndView("redirect:/login");
-            }
+//            }else if(set.isPresent()){
+//                return new ModelAndView("redirect:/login");
+//            }
         }else if(set.isPresent()){
             return new ModelAndView("redirect:/login");
         }
@@ -223,13 +223,13 @@ public class ExperienceController {
         mav.addObject("favExperienceModels", new ArrayList<>());
         boolean obs;
 
-        if (principal != null) {
-            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-            if (user.isPresent()) {
-                final UserModel userModel = user.get();
+        if (owner != null) {
+//            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+//            if (user.isPresent()) {
+//                final UserModel userModel = user.get();
                 if (view.isPresent() || setObs.isPresent()) {
                     //si soy el usuario owner puedo edit la visibilidad
-                    if (experience.getUser().equals(userModel)) {
+                    if (experience.getUser().equals(owner)) {
                         if (setObs.isPresent()) {
                             obs = setObs.get();
                             experienceService.changeVisibility(experience, obs);
@@ -242,11 +242,11 @@ public class ExperienceController {
 //                    updateExperience(experience.getExperienceId(), experience.getExperienceName(), experience.getAddress(), experience.getDescription(),
 //                            experience.getEmail(), experience.getSiteUrl(), experience.getPrice(), experience.getCity(), experience.getCategory(), owner, experience.getExperienceImage(), obs, views);
                 }
-                favExperienceService.setFav(userModel, set, Optional.of(experience));
-                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(userModel);
+                favExperienceService.setFav(owner, set, Optional.of(experience));
+                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(owner);
                 mav.addObject("favExperienceModels", favExperienceModels);
-                mav.addObject("isEditing", experienceService.experienceBelongsToUser(userModel, experience));
-            }
+                mav.addObject("isEditing", experienceService.experienceBelongsToUser(owner, experience));
+//            }
 //            } else {
 //                if(set.isPresent()){
 //                    return new ModelAndView("redirect:/login");
