@@ -140,8 +140,9 @@ public class ExperienceController {
     }
 
     @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.POST})
-    public ModelAndView experience(@PathVariable("categoryName") final String categoryName,
+    public ModelAndView experienceFilter(@PathVariable("categoryName") final String categoryName,
                                        HttpServletRequest request,
+                                       @RequestParam Optional<OrderByModel> orderBy,
                                        @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                        @Valid @ModelAttribute("filterForm") final FilterForm form,
                                        final BindingResult errors,
@@ -150,14 +151,12 @@ public class ExperienceController {
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
 
         if (errors.hasErrors()) {
-            return experienceGet(categoryName, form, searchForm, principal, request, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
+            return experienceGet(categoryName, form, searchForm, principal, request, orderBy, Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
         }
 
         //TODO: check add only city and then access cityid. Multiple db access
         final Optional<CityModel> cityModel = locationService.getCityByName(form.getExperienceCity());
-        if (cityModel.isPresent()) {
-            mav.addObject("cityId", cityModel.get().getCityId());
-        }
+        cityModel.ifPresent(model -> mav.addObject("cityId", model.getCityId()));
 
         final Double priceMax = form.getExperiencePriceMax();
         if (priceMax != null) {
@@ -168,6 +167,8 @@ public class ExperienceController {
         if (score != -1) {
             mav.addObject("score", score);
         }
+
+        orderBy.ifPresent(orderByModel -> mav.addObject("orderBy", orderByModel));
 
         return mav;
     }

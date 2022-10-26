@@ -68,7 +68,9 @@
                </button>
 
 
-               <a href="<c:url value = "/experiences/${categoryName}"/>">
+               <a href="<c:url value = "/experiences/${categoryName}">
+                           <c:param name = "orderBy" value = "${orderBy}" />
+                        </c:url>">
                   <button class="btn btn-clean-filter px-3 py-2 my-2" type="button" id="cleanFilterFormButton" form="submitForm">
                      <spring:message code="filters.btn.clear"/>
                   </button>
