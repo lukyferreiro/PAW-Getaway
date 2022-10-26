@@ -39,7 +39,6 @@
     <div>
 
 
-    <c:if test="${param.orderPrev != null}">
             <span class="orderInfo">
                 <span><spring:message code="order.${param.orderPrev.toString()}"/></span>
                 <a href="<c:url value="${param.path}">
@@ -65,7 +64,6 @@
                     </button>
                 </a>
             </span>
-        </c:if>
     </div>
 
 

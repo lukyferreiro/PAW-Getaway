@@ -32,7 +32,7 @@
                            <jsp:param name="orderByModels" value="${orderByModels}"/>
                            <jsp:param name="path" value="${path}"/>
                            <jsp:param name="query" value="${query}"/>
-                           <jsp:param name="orderPrev" value="${orderBy == null ? null : orderBy}"/>
+                           <jsp:param name="orderPrev" value="${orderBy}"/>
                         </jsp:include>
                      </div>
 

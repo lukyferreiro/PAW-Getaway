@@ -72,6 +72,7 @@ public class UserExperiencesController {
 
         final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user);
         final OrderByModel[] orderByModels = OrderByModel.values();
+        mav.addObject("orderBy", OrderByModel.OrderByRankDesc);
 
         final Page<ExperienceModel> currentPage = experienceService.listExperiencesFavsByUser(user, orderBy, pageNum);
         final List<ExperienceModel> experienceList = currentPage.getContent();

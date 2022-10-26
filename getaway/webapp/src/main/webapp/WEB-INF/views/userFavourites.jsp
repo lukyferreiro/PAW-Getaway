@@ -26,7 +26,7 @@
                         <jsp:include page="/WEB-INF/components/orderDropdown.jsp">
                            <jsp:param name="orderByModels" value="${orderByModels}"/>
                            <jsp:param name="path" value="/user/favourites"/>
-                           <jsp:param name="orderPrev" value="${orderBy == null ? null : orderBy}"/>
+                           <jsp:param name="orderPrev" value="${orderBy}"/>
                         </jsp:include>
                      </div>
                      <h3 class="title m-0"><spring:message code="favourite.description"/></h3>
