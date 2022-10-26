@@ -137,6 +137,7 @@ public class UserExperiencesController {
         final String path = request.getServletPath();
 
         mav.addObject("path", path);
+        mav.addObject("userQuery", userQuery.orElse(""));
 
         mav.addObject("hasExperiences", hasExperiences);
         mav.addObject("experienceList", currentExperiences);

@@ -121,6 +121,7 @@
                                           <c:param name="pageNum" value="${currentPage}"/>
                                           <c:param name="set" value="${false}"/>
                                           <c:param name = "orderBy" value = "${orderBy}" />
+                                          <c:param name = "userQuery" value = "${userQuery}" />
                                           <c:param name="experience" value="${experience.experienceId}"/>
                                        </c:url>">
                                                 <button type="button" class="btn btn-eye" style="font-size: x-large" id="setFalse">
@@ -133,6 +134,7 @@
                                           <c:param name="pageNum" value="${currentPage}"/>
                                           <c:param name="set" value="${true}"/>
                                           <c:param name = "orderBy" value = "${orderBy}" />
+                                          <c:param name = "userQuery" value = "${userQuery}" />
                                           <c:param name="experience" value="${experience.experienceId}"/>
                                        </c:url>">
                                                 <button type="button" class="btn btn-eye" style="font-size: x-large" id="setTrue">
@@ -167,6 +169,7 @@
                         <li class="page-item">
                            <a class="page-link "
                               href="<c:url value = "/user/experiences">
+                                       <c:param name = "userQuery" value = "${userQuery}" />
                                        <c:param name = "pageNum" value = "1"/>
                                        <c:param name = "orderBy" value = "${orderBy}" />
                                  </c:url>">
@@ -177,6 +180,7 @@
                            <li class="page-item">
                               <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
                                  href="<c:url value = "/user/experiences">
+                                       <c:param name = "userQuery" value = "${userQuery}" />
                                        <c:param name = "pageNum" value = "${i}"/>
                                        <c:param name = "orderBy" value = "${orderBy}" />
                                        </c:url>">
@@ -187,6 +191,7 @@
                         <li class="page-item">
                            <a class="page-link "
                               href="<c:url value = "/user/experiences">
+                                       <c:param name = "userQuery" value = "${userQuery}" />
                                        <c:param name = "pageNum" value = "${totalPages}"/>
                                        <c:param name = "orderBy" value = "${orderBy}" />
                                  </c:url>">
