@@ -114,6 +114,7 @@ public class UserExperiencesController {
 
         // Order By
         final OrderByModel[] orderByModels = OrderByModel.values();
+        mav.addObject("orderBy", OrderByModel.OrderByAZ);
         orderBy.ifPresent(orderByModel -> mav.addObject("orderBy", orderByModel));
         mav.addObject("orderByModels", orderByModels);
 
