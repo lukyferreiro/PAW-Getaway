@@ -46,9 +46,9 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS experiences
 (
     experienceId SERIAL NOT NULL,
-    experienceName VARCHAR(255) NOT NULL,
+    experienceName VARCHAR(50) NOT NULL,
     price DECIMAL,
-    address VARCHAR(255) NOT NULL,
+    address VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL,
     description TEXT,
     siteUrl TEXT,
