@@ -83,7 +83,11 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public Optional<ExperienceModel> getVisibleExperienceById(Long experienceId, UserModel user) {
         LOGGER.debug("Retrieving experience with id {}", experienceId);
-        return experienceDao.getVisibleExperienceById(experienceId, user);
+        Optional<ExperienceModel> maybeExperience = experienceDao.getVisibleExperienceById(experienceId, user);
+        if (maybeExperience.isPresent()){
+            maybeExperience.get().setIsFav(user != null && user.isFav(maybeExperience.get()));
+        }
+        return maybeExperience;
     }
 
     @Override
@@ -172,7 +176,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         }
 
         for (ExperienceModel experience : experienceModelList) {
-            experience.setIsFav(user != null && user.isFav(experience));
+            experience.setIsFav(true);
         }
 
         LOGGER.debug("Max page value service: {}", totalPages);
@@ -204,6 +208,11 @@ public class ExperienceServiceImpl implements ExperienceService {
         } else {
             totalPages = 1;
         }
+
+        for (ExperienceModel experience : experienceModelList) {
+            experience.setIsFav(user != null && user.isFav(experience));
+        }
+
 
         LOGGER.debug("Max page value service: {}", totalPages);
         return new Page<>(experienceModelList, page, totalPages, total);

@@ -94,6 +94,16 @@ public class ExperienceController {
             }
         }
 
+        // FavExperiences
+        if (owner != null) {
+                if(experience.isPresent()){
+                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(),owner);
+                    favExperienceService.setFav(owner, set, addFavExperience);
+                }
+        }else if(set.isPresent()){
+            return new ModelAndView("redirect:/login");
+        }
+
         if (cityId.isPresent() && cityId.get()>0) {
             CityModel city = locationService.getCityById(cityId.get()).orElseThrow(CityNotFoundException::new);
             currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, city, orderBy, pageNum, owner);
@@ -101,19 +111,6 @@ public class ExperienceController {
         } else {
             currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, null, orderBy, pageNum, owner);
             mav.addObject("cityId", -1);
-        }
-
-        // FavExperiences
-//        mav.addObject("favExperienceModels", new ArrayList<>());
-        if (owner != null) {
-                if(experience.isPresent()){
-                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(),owner);
-                    favExperienceService.setFav(owner, set, addFavExperience);
-                }
-//                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(owner);
-//                mav.addObject("favExperienceModels", favExperienceModels);
-        }else if(set.isPresent()){
-            return new ModelAndView("redirect:/login");
         }
 
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
@@ -213,13 +210,9 @@ public class ExperienceController {
         mav.addObject("maxPage", currentPage.getMaxPage());
         mav.addObject("totalPages", currentPage.getTotalPages());
 
-//        mav.addObject("favExperienceModels", new ArrayList<>());
         boolean obs;
 
         if (owner != null) {
-//            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-//            if (user.isPresent()) {
-//                final UserModel userModel = user.get();
                 if (view.isPresent() || setObs.isPresent()) {
                     //si soy el usuario owner puedo edit la visibilidad
                     if (experience.getUser().equals(owner)) {
@@ -232,31 +225,14 @@ public class ExperienceController {
                             experienceService.increaseViews(experience);
                         }
                     }
-//                    updateExperience(experience.getExperienceId(), experience.getExperienceName(), experience.getAddress(), experience.getDescription(),
-//                            experience.getEmail(), experience.getSiteUrl(), experience.getPrice(), experience.getCity(), experience.getCategory(), owner, experience.getExperienceImage(), obs, views);
                 }
                 favExperienceService.setFav(owner, set, Optional.of(experience));
-//                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(owner);
-//                mav.addObject("favExperienceModels", favExperienceModels);
                 mav.addObject("isEditing", experienceService.experienceBelongsToUser(owner, experience));
-//            }
-//            } else {
-//                if(set.isPresent()){
-//                    return new ModelAndView("redirect:/login");
-//                }else if(view.isPresent()){
-//                    views += 1;
-//                    updateExperience(experience.getExperienceId(),experience.getExperienceName(), experience.getAddress(), experience.getDescription(),
-//                            experience.getEmail(), experience.getSiteUrl(), experience.getPrice(), experience.getCity(), experience.getCategory(), owner, experience.getExperienceImage(), obs, views );
-//                }
-//                mav.addObject("isEditing", false);
-//            }
         } else {
             if(set.isPresent()){
                 return new ModelAndView("redirect:/login");
             }else if(view.isPresent()){
                 experienceService.increaseViews(experience);
-                //                updateExperience(experience.getExperienceId(),experience.getExperienceName(), experience.getAddress(), experience.getDescription(),
-//                        experience.getEmail(), experience.getSiteUrl(), experience.getPrice(), experience.getCity(), experience.getCategory(), owner, experience.getExperienceImage(), obs, views );
             }
             mav.addObject("isEditing", false);
         }

@@ -16,6 +16,7 @@
          <div class="container-fluid px-5 d-flex justify-content-center align-content-center flex-column">
 
             <jsp:include page="/WEB-INF/components/cardExperienceDetail.jsp">
+               <jsp:param name="isFav" value="${experience.isFav}"/>
                <jsp:param name="name" value="${experience.experienceName}"/>
                <jsp:param name="id" value="${experience.experienceId}"/>
                <jsp:param name="experienceCategoryName" value="${experience.category.categoryName}"/>

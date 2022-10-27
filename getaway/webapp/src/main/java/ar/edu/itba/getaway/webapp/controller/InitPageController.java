@@ -62,17 +62,13 @@ public class InitPageController {
                 final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), user);
                 favExperienceService.setFav(user, set, addFavExperience);
             }
-//            final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user);
-//            mav.addObject("favExperienceModels", favExperienceModels);
         } else {
-//            mav.addObject("favExperienceModels", new ArrayList<>());
             if (set.isPresent()) {
                 return new ModelAndView("redirect:/login");
             }
         }
 
         final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategories(user);
-
 
         mav.addObject("listByCategory", listByCategory);
         return mav;

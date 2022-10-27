@@ -127,7 +127,7 @@ public class UserModel {
             favExperiences.sort(orderByModel.get().comparator);
         }
         else {
-            favExperiences.sort(OrderByModel.OrderByAZ.comparator);
+            favExperiences.sort(OrderByModel.OrderByRankDesc.comparator);
         }
 
         Integer fromIndex = (page - 1) * pageSize;
