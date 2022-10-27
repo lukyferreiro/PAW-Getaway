@@ -39,8 +39,6 @@ public class UserModel {
     )
     private List<ExperienceModel> favExperiences;
 
-    //Repeat for reviews and experiences ???
-
     /* default */
     protected UserModel() {
         // Just for Hibernate

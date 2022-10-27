@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<div>
+<div class="d-flex justify-content-center align-content-center">
     <div>
         <jsp:useBean id="orderByModels" scope="request" type="ar.edu.itba.getaway.models.OrderByModel[]"/>
 
@@ -36,9 +36,4 @@
             </c:forEach>
         </ul>
     </div>
-    <div>
-
-    </div>
-
-
 </div>

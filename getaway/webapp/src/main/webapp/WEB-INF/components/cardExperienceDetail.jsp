@@ -24,7 +24,7 @@
             </c:when>
             <c:otherwise>
                <img class="container-fluid p-0" style="height: fit-content; max-height: 550px;" alt="Imagen ${param.experienceCategoryName}"
-                    src="<c:url value="/resources/images/${param.experienceCategoryName}.jpg" />">
+                    src="<c:url value="/resources/images/${param.experienceCategoryName}.svg" />">
             </c:otherwise>
          </c:choose>
       </div>

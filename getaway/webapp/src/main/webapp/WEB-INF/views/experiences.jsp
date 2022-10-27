@@ -79,7 +79,7 @@
 
             <div class="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex flex-column justify-content-center align-content-center"
                  style="min-height: 650px;">
-               <div>
+               <div class="d-flex justify-content-start">
                   <jsp:include page="/WEB-INF/components/orderDropdown.jsp">
                      <jsp:param name="orderByModels" value="${orderByModels}"/>
                      <jsp:param name="path" value="${path}"/>

@@ -26,19 +26,8 @@
                   </c:if>
 
                   <%--SEARCH and ORDER--%>
-                  <div class="d-flex align-items-center p-3">
-                     <button class="btn btn-search-navbar p-0" type="submit" form="searchExperiencePrivateForm">
-                        <img src="<c:url value="/resources/images/ic_lupa.svg"/>" alt="Icono lupa">
-                     </button>
-                     <spring:message code="navbar.search" var="placeholder"/>
-                     <c:url value="/user/experiences" var="searchPrivatePostPath"/>
-                     <form:form modelAttribute="searchFormPrivate" action="${searchPrivatePostPath}" id="searchExperiencePrivateForm" method="post"
-                                acceptCharset="UTF-8" cssClass="my-auto">
-                        <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>
-                        <form:errors path="query" element="p" cssClass="form-error-label"/>
-                     </form:form>
-
-                     <div>
+                  <div class="d-flex justify-content-center align-content-center">
+                     <div style="margin: 0 auto 0 20px; flex:1;">
                         <jsp:include page="/WEB-INF/components/orderDropdown.jsp">
                            <jsp:param name="orderByModels" value="${orderByModels}"/>
                            <jsp:param name="path" value="${path}"/>
@@ -46,14 +35,22 @@
                            <jsp:param name="orderPrev" value="${orderBy}"/>
                         </jsp:include>
                      </div>
-                  </div>
-
-
-                  <div class="d-flex justify-content-center align-content-center">
                      <h3 class="title m-0"><spring:message code="experience.description"/></h3>
+                     <div class="d-flex justify-content-center align-content-center" style="margin: 0 20px 0 auto; flex:1;">
+                        <button class="btn btn-search-navbar p-0" type="submit" form="searchExperiencePrivateForm">
+                           <img src="<c:url value="/resources/images/ic_lupa.svg"/>" alt="Icono lupa">
+                        </button>
+                        <spring:message code="navbar.search" var="placeholder"/>
+                        <c:url value="/user/experiences" var="searchPrivatePostPath"/>
+                        <form:form modelAttribute="searchFormPrivate" action="${searchPrivatePostPath}" id="searchExperiencePrivateForm" method="post"
+                                   acceptCharset="UTF-8" cssClass="my-auto">
+                           <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>
+                           <form:errors path="query" element="p" cssClass="form-error-label"/>
+                        </form:form>
+                     </div>
                   </div>
-               <div class="mt-5 mx-5">
 
+                  <div class="mt-4 mx-5">
                      <c:choose>
                         <c:when test="${experienceList.size() == 0}">
                            <div class="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
@@ -164,44 +161,43 @@
                         </c:otherwise>
                      </c:choose>
 
-                  <div class="mt-auto d-flex justify-content-center align-items-center">
-                     <ul class="pagination m-0">
-                        <li class="page-item">
-                           <a class="page-link "
-                              href="<c:url value = "/user/experiences">
-                                       <c:param name = "userQuery" value = "${userQuery}" />
-                                       <c:param name = "pageNum" value = "1"/>
-                                       <c:param name = "orderBy" value = "${orderBy}" />
-                                 </c:url>">
-                              <spring:message code="pagination.start"/>
-                           </a>
-                        </li>
-                        <c:forEach var="i" begin="${minPage}" end="${maxPage}">
+                     <div class="mt-auto d-flex justify-content-center align-items-center">
+                        <ul class="pagination m-0">
                            <li class="page-item">
-                              <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
+                              <a class="page-link "
                                  href="<c:url value = "/user/experiences">
-                                       <c:param name = "userQuery" value = "${userQuery}" />
-                                       <c:param name = "pageNum" value = "${i}"/>
-                                       <c:param name = "orderBy" value = "${orderBy}" />
-                                       </c:url>">
-                                 <c:out value="${i}"/>
+                                          <c:param name = "userQuery" value = "${userQuery}" />
+                                          <c:param name = "pageNum" value = "1"/>
+                                          <c:param name = "orderBy" value = "${orderBy}" />
+                                    </c:url>">
+                                 <spring:message code="pagination.start"/>
                               </a>
                            </li>
-                        </c:forEach>
-                        <li class="page-item">
-                           <a class="page-link "
-                              href="<c:url value = "/user/experiences">
-                                       <c:param name = "userQuery" value = "${userQuery}" />
-                                       <c:param name = "pageNum" value = "${totalPages}"/>
-                                       <c:param name = "orderBy" value = "${orderBy}" />
-                                 </c:url>">
-                              <spring:message code="pagination.end"/>
-                           </a>
-                        </li>
-                     </ul>
+                           <c:forEach var="i" begin="${minPage}" end="${maxPage}">
+                              <li class="page-item">
+                                 <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"
+                                    href="<c:url value = "/user/experiences">
+                                          <c:param name = "userQuery" value = "${userQuery}" />
+                                          <c:param name = "pageNum" value = "${i}"/>
+                                          <c:param name = "orderBy" value = "${orderBy}" />
+                                          </c:url>">
+                                    <c:out value="${i}"/>
+                                 </a>
+                              </li>
+                           </c:forEach>
+                           <li class="page-item">
+                              <a class="page-link "
+                                 href="<c:url value = "/user/experiences">
+                                          <c:param name = "userQuery" value = "${userQuery}" />
+                                          <c:param name = "pageNum" value = "${totalPages}"/>
+                                          <c:param name = "orderBy" value = "${orderBy}" />
+                                    </c:url>">
+                                 <spring:message code="pagination.end"/>
+                              </a>
+                           </li>
+                        </ul>
+                     </div>
                   </div>
-
-               </div>
                </c:otherwise>
             </c:choose>
          </div>

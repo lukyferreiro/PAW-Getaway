@@ -53,4 +53,12 @@
 
 .btn-close{
     color: black;
+    font-size: small;
+}
+
+.btn-close:hover, .btn-close:focus {
+    color: black;
+    transform: scale(1.02);
+    transition: 0.3s;
+    box-shadow: none;
 }
