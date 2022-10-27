@@ -58,14 +58,6 @@ public class ExperienceFormController {
                                              @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                              Principal principal,
                                              HttpServletRequest request) {
-//        if (principal != null) {
-//            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-//            if(user.isPresent()){
-//                if(!user.get().hasRole("VERIFIED")){
-//                    return new ModelAndView("pleaseVerify");
-//                }
-//            }
-//        }
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("experienceForm");
         final ExperienceCategory[] categoryModels = ExperienceCategory.values();
@@ -120,12 +112,10 @@ public class ExperienceFormController {
         final byte[] image = (experienceImg.isEmpty()) ? null : experienceImg.getBytes();
         final ExperienceModel experienceModel = experienceService.createExperience(form.getExperienceName(), form.getExperienceAddress(), description,
                 form.getExperienceMail(), url, price, cityModel, category, user, image);
-//        if(!user.hasRole("PROVIDER")){
         //TODO CHECK
-        final UserModel userModelProvider = userService.getUserByExperience(experienceModel).get();
+        final UserModel userModelProvider = userService.getUserByExperience(experienceModel);
         LOGGER.debug("Updating SpringContextHolder");
         forceLogin(userModelProvider, request);
-//        }
 
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + experienceModel.getCategory().getCategoryName() + "/" + experienceModel.getExperienceId());
         mav.addObject("success", true);

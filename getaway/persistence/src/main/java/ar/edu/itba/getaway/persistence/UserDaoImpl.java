@@ -36,15 +36,6 @@ public class UserDaoImpl implements UserDao {
         em.persist(userModel);
         LOGGER.info("Created user with id {}", userModel.getUserId());
 
-//        Optional<RoleModel> roleModel;
-//        for (RoleModel roleModel : roleModels) {
-////            roleModel = getRoleByName(role);
-//            addRole(userModel, roleModel);
-////            UserRoleModel userRoleModel = new UserRoleModel(userModel, roleModel.get());
-////            em.persist(userRoleModel);
-////            LOGGER.debug("Added role {} to user with id {}", role, userModel.getUserId());
-//        }
-
         return userModel;
     }
 
@@ -63,16 +54,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<UserModel> getUserByExperience(ExperienceModel experience){
-        return Optional.ofNullable(experience.getUser());
-    }
-
-    @Override
-    public Optional<UserModel> getUserByReview(ReviewModel review){
-        return Optional.ofNullable(review.getUser());
-    }
-
-    @Override
     public Collection<RoleModel> getUserRoles(UserModel user) {
         return user.getRoles();
     }
@@ -87,14 +68,6 @@ public class UserDaoImpl implements UserDao {
         return userRoles;
     }
 
-//    @Override
-//    public Collection<UserRoleModel> getUserRolesModels(UserModel user){
-//        LOGGER.debug("Get roles of user with id {}", user.getUserId());
-//        final TypedQuery<UserRoleModel> query = em.createQuery("FROM UserRoleModel WHERE user = :user", UserRoleModel.class);
-//        query.setParameter("user", user);
-//        return query.getResultList();
-//    }
-
     @Override
     public Optional<RoleModel> getRoleByName(Roles role) {
         LOGGER.debug("Get role with name {}", role.name());
@@ -102,13 +75,6 @@ public class UserDaoImpl implements UserDao {
         query.setParameter("roleName", role);
         return query.getResultList().stream().findFirst();
     }
-
-//    private Optional<UserRoleModel> getUserRole(UserModel user, RoleModel role) {
-//        final TypedQuery<UserRoleModel> query = em.createQuery("FROM UserRoleModel WHERE user = :user AND role = :role", UserRoleModel.class);
-//        query.setParameter("user", user);
-//        query.setParameter("role", role);
-//        return query.getResultList().stream().findFirst();
-//    }
 
     @Override
     public Optional<UserModel> updateRoles(UserModel user, Roles oldVal, Roles newVal) {
@@ -139,15 +105,5 @@ public class UserDaoImpl implements UserDao {
         final RoleModel roleModel = getRoleByName(newRole).get();
         user.addRole(roleModel);
         return Optional.ofNullable(em.merge(user));
-//        final UserRoleModel userRoleModel = new UserRoleModel(user, roleModel);
-//        em.persist(userRoleModel);
     }
-
-//    @Override
-//    public Optional<UserModelWithReviews> getUserWithReviewsByEmail (String email){
-//        LOGGER.debug("Get user and reviews with email {}", email);
-//        final TypedQuery<UserModelWithReviews> query = em.createQuery("FROM UserModelWithReviews WHERE email = :email", UserModelWithReviews.class);
-//        query.setParameter("email", email);
-//        return query.getResultList().stream().findFirst();
-//    }
 }

@@ -48,15 +48,6 @@ public class ReviewFormController {
                                          HttpServletRequest request) {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
 
-//        if (principal != null) {
-//            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-//            if(user.isPresent()){
-//                if(!user.get().hasRole("VERIFIED")){
-//                    return new ModelAndView("pleaseVerify");
-//                }
-//            }
-//        }
-
         final ModelAndView mav = new ModelAndView("reviewForm");
 
         mav.addObject("endpoint", request.getServletPath());

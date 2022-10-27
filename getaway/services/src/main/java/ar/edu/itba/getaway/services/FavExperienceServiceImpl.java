@@ -37,13 +37,7 @@ public class FavExperienceServiceImpl implements FavExperienceService {
 
     @Override
     public boolean isFav(UserModel user, ExperienceModel experience) {
-        return favExperienceDao.isFav(user, experience);
-    }
-
-    @Override
-    public List<Long> listFavsByUser(UserModel user) {
-        LOGGER.debug("Retrieving all favs of user with id {}", user.getUserId());
-        return favExperienceDao.listFavsByUser(user);
+        return user.isFav(experience);
     }
 
     @Transactional

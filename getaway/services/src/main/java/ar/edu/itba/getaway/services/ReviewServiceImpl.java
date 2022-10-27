@@ -25,10 +25,6 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private ReviewDao reviewDao;
-    @Autowired
-    private ImageService imageService;
-    @Autowired
-    private ExperienceService experienceService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImpl.class);
     private static final Integer PAGE_SIZE = 6;
@@ -64,7 +60,6 @@ public class ReviewServiceImpl implements ReviewService {
         LOGGER.debug("Requested page {}", page);
 
         Long total = reviewDao.getReviewByExperienceCount(experience);
-//        Long total = experience.getReviewCount();
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -78,7 +73,6 @@ public class ReviewServiceImpl implements ReviewService {
             } else if (page < 0) {
                 page = 1;
             }
-//            reviewUserModelList = experience.getExperienceReviews(page, PAGE_SIZE);
             reviewUserModelList = reviewDao.getReviewsByExperience(experience, page, PAGE_SIZE);
         } else {
             totalPages = 1;

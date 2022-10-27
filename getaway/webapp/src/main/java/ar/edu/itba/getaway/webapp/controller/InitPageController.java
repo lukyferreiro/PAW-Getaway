@@ -31,8 +31,6 @@ public class InitPageController {
     private FavExperienceService favExperienceService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private ReviewService reviewService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InitPageController.class);
 
@@ -45,9 +43,6 @@ public class InitPageController {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("mainPage");
 
-
-
-//        mav.addObject("favExperienceModels", new ArrayList<>());
 
         UserModel user = null;
         if (principal != null) {

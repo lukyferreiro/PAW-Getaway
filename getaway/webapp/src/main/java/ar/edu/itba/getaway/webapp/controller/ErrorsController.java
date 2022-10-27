@@ -146,17 +146,17 @@ public class ErrorsController {
         return mav;
     }
 
-//    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
-//    @ExceptionHandler(value = Exception.class)
-//    public ModelAndView serverException() {
-//        LOGGER.error("Error serverException caught");
-//        final Locale locale = LocaleContextHolder.getLocale();
-//        final String error = messageSource.getMessage("errors.ServerError", null, locale);
-//        final Long code = Long.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.toString());
-//        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
-//        mav.addObject("description", error);
-//        mav.addObject("code", code);
-//        return mav;
-//    }
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = Exception.class)
+    public ModelAndView serverException() {
+        LOGGER.error("Error serverException caught");
+        final Locale locale = LocaleContextHolder.getLocale();
+        final String error = messageSource.getMessage("errors.ServerError", null, locale);
+        final Long code = Long.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+        final ModelAndView mav = new ModelAndView(ERROR_VIEW);
+        mav.addObject("description", error);
+        mav.addObject("code", code);
+        return mav;
+    }
 
 }

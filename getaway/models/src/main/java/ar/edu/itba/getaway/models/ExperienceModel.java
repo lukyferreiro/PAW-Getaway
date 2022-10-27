@@ -42,9 +42,6 @@ public class ExperienceModel {
     @OneToOne
     @JoinColumn(name = "imgId")
     private ImageModel experienceImage;
-//    @OneToMany(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "experienceId")
-//    private List<ReviewModel> experienceReviews;
 
     @Column(name = "observable", nullable = false)
     private Boolean observable;
@@ -203,11 +200,6 @@ public class ExperienceModel {
         this.experienceImage = experienceImage;
     }
 
-//    public List<ReviewModel> getExperienceReviews(Integer page, Integer pageSize) {
-//        Integer fromIndex = (page - 1) * pageSize;
-//        Integer toIndex = Math.min((fromIndex + pageSize), experienceReviews.size());
-//        return experienceReviews.subList(fromIndex, toIndex);
-//    }
     @Transient
     public Long getReviewCount() {
         return reviewCount;
@@ -254,6 +246,4 @@ public class ExperienceModel {
     public int hashCode() {
         return Objects.hash(experienceId);
     }
-
-
 }

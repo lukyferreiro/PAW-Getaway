@@ -39,11 +39,7 @@ public class UserExperiencesController {
     @Autowired
     private LocationService locationService;
     @Autowired
-    private ImageService imageService;
-    @Autowired
     private FavExperienceService favExperienceService;
-    @Autowired
-    private ReviewService reviewService;
     @Autowired
     private CategoryService categoryService;
 
@@ -70,7 +66,6 @@ public class UserExperiencesController {
             favExperienceService.setFav(user, set, addFavExperience);
         }
 
-//        final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user);
         final OrderByModel[] orderByModels = OrderByModel.values();
         mav.addObject("orderBy", OrderByModel.OrderByRankDesc);
 
@@ -118,22 +113,16 @@ public class UserExperiencesController {
         orderBy.ifPresent(orderByModel -> mav.addObject("orderBy", orderByModel));
         mav.addObject("orderByModels", orderByModels);
 
-
         //Observable
         if(experience.isPresent() && set.isPresent()){
             final ExperienceModel myExperience = experienceService.getExperienceById(experience.get()).orElseThrow(ExperienceNotFoundException::new);
-//            final ExperienceModel toUpdateExperience = new ExperienceModel(myExperience.getExperienceId(),myExperience.getExperienceName(), myExperience.getAddress(), myExperience.getDescription(),
-//                    myExperience.getEmail(), myExperience.getSiteUrl(), myExperience.getPrice(), myExperience.getCity(), myExperience.getCategory(), user, myExperience.getExperienceImage(), set.get(), myExperience.getViews() );
-//
-//            myExperience.setObservable(set.get());
-//            experienceService.updateExperienceWithoutImg(myExperience);
             experienceService.changeVisibility(myExperience, set.get());
         }
 
         userQuery.ifPresent(searchFormPrivate::setQuery);
         currentPage = experienceService.getExperiencesListByUser(userQuery.orElse(""), user, orderBy, pageNum);
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
-        final boolean hasExperiences = experienceService.hasExperiencesByUser(user);
+        final boolean hasExperiences = !currentPage.getTotalPages().equals(0);
 
         final String path = request.getServletPath();
 
@@ -293,7 +282,6 @@ public class UserExperiencesController {
                 form.getExperienceMail(), url, price, cityModel, category, user, imageModel, experience.getObservable(), experience.getViews());
 
         experienceService.updateExperience(toUpdateExperience, image);
-
 
         final ModelAndView mav = new ModelAndView("redirect:/experiences/" + toUpdateExperience.getCategory().getCategoryName() + "/" + toUpdateExperience.getExperienceId());
         mav.addObject("success", true);

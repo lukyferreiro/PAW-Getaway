@@ -30,9 +30,6 @@ public class LocationDaoImpl implements LocationDao {
     @Override
     public Optional<CityModel> getCityById(Long cityId) {
         LOGGER.debug("Get city with id {}", cityId);
-//        final TypedQuery<CityModel> query = em.createQuery("FROM CityModel WHERE cityId = :cityId", CityModel.class);
-//        query.setParameter("cityId", cityId);
-//        return query.getResultList().stream().findFirst();
         return Optional.ofNullable(em.find(CityModel.class, cityId));
     }
 
@@ -61,8 +58,6 @@ public class LocationDaoImpl implements LocationDao {
     @Override
     public Optional<CountryModel> getCountryById(Long countryId) {
         LOGGER.debug("Get country with id {}", countryId);
-//        final TypedQuery<CountryModel> query = em.createQuery("FROM CountryModel WHERE countryId = :countryId", CountryModel.class);
-//        query.setParameter("countryId", countryId);
         return Optional.ofNullable(em.find(CountryModel.class, countryId));
     }
 

@@ -36,12 +36,6 @@ public class UserServiceImpl implements UserService {
     private final Collection<Roles> DEFAULT_ROLES = Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     @Override
-    public Collection<RoleModel> getUserRolesModels(UserModel user) {
-        LOGGER.debug("Retrieving roles of user with id {}", user.getUserId());
-        return userDao.getUserRoles(user);
-    }
-
-    @Override
     public Optional<UserModel> getUserById(Long id) {
         LOGGER.debug("Retrieving user with id {}", id);
         return userDao.getUserById(id);
@@ -54,15 +48,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserModel> getUserByExperience(ExperienceModel experience) {
+    public UserModel getUserByExperience(ExperienceModel experience) {
         LOGGER.debug("Retrieving user who creates experience with id {}", experience.getExperienceId());
-        return userDao.getUserByExperience(experience);
-    }
-
-    @Override
-    public Optional<UserModel> getUserByReview(ReviewModel review) {
-        LOGGER.debug("Retrieving user who creates review with id {}", review.getReviewId());
-        return userDao.getUserByReview(review);
+        return experience.getUser();
     }
 
     @Transactional
@@ -164,12 +152,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateProfileImage(UserModel userModel, byte[] image) {
-        LOGGER.debug("Updating user {} profile image of id {}", userModel.getUserId(), userModel.getProfileImage().getImageId());
-        imageService.updateImg(image, userModel.getProfileImage());
-    }
-
-    @Override
     public void addRole(UserModel user, Roles newRole) {
         LOGGER.debug("Adding role {} to user with id {}", newRole.name(), user.getUserId());
         userDao.addRole(user, newRole);
@@ -179,10 +161,4 @@ public class UserServiceImpl implements UserService {
     public Collection<Roles> getRolesByUser(UserModel user) {
         return userDao.getRolesByUser(user);
     }
-
-//    @Override
-//    public Optional<UserModelWithReviews> getUserWithReviewsByEmail(String email) {
-//        LOGGER.debug("Retrieving user with email {}", email);
-//        return userDao.getUserWithReviewsByEmail(email);
-//    }
 }

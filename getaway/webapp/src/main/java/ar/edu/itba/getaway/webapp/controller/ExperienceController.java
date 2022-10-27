@@ -26,7 +26,6 @@ import java.util.Optional;
 
 @Controller
 public class ExperienceController {
-
     @Autowired
     private UserService userService;
     @Autowired
@@ -96,10 +95,10 @@ public class ExperienceController {
 
         // FavExperiences
         if (owner != null) {
-                if(experience.isPresent()){
-                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(),owner);
-                    favExperienceService.setFav(owner, set, addFavExperience);
-                }
+            if(experience.isPresent()){
+                final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(),owner);
+                favExperienceService.setFav(owner, set, addFavExperience);
+            }
         }else if(set.isPresent()){
             return new ModelAndView("redirect:/login");
         }
@@ -194,7 +193,6 @@ public class ExperienceController {
 
         final Page<ReviewModel> currentPage = reviewService.getReviewAndUser(experience, pageNum);
         final List<ReviewModel> reviews = currentPage.getContent();
-        final CityModel cityModel = experience.getCity();
 
         LOGGER.debug("Experience with id {} has an average score of {}", experienceId, experience.getAverageScore());
 
@@ -210,24 +208,20 @@ public class ExperienceController {
         mav.addObject("maxPage", currentPage.getMaxPage());
         mav.addObject("totalPages", currentPage.getTotalPages());
 
-        boolean obs;
-
         if (owner != null) {
-                if (view.isPresent() || setObs.isPresent()) {
-                    //si soy el usuario owner puedo edit la visibilidad
-                    if (experience.getUser().equals(owner)) {
-                        if (setObs.isPresent()) {
-                            obs = setObs.get();
-                            experienceService.changeVisibility(experience, obs);
-                        }
-                    } else { //el owner no suma visualizaciones
-                        if (view.isPresent()) {
-                            experienceService.increaseViews(experience);
-                        }
+            if (view.isPresent() || setObs.isPresent()) {
+                //si soy el usuario owner puedo edit la visibilidad
+                if (experience.getUser().equals(owner)) {
+                    setObs.ifPresent(aBoolean -> experienceService.changeVisibility(experience, aBoolean));
+                } else { //el owner no suma visualizaciones
+                    if (view.isPresent()) {
+                        experienceService.increaseViews(experience);
                     }
                 }
-                favExperienceService.setFav(owner, set, Optional.of(experience));
-                mav.addObject("isEditing", experienceService.experienceBelongsToUser(owner, experience));
+            }
+            favExperienceService.setFav(owner, set, Optional.of(experience));
+            set.ifPresent(experience::setIsFav);
+            mav.addObject("isEditing", experienceService.experienceBelongsToUser(owner, experience));
         } else {
             if(set.isPresent()){
                 return new ModelAndView("redirect:/login");
@@ -239,5 +233,4 @@ public class ExperienceController {
 
         return mav;
     }
-
 }

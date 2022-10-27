@@ -84,16 +84,8 @@ public class ExperienceServiceImpl implements ExperienceService {
     public Optional<ExperienceModel> getVisibleExperienceById(Long experienceId, UserModel user) {
         LOGGER.debug("Retrieving experience with id {}", experienceId);
         Optional<ExperienceModel> maybeExperience = experienceDao.getVisibleExperienceById(experienceId, user);
-        if (maybeExperience.isPresent()){
-            maybeExperience.get().setIsFav(user != null && user.isFav(maybeExperience.get()));
-        }
+        maybeExperience.ifPresent(experienceModel -> experienceModel.setIsFav(user != null && user.isFav(experienceModel)));
         return maybeExperience;
-    }
-
-    @Override
-    public List<ExperienceModel> listExperiencesByUser(UserModel user, CategoryModel category) {
-        LOGGER.debug("Retrieving experiences of category {} created by user with id {}", category.getCategoryId(), user.getUserId());
-        return experienceDao.listExperiencesByUser(user, category);
     }
 
     @Override
@@ -169,8 +161,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             } else if (page < 0) {
                 page = 1;
             }
-//            experienceModelList = experienceDao.listExperiencesFavsByUser(user, order, page, RESULT_PAGE_SIZE);
-                experienceModelList = user.getFavExperiences(page, RESULT_PAGE_SIZE, order);
+            experienceModelList = user.getFavExperiences(page, RESULT_PAGE_SIZE, order);
         } else {
             totalPages = 1;
         }
@@ -213,7 +204,6 @@ public class ExperienceServiceImpl implements ExperienceService {
             experience.setIsFav(user != null && user.isFav(experience));
         }
 
-
         LOGGER.debug("Max page value service: {}", totalPages);
         return new Page<>(experienceModelList, page, totalPages, total);
     }
@@ -232,14 +222,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public boolean hasExperiencesByUser(UserModel user) {
-        LOGGER.debug("Retrieving whether the user with id {} has experiences", user.getUserId());
-        return experienceDao.hasExperiencesByUser(user);
-    }
-
-    @Override
     public boolean experienceBelongsToUser(UserModel user, ExperienceModel experience) {
-//        return experienceDao.experienceBelongsToUser(user, experience);
         return experience.getUser().equals(user);
     }
 

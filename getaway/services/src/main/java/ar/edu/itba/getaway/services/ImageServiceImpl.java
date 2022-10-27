@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
 import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
 import ar.edu.itba.getaway.interfaces.services.ImageService;

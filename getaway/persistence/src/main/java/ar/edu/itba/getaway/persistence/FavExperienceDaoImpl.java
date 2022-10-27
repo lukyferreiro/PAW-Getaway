@@ -15,7 +15,6 @@ import java.util.List;
 
 @Repository
 public class FavExperienceDaoImpl implements FavExperienceDao {
-
     @PersistenceContext
     private EntityManager em;
     private static final Logger LOGGER = LoggerFactory.getLogger(FavExperienceDaoImpl.class);
@@ -32,20 +31,5 @@ public class FavExperienceDaoImpl implements FavExperienceDao {
         LOGGER.debug("Removing experience with {} as fav of user with id {}", experience.getExperienceId(), user.getUserId());
         user.removeFav(experience);
         em.merge(user);
-    }
-
-    @Override
-    public List<Long> listFavsByUser(UserModel user) {
-        final List<Long> toRet = new ArrayList<>();
-        final List<ExperienceModel> favExperiences = user.getFavExperiences();
-        for (ExperienceModel exp: favExperiences) {
-            toRet.add(exp.getExperienceId());
-        }
-        return toRet;
-    }
-
-    @Override
-    public boolean isFav(UserModel user, ExperienceModel experience) {
-        return user.isFav(experience);
     }
 }
