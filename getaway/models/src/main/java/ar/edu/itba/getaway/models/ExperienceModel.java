@@ -43,7 +43,6 @@ public class ExperienceModel {
     @OneToOne
     @JoinColumn(name = "imgId")
     private ImageModel experienceImage;
-
 //    @OneToMany(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "experienceId")
 //    private List<ReviewModel> experienceReviews;
@@ -60,6 +59,7 @@ public class ExperienceModel {
     @Formula(value = "(select count(*) from reviews where reviews.experienceId = experienceId)")
     private Long reviewCount;
 
+    private String locationName;
 
     /* default */
     protected ExperienceModel() {
@@ -220,6 +220,16 @@ public class ExperienceModel {
         return averageScore;
     }
 
+    @Transient
+    public String getLocationName() {
+        return locationName;
+    }
+
+    @PostLoad
+    public void loadLocationName() {
+        locationName = address + ", " + city.getCityName() + ", " + city.getCountry().getCountryName();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -237,4 +247,6 @@ public class ExperienceModel {
     public int hashCode() {
         return Objects.hash(experienceId);
     }
+
+
 }

@@ -40,7 +40,7 @@
                                         <jsp:param name="name" value="${categoryList.get(experience).experienceName}"/>
                                         <jsp:param name="description"
                                                    value="${categoryList.get(experience).description}"/>
-                                        <jsp:param name="address" value="${categoryList.get(experience).address}"/>
+                                        <jsp:param name="address" value="${categoryList.get(experience).locationName}"/>
                                         <jsp:param name="price" value="${categoryList.get(experience).price}"/>
                                         <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
                                         <jsp:param name="path" value="${param.path}"/>

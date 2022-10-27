@@ -109,7 +109,7 @@
                               <jsp:param name="id" value="${experience.experienceId}"/>
                               <jsp:param name="name" value="${experience.experienceName}"/>
                               <jsp:param name="description" value="${experience.description}"/>
-                              <jsp:param name="address" value="${experience.address}"/>
+                              <jsp:param name="address" value="${experience.locationName}"/>
                               <jsp:param name="price" value="${experience.price}"/>
                               <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
                               <jsp:param name="path" value="/experiences/${categoryName}"/>

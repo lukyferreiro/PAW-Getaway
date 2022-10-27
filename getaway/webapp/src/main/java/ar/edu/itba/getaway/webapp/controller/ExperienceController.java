@@ -106,17 +106,12 @@ public class ExperienceController {
         // FavExperiences
         mav.addObject("favExperienceModels", new ArrayList<>());
         if (owner != null) {
-//            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-//            if(user.isPresent()){
                 if(experience.isPresent()){
                     final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(),owner);
                     favExperienceService.setFav(owner, set, addFavExperience);
                 }
                 final List<Long> favExperienceModels = favExperienceService.listFavsByUser(owner);
                 mav.addObject("favExperienceModels", favExperienceModels);
-//            }else if(set.isPresent()){
-//                return new ModelAndView("redirect:/login");
-//            }
         }else if(set.isPresent()){
             return new ModelAndView("redirect:/login");
         }
@@ -203,8 +198,6 @@ public class ExperienceController {
         final Page<ReviewModel> currentPage = reviewService.getReviewAndUser(experience, pageNum);
         final List<ReviewModel> reviews = currentPage.getContent();
         final CityModel cityModel = experience.getCity();
-        final String city = cityModel.getCityName();
-        final String country = cityModel.getCountry().getCountryName();
 
         LOGGER.debug("Experience with id {} has an average score of {}", experienceId, experience.getAverageScore());
 
@@ -213,8 +206,6 @@ public class ExperienceController {
         mav.addObject("dbCategoryName", category.getCategoryName());
         mav.addObject("experience", experience);
         mav.addObject("reviews", reviews);
-        mav.addObject("city", city);
-        mav.addObject("country", country);
         mav.addObject("success", success.isPresent());
         mav.addObject("successReview", successReview.isPresent());
         mav.addObject("currentPage", currentPage.getCurrentPage());
