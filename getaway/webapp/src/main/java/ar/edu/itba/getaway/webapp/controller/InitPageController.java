@@ -46,27 +46,33 @@ public class InitPageController {
         final ModelAndView mav = new ModelAndView("mainPage");
 
 
-        final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategories();
 
-        mav.addObject("favExperienceModels", new ArrayList<>());
+//        mav.addObject("favExperienceModels", new ArrayList<>());
+
+        UserModel user = null;
         if (principal != null) {
-            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-            if (user.isPresent()) {
-                if (experience.isPresent()) {
-                    final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), user.get());
-                    favExperienceService.setFav(user.get(), set, addFavExperience);
-                }
-                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user.get());
-                mav.addObject("favExperienceModels", favExperienceModels);
-            } else if (set.isPresent()) {
-                return new ModelAndView("redirect:/login");
+            Optional<UserModel> maybeUser = userService.getUserByEmail(principal.getName());
+            if(maybeUser.isPresent()){
+                user = maybeUser.get();
             }
+        }
+
+        if (user != null) {
+            if (experience.isPresent()) {
+                final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), user);
+                favExperienceService.setFav(user, set, addFavExperience);
+            }
+//            final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user);
+//            mav.addObject("favExperienceModels", favExperienceModels);
         } else {
-            mav.addObject("favExperienceModels", new ArrayList<>());
+//            mav.addObject("favExperienceModels", new ArrayList<>());
             if (set.isPresent()) {
                 return new ModelAndView("redirect:/login");
             }
         }
+
+        final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategories(user);
+
 
         mav.addObject("listByCategory", listByCategory);
         return mav;

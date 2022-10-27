@@ -104,14 +104,14 @@ public class ExperienceController {
         }
 
         // FavExperiences
-        mav.addObject("favExperienceModels", new ArrayList<>());
+//        mav.addObject("favExperienceModels", new ArrayList<>());
         if (owner != null) {
                 if(experience.isPresent()){
                     final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(),owner);
                     favExperienceService.setFav(owner, set, addFavExperience);
                 }
-                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(owner);
-                mav.addObject("favExperienceModels", favExperienceModels);
+//                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(owner);
+//                mav.addObject("favExperienceModels", favExperienceModels);
         }else if(set.isPresent()){
             return new ModelAndView("redirect:/login");
         }
@@ -213,7 +213,7 @@ public class ExperienceController {
         mav.addObject("maxPage", currentPage.getMaxPage());
         mav.addObject("totalPages", currentPage.getTotalPages());
 
-        mav.addObject("favExperienceModels", new ArrayList<>());
+//        mav.addObject("favExperienceModels", new ArrayList<>());
         boolean obs;
 
         if (owner != null) {
@@ -236,8 +236,8 @@ public class ExperienceController {
 //                            experience.getEmail(), experience.getSiteUrl(), experience.getPrice(), experience.getCity(), experience.getCategory(), owner, experience.getExperienceImage(), obs, views);
                 }
                 favExperienceService.setFav(owner, set, Optional.of(experience));
-                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(owner);
-                mav.addObject("favExperienceModels", favExperienceModels);
+//                final List<Long> favExperienceModels = favExperienceService.listFavsByUser(owner);
+//                mav.addObject("favExperienceModels", favExperienceModels);
                 mav.addObject("isEditing", experienceService.experienceBelongsToUser(owner, experience));
 //            }
 //            } else {

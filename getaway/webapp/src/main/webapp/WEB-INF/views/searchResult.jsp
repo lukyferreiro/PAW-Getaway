@@ -50,10 +50,10 @@
                            <jsp:param name="categoryName" value="${experience.category.categoryName}"/>
                            <jsp:param name="id" value="${experience.experienceId}"/>
                            <jsp:param name="name" value="${experience.experienceName}"/>
+                           <jsp:param name="isFav" value="${experience.isFav}"/>
                            <jsp:param name="description" value="${experience.description}"/>
                            <jsp:param name="address" value="${experience.address}"/>
                            <jsp:param name="price" value="${experience.price}"/>
-                           <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
                            <jsp:param name="path" value="/search_result"/>
                            <jsp:param name="query" value="${query}"/>
                            <jsp:param name="orderBy" value="${orderBy}"/>

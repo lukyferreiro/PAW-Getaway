@@ -117,14 +117,25 @@ public class ExperienceServiceImpl implements ExperienceService {
             totalPages = 1;
         }
 
+        for (ExperienceModel experience: experienceModelList) {
+            experience.setIsFav(user != null && user.isFav(experience));
+        }
+
         LOGGER.debug("Max page value service: {}", totalPages);
         return new Page<>(experienceModelList, page, totalPages, total);
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category) {
+    public List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, UserModel user) {
         LOGGER.debug("Retrieving all experiences by best ranked of category with id {}", category.getCategoryId());
-        return experienceDao.listExperiencesByBestRanked(category);
+
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByBestRanked(category);
+
+        for (ExperienceModel experience: experienceModelList) {
+            experience.setIsFav(user != null && user.isFav(experience));
+        }
+
+        return experienceModelList;
     }
 
     @Override
@@ -158,6 +169,10 @@ public class ExperienceServiceImpl implements ExperienceService {
                 experienceModelList = user.getFavExperiences(page, RESULT_PAGE_SIZE, order);
         } else {
             totalPages = 1;
+        }
+
+        for (ExperienceModel experience : experienceModelList) {
+            experience.setIsFav(user != null && user.isFav(experience));
         }
 
         LOGGER.debug("Max page value service: {}", totalPages);
@@ -195,14 +210,14 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<List<ExperienceModel>> getExperiencesListByCategories() {
+    public List<List<ExperienceModel>> getExperiencesListByCategories(UserModel user) {
         final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
         LOGGER.debug("Retrieving all experiences listed by categories");
         final List<CategoryModel> categories = categoryService.listAllCategories();
 
         for (int i = 0; i < categories.size(); i++) {
             listExperiencesByCategory.add(new ArrayList<>());
-            listExperiencesByCategory.get(i).addAll(listExperiencesByBestRanked(categories.get(i)));
+            listExperiencesByCategory.get(i).addAll(listExperiencesByBestRanked(categories.get(i), user));
         }
         return listExperiencesByCategory;
     }

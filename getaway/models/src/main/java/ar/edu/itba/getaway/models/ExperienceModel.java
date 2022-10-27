@@ -3,7 +3,6 @@ package ar.edu.itba.getaway.models;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -60,6 +59,9 @@ public class ExperienceModel {
     private Long reviewCount;
 
     private String locationName;
+
+    @Transient
+    private boolean isFav;
 
     /* default */
     protected ExperienceModel() {
@@ -206,10 +208,6 @@ public class ExperienceModel {
 //        Integer toIndex = Math.min((fromIndex + pageSize), experienceReviews.size());
 //        return experienceReviews.subList(fromIndex, toIndex);
 //    }
-    public boolean isFav(UserModel user){
-        return user.isFav(this);
-    }
-
     @Transient
     public Long getReviewCount() {
         return reviewCount;
@@ -223,6 +221,15 @@ public class ExperienceModel {
     @Transient
     public String getLocationName() {
         return locationName;
+    }
+
+    @Transient
+    public boolean getIsFav() {
+        return isFav;
+    }
+
+    public void setIsFav(boolean isFav){
+        this.isFav = isFav;
     }
 
     @PostLoad

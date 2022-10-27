@@ -6,7 +6,7 @@
 
       <div class="btn-fav">
          <jsp:include page="/WEB-INF/components/fav.jsp">
-            <jsp:param name="favExperienceModels" value="${param.favExperienceModels}"/>
+            <jsp:param name="isFav" value="${param.isFav}"/>
             <jsp:param name="experienceId" value="${param.id}"/>
             <jsp:param name="path" value="${param.path}"/>
             <jsp:param name="query" value="${param.query}"/>

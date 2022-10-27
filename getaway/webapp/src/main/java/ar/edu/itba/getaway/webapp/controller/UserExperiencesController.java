@@ -70,7 +70,7 @@ public class UserExperiencesController {
             favExperienceService.setFav(user, set, addFavExperience);
         }
 
-        final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user);
+//        final List<Long> favExperienceModels = favExperienceService.listFavsByUser(user);
         final OrderByModel[] orderByModels = OrderByModel.values();
         mav.addObject("orderBy", OrderByModel.OrderByRankDesc);
 
@@ -87,7 +87,7 @@ public class UserExperiencesController {
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
         mav.addObject("totalPages", currentPage.getTotalPages());
-        mav.addObject("favExperienceModels", favExperienceModels);
+//        mav.addObject("favExperienceModels", favExperienceModels);
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("experiences", experienceList);
 

@@ -5,21 +5,13 @@
 
 <div class="my-2">
     <jsp:useBean id="listByCategory" scope="request" type="java.util.List"/>
-    <jsp:useBean id="favExperienceModels" scope="request" type="java.util.List"/>
 
     <c:forEach varStatus="categoryIndex" var="categoryList" items="${listByCategory}">
         <c:if test="${categoryList.size() != 0}">
             <div class="text-center my-2">
                 <h2 style="font-weight: 600; text-decoration: underline">
-                    <c:choose>
-                        <c:when test="${isEditing}">
-                            <spring:message code="myExperiences.${categoryList.get(0).getCategory().categoryName}"/>
-                        </c:when>
-                        <c:otherwise>
                             <spring:message
                                     code="mainPage.bestRanked.${categoryList.get(0).getCategory().categoryName}"/>
-                        </c:otherwise>
-                    </c:choose>
                 </h2>
             </div>
             <div id="recipeCarousel<c:out value="${categoryIndex.index}"/>" class="carousel slide"
@@ -38,11 +30,11 @@
                                                    value="${categoryList.get(experience).category.categoryName}"/>
                                         <jsp:param name="id" value="${categoryList.get(experience).experienceId}"/>
                                         <jsp:param name="name" value="${categoryList.get(experience).experienceName}"/>
+                                        <jsp:param name="isFav" value="${categoryList.get(experience).isFav}"/>
                                         <jsp:param name="description"
                                                    value="${categoryList.get(experience).description}"/>
                                         <jsp:param name="address" value="${categoryList.get(experience).locationName}"/>
                                         <jsp:param name="price" value="${categoryList.get(experience).price}"/>
-                                        <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
                                         <jsp:param name="path" value="${param.path}"/>
                                         <jsp:param name="avgReviews"
                                                    value="${categoryList.get(experience).getAverageScore()}"/>

@@ -2,17 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<jsp:useBean id="favExperienceModels" scope="request" type="java.util.List"/>
-
-<c:set var="fav" value="${false}"/>
-<c:forEach var="favExperience" items="${favExperienceModels}">
-   <c:if test="${favExperience == param.experienceId}">
-      <c:set var="fav" value="${true}"/>
-   </c:if>
-</c:forEach>
-
 <c:choose>
-   <c:when test="${fav}">
+   <c:when test="${param.isFav}">
       <a href="<c:url value="${param.path}">
            <c:choose>
               <c:when test="${param.search}">

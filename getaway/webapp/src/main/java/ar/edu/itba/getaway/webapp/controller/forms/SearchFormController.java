@@ -57,7 +57,7 @@ public class SearchFormController {
             }
         }
 
-        mav.addObject("favExperienceModels", new ArrayList<>());
+//        mav.addObject("favExperienceModels", new ArrayList<>());
         if (owner != null) {
 //            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
 //            if(user.isPresent()){
@@ -65,8 +65,8 @@ public class SearchFormController {
                 final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), owner);
                 favExperienceService.setFav(owner, set, addFavExperience);
             }
-            final List<Long> favExperienceModels = favExperienceService.listFavsByUser(owner);
-            mav.addObject("favExperienceModels", favExperienceModels);
+//            final List<Long> favExperienceModels = favExperienceService.listFavsByUser(owner);
+//            mav.addObject("favExperienceModels", favExperienceModels);
 //            }else if(set.isPresent()){
 //                return new ModelAndView("redirect:/login");
 //            }

@@ -40,13 +40,13 @@
                            <jsp:param name="categoryName" value="${experience.category.categoryName}"/>
                            <jsp:param name="id" value="${experience.experienceId}"/>
                            <jsp:param name="name" value="${experience.experienceName}"/>
+                           <jsp:param name="isFav" value="${experience.isFav}"/>
                            <jsp:param name="description" value="${experience.description}"/>
                            <jsp:param name="address" value="${experience.address}"/>
                            <jsp:param name="price" value="${experience.price}"/>
-                           <jsp:param name="favExperienceModels" value="${favExperienceModels}"/>
                            <jsp:param name="path" value="/user/favourites"/>
-                           <jsp:param name="avgReviews" value="${experience.getAverageScore()}"/>
-                           <jsp:param name="reviewCount" value="${experience.getReviewCount()}"/>
+                           <jsp:param name="avgReviews" value="${experience.averageScore}"/>
+                           <jsp:param name="reviewCount" value="${experience.reviewCount}"/>
                            <jsp:param name="orderBY" value="${orderBy}"/>
                            <jsp:param name="pageNum" value="${currentPage}"/>
                         </jsp:include>
