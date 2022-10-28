@@ -152,7 +152,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }*/
 
     @Override
-    public List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, Integer page, Integer pageSize) {
+    public List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order) {
         LOGGER.debug("Get experiences of user with id {}", user.getUserId());
         String orderQuery;
         if (order.isPresent()){
@@ -163,17 +163,17 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
         final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user " + orderQuery, ExperienceModel.class);
         query.setParameter("name", name);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
+       /* query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);*/
         query.setParameter("user", user);
         return query.getResultList();
     }
 
-    @Override
+ /*   @Override
     public Long getCountExperiencesByUser(String name, UserModel user){
         final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user", Long.class);
         query.setParameter("name", name);
         query.setParameter("user", user);
         return query.getSingleResult();
-    }
+    }*/
 }

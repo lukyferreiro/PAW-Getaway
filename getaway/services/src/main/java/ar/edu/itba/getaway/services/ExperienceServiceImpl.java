@@ -238,7 +238,10 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         LOGGER.debug("Requested page {}", page);
 
-        Long total = experienceDao.getCountExperiencesByUser(name, user);
+        List<ExperienceModel> allExperienceModelList = experienceDao.getExperiencesListByUser(name, user, order);
+        int total = allExperienceModelList.size();
+
+        //Long total = experienceDao.getCountExperiencesByUser(name, user);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -252,13 +255,13 @@ public class ExperienceServiceImpl implements ExperienceService {
             } else if (page < 0) {
                 page = 1;
             }
-            experienceModelList = experienceDao.getExperiencesListByUser(name, user, order, page, RESULT_PAGE_SIZE);
+           /* experienceModelList = experienceDao.getExperiencesListByUser(name, user, order, page, RESULT_PAGE_SIZE);*/
         } else {
             totalPages = 1;
         }
 
         LOGGER.debug("Max page value service: {}", totalPages);
-        return new Page<>(experienceModelList, page, totalPages, total);
+        return new Page<>(experienceModelList, page, totalPages, (long) total);
     }
 
     @Transactional

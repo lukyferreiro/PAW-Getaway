@@ -17,6 +17,6 @@ public interface ExperienceDao {
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category);
     List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, UserModel user);
 /*    Long getCountByName(String name, UserModel user);*/
-    Long getCountExperiencesByUser(String name, UserModel user);
-    List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, Integer page, Integer pageSize);
+/*    Long getCountExperiencesByUser(String name, UserModel user);*/
+    List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order);
 }
