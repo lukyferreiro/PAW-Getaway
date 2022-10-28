@@ -1,9 +1,7 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.getaway.interfaces.services.ExperienceService;
-import ar.edu.itba.getaway.interfaces.services.ImageService;
+import ar.edu.itba.getaway.interfaces.services.EmailService;
 import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.ImageModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.interfaces.persistence.ReviewDao;
 import ar.edu.itba.getaway.interfaces.services.ReviewService;
@@ -12,20 +10,26 @@ import ar.edu.itba.getaway.models.pagination.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import javax.mail.MessagingException;
+import java.net.MalformedURLException;
+import java.util.*;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private ReviewDao reviewDao;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private MessageSource messageSource;
 
+    private final Locale locale = LocaleContextHolder.getLocale();
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImpl.class);
     private static final Integer PAGE_SIZE = 6;
     private static final Integer USER_PAGE_SIZE = 12;
@@ -34,7 +38,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewModel createReview(String title, String description, Long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel) {
         LOGGER.debug("Creating review with title {}", title);
-        return reviewDao.createReview(title, description, score, experienceModel, reviewDate, userModel);
+        final ReviewModel reviewModel = reviewDao.createReview(title, description, score, experienceModel, reviewDate, userModel);
+        sendNewReviewEmail(reviewModel);
+        return reviewModel;
     }
 
     @Transactional
@@ -117,5 +123,16 @@ public class ReviewServiceImpl implements ReviewService {
 
         LOGGER.debug("Max page value service: {}", totalPages);
         return new Page<>(reviewUserModelList, page, totalPages, total);
+    }
+
+    private void sendNewReviewEmail(ReviewModel reviewModel){
+        try {
+            final Map<String, Object> variables = new HashMap<>();
+            variables.put("review", reviewModel);
+            variables.put("to", reviewModel.getUser().getEmail());
+            emailService.sendMail("newReview", messageSource.getMessage("email.newReview", new Object[]{}, locale), variables, locale);
+        } catch (MessagingException e) {
+            LOGGER.warn("Error, mail to verify account not sent");
+        }
     }
 }
