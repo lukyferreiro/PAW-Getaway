@@ -127,7 +127,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, Integer pageSize, UserModel user) {
+    public List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, UserModel user) {
         String orderQuery;
         if (order.isPresent()){
             orderQuery = order.get().getSqlQuery();
@@ -138,18 +138,18 @@ public class ExperienceDaoImpl implements ExperienceDao {
         final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.address) LIKE LOWER(CONCAT('%', :name,'%')) AND (exp.observable=true OR exp.user=:user)" + orderQuery, ExperienceModel.class);
         query.setParameter("name", name);
         query.setParameter("user", user);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
+       // query.setFirstResult((page - 1) * pageSize);
+       // query.setMaxResults(pageSize);
         return query.getResultList();
     }
 
-    @Override
+/*    @Override
     public Long getCountByName(String name, UserModel user) {
         final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.address) LIKE LOWER(CONCAT('%', :name,'%')) AND (exp.observable=true OR exp.user=:user)", Long.class);
         query.setParameter("name", name);
         query.setParameter("user", user);
         return query.getSingleResult();
-    }
+    }*/
 
     @Override
     public List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, Integer page, Integer pageSize) {
