@@ -135,7 +135,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         else {
             orderQuery = OrderByModel.OrderByRankDesc.getSqlQuery();
         }
-        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.address) LIKE LOWER(CONCAT('%', :name,'%')) AND (exp.observable=true OR exp.user=:user)" + orderQuery, ExperienceModel.class);
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE (LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.locationName) LIKE LOWER(CONCAT('%', :name,'%'))) AND (exp.observable=true OR exp.user=:user)" + orderQuery, ExperienceModel.class);
         query.setParameter("name", name);
         query.setParameter("user", user);
        // query.setFirstResult((page - 1) * pageSize);

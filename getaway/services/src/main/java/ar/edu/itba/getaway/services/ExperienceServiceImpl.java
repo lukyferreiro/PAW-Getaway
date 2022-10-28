@@ -256,6 +256,9 @@ public class ExperienceServiceImpl implements ExperienceService {
                 page = 1;
             }
            /* experienceModelList = experienceDao.getExperiencesListByUser(name, user, order, page, RESULT_PAGE_SIZE);*/
+            int fromIndex = (page - 1) * RESULT_PAGE_SIZE;
+            int toIndex = Math.min((fromIndex + RESULT_PAGE_SIZE), total);
+            experienceModelList = allExperienceModelList.subList(fromIndex, toIndex);
         } else {
             totalPages = 1;
         }
