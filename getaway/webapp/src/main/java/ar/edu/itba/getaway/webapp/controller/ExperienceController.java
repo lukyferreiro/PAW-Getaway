@@ -11,7 +11,6 @@ import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,8 +56,6 @@ public class ExperienceController {
         final ModelAndView mav = new ModelAndView("experiences");
         final Page<ExperienceModel> currentPage;
 
-        // Category
-        // Ordinal empieza en 0
         final CategoryModel categoryModel = categoryService.getCategoryByName(categoryName).orElseThrow(CategoryNotFoundException::new);
 
         // Order By
@@ -87,7 +83,7 @@ public class ExperienceController {
 
         UserModel owner = null;
         if (principal != null) {
-            Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if(user.isPresent()){
                 owner = user.get();
             }
@@ -104,7 +100,7 @@ public class ExperienceController {
         }
 
         if (cityId.isPresent() && cityId.get()>0) {
-            CityModel city = locationService.getCityById(cityId.get()).orElseThrow(CityNotFoundException::new);
+            final CityModel city = locationService.getCityById(cityId.get()).orElseThrow(CityNotFoundException::new);
             currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, city, orderBy, pageNum, owner);
             mav.addObject("cityId", cityId.get());
         } else {
@@ -184,7 +180,7 @@ public class ExperienceController {
         final CategoryModel category = categoryService.getCategoryByName(categoryName).orElseThrow(CategoryNotFoundException::new);
         UserModel owner = null;
         if (principal != null) {
-            Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if(user.isPresent()){
                 owner = user.get();
             }
@@ -210,10 +206,10 @@ public class ExperienceController {
 
         if (owner != null) {
             if (view.isPresent() || setObs.isPresent()) {
-                //si soy el usuario owner puedo edit la visibilidad
+                //Si soy el usuario owner puedo editar la visibilidad
                 if (experience.getUser().equals(owner)) {
                     setObs.ifPresent(aBoolean -> experienceService.changeVisibility(experience, aBoolean));
-                } else { //el owner no suma visualizaciones
+                } else { //El owner no suma visualizaciones
                     if (view.isPresent()) {
                         experienceService.increaseViews(experience);
                     }
@@ -223,9 +219,9 @@ public class ExperienceController {
             set.ifPresent(experience::setIsFav);
             mav.addObject("isEditing", experienceService.experienceBelongsToUser(owner, experience));
         } else {
-            if(set.isPresent()){
+            if (set.isPresent()) {
                 return new ModelAndView("redirect:/login");
-            }else if(view.isPresent()){
+            } else if (view.isPresent()) {
                 experienceService.increaseViews(experience);
             }
             mav.addObject("isEditing", false);

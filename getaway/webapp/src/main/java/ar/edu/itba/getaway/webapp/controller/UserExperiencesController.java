@@ -82,7 +82,6 @@ public class UserExperiencesController {
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
         mav.addObject("totalPages", currentPage.getTotalPages());
-//        mav.addObject("favExperienceModels", favExperienceModels);
         mav.addObject("orderByModels", orderByModels);
         mav.addObject("experiences", experienceList);
 
@@ -147,14 +146,15 @@ public class UserExperiencesController {
                                        @Valid @ModelAttribute("searchFormPrivate") final SearchForm searchFormPrivate,
                                        final BindingResult errors,
                                        HttpServletRequest request) {
+        LOGGER.debug("Endpoint POST /user/experiences");
+
         if (errors.hasErrors()) {
             LOGGER.debug("Error in the search input");
             return experience(principal, Optional.empty(),Optional.empty(),Optional.empty(), searchForm, searchFormPrivate, request,Optional.empty(),Optional.empty(),1);
         }
-        LOGGER.debug("Endpoint POST /user/experiences");
-        ModelAndView mav = new ModelAndView("redirect:/user/experiences");
-        mav.addObject("userQuery", searchForm.getQuery());
 
+        final ModelAndView mav = new ModelAndView("redirect:/user/experiences");
+        mav.addObject("userQuery", searchForm.getQuery());
         return mav;
     }
 

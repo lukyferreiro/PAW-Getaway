@@ -6,13 +6,11 @@ import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.interfaces.services.ExperienceService;
 import ar.edu.itba.getaway.interfaces.services.FavExperienceService;
-import ar.edu.itba.getaway.interfaces.services.ReviewService;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,7 +48,7 @@ public class SearchFormController {
 
         UserModel owner = null;
         if (principal != null) {
-            Optional<UserModel> user = userService.getUserByEmail(principal.getName());
+            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if (user.isPresent()) {
                 owner = user.get();
             }
@@ -62,7 +59,7 @@ public class SearchFormController {
                 final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), owner);
                 favExperienceService.setFav(owner, set, addFavExperience);
             }
-        }else if(set.isPresent()){
+        } else if(set.isPresent()){
             return new ModelAndView("redirect:/login");
         }
 
@@ -115,6 +112,3 @@ public class SearchFormController {
     }
 
 }
-
-
-

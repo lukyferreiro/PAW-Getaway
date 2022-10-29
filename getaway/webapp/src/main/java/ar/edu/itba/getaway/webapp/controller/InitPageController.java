@@ -4,13 +4,11 @@ import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.interfaces.services.ExperienceService;
 import ar.edu.itba.getaway.interfaces.services.FavExperienceService;
-import ar.edu.itba.getaway.interfaces.services.ReviewService;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +43,7 @@ public class InitPageController {
 
         UserModel user = null;
         if (principal != null) {
-            Optional<UserModel> maybeUser = userService.getUserByEmail(principal.getName());
+            final Optional<UserModel> maybeUser = userService.getUserByEmail(principal.getName());
             if(maybeUser.isPresent()){
                 user = maybeUser.get();
             }
