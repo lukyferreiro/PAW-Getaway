@@ -72,7 +72,7 @@
                                  <jsp:param name="hasImage" value="${review.user.profileImage.image!=null}"/>
                                  <jsp:param name="profileImageId" value="${review.user.profileImage.imageId}"/>
                                  <jsp:param name="reviewId" value="${review.reviewId}"/>
-                                 <jsp:param name="isEditing" value="${isEditing}"/>
+                                 <jsp:param name="isEditing" value="${false}"/>
                               </jsp:include>
                            </div>
                         </c:forEach>

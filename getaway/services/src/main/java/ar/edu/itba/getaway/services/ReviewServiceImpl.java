@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 @Service
@@ -28,6 +29,8 @@ public class ReviewServiceImpl implements ReviewService {
     private EmailService emailService;
     @Autowired
     private MessageSource messageSource;
+    @Autowired
+    private String appBaseUrl;
 
     private final Locale locale = LocaleContextHolder.getLocale();
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImpl.class);
@@ -125,13 +128,18 @@ public class ReviewServiceImpl implements ReviewService {
         return new Page<>(reviewUserModelList, page, totalPages, total);
     }
 
-    private void sendNewReviewEmail(ReviewModel reviewModel){
+    private void sendNewReviewEmail(ReviewModel reviewModel) {
         try {
+            final String categoryName = reviewModel.getExperience().getCategory().getCategoryName();
+            final long experienceId = reviewModel.getExperience().getExperienceId();
+            final String url = new URL("http", appBaseUrl, 8080, "/webapp_war/experiences/" + categoryName + '/' + experienceId).toString();
+//            final String url = new URL("http", appBaseUrl, "/paw-2022b-1/experiences/" + categoryName + '/' + experienceId).toString();
             final Map<String, Object> variables = new HashMap<>();
             variables.put("review", reviewModel);
-            variables.put("to", reviewModel.getUser().getEmail());
+            variables.put("myExperienceUrl", url);
+            variables.put("to", reviewModel.getExperience().getUser().getEmail());
             emailService.sendMail("newReview", messageSource.getMessage("email.newReview", new Object[]{}, locale), variables, locale);
-        } catch (MessagingException e) {
+        } catch (MessagingException | MalformedURLException e) {
             LOGGER.warn("Error, mail to verify account not sent");
         }
     }

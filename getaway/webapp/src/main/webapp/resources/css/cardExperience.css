@@ -24,9 +24,9 @@
 
 .experience.card-title:hover {
     color: black;
-    text-decoration: none;
-    transition: 0.3s;
-    font-weight: bold;
+    text-decoration: underline;
+    /*transition: 0.3s;*/
+    /*font-weight: bold;*/
 }
 
 .title-link a {

@@ -2,30 +2,34 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<div class="card mx-5 my-3 p-4">
-   <div class="experience card-title d-flex justify-content-center align-content-center">
-
-      <h1>
-         <c:out value="${param.name}"/>
-      </h1>
-         <jsp:include page="/WEB-INF/components/fav.jsp">
-            <jsp:param name="isFav" value="${param.isFav}"/>
-            <jsp:param name="experienceId" value="${param.id}"/>
-            <jsp:param name="path" value="${param.path}"/>
-         </jsp:include>
+<div class="card mx-5 my-3 px-4 pt-4">
+   <div class="d-flex justify-content-center align-content-center">
+      <h1><c:out value="${param.name}"/></h1>
+      <jsp:include page="/WEB-INF/components/fav.jsp">
+         <jsp:param name="isFav" value="${param.isFav}"/>
+         <jsp:param name="experienceId" value="${param.id}"/>
+         <jsp:param name="path" value="${param.path}"/>
+      </jsp:include>
    </div>
 
    <div class="d-flex flex-wrap justify-content-center align-content-center">
-      <div class="p-2" style="width: 600px;">
-         <c:choose>
-            <c:when test="${param.hasImage}">
-               <img class="container-fluid p-0" style="height: fit-content; max-height: 550px;" src="<c:url value='/experiences/${param.id}/image'/>" alt="Imagen"/>
-            </c:when>
-            <c:otherwise>
-               <img class="container-fluid p-0" style="height: fit-content; max-height: 550px;" alt="Imagen ${param.experienceCategoryName}"
-                    src="<c:url value="/resources/images/${param.experienceCategoryName}.svg" />">
-            </c:otherwise>
-         </c:choose>
+      <div class="d-flex flex-column">
+         <div class="p-2" style="width: 600px;">
+            <c:choose>
+               <c:when test="${param.hasImage}">
+                  <img class="container-fluid p-0" style="height: fit-content; max-height: 550px;" src="<c:url value='/experiences/${param.id}/image'/>" alt="Imagen"/>
+               </c:when>
+               <c:otherwise>
+                  <img class="container-fluid p-0" style="height: fit-content; max-height: 550px;" alt="Imagen ${param.experienceCategoryName}"
+                       src="<c:url value="/resources/images/${param.experienceCategoryName}.svg" />">
+               </c:otherwise>
+            </c:choose>
+         </div>
+         <c:if test="${!param.hasImage}">
+            <h5 class="mt-3 text-center">
+               <spring:message code="experienceDetail.imageDefault.text"/>
+            </h5>
+         </c:if>
       </div>
       <div style="flex:5; min-width: 350px;">
          <div class="row">
@@ -112,46 +116,42 @@
                      <jsp:param name="avgReview" value="${param.reviewAvg}"/>
                   </jsp:include>
                </div>
-
-               <c:if test="${param.isEditing}">
-                  <div class="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
-                     <c:choose>
-                        <c:when test="${param.observable}">
-                           <a href="<c:url value="${param.path}">
-                                          <c:param name="setObs" value="${false}"/>
-                                       </c:url>">
-                              <button type="button" class="btn btn-observable" style="font-size: x-large" id="setFalse">
-                                 <i class="bi bi-eye"></i>
-                              </button>
-                           </a>
-                        </c:when>
-                        <c:otherwise>
-                           <a href="<c:url value="${param.path}">
-                                          <c:param name="setObs" value="${true}"/>
-                                       </c:url>">
-                              <button type="button" class="btn btn-observable" style="font-size: x-large" id="setTrue">
-                                 <i class="bi bi-eye-slash"></i>
-                              </button>
-                           </a>
-                        </c:otherwise>
-                     </c:choose>
-                     <a href="<c:url value="/user/experiences/edit/${param.id}"/>">
-                        <button type="button" class="btn btn-pencil" style="font-size: x-large">
-                           <i class="bi bi-pencil"></i>
-                        </button>
-                     </a>
-                     <a href="<c:url value="/user/experiences/delete/${param.id}"/>">
-                        <button type="button" class="btn btn-trash" style="font-size: x-large">
-                           <i class="bi bi-trash"></i>
-                        </button>
-                     </a>
-                  </div>
-               </c:if>
             </div>
             <div class="col-2 p-0"></div>
          </div>
       </div>
    </div>
+
+   <c:if test="${param.isEditing}">
+      <div class="btn-group my-2 d-flex justify-content-center align-content-center" role="group">
+         <c:choose>
+            <c:when test="${param.observable}">
+               <a href="<c:url value="${param.path}"> <c:param name="setObs" value="${false}"/> </c:url>">
+                  <button type="button" class="btn btn-observable" style="font-size: xx-large" id="setFalse">
+                     <i class="bi bi-eye"></i>
+                  </button>
+               </a>
+            </c:when>
+            <c:otherwise>
+               <a href="<c:url value="${param.path}"> <c:param name="setObs" value="${true}"/> </c:url>">
+                  <button type="button" class="btn btn-observable" style="font-size: xx-large" id="setTrue">
+                     <i class="bi bi-eye-slash"></i>
+                  </button>
+               </a>
+            </c:otherwise>
+         </c:choose>
+         <a href="<c:url value="/user/experiences/edit/${param.id}"/>">
+            <button type="button" class="btn btn-pencil" style="font-size: xx-large">
+               <i class="bi bi-pencil"></i>
+            </button>
+         </a>
+         <a href="<c:url value="/user/experiences/delete/${param.id}"/>">
+            <button type="button" class="btn btn-trash" style="font-size: xx-large">
+               <i class="bi bi-trash"></i>
+            </button>
+         </a>
+      </div>
+   </c:if>
 </div>
 
 

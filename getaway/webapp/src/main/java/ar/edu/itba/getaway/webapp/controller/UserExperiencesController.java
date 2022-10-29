@@ -66,7 +66,7 @@ public class UserExperiencesController {
             favExperienceService.setFav(user, set, addFavExperience);
         }
 
-        final OrderByModel[] orderByModels = OrderByModel.values();
+        final OrderByModel[] orderByModels = OrderByModel.getProviderOrderByModel();
         mav.addObject("orderBy", OrderByModel.OrderByRankDesc);
 
         final Page<ExperienceModel> currentPage = experienceService.listExperiencesFavsByUser(user, orderBy, pageNum);
@@ -108,7 +108,7 @@ public class UserExperiencesController {
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
         // Order By
-        final OrderByModel[] orderByModels = OrderByModel.values();
+        final OrderByModel[] orderByModels = OrderByModel.getProviderOrderByModel();
         mav.addObject("orderBy", OrderByModel.OrderByAZ);
         orderBy.ifPresent(orderByModel -> mav.addObject("orderBy", orderByModel));
         mav.addObject("orderByModels", orderByModels);

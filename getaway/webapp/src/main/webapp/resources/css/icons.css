@@ -51,6 +51,14 @@
     border-color: transparent;
 }
 
+.btn-pencil:hover, .btn-pencil:focus {
+    color: var(--primary-color);
+}
+
+.btn-trash:hover, .btn-trash:focus {
+    color: red;
+}
+
 .btn-close{
     color: black;
     font-size: small;

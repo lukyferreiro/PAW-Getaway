@@ -33,13 +33,10 @@ import java.util.Properties;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-//    @Value("classpath:schema.sql")
-//    private Resource schemaSql;
-
     @Bean(name = "appBaseUrl")
     public String appBaseUrl() {
-//        return "localhost";
-        return "pawserver.it.itba.edu.ar";
+        return "localhost";
+//        return "pawserver.it.itba.edu.ar";
     }
 
     private static final int MAX_SIZE_PER_FILE = 10000000;
@@ -73,39 +70,20 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ds.setDriverClass(org.postgresql.Driver.class);
 
         //Usuario Local
-//        ds.setUrl("jdbc:postgresql://localhost/postgres");
-//        ds.setUsername("postgres");
-//        ds.setPassword("getawaydb");
-//         Usuario remoto (para todos los del grupo)
-        ds.setUrl("jdbc:postgresql://ec2-54-204-241-136.compute-1.amazonaws.com:5432/d38a8rs1b2dpeh");
-        ds.setUsername("adrzztklademib");
-        ds.setPassword("580c8ba69151e9ba288d107d1b28f9dfc3706838eccbfb4d4d9ca1cde2f6f86e");
+        ds.setUrl("jdbc:postgresql://localhost/postgres");
+        ds.setUsername("postgres");
+        ds.setPassword("getawaydb");
+        //Usuario Heroku
+//        ds.setUrl("jdbc:postgresql://ec2-54-204-241-136.compute-1.amazonaws.com:5432/d38a8rs1b2dpeh");
+//        ds.setUsername("adrzztklademib");
+//        ds.setPassword("580c8ba69151e9ba288d107d1b28f9dfc3706838eccbfb4d4d9ca1cde2f6f86e");
         //Usuario PAW
-        // ds.setUrl("jdbc:postgresql://10.16.1.110/paw-2022b-1");
-        //ds.setUsername("paw-2022b-1");
-        //  ds.setPassword("qo16kZtyI");
+//        ds.setUrl("jdbc:postgresql://10.16.1.110/paw-2022b-1");
+//        ds.setUsername("paw-2022b-1");
+//        ds.setPassword("qo16kZtyI");
 
         return ds;
     }
-
-
-    // TODO databasePopulator y databaseInitializer pueden eliminarse de momento, mientras
-    // dejamos que hibernate administre la base de datos.
-    // Si estuviesemos usandolos para otra cosa además del setup de la base
-    // de datos, podríamos mantenerlos.
-//    @Bean
-//    public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
-//        final DataSourceInitializer dsi = new DataSourceInitializer();
-//        dsi.setDataSource(ds);
-//        dsi.setDatabasePopulator(databasePopulator());
-//        return dsi;
-//    }
-//
-//    private DatabasePopulator databasePopulator() {
-//        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-//        dbp.addScript(schemaSql);
-//        return dbp;
-//    }
 
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
@@ -115,12 +93,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         multipartResolver.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
         return multipartResolver;
     }
-
-//    @Bean
-//    public PlatformTransactionManager transactionManager(final DataSource ds) {
-//        return new DataSourceTransactionManager(ds);
-//    }
-
 
     //-------------------------------------------
     //----------Para la segunda entrega----------

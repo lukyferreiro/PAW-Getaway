@@ -63,7 +63,7 @@ public class ExperienceController {
         final CategoryModel categoryModel = categoryService.getCategoryByName(categoryName).orElseThrow(CategoryNotFoundException::new);
 
         // Order By
-        final OrderByModel[] orderByModels = OrderByModel.values();
+        final OrderByModel[] orderByModels = OrderByModel.getUserOrderByModel();
         mav.addObject("orderBy", OrderByModel.OrderByRankDesc);
         orderBy.ifPresent(orderByModel -> mav.addObject("orderBy", orderByModel));
 

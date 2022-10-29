@@ -63,101 +63,124 @@
                            </div>
                         </c:when>
                         <c:otherwise>
-                        <table class="table table-bordered table-hover table-fit">
-                           <thead class="table-light">
+                           <table class="table table-bordered table-hover table-fit">
+                              <thead class="table-light">
                               <tr>
-                                 <th scope="col"><h4 class="table-title"><spring:message code="experience.title"/></h4></th>
-                                 <th scope="col"><h4 class="table-title"><spring:message code="experienceForm.experienceCategory"/></h4></th>
-                                 <th scope="col"><h4 class="table-title"><spring:message code="review.scoreAssign"/></h4></th>
-                                 <th scope="col"><h4 class="table-title"><spring:message code="experience.viewsAmount"/></h4></th>
-                                 <th scope="col"><h4 class="table-title"><spring:message code="experience.actions"/></h4></th>
+                                 <th scope="col"><h4 class="table-title">
+                                    <spring:message code="experience.title"/></h4></th>
+                                 <th scope="col"><h4 class="table-title">
+                                    <spring:message code="experienceForm.experienceCategory"/></h4></th>
+                                 <th scope="col"><h4 class="table-title">
+                                    <spring:message code="review.scoreAssign"/></h4></th>
+                                 <th scope="col"><h4 class="table-title">
+                                    <spring:message code="experience.price"/></h4></th>
+                                 <th scope="col"><h4 class="table-title">
+                                    <spring:message code="experience.viewsAmount"/></h4></th>
+                                 <th scope="col"><h4 class="table-title">
+                                    <spring:message code="experience.actions"/></h4></th>
                               </tr>
-                           </thead>
-                           <tbody>
-                           <c:forEach var="experience" items="${experienceList}" varStatus="myIndex">
-                              <tr>
-                                 <th scope="row">
-                                    <div class="title-link">
-                                       <a href="<c:url value="/experiences/${experience.category.categoryName}/${experience.experienceId}"/>">
-                                          <h4 class="experience card-title container-fluid p-0"><c:out value="${experience.experienceName}"/></h4>
-                                       </a>
-                                    </div>
-                                 </th>
-                                 <td>
-
-<%--                                    Change to spring messagfe value--%>
-
-                                    <div class="container-fluid d-flex p-2 mb-1 align-items-end">
-                                       <h4 class="container-fluid p-0">
-                                          <spring:message code="experienceForm.${experience.category.categoryName}"/>
+                              </thead>
+                              <tbody>
+                              <c:forEach var="experience" items="${experienceList}" varStatus="myIndex">
+                                 <tr>
+                                    <th scope="row">
+                                       <div class="title-link">
+                                          <a href="<c:url value="/experiences/${experience.category.categoryName}/${experience.experienceId}"/>">
+                                             <h4 class="experience card-title container-fluid p-0">
+                                                <c:out value="${experience.experienceName}"/>
+                                             </h4>
+                                          </a>
+                                       </div>
+                                    </th>
+                                    <td>
+                                       <div class="container-fluid d-flex p-2 mb-1 align-items-end">
+                                          <h4 class="container-fluid p-0">
+                                             <spring:message code="experienceForm.${experience.category.categoryName}"/>
                                           </h4>
-                                    </div>
-                                 </td>
-                                 <td>
-                                    <div class="container-fluid d-flex p-2 mb-1 align-items-end">
-                                       <h5 class="mb-1">
-                                          <spring:message code="experience.reviews" arguments="${experience.reviewCount}"/>
-                                       </h5>
-                                       <jsp:include page="/WEB-INF/components/starAvg.jsp">
-                                          <jsp:param name="avgReview" value="${experience.averageScore}"/>
-                                       </jsp:include>
-                                    </div>
-                                 </td>
-                                 <td>
-                                    <div class="container-fluid d-flex p-2 mb-1 align-items-end">
-                                       <h5 class="mb-1">
-                                          <c:out value="${experience.views}"/>
-                                       </h5>
-                                    </div>
-                                 </td>
-                                 <td>
-                                    <div class="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
-                                       <c:choose>
-                                          <c:when test="${experience.observable}">
-                                             <a href="<c:url value="/user/experiences">
+                                       </div>
+                                    </td>
+                                    <td>
+                                       <div class="container-fluid d-flex p-2 mb-1 align-items-end">
+                                          <h5 class="mb-1">
+                                             <spring:message code="experience.reviews" arguments="${experience.reviewCount}"/>
+                                          </h5>
+                                          <jsp:include page="/WEB-INF/components/starAvg.jsp">
+                                             <jsp:param name="avgReview" value="${experience.averageScore}"/>
+                                          </jsp:include>
+                                       </div>
+                                    </td>
+                                    <td>
+                                       <div class="container-fluid d-flex p-2 mb-1 align-items-end">
+                                          <h5 class="mb-1">
+                                             <c:choose>
+                                                <c:when test="${param.price == ''}">
+                                                   <spring:message code="experience.noPrice"/>
+                                                </c:when>
+                                                <c:when test="${param.price == '0.0'}">
+                                                   <spring:message code="experience.price.free"/>
+                                                </c:when>
+                                                <c:otherwise>
+                                                   <spring:message code="experience.price.value" arguments="${experience.price}"/>
+                                                </c:otherwise>
+                                             </c:choose>
+                                          </h5>
+                                       </div>
+                                    </td>
+                                    <td>
+                                       <div class="container-fluid d-flex p-2 mb-1 align-items-end">
+                                          <h5 class="mb-1">
+                                             <c:out value="${experience.views}"/>
+                                          </h5>
+                                       </div>
+                                    </td>
+                                    <td>
+                                       <div class="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
+                                          <c:choose>
+                                             <c:when test="${experience.observable}">
+                                                <a href="<c:url value="/user/experiences">
                                           <c:param name="pageNum" value="${currentPage}"/>
                                           <c:param name="set" value="${false}"/>
                                           <c:param name = "orderBy" value = "${orderBy}" />
                                           <c:param name = "userQuery" value = "${userQuery}" />
                                           <c:param name="experience" value="${experience.experienceId}"/>
                                        </c:url>">
-                                                <button type="button" class="btn btn-observable" style="font-size: x-large" id="setFalse">
-                                                   <i class="bi bi-eye"></i>
-                                                </button>
-                                             </a>
-                                          </c:when>
-                                          <c:otherwise>
-                                             <a href="<c:url value="/user/experiences">
+                                                   <button type="button" class="btn btn-observable" style="font-size: x-large" id="setFalse">
+                                                      <i class="bi bi-eye"></i>
+                                                   </button>
+                                                </a>
+                                             </c:when>
+                                             <c:otherwise>
+                                                <a href="<c:url value="/user/experiences">
                                           <c:param name="pageNum" value="${currentPage}"/>
                                           <c:param name="set" value="${true}"/>
                                           <c:param name = "orderBy" value = "${orderBy}" />
                                           <c:param name = "userQuery" value = "${userQuery}" />
                                           <c:param name="experience" value="${experience.experienceId}"/>
                                        </c:url>">
-                                                <button type="button" class="btn btn-observable" style="font-size: x-large" id="setTrue">
-                                                   <i class="bi bi-eye-slash"></i>
-                                                </button>
-                                             </a>
-                                          </c:otherwise>
-                                       </c:choose>
+                                                   <button type="button" class="btn btn-observable" style="font-size: x-large" id="setTrue">
+                                                      <i class="bi bi-eye-slash"></i>
+                                                   </button>
+                                                </a>
+                                             </c:otherwise>
+                                          </c:choose>
 
-                                       <a href="<c:url value="/user/experiences/edit/${experience.experienceId}"/>">
-                                          <button type="button" class="btn btn-pencil" style="font-size: x-large">
-                                             <i class="bi bi-pencil"></i>
-                                          </button>
-                                       </a>
-                                       <a href="<c:url value="/user/experiences/delete/${experience.experienceId}"/>">
-                                          <button type="button" class="btn btn-trash" style="font-size: x-large">
-                                             <i class="bi bi-trash"></i>
-                                          </button>
-                                       </a>
-                                    </div>
-                                 </td>
-                              </tr>
-                           </c:forEach>
-                           </tbody>
+                                          <a href="<c:url value="/user/experiences/edit/${experience.experienceId}"/>">
+                                             <button type="button" class="btn btn-pencil" style="font-size: x-large">
+                                                <i class="bi bi-pencil"></i>
+                                             </button>
+                                          </a>
+                                          <a href="<c:url value="/user/experiences/delete/${experience.experienceId}"/>">
+                                             <button type="button" class="btn btn-trash" style="font-size: x-large">
+                                                <i class="bi bi-trash"></i>
+                                             </button>
+                                          </a>
+                                       </div>
+                                    </td>
+                                 </tr>
+                              </c:forEach>
+                              </tbody>
 
-                        </table>
+                           </table>
                         </c:otherwise>
                      </c:choose>
 

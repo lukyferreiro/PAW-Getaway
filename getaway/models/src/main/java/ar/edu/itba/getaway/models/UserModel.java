@@ -123,15 +123,16 @@ public class UserModel {
     }
 
     public List<ExperienceModel> getFavExperiences(Integer page, Integer pageSize, Optional<OrderByModel> orderByModel) {
-        if(orderByModel.isPresent()){
+        if (orderByModel.isPresent()) {
             favExperiences.sort(orderByModel.get().comparator);
-        }
-        else {
+        } else {
             favExperiences.sort(OrderByModel.OrderByRankDesc.comparator);
         }
 
-        Integer fromIndex = (page - 1) * pageSize;
-        Integer toIndex = Math.min((fromIndex + pageSize), favExperiences.size());
+        favExperiences.removeIf(experience -> !experience.getObservable());
+
+        int fromIndex = (page - 1) * pageSize;
+        int toIndex = Math.min((fromIndex + pageSize), favExperiences.size());
         return favExperiences.subList(fromIndex, toIndex);
     }
     public void addFav(ExperienceModel experience) {
@@ -145,11 +146,11 @@ public class UserModel {
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o){
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (!(o instanceof UserModel)){
+        if (!(o instanceof UserModel)) {
             return false;
         }
         UserModel other = (UserModel) o;
