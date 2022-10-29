@@ -5,7 +5,7 @@
 
 <html>
    <head>
-      <title><spring:message code="pageName"/> <c:if test="${query != null}">-
+      <title><spring:message code="pageName"/> <c:if test="${query != ''}"> -
          <spring:message code="searchResult.title" arguments="${query}"/></c:if></title>
       <%@ include file="../components/includes/headers.jsp" %>
    </head>
@@ -14,7 +14,7 @@
          <%@ include file="../components/navbar.jsp" %>
 
          <c:choose>
-            <c:when test="${experiences.size() == 0 || query == null}">
+            <c:when test="${experiences.size() == 0}">
                <div class="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
                   <div class="d-flex justify-content-center align-content-center">
                      <img src="<c:url value="/resources/images/ic_no_search.jpeg"/>" alt="Imagen lupa" style="width: 150px; height:150px; min-width: 150px; min-height: 150px; margin-right: 5px;">
@@ -35,8 +35,6 @@
                            <jsp:param name="orderPrev" value="${orderBy}"/>
                         </jsp:include>
                      </div>
-
-<%--                     Cambiar a tamaño global no de página --%>
 
                      <h3 class="my-2">
                         <spring:message code="searchResult.description" arguments="${totalResults},${query}"/></h3>
