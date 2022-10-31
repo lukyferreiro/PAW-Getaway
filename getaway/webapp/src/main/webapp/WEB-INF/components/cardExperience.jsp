@@ -35,7 +35,7 @@
             <div class="title-link">
                <a href="<c:url value="/experiences/${param.categoryName}/${param.id}">
                            <c:param name="view" value="${true}"/>
-                  </c:url>">
+                  </c:url>" <c:if test="${!param.observable}"> class="disabled" </c:if> > </a>
                   <h2 class="experience card-title container-fluid p-0 text-truncate"><c:out value="${param.name}"/></h2>
                </a>
             </div>
@@ -66,6 +66,10 @@
          <jsp:include page="/WEB-INF/components/starAvg.jsp">
             <jsp:param name="avgReview" value="${param.avgReviews}"/>
          </jsp:include>
+
+         <c:if test="${!param.observable}">
+            <p class="obs-info"><spring:message code="experience.notVisible" /></p>
+         </c:if>
       </div>
 
    </div>

@@ -40,6 +40,7 @@
                                                    value="${categoryList.get(experience).getAverageScore()}"/>
                                         <jsp:param name="reviewCount"
                                                    value="${categoryList.get(experience).getReviewCount()}"/>
+                                        <jsp:param name="observable" value="${categoryList.get(experience).observable}"/>
                                     </jsp:include>
                                 </c:forEach>
                             </div>

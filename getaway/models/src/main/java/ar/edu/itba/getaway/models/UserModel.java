@@ -129,8 +129,6 @@ public class UserModel {
             favExperiences.sort(OrderByModel.OrderByRankDesc.comparator);
         }
 
-        favExperiences.removeIf(experience -> !experience.getObservable());
-
         int fromIndex = (page - 1) * pageSize;
         int toIndex = Math.min((fromIndex + pageSize), favExperiences.size());
         return favExperiences.subList(fromIndex, toIndex);

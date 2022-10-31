@@ -37,3 +37,12 @@
 .table-title{
     font-weight: bold;
 }
+
+.obs-info{
+    color: red;
+}
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+}
