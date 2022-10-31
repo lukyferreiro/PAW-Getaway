@@ -45,6 +45,9 @@
          <h6 style="font-size: medium" id="reviewDescription">
             <c:out value="${param.description}"/>
          </h6>
+         <c:if test="${!param.observable}">
+            <p class="obs-info"><spring:message code="experience.notVisible" /></p>
+         </c:if>
       </div>
    </div>
 

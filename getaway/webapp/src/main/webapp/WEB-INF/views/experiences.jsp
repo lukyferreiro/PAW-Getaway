@@ -121,6 +121,7 @@
                               <jsp:param name="orderBy" value="${orderBy}"/>
                               <jsp:param name="avgReviews" value="${experience.averageScore}"/>
                               <jsp:param name="reviewCount" value="${experience.reviewCount}"/>
+                              <jsp:param name="observable" value="${experience.observable}"/>
                            </jsp:include>
                         </c:forEach>
                      </div>

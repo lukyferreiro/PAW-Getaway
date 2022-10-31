@@ -51,6 +51,13 @@ public class UserReviewsController {
         final Page<ReviewModel> currentPage = reviewService.getReviewsByUser(user, pageNum);
         final List<ReviewModel> reviewList = currentPage.getContent();
 
+        boolean hasImage = false;
+        long imageId = -1;
+        if(user.getProfileImage()!=null){
+            hasImage = user.getProfileImage().getImage() != null;
+            imageId = user.getProfileImage().getImageId();
+        }
+
         mav.addObject("reviews", reviewList);
         mav.addObject("isEditing", true);
         mav.addObject("successReview", successReview.isPresent());
@@ -59,8 +66,8 @@ public class UserReviewsController {
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
         mav.addObject("totalPages", currentPage.getTotalPages());
-        mav.addObject("hasImage", user.getProfileImage().getImage() != null);
-        mav.addObject("profileImageId", user.getProfileImage().getImageId());
+        mav.addObject("hasImage", hasImage);
+        mav.addObject("profileImageId", imageId);
 
         return mav;
     }
