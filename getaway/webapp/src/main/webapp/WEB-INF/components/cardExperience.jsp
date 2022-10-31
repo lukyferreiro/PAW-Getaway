@@ -66,7 +66,8 @@
          <jsp:include page="/WEB-INF/components/starAvg.jsp">
             <jsp:param name="avgReview" value="${param.avgReviews}"/>
          </jsp:include>
-
+      </div>
+      <div class="card-body">
          <c:if test="${!param.observable}">
             <h5 class="obs-info"><spring:message code="experience.notVisible" /></h5>
          </c:if>

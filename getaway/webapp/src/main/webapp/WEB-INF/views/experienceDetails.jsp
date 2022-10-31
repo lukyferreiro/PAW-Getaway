@@ -26,7 +26,7 @@
                <jsp:param name="description" value="${experience.description}"/>
                <jsp:param name="siteUrl" value="${experience.siteUrl}"/>
                <jsp:param name="email" value="${experience.email}"/>
-               <jsp:param name="hasImage" value="${experience.experienceImage.image != null}"/>
+               <jsp:param name="hasImage" value="${experience.image != null}"/>
                <jsp:param name="reviewAvg" value="${experience.averageScore}"/>
                <jsp:param name="reviewCount" value="${experience.reviewCount}"/>
                 <jsp:param name="isEditing" value="${isEditing}"/>
@@ -69,10 +69,11 @@
                                  <jsp:param name="description" value="${review.description}"/>
                                  <jsp:param name="reviewDate" value="${review.reviewDate}"/>
                                  <jsp:param name="score" value="${review.score}"/>
-                                 <jsp:param name="hasImage" value="${review.user.profileImage.image!=null}"/>
-                                 <jsp:param name="profileImageId" value="${review.user.profileImage.imageId}"/>
+                                 <jsp:param name="hasImage" value="${review.user.image!=null}"/>
+                                 <jsp:param name="profileImageId" value="${review.user.imageId}"/>
                                  <jsp:param name="reviewId" value="${review.reviewId}"/>
                                  <jsp:param name="isEditing" value="${false}"/>
+                                 <jsp:param name="observable" value="${review.experience.observable}"/>
                               </jsp:include>
                            </div>
                         </c:forEach>

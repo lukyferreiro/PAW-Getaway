@@ -47,7 +47,7 @@ public class UserProfileController {
         final UserModel userModel = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
         mav.addObject("user", userModel);
-        mav.addObject("hasImage", userModel.getProfileImage().getImage() != null);
+        mav.addObject("hasImage", userModel.getImage() != null);
 
         return mav;
     }

@@ -200,6 +200,15 @@ public class ExperienceModel {
         this.experienceImage = experienceImage;
     }
 
+    //    Image methods
+    public byte[] getImage(){
+        if(experienceImage == null){
+            return null;
+        }else {
+            return experienceImage.getImage();
+        }
+    }
+
     @Transient
     public Long getReviewCount() {
         return reviewCount;

@@ -143,6 +143,22 @@ public class UserModel {
         return favExperiences.contains(experience);
     }
 
+//    Image methods
+    public long getImageId(){
+        if(profileImage == null){
+            return -1;
+        }else {
+            return profileImage.getImageId();
+        }
+    }
+
+    public byte[] getImage(){
+        if(profileImage == null){
+            return null;
+        }else {
+            return profileImage.getImage();
+        }
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {
