@@ -26,7 +26,8 @@
     color: black;
     text-decoration: underline;
     /*transition: 0.3s;*/
-    /*font-weight: bold;*/
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .title-link a {
@@ -45,4 +46,5 @@
 a.disabled {
     pointer-events: none;
     cursor: default;
+    text-decoration: none;
 }
