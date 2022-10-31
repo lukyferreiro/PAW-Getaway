@@ -116,6 +116,12 @@
                      <jsp:param name="avgReview" value="${param.reviewAvg}"/>
                   </jsp:include>
                </div>
+
+               <div>
+                  <c:if test="${!param.observable}">
+                     <p class="obs-info"><spring:message code="experience.notVisible" /></p>
+                  </c:if>
+               </div>
             </div>
             <div class="col-2 p-0"></div>
          </div>
