@@ -36,7 +36,7 @@
                <a href="<c:url value="/experiences/${param.categoryName}/${param.id}">
                            <c:param name="view" value="${true}"/>
                   </c:url>">
-                  <h2 class="experience card-title container-fluid p-0"><c:out value="${param.name}"/></h2>
+                  <h2 class="experience card-title container-fluid p-0 text-truncate"><c:out value="${param.name}"/></h2>
                </a>
             </div>
             <div class="card-text container-fluid p-0">
