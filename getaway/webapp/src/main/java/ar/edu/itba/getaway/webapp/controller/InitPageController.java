@@ -3,7 +3,7 @@ package ar.edu.itba.getaway.webapp.controller;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.interfaces.services.ExperienceService;
-import ar.edu.itba.getaway.interfaces.services.FavExperienceService;
+import ar.edu.itba.getaway.interfaces.services.FavAndViewExperienceService;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +26,7 @@ public class InitPageController {
     @Autowired
     private ExperienceService experienceService;
     @Autowired
-    private FavExperienceService favExperienceService;
+    private FavAndViewExperienceService favAndViewExperienceService;
     @Autowired
     private UserService userService;
 
@@ -49,18 +50,22 @@ public class InitPageController {
             }
         }
 
+        List<List<ExperienceModel>> listByCategory = new ArrayList<>();
+
         if (user != null) {
             if (experience.isPresent()) {
                 final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), user);
-                favExperienceService.setFav(user, set, addFavExperience);
+                favAndViewExperienceService.setFav(user, set, addFavExperience);
             }
+            listByCategory = experienceService.userLandingPage(user);
+            mav.addObject("isLogged", true);
         } else {
             if (set.isPresent()) {
                 return new ModelAndView("redirect:/login");
             }
+            mav.addObject("isLogged", false);
+            listByCategory = experienceService.getExperiencesListByCategories(user);
         }
-
-        final List<List<ExperienceModel>> listByCategory = experienceService.getExperiencesListByCategories(user);
 
         mav.addObject("listByCategory", listByCategory);
         return mav;

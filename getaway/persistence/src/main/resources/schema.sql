@@ -66,12 +66,13 @@ CREATE TABLE IF NOT EXISTS experiences
     FOREIGN KEY (imgId) REFERENCES images (imgId) ON DELETE CASCADE
     );
 
-CREATE TABLE IF NOT EXISTS views
+CREATE TABLE IF NOT EXISTS viewed
 (
     experienceId INT NOT NULL,
-    viewCount INT,
-    PRIMARY KEY (experienceId),
-    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
+    userId INT NOT NULL,
+    PRIMARY KEY (experienceId, userId),
+    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS reviews

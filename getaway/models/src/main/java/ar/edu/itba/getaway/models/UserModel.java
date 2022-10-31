@@ -39,6 +39,13 @@ public class UserModel {
     )
     private List<ExperienceModel> favExperiences;
 
+    @ManyToMany
+    @JoinTable(name = "viewed",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "experienceId")
+    )
+    private List<ExperienceModel> viewedExperiences;
+
     /* default */
     protected UserModel() {
         // Just for Hibernate
@@ -143,6 +150,18 @@ public class UserModel {
     }
     public boolean isFav(ExperienceModel experience) {
         return favExperiences.contains(experience);
+    }
+
+    public void addViewed(ExperienceModel experience) {
+        viewedExperiences.add(experience);
+    }
+    public boolean isViewed(ExperienceModel experience) {
+        return viewedExperiences.contains(experience);
+    }
+    public List<ExperienceModel> getViewedExperiences() {
+        int toIndex = viewedExperiences.size();
+        int fromIndex = Math.max((toIndex-9), 0);
+        return viewedExperiences.subList(fromIndex, toIndex);
     }
 
     @Override

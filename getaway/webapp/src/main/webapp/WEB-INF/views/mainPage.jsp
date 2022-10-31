@@ -15,6 +15,7 @@
 
     <jsp:include page="/WEB-INF/components/carousel.jsp">
         <jsp:param name="listByCategory" value="${listByCategory}"/>
+        <jsp:param name="isLogged" value="${isLogged}"/>
         <jsp:param name="path" value="/"/>
     </jsp:include>
 

@@ -5,7 +5,7 @@ import ar.edu.itba.getaway.models.OrderByModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.interfaces.services.ExperienceService;
-import ar.edu.itba.getaway.interfaces.services.FavExperienceService;
+import ar.edu.itba.getaway.interfaces.services.FavAndViewExperienceService;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.webapp.forms.SearchForm;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class SearchFormController {
     @Autowired
     private UserService userService;
     @Autowired
-    private FavExperienceService favExperienceService;
+    private FavAndViewExperienceService favAndViewExperienceService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchFormController.class);
 
@@ -57,7 +57,7 @@ public class SearchFormController {
         if (owner != null) {
             if (experience.isPresent()) {
                 final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), owner);
-                favExperienceService.setFav(owner, set, addFavExperience);
+                favAndViewExperienceService.setFav(owner, set, addFavExperience);
             }
         } else if(set.isPresent()){
             return new ModelAndView("redirect:/login");

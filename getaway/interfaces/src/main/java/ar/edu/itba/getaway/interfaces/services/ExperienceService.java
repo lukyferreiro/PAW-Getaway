@@ -24,4 +24,5 @@ public interface ExperienceService {
     void updateExperienceWithoutImg(ExperienceModel toUpdateExperience);
     void increaseViews(ExperienceModel experience);
     void changeVisibility(ExperienceModel experience, Boolean obs);
+    List<List<ExperienceModel>> userLandingPage(UserModel user);
 }

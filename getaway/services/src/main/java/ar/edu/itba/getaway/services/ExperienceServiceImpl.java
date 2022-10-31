@@ -220,8 +220,8 @@ public class ExperienceServiceImpl implements ExperienceService {
         final List<CategoryModel> categories = categoryService.listAllCategories();
 
         for (int i = 0; i < categories.size(); i++) {
-            listExperiencesByCategory.add(new ArrayList<>());
-            listExperiencesByCategory.get(i).addAll(listExperiencesByBestRanked(categories.get(i), user));
+//            listExperiencesByCategory.add(new ArrayList<>());
+            listExperiencesByCategory.add(listExperiencesByBestRanked(categories.get(i), user));
         }
         return listExperiencesByCategory;
     }
@@ -279,6 +279,18 @@ public class ExperienceServiceImpl implements ExperienceService {
     public void changeVisibility(ExperienceModel experience, Boolean obs){
         experience.setObservable(obs);
         updateExperienceWithoutImg(experience);
+    }
+
+    @Override
+    public List<List<ExperienceModel>> userLandingPage(UserModel user){
+        final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
+
+        listExperiencesByCategory.add(user.getViewedExperiences());
+        listExperiencesByCategory.add(user.getFavExperiences());
+
+        //TODO: add recommended by views and by favs to list of lists
+
+        return listExperiencesByCategory;
     }
 
 }

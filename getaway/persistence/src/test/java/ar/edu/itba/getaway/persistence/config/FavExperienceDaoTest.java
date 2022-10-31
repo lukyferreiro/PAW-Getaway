@@ -1,7 +1,7 @@
 //package ar.edu.itba.getaway.persistence.config;
 //
 //import ar.edu.itba.getaway.models.FavExperienceModel;
-//import ar.edu.itba.getaway.interfaces.persistence.FavExperienceDao;
+//import ar.edu.itba.getaway.interfaces.persistence.FavAndViewExperienceDao;
 //import org.junit.Before;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
@@ -24,7 +24,7 @@
 //@RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration(classes = TestConfig.class)
 //@Sql(scripts = "classpath:favexperience-dao-test.sql")
-//public class FavExperienceDaoTest {
+//public class FavAndViewExperienceDaoTest {
 //    /** Data for tests **/
 //
 //    private final List<Long> USER_FAVOURITES = new ArrayList<>(Arrays.asList(1L, 5L));
@@ -35,7 +35,7 @@
 //    private DataSource ds;
 //
 //    @Autowired
-//    private FavExperienceDao favExperienceDao;
+//    private FavAndViewExperienceDao favAndViewExperienceDao;
 //
 //    private JdbcTemplate jdbcTemplate;
 //
@@ -47,7 +47,7 @@
 //    @Test
 //    @Rollback
 //    public void testCreate() {
-//        final FavExperienceModel favExperienceModel = favExperienceDao.createFav(2L, 8L);
+//        final FavExperienceModel favExperienceModel = favAndViewExperienceDao.createFav(2L, 8L);
 //        assertNotNull(favExperienceModel);
 //        assertEquals(new Long(2), favExperienceModel.getUserId());
 //        assertEquals(new Long(8), favExperienceModel.getExperienceId());
@@ -57,25 +57,25 @@
 //    @Test
 //    @Rollback
 //    public void testDelete() {
-//        assertTrue(favExperienceDao.deleteFav(1L,1L));
+//        assertTrue(favAndViewExperienceDao.deleteFav(1L,1L));
 //        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "favuserexperience", "experienceId = " + 1 + " AND userId = " + 1));
 //
 //    }
 //
 //    @Test
 //    public void testListByUserId() {
-//        List<Long> experiencesIds = favExperienceDao.listFavsByUserId(1L);
+//        List<Long> experiencesIds = favAndViewExperienceDao.listFavsByUserId(1L);
 //        assertFalse(experiencesIds.isEmpty());
 //        assertTrue(experiencesIds.containsAll(USER_FAVOURITES));
 //    }
 //
 //    @Test
 //    public void testIsFavTrue() {
-//        assertTrue(favExperienceDao.isFav(1L, 1L));
+//        assertTrue(favAndViewExperienceDao.isFav(1L, 1L));
 //    }
 //
 //    @Test
 //    public void testIsFavFalse() {
-//        assertFalse(favExperienceDao.isFav(1L, 8L));
+//        assertFalse(favAndViewExperienceDao.isFav(1L, 8L));
 //    }
 //}
