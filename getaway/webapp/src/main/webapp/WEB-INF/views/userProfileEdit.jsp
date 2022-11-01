@@ -36,20 +36,32 @@
 
                               <div class="form-group my-2"> <!--Nombre-->
                                  <spring:message code="editProfile.surname.placeholder" var="namePlaceholder"/>
-                                 <form:label path="name" class="form-label">
-                                    <spring:message code="editProfile.name"/><span class="required-field">*</span>
+                                 <form:label path="name" class="form-label d-flex justify-content-between">
+                                    <div>
+                                       <spring:message code="editProfile.name"/>
+                                       <span class="required-field">*</span>
+                                    </div>
+                                    <div class="align-self-center">
+                                       <h6 class="max-input-text"> <spring:message code="editProfile.maxInput" arguments="50"/> </h6>
+                                    </div>
                                  </form:label>
-                                 <form:input type="text" path="name" id="name" cssErrorClass="form-control is-invalid"
+                                 <form:input maxlength="50" type="text" path="name" id="name" cssErrorClass="form-control is-invalid"
                                              class="form-control" placeholder="${namePlaceholder}"/>
                                  <form:errors path="name" cssClass="form-error-label" element="p"/>
                               </div>
 
                               <div class="form-group my-2"> <!--Apellido-->
                                  <spring:message code="editProfile.surname.placeholder" var="surnamePlaceholder"/>
-                                 <form:label path="surname" class="form-label">
-                                    <spring:message code="editProfile.surname"/><span class="required-field">*</span>
+                                 <form:label path="surname" class="form-label d-flex justify-content-between">
+                                    <div>
+                                       <spring:message code="editProfile.surname"/>
+                                       <span class="required-field">*</span>
+                                    </div>
+                                    <div class="align-self-center">
+                                       <h6 class="max-input-text"> <spring:message code="editProfile.maxInput" arguments="50"/> </h6>
+                                    </div>
                                  </form:label>
-                                 <form:input type="text" path="surname" cssErrorClass="form-control is-invalid" id="surname"
+                                 <form:input maxlength="50" type="text" path="surname" cssErrorClass="form-control is-invalid" id="surname"
                                              class="form-control" placeholder="${surnamePlaceholder}"/>
                                  <form:errors path="surname" cssClass="form-error-label" element="p"/>
                               </div>

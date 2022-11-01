@@ -3,10 +3,10 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 
-<div class="card m-2">
+<div class="card m-2" <c:if test="${param.isEditing}"> style="height: 375px;" </c:if> >
    <c:if test="${param.isEditing}">
       <div class="card-title m-2 d-flex justify-content-center align-content-center">
-         <h4 style="font-weight: bold; text-decoration: underline;">
+         <h4 style="font-weight: bold; text-decoration: underline; word-break: break-all;">
             <c:out value="${param.experienceName}"/>
          </h4>
       </div>
@@ -45,7 +45,7 @@
          <h6 style="font-size: medium" id="reviewDescription">
             <c:out value="${param.description}"/>
          </h6>
-         <c:if test="${!param.observable}">
+         <c:if test="${!param.observable && param.isEditing}">
             <p class="obs-info"><spring:message code="experience.notVisible" /></p>
          </c:if>
       </div>

@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<div class="card card-experience h-auto mx-3 my-2 p-0">
+<div class="card card-experience mx-3 my-2 p-0">
 
       <div class="btn-fav">
          <jsp:include page="/WEB-INF/components/fav.jsp">
@@ -26,7 +26,7 @@
                <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/experiences/${param.id}/image'/>" alt="Imagen"/>
             </c:when>
             <c:otherwise>
-               <img class="card-img-top container-fluid p-0 mw-100" alt="Imagen ${param.categoryName}"
+               <img class="card-img-top container-fluid my-3 p-0 mw-100" alt="Imagen ${param.categoryName}"
                     src="<c:url value="/resources/images/${param.categoryName}.svg" />">
             </c:otherwise>
          </c:choose>
@@ -41,7 +41,7 @@
             </div>
             <div class="card-text container-fluid p-0">
                <p class="text-truncate"><c:out value="${param.description}"/></p>
-               <h5><c:out value="${param.address}"/></h5>
+               <h5 class="text-truncate"><c:out value="${param.address}"/></h5>
                <h6>
                   <c:choose>
                      <c:when test="${param.price == ''}">

@@ -20,19 +20,29 @@
                           enctype="multipart/form-data" cssStyle="width: 100%;">
                   <div class="p-4 m-4">
                      <div class="col m-2"> <!--Titulo de la review-->
-                        <form:label path="title" class="form-label">
-                           <spring:message code="review.title"/>
-                           <span class="required-field">*</span>
+                        <form:label path="title" class="form-label d-flex justify-content-between">
+                           <div>
+                              <spring:message code="review.title"/>
+                              <span class="required-field">*</span>
+                           </div>
+                           <div class="align-self-center">
+                              <h6 class="max-input-text"> <spring:message code="reviewForm.maxInput" arguments="50"/> </h6>
+                           </div>
                         </form:label>
-                        <form:input path="title" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
+                        <form:input maxlength="50" path="title" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
                         <form:errors path="title" element="p" cssClass="form-error-label"/>
                      </div>
                      <div class="col m-2"> <!--Descripcion de la review-->
-                        <form:label path="description" class="form-label">
-                           <spring:message code="review.description"/>
-                           <span class="required-field">*</span>
+                        <form:label path="description" class="form-label d-flex justify-content-between">
+                           <div>
+                              <spring:message code="review.description"/>
+                              <span class="required-field">*</span>
+                           </div>
+                           <div class="align-self-center">
+                              <h6 class="max-input-text"> <spring:message code="reviewForm.maxInput" arguments="255"/> </h6>
+                           </div>
                         </form:label>
-                        <form:textarea path="description" class="form-control" cssErrorClass="form-control is-invalid" rows="4" cssStyle="max-height: 200px;"/>
+                        <form:textarea maxlength="255" path="description" class="form-control" cssErrorClass="form-control is-invalid" rows="4" cssStyle="max-height: 200px;"/>
                         <form:errors path="description" element="p" cssClass="form-error-label"/>
                      </div>
                      <div class="col m-2"> <!--Rating-->

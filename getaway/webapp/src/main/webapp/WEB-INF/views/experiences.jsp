@@ -83,9 +83,9 @@
                <jsp:include page="/WEB-INF/components/orderDropdown.jsp">
                   <jsp:param name="orderByModels" value="${orderByModels}"/>
                   <jsp:param name="path" value="${path}"/>
-                  <jsp:param name = "score" value = "${score}"/>
-                  <jsp:param name = "cityId" value = "${cityId}"/>
-                  <jsp:param name = "maxPrice" value = "${maxPrice}"/>
+                  <jsp:param name="score" value = "${score}"/>
+                  <jsp:param name="cityId" value = "${cityId}"/>
+                  <jsp:param name="maxPrice" value = "${maxPrice}"/>
                   <jsp:param name="orderPrev" value="${orderBy}"/>
                </jsp:include>
             </div>

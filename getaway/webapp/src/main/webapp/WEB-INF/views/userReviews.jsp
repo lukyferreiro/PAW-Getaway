@@ -31,9 +31,10 @@
                   <div class="d-flex justify-content-around align-content-center">
                      <h3 class="title"><spring:message code="review.profile.description"/></h3>
                   </div>
-                  <div class="mx-5 my-2 d-flex flex-wrap justify-content-center align-content-center ">
+                  <div class="mx-5 my-2 d-flex flex-wrap justify-content-center align-content-center">
                      <c:forEach var="review" varStatus="myIndex" items="${reviews}">
-                        <div style="min-width: 500px; min-height: 150px; height: fit-content;">
+                        <div style="min-width: 500px; max-width: 500px; height: auto">
+<%--                     <div class="h-100" >--%>
                            <jsp:include page="/WEB-INF/components/cardReview.jsp">
                               <jsp:param name="userName" value="${review.user.name}"/>
                               <jsp:param name="userSurname" value="${review.user.surname}"/>
