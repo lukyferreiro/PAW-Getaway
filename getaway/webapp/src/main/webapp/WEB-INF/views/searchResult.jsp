@@ -50,7 +50,7 @@
                            <jsp:param name="name" value="${experience.experienceName}"/>
                            <jsp:param name="isFav" value="${experience.isFav}"/>
                            <jsp:param name="description" value="${experience.description}"/>
-                           <jsp:param name="address" value="${experience.address}"/>
+                           <jsp:param name="address" value="${experience.getLocationName()}"/>
                            <jsp:param name="price" value="${experience.price}"/>
                            <jsp:param name="path" value="/search_result"/>
                            <jsp:param name="query" value="${query}"/>

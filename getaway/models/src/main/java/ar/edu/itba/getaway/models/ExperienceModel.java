@@ -55,8 +55,6 @@ public class ExperienceModel {
     @Formula(value = "(select count(*) from reviews where reviews.experienceId = experienceId)")
     private Long reviewCount;
 
-    private String locationName;
-
     @Transient
     private boolean isFav;
 
@@ -219,9 +217,8 @@ public class ExperienceModel {
         return averageScore;
     }
 
-    @Transient
     public String getLocationName() {
-        return locationName;
+        return address + ", " + city.getCityName() + ", " + city.getCountry().getCountryName();
     }
 
     @Transient
@@ -231,11 +228,6 @@ public class ExperienceModel {
 
     public void setIsFav(boolean isFav){
         this.isFav = isFav;
-    }
-
-    @PostLoad
-    public void loadLocationName() {
-        locationName = address + ", " + city.getCityName() + ", " + city.getCountry().getCountryName();
     }
 
     @Override
