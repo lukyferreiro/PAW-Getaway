@@ -46,9 +46,6 @@ public class ExperienceController {
                                       Principal principal,
                                       HttpServletRequest request,
                                       @RequestParam Optional<OrderByModel> orderBy,
-                                      @RequestParam Optional<Long> cityId,
-                                      @RequestParam Optional<Double> maxPrice,
-                                      @RequestParam Optional<Long> score,
                                       @RequestParam Optional<Long> experience,
                                       @RequestParam Optional<Boolean> set,
                                       @RequestParam(value = "pageNum", defaultValue = "1") final Integer pageNum) {
@@ -65,17 +62,16 @@ public class ExperienceController {
 
         // Price
         Double max = experienceService.getMaxPriceByCategory(categoryModel).orElse(0D);
+        Long scoreVal = 0L;
+
         mav.addObject("max", max);
-        if(maxPrice.isPresent()){
-            max = maxPrice.get();
+        if(form != null){
+            if(form.getMaxPrice() != null){
+                max = form.getMaxPrice();
+            }
+            scoreVal = form.getScoreVal();
         }
         mav.addObject("maxPrice", max);
-
-        // Score
-        Long scoreVal = 0L;
-        if (score.isPresent() && score.get() != -1) {
-            scoreVal = score.get();
-        }
         mav.addObject("score", scoreVal);
 
         // City
@@ -99,10 +95,10 @@ public class ExperienceController {
             return new ModelAndView("redirect:/login");
         }
 
-        if (cityId.isPresent() && cityId.get()>0) {
-            final CityModel city = locationService.getCityById(cityId.get()).orElseThrow(CityNotFoundException::new);
+        if (form!=null && form.getCityId()!= null && !form.getCityId().equals("-1")) {
+            final CityModel city = locationService.getCityById(Long.valueOf(form.getCityId())).orElseThrow(CityNotFoundException::new);
             currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, city, orderBy, pageNum, owner);
-            mav.addObject("cityId", cityId.get());
+            mav.addObject("cityId", city.getCityId());
         } else {
             currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, null, orderBy, pageNum, owner);
             mav.addObject("cityId", -1);
@@ -123,40 +119,6 @@ public class ExperienceController {
         mav.addObject("currentPage", currentPage.getCurrentPage());
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
-
-        return mav;
-    }
-
-    @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.POST})
-    public ModelAndView experienceFilter(@PathVariable("categoryName") final String categoryName,
-                                       HttpServletRequest request,
-                                       @RequestParam Optional<OrderByModel> orderBy,
-                                       @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
-                                       @Valid @ModelAttribute("filterForm") final FilterForm form,
-                                       final BindingResult errors,
-                                       Principal principal) {
-        LOGGER.debug("Endpoint POST {}", request.getServletPath());
-        final ModelAndView mav = new ModelAndView("redirect:/experiences/" + categoryName);
-
-        if (errors.hasErrors()) {
-            return experienceGet(categoryName, form, searchForm, principal, request, orderBy, Optional.empty(), Optional.empty(), Optional.empty() , Optional.empty(), Optional.empty(), 1);
-        }
-
-        //TODO: check add only city and then access cityid. Multiple db access
-        final Optional<CityModel> cityModel = locationService.getCityByName(form.getExperienceCity());
-        cityModel.ifPresent(model -> mav.addObject("cityId", model.getCityId()));
-
-        final Double priceMax = form.getExperiencePriceMax();
-        if (priceMax != null) {
-            mav.addObject("maxPrice", priceMax);
-        }
-
-        final Long score = form.getScoreVal();
-        if (score != -1) {
-            mav.addObject("score", score);
-        }
-
-        orderBy.ifPresent(orderByModel -> mav.addObject("orderBy", orderByModel));
 
         return mav;
     }
