@@ -19,4 +19,6 @@ public interface ExperienceDao {
 /*    Long getCountByName(String name, UserModel user);*/
 /*    Long getCountExperiencesByUser(String name, UserModel user);*/
     List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order);
+    List<ExperienceModel> getRecommendedByFavs(UserModel user);
+    List<ExperienceModel> getRecommendedByViews(UserModel user);
 }

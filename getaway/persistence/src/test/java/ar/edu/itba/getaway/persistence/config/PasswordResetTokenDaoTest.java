@@ -70,7 +70,7 @@
 //    @Test
 //    @Rollback
 //    public void testRemoveTokenById() {
-//        passwordResetTokenDao.removeTokenById(id1);
+//        passwordResetTokenDao.removeToken(id1);
 //        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "passwordresettoken", "passtokenid = " + id1));
 //    }
 //

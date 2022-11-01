@@ -144,6 +144,13 @@ public class UserDaoTest {
     @Test
     public void testGetUserRoles() {
         final Collection<RoleModel> roles = userDao.getUserRoles(DEFAULT_USER);
+
+        for (RoleModel role:roles
+             ) {
+            System.out.println(role.getRoleName());
+        }
+
+
         assertEquals(DEFAULT_ROLES_MODELS, roles);
         assertTrue(roles.contains(USER_MODEL));
         assertTrue(roles.contains(NOT_VERIFIED_MODEL));
