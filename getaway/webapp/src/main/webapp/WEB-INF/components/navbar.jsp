@@ -18,8 +18,8 @@
                <img src="<c:url value="/resources/images/ic_lupa.svg"/>" alt="Icono lupa">
             </button>
             <spring:message code="navbar.search" var="placeholder"/>
-            <c:url value="/search_result" var="searchPostPath"/>
-            <form:form modelAttribute="searchForm" action="${searchPostPath}" id="searchExperienceForm" method="post"
+            <c:url value="/search_result" var="searchGetPath"/>
+            <form:form modelAttribute="searchForm" action="${searchGetPath}" id="searchExperienceForm" method="get"
                        acceptCharset="UTF-8" cssClass="my-auto">
                <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>
                <form:errors path="query" element="p" cssClass="form-error-label"/>
