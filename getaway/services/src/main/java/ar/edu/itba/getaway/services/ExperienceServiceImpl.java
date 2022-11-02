@@ -68,20 +68,20 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public void deleteExperience(ExperienceModel experienceModel) {
         LOGGER.debug("Deleting experience with id {}", experienceModel.getExperienceId());
-        ImageModel toDeleteImg = experienceModel.getExperienceImage();
+        final ImageModel toDeleteImg = experienceModel.getExperienceImage();
         experienceDao.deleteExperience(experienceModel);
         imageService.deleteImg(toDeleteImg);
     }
 
     @Override
-    public Optional<ExperienceModel> getExperienceById(Long experienceId) {
+    public Optional<ExperienceModel> getExperienceById(long experienceId) {
         LOGGER.debug("Retrieving experience with id {}", experienceId);
         return experienceDao.getExperienceById(experienceId);
     }
 
 
     @Override
-    public Optional<ExperienceModel> getVisibleExperienceById(Long experienceId, UserModel user) {
+    public Optional<ExperienceModel> getVisibleExperienceById(long experienceId, UserModel user) {
         LOGGER.debug("Retrieving experience with id {}", experienceId);
         Optional<ExperienceModel> maybeExperience = experienceDao.getVisibleExperienceById(experienceId, user);
         maybeExperience.ifPresent(experienceModel -> experienceModel.setIsFav(user != null && user.isFav(experienceModel)));
@@ -89,13 +89,13 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page, UserModel user) {
+    public Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, UserModel user) {
         int totalPages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {} ", page);
-        Long total = experienceDao.countListByFilter(category, max, score, city,user);
-        if (total > 0){
+        final long total = experienceDao.countListByFilter(category, max, score, city, user);
+        if (total > 0) {
             LOGGER.debug("Total experiences found: {}", total);
 
             totalPages = (int) Math.ceil((double) total / PAGE_SIZE);
@@ -113,7 +113,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             totalPages = 1;
         }
 
-        for (ExperienceModel experience: experienceModelList) {
+        for (ExperienceModel experience : experienceModelList) {
             experience.setIsFav(user != null && user.isFav(experience));
         }
 
@@ -125,9 +125,9 @@ public class ExperienceServiceImpl implements ExperienceService {
     public List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, UserModel user) {
         LOGGER.debug("Retrieving all experiences by best ranked of category with id {}", category.getCategoryId());
 
-        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByBestRanked(category);
+        final List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByBestRanked(category);
 
-        for (ExperienceModel experience: experienceModelList) {
+        for (ExperienceModel experience : experienceModelList) {
             experience.setIsFav(user != null && user.isFav(experience));
         }
 
@@ -135,19 +135,17 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Optional<Double> getMaxPriceByCategory (CategoryModel category) {
+    public Optional<Double> getMaxPriceByCategory(CategoryModel category) {
         LOGGER.debug("Retrieving max price of category with id {}", category.getCategoryId());
-        return experienceDao.getMaxPriceByCategory (category);
+        return experienceDao.getMaxPriceByCategory(category);
     }
 
     @Override
-    public Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, Integer page) {
+    public Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page) {
+        LOGGER.debug("Requested page {}", page);
         int totalPages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
-
-        LOGGER.debug("Requested page {}", page);
-
-        Long total = Long.valueOf(user.getFavCount());
+        final long total = user.getFavCount();
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -175,13 +173,12 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, UserModel user) {
-        int totalPages;
-        List<ExperienceModel> experienceModelList = new ArrayList<>();
-
+    public Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, int page, UserModel user) {
         LOGGER.debug("Requested page {}", page);
 
-        Long total = experienceDao.getCountByName(name, user);
+        int totalPages;
+        List<ExperienceModel> experienceModelList = new ArrayList<>();
+        final long total = experienceDao.getCountByName(name, user);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -228,13 +225,12 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, Integer page) {
-        int totalPages;
-        List<ExperienceModel> experienceModelList = new ArrayList<>();
-
+    public Page<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page) {
         LOGGER.debug("Requested page {}", page);
 
-        Long total = experienceDao.getCountExperiencesByUser(name, user);
+        int totalPages;
+        List<ExperienceModel> experienceModelList = new ArrayList<>();
+        final long total = experienceDao.getCountExperiencesByUser(name, user);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -260,14 +256,14 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Transactional
     @Override
-    public void increaseViews(ExperienceModel experience){
+    public void increaseViews(ExperienceModel experience) {
         experience.increaseViews();
         updateExperienceWithoutImg(experience);
     }
 
     @Transactional
     @Override
-    public void changeVisibility(ExperienceModel experience, Boolean obs){
+    public void changeVisibility(ExperienceModel experience, boolean obs) {
         experience.setObservable(obs);
         updateExperienceWithoutImg(experience);
     }

@@ -28,7 +28,7 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public Optional<CityModel> getCityById(Long cityId) {
+    public Optional<CityModel> getCityById(long cityId) {
         LOGGER.debug("Get city with id {}", cityId);
         return Optional.ofNullable(em.find(CityModel.class, cityId));
     }
@@ -56,7 +56,7 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public Optional<CountryModel> getCountryById(Long countryId) {
+    public Optional<CountryModel> getCountryById(long countryId) {
         LOGGER.debug("Get country with id {}", countryId);
         return Optional.ofNullable(em.find(CountryModel.class, countryId));
     }

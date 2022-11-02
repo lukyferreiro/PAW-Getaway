@@ -20,8 +20,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
 
     @Override
-    public ExperienceModel createExperience(String name, String address, String description, String email, String url,
-                                            Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
+    public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
 
         final ExperienceModel experience = new ExperienceModel(name, address, description, email, url, price, city, category, user, experienceImage, true, 0);
         em.persist(experience);
@@ -42,13 +41,13 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public Optional<ExperienceModel> getExperienceById(Long experienceId) {
+    public Optional<ExperienceModel> getExperienceById(long experienceId) {
         LOGGER.debug("Get experience with id {}", experienceId);
         return Optional.ofNullable(em.find(ExperienceModel.class, experienceId));
     }
 
     @Override
-    public Optional<ExperienceModel> getVisibleExperienceById(Long experienceId, UserModel user) {
+    public Optional<ExperienceModel> getVisibleExperienceById(long experienceId, UserModel user) {
         LOGGER.debug("Get experience with id {}", experienceId);
         final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId = :experienceId AND (exp.observable = true OR exp.user = :user)", ExperienceModel.class);
         query.setParameter("experienceId", experienceId);
@@ -65,7 +64,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page, Integer pageSize, UserModel user) {
+    public List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, int pageSize, UserModel user) {
         String orderQuery;
         if (order.isPresent()) {
             orderQuery = order.get().getSqlQuery();
@@ -74,7 +73,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
 
         if (city != null) {
-            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city AND COALESCE(exp.price,0)<=:max AND exp.averageScore>=:score AND (exp.observable=true OR exp.user=:user)" + orderQuery, ExperienceModel.class);
+            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND exp.observable=true AND exp.city=:city AND COALESCE(exp.price,0)<=:max AND exp.averageScore>=:score AND (exp.observable=true OR exp.user=:user)" + orderQuery, ExperienceModel.class);
             query.setParameter("category", category);
             query.setParameter("city", city);
             query.setParameter("max", max);
@@ -84,7 +83,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
             query.setParameter("user", user);
             return query.getResultList();
         } else {
-            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND COALESCE(exp.price,0)<=:max AND exp.averageScore>=:score AND (exp.observable=true OR exp.user=:user)" + orderQuery, ExperienceModel.class);
+            final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND exp.observable=true AND COALESCE(exp.price,0)<=:max AND exp.averageScore>=:score AND (exp.observable=true OR exp.user=:user)" + orderQuery, ExperienceModel.class);
             query.setParameter("category", category);
             query.setParameter("max", max);
             query.setParameter("score", score);
@@ -96,23 +95,22 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public Long countListByFilter(CategoryModel category, Double max, Long score, CityModel city, UserModel user) {
+    public long countListByFilter(CategoryModel category, Double max, Long score, CityModel city, UserModel user) {
+        final TypedQuery<Long> query;
         if (city != null) {
-            final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city AND COALESCE(exp.price,0)<=:max AND exp.averageScore>=:score AND (exp.observable=true OR exp.user=:user)", Long.class);
+            query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city AND COALESCE(exp.price,0)<=:max AND exp.averageScore>=:score AND (exp.observable=true OR exp.user=:user)", Long.class);
             query.setParameter("category", category);
             query.setParameter("max", max);
             query.setParameter("score", score);
             query.setParameter("city", city);
-            query.setParameter("user", user);
-            return query.getSingleResult();
         } else {
-            final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category AND COALESCE(exp.price,0)<=:max  AND exp.averageScore>=:score AND (exp.observable=true OR exp.user=:user)", Long.class);
+            query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE exp.category=:category AND COALESCE(exp.price,0)<=:max  AND exp.averageScore>=:score AND (exp.observable=true OR exp.user=:user)", Long.class);
             query.setParameter("category", category);
             query.setParameter("max", max);
             query.setParameter("score", score);
-            query.setParameter("user", user);
-            return query.getSingleResult();
         }
+        query.setParameter("user", user);
+        return query.getSingleResult();
     }
 
     @Override
@@ -124,7 +122,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order,Integer page, Integer pageSize, UserModel user) {
+    public List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, int page, int pageSize, UserModel user) {
         String orderQuery;
         if (order.isPresent()) {
             orderQuery = order.get().getSqlQuery();
@@ -140,7 +138,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public Long getCountByName(String name, UserModel user) {
+    public long getCountByName(String name, UserModel user) {
         final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.locationName) LIKE LOWER(CONCAT('%', :name,'%')) AND (exp.observable=true OR exp.user=:user)", Long.class);
         query.setParameter("name", name);
         query.setParameter("user", user);
@@ -148,7 +146,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order,Integer page, Integer pageSize) {
+    public List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize) {
         LOGGER.debug("Get experiences of user with id {}", user.getUserId());
         String orderQuery;
         if (order.isPresent()) {
@@ -165,7 +163,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public Long getCountExperiencesByUser(String name, UserModel user) {
+    public long getCountExperiencesByUser(String name, UserModel user) {
         final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user", Long.class);
         query.setParameter("name", name);
         query.setParameter("user", user);

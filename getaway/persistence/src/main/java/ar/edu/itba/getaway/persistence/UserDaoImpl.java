@@ -21,13 +21,13 @@ public class UserDaoImpl implements UserDao {
     public UserModel createUser(String password, String name, String surname, String email,
                                 Collection<Roles> roles, ImageModel image) throws DuplicateUserException {
 
-        Optional<UserModel> user = getUserByEmail(email);
+        final Optional<UserModel> user = getUserByEmail(email);
 
         if(user.isPresent()){
             throw new DuplicateUserException();
         }
 
-        Collection<RoleModel> roleModels = new ArrayList<>();
+        final Collection<RoleModel> roleModels = new ArrayList<>();
         for (Roles role: roles) {
             roleModels.add(getRoleByName(role).get());
         }
@@ -40,7 +40,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<UserModel> getUserById(Long userId) {
+    public Optional<UserModel> getUserById(long userId) {
         LOGGER.debug("Get user with id {}", userId);
         return Optional.ofNullable(em.find(UserModel.class, userId));
     }

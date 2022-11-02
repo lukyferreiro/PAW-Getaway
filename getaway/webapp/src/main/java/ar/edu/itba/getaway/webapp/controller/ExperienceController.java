@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -65,8 +64,8 @@ public class ExperienceController {
         Long scoreVal = 0L;
 
         mav.addObject("max", max);
-        if(form != null){
-            if(form.getMaxPrice() != null){
+        if (form != null) {
+            if (form.getMaxPrice() != null) {
                 max = form.getMaxPrice();
             }
             scoreVal = form.getScoreVal();
@@ -80,23 +79,23 @@ public class ExperienceController {
         UserModel owner = null;
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-            if(user.isPresent()){
+            if (user.isPresent()) {
                 owner = user.get();
             }
         }
 
         // FavExperiences
         if (owner != null) {
-            if(experience.isPresent()){
-                final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(),owner);
+            if (experience.isPresent()) {
+                final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), owner);
                 favExperienceService.setFav(owner, set, addFavExperience);
             }
-        }else if(set.isPresent()){
+        } else if (set.isPresent()) {
             return new ModelAndView("redirect:/login");
         }
 
-        if (form!=null && form.getCityId()!= null && !form.getCityId().equals("-1")) {
-            final CityModel city = locationService.getCityById(Long.valueOf(form.getCityId())).orElseThrow(CityNotFoundException::new);
+        if (form != null && form.getCityId() != null && !form.getCityId().equals("-1")) {
+            final CityModel city = locationService.getCityById(Long.parseLong(form.getCityId())).orElseThrow(CityNotFoundException::new);
             currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, city, orderBy, pageNum, owner);
             mav.addObject("cityId", city.getCityId());
         } else {
@@ -126,7 +125,7 @@ public class ExperienceController {
     @RequestMapping("/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}")
     public ModelAndView experienceView(Principal principal,
                                        @PathVariable("categoryName") final String categoryName,
-                                       @PathVariable("experienceId") final Long experienceId,
+                                       @PathVariable("experienceId") final long experienceId,
                                        @RequestParam Optional<Boolean> view,
                                        @RequestParam Optional<Boolean> set,
                                        @RequestParam Optional<Boolean> setObs,
@@ -143,7 +142,7 @@ public class ExperienceController {
         UserModel owner = null;
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-            if(user.isPresent()){
+            if (user.isPresent()) {
                 owner = user.get();
             }
         }

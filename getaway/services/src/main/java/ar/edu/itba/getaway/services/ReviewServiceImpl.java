@@ -34,8 +34,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final Locale locale = LocaleContextHolder.getLocale();
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImpl.class);
-    private static final Integer PAGE_SIZE = 6;
-    private static final Integer USER_PAGE_SIZE = 12;
+    private static final int PAGE_SIZE = 6;
+    private static final int USER_PAGE_SIZE = 12;
 
     @Transactional
     @Override
@@ -48,7 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public void updateReview(Long reviewId, ReviewModel reviewModel) {
+    public void updateReview(long reviewId, ReviewModel reviewModel) {
         LOGGER.debug("Updating review with id {}", reviewId);
         reviewDao.updateReview(reviewId, reviewModel);
     }
@@ -61,14 +61,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewModel> getReviewAndUser(ExperienceModel experience, Integer page) {
+    public Page<ReviewModel> getReviewAndUser(ExperienceModel experience, int page) {
         LOGGER.debug("Retrieving all reviews and user of experience with id {}", experience.getExperienceId());
+        LOGGER.debug("Requested page {}", page);
         int totalPages;
         List<ReviewModel> reviewUserModelList = new ArrayList<>();
-
-        LOGGER.debug("Requested page {}", page);
-
-        Long total = reviewDao.getReviewByExperienceCount(experience);
+        final long total = reviewDao.getReviewByExperienceCount(experience);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -92,20 +90,19 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Optional<ReviewModel> getReviewById(Long reviewId) {
+    public Optional<ReviewModel> getReviewById(long reviewId) {
         LOGGER.debug("Retrieving review with id {}", reviewId);
         return reviewDao.getReviewById(reviewId);
     }
 
     @Override
-    public Page<ReviewModel> getReviewsByUser(UserModel user, Integer page) {
+    public Page<ReviewModel> getReviewsByUser(UserModel user, int page) {
         LOGGER.debug("Retrieving all reviews of user with id {}", user.getUserId());
-        int totalPages;
-        List<ReviewModel> reviewUserModelList = new ArrayList<>();
-
         LOGGER.debug("Requested page {}", page);
 
-        Long total = reviewDao.getReviewByUserCount(user);
+        int totalPages;
+        List<ReviewModel> reviewUserModelList = new ArrayList<>();
+        final long total = reviewDao.getReviewByUserCount(user);
 
         if (total > 0) {
             LOGGER.debug("Total reviews found: {}", total);

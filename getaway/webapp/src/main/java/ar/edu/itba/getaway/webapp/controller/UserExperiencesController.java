@@ -98,7 +98,7 @@ public class UserExperiencesController {
                                    HttpServletRequest request,
                                    Optional<Boolean> delete,
                                    @RequestParam Optional<OrderByModel> orderBy,
-                                   @RequestParam(value = "pageNum", defaultValue = "1") final Integer pageNum) {
+                                   @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum) {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final Page<ExperienceModel> currentPage;
 
@@ -121,7 +121,7 @@ public class UserExperiencesController {
         userQuery.ifPresent(searchFormPrivate::setQuery);
         currentPage = experienceService.getExperiencesListByUser(userQuery.orElse(""), user, orderBy, pageNum);
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
-        final boolean hasExperiences = !currentPage.getTotalPages().equals(0);
+        final boolean hasExperiences = currentPage.getTotalPages() != 0;
 
         final String path = request.getServletPath();
 

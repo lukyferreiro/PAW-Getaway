@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface UserService {
     UserModel createUser (String password, String name, String surname, String email) throws DuplicateUserException;
-    Optional<UserModel> getUserById (Long userId);
+    Optional<UserModel> getUserById (long userId);
     Optional<UserModel> getUserByEmail (String email);
     UserModel getUserByExperience(ExperienceModel experience);
     Optional<UserModel> verifyAccount (String token);

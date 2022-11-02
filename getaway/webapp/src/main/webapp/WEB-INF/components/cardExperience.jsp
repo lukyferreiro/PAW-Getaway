@@ -26,7 +26,7 @@
                <img class="card-img-top container-fluid p-0 mw-100" src="<c:url value='/experiences/${param.id}/image'/>" alt="Imagen"/>
             </c:when>
             <c:otherwise>
-               <img class="card-img-top container-fluid my-3 p-0 mw-100" alt="Imagen ${param.categoryName}"
+               <img class="card-img-top container-fluid p-4 mw-100" alt="Imagen ${param.categoryName}"
                     src="<c:url value="/resources/images/${param.categoryName}.svg" />">
             </c:otherwise>
          </c:choose>

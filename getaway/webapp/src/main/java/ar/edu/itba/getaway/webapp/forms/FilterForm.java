@@ -4,7 +4,7 @@ public class FilterForm {
 
     private String cityId;
     private Double maxPrice;
-    private Boolean enablePrice;
+    private boolean enablePrice;
     private String score;
 
     public Double getMaxPrice() {
@@ -27,10 +27,10 @@ public class FilterForm {
     public void setCityId(String cityId) {
         this.cityId = cityId;
     }
-    public Boolean getEnablePrice() {
+    public boolean getEnablePrice() {
         return enablePrice;
     }
-    public void setEnablePrice(Boolean enablePrice) {
+    public void setEnablePrice(boolean enablePrice) {
         this.enablePrice = enablePrice;
     }
     public void setScore(String score) {

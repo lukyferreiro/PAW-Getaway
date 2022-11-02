@@ -28,7 +28,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Optional<CityModel> getCityById(Long cityId) {
+    public Optional<CityModel> getCityById(long cityId) {
         LOGGER.debug("Retrieving city with id {}", cityId);
         return locationDao.getCityById(cityId);
     }
@@ -52,7 +52,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Optional<CountryModel> getCountryById(Long countryId) {
+    public Optional<CountryModel> getCountryById(long countryId) {
         LOGGER.debug("Retrieving country with id {}", countryId);
         return locationDao.getCountryById(countryId);
     }

@@ -5,10 +5,10 @@ import java.util.List;
 public class Page<T> {
 
     private final List<T> content;
-    private final Integer currentPage, totalPages;
-    private final Long totalResults;
+    private final int currentPage, totalPages;
+    private final long totalResults;
 
-    public Page(List<T> content, Integer currentPage, Integer totalPages, Long totalResults) {
+    public Page(List<T> content, int currentPage, int totalPages, long totalResults) {
         this.content = content;
         this.currentPage = currentPage;
         this.totalPages = totalPages;
@@ -19,15 +19,15 @@ public class Page<T> {
         return content;
     }
 
-    public Integer getCurrentPage() {
+    public int getCurrentPage() {
         return currentPage;
     }
 
-    public Integer getTotalPages() {
+    public int getTotalPages() {
         return totalPages;
     }
 
-    public Integer getMinPage() {
+    public int getMinPage() {
         int minPage = 1;
         if (currentPage - 2 >= 1) {
             minPage = currentPage - 2;
@@ -37,7 +37,7 @@ public class Page<T> {
         return minPage;
     }
 
-    public Integer getMaxPage() {
+    public int getMaxPage() {
         int maxPage = currentPage;
         if (currentPage + 2 <= totalPages) {
             maxPage = currentPage + 2;
@@ -47,7 +47,7 @@ public class Page<T> {
         return maxPage;
     }
 
-    public Long getTotalResults() {
+    public long getTotalResults() {
         return totalResults;
     }
 }

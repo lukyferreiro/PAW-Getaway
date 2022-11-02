@@ -26,7 +26,7 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public Optional<CategoryModel> getCategoryById(Long categoryId) {
+    public Optional<CategoryModel> getCategoryById(long categoryId) {
         LOGGER.debug("Get category with id {}", categoryId);
         final TypedQuery<CategoryModel> query = em.createQuery("FROM CategoryModel WHERE categoryId = :categoryId", CategoryModel.class);
         query.setParameter("categoryId", categoryId);
@@ -42,7 +42,7 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public Integer getCategoriesCount (){
+    public int getCategoriesCount (){
         LOGGER.debug("Get count of categories");
         return em.createQuery("FROM CategoryModel", CategoryModel.class).getResultList().size();
     }

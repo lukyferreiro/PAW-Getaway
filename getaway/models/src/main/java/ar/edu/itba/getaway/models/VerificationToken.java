@@ -12,7 +12,7 @@ public class VerificationToken {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "verificationToken_verifId_seq")
     @SequenceGenerator(sequenceName = "verificationToken_verifId_seq", name = "verificationToken_verifId_seq", allocationSize = 1)
     @Column(name = "verifId")
-    private Long id;
+    private long id;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "verifUserId")
     private UserModel user;
@@ -46,10 +46,10 @@ public class VerificationToken {
     public void setValue(String value) {
         this.value = value;
     }
-    public Long getId() {
+    public long getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
     public UserModel getUser() {
@@ -74,7 +74,7 @@ public class VerificationToken {
             return false;
         }
         VerificationToken verificationToken = (VerificationToken) o;
-        return this.id.equals(verificationToken.id);
+        return this.id == verificationToken.id;
     }
 
     @Override

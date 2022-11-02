@@ -26,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<CategoryModel> getCategoryById(Long categoryId) {
+    public Optional<CategoryModel> getCategoryById(long categoryId) {
         LOGGER.debug("Retrieving category with id {}", categoryId);
         return categoryDao.getCategoryById(categoryId);
     }
@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Integer getCategoriesCount() {
+    public int getCategoriesCount() {
         LOGGER.debug("Retrieving cant of categories");
         return categoryDao.getCategoriesCount();
     }

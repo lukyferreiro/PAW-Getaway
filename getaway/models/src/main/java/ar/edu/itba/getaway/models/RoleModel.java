@@ -11,7 +11,7 @@ public class RoleModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roles_roleId_seq")
     @SequenceGenerator(sequenceName = "roles_roleId_seq", name = "roles_roleId_seq", allocationSize = 1)
     @Column(name = "roleId")
-    private Long roleId;
+    private long roleId;
 
     @Column(name = "roleName", length = 20, nullable = false)
     @Enumerated(EnumType.STRING)
@@ -22,15 +22,15 @@ public class RoleModel {
         // Just for Hibernate
     }
 
-    public RoleModel(Long roleId, Roles roleName){
+    public RoleModel(long roleId, Roles roleName){
         this.roleId = roleId;
         this.roleName = roleName;
     }
 
-    public Long getRoleId() {
+    public long getRoleId() {
         return roleId;
     }
-    public void setRoleId(Long roleId) {
+    public void setRoleId(long roleId) {
         this.roleId = roleId;
     }
     public Roles getRoleName() {
@@ -49,7 +49,7 @@ public class RoleModel {
             return false;
         }
         RoleModel other = (RoleModel) o;
-        return this.roleId.equals(other.roleId) && this.roleName.equals(other.roleName);
+        return this.roleId == other.roleId && this.roleName.equals(other.roleName);
     }
 
     @Override
