@@ -113,10 +113,10 @@
                                        <div class="container-fluid d-flex p-2 mb-1 align-items-end">
                                           <h5 class="mb-1">
                                              <c:choose>
-                                                <c:when test="${param.price == ''}">
+                                                <c:when test="${experience.price == null}">
                                                    <spring:message code="experience.noPrice"/>
                                                 </c:when>
-                                                <c:when test="${param.price == '0.0'}">
+                                                <c:when test="${experience.price == ''}">
                                                    <spring:message code="experience.price.free"/>
                                                 </c:when>
                                                 <c:otherwise>

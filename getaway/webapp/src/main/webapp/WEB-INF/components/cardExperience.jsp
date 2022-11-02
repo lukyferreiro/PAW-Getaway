@@ -67,9 +67,9 @@
             <jsp:param name="avgReview" value="${param.avgReviews}"/>
          </jsp:include>
       </div>
-      <div class="card-body">
+      <div class="card-body p-0 d-flex justify-content-center">
          <c:if test="${!param.observable}">
-            <h5 class="obs-info"><spring:message code="experience.notVisible" /></h5>
+            <h5 class="obs-info align-self-center" style="font-size: small"><spring:message code="experience.notVisible" /></h5>
          </c:if>
       </div>
 
