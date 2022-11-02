@@ -178,6 +178,7 @@
 
    <%@ include file="../components/includes/bottomScripts.jsp" %>
    <script src='<c:url value="/resources/js/submitStarsButton.js"/>'></script>
+   <script src='<c:url value="/resources/js/submitButton.js"/>'></script>
 
    </body>
 </html>
