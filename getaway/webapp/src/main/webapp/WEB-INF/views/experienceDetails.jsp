@@ -21,7 +21,7 @@
                <jsp:param name="id" value="${experience.experienceId}"/>
                <jsp:param name="experienceCategoryName" value="${experience.category.categoryName}"/>
                <jsp:param name="categoryName" value="${categoryName}"/>
-               <jsp:param name="address" value="${experience.locationName}"/>
+               <jsp:param name="address" value="${experience.getLocationName()}"/>
                <jsp:param name="price" value="${experience.price.toString()}"/>
                <jsp:param name="description" value="${experience.description}"/>
                <jsp:param name="siteUrl" value="${experience.siteUrl}"/>
