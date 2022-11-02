@@ -3,10 +3,10 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 
-<div class="card m-2" <c:if test="${param.isEditing}"> style="height: 375px;" </c:if> >
+<div class="card m-2" <c:if test="${param.isEditing}"> style="height: 380px;" </c:if> >
    <c:if test="${param.isEditing}">
       <div class="card-title m-2 d-flex justify-content-center align-content-center">
-         <h4 style="font-weight: bold; text-decoration: underline; word-break: break-all;">
+         <h4 class="text-center" style="font-weight: bold; text-decoration: underline; word-break: break-all;">
             <c:out value="${param.experienceName}"/>
          </h4>
       </div>
