@@ -83,7 +83,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public Optional<ExperienceModel> getVisibleExperienceById(long experienceId, UserModel user) {
         LOGGER.debug("Retrieving experience with id {}", experienceId);
-        Optional<ExperienceModel> maybeExperience = experienceDao.getVisibleExperienceById(experienceId, user);
+        Optional<ExperienceModel> maybeExperience = experienceDao.getVisibleExperienceById(experienceId);
         maybeExperience.ifPresent(experienceModel -> experienceModel.setIsFav(user != null && user.isFav(experienceModel)));
         return maybeExperience;
     }
@@ -94,7 +94,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {} ", page);
-        final long total = experienceDao.countListByFilter(category, max, score, city, user);
+        final long total = experienceDao.countListByFilter(category, max, score, city);
         if (total > 0) {
             LOGGER.debug("Total experiences found: {}", total);
 
@@ -108,7 +108,7 @@ public class ExperienceServiceImpl implements ExperienceService {
                 page = 1;
             }
 
-            experienceModelList = experienceDao.listExperiencesByFilter(category, max, score, city, order, page, PAGE_SIZE, user);
+            experienceModelList = experienceDao.listExperiencesByFilter(category, max, score, city, order, page, PAGE_SIZE);
         } else {
             totalPages = 1;
         }
@@ -178,7 +178,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         int totalPages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
-        final long total = experienceDao.getCountByName(name, user);
+        final long total = experienceDao.getCountByName(name);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -192,7 +192,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             } else if (page < 0) {
                 page = 1;
             }
-            experienceModelList = experienceDao.listExperiencesByName(name, order, page, RESULT_PAGE_SIZE, user);
+            experienceModelList = experienceDao.listExperiencesByName(name, order, page, RESULT_PAGE_SIZE);
 
         } else {
             totalPages = 1;

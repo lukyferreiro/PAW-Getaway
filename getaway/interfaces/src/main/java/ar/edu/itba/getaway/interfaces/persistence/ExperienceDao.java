@@ -10,14 +10,14 @@ public interface ExperienceDao {
     void updateExperience(ExperienceModel experienceModel);
     void deleteExperience(ExperienceModel experienceModel);
     Optional<ExperienceModel> getExperienceById(long experienceId);
-    Optional<ExperienceModel> getVisibleExperienceById(long experienceId, UserModel user);
+    Optional<ExperienceModel> getVisibleExperienceById(long experienceId);
     Optional<Double> getMaxPriceByCategory(CategoryModel category);
     //TODO VER ACA
-    List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, int pageSize, UserModel user);
-    long countListByFilter(CategoryModel categoryId, Double max, Long score, CityModel city, UserModel user);
+    List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, int pageSize);
+    long countListByFilter(CategoryModel categoryId, Double max, Long score, CityModel city);
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category);
-    List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, int page, int pageSize, UserModel user);
-    long getCountByName(String name, UserModel user);
+    List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, int page, int pageSize);
+    long getCountByName(String name);
     long getCountExperiencesByUser(String name, UserModel user);
     List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize);
 }
