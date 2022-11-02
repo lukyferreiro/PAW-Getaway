@@ -121,7 +121,7 @@ public class UserExperiencesController {
         userQuery.ifPresent(searchFormPrivate::setQuery);
         currentPage = experienceService.getExperiencesListByUser(userQuery.orElse(""), user, orderBy, pageNum);
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
-        final boolean hasExperiences = currentPage.getTotalPages() != 0;
+        final boolean hasExperiences = user.hasExperiences();
 
         final String path = request.getServletPath();
 

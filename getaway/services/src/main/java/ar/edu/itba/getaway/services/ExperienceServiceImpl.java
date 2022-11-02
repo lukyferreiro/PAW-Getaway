@@ -267,5 +267,4 @@ public class ExperienceServiceImpl implements ExperienceService {
         experience.setObservable(obs);
         updateExperienceWithoutImg(experience);
     }
-
 }

@@ -1,5 +1,7 @@
 package ar.edu.itba.getaway.models;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -32,6 +34,9 @@ public class UserModel {
     @ManyToMany
     @JoinTable(name = "favuserexperience", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "experienceId"))
     private List<ExperienceModel> favExperiences;
+
+    @Formula(value = "(select count(*) from experiences where experiences.userId = userId)!=0")
+    private boolean hasExperiences;
 
     /* default */
     protected UserModel() {
@@ -153,6 +158,11 @@ public class UserModel {
         } else {
             return profileImage.getImage();
         }
+    }
+
+    @Transient
+    public boolean hasExperiences(){
+        return hasExperiences;
     }
 
     @Override
