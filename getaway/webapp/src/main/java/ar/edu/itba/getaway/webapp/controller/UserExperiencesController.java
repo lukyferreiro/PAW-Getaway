@@ -127,7 +127,6 @@ public class UserExperiencesController {
 
         mav.addObject("path", path);
         mav.addObject("userQuery", userQuery.orElse(""));
-
         mav.addObject("hasExperiences", hasExperiences);
         mav.addObject("experienceList", currentExperiences);
         request.setAttribute("pageNum", pageNum);
@@ -154,7 +153,7 @@ public class UserExperiencesController {
         }
 
         final ModelAndView mav = new ModelAndView("redirect:/user/experiences");
-        mav.addObject("userQuery", searchForm.getQuery());
+        mav.addObject("userQuery", searchFormPrivate.getQuery());
         return mav;
     }
 
