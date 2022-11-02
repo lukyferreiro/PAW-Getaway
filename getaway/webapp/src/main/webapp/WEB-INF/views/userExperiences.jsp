@@ -41,11 +41,11 @@
                            <img src="<c:url value="/resources/images/ic_lupa.svg"/>" alt="Icono lupa">
                         </button>
                         <spring:message code="navbar.search" var="placeholder"/>
-                        <c:url value="/user/experiences" var="searchPrivatePostPath"/>
-                        <form:form modelAttribute="searchFormPrivate" action="${searchPrivatePostPath}" id="searchExperiencePrivateForm" method="post"
+                        <c:url value="/user/experiences" var="searchPrivateGetPath"/>
+                        <form:form modelAttribute="searchFormPrivate" action="${searchPrivateGetPath}" id="searchExperiencePrivateForm" method="get"
                                    acceptCharset="UTF-8" cssClass="my-auto">
-                           <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>
-                           <form:errors path="query" element="p" cssClass="form-error-label"/>
+                           <form:input path="userQuery" type="text" class="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>
+                           <form:errors path="userQuery" element="p" cssClass="form-error-label"/>
                         </form:form>
                      </div>
                   </div>
