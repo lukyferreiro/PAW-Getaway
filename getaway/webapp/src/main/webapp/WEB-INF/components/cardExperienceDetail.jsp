@@ -4,7 +4,9 @@
 
 <div class="card mx-5 my-3 px-4 pt-4">
    <div class="d-flex justify-content-center align-content-center">
-      <h1><c:out value="${param.name}"/></h1>
+      <h1 class="text-center" style="word-break: break-all">
+         <c:out value="${param.name}"/>
+      </h1>
       <jsp:include page="/WEB-INF/components/fav.jsp">
          <jsp:param name="isFav" value="${param.isFav}"/>
          <jsp:param name="experienceId" value="${param.id}"/>
