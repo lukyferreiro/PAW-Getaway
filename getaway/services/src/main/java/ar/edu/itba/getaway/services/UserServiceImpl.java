@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     private final Collection<Roles> DEFAULT_ROLES = Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     @Override
-    public Optional<UserModel> getUserById(Long id) {
+    public Optional<UserModel> getUserById(long id) {
         LOGGER.debug("Retrieving user with id {}", id);
         return userDao.getUserById(id);
     }

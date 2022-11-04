@@ -33,13 +33,14 @@
                                         <jsp:param name="isFav" value="${categoryList.get(experience).isFav}"/>
                                         <jsp:param name="description"
                                                    value="${categoryList.get(experience).description}"/>
-                                        <jsp:param name="address" value="${categoryList.get(experience).locationName}"/>
+                                        <jsp:param name="address" value="${categoryList.get(experience).getLocationName()}"/>
                                         <jsp:param name="price" value="${categoryList.get(experience).price}"/>
                                         <jsp:param name="path" value="${param.path}"/>
                                         <jsp:param name="avgReviews"
                                                    value="${categoryList.get(experience).getAverageScore()}"/>
                                         <jsp:param name="reviewCount"
                                                    value="${categoryList.get(experience).getReviewCount()}"/>
+                                        <jsp:param name="observable" value="${categoryList.get(experience).observable}"/>
                                     </jsp:include>
                                 </c:forEach>
                             </div>

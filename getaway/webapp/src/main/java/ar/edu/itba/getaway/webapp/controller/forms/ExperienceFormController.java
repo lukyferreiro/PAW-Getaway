@@ -110,7 +110,6 @@ public class ExperienceFormController {
         final byte[] image = (experienceImg.isEmpty()) ? null : experienceImg.getBytes();
         final ExperienceModel experienceModel = experienceService.createExperience(form.getExperienceName(), form.getExperienceAddress(), description,
                 form.getExperienceMail(), url, price, cityModel, category, user, image);
-        //TODO CHECK
         final UserModel userModelProvider = userService.getUserByExperience(experienceModel);
         LOGGER.debug("Updating SpringContextHolder");
         forceLogin(userModelProvider, request);

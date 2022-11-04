@@ -4,7 +4,9 @@
 
 <div class="card mx-5 my-3 px-4 pt-4">
    <div class="d-flex justify-content-center align-content-center">
-      <h1><c:out value="${param.name}"/></h1>
+      <h1 class="text-center" style="word-break: break-all">
+         <c:out value="${param.name}"/>
+      </h1>
       <jsp:include page="/WEB-INF/components/fav.jsp">
          <jsp:param name="isFav" value="${param.isFav}"/>
          <jsp:param name="experienceId" value="${param.id}"/>
@@ -115,6 +117,12 @@
                   <jsp:include page="/WEB-INF/components/starAvg.jsp">
                      <jsp:param name="avgReview" value="${param.reviewAvg}"/>
                   </jsp:include>
+               </div>
+
+               <div>
+                  <c:if test="${!param.observable}">
+                     <p class="obs-info"><spring:message code="experience.notVisible" /></p>
+                  </c:if>
                </div>
             </div>
             <div class="col-2 p-0"></div>

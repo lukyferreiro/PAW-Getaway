@@ -15,7 +15,7 @@ public class  ExperienceForm {
     private String experienceName;
 
     @NotNull
-    private Long experienceCategory;
+    private long experienceCategory;
 
     @NotEmpty
     private String experienceCountry;
@@ -33,10 +33,12 @@ public class  ExperienceForm {
     private String experiencePrice;
 
     // https://regexr.com/39nr7
+    @Size(max = 500)
     @Pattern(regexp = "^([(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*))?$")
     private String experienceUrl;
 
     @NotEmpty
+    @Size(max = 255)
     @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$")
     private String experienceMail;
 
@@ -59,7 +61,7 @@ public class  ExperienceForm {
     public String getExperienceUrl() {
         return experienceUrl;
     }
-    public Long getExperienceCategory() {
+    public long getExperienceCategory() {
         return experienceCategory;
     }
     public MultipartFile getExperienceImg() {
@@ -80,7 +82,7 @@ public class  ExperienceForm {
     public void setExperienceAddress(String experienceAddress) {
         this.experienceAddress = experienceAddress;
     }
-    public void setExperienceCategory(Long experienceCategory) {
+    public void setExperienceCategory(long experienceCategory) {
         this.experienceCategory = experienceCategory;
     }
     public void setExperienceImg(MultipartFile experienceImg) {

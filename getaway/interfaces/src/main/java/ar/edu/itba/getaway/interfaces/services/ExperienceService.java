@@ -11,18 +11,19 @@ public interface ExperienceService {
     ExperienceModel createExperience (String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, byte[] image);
     void updateExperience (ExperienceModel experienceModel, byte[] image);
     void deleteExperience (ExperienceModel experienceModel);
-    Optional<ExperienceModel> getExperienceById(Long experienceId);
-    Optional<ExperienceModel> getVisibleExperienceById(Long experienceId, UserModel user);
-    Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, Integer page, UserModel user);
+    Optional<ExperienceModel> getExperienceById(long experienceId);
+    Optional<ExperienceModel> getVisibleExperienceById(long experienceId, UserModel user);
+    //TODO VER ACA
+    Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, UserModel user);
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, UserModel user);
     Optional<Double> getMaxPriceByCategory(CategoryModel category);
-    Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, Integer page);
-    Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, Integer page, UserModel user);
+    Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page);
+    Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, int page, UserModel user);
     List<List<ExperienceModel>> getExperiencesListByCategories(UserModel user);
     boolean experienceBelongsToUser(UserModel user, ExperienceModel experience);
-    Page<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, Integer page);
+    Page<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page);
     void updateExperienceWithoutImg(ExperienceModel toUpdateExperience);
     void increaseViews(ExperienceModel experience);
-    void changeVisibility(ExperienceModel experience, Boolean obs);
+    void changeVisibility(ExperienceModel experience, boolean obs);
     List<List<ExperienceModel>> userLandingPage(UserModel user);
 }

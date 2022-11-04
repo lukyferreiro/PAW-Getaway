@@ -11,7 +11,7 @@ public class ImageModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "images_imgId_seq")
     @SequenceGenerator(sequenceName = "images_imgId_seq", name = "images_imgId_seq", allocationSize = 1)
     @Column(name = "imgId", nullable = false)
-    private Long imageId;
+    private long imageId;
 
     @Column(name = "imageObject", nullable = true, length = 30000000)
     @Basic(fetch = FetchType.LAZY, optional = false)
@@ -26,15 +26,15 @@ public class ImageModel {
         this.image = image;
     }
 
-    public ImageModel(byte[] image, Long imageId) {
+    public ImageModel(byte[] image, long imageId) {
         this.image = image;
         this.imageId = imageId;
     }
 
-    public Long getImageId() {
+    public long getImageId() {
         return imageId;
     }
-    public void setImageId(Long imageId) {
+    public void setImageId(long imageId) {
         this.imageId = imageId;
     }
     public byte[] getImage() {
@@ -53,7 +53,7 @@ public class ImageModel {
             return false;
         }
         ImageModel image = (ImageModel) o;
-        return this.imageId.equals(image.imageId);
+        return this.imageId == image.imageId;
     }
 
     @Override

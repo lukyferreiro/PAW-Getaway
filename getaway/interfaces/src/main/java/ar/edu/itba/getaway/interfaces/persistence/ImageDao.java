@@ -8,5 +8,5 @@ public interface ImageDao {
     ImageModel createImg (byte[] image);
     void updateImg(byte[] image, ImageModel imageModel) ;
     void deleteImg (ImageModel imageModel);
-    Optional<ImageModel> getImgById (Long imageId);
+    Optional<ImageModel> getImgById (long imageId);
 }

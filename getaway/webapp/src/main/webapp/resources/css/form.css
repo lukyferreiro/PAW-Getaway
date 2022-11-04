@@ -13,6 +13,13 @@
     font-weight: normal;
 }
 
+.max-input-text {
+    font-size: small;
+    font-weight: normal;
+    color: rgba(0, 0, 0, 0.5);
+    margin: 0 10px 0 0;
+}
+
 .required-field {
     color: red;
     margin-left: 5px;

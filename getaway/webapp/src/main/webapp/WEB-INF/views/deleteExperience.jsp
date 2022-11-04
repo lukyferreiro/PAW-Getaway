@@ -17,7 +17,7 @@
             <div class="w-100 modalContainer">
                <div class="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">
                   <div class="col-12">
-                     <h1 class="text-center title">
+                     <h1 class="text-center title" style="word-break: break-all;">
                         <spring:message code="experience.deleteQuestion" arguments="${experience.experienceName}"/>
                      </h1>
                   </div>

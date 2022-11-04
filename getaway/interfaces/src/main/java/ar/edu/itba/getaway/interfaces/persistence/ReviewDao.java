@@ -9,14 +9,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReviewDao {
+    //TODO ver aca
     ReviewModel createReview (String title, String description, Long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel);
-    void updateReview (Long reviewId, ReviewModel reviewModel);
+    void updateReview (long reviewId, ReviewModel reviewModel);
     void deleteReview (ReviewModel review);
-    Optional<ReviewModel> getReviewById (Long reviewId);
+    Optional<ReviewModel> getReviewById (long reviewId);
     //TODO move this logic to a new UserModel
-    List<ReviewModel> getReviewsByUser (UserModel user, Integer page, Integer pageSize);
-    Long getReviewByUserCount(UserModel user);
+    List<ReviewModel> getReviewsByUser (UserModel user, int page, int pageSize);
+    long getReviewByUserCount(UserModel user);
     //TODO move to a new ExperienceModel
-    List<ReviewModel> getReviewsByExperience (ExperienceModel experience, Integer page, Integer pageSize);
-    Long getReviewByExperienceCount(ExperienceModel experience);
+    List<ReviewModel> getReviewsByExperience (ExperienceModel experience, int page, int pageSize);
+    long getReviewByExperienceCount(ExperienceModel experience);
 }

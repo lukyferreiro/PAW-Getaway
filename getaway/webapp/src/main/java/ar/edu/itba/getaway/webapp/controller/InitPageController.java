@@ -41,7 +41,6 @@ public class InitPageController {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
         final ModelAndView mav = new ModelAndView("mainPage");
 
-
         UserModel user = null;
         if (principal != null) {
             final Optional<UserModel> maybeUser = userService.getUserByEmail(principal.getName());

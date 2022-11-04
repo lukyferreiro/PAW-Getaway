@@ -7,12 +7,13 @@ import java.util.Objects;
 @Entity
 @Table(name = "reviews")
 public class ReviewModel {
+    //TODO VER ACA
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reviews_reviewId_seq")
     @SequenceGenerator(sequenceName = "reviews_reviewId_seq", name = "reviews_reviewId_seq", allocationSize = 1)
     @Column(name = "reviewId")
-    private Long reviewId;
+    private long reviewId;
     @Column(name = "title", nullable = false)
     private String title;
     @Column(name = "description", nullable = false)
@@ -45,7 +46,7 @@ public class ReviewModel {
         this.user = user;
     }
 
-    public ReviewModel(Long reviewId, String title, String description, Long score, ExperienceModel experience, Date reviewDate, UserModel user) {
+    public ReviewModel(long reviewId, String title, String description, Long score, ExperienceModel experience, Date reviewDate, UserModel user) {
         this.reviewId = reviewId;
         this.title = title;
         this.description = description;
@@ -55,10 +56,10 @@ public class ReviewModel {
         this.user = user;
     }
 
-    public Long getReviewId() {
+    public long getReviewId() {
         return reviewId;
     }
-    public void setReviewId(Long reviewId) {
+    public void setReviewId(long reviewId) {
         this.reviewId = reviewId;
     }
     public String getTitle() {
@@ -110,7 +111,7 @@ public class ReviewModel {
             return false;
         }
         ReviewModel other = (ReviewModel) o;
-        return this.reviewId.equals(other.reviewId);
+        return this.reviewId == other.reviewId;
     }
 
     @Override

@@ -9,10 +9,12 @@ import javax.validation.constraints.Size;
 public class RegisterForm {
 
     @NotEmpty
+    @Size(max = 50)
     @Pattern(regexp = "^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$")
     private String name;
 
     @NotEmpty
+    @Size(max = 50)
     @Pattern(regexp = "^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$")
     private String surname;
 
@@ -28,6 +30,7 @@ public class RegisterForm {
     private String confirmPassword;
 
     @NotEmpty
+    @Size(max = 255)
     @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$")
     private String email;
 

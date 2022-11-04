@@ -48,9 +48,7 @@ public class ReviewFormController {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
 
         final ModelAndView mav = new ModelAndView("reviewForm");
-
         mav.addObject("endpoint", request.getServletPath());
-
         return mav;
     }
 

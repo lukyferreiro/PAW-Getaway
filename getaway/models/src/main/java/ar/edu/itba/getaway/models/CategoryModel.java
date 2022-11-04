@@ -11,7 +11,7 @@ public class CategoryModel{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categories_categoryId_seq")
     @SequenceGenerator(sequenceName = "categories_categoryId_seq", name = "categories_categoryId_seq", allocationSize = 1)
     @Column(name = "categoryId")
-    private Long categoryId;
+    private long categoryId;
     @Column(name = "categoryName", nullable = false, unique = true)
     private String categoryName;
 
@@ -25,16 +25,16 @@ public class CategoryModel{
     }
 
     //Constructor used in testing
-    public CategoryModel(Long categoryId, String categoryName) {
+    public CategoryModel(long categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
     }
 
 
-    public Long getCategoryId() {
+    public long getCategoryId() {
         return categoryId;
     }
-    public void setCategoryId(Long categoryId) {
+    public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
     }
     public String getCategoryName() {
@@ -53,7 +53,7 @@ public class CategoryModel{
             return false;
         }
         CategoryModel other = (CategoryModel) o;
-        return this.categoryId.equals(other.categoryId) && this.categoryName.equals(other.categoryName);
+        return this.categoryId == other.categoryId && this.categoryName.equals(other.categoryName);
     }
 
     @Override

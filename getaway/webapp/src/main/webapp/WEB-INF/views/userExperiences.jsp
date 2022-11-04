@@ -41,11 +41,11 @@
                            <img src="<c:url value="/resources/images/ic_lupa.svg"/>" alt="Icono lupa">
                         </button>
                         <spring:message code="navbar.search" var="placeholder"/>
-                        <c:url value="/user/experiences" var="searchPrivatePostPath"/>
-                        <form:form modelAttribute="searchFormPrivate" action="${searchPrivatePostPath}" id="searchExperiencePrivateForm" method="post"
+                        <c:url value="/user/experiences" var="searchPrivateGetPath"/>
+                        <form:form modelAttribute="searchFormPrivate" action="${searchPrivateGetPath}" id="searchExperiencePrivateForm" method="get"
                                    acceptCharset="UTF-8" cssClass="my-auto">
-                           <form:input path="query" type="text" class="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>
-                           <form:errors path="query" element="p" cssClass="form-error-label"/>
+                           <form:input path="userQuery" type="text" class="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>
+                           <form:errors path="userQuery" element="p" cssClass="form-error-label"/>
                         </form:form>
                      </div>
                   </div>
@@ -84,9 +84,9 @@
                               <c:forEach var="experience" items="${experienceList}" varStatus="myIndex">
                                  <tr>
                                     <th scope="row">
-                                       <div class="title-link">
+                                       <div class="title-link" style="width: 300px;">
                                           <a href="<c:url value="/experiences/${experience.category.categoryName}/${experience.experienceId}"/>">
-                                             <h4 class="experience card-title container-fluid p-0">
+                                             <h4 class="experience card-title container-fluid p-0" style="word-break: break-all;">
                                                 <c:out value="${experience.experienceName}"/>
                                              </h4>
                                           </a>
@@ -113,10 +113,10 @@
                                        <div class="container-fluid d-flex p-2 mb-1 align-items-end">
                                           <h5 class="mb-1">
                                              <c:choose>
-                                                <c:when test="${param.price == ''}">
+                                                <c:when test="${experience.price == null}">
                                                    <spring:message code="experience.noPrice"/>
                                                 </c:when>
-                                                <c:when test="${param.price == '0.0'}">
+                                                <c:when test="${experience.price == ''}">
                                                    <spring:message code="experience.price.free"/>
                                                 </c:when>
                                                 <c:otherwise>

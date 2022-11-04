@@ -1,5 +1,7 @@
 package ar.edu.itba.getaway.models;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -11,7 +13,7 @@ public class UserModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_userId_seq")
     @SequenceGenerator(sequenceName = "users_userId_seq", name = "users_userId_seq", allocationSize = 1)
     @Column(name = "userId")
-    private Long userId;
+    private long userId;
     @Column(name = "userName", length = 50, nullable = false)
     private String name;
     @Column(name = "userSurname", length = 50, nullable = false)
@@ -26,17 +28,11 @@ public class UserModel {
     private ImageModel profileImage;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "userroles",
-        joinColumns = @JoinColumn(name = "userId"),
-        inverseJoinColumns = @JoinColumn(name = "roleId")
-    )
+    @JoinTable(name = "userroles", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
     private Collection<RoleModel> roles;
 
     @ManyToMany
-    @JoinTable(name = "favuserexperience",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "experienceId")
-    )
+    @JoinTable(name = "favuserexperience", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "experienceId"))
     private List<ExperienceModel> favExperiences;
 
     @ManyToMany
@@ -45,6 +41,9 @@ public class UserModel {
             inverseJoinColumns = @JoinColumn(name = "experienceId")
     )
     private List<ExperienceModel> viewedExperiences;
+
+    @Formula(value = "(select count(*) from experiences where experiences.userId = userId)!=0")
+    private boolean hasExperiences;
 
     /* default */
     protected UserModel() {
@@ -60,7 +59,7 @@ public class UserModel {
         this.profileImage = profileImage;
     }
 
-    public UserModel(Long userId, String password, String name, String surname, String email, Collection<RoleModel> roles, ImageModel profileImage) {
+    public UserModel(long userId, String password, String name, String surname, String email, Collection<RoleModel> roles, ImageModel profileImage) {
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -100,10 +99,10 @@ public class UserModel {
     public void setEmail(String email) {
         this.email = email;
     }
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -122,26 +121,25 @@ public class UserModel {
     }
 
     // Favs methods
-    public Integer getFavCount() {
+    public int getFavCount() {
         return favExperiences.size();
     }
     public List<ExperienceModel> getFavExperiences() {
         return favExperiences;
     }
 
-    public List<ExperienceModel> getFavExperiences(Integer page, Integer pageSize, Optional<OrderByModel> orderByModel) {
+    public List<ExperienceModel> getFavExperiences(int page, int pageSize, Optional<OrderByModel> orderByModel) {
         if (orderByModel.isPresent()) {
             favExperiences.sort(orderByModel.get().comparator);
         } else {
             favExperiences.sort(OrderByModel.OrderByRankDesc.comparator);
         }
 
-        favExperiences.removeIf(experience -> !experience.getObservable());
-
         int fromIndex = (page - 1) * pageSize;
         int toIndex = Math.min((fromIndex + pageSize), favExperiences.size());
         return favExperiences.subList(fromIndex, toIndex);
     }
+
     public void addFav(ExperienceModel experience) {
         favExperiences.add(experience);
     }
@@ -150,6 +148,28 @@ public class UserModel {
     }
     public boolean isFav(ExperienceModel experience) {
         return favExperiences.contains(experience);
+    }
+
+    //    Image methods
+    public long getImageId() {
+        if (profileImage == null) {
+            return -1;
+        } else {
+            return profileImage.getImageId();
+        }
+    }
+
+    public byte[] getImage() {
+        if (profileImage == null) {
+            return null;
+        } else {
+            return profileImage.getImage();
+        }
+    }
+
+    @Transient
+    public boolean hasExperiences(){
+        return hasExperiences;
     }
 
     public void addViewed(ExperienceModel experience) {
@@ -173,7 +193,7 @@ public class UserModel {
             return false;
         }
         UserModel other = (UserModel) o;
-        return this.userId.equals(other.userId) && this.email.equals(other.email);
+        return this.userId == other.userId && this.email.equals(other.email);
     }
 
     @Override

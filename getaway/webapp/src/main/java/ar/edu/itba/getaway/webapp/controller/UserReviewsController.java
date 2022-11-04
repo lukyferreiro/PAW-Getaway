@@ -59,15 +59,15 @@ public class UserReviewsController {
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
         mav.addObject("totalPages", currentPage.getTotalPages());
-        mav.addObject("hasImage", user.getProfileImage().getImage() != null);
-        mav.addObject("profileImageId", user.getProfileImage().getImageId());
+        mav.addObject("hasImage", user.getImage() != null);
+        mav.addObject("profileImageId", user.getImageId());
 
         return mav;
     }
 
     @PreAuthorize("@antMatcherVoter.canDeleteReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/delete/{reviewId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewDelete(@PathVariable("reviewId") final Long reviewId,
+    public ModelAndView reviewDelete(@PathVariable("reviewId") final long reviewId,
                                      @ModelAttribute("deleteForm") final DeleteForm form,
                                      @ModelAttribute("searchForm") final SearchForm searchForm,
                                      HttpServletRequest request) {
@@ -83,7 +83,7 @@ public class UserReviewsController {
 
     @PreAuthorize("@antMatcherVoter.canDeleteReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/delete/{reviewId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewDeletePost(@PathVariable(value = "reviewId") final Long reviewId,
+    public ModelAndView reviewDeletePost(@PathVariable(value = "reviewId") final long reviewId,
                                          @ModelAttribute("deleteForm") final DeleteForm form,
                                          @ModelAttribute("searchForm") final SearchForm searchForm,
                                          final BindingResult errors,
@@ -104,7 +104,7 @@ public class UserReviewsController {
 
     @PreAuthorize("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/edit/{reviewId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewEdit(@PathVariable("reviewId") final Long reviewId,
+    public ModelAndView reviewEdit(@PathVariable("reviewId") final long reviewId,
                                    @ModelAttribute("reviewForm") final ReviewForm form,
                                    @ModelAttribute("searchForm") final SearchForm searchForm,
                                    HttpServletRequest request) {
@@ -135,7 +135,7 @@ public class UserReviewsController {
 
     @PreAuthorize("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
     @RequestMapping(value = "/user/reviews/edit/{reviewId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewEditPost(@PathVariable(value = "reviewId") final Long reviewId,
+    public ModelAndView reviewEditPost(@PathVariable(value = "reviewId") final long reviewId,
                                        @Valid @ModelAttribute("reviewForm") final ReviewForm form,
                                        final BindingResult errors,
                                        @ModelAttribute("searchForm") final SearchForm searchForm,

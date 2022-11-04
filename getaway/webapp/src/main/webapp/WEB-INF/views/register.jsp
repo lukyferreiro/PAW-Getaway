@@ -31,38 +31,61 @@
                            <form:form modelAttribute="registerForm" action="${postPath}" id="registerForm" method="post" acceptCharset="UTF-8">
                               <div class="form-group"> <!--Email-->
                                  <spring:message code="registerForm.email.placeholder" var="emailPlaceholder"/>
-                                 <form:label path="email" class="form-label">
-                                    <spring:message code="registerForm.email.title"/><span class="required-field">*</span>
+                                 <form:label path="email" class="form-label d-flex justify-content-between">
+                                    <div>
+                                       <spring:message code="registerForm.email.title"/>
+                                       <span class="required-field">*</span>
+                                    </div>
+                                    <div class="align-self-center">
+                                       <h6 class="max-input-text"> <spring:message code="register.maxInput" arguments="255"/> </h6>
+                                    </div>
                                  </form:label>
-                                 <form:input type="text" path="email" id="email" cssErrorClass="form-control is-invalid"
+                                 <form:input maxlength="255" type="text" path="email" id="email" cssErrorClass="form-control is-invalid"
                                              class="form-control" placeholder="${emailPlaceholder}"/>
                                  <form:errors path="email" cssClass="form-error-label" element="p"/>
                               </div>
 
                               <div class="form-group"> <!--Nombre-->
                                  <spring:message code="registerForm.name.placeholder" var="namePlaceholder"/>
-                                 <form:label path="name" class="form-label">
-                                    <spring:message code="registerForm.name.title"/><span class="required-field">*</span>
+                                 <form:label path="name" class="form-label d-flex justify-content-between">
+                                    <div>
+                                       <spring:message code="registerForm.name.title"/>
+                                       <span class="required-field">*</span>
+                                    </div>
+                                    <div class="align-self-center">
+                                       <h6 class="max-input-text"> <spring:message code="register.maxInput" arguments="50"/> </h6>
+                                    </div>
                                  </form:label>
-                                 <form:input type="text" path="name" id="name" cssErrorClass="form-control is-invalid"
+                                 <form:input maxlength="50" type="text" path="name" id="name" cssErrorClass="form-control is-invalid"
                                              class="form-control" placeholder="${namePlaceholder}"/>
                                  <form:errors path="name" cssClass="form-error-label" element="p"/>
                               </div>
 
                               <div class="form-group"> <!--Apellido-->
                                  <spring:message code="registerForm.surname.placeholder" var="surnamePlaceholder"/>
-                                 <form:label path="surname" class="form-label">
-                                    <spring:message code="registerForm.surname.title"/><span class="required-field">*</span>
+                                 <form:label path="surname" class="form-label d-flex justify-content-between">
+                                    <div>
+                                       <spring:message code="registerForm.surname.title"/>
+                                       <span class="required-field">*</span>
+                                    </div>
+                                    <div class="align-self-center">
+                                       <h6 class="max-input-text"> <spring:message code="register.maxInput" arguments="50"/> </h6>
+                                    </div>
                                  </form:label>
-                                 <form:input type="text" path="surname" cssErrorClass="form-control is-invalid" id="surname"
+                                 <form:input maxlength="50" type="text" path="surname" cssErrorClass="form-control is-invalid" id="surname"
                                              class="form-control" placeholder="${surnamePlaceholder}"/>
                                  <form:errors path="surname" cssClass="form-error-label" element="p"/>
                               </div>
 
                               <div class="form-group"> <!--Contraseña-->
-                                 <form:label path="password" class="form-label">
-                                    <spring:message code="registerForm.password.title"/>
-                                    <span class="required-field">*</span>
+                                 <form:label path="password" class="form-label d-flex justify-content-between">
+                                    <div>
+                                       <spring:message code="registerForm.password.title"/>
+                                       <span class="required-field">*</span>
+                                    </div>
+                                    <div class="align-self-center">
+                                       <h6 class="max-input-text"> <spring:message code="register.maxInput" arguments="25"/> </h6>
+                                    </div>
                                  </form:label>
                                  <div class="input-group d-flex justify-content-start align-items-center">
                                     <spring:message code="registerForm.password.placeholder" var="passwordPlaceholder"/>

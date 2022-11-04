@@ -13,7 +13,7 @@ public class ExperienceModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "experiences_experienceId_seq")
     @SequenceGenerator(sequenceName = "experiences_experienceId_seq", name = "experiences_experienceId_seq", allocationSize = 1)
     @Column(name = "experienceId")
-    private Long experienceId;
+    private long experienceId;
     @Column(name = "experienceName", nullable = false, unique = true)
     private String experienceName;
     @Column(name = "price", nullable = true)
@@ -44,18 +44,16 @@ public class ExperienceModel {
     private ImageModel experienceImage;
 
     @Column(name = "observable", nullable = false)
-    private Boolean observable;
+    private boolean observable;
 
     @Column(name = "views", nullable = false)
-    private Integer views;
+    private int views;
 
     @Formula(value = "(select coalesce(ceiling(avg(reviews.score)),0) from reviews where reviews.experienceId = experienceId)")
-    private Long averageScore;
+    private long averageScore;
 
     @Formula(value = "(select count(*) from reviews where reviews.experienceId = experienceId)")
-    private Long reviewCount;
-
-    private String locationName;
+    private long reviewCount;
 
     @Transient
     private boolean isFav;
@@ -65,7 +63,7 @@ public class ExperienceModel {
         // Just for Hibernate
     }
 
-    public ExperienceModel(String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage, Boolean observable, Integer views) {
+    public ExperienceModel(String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage, boolean observable, int views) {
         this.experienceName = experienceName;
         this.address = address;
         this.description = description;
@@ -80,7 +78,7 @@ public class ExperienceModel {
         this.views = views;
     }
 
-    public ExperienceModel(Long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage, Boolean observable, Integer views) {
+    public ExperienceModel(long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage, boolean observable, int views) {
         this.experienceId = experienceId;
         this.experienceName = experienceName;
         this.address = address;
@@ -96,123 +94,106 @@ public class ExperienceModel {
         this.views = views;
     }
 
-    public Long getExperienceId() {
+    public long getExperienceId() {
         return experienceId;
     }
-
-    public void setExperienceId(Long experienceId) {
+    public void setExperienceId(long experienceId) {
         this.experienceId = experienceId;
     }
-
     public String getExperienceName() {
         return experienceName;
     }
-
     public void setExperienceName(String experienceName) {
         this.experienceName = experienceName;
     }
-
     public Double getPrice() {
         return price;
     }
-
     public void setPrice(Double price) {
         this.price = price;
     }
-
     public String getAddress() {
         return address;
     }
-
     public void setAddress(String address) {
         this.address = address;
     }
-
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
-
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
-
     public String getSiteUrl() {
         return siteUrl;
     }
-
     public void setSiteUrl(String siteUrl) {
         this.siteUrl = siteUrl;
     }
-
     public CityModel getCity() {
         return city;
     }
-
     public void setCity(CityModel city) {
         this.city = city;
     }
-
     public CategoryModel getCategory() {
         return category;
     }
-
     public void setCategory(CategoryModel category) {
         this.category = category;
     }
-
     public UserModel getUser() {
         return user;
     }
-
     public void setUser(UserModel user) {
         this.user = user;
     }
-
-    public Boolean getObservable() {
+    public boolean getObservable() {
         return observable;
     }
-
-    public void setObservable(Boolean observable) {
+    public void setObservable(boolean observable) {
         this.observable = observable;
     }
-
-    public Integer getViews() {
+    public int getViews() {
         return views;
     }
-
     public void increaseViews() {
         this.views++ ;
     }
-
     public ImageModel getExperienceImage() {
         return experienceImage;
     }
-
     public void setExperienceImage(ImageModel experienceImage) {
         this.experienceImage = experienceImage;
     }
 
+    //    Image methods
+    public byte[] getImage(){
+        if(experienceImage == null){
+            return null;
+        }else {
+            return experienceImage.getImage();
+        }
+    }
+
     @Transient
-    public Long getReviewCount() {
+    public long getReviewCount() {
         return reviewCount;
     }
 
     @Transient
-    public Long getAverageScore() {
+    public long getAverageScore() {
         return averageScore;
     }
 
-    @Transient
     public String getLocationName() {
-        return locationName;
+        return address + ", " + city.getCityName() + ", " + city.getCountry().getCountryName();
     }
 
     @Transient
@@ -224,11 +205,6 @@ public class ExperienceModel {
         this.isFav = isFav;
     }
 
-    @PostLoad
-    public void loadLocationName() {
-        locationName = address + ", " + city.getCityName() + ", " + city.getCountry().getCountryName();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -238,7 +214,7 @@ public class ExperienceModel {
             return false;
         }
         ExperienceModel other = (ExperienceModel) o;
-        return this.experienceId.equals(other.experienceId) && this.experienceName.equals(other.experienceName) &&
+        return this.experienceId == other.experienceId && this.experienceName.equals(other.experienceName) &&
                 this.address.equals(other.address) && this.city.equals(other.city);
     }
 

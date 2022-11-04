@@ -12,7 +12,7 @@ public class PasswordResetToken {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "passwordResetToken_passTokenId_seq")
     @SequenceGenerator(sequenceName = "passwordResetToken_passTokenId_seq", name = "passwordResetToken_passTokenId_seq", allocationSize = 1)
     @Column(name = "passTokenId")
-    private Long id;
+    private long id;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "passTokenUserId")
     private UserModel user;
@@ -47,10 +47,10 @@ public class PasswordResetToken {
     public void setValue(String value) {
         this.value = value;
     }
-    public Long getId() {
+    public long getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
     public UserModel getUser() {
@@ -75,7 +75,7 @@ public class PasswordResetToken {
             return false;
         }
         PasswordResetToken passwordResetToken = (PasswordResetToken) o;
-        return this.id.equals(passwordResetToken.id);
+        return this.id == passwordResetToken.id;
     }
 
     @Override

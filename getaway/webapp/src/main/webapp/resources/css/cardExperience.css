@@ -1,6 +1,6 @@
 .card-experience {
     width: 350px;
-    height: fit-content;
+    height: 500px;
 }
 
 .card-link {
@@ -25,8 +25,8 @@
 .experience.card-title:hover {
     color: black;
     text-decoration: underline;
-    /*transition: 0.3s;*/
     /*font-weight: bold;*/
+    cursor: pointer;
 }
 
 .title-link a {
@@ -36,4 +36,15 @@
 
 .table-title{
     font-weight: bold;
+}
+
+.obs-info{
+    color: red;
+    margin: 0;
+}
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
 }

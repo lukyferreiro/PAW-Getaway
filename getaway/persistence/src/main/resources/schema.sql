@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS users
     userName VARCHAR(50) NOT NULL,
     userSurname VARCHAR(50) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    imgId INT,
+    imgId INT NOT NULL,
     password VARCHAR(255) NOT NULL,
     PRIMARY KEY (userId),
     UNIQUE(email),
@@ -55,9 +55,9 @@ CREATE TABLE IF NOT EXISTS experiences
     cityId INT NOT NULL,
     categoryId INT NOT NULL,
     userId INT NOT NULL,
-    imgId INT,
-    observable BOOLEAN NOT NULL,
-    views INT NOT NULL,
+    imgId INT NOT NULL,
+    observable BOOLEAN NOT NULL DEFAULT TRUE,
+    views INT NOT NULL DEFAULT 0,
     PRIMARY KEY (experienceId),
     UNIQUE(experienceName, address, cityId),
     FOREIGN KEY (cityId) REFERENCES cities (cityId) ON DELETE CASCADE,
@@ -65,15 +65,6 @@ CREATE TABLE IF NOT EXISTS experiences
     FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE,
     FOREIGN KEY (imgId) REFERENCES images (imgId) ON DELETE CASCADE
     );
-
-CREATE TABLE IF NOT EXISTS viewed
-(
-    experienceId INT NOT NULL,
-    userId INT NOT NULL,
-    PRIMARY KEY (experienceId, userId),
-    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE,
-    FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE
-);
 
 CREATE TABLE IF NOT EXISTS reviews
 (
@@ -133,3 +124,12 @@ CREATE TABLE IF NOT EXISTS favuserexperience(
     FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE,
     FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS viewed
+(
+    experienceId INT NOT NULL,
+    userId INT NOT NULL,
+    PRIMARY KEY (experienceId, userId),
+    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE
+    );

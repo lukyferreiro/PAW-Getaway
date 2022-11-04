@@ -11,7 +11,7 @@ public class CityModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cities_cityId_seq")
     @SequenceGenerator(sequenceName = "cities_cityId_seq", name = "cities_cityId_seq", allocationSize = 1)
     @Column(name = "cityId")
-    private Long cityId;
+    private long cityId;
 
     @Column(name = "cityName", nullable = false)
     private String cityName;
@@ -31,16 +31,16 @@ public class CityModel {
     }
 
     //Constructor used in testing
-    public CityModel(Long cityId, CountryModel country,String cityName) {
+    public CityModel(long cityId, CountryModel country,String cityName) {
         this.cityId = cityId;
         this.cityName = cityName;
         this.country = country;
     }
 
-    public Long getCityId() {
+    public long getCityId() {
         return cityId;
     }
-    public void setCityId(Long cityId) {
+    public void setCityId(long cityId) {
         this.cityId = cityId;
     }
     public CountryModel getCountry() {
@@ -65,7 +65,7 @@ public class CityModel {
             return false;
         }
         CityModel other = (CityModel) o;
-        return this.cityId.equals(other.cityId) && this.cityName.equals(other.cityName);
+        return this.cityId == other.cityId && this.cityName.equals(other.cityName);
     }
 
     @Override

@@ -40,7 +40,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Optional<ImageModel> getImgById(Long imageId) {
+    public Optional<ImageModel> getImgById(long imageId) {
         LOGGER.debug("Retrieving image with id {}", imageId);
         return imageDao.getImgById(imageId);
     }

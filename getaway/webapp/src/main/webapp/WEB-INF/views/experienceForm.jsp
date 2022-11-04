@@ -26,9 +26,14 @@
                <div class="container-inputs">
                   <div class="p-0 m-0 d-flex">
                      <div class="col m-2"> <!--Nombre de la experiencia-->
-                        <form:label path="experienceName" class="form-label">
-                           <spring:message code="experienceForm.experienceName"/>
-                           <span class="required-field">*</span>
+                        <form:label path="experienceName" class="form-label d-flex justify-content-between">
+                           <div>
+                              <spring:message code="experienceForm.experienceName"/>
+                              <span class="required-field">*</span>
+                           </div>
+                           <div class="align-self-center">
+                              <h6 class="max-input-text"> <spring:message code="experienceForm.maxInput" arguments="500"/> </h6>
+                           </div>
                         </form:label>
                         <form:input maxlength="50" path="experienceName" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
                         <form:errors path="experienceName" element="p" cssClass="form-error-label"/>
@@ -39,7 +44,7 @@
                            <span class="required-field">*</span>
                         </form:label>
                         <form:select path="experienceCategory" class="form-select" cssErrorClass="form-control is-invalid">
-                           <c:if test="${formCategory == null}">
+                           <c:if test="${formCategory == 0}">
                               <option value="" disabled selected hidden><c:out value="${placeholder}"/></option>
                            </c:if>
                            <c:forEach var="category" items="${categories}">
@@ -58,9 +63,14 @@
                         <form:errors path="experienceCategory" element="p" cssClass="form-error-label"/>
                      </div>
                      <div class="col m-2"> <!--Precio-->
-                        <form:label path="experiencePrice" class="form-label">
-                           <spring:message code="experienceForm.experiencePrice"/>
-                           <span class="optional-text"><spring:message code="inputField.optional"/></span>
+                        <form:label path="experiencePrice" class="form-label d-flex justify-content-between">
+                           <div>
+                              <spring:message code="experienceForm.experiencePrice"/>
+                              <span class="optional-text"><spring:message code="inputField.optional"/></span>
+                           </div>
+                           <div class="align-self-center">
+                              <h6 class="max-input-text"> <spring:message code="experienceForm.maxInput" arguments="7"/> </h6>
+                           </div>
                         </form:label>
                         <form:input path="experiencePrice" type="text" class="form-control" id="experienceFormPriceInput"
                                     cssErrorClass="form-control is-invalid" placeholder="0"/>
@@ -69,9 +79,14 @@
                   </div>
 
                   <div class="p-0 m-2 d-flex flex-column"> <!--Descripcion-->
-                     <form:label path="experienceInfo" class="form-label">
-                        <spring:message code="experienceForm.experienceInfo"/>
-                        <span class="optional-text"><spring:message code="inputField.optional"/></span>
+                     <form:label path="experienceInfo" class="form-label d-flex justify-content-between">
+                        <div>
+                           <spring:message code="experienceForm.experienceInfo"/>
+                           <span class="optional-text"><spring:message code="inputField.optional"/></span>
+                        </div>
+                        <div class="align-self-center">
+                           <h6 class="max-input-text"> <spring:message code="experienceForm.maxInput" arguments="500"/> </h6>
+                        </div>
                      </form:label>
                      <form:textarea maxlength="500" path="experienceInfo" class="form-control" cssErrorClass="form-control is-invalid" rows="4" cssStyle="max-height: 300px;"/>
                      <form:errors path="experienceInfo" element="p" cssClass="form-error-label"/>
@@ -79,20 +94,30 @@
 
                   <div class="p-0 m-0 d-flex">
                      <div class="col m-2"> <!--Email de contacto-->
-                        <form:label path="experienceMail" class="form-label">
-                           <spring:message code="experienceForm.experienceMail"/>
-                           <span class="required-field">*</span>
+                        <form:label path="experienceMail" class="form-label d-flex justify-content-between">
+                           <div>
+                              <spring:message code="experienceForm.experienceMail"/>
+                              <span class="required-field">*</span>
+                           </div>
+                           <div class="align-self-center">
+                              <h6 class="max-input-text"> <spring:message code="experienceForm.maxInput" arguments="255"/> </h6>
+                           </div>
                         </form:label>
-                        <form:input path="experienceMail" type="email" class="form-control"
+                        <form:input maxlength="255" path="experienceMail" type="email" class="form-control"
                                     cssErrorClass="form-control is-invalid" placeholder="${mailExample}"/>
                         <form:errors path="experienceMail" element="p" cssClass="form-error-label"/>
                      </div>
                      <div class="col m-2"> <!--Url-->
-                        <form:label path="experienceUrl" class="form-label">
-                           <spring:message code="experienceForm.experienceUrl"/>
-                           <span class="optional-text"><spring:message code="inputField.optional"/></span>
+                        <form:label path="experienceUrl" class="form-label d-flex justify-content-between">
+                           <div>
+                              <spring:message code="experienceForm.experienceUrl"/>
+                              <span class="optional-text"><spring:message code="inputField.optional"/></span>
+                           </div>
+                           <div class="align-self-center">
+                              <h6 class="max-input-text"> <spring:message code="experienceForm.maxInput" arguments="500"/> </h6>
+                           </div>
                         </form:label>
-                        <form:input path="experienceUrl" id="experienceFormUrlInput" type="text"
+                        <form:input maxlength="500" path="experienceUrl" id="experienceFormUrlInput" type="text"
                                     cssErrorClass="form-control is-invalid" class="form-control" placeholder="${urlExample}"/>
                         <form:errors path="experienceUrl" element="p" cssClass="form-error-label"/>
                      </div>
@@ -134,9 +159,14 @@
                         <form:errors path="experienceCity" element="p" cssClass="form-error-label"/>
                      </div>
                      <div class="col m-2"> <!--Direccion-->
-                        <form:label path="experienceAddress" class="form-label">
-                           <spring:message code="experienceForm.experienceAddress"/>
-                           <span class="required-field">*</span>
+                        <form:label path="experienceAddress" class="form-label d-flex justify-content-between">
+                           <div>
+                              <spring:message code="experienceForm.experienceAddress"/>
+                              <span class="required-field">*</span>
+                           </div>
+                           <div class="align-self-center">
+                              <h6 class="max-input-text"> <spring:message code="experienceForm.maxInput" arguments="100"/> </h6>
+                           </div>
                         </form:label>
                         <form:input maxlength="100" path="experienceAddress" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
                         <form:errors path="experienceAddress" element="p" cssClass="form-error-label"/>

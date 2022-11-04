@@ -29,7 +29,7 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     @Override
-    public void updateReview(Long reviewId, ReviewModel reviewModel) {
+    public void updateReview(long reviewId, ReviewModel reviewModel) {
         LOGGER.debug("Updating review with id: {}", reviewId);
         em.merge(reviewModel);
     }
@@ -41,13 +41,13 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     @Override
-    public Optional<ReviewModel> getReviewById(Long reviewId) {
+    public Optional<ReviewModel> getReviewById(long reviewId) {
         LOGGER.debug("Get review with id {}", reviewId);
         return Optional.ofNullable(em.find(ReviewModel.class, reviewId));
     }
 
     @Override
-    public List<ReviewModel> getReviewsByUser(UserModel user, Integer page, Integer pageSize) {
+    public List<ReviewModel> getReviewsByUser(UserModel user, int page, int pageSize) {
         final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE user = :user", ReviewModel.class);
         query.setParameter("user", user);
         query.setFirstResult((page - 1) * pageSize);
@@ -56,14 +56,14 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     @Override
-    public Long getReviewByUserCount(UserModel user) {
+    public long getReviewByUserCount(UserModel user) {
         final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.user) FROM ReviewModel r WHERE r.user = :user", Long.class);
         query.setParameter("user", user);
         return query.getSingleResult();
     }
 
     @Override
-    public List<ReviewModel> getReviewsByExperience(ExperienceModel experience, Integer page, Integer pageSize) {
+    public List<ReviewModel> getReviewsByExperience(ExperienceModel experience, int page, int pageSize) {
         final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE experience = :experience", ReviewModel.class);
         query.setParameter("experience", experience);
         query.setFirstResult((page - 1) * pageSize);
@@ -72,7 +72,7 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     @Override
-    public Long getReviewByExperienceCount(ExperienceModel experience) {
+    public long getReviewByExperienceCount(ExperienceModel experience) {
         final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.experience) FROM ReviewModel r WHERE r.experience = :experience", Long.class);
         query.setParameter("experience", experience);
         return query.getSingleResult();

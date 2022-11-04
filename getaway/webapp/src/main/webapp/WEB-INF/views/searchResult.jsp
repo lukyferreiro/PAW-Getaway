@@ -44,13 +44,13 @@
                   <div class="d-flex flex-wrap justify-content-center">
                      <c:forEach var="experience" varStatus="myIndex" items="${experiences}">
                         <jsp:include page="/WEB-INF/components/cardExperience.jsp">
-                           <jsp:param name="hasImage" value="${experience.experienceImage.image != null}"/>
+                           <jsp:param name="hasImage" value="${experience.image != null}"/>
                            <jsp:param name="categoryName" value="${experience.category.categoryName}"/>
                            <jsp:param name="id" value="${experience.experienceId}"/>
                            <jsp:param name="name" value="${experience.experienceName}"/>
                            <jsp:param name="isFav" value="${experience.isFav}"/>
                            <jsp:param name="description" value="${experience.description}"/>
-                           <jsp:param name="address" value="${experience.address}"/>
+                           <jsp:param name="address" value="${experience.getLocationName()}"/>
                            <jsp:param name="price" value="${experience.price}"/>
                            <jsp:param name="path" value="/search_result"/>
                            <jsp:param name="query" value="${query}"/>
@@ -59,6 +59,7 @@
                            <jsp:param name="avgReviews" value="${experience.averageScore}"/>
                            <jsp:param name="reviewCount" value="${experience.reviewCount}"/>
                            <jsp:param name="pageNum" value="${currentPage}"/>
+                           <jsp:param name="observable" value="${experience.observable}"/>
                         </jsp:include>
                      </c:forEach>
                   </div>
@@ -106,5 +107,6 @@
          </div>
          <%@ include file="../components/includes/bottomScripts.jsp" %>
          <script src='<c:url value="/resources/js/submitStarsButton.js"/>'></script>
+         <script src='<c:url value="/resources/js/submitButton.js"/>'></script>
    </body>
 </html>

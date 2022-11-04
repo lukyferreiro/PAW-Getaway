@@ -1,6 +1,3 @@
-let processing = false;
-let submitForm = document.getElementById("submitForm");
-let submitFormButton = document.getElementById("submitFormButton");
 let star1 = document.getElementById("star1");
 let star2 = document.getElementById("star2");
 let star3 = document.getElementById("star3");
@@ -50,14 +47,4 @@ star4.addEventListener("click", () => {
 star5.addEventListener("click", () => {
     let score = document.getElementById("scoreInput");
     score.value = "5";
-})
-
-submitFormButton.addEventListener("click", () => {
-    if (processing) {
-        return;
-    }
-    processing = true;
-    submitFormButton.disabled = true;
-    submitForm.submit();
-    processing = false;
 })

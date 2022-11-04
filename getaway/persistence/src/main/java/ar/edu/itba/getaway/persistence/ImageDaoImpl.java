@@ -38,7 +38,7 @@ public class ImageDaoImpl implements ImageDao {
     }
 
     @Override
-    public Optional<ImageModel> getImgById(Long imageId) {
+    public Optional<ImageModel> getImgById(long imageId) {
         LOGGER.debug("Get image with id {}", imageId);
         return Optional.ofNullable(em.find(ImageModel.class, imageId));
     }
