@@ -46,7 +46,7 @@ public class VerificationTokenDaoTest {
     private final static String NAME_1 = "usuario";
     private final static String SURNAME_1 = "uno";
     private final static String EMAIL_1 = "uno@mail.com";
-    private final static ImageModel IMAGE_1 = new ImageModel( null, 15L);
+    private final static ImageModel IMAGE_1 = new ImageModel(15L, null);
 
     private final static UserModel USER_1 = new UserModel(1, PASSWORD_1, NAME_1, SURNAME_1, EMAIL_1, DEFAULT_ROLES_MODELS, IMAGE_1);
 
@@ -55,7 +55,7 @@ public class VerificationTokenDaoTest {
     private final static String NAME_2 = "usuario2";
     private final static String SURNAME_2 = "dos";
     private final static String EMAIL_2 = "dos@mail.com";
-    private final static ImageModel IMAGE_2 = new ImageModel( null, 16L);
+    private final static ImageModel IMAGE_2 = new ImageModel(  16L, null);
 
     private final static UserModel USER_2 = new UserModel(2, PASSWORD_2, NAME_2, SURNAME_2, EMAIL_2, DEFAULT_ROLES_MODELS, IMAGE_2);
 

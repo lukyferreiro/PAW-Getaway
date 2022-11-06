@@ -26,7 +26,7 @@ public class ImageModel {
         this.image = image;
     }
 
-    public ImageModel(byte[] image, long imageId) {
+    public ImageModel( long imageId, byte[] image) {
         this.image = image;
         this.imageId = imageId;
     }

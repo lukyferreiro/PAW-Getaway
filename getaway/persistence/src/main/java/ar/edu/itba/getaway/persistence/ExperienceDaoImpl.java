@@ -189,36 +189,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
         return queryForExperiences.getResultList();
     }
 
-    @Override
-    public List<ExperienceModel> getRecommendedByViews(UserModel user) {
-        final Query queryForIds = em.createNativeQuery(
-                "SELECT experienceid\n" +
-                        "FROM viewed\n" +
-                        "WHERE userid IN (\n" +
-                        "    SELECT userid\n" +
-                        "    FROM viewed\n" +
-                        "    WHERE userid != :userid AND experienceid IN (\n" +
-                        "        SELECT experienceid\n" +
-                        "        FROM viewed\n" +
-                        "        WHERE userid = :userid\n" +
-                        "    )\n" +
-                        ")\n" +
-                        "  AND experienceid NOT IN (\n" +
-                        "        SELECT experienceid\n" +
-                        "        FROM viewed\n" +
-                        "        WHERE userid = :userid\n" +
-                        "    )\n" +
-                        "GROUP BY experienceid\n" +
-                        "ORDER BY COUNT(experienceid) DESC");
 
-        queryForIds.setParameter("userid", user.getUserId());
-        List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
-
-        final TypedQuery<ExperienceModel> queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN :idList", ExperienceModel.class);
-        queryForExperiences.setParameter("idList",  resultingIds.stream().map(Number::longValue).collect(Collectors.toList()) );
-        queryForExperiences.setMaxResults(9);
-
-        return queryForExperiences.getResultList();
-    }
 
 }

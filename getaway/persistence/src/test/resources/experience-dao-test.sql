@@ -5,7 +5,6 @@ TRUNCATE TABLE countries RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE categories RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE reviews RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE images RESTART IDENTITY AND COMMIT NO CHECK;
-TRUNCATE TABLE imagesExperiences RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE favuserexperience RESTART IDENTITY AND COMMIT NO CHECK;
 
 -- Add at least three users (in case we limit 1 review per experience per user)
@@ -40,22 +39,22 @@ INSERT INTO images(imgid, imageObject) VALUES(8, '0x1234');
 
 -- Add 1 experience of each category
 -- Add 3 to adventure with different price ranges and cities for filter testing
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
-VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 1, 'owner@mail.com');
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
-VALUES (2, 'testgastro', 1000, 'dirgastro', null, null, 1, 2, 1, 'owner@mail.com');
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
-VALUES (3, 'testhotel', 1000, 'dirhotel', null, null, 1, 3, 1, 'owner@mail.com');
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
-VALUES (4, 'testrelax', 10000, 'dirrelax', null, null, 2, 4, 1, 'owner@mail.com');
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
-VALUES (5, 'testnight', null, 'dirnight', null, null, 2, 5, 1, 'owner@mail.com');
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
-VALUES (6, 'testhist', 5000, 'dirhist', null, null, 2, 6, 2, 'owner2@mail.com');
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
-VALUES (7, 'testaventura2', 1500, 'diraventura2', null, null, 1, 1, 2, 'owner2@mail.com');
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
-VALUES (8, 'testaventura3', 2000, 'diraventura3', null, null, 2, 1, 2, 'owner2@mail.com');
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, observable, views)
+VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 1, 'owner@mail.com', true, 0);
+-- INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
+-- VALUES (2, 'testgastro', 1000, 'dirgastro', null, null, 1, 2, 1, 'owner@mail.com');
+-- INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
+-- VALUES (3, 'testhotel', 1000, 'dirhotel', null, null, 1, 3, 1, 'owner@mail.com');
+-- INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
+-- VALUES (4, 'testrelax', 10000, 'dirrelax', null, null, 2, 4, 1, 'owner@mail.com');
+-- INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
+-- VALUES (5, 'testnight', null, 'dirnight', null, null, 2, 5, 1, 'owner@mail.com');
+-- INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
+-- VALUES (6, 'testhist', 5000, 'dirhist', null, null, 2, 6, 2, 'owner2@mail.com');
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, observable, views)
+VALUES (7, 'testaventura2', 1500, 'diraventura2', null, null, 1, 1, 2, 'owner2@mail.com', true, 0);
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, observable, views)
+VALUES (8, 'testaventura3', 2000, 'diraventura3', null, null, 2, 1, 2, 'owner2@mail.com', true, 0);
 
 -- INSERT INTO favuserexperience(userid, experienceid) VALUES (1, 1);
 -- INSERT INTO favuserexperience(userid, experienceid) VALUES (1, 5);
