@@ -76,20 +76,4 @@
 ////        assertTrue(imageModel.isPresent());
 ////        assertArrayEquals(imgInfo1,imageModel.get().getImage());
 //    }
-//
-//    @Test
-//    @Rollback
-//    public void createExperienceImg() {
-////        final ImageExperienceModel imageExperienceModel = imageDao.createExperienceImg(imgInfo3, 8L,true);
-////        assertArrayEquals(imgInfo3, imageDao.getImgById(imageExperienceModel.getImageId()).get().getImage());
-////        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "imagesExperiences", "imgId = " + imageExperienceModel.getImageId() + " AND experienceId = " + imageExperienceModel.getExperienceId()));
-//    }
-//
-//    //TODO: modify later with an actual bytea
-//    @Test
-//    public void testGetImgByExperienceId() {
-////        final Optional<ImageModel> imageModel = imageDao.getImgByExperienceId(8L);
-////        assertTrue(imageModel.isPresent());
-////        assertArrayEquals(imgInfo1,imageModel.get().getImage());
-//    }
 //}

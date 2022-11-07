@@ -152,7 +152,7 @@ public class UserReviewsController {
         final ReviewModel newReviewModel = new ReviewModel(reviewId, form.getTitle(), form.getDescription(),
                 form.getLongScore(),review.getExperience(), Date.from(Instant.now()), user);
 
-        reviewService.updateReview(reviewId,newReviewModel);
+        reviewService.updateReview(newReviewModel);
 
         ModelAndView mav = new ModelAndView("redirect:/user/reviews");
         mav.addObject("successReview", true);

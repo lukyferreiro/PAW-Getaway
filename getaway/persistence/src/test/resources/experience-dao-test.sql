@@ -29,46 +29,20 @@ INSERT INTO cities(cityid, cityname, countryid) VALUES(2, 'Test City Two', 1);
 
 -- Add images (with value null) for consistency
 INSERT INTO images(imgid, imageObject) VALUES(1, '0x1234');
-INSERT INTO images(imgid, imageObject) VALUES(2, '0x1234');
-INSERT INTO images(imgid, imageObject) VALUES(3, '0x1234');
-INSERT INTO images(imgid, imageObject) VALUES(4, '0x1234');
-INSERT INTO images(imgid, imageObject) VALUES(5, '0x1234');
-INSERT INTO images(imgid, imageObject) VALUES(6, '0x1234');
 INSERT INTO images(imgid, imageObject) VALUES(7, '0x1234');
 INSERT INTO images(imgid, imageObject) VALUES(8, '0x1234');
 
 -- Add 1 experience of each category
 -- Add 3 to adventure with different price ranges and cities for filter testing
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, observable, views)
-VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 1, 'owner@mail.com', true, 0);
--- INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
--- VALUES (2, 'testgastro', 1000, 'dirgastro', null, null, 1, 2, 1, 'owner@mail.com');
--- INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
--- VALUES (3, 'testhotel', 1000, 'dirhotel', null, null, 1, 3, 1, 'owner@mail.com');
--- INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
--- VALUES (4, 'testrelax', 10000, 'dirrelax', null, null, 2, 4, 1, 'owner@mail.com');
--- INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
--- VALUES (5, 'testnight', null, 'dirnight', null, null, 2, 5, 1, 'owner@mail.com');
--- INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
--- VALUES (6, 'testhist', 5000, 'dirhist', null, null, 2, 6, 2, 'owner2@mail.com');
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, observable, views)
-VALUES (7, 'testaventura2', 1500, 'diraventura2', null, null, 1, 1, 2, 'owner2@mail.com', true, 0);
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, observable, views)
-VALUES (8, 'testaventura3', 2000, 'diraventura3', null, null, 2, 1, 2, 'owner2@mail.com', true, 0);
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
+VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 1, 'owner@mail.com', 1, true, 0);
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid,observable, views)
+VALUES (7, 'testaventura2', 1500, 'diraventura2', null, null, 1, 1, 2, 'owner2@mail.com', 7, true, 0);
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
+VALUES (8, 'testaventura3', 2000, 'diraventura3', null, null, 2, 1, 2, 'owner2@mail.com', 8, true, 0);
 
 -- INSERT INTO favuserexperience(userid, experienceid) VALUES (1, 1);
 -- INSERT INTO favuserexperience(userid, experienceid) VALUES (1, 5);
-
--- Add imagesExperiences for consistency
--- INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (1,1,true);
--- INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (2,2,true);
--- INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (3,3,true);
--- INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (4,4,true);
--- INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (5,5,true);
--- INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (6,6,true);
--- INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (7,7,true);
--- INSERT INTO imagesExperiences(imgId, experienceId, isCover) VALUES (8,8,true);
-
 
 -- Add 3 reviews to each adventure for review specific filter
 

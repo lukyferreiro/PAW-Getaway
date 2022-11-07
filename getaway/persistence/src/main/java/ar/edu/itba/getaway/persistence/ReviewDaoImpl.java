@@ -29,8 +29,8 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     @Override
-    public void updateReview(long reviewId, ReviewModel reviewModel) {
-        LOGGER.debug("Updating review with id: {}", reviewId);
+    public void updateReview(ReviewModel reviewModel) {
+        LOGGER.debug("Updating review with id: {}", reviewModel.getReviewId());
         em.merge(reviewModel);
     }
 

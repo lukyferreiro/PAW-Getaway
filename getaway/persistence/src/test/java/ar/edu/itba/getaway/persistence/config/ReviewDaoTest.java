@@ -1,151 +1,140 @@
-//package ar.edu.itba.getaway.persistence.config;
-//
-//import ar.edu.itba.getaway.models.ReviewModel;
-//import ar.edu.itba.getaway.models.ReviewUserModel;
-//import ar.edu.itba.getaway.interfaces.persistence.ReviewDao;
-//import org.junit.Before;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.jdbc.core.JdbcTemplate;
-//import org.springframework.test.annotation.Rollback;
-//import org.springframework.test.context.ContextConfiguration;
-//import org.springframework.test.context.jdbc.Sql;
-//import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-//import org.springframework.test.jdbc.JdbcTestUtils;
-//import org.springframework.transaction.annotation.Transactional;
-//import static org.junit.Assert.*;
-//import static org.junit.Assert.assertEquals;
-//import javax.sql.DataSource;
-//
-//import java.util.Date;
-//import java.util.List;
-//import java.util.Optional;
-//
-//@Transactional
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(classes = TestConfig.class)
-//@Sql(scripts = "classpath:review-dao-test.sql")
-//public class ReviewDaoTest {
-//    /** Data for tests **/
-//
-//    private final ReviewModel R1 = new ReviewModel(1L, "Title1", "Desc1", 1L, 1L, new Date(2022,1,1), 1L);
-//    private final ReviewModel R2 = new ReviewModel(2L, "Title2", "Desc2", 2L, 1L, new Date(2022,1,1), 2L);
-//    private final ReviewModel R3 = new ReviewModel(3L, "Title3", "Desc3", 3L, 1L, new Date(2022,1,1), 3L);
-//
-//    private final Long ADV1_REV = 2L;
-//    private final Long ADV2_REV = 4L;
-//    private final Long ADV3_REV = 5L;
-//
-//    private final Integer PAGE_SIZE = 12;
-//
-//    private final ReviewUserModel U1R1 = new ReviewUserModel(1L, "Title1", "Desc1", 1L, 1L, new Date(2022,1,1), 1L, "owner", "user", 0L);
-//    private final ReviewUserModel U1R4 = new ReviewUserModel(4L, "Title4", "Desc4", 3L, 7L, new Date(2022,1,1), 1L, "owner", "user", 0L);
-//    private final ReviewUserModel U1R7 = new ReviewUserModel(7L, "Title7", "Desc7", 5L, 8L, new Date(2022,1,1), 1L, "owner", "user", 0L);
-//
-//    /****/
-//
-//    @Autowired
-//    private DataSource ds;
-//
-//    @Autowired
-//    private ReviewDao reviewDao;
-//
-//    private JdbcTemplate jdbcTemplate;
-//
-//    @Before
-//    public void setUp() {
-//        this.jdbcTemplate = new JdbcTemplate(ds);
-//    }
-//
-//    @Test
-//    @Rollback
-//    public void testCreateReview() {
-//        final ReviewModel reviewModel = reviewDao.createReview("TestTitle", "TestDesc", 3L, 1L, new Date(2022, 1,1), 4L);
-//        assertNotNull(reviewModel);
-//        assertEquals("TestTitle", reviewModel.getTitle());
-//        assertEquals("TestDesc", reviewModel.getDescription());
-//        assertEquals(new Long(3), reviewModel.getScore());
-//        assertEquals(new Long(1), reviewModel.getExperienceId());
-//        assertEquals(new Date(2022, 1,1), reviewModel.getReviewDate());
-//        assertEquals(new Long(4), reviewModel.getUserId());
-//        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "reviewId = " + reviewModel.getReviewId()));
-//    }
-//
-//    @Test
-//    public void testGetReviewsByExperienceId() {
-//        final List<ReviewModel> reviewModelList = reviewDao.getReviewsByExperienceId(1L);
-//        assertNotNull(reviewModelList);
-//        assertFalse(reviewModelList.isEmpty());
+package ar.edu.itba.getaway.persistence.config;
+
+import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.interfaces.persistence.ReviewDao;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import javax.sql.DataSource;
+
+import java.util.*;
+
+@Transactional
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestConfig.class)
+@Sql(scripts = "classpath:review-dao-test.sql")
+public class ReviewDaoTest {
+    /** Data for tests **/
+
+    //User data
+    private static final RoleModel USER_MODEL = new RoleModel(2L, Roles.USER);
+    private static final RoleModel NOT_VERIFIED_MODEL = new RoleModel(4L, Roles.NOT_VERIFIED);
+    private static final Collection<RoleModel> DEFAULT_ROLES_MODELS = new ArrayList<>(Arrays.asList(USER_MODEL, NOT_VERIFIED_MODEL));
+
+
+    private final static UserModel USER_1 = new UserModel(1L, "contra1", "owner", "user", "owner@mail.com", DEFAULT_ROLES_MODELS, null);
+    private final static UserModel USER_2 = new UserModel(2L, "contra2", "owner2", "user2", "owner2@mail.com", DEFAULT_ROLES_MODELS, null);
+    private final static UserModel USER_3 = new UserModel(3L, "contra3", "owner3", "user3", "owner3@mail.com", DEFAULT_ROLES_MODELS, null);
+
+    //Experience data
+    private final static CategoryModel CATEGORY_1 = new CategoryModel(1L, "Aventura");
+
+    private final static CountryModel COUNTRY_1 = new CountryModel(1L, "Test Country");
+
+    private final static CityModel CITY_1 = new CityModel(1L, COUNTRY_1, "Test City One");
+    private final static CityModel CITY_2 = new CityModel(2L, COUNTRY_1, "Test City Two");
+
+    private final ImageModel IMAGE_ADV_1 = new ImageModel(1, null);
+    private final ImageModel IMAGE_ADV_2 = new ImageModel(2, null);
+    private final ImageModel IMAGE_ADV_3 = new ImageModel(3, null);
+
+    private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, "mail@aventura1.com", null, 0.0, CITY_1, CATEGORY_1, USER_1, IMAGE_ADV_1, true, 0);
+
+    //Reviews data
+    private final ReviewModel R1 = new ReviewModel(1L, "Title1", "Desc1", 1L, DEFAULT_ADV, new Date(2022,1,1), USER_1);
+    private final ReviewModel R2 = new ReviewModel(2L, "Title2", "Desc2", 2L, DEFAULT_ADV, new Date(2022,1,1), USER_1);
+    private final ReviewModel R3 = new ReviewModel(3L, "Title3", "Desc3", 3L, DEFAULT_ADV, new Date(2022,1,1), USER_1);
+
+    private final Long ADV1_REV = 2L;
+    private final Long ADV2_REV = 4L;
+    private final Long ADV3_REV = 5L;
+
+    private final Integer PAGE_SIZE = 12;
+
+    /****/
+
+    @Autowired
+    private DataSource ds;
+
+    @Autowired
+    private ReviewDao reviewDao;
+
+    private JdbcTemplate jdbcTemplate;
+
+    @Before
+    public void setUp() {
+        this.jdbcTemplate = new JdbcTemplate(ds);
+    }
+
+    @Test
+    @Rollback
+    public void testCreateReview() {
+        final ReviewModel reviewModel = reviewDao.createReview("TestTitle", "TestDesc", 3L, DEFAULT_ADV, new Date(2022, 1,1), USER_1);
+        assertNotNull(reviewModel);
+        assertEquals("TestTitle", reviewModel.getTitle());
+        assertEquals("TestDesc", reviewModel.getDescription());
+        assertEquals(new Long(3), reviewModel.getScore());
+        assertEquals(DEFAULT_ADV, reviewModel.getExperience());
+        assertEquals(new Date(2022, 1,1), reviewModel.getReviewDate());
+        assertEquals(USER_1, reviewModel.getUser());
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "reviewId = " + reviewModel.getReviewId()));
+    }
+
+    @Test
+    public void testGetReviewsByExperience() {
+        final List<ReviewModel> reviewModelList = reviewDao.getReviewsByExperience(DEFAULT_ADV, 1, PAGE_SIZE);
+        assertNotNull(reviewModelList);
+        assertFalse(reviewModelList.isEmpty());
+        assertTrue(reviewModelList.contains(R1));
+        assertTrue(reviewModelList.contains(R2));
+        assertTrue(reviewModelList.contains(R3));
+    }
+
+    @Test
+    public void testGetReviewById() {
+        final Optional<ReviewModel> reviewModel = reviewDao.getReviewById(1L);
+        assertTrue(reviewModel.isPresent());
+        assertEquals(R1, reviewModel.get());
+    }
+
+    @Test
+    public void testGetReviewsByUser() {
+        final List<ReviewModel> reviewModelList = reviewDao.getReviewsByUser(USER_1,1,PAGE_SIZE);
+        assertFalse(reviewModelList.isEmpty());
 //        assertTrue(reviewModelList.contains(R1));
-//        assertTrue(reviewModelList.contains(R2));
-//        assertTrue(reviewModelList.contains(R3));
-//    }
-//
-//    @Test
-//    public void testGetReviewAverageScore() {
-//        Long adv1Review = reviewDao.getReviewAverageScore(1L);
-//        Long adv2Review = reviewDao.getReviewAverageScore(7L);
-//        Long adv3Review = reviewDao.getReviewAverageScore(8L);
-//
-//        assertEquals(adv1Review, ADV1_REV);
-//        assertEquals(adv2Review, ADV2_REV);
-//        assertEquals(adv3Review, ADV3_REV);
-//    }
-//
-//    @Test
-//    public void testGetReviewCount() {
-//        assertEquals(new Integer(0), reviewDao.getReviewCount(9L));
-//        assertEquals(new Integer(3), reviewDao.getReviewCount(1L));
-//        assertEquals(new Integer(3), reviewDao.getReviewCount(7L));
-//        assertEquals(new Integer(3), reviewDao.getReviewCount(8L));
-//    }
-//
-//    @Test
-//    public void testGetReviewAndUser() {
-//        final List<ReviewUserModel> reviewUserModelList = reviewDao.getReviewAndUser(1L,1,PAGE_SIZE);
-//        assertNotNull(reviewUserModelList);
-//        assertFalse(reviewUserModelList.isEmpty());
-//
-//        assertTrue(reviewUserModelList.contains(new ReviewUserModel(1L, "Title1", "Desc1", 1L, 1L, new Date(2022, 1,1), 1L, "owner", "user", 0L)));
-//        assertTrue(reviewUserModelList.contains(new ReviewUserModel(2L, "Title1", "Desc2", 2L, 1L, new Date(2022, 1,1), 2L, "owner2", "user2", 0L)));
-//        assertTrue(reviewUserModelList.contains(new ReviewUserModel(3L, "Title1", "Desc3", 3L, 1L, new Date(2022, 1,1), 3L, "owner3", "user3", 0L)));
-//    }
-//
-//    @Test
-//    public void testGetReviewById() {
-//        final Optional<ReviewModel> reviewModel = reviewDao.getReviewById(1L);
-//        assertTrue(reviewModel.isPresent());
-//        assertEquals(R1, reviewModel.get());
-//    }
-//
-//    @Test
-//    public void testGetReviewsByUserId() {
-//        final List<ReviewUserModel> reviewModelList = reviewDao.getReviewsByUserId(1L,1,PAGE_SIZE);
-//        assertFalse(reviewModelList.isEmpty());
-//        assertTrue(reviewModelList.contains(U1R1));
-//        assertTrue(reviewModelList.contains(U1R4));
-//        assertTrue(reviewModelList.contains(U1R7));
-//    }
-//
-//    @Test
-//    @Rollback
-//    public void testDeleteReview() {
-//        assertTrue(reviewDao.deleteReview(1L));
-//        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "reviewId = " + 1));
-//    }
-//
-//    @Test
-//    @Rollback
-//    public void testUpdateReview() {
-//        assertTrue(reviewDao.updateReview(1L, new ReviewModel(1L,"TitleUpdate", "DescUpdate", 5L, 7L, new Date(2020,1,1), 4L)));
-//        Optional<ReviewModel> reviewModel = reviewDao.getReviewById(1L);
-//        assertTrue(reviewModel.isPresent());
-//        assertEquals( "TitleUpdate", reviewModel.get().getTitle());
-//        assertEquals( "DescUpdate", reviewModel.get().getDescription());
-//        assertEquals(new Long(5), reviewModel.get().getScore());
+    }
+
+    @Test
+    @Rollback
+    public void testDeleteReview() {
+//        reviewDao.deleteReview(R1);
+        ReviewModel toDeleteReview = reviewDao.getReviewById(1L).orElse(R1);
+        reviewDao.deleteReview(toDeleteReview);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "reviewId = " + toDeleteReview.getReviewId()));
+    }
+
+    @Test
+    @Rollback
+    public void testUpdateReview() {
+        reviewDao.updateReview(new ReviewModel(R1.getReviewId(),"TitleUpdate", "DescUpdate", 5L, R1.getExperience(), R1.getReviewDate(), R1.getUser()));
+        Optional<ReviewModel> reviewModel = reviewDao.getReviewById(1L);
+        assertTrue(reviewModel.isPresent());
+        assertEquals( "TitleUpdate", reviewModel.get().getTitle());
+        assertEquals( "DescUpdate", reviewModel.get().getDescription());
+        assertEquals(new Long(5), reviewModel.get().getScore());
+        //Al momento de realizar un update estos valores no se modifican, por lo que no vale la pena compararlos
 //        assertEquals(new Long(7), reviewModel.get().getExperienceId());
 //        assertEquals(new Long(4), reviewModel.get().getUserId());
 //        assertEquals(new Date(2020,1,1), reviewModel.get().getReviewDate());
-//    }
-//}
+    }
+}

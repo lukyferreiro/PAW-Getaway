@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface ReviewService {
     //TODO ver aca
     ReviewModel createReview(String title, String description, Long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel);
-    void updateReview(long reviewId, ReviewModel reviewModel);
+    void updateReview(ReviewModel reviewModel);
     void deleteReview(ReviewModel review);
     Page<ReviewModel> getReviewAndUser(ExperienceModel experience, int page);
     Optional<ReviewModel> getReviewById(long reviewId);

@@ -48,9 +48,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public void updateReview(long reviewId, ReviewModel reviewModel) {
-        LOGGER.debug("Updating review with id {}", reviewId);
-        reviewDao.updateReview(reviewId, reviewModel);
+    public void updateReview(ReviewModel reviewModel) {
+        LOGGER.debug("Updating review with id {}", reviewModel.getReviewId());
+        reviewDao.updateReview(reviewModel);
     }
 
     @Transactional
