@@ -116,7 +116,7 @@ public class PasswordResetTokenDaoTest {
     @Test
     @Rollback
     public void testGetTokenByUser() {
-        final Optional<PasswordResetToken> passwordResetToken = passwordResetTokenDao.getTokenByUser(USER_1);
+        final Optional<PasswordResetToken> passwordResetToken = passwordResetTokenDao.getTokenByUser(USER_2);
         assertNotNull(passwordResetToken);
         assertTrue(passwordResetToken.isPresent());
         assertEquals(token1, passwordResetToken.get().getValue());
@@ -126,7 +126,8 @@ public class PasswordResetTokenDaoTest {
     @Test
     @Rollback
     public void testRemoveToken() {
-        passwordResetTokenDao.removeToken(RESET);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "passwordResetToken", "passTokenId = " + 1));
+        PasswordResetToken toDeleteToken = passwordResetTokenDao.getTokenByValue(RESET.getValue()).orElse(RESET);
+        passwordResetTokenDao.removeToken(toDeleteToken);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "passwordResetToken", "passTokenId = " + toDeleteToken.getId()));
     }
 }

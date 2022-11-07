@@ -29,8 +29,6 @@ import static org.junit.Assert.*;
 @Sql(scripts = "classpath:verification-token-dao-test.sql")
 public class VerificationTokenDaoTest {
     /**Data for tests**/
-
-
     //TO BE CREATED TOKEN DATA
     private final String token2 = "6789x";
     private static final LocalDateTime EXPIRATION_DATE = LocalDateTime.of(2021, 5, 29, 12, 30);
@@ -113,9 +111,8 @@ public class VerificationTokenDaoTest {
     }
 
     @Test
-    @Rollback
     public void testGetTokenByUser() {
-        final Optional<VerificationToken> verificationToken = verificationTokenDao.getTokenByUser(USER_1);
+        final Optional<VerificationToken> verificationToken = verificationTokenDao.getTokenByUser(USER_2);
         assertNotNull(verificationToken);
         assertTrue(verificationToken.isPresent());
         assertEquals(token1, verificationToken.get().getValue());
@@ -125,7 +122,9 @@ public class VerificationTokenDaoTest {
     @Test
     @Rollback
     public void testRemoveToken() {
-        verificationTokenDao.removeToken(VERIF);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "verificationtoken", "verifid = " + 1));
+//        verificationTokenDao.removeToken(VERIF);
+        VerificationToken toDeleteToken = verificationTokenDao.getTokenByValue(VERIF.getValue()).orElse(VERIF);
+        verificationTokenDao.removeToken(toDeleteToken);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "verificationtoken", "verifid = " + toDeleteToken.getId()));
     }
 }

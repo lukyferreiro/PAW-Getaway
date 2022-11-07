@@ -22,6 +22,8 @@ import static org.junit.Assert.assertEquals;
 import javax.sql.DataSource;
 import java.util.*;
 
+//TODO: check methods not rollbacking
+
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)

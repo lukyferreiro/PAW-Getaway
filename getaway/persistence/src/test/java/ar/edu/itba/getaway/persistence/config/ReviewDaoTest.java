@@ -111,7 +111,8 @@ public class ReviewDaoTest {
     public void testGetReviewsByUser() {
         final List<ReviewModel> reviewModelList = reviewDao.getReviewsByUser(USER_1,1,PAGE_SIZE);
         assertFalse(reviewModelList.isEmpty());
-//        assertTrue(reviewModelList.contains(R1));
+        assertTrue(reviewModelList.contains(R1));
+        assertTrue(reviewModelList.contains(R3));
     }
 
     @Test

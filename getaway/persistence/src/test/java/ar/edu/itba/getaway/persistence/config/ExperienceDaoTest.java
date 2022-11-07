@@ -30,10 +30,8 @@ public class ExperienceDaoTest {
     private static final RoleModel NOT_VERIFIED_MODEL = new RoleModel(4L, Roles.NOT_VERIFIED);
     private static final Collection<RoleModel> DEFAULT_ROLES_MODELS = new ArrayList<>(Arrays.asList(USER_MODEL, NOT_VERIFIED_MODEL));
 
-
     private final static UserModel USER_1 = new UserModel(1L, "contra1", "owner", "user", "owner@mail.com", DEFAULT_ROLES_MODELS, null);
     private final static UserModel USER_2 = new UserModel(2L, "contra2", "owner2", "user2", "owner2@mail.com", DEFAULT_ROLES_MODELS, null);
-    private final static UserModel USER_3 = new UserModel(3L, "contra3", "owner3", "user3", "owner3@mail.com", DEFAULT_ROLES_MODELS, null);
 
     //Experience data
     private final static CategoryModel CATEGORY_1 = new CategoryModel(1L, "Aventura");
@@ -57,7 +55,6 @@ public class ExperienceDaoTest {
     private final Optional<OrderByModel> NO_ORDER = Optional.empty();
     private final Long NO_CITY = (long) -1;
     private final Integer PAGE_SIZE = 3;
-
 
     private final ImageModel IMAGE = new ImageModel(1, null);
     /****/
