@@ -32,7 +32,7 @@
                               <span class="required-field">*</span>
                            </div>
                            <div class="align-self-center">
-                              <h6 class="max-input-text"> <spring:message code="experienceForm.maxInput" arguments="500"/> </h6>
+                              <h6 class="max-input-text"> <spring:message code="experienceForm.maxInput" arguments="50"/> </h6>
                            </div>
                         </form:label>
                         <form:input maxlength="50" path="experienceName" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>

@@ -4,20 +4,20 @@
 
 <div class="card card-experience mx-3 my-2 p-0">
 
-      <div class="btn-fav">
-         <jsp:include page="/WEB-INF/components/fav.jsp">
-            <jsp:param name="isFav" value="${param.isFav}"/>
-            <jsp:param name="experienceId" value="${param.id}"/>
-            <jsp:param name="path" value="${param.path}"/>
-            <jsp:param name="query" value="${param.query}"/>
-            <jsp:param name="score" value="${param.score}"/>
-            <jsp:param name="cityId" value="${param.cityId}"/>
-            <jsp:param name="maxPrice" value="${param.maxPrice}"/>
-            <jsp:param name="orderBy" value="${param.orderBy}"/>
-            <jsp:param name="filter" value="${param.filter}"/>
-            <jsp:param name="search" value="${param.search}"/>
-         </jsp:include>
-      </div>
+   <div class="btn-fav">
+      <jsp:include page="/WEB-INF/components/fav.jsp">
+         <jsp:param name="isFav" value="${param.isFav}"/>
+         <jsp:param name="experienceId" value="${param.id}"/>
+         <jsp:param name="path" value="${param.path}"/>
+         <jsp:param name="query" value="${param.query}"/>
+         <jsp:param name="score" value="${param.score}"/>
+         <jsp:param name="cityId" value="${param.cityId}"/>
+         <jsp:param name="maxPrice" value="${param.maxPrice}"/>
+         <jsp:param name="orderBy" value="${param.orderBy}"/>
+         <jsp:param name="filter" value="${param.filter}"/>
+         <jsp:param name="search" value="${param.search}"/>
+      </jsp:include>
+   </div>
 
    <div class="card-link h-100 d-flex flex-column">
       <div>
@@ -36,7 +36,8 @@
                <a href="<c:url value="/experiences/${param.categoryName}/${param.id}">
                            <c:param name="view" value="${true}"/>
                   </c:url>" <c:if test="${!param.observable}"> class="disabled" </c:if>>
-                  <h2 class="experience card-title container-fluid p-0 text-truncate"><c:out value="${param.name}"/></h2>
+                  <h2 class="experience card-title container-fluid p-0 text-truncate">
+                     <c:out value="${param.name}"/></h2>
                </a>
             </div>
             <div class="card-text container-fluid p-0">
@@ -67,11 +68,12 @@
             <jsp:param name="avgReview" value="${param.avgReviews}"/>
          </jsp:include>
       </div>
-      <div class="card-body p-0 d-flex justify-content-center">
-         <c:if test="${!param.observable}">
-            <h5 class="obs-info align-self-center" style="font-size: small"><spring:message code="experience.notVisible" /></h5>
-         </c:if>
-      </div>
+      <c:if test="${!param.observable}">
+         <div class="card-body p-0 d-flex justify-content-center">
+            <h5 class="obs-info align-self-center" style="font-size: small">
+               <spring:message code="experience.notVisible"/></h5>
+         </div>
+      </c:if>
 
    </div>
 </div>

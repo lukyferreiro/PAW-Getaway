@@ -33,8 +33,7 @@
                   </div>
                   <div class="mx-5 my-2 d-flex flex-wrap justify-content-center align-content-center">
                      <c:forEach var="review" varStatus="myIndex" items="${reviews}">
-                        <div style="min-width: 500px; max-width: 500px; height: auto">
-<%--                     <div class="h-100" >--%>
+                        <div style="min-width: 700px; max-width: 700px; height: auto">
                            <jsp:include page="/WEB-INF/components/cardReview.jsp">
                               <jsp:param name="userName" value="${review.user.name}"/>
                               <jsp:param name="userSurname" value="${review.user.surname}"/>

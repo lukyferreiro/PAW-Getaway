@@ -84,7 +84,7 @@
                               <c:forEach var="experience" items="${experienceList}" varStatus="myIndex">
                                  <tr>
                                     <th scope="row">
-                                       <div class="title-link" style="width: 300px;">
+                                       <div class="title-link" style="width: 350px;">
                                           <a href="<c:url value="/experiences/${experience.category.categoryName}/${experience.experienceId}"/>">
                                              <h4 class="experience card-title container-fluid p-0" style="word-break: break-all;">
                                                 <c:out value="${experience.experienceName}"/>
