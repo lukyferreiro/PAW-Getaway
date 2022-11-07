@@ -147,29 +147,12 @@ public class UserDaoTest {
     public void testGetUserRoles() {
         final Collection<RoleModel> roles = userDao.getUserRoles(DEFAULT_USER);
 
-        for (RoleModel role:roles
-             ) {
-            System.out.println(role.getRoleName());
-        }
-
-
         assertEquals(DEFAULT_ROLES_MODELS, roles);
         assertTrue(roles.contains(USER_MODEL));
         assertTrue(roles.contains(NOT_VERIFIED_MODEL));
         assertFalse(roles.contains(VERIFIED_MODEL));
         assertFalse(roles.contains(PROVIDER_MODEL));
     }
-
-//    @Test
-//    public void testGetUserRolesModels() {
-//        final Collection<UserRoleModel> roleModels = userDao.getUserRolesModels(DEFAULT_USER);
-//
-//        assertEquals(Arrays.asList(USER_MODEL, NOT_VERIFIED_MODEL).size(), roleModels.size());
-//
-//        final ArrayList<UserRoleModel> arrayRoles = new ArrayList<>(roleModels);
-//        assertTrue(arrayRoles.contains(new UserRoleModel(DEFAULT_USER, USER_MODEL)));
-//        assertTrue(arrayRoles.contains(new UserRoleModel(DEFAULT_USER, NOT_VERIFIED_MODEL)));
-//    }
 
     @Test
     public void testGetRoleByNameProvider(){
@@ -285,6 +268,7 @@ public class UserDaoTest {
         assertTrue(arrayRoles.contains(USER_MODEL));
         assertTrue(arrayRoles.contains(NOT_VERIFIED_MODEL));
         assertTrue(arrayRoles.contains(PROVIDER_MODEL));
+
 
 //        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId()) + " AND roleId = " + USER_MODEL.getRoleId()));
 //        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + DEFAULT_USER.getUserId()) + " AND roleId = " + NOT_VERIFIED_MODEL.getRoleId()));

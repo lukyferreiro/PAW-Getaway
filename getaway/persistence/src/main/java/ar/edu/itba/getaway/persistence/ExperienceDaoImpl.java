@@ -159,6 +159,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public List<ExperienceModel> getRecommendedByFavs(UserModel user){
+        //TODO: check how to preserve this order by in next query
          final Query queryForIds = em.createNativeQuery(
                  "SELECT experienceid\n" +
                  "FROM favuserexperience\n" +
@@ -186,9 +187,39 @@ public class ExperienceDaoImpl implements ExperienceDao {
         queryForExperiences.setParameter("idList",  resultingIds.stream().map(Number::longValue).collect(Collectors.toList()) );
         queryForExperiences.setMaxResults(9);
 
+        //TODO: maybe if we dont have enough recommendations, switch to recommended by views or append recommended by views
         return queryForExperiences.getResultList();
     }
 
+    @Override
+    public List<ExperienceModel> getRecommendedByReviews(UserModel user) {
+        final Query queryForCityIds = em.createNativeQuery("WITH reviewedExperiences AS (\n" +
+                "    SELECT cityid, userid, categoryid\n" +
+                "    FROM experiences\n" +
+                "    where experienceid IN (\n" +
+                "        SELECT experienceid\n" +
+                "        FROM reviews\n" +
+                "        WHERE userid=:userid\n" +
+                "        ) AND observable = true \n" +
+                ")\n" +
+                "SELECT cityid\n" +
+                "FROM reviewedExperiences\n" +
+                "GROUP BY cityid\n" +
+                "HAVING COUNT(cityid) >= ALL (\n" +
+                "    SELECT COUNT(cityid)\n" +
+                "    from reviewedExperiences\n" +
+                "    group by cityid\n" +
+                "    )");
 
+        queryForCityIds.setParameter("userid", user.getUserId());
+        List<Number> resultingIds = (List<Number>) queryForCityIds.getResultList();
 
+        final TypedQuery<ExperienceModel> queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.city.cityId IN :idList", ExperienceModel.class);
+        queryForExperiences.setParameter("idList",  resultingIds.stream().map(Number::longValue).collect(Collectors.toList()) );
+        queryForExperiences.setMaxResults(9);
+
+        //TODO: maybe if we dont have enough recommendations, switch to recommended by provider, or by category
+        //Or maybe add other recommendation tabs
+        return queryForExperiences.getResultList();
+    }
 }

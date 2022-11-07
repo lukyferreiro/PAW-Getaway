@@ -274,6 +274,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         listExperiencesByCategory.add(user.getViewedExperiences());
         listExperiencesByCategory.add(experienceDao.getRecommendedByFavs(user));
+        listExperiencesByCategory.add(experienceDao.getRecommendedByReviews(user));
 
         return listExperiencesByCategory;
     }

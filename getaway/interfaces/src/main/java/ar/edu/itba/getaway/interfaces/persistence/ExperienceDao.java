@@ -21,4 +21,5 @@ public interface ExperienceDao {
     long getCountExperiencesByUser(String name, UserModel user);
     List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize);
     List<ExperienceModel> getRecommendedByFavs(UserModel user);
+    List<ExperienceModel> getRecommendedByReviews(UserModel user);
 }

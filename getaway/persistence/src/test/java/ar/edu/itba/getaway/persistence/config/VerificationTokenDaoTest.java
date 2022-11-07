@@ -107,7 +107,7 @@ public class VerificationTokenDaoTest {
         System.out.println(USER_2.getUserId());
 
         //Creo que lo toma como diferente porque uno es generado por hibernate y otro creado a mano, pero no estoy seguro
-        //assertEquals(USER_2, verificationToken.get().getUser());
+        assertEquals(USER_2, verificationToken.get().getUser());
     }
 
     @Test
