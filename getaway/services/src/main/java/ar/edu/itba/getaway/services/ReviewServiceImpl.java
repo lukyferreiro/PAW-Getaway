@@ -35,7 +35,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final Locale locale = LocaleContextHolder.getLocale();
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImpl.class);
     private static final int PAGE_SIZE = 6;
-    private static final int USER_PAGE_SIZE = 12;
+    private static final int USER_PAGE_SIZE = 6;
 
     @Transactional
     @Override
