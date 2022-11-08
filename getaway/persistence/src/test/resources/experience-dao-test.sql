@@ -7,10 +7,31 @@ TRUNCATE TABLE reviews RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE images RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE favuserexperience RESTART IDENTITY AND COMMIT NO CHECK;
 
+INSERT INTO roles(roleId, roleName) VALUES (1, 'PROVIDER');
+INSERT INTO roles(roleId, roleName) VALUES (2, 'USER');
+INSERT INTO roles(roleId, roleName) VALUES (3, 'VERIFIED');
+INSERT INTO roles(roleId, roleName) VALUES (4, 'NOT_VERIFIED');
+
+INSERT INTO images(imgid, imageObject) VALUES(15, '0x1234');
+INSERT INTO images(imgid, imageObject) VALUES(16, '0x1234');
+INSERT INTO images(imgid, imageObject) VALUES(17, '0x1234');
+
 -- Add at least three users (in case we limit 1 review per experience per user)
-INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (1, 'owner', 'user', 'owner@mail.com', null, 'contra1');
-INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (2, 'owner2', 'user2', 'owner2@mail.com', null, 'contra2');
-INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (3, 'owner3', 'user3', 'owner3@mail.com', null, 'contra3');
+INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (1, 'owner', 'user', 'owner@mail.com', 15, 'contra1');
+INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (2, 'owner2', 'user2', 'owner2@mail.com', 16, 'contra2');
+INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (3, 'owner3', 'user3', 'owner3@mail.com', 17, 'contra3');
+
+-- Adding default_roles to userid 1
+INSERT INTO userRoles(roleid, userid) VALUES (2,1);
+INSERT INTO userRoles(roleid, userid) VALUES (4,1);
+
+-- Adding default_roles to userid 2
+INSERT INTO userRoles(roleid, userid) VALUES (2,2);
+INSERT INTO userRoles(roleid, userid) VALUES (4,2);
+
+-- Adding default_roles to userid 3
+INSERT INTO userRoles(roleid, userid) VALUES (2,3);
+INSERT INTO userRoles(roleid, userid) VALUES (4,3);
 
 -- Populate categories
 INSERT INTO categories(categoryid, categoryname) VALUES (1, 'Aventura');

@@ -67,6 +67,8 @@ public class UserModel {
         this.email = email;
         this.roles = roles;
         this.profileImage = profileImage;
+        this.favExperiences = new ArrayList<>();
+        this.viewedExperiences = new ArrayList<>();
     }
 
     public ImageModel getProfileImage() {
