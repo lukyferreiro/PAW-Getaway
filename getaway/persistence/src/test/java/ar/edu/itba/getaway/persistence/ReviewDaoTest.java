@@ -1,7 +1,8 @@
-package ar.edu.itba.getaway.persistence.config;
+package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.persistence.ReviewDao;
+import ar.edu.itba.getaway.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +16,9 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import java.util.*;
@@ -65,9 +69,10 @@ public class ReviewDaoTest {
 
     @Autowired
     private DataSource ds;
-
     @Autowired
     private ReviewDao reviewDao;
+    @PersistenceContext
+    private EntityManager em;
 
     private JdbcTemplate jdbcTemplate;
 
@@ -121,6 +126,7 @@ public class ReviewDaoTest {
 //        reviewDao.deleteReview(R1);
         ReviewModel toDeleteReview = reviewDao.getReviewById(1L).orElse(R1);
         reviewDao.deleteReview(toDeleteReview);
+        em.flush();
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "reviewId = " + toDeleteReview.getReviewId()));
     }
 
@@ -133,9 +139,5 @@ public class ReviewDaoTest {
         assertEquals( "TitleUpdate", reviewModel.get().getTitle());
         assertEquals( "DescUpdate", reviewModel.get().getDescription());
         assertEquals(new Long(5), reviewModel.get().getScore());
-        //Al momento de realizar un update estos valores no se modifican, por lo que no vale la pena compararlos
-//        assertEquals(new Long(7), reviewModel.get().getExperienceId());
-//        assertEquals(new Long(4), reviewModel.get().getUserId());
-//        assertEquals(new Date(2020,1,1), reviewModel.get().getReviewDate());
     }
 }

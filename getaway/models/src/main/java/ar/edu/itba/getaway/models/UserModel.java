@@ -193,7 +193,7 @@ public class UserModel {
             return false;
         }
         UserModel other = (UserModel) o;
-        return this.userId == other.userId && this.email.equals(other.email);
+        return this.getUserId() == other.getUserId() && this.getEmail().equals(other.getEmail());
     }
 
     @Override

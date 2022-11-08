@@ -81,7 +81,7 @@ public class VerificationToken {
             return false;
         }
         VerificationToken verificationToken = (VerificationToken) o;
-        return this.id == verificationToken.id;
+        return this.getId() == verificationToken.getId();
     }
 
     @Override

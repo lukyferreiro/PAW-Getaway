@@ -1,8 +1,9 @@
-package ar.edu.itba.getaway.persistence.config;
+package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
 import ar.edu.itba.getaway.interfaces.persistence.VerificationTokenDao;
 import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +16,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -69,7 +72,8 @@ public class PasswordResetTokenDaoTest {
     private PasswordResetTokenDao passwordResetTokenDao;
     @Autowired
     private DataSource ds;
-
+    @PersistenceContext
+    private EntityManager em;
     private JdbcTemplate jdbcTemplate;
 
     @Before
@@ -95,22 +99,7 @@ public class PasswordResetTokenDaoTest {
         assertEquals(token1, passwordResetToken.get().getValue());
         assertEquals(1L, passwordResetToken.get().getId());
 
-        System.out.println("ACTUAL");
-        System.out.println(passwordResetToken.get().getUser().getEmail());
-        System.out.println(passwordResetToken.get().getUser().getName());
-        System.out.println(passwordResetToken.get().getUser().getSurname());
-        System.out.println(passwordResetToken.get().getUser().getPassword());
-        System.out.println(passwordResetToken.get().getUser().getUserId());
-
-        System.out.println("EXPECTED");
-        System.out.println(USER_2.getEmail());
-        System.out.println(USER_2.getName());
-        System.out.println(USER_2.getSurname());
-        System.out.println(USER_2.getPassword());
-        System.out.println(USER_2.getUserId());
-
-        //Creo que lo toma como diferente porque uno es generado por hibernate y otro creado a mano, pero no estoy seguro
-        //assertEquals(USER_2, passwordResetToken.get().getUser());
+        assertEquals(USER_2, passwordResetToken.get().getUser());
     }
 
     @Test
@@ -128,6 +117,7 @@ public class PasswordResetTokenDaoTest {
     public void testRemoveToken() {
         PasswordResetToken toDeleteToken = passwordResetTokenDao.getTokenByValue(RESET.getValue()).orElse(RESET);
         passwordResetTokenDao.removeToken(toDeleteToken);
+        em.flush();
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "passwordResetToken", "passTokenId = " + toDeleteToken.getId()));
     }
 }

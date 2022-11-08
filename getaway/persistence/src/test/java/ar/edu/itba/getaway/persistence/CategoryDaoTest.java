@@ -1,7 +1,8 @@
-package ar.edu.itba.getaway.persistence.config;
+package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.CategoryModel;
 import ar.edu.itba.getaway.interfaces.persistence.CategoryDao;
+import ar.edu.itba.getaway.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -53,7 +53,7 @@ public class ImageModel {
             return false;
         }
         ImageModel image = (ImageModel) o;
-        return this.imageId == image.imageId;
+        return this.getImageId() == image.getImageId();
     }
 
     @Override

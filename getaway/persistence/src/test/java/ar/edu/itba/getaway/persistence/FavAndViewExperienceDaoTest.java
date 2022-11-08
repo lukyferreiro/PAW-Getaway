@@ -1,6 +1,7 @@
-package ar.edu.itba.getaway.persistence.config;
+package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.interfaces.persistence.FavAndViewExperienceDao;
+import ar.edu.itba.getaway.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

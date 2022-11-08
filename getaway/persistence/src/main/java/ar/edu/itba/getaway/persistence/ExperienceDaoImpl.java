@@ -181,14 +181,22 @@ public class ExperienceDaoImpl implements ExperienceDao {
                  "ORDER BY COUNT(experienceid) DESC");
 
         queryForIds.setParameter("userid", user.getUserId());
-         List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
+        List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
 
-        final TypedQuery<ExperienceModel> queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN :idList", ExperienceModel.class);
-        queryForExperiences.setParameter("idList",  resultingIds.stream().map(Number::longValue).collect(Collectors.toList()) );
-        queryForExperiences.setMaxResults(9);
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<ExperienceModel> queryForExperiences;
+        if(idList.size() > 0){
+             queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList)", ExperienceModel.class);
+             queryForExperiences.setParameter("idList", idList ) ;
+             queryForExperiences.setMaxResults(9);
+            return queryForExperiences.getResultList();
+        }
 
+
+
+        //TODO: check empty result set behaviour
         //TODO: maybe if we dont have enough recommendations, switch to recommended by views or append recommended by views
-        return queryForExperiences.getResultList();
+        return new ArrayList<>();
     }
 
     @Override
@@ -214,12 +222,18 @@ public class ExperienceDaoImpl implements ExperienceDao {
         queryForCityIds.setParameter("userid", user.getUserId());
         List<Number> resultingIds = (List<Number>) queryForCityIds.getResultList();
 
-        final TypedQuery<ExperienceModel> queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.city.cityId IN :idList", ExperienceModel.class);
-        queryForExperiences.setParameter("idList",  resultingIds.stream().map(Number::longValue).collect(Collectors.toList()) );
-        queryForExperiences.setMaxResults(9);
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<ExperienceModel> queryForExperiences;
+        if(idList.size() > 0){
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.city.cityId IN (:idList)", ExperienceModel.class);
+            queryForExperiences.setParameter("idList", idList ) ;
+            queryForExperiences.setMaxResults(9);
+            return queryForExperiences.getResultList();
+        }
 
+        //TODO: check empty result set behaviour
         //TODO: maybe if we dont have enough recommendations, switch to recommended by provider, or by category
         //Or maybe add other recommendation tabs
-        return queryForExperiences.getResultList();
+        return new ArrayList<>();
     }
 }

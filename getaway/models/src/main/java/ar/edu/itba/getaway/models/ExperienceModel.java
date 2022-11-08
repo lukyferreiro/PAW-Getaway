@@ -28,7 +28,7 @@ public class ExperienceModel {
     private String siteUrl;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cityId", unique = true)
+    @JoinColumn(name = "cityId")
     private CityModel city;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -214,8 +214,8 @@ public class ExperienceModel {
             return false;
         }
         ExperienceModel other = (ExperienceModel) o;
-        return this.experienceId == other.experienceId && this.experienceName.equals(other.experienceName) &&
-                this.address.equals(other.address) && this.city.equals(other.city);
+        return this.getExperienceId() == other.getExperienceId() && this.getExperienceName().equals(other.getExperienceName()) &&
+                this.getAddress().equals(other.getAddress()) && this.getCity().equals(other.getCity());
     }
 
     @Override

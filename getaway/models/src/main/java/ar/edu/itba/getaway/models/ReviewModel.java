@@ -111,7 +111,7 @@ public class ReviewModel {
             return false;
         }
         ReviewModel other = (ReviewModel) o;
-        return this.reviewId == other.reviewId;
+        return this.getReviewId() == other.getReviewId();
     }
 
     @Override

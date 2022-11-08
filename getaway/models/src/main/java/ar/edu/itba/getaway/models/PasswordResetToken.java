@@ -82,7 +82,7 @@ public class PasswordResetToken {
             return false;
         }
         PasswordResetToken passwordResetToken = (PasswordResetToken) o;
-        return this.id == passwordResetToken.id;
+        return this.getId() == passwordResetToken.getId();
     }
 
     @Override

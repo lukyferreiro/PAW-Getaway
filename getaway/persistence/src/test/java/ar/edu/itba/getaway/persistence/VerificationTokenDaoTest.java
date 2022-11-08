@@ -1,7 +1,8 @@
-package ar.edu.itba.getaway.persistence.config;
+package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.interfaces.persistence.VerificationTokenDao;
 import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -66,6 +69,8 @@ public class VerificationTokenDaoTest {
     private VerificationTokenDao verificationTokenDao;
     @Autowired
     private DataSource ds;
+    @PersistenceContext
+    private EntityManager em;
 
     private JdbcTemplate jdbcTemplate;
 
@@ -91,22 +96,6 @@ public class VerificationTokenDaoTest {
         assertTrue(verificationToken.isPresent());
         assertEquals(token1, verificationToken.get().getValue());
         assertEquals(1L, verificationToken.get().getId());
-
-        System.out.println("ACTUAL");
-        System.out.println(verificationToken.get().getUser().getEmail());
-        System.out.println(verificationToken.get().getUser().getName());
-        System.out.println(verificationToken.get().getUser().getSurname());
-        System.out.println(verificationToken.get().getUser().getPassword());
-        System.out.println(verificationToken.get().getUser().getUserId());
-
-        System.out.println("EXPECTED");
-        System.out.println(USER_2.getEmail());
-        System.out.println(USER_2.getName());
-        System.out.println(USER_2.getSurname());
-        System.out.println(USER_2.getPassword());
-        System.out.println(USER_2.getUserId());
-
-        //Creo que lo toma como diferente porque uno es generado por hibernate y otro creado a mano, pero no estoy seguro
         assertEquals(USER_2, verificationToken.get().getUser());
     }
 
@@ -122,9 +111,9 @@ public class VerificationTokenDaoTest {
     @Test
     @Rollback
     public void testRemoveToken() {
-//        verificationTokenDao.removeToken(VERIF);
         VerificationToken toDeleteToken = verificationTokenDao.getTokenByValue(VERIF.getValue()).orElse(VERIF);
         verificationTokenDao.removeToken(toDeleteToken);
+        em.flush();
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "verificationtoken", "verifid = " + toDeleteToken.getId()));
     }
 }
