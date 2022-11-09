@@ -188,7 +188,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         if(idList.size() > 0){
              queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList)", ExperienceModel.class);
              queryForExperiences.setParameter("idList", idList ) ;
-             queryForExperiences.setMaxResults(9);
+             queryForExperiences.setMaxResults(6);
             return queryForExperiences.getResultList();
         }
 

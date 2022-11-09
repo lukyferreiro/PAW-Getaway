@@ -159,6 +159,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Collection<Roles> getRolesByUser(UserModel user) {
-        return userDao.getRolesByUser(user);
+        final List<Roles> userRoles = new ArrayList<>();
+        final Collection<RoleModel> userRoleModels = user.getRoles();
+        for (RoleModel role: userRoleModels) {
+            userRoles.add(role.getRoleName());
+        }
+        return userRoles;
     }
 }

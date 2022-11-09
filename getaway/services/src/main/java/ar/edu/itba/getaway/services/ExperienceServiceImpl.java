@@ -273,7 +273,14 @@ public class ExperienceServiceImpl implements ExperienceService {
         final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
 
         listExperiencesByCategory.add(user.getViewedExperiences());
-        listExperiencesByCategory.add(experienceDao.getRecommendedByFavs(user));
+
+        //Mover lógica de llamar a otro tipo de recomendación acá
+        List <ExperienceModel> recommendedByFavs = experienceDao.getRecommendedByFavs(user);
+        if (recommendedByFavs.size() > 0){
+            listExperiencesByCategory.add(recommendedByFavs);
+        }
+
+
         listExperiencesByCategory.add(experienceDao.getRecommendedByReviews(user));
 
         return listExperiencesByCategory;
