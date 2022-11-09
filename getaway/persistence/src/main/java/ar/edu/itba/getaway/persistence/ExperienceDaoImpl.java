@@ -102,6 +102,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public List<ExperienceModel> listExperiencesSearch(String name, Optional<OrderByModel> order, int page, int pageSize) {
+        LOGGER.debug("List experiences that contains {}", name);
         String orderQuery = getOrderQuery(order);
         if(name.equals("%") || name.equals("_")){
             name= '/' + name;
@@ -122,7 +123,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public List<ExperienceModel> listExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize) {
-        LOGGER.debug("Get experiences of user with id {}", user.getUserId());
+        LOGGER.debug("List experiences of user with id {}", user.getUserId());
         String orderQuery = getOrderQuery(order);
         if(name.equals("%") || name.equals("_")){
             name= '/' + name;
