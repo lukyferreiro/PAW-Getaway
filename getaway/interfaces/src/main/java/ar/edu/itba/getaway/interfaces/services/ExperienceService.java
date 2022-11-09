@@ -18,10 +18,10 @@ public interface ExperienceService {
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, UserModel user);
     Optional<Double> getMaxPriceByCategory(CategoryModel category);
     Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page);
-    Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, int page, UserModel user);
+    Page<ExperienceModel> listExperiencesSearch(String name, Optional<OrderByModel> order, int page, UserModel user);
     List<List<ExperienceModel>> getExperiencesListByCategories(UserModel user);
     boolean experienceBelongsToUser(UserModel user, ExperienceModel experience);
-    Page<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page);
+    Page<ExperienceModel> listExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page);
     void updateExperienceWithoutImg(ExperienceModel toUpdateExperience);
     void increaseViews(ExperienceModel experience);
     void changeVisibility(ExperienceModel experience, boolean obs);

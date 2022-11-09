@@ -16,8 +16,8 @@ public interface ExperienceDao {
     List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, int pageSize);
     long countListByFilter(CategoryModel categoryId, Double max, Long score, CityModel city);
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category);
-    List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, int page, int pageSize);
+    List<ExperienceModel> listExperiencesSearch(String name, Optional<OrderByModel> order, int page, int pageSize);
     long getCountByName(String name);
     long getCountExperiencesByUser(String name, UserModel user);
-    List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize);
+    List<ExperienceModel> listExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize);
 }

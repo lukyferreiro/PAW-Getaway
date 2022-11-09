@@ -173,7 +173,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, int page, UserModel user) {
+    public Page<ExperienceModel> listExperiencesSearch(String name, Optional<OrderByModel> order, int page, UserModel user) {
         LOGGER.debug("Requested page {}", page);
 
         int totalPages;
@@ -192,7 +192,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             } else if (page < 0) {
                 page = 1;
             }
-            experienceModelList = experienceDao.listExperiencesByName(name, order, page, RESULT_PAGE_SIZE);
+            experienceModelList = experienceDao.listExperiencesSearch(name, order, page, RESULT_PAGE_SIZE);
 
         } else {
             totalPages = 1;
@@ -225,7 +225,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page) {
+    public Page<ExperienceModel> listExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page) {
         LOGGER.debug("Requested page {}", page);
 
         int totalPages;
@@ -244,7 +244,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             } else if (page < 0) {
                 page = 1;
             }
-            experienceModelList = experienceDao.getExperiencesListByUser(name, user, order, page, RESULT_PAGE_SIZE);
+            experienceModelList = experienceDao.listExperiencesListByUser(name, user, order, page, RESULT_PAGE_SIZE);
 
         } else {
             totalPages = 1;

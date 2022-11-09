@@ -61,10 +61,10 @@ public class SearchFormController {
             return new ModelAndView("redirect:/login");
         }
 
-        final Page<ExperienceModel> currentPage = experienceService.listExperiencesByName(searchForm.getQuery(), orderBy, pageNum, owner );
+        final Page<ExperienceModel> currentPage = experienceService.listExperiencesSearch(searchForm.getQuery(), orderBy, pageNum, owner );
 
         final OrderByModel[] orderByModels = OrderByModel.getUserOrderByModel();
-        mav.addObject("orderBy", OrderByModel.OrderByRankDesc);
+        mav.addObject("orderBy", OrderByModel.OrderByAZ);
         final List<ExperienceModel> experienceModels = currentPage.getContent();
 
         if(query.isPresent()){

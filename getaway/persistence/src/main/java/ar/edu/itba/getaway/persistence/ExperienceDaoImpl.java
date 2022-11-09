@@ -64,20 +64,12 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, int pageSize) {
-        String orderQuery;
-        if (order.isPresent()) {
-            orderQuery = order.get().getSqlQuery();
-        } else {
-            orderQuery = OrderByModel.OrderByRankDesc.getSqlQuery();
-        }
-
+        String orderQuery = getOrderQuery(order);
         TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND COALESCE(exp.price,0)<=:max AND exp.averageScore>=:score AND exp.observable=true " + orderQuery, ExperienceModel.class);
-
         if (city != null) {
             query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category=:category AND exp.city=:city AND COALESCE(exp.price,0)<=:max AND exp.averageScore>=:score AND exp.observable=true " + orderQuery, ExperienceModel.class);
             query.setParameter("city", city);
         }
-
         query.setParameter("category", category);
         query.setParameter("max", max);
         query.setParameter("score", score);
@@ -109,12 +101,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByName(String name, Optional<OrderByModel> order, int page, int pageSize) {
-        String orderQuery;
-        if (order.isPresent()) {
-            orderQuery = order.get().getSqlQuery();
-        } else {
-            orderQuery = OrderByModel.OrderByRankDesc.getSqlQuery();
+    public List<ExperienceModel> listExperiencesSearch(String name, Optional<OrderByModel> order, int page, int pageSize) {
+        String orderQuery = getOrderQuery(order);
+        if(name.equals("%") || name.equals("_")){
+            name= '/' + name;
         }
         final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE (LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.cityName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.country.countryName) LIKE LOWER(CONCAT('%', :name,'%'))) AND exp.observable=true " + orderQuery, ExperienceModel.class);
         query.setParameter("name", name);
@@ -131,13 +121,11 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> getExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize) {
+    public List<ExperienceModel> listExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize) {
         LOGGER.debug("Get experiences of user with id {}", user.getUserId());
-        String orderQuery;
-        if (order.isPresent()) {
-            orderQuery = order.get().getSqlQuery();
-        } else {
-            orderQuery = OrderByModel.OrderByAZ.getSqlQuery();
+        String orderQuery = getOrderQuery(order);
+        if(name.equals("%") || name.equals("_")){
+            name= '/' + name;
         }
         final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user " + orderQuery, ExperienceModel.class);
         query.setParameter("name", name);
@@ -153,5 +141,12 @@ public class ExperienceDaoImpl implements ExperienceDao {
         query.setParameter("name", name);
         query.setParameter("user", user);
         return query.getSingleResult();
+    }
+
+    private String getOrderQuery(Optional<OrderByModel> order){
+        if (order.isPresent()) {
+            return order.get().getSqlQuery();
+        }
+        return OrderByModel.OrderByAZ.getSqlQuery();
     }
 }

@@ -263,7 +263,7 @@
 ////
 ////    @Test
 ////    public void testGetByName() {
-////        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByName("testave", NO_ORDER,1, PAGE_SIZE);
+////        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesSearch("testave", NO_ORDER,1, PAGE_SIZE);
 ////
 ////        assertFalse(experienceModelList.isEmpty());
 ////        assertTrue(experienceModelList.contains(DEFAULT_ADV));

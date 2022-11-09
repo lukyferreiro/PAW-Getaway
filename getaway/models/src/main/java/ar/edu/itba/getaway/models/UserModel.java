@@ -125,7 +125,7 @@ public class UserModel {
         if (orderByModel.isPresent()) {
             favExperiences.sort(orderByModel.get().comparator);
         } else {
-            favExperiences.sort(OrderByModel.OrderByRankDesc.comparator);
+            favExperiences.sort(OrderByModel.OrderByAZ.comparator);
         }
 
         int fromIndex = (page - 1) * pageSize;

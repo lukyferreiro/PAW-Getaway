@@ -68,7 +68,7 @@ public class UserExperiencesController {
         }
 
         final OrderByModel[] orderByModels = OrderByModel.getUserOrderByModel();
-        mav.addObject("orderBy", OrderByModel.OrderByRankDesc);
+        mav.addObject("orderBy", OrderByModel.OrderByAZ);
 
         final Page<ExperienceModel> currentPage = experienceService.listExperiencesFavsByUser(user, orderBy, pageNum);
         final List<ExperienceModel> experienceList = currentPage.getContent();
@@ -120,7 +120,7 @@ public class UserExperiencesController {
         }
 
         userQuery.ifPresent(searchFormPrivate::setUserQuery);
-        currentPage = experienceService.getExperiencesListByUser(userQuery.orElse(""), user, orderBy, pageNum);
+        currentPage = experienceService.listExperiencesListByUser(userQuery.orElse(""), user, orderBy, pageNum);
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
         final boolean hasExperiences = user.hasExperiences();
 
