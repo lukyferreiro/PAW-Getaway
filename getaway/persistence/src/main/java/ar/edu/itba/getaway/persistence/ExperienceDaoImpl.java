@@ -21,7 +21,6 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
 
-    private static final Integer CAROUSEL_LENGHT = 6;
 
     @Override
     public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
@@ -160,7 +159,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> getRecommendedByFavs(UserModel user) {
+    public List<ExperienceModel> getRecommendedByFavs(UserModel user, int maxResults) {
         //TODO: check how to preserve this order by in next query
         final Query queryForIds = em.createNativeQuery(
                 "SELECT experienceid\n" +
@@ -190,7 +189,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         if (idList.size() > 0) {
             queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList)", ExperienceModel.class);
             queryForExperiences.setParameter("idList", idList);
-            queryForExperiences.setMaxResults(CAROUSEL_LENGHT);
+            queryForExperiences.setMaxResults(maxResults);
             return queryForExperiences.getResultList();
         }
 
@@ -201,7 +200,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> getRecommendedByViews(UserModel user) {
+    public List<ExperienceModel> getRecommendedByViews(UserModel user, int maxResults) {
 
         final Query queryForIds = em.createNativeQuery("SELECT experienceid\n" +
                 "FROM viewed\n" +
@@ -229,7 +228,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         if (idList.size() > 0) {
             queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList)", ExperienceModel.class);
             queryForExperiences.setParameter("idList", idList);
-            queryForExperiences.setMaxResults(CAROUSEL_LENGHT);
+            queryForExperiences.setMaxResults(maxResults);
             return queryForExperiences.getResultList();
         }
 
@@ -241,7 +240,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
 
     @Override
-    public List<ExperienceModel> getRecommendedByReviewsCity(UserModel user) {
+    public List<ExperienceModel> getRecommendedByReviewsCity(UserModel user, int maxResults) {
         final Query queryForCityIds = em.createNativeQuery("WITH reviewedExperiences AS (\n" +
                 "    SELECT cityid\n" +
                 "    FROM experiences\n" +
@@ -268,7 +267,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         if (idList.size() > 0) {
             queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.city.cityId IN (:idList)", ExperienceModel.class);
             queryForExperiences.setParameter("idList", idList);
-            queryForExperiences.setMaxResults(CAROUSEL_LENGHT);
+            queryForExperiences.setMaxResults(maxResults);
             return queryForExperiences.getResultList();
         }
 
@@ -278,7 +277,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         return new ArrayList<>();
     }
 
-    public List<ExperienceModel> getRecommendedByReviewsProvider(UserModel user) {
+    public List<ExperienceModel> getRecommendedByReviewsProvider(UserModel user, int maxResults) {
 
         final Query queryForCityIds = em.createNativeQuery("WITH reviewedExperiences AS (\n" +
                 "    SELECT userid\n" +
@@ -306,7 +305,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         if (idList.size() > 0) {
             queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.city.cityId IN (:idList)", ExperienceModel.class);
             queryForExperiences.setParameter("idList", idList);
-            queryForExperiences.setMaxResults(CAROUSEL_LENGHT);
+            queryForExperiences.setMaxResults(maxResults);
             return queryForExperiences.getResultList();
         }
 
@@ -317,7 +316,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     }
 
-    public List<ExperienceModel> getRecommendedByReviewsCategory(UserModel user) {
+    public List<ExperienceModel> getRecommendedByReviewsCategory(UserModel user, int maxResults) {
         final Query queryForCityIds = em.createNativeQuery("WITH reviewedExperiences AS (\n" +
                 "    SELECT categoryid\n" +
                 "    FROM experiences\n" +
@@ -344,7 +343,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         if (idList.size() > 0) {
             queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.city.cityId IN (:idList)", ExperienceModel.class);
             queryForExperiences.setParameter("idList", idList);
-            queryForExperiences.setMaxResults(CAROUSEL_LENGHT);
+            queryForExperiences.setMaxResults(maxResults);
             return queryForExperiences.getResultList();
         }
 

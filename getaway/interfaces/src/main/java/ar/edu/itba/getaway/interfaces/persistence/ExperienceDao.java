@@ -33,13 +33,13 @@ public interface ExperienceDao {
 
     long getCountExperiencesByUser(String name, UserModel user);
 
-    List<ExperienceModel> getRecommendedByFavs(UserModel user);
+    List<ExperienceModel> getRecommendedByFavs(UserModel user,int maxResults);
 
-    List<ExperienceModel> getRecommendedByReviewsCity(UserModel user);
+    List<ExperienceModel> getRecommendedByReviewsCity(UserModel user,int maxResults);
 
-    List<ExperienceModel> getRecommendedByReviewsProvider(UserModel user);
+    List<ExperienceModel> getRecommendedByReviewsProvider(UserModel user,int maxResults);
 
-    List<ExperienceModel> getRecommendedByReviewsCategory(UserModel user);
+    List<ExperienceModel> getRecommendedByReviewsCategory(UserModel user,int maxResults);
 
-    List<ExperienceModel> getRecommendedByViews(UserModel user);
+    List<ExperienceModel> getRecommendedByViews(UserModel user,int maxResults);
 }

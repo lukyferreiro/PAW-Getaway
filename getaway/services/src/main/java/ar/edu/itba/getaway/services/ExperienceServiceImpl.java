@@ -34,6 +34,8 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceServiceImpl.class);
 
+    private static final int CAROUSEL_LENGTH = 6;
+
     @Override
     @Transactional
     public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, byte[] image) {
@@ -275,16 +277,18 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         listExperiencesByCategory.add(user.getViewedExperiences());
 
+        //TODO NOT ENOUGH RESULTS LOGIC (PROVIDER , AND CATEGORY RECOMMENDATION)
+
         //Mover lógica de llamar a otro tipo de recomendación acá
-        List<ExperienceModel> recommendedByFavs = experienceDao.getRecommendedByFavs(user);
+        List<ExperienceModel> recommendedByFavs = experienceDao.getRecommendedByFavs(user, CAROUSEL_LENGTH);
         if (recommendedByFavs.size() == 6) {
             listExperiencesByCategory.add(recommendedByFavs);
         } else {
-
-            recommendedByViews = experienceDao.getRecommendedByViews(user);
+            recommendedByViews = experienceDao.getRecommendedByViews(user, CAROUSEL_LENGTH);
+            recommendedByFavs.addAll(recommendedByViews.subList(0, Math.min(6 - recommendedByFavs.size(), recommendedByViews.size())));
         }
 
-        listExperiencesByCategory.add(experienceDao.getRecommendedByReviewsCity(user));
+        listExperiencesByCategory.add(experienceDao.getRecommendedByReviewsCity(user, CAROUSEL_LENGTH));
 
         return listExperiencesByCategory;
     }
