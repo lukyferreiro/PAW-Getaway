@@ -21,6 +21,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
 
+    private static final Integer CAROUSEL_LENGHT = 6;
+
     @Override
     public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
 
@@ -158,40 +160,39 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> getRecommendedByFavs(UserModel user){
+    public List<ExperienceModel> getRecommendedByFavs(UserModel user) {
         //TODO: check how to preserve this order by in next query
-         final Query queryForIds = em.createNativeQuery(
-                 "SELECT experienceid\n" +
-                 "FROM favuserexperience\n" +
-                 "WHERE userid IN (\n" +
-                 "    SELECT userid\n" +
-                 "    FROM favuserexperience\n" +
-                 "    WHERE userid != :userid AND experienceid IN (\n" +
-                 "        SELECT experienceid\n" +
-                 "        FROM favuserexperience\n" +
-                 "        WHERE userid = :userid\n" +
-                 "    )\n" +
-                 ")\n" +
-                 "  AND experienceid NOT IN (\n" +
-                 "        SELECT experienceid\n" +
-                 "        FROM favuserexperience\n" +
-                 "        WHERE userid = :userid\n" +
-                 "    )\n" +
-                 "GROUP BY experienceid\n" +
-                 "ORDER BY COUNT(experienceid) DESC");
+        final Query queryForIds = em.createNativeQuery(
+                "SELECT experienceid\n" +
+                        "FROM favuserexperience\n" +
+                        "WHERE userid IN (\n" +
+                        "    SELECT userid\n" +
+                        "    FROM favuserexperience\n" +
+                        "    WHERE userid != :userid AND experienceid IN (\n" +
+                        "        SELECT experienceid\n" +
+                        "        FROM favuserexperience\n" +
+                        "        WHERE userid = :userid\n" +
+                        "    )\n" +
+                        ")\n" +
+                        "  AND experienceid NOT IN (\n" +
+                        "        SELECT experienceid\n" +
+                        "        FROM favuserexperience\n" +
+                        "        WHERE userid = :userid\n" +
+                        "    )\n" +
+                        "GROUP BY experienceid\n" +
+                        "ORDER BY COUNT(experienceid) DESC");
 
         queryForIds.setParameter("userid", user.getUserId());
         List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
 
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
         final TypedQuery<ExperienceModel> queryForExperiences;
-        if(idList.size() > 0){
-             queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList)", ExperienceModel.class);
-             queryForExperiences.setParameter("idList", idList ) ;
-             queryForExperiences.setMaxResults(6);
+        if (idList.size() > 0) {
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList)", ExperienceModel.class);
+            queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setMaxResults(CAROUSEL_LENGHT);
             return queryForExperiences.getResultList();
         }
-
 
 
         //TODO: check empty result set behaviour
@@ -200,9 +201,49 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> getRecommendedByReviews(UserModel user) {
+    public List<ExperienceModel> getRecommendedByViews(UserModel user) {
+
+        final Query queryForIds = em.createNativeQuery("SELECT experienceid\n" +
+                "FROM viewed\n" +
+                "WHERE userid IN (\n" +
+                "    SELECT userid\n" +
+                "    FROM viewed\n" +
+                "    WHERE userid != :userid AND experienceid IN (\n" +
+                "        SELECT experienceid\n" +
+                "        FROM viewed\n" +
+                "        WHERE userid = :userid\n" +
+                "    )\n" +
+                ")\n" +
+                "  AND experienceid NOT IN (\n" +
+                "        SELECT experienceid\n" +
+                "        FROM viewed\n" +
+                "        WHERE userid = :userid\n" +
+                "    )\n"
+        );
+
+        queryForIds.setParameter("userid", user.getUserId());
+        List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
+
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<ExperienceModel> queryForExperiences;
+        if (idList.size() > 0) {
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList)", ExperienceModel.class);
+            queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setMaxResults(CAROUSEL_LENGHT);
+            return queryForExperiences.getResultList();
+        }
+
+
+        //TODO: check empty result set behaviour
+        //TODO: maybe if we dont have enough recommendations, switch to recommended by views or append recommended by views
+        return new ArrayList<>();
+    }
+
+
+    @Override
+    public List<ExperienceModel> getRecommendedByReviewsCity(UserModel user) {
         final Query queryForCityIds = em.createNativeQuery("WITH reviewedExperiences AS (\n" +
-                "    SELECT cityid, userid, categoryid\n" +
+                "    SELECT cityid\n" +
                 "    FROM experiences\n" +
                 "    where experienceid IN (\n" +
                 "        SELECT experienceid\n" +
@@ -215,8 +256,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
                 "GROUP BY cityid\n" +
                 "HAVING COUNT(cityid) >= ALL (\n" +
                 "    SELECT COUNT(cityid)\n" +
-                "    from reviewedExperiences\n" +
-                "    group by cityid\n" +
+                "    FROM reviewedExperiences\n" +
+                "    GROUP BY cityid\n" +
                 "    )");
 
         queryForCityIds.setParameter("userid", user.getUserId());
@@ -224,10 +265,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
         final TypedQuery<ExperienceModel> queryForExperiences;
-        if(idList.size() > 0){
+        if (idList.size() > 0) {
             queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.city.cityId IN (:idList)", ExperienceModel.class);
-            queryForExperiences.setParameter("idList", idList ) ;
-            queryForExperiences.setMaxResults(9);
+            queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setMaxResults(CAROUSEL_LENGHT);
             return queryForExperiences.getResultList();
         }
 
@@ -236,4 +277,82 @@ public class ExperienceDaoImpl implements ExperienceDao {
         //Or maybe add other recommendation tabs
         return new ArrayList<>();
     }
+
+    public List<ExperienceModel> getRecommendedByReviewsProvider(UserModel user) {
+
+        final Query queryForCityIds = em.createNativeQuery("WITH reviewedExperiences AS (\n" +
+                "    SELECT userid\n" +
+                "    FROM experiences\n" +
+                "    where experienceid IN (\n" +
+                "        SELECT experienceid\n" +
+                "        FROM reviews\n" +
+                "        WHERE userid=:userid\n" +
+                "        ) AND observable = true \n" +
+                ")\n" +
+                "SELECT userid\n" +
+                "FROM reviewedExperiences\n" +
+                "GROUP BY userid\n" +
+                "HAVING COUNT(userid) >= ALL (\n" +
+                "    SELECT COUNT(userid)\n" +
+                "    FROM reviewedExperiences\n" +
+                "    GROUP BY userid\n" +
+                "    )");
+
+        queryForCityIds.setParameter("userid", user.getUserId());
+        List<Number> resultingIds = (List<Number>) queryForCityIds.getResultList();
+
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<ExperienceModel> queryForExperiences;
+        if (idList.size() > 0) {
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.city.cityId IN (:idList)", ExperienceModel.class);
+            queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setMaxResults(CAROUSEL_LENGHT);
+            return queryForExperiences.getResultList();
+        }
+
+        //TODO: check empty result set behaviour
+        //TODO: maybe if we dont have enough recommendations, switch to recommended by provider, or by category
+        //Or maybe add other recommendation tabs
+        return new ArrayList<>();
+
+    }
+
+    public List<ExperienceModel> getRecommendedByReviewsCategory(UserModel user) {
+        final Query queryForCityIds = em.createNativeQuery("WITH reviewedExperiences AS (\n" +
+                "    SELECT categoryid\n" +
+                "    FROM experiences\n" +
+                "    where experienceid IN (\n" +
+                "        SELECT experienceid\n" +
+                "        FROM reviews\n" +
+                "        WHERE userid=:userid\n" +
+                "        ) AND observable = true \n" +
+                ")\n" +
+                "SELECT categoryid\n" +
+                "FROM reviewedExperiences\n" +
+                "GROUP BY categoryid\n" +
+                "HAVING COUNT(categoryid) >= ALL (\n" +
+                "    SELECT COUNT(categoryid)\n" +
+                "    FROM reviewedExperiences\n" +
+                "    GROUP BY categoryid\n" +
+                "    )");
+
+        queryForCityIds.setParameter("userid", user.getUserId());
+        List<Number> resultingIds = (List<Number>) queryForCityIds.getResultList();
+
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<ExperienceModel> queryForExperiences;
+        if (idList.size() > 0) {
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.city.cityId IN (:idList)", ExperienceModel.class);
+            queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setMaxResults(CAROUSEL_LENGHT);
+            return queryForExperiences.getResultList();
+        }
+
+        //TODO: check empty result set behaviour
+        //TODO: maybe if we dont have enough recommendations, switch to recommended by provider, or by category
+        //Or maybe add other recommendation tabs
+        return new ArrayList<>();
+    }
+
+
 }

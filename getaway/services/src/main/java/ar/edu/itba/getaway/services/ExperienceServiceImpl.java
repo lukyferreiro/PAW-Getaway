@@ -269,19 +269,22 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<List<ExperienceModel>> userLandingPage(UserModel user){
+    public List<List<ExperienceModel>> userLandingPage(UserModel user) {
         final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
+        List<ExperienceModel> recommendedByViews = new ArrayList<>();
 
         listExperiencesByCategory.add(user.getViewedExperiences());
 
         //Mover lógica de llamar a otro tipo de recomendación acá
-        List <ExperienceModel> recommendedByFavs = experienceDao.getRecommendedByFavs(user);
-        if (recommendedByFavs.size() > 0){
+        List<ExperienceModel> recommendedByFavs = experienceDao.getRecommendedByFavs(user);
+        if (recommendedByFavs.size() == 6) {
             listExperiencesByCategory.add(recommendedByFavs);
+        } else {
+
+            recommendedByViews = experienceDao.getRecommendedByViews(user);
         }
 
-
-        listExperiencesByCategory.add(experienceDao.getRecommendedByReviews(user));
+        listExperiencesByCategory.add(experienceDao.getRecommendedByReviewsCity(user));
 
         return listExperiencesByCategory;
     }
