@@ -49,7 +49,7 @@ public class InitPageController {
             }
         }
 
-        List<List<ExperienceModel>> listByCategory = new ArrayList<>();
+        List<List<ExperienceModel>> listByCategory;
 
         if (user != null) {
             if (experience.isPresent()) {
