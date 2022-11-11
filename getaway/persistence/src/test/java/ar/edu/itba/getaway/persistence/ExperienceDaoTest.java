@@ -231,7 +231,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByBestRanked() {
-        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByBestRanked(CATEGORY_1);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByBestRanked(CATEGORY_1, 6);
 
         assertFalse(experienceModelList.isEmpty());
         assertEquals( DEFAULT_ADV3, experienceModelList.get(0));
@@ -243,7 +243,6 @@ public class ExperienceDaoTest {
     @Test
     public void testGetByName() {
         List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByName("aventura2", NO_ORDER,1, PAGE_SIZE);
-
         assertFalse(experienceModelList.isEmpty());
         assertFalse(experienceModelList.contains(DEFAULT_ADV));
         assertTrue(experienceModelList.contains(DEFAULT_ADV2));

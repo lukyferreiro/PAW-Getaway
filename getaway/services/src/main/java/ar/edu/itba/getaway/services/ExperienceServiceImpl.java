@@ -17,6 +17,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ExperienceServiceImpl implements ExperienceService {
@@ -127,7 +128,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     public List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, UserModel user) {
         LOGGER.debug("Retrieving all experiences by best ranked of category with id {}", category.getCategoryId());
 
-        final List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByBestRanked(category);
+        final List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByBestRanked(category, CAROUSEL_LENGTH);
 
         for (ExperienceModel experience : experienceModelList) {
             experience.setIsFav(user != null && user.isFav(experience));
@@ -273,23 +274,70 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public List<List<ExperienceModel>> userLandingPage(UserModel user) {
         final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
-        List<ExperienceModel> recommendedByViews = new ArrayList<>();
+        List<ExperienceModel> viewedExperiences = user.getViewedExperiences(CAROUSEL_LENGTH);
 
-        listExperiencesByCategory.add(user.getViewedExperiences());
+        //Adding viewed experiences to user
+        for (ExperienceModel experience : viewedExperiences) {
+            experience.setIsFav(user.isFav(experience));
+        }
+        listExperiencesByCategory.add(viewedExperiences);
 
-        //TODO NOT ENOUGH RESULTS LOGIC (PROVIDER , AND CATEGORY RECOMMENDATION)
-
-        //Mover lógica de llamar a otro tipo de recomendación acá
-        List<ExperienceModel> recommendedByFavs = experienceDao.getRecommendedByFavs(user, CAROUSEL_LENGTH);
-        if (recommendedByFavs.size() == 6) {
-            listExperiencesByCategory.add(recommendedByFavs);
-        } else {
-            recommendedByViews = experienceDao.getRecommendedByViews(user, CAROUSEL_LENGTH);
-            recommendedByFavs.addAll(recommendedByViews.subList(0, Math.min(6 - recommendedByFavs.size(), recommendedByViews.size())));
+        //Getting recommendedByFavs
+        //If we dont have enough recommendations we switch to recommended by views, and then plainly by the best ranked in general
+        //If an experience was already added we skip it to avoid duplicates
+        List<ExperienceModel> recommendedByFavsFullList = experienceDao.getRecommendedByFavs(user, CAROUSEL_LENGTH);
+        List<Long> alreadyRecommended = recommendedByFavsFullList.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList());
+        List<ExperienceModel> recommendedByViews;
+        List<ExperienceModel> bestRanked;
+        if (recommendedByFavsFullList.size() < CAROUSEL_LENGTH) {
+            recommendedByViews = experienceDao.getRecommendedByViews(user, CAROUSEL_LENGTH - recommendedByFavsFullList.size(), alreadyRecommended);
+            alreadyRecommended.addAll(recommendedByViews.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
+            recommendedByFavsFullList.addAll(recommendedByViews);
+        }
+        if (recommendedByFavsFullList.size() < CAROUSEL_LENGTH) {
+            bestRanked = experienceDao.getBestRanked(CAROUSEL_LENGTH - recommendedByFavsFullList.size(), recommendedByFavsFullList.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
+            alreadyRecommended.addAll(bestRanked.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
+            recommendedByFavsFullList.addAll(bestRanked);
         }
 
-        listExperiencesByCategory.add(experienceDao.getRecommendedByReviewsCity(user, CAROUSEL_LENGTH));
+        //Adding recommendedByFavs to general list
+        for (ExperienceModel experience: recommendedByFavsFullList) {
+            experience.setIsFav(user.isFav(experience));
+        }
+        listExperiencesByCategory.add(recommendedByFavsFullList);
 
+        //Check if user hasReviews to get recommendations
+        if (user.hasReviews()){
+            //Getting recommendedByReviews
+            //Firstly, we look at the city where the user has made the most reviews
+            //Secondly, we look at the provider to whom the user has made the most reviews
+            //Lastly, we look at the category which the user has made the most reviews
+            //If an experience was already added we skip it to avoid duplicates
+            List<Long> userReviewedIds = experienceDao.reviewedExperiencesId(user);
+            List<ExperienceModel> recommendedByReviewsFullList;
+            List<ExperienceModel> recommendedByReviewsProvider;
+            List<ExperienceModel> recommendedByReviewsCategory;
+            recommendedByReviewsFullList = experienceDao.getRecommendedByReviewsCity(user, CAROUSEL_LENGTH, alreadyRecommended, userReviewedIds);
+
+            if (recommendedByReviewsFullList.size() < CAROUSEL_LENGTH) {
+                recommendedByReviewsProvider = experienceDao.getRecommendedByReviewsProvider(user, CAROUSEL_LENGTH - recommendedByReviewsFullList.size(), alreadyRecommended, userReviewedIds);
+                recommendedByReviewsFullList.addAll(recommendedByReviewsProvider);
+                alreadyRecommended.addAll(recommendedByReviewsProvider.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
+            }
+
+            if (recommendedByReviewsFullList.size() < CAROUSEL_LENGTH) {
+                recommendedByReviewsCategory = experienceDao.getRecommendedByReviewsCategory(user, CAROUSEL_LENGTH - recommendedByReviewsFullList.size(), alreadyRecommended, userReviewedIds);
+                recommendedByReviewsFullList.addAll(recommendedByReviewsCategory);
+            }
+
+            for (ExperienceModel experience: recommendedByReviewsFullList) {
+                experience.setIsFav(user.isFav(experience));
+            }
+            listExperiencesByCategory.add(recommendedByReviewsFullList);
+            return listExperiencesByCategory;
+        }
+
+        listExperiencesByCategory.add(new ArrayList<>());
         return listExperiencesByCategory;
     }
 

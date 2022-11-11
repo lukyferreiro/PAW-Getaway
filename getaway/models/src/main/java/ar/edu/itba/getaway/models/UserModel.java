@@ -45,6 +45,9 @@ public class UserModel {
     @Formula(value = "(select count(*) from experiences where experiences.userId = userId)!=0")
     private boolean hasExperiences;
 
+    @Formula(value = "(select count(*) from reviews where reviews.userId = userId)!=0")
+    private boolean hasReviews;
+
     /* default */
     protected UserModel() {
         // Just for Hibernate
@@ -174,15 +177,20 @@ public class UserModel {
         return hasExperiences;
     }
 
+    @Transient
+    public boolean hasReviews(){
+        return hasReviews;
+    }
+
     public void addViewed(ExperienceModel experience) {
         viewedExperiences.add(experience);
     }
     public boolean isViewed(ExperienceModel experience) {
         return viewedExperiences.contains(experience);
     }
-    public List<ExperienceModel> getViewedExperiences() {
+    public List<ExperienceModel> getViewedExperiences(int size) {
         int toIndex = viewedExperiences.size();
-        int fromIndex = Math.max((toIndex-9), 0);
+        int fromIndex = Math.max((toIndex-size), 0);
         return viewedExperiences.subList(fromIndex, toIndex);
     }
 
