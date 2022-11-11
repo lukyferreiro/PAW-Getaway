@@ -31,7 +31,7 @@ public class CityModel {
     }
 
     //Constructor used in testing
-    public CityModel(long cityId, CountryModel country,String cityName) {
+    public CityModel(long cityId, CountryModel country, String cityName) {
         this.cityId = cityId;
         this.cityName = cityName;
         this.country = country;
