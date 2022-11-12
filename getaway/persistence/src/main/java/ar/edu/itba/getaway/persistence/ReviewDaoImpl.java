@@ -21,7 +21,7 @@ public class ReviewDaoImpl implements ReviewDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewDaoImpl.class);
 
     @Override
-    public ReviewModel createReview(String title, String description, Long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel) {
+    public ReviewModel createReview(String title, String description, long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel) {
         final ReviewModel reviewModel = new ReviewModel(title, description, score, experienceModel, reviewDate, userModel);
         em.persist(reviewModel);
         LOGGER.debug("Created new review with id {} by user with id {}", reviewModel.getReviewId(), userModel.getUserId());

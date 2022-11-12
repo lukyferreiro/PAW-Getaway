@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReviewDao {
-    //TODO ver aca
-    ReviewModel createReview (String title, String description, Long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel);
+    ReviewModel createReview (String title, String description, long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel);
     void updateReview (ReviewModel reviewModel);
     void deleteReview (ReviewModel review);
     Optional<ReviewModel> getReviewById (long reviewId);

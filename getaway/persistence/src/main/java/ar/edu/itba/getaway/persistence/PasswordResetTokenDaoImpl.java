@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.persistence;
 
-import ar.edu.itba.getaway.models.CountryModel;
 import ar.edu.itba.getaway.models.PasswordResetToken;
 import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
 import ar.edu.itba.getaway.models.UserModel;

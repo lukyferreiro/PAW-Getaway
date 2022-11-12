@@ -39,7 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public ReviewModel createReview(String title, String description, Long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel) {
+    public ReviewModel createReview(String title, String description, long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel) {
         LOGGER.debug("Creating review with title {}", title);
         final ReviewModel reviewModel = reviewDao.createReview(title, description, score, experienceModel, reviewDate, userModel);
         sendNewReviewEmail(reviewModel);

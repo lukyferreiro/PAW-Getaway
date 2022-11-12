@@ -2,8 +2,6 @@ package ar.edu.itba.getaway.interfaces.services;
 
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
-
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +11,6 @@ public interface ExperienceService {
     void deleteExperience (ExperienceModel experienceModel);
     Optional<ExperienceModel> getExperienceById(long experienceId);
     Optional<ExperienceModel> getVisibleExperienceById(long experienceId, UserModel user);
-    //TODO VER ACA
     Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, UserModel user);
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, UserModel user);
     Optional<Double> getMaxPriceByCategory(CategoryModel category);

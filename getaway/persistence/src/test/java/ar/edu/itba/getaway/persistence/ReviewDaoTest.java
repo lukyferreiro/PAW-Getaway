@@ -88,7 +88,7 @@ public class ReviewDaoTest {
         assertNotNull(reviewModel);
         assertEquals("TestTitle", reviewModel.getTitle());
         assertEquals("TestDesc", reviewModel.getDescription());
-        assertEquals(new Long(3), reviewModel.getScore());
+        assertEquals(3L, reviewModel.getScore());
         assertEquals(DEFAULT_ADV, reviewModel.getExperience());
         assertEquals(new Date(2022, 1,1), reviewModel.getReviewDate());
         assertEquals(USER_1, reviewModel.getUser());
@@ -138,6 +138,6 @@ public class ReviewDaoTest {
         assertTrue(reviewModel.isPresent());
         assertEquals( "TitleUpdate", reviewModel.get().getTitle());
         assertEquals( "DescUpdate", reviewModel.get().getDescription());
-        assertEquals(new Long(5), reviewModel.get().getScore());
+        assertEquals(5L, reviewModel.get().getScore());
     }
 }

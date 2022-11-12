@@ -24,8 +24,6 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.*;
 
-//TODO: check methods update and addrole
-
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
