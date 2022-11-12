@@ -35,11 +35,11 @@ public class ReviewServiceImpl implements ReviewService {
     private final Locale locale = LocaleContextHolder.getLocale();
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImpl.class);
     private static final int PAGE_SIZE = 6;
-    private static final int USER_PAGE_SIZE = 12;
+    private static final int USER_PAGE_SIZE = 6;
 
     @Transactional
     @Override
-    public ReviewModel createReview(String title, String description, Long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel) {
+    public ReviewModel createReview(String title, String description, long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel) {
         LOGGER.debug("Creating review with title {}", title);
         final ReviewModel reviewModel = reviewDao.createReview(title, description, score, experienceModel, reviewDate, userModel);
         sendNewReviewEmail(reviewModel);
@@ -48,9 +48,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public void updateReview(long reviewId, ReviewModel reviewModel) {
-        LOGGER.debug("Updating review with id {}", reviewId);
-        reviewDao.updateReview(reviewId, reviewModel);
+    public void updateReview(ReviewModel reviewModel) {
+        LOGGER.debug("Updating review with id {}", reviewModel.getReviewId());
+        reviewDao.updateReview(reviewModel);
     }
 
     @Transactional

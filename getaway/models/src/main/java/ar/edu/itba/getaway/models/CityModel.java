@@ -65,7 +65,7 @@ public class CityModel {
             return false;
         }
         CityModel other = (CityModel) o;
-        return this.cityId == other.cityId && this.cityName.equals(other.cityName);
+        return this.getCityId() == other.getCityId() && this.getCityName().equals(other.getCityName()) && this.getCountry().equals(other.getCountry());
     }
 
     @Override

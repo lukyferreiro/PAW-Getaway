@@ -8,8 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class ExperienceDaoImpl implements ExperienceDao {
@@ -18,6 +20,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     private EntityManager em;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
+
 
     @Override
     public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
@@ -93,9 +96,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category) {
+    public List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, int size) {
         final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.category = :category AND exp.observable=true ORDER BY exp.averageScore DESC", ExperienceModel.class);
-        query.setMaxResults(6);
+        query.setMaxResults(size);
         query.setParameter("category", category);
         return query.getResultList();
     }
@@ -122,7 +125,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize) {
+    public List<ExperienceModel> listExperiencesSearchByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize) {
         LOGGER.debug("List experiences of user with id {}", user.getUserId());
         String orderQuery = getOrderQuery(order);
         if(name.equals("%") || name.equals("_")){
@@ -138,6 +141,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public long getCountExperiencesByUser(String name, UserModel user) {
+        LOGGER.debug("Get count of experiences of user with id {}", user.getUserId());
         final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user", Long.class);
         query.setParameter("name", name);
         query.setParameter("user", user);
@@ -150,4 +154,249 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
         return OrderByModel.OrderByAZ.getSqlQuery();
     }
+
+    @Override
+    public List<ExperienceModel> getRecommendedByFavs(UserModel user, int maxResults) {
+        LOGGER.debug("Getting possible ids of experiences to recommend based on user {} favourites", user.getUserId());
+        final Query queryForIds = em.createNativeQuery(
+                "SELECT experienceid\n" +
+                        "FROM favuserexperience\n" +
+                        "WHERE userid IN (\n" +
+                        "    SELECT userid\n" +
+                        "    FROM favuserexperience\n" +
+                        "    WHERE userid != :userid AND experienceid IN (\n" +
+                        "        SELECT experienceid\n" +
+                        "        FROM favuserexperience\n" +
+                        "        WHERE userid = :userid\n" +
+                        "    )\n" +
+                        ")\n" +
+                        "  AND experienceid NOT IN (\n" +
+                        "        SELECT experienceid\n" +
+                        "        FROM favuserexperience\n" +
+                        "        WHERE userid = :userid\n" +
+                        "    )"
+        );
+
+        queryForIds.setParameter("userid", user.getUserId());
+        List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
+
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<ExperienceModel> queryForExperiences;
+        if (idList.size() > 0) {
+            LOGGER.debug("Selecting experiences contained in ");
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.experienceId IN (:idList) " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
+            queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setMaxResults(maxResults);
+            return queryForExperiences.getResultList();
+        }
+
+        LOGGER.debug("Not possible to make a recommendation by favourites alone");
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<ExperienceModel> getRecommendedByViews(UserModel user, int maxResults, List<Long> alreadyAdded) {
+        final Query queryForIds = em.createNativeQuery("SELECT experienceid\n" +
+                "FROM viewed\n" +
+                "WHERE userid IN (\n" +
+                "    SELECT userid\n" +
+                "    FROM viewed\n" +
+                "    WHERE userid != :userid AND experienceid IN (\n" +
+                "        SELECT experienceid\n" +
+                "        FROM viewed\n" +
+                "        WHERE userid = :userid\n" +
+                "    )\n" +
+                ")\n" +
+                "  AND experienceid NOT IN (\n" +
+                "        SELECT experienceid\n" +
+                "        FROM viewed\n" +
+                "        WHERE userid = :userid\n" +
+                "    )\n"
+        );
+
+        queryForIds.setParameter("userid", user.getUserId());
+        List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
+
+        if (alreadyAdded.size() == 0){
+            alreadyAdded.add(-1L);
+        }
+
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<ExperienceModel> queryForExperiences;
+        if (idList.size() > 0) {
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.experienceId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
+            queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setParameter("alreadyAdded", alreadyAdded);
+            queryForExperiences.setMaxResults(maxResults);
+            return queryForExperiences.getResultList();
+        }
+
+        LOGGER.debug("Not possible to make a recommendation by views alone");
+        return new ArrayList<>();
+    }
+
+    public List<ExperienceModel> getRecommendedBestRanked(int maxResults, List<Long> alreadyAdded){
+        if (alreadyAdded.size() == 0){
+            alreadyAdded.add(-1L);
+        }
+
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.id NOT IN (:alreadyAdded) ORDER BY exp.averageScore DESC", ExperienceModel.class);
+        query.setParameter("alreadyAdded", alreadyAdded);
+        query.setMaxResults(maxResults);
+        return query.getResultList();
+    }
+
+    @Override
+    public  List<Long> reviewedExperiencesId(UserModel user){
+        final Query queryForReviewedExperiencesId = em.createNativeQuery("SELECT experienceid FROM reviews WHERE userid=:userid");
+        queryForReviewedExperiencesId.setParameter("userid", user.getUserId());
+        List<Number> resultingIds = (List<Number>) queryForReviewedExperiencesId.getResultList();
+        return  resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ExperienceModel> getRecommendedByReviewsCity(UserModel user, int maxResults, List<Long> alreadyAdded, List<Long> reviewedIds) {
+        final Query queryForCityIds = em.createNativeQuery("SELECT cityid\n" +
+                "FROM (\n" +
+                "    SELECT cityid\n" +
+                "    FROM experiences\n" +
+                "    where experienceid IN (\n" +
+                "        SELECT experienceid\n" +
+                "        FROM reviews\n" +
+                "        WHERE userid=:userid AND score>=3\n" +
+                "        )\n" +
+                "    )  AS aux\n" +
+                "GROUP BY cityid\n" +
+                "HAVING COUNT(cityid) >= ALL (\n" +
+                "    SELECT COUNT(cityid)\n" +
+                "    FROM (\n" +
+                "        SELECT cityid\n" +
+                "        FROM experiences\n" +
+                "        where experienceid IN (\n" +
+                "            SELECT experienceid\n" +
+                "            FROM reviews\n" +
+                "            WHERE userid=:userid AND score>=3\n" +
+                "        )\n" +
+                "    ) AS aux2\n" +
+                "    GROUP BY cityid\n" +
+                "    )");
+
+        queryForCityIds.setParameter("userid", user.getUserId());
+        List<Number> resultingIds = (List<Number>) queryForCityIds.getResultList();
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+
+        if (alreadyAdded.size() == 0){
+            alreadyAdded.add(-1L);
+        }
+
+        final TypedQuery<ExperienceModel> queryForExperiences;
+        if (idList.size() > 0) {
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.city.cityId IN (:idList) AND exp.experienceId NOT IN (:reviewedIds) AND exp.experienceId NOT IN (:alreadyAdded) " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
+            queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setParameter("reviewedIds", reviewedIds);
+            queryForExperiences.setParameter("alreadyAdded", alreadyAdded);
+            queryForExperiences.setMaxResults(maxResults);
+            return queryForExperiences.getResultList();
+        }
+
+        return new ArrayList<>();
+    }
+
+    public List<ExperienceModel> getRecommendedByReviewsProvider(UserModel user, int maxResults, List<Long> alreadyAdded, List<Long> reviewedIds) {
+        final Query queryForProviderIds = em.createNativeQuery("SELECT userid\n" +
+                "FROM (\n" +
+                "    SELECT userid\n" +
+                "    FROM experiences\n" +
+                "    where experienceid IN (\n" +
+                "        SELECT experienceid\n" +
+                "        FROM reviews\n" +
+                "        WHERE userid=:userid AND score>=3\n" +
+                "        )\n" +
+                "    )  AS aux\n" +
+                "GROUP BY userid\n" +
+                "HAVING COUNT(userid) >= ALL (\n" +
+                "    SELECT COUNT(userid)\n" +
+                "    FROM (\n" +
+                "        SELECT userid\n" +
+                "        FROM experiences\n" +
+                "        where experienceid IN (\n" +
+                "            SELECT experienceid\n" +
+                "            FROM reviews\n" +
+                "            WHERE userid=:userid AND score>=3\n" +
+                "        )\n" +
+                "    ) AS aux\n" +
+                "    GROUP BY userid\n" +
+                "    )");
+
+        queryForProviderIds.setParameter("userid", user.getUserId());
+        List<Number> resultingIds = (List<Number>) queryForProviderIds.getResultList();
+
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<ExperienceModel> queryForExperiences;
+
+        if (alreadyAdded.size() == 0){
+            alreadyAdded.add(-1L);
+        }
+
+        if (idList.size() > 0) {
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.user.userId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.experienceId NOT IN (:reviewedIds) " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
+            queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setParameter("reviewedIds", reviewedIds);
+            queryForExperiences.setParameter("alreadyAdded", alreadyAdded);
+            queryForExperiences.setMaxResults(maxResults);
+            return queryForExperiences.getResultList();
+        }
+
+        return new ArrayList<>();
+
+    }
+
+    public List<ExperienceModel> getRecommendedByReviewsCategory(UserModel user, int maxResults, List<Long> alreadyAdded, List<Long> reviewedIds) {
+        final Query queryForCategoryIds = em.createNativeQuery("SELECT categoryid\n" +
+                "FROM (\n" +
+                "    SELECT categoryid\n" +
+                "    FROM experiences\n" +
+                "    where experienceid IN (\n" +
+                "        SELECT experienceid\n" +
+                "        FROM reviews\n" +
+                "        WHERE userid=:userid AND score>=3\n" +
+                "        )\n" +
+                "    )  AS aux\n" +
+                "GROUP BY categoryid\n" +
+                "HAVING COUNT(categoryid) >= ALL (\n" +
+                "    SELECT COUNT(categoryid)\n" +
+                "    FROM (\n" +
+                "        SELECT categoryid\n" +
+                "        FROM experiences\n" +
+                "        where experienceid IN (\n" +
+                "            SELECT experienceid\n" +
+                "            FROM reviews\n" +
+                "            WHERE userid=:userid AND score>=3\n" +
+                "        )\n" +
+                "    ) AS aux\n" +
+                "    GROUP BY categoryid\n" +
+                "    )\n");
+
+        queryForCategoryIds.setParameter("userid", user.getUserId());
+        List<Number> resultingIds = (List<Number>) queryForCategoryIds.getResultList();
+
+        if (alreadyAdded.size() == 0){
+            alreadyAdded.add(-1L);
+        }
+
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<ExperienceModel> queryForExperiences;
+        if (idList.size() > 0) {
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.category.categoryId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.experienceId NOT IN (:reviewedIds) " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
+            queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setParameter("reviewedIds", reviewedIds);
+            queryForExperiences.setParameter("alreadyAdded", alreadyAdded);
+            queryForExperiences.setMaxResults(maxResults);
+            return queryForExperiences.getResultList();
+        }
+
+        return new ArrayList<>();
+    }
+
+
 }

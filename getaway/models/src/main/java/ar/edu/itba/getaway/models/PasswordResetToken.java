@@ -38,6 +38,13 @@ public class PasswordResetToken {
         this.expirationDate = expirationDate;
     }
 
+    public PasswordResetToken(long id, String value, UserModel user, LocalDateTime expirationDate) {
+        this.id = id;
+        this.value = value;
+        this.user = user;
+        this.expirationDate = expirationDate;
+    }
+
     public boolean isValid() {
         return expirationDate.compareTo(LocalDateTime.now()) > 0;
     }
@@ -75,7 +82,7 @@ public class PasswordResetToken {
             return false;
         }
         PasswordResetToken passwordResetToken = (PasswordResetToken) o;
-        return this.id == passwordResetToken.id;
+        return this.getId() == passwordResetToken.getId();
     }
 
     @Override

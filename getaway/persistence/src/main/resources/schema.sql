@@ -124,3 +124,12 @@ CREATE TABLE IF NOT EXISTS favuserexperience(
     FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE,
     FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS viewed
+(
+    experienceId INT NOT NULL,
+    userId INT NOT NULL,
+    PRIMARY KEY (experienceId, userId),
+    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE
+    );

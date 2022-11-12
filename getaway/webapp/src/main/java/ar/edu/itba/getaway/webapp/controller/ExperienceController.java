@@ -34,7 +34,7 @@ public class ExperienceController {
     @Autowired
     private ReviewService reviewService;
     @Autowired
-    private FavExperienceService favExperienceService;
+    private FavAndViewExperienceService favAndViewExperienceService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
 
@@ -86,9 +86,9 @@ public class ExperienceController {
 
         // FavExperiences
         if (owner != null) {
-            if (experience.isPresent()) {
-                final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), owner);
-                favExperienceService.setFav(owner, set, addFavExperience);
+            if(experience.isPresent()){
+                final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(),owner);
+                favAndViewExperienceService.setFav(owner, set, addFavExperience);
             }
         } else if (set.isPresent()) {
             return new ModelAndView("redirect:/login");
@@ -172,11 +172,12 @@ public class ExperienceController {
                     setObs.ifPresent(aBoolean -> experienceService.changeVisibility(experience, aBoolean));
                 } else { //El owner no suma visualizaciones
                     if (view.isPresent()) {
+                        favAndViewExperienceService.setViewed(owner, experience);
                         experienceService.increaseViews(experience);
                     }
                 }
             }
-            favExperienceService.setFav(owner, set, Optional.of(experience));
+            favAndViewExperienceService.setFav(owner, set, Optional.of(experience));
             set.ifPresent(experience::setIsFav);
             mav.addObject("isEditing", experienceService.experienceBelongsToUser(owner, experience));
         } else {

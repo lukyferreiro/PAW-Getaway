@@ -40,7 +40,7 @@ public class UserExperiencesController {
     @Autowired
     private LocationService locationService;
     @Autowired
-    private FavExperienceService favExperienceService;
+    private FavAndViewExperienceService favAndViewExperienceService;
     @Autowired
     private CategoryService categoryService;
 
@@ -64,7 +64,7 @@ public class UserExperiencesController {
 
         if(experience.isPresent()){
             final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), user);
-            favExperienceService.setFav(user, set, addFavExperience);
+            favAndViewExperienceService.setFav(user, set, addFavExperience);
         }
 
         final OrderByModel[] orderByModels = OrderByModel.getUserOrderByModel();

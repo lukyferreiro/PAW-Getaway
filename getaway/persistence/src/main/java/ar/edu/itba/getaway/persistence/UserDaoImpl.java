@@ -54,21 +54,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Collection<RoleModel> getUserRoles(UserModel user) {
-        return user.getRoles();
-    }
-
-    @Override
-    public Collection<Roles> getRolesByUser (UserModel user){
-        final List<Roles> userRoles = new ArrayList<>();
-        final Collection<RoleModel> userRoleModels = user.getRoles();
-        for (RoleModel role: userRoleModels) {
-            userRoles.add(role.getRoleName());
-        }
-        return userRoles;
-    }
-
-    @Override
     public Optional<RoleModel> getRoleByName(Roles role) {
         LOGGER.debug("Get role with name {}", role.name());
         final TypedQuery<RoleModel> query = em.createQuery("FROM RoleModel WHERE roleName = :roleName", RoleModel.class);

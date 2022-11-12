@@ -28,11 +28,11 @@ import java.util.Properties;
 @Configuration
 public class TestConfig {
 
-//    @Value("classpath:hsqldb.sql")
-//    private Resource hsqldbSql;
-//    @Value("classpath:schema.sql")
-//    private Resource schemaSql;
-//
+    @Value("classpath:hsqldb.sql")
+    private Resource hsqldbSql;
+    @Value("classpath:schema.sql")
+    private Resource schemaSql;
+
 //    @Bean
 //    public DataSource dataSource() {
 //        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
@@ -48,20 +48,20 @@ public class TestConfig {
 //    public PlatformTransactionManager transactionManager(final DataSource ds){
 //        return new DataSourceTransactionManager(ds);
 //    }
-//
-//    @Bean
-//    public DataSourceInitializer dataSourceInitializer(final DataSource ds){
-//        final DataSourceInitializer dsInit = new DataSourceInitializer();
-//        dsInit.setDataSource(ds);
-//        dsInit.setDatabasePopulator(dataSourcePopulator());
-//        return dsInit;
-//    }
-//
-//    private DatabasePopulator dataSourcePopulator(){
-//        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-//        dbp.addScripts(hsqldbSql, schemaSql);//Esto lo que hace es que setee el modo compatibilidad con postgres.
-//        return dbp;
-//    }
+
+    @Bean
+    public DataSourceInitializer dataSourceInitializer(final DataSource ds){
+        final DataSourceInitializer dsInit = new DataSourceInitializer();
+        dsInit.setDataSource(ds);
+        dsInit.setDatabasePopulator(dataSourcePopulator());
+        return dsInit;
+    }
+
+    private DatabasePopulator dataSourcePopulator(){
+        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
+        dbp.addScripts(hsqldbSql, schemaSql);//Esto lo que hace es que setee el modo compatibilidad con postgres.
+        return dbp;
+    }
 
     @Bean
     public DataSource dataSource() {

@@ -7,8 +7,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "reviews")
 public class ReviewModel {
-    //TODO VER ACA
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reviews_reviewId_seq")
     @SequenceGenerator(sequenceName = "reviews_reviewId_seq", name = "reviews_reviewId_seq", allocationSize = 1)
@@ -19,8 +17,7 @@ public class ReviewModel {
     @Column(name = "description", nullable = false)
     private String description;
     @Column(name = "score", nullable = false)
-    private Long score;
-    //TODO change tipo DATE
+    private long score;
     @Column(name = "reviewDate", nullable = false)
     private Date reviewDate;
 
@@ -37,7 +34,7 @@ public class ReviewModel {
         // Just for Hibernate
     }
 
-    public ReviewModel(String title, String description, Long score, ExperienceModel experience, Date reviewDate, UserModel user) {
+    public ReviewModel(String title, String description, long score, ExperienceModel experience, Date reviewDate, UserModel user) {
         this.title = title;
         this.description = description;
         this.score = score;
@@ -46,7 +43,7 @@ public class ReviewModel {
         this.user = user;
     }
 
-    public ReviewModel(long reviewId, String title, String description, Long score, ExperienceModel experience, Date reviewDate, UserModel user) {
+    public ReviewModel(long reviewId, String title, String description, long score, ExperienceModel experience, Date reviewDate, UserModel user) {
         this.reviewId = reviewId;
         this.title = title;
         this.description = description;
@@ -74,10 +71,10 @@ public class ReviewModel {
     public void setDescription(String description) {
         this.description = description;
     }
-    public Long getScore() {
+    public long getScore() {
         return score;
     }
-    public void setScore(Long score) {
+    public void setScore(long score) {
         this.score = score;
     }
     public String getStringScore() {
@@ -111,7 +108,7 @@ public class ReviewModel {
             return false;
         }
         ReviewModel other = (ReviewModel) o;
-        return this.reviewId == other.reviewId;
+        return this.getReviewId() == other.getReviewId();
     }
 
     @Override

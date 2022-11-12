@@ -53,7 +53,7 @@ public class CategoryModel{
             return false;
         }
         CategoryModel other = (CategoryModel) o;
-        return this.categoryId == other.categoryId && this.categoryName.equals(other.categoryName);
+        return this.getCategoryId() == other.getCategoryId() && this.getCategoryName().equals(other.getCategoryName());
     }
 
     @Override

@@ -2,7 +2,6 @@ package ar.edu.itba.getaway.interfaces.services;
 
 import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
-
 import java.util.Collection;
 import java.util.Optional;
 

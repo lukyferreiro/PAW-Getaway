@@ -29,14 +29,24 @@ public class UserModel {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "userroles", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
-    private Collection<RoleModel> roles;
+    private List<RoleModel> roles;
 
     @ManyToMany
     @JoinTable(name = "favuserexperience", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "experienceId"))
     private List<ExperienceModel> favExperiences;
 
+    @ManyToMany
+    @JoinTable(name = "viewed",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "experienceId")
+    )
+    private List<ExperienceModel> viewedExperiences;
+
     @Formula(value = "(select count(*) from experiences where experiences.userId = userId)!=0")
     private boolean hasExperiences;
+
+    @Formula(value = "(select count(*) from reviews where reviews.userId = userId)!=0")
+    private boolean hasReviews;
 
     /* default */
     protected UserModel() {
@@ -48,7 +58,7 @@ public class UserModel {
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.roles = roles;
+        this.roles = new ArrayList<>(roles);
         this.profileImage = profileImage;
     }
 
@@ -58,8 +68,10 @@ public class UserModel {
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.roles = roles;
+        this.roles = new ArrayList<>(roles);
         this.profileImage = profileImage;
+        this.favExperiences = new ArrayList<>();
+        this.viewedExperiences = new ArrayList<>();
     }
 
     public ImageModel getProfileImage() {
@@ -165,6 +177,23 @@ public class UserModel {
         return hasExperiences;
     }
 
+    @Transient
+    public boolean hasReviews(){
+        return hasReviews;
+    }
+
+    public void addViewed(ExperienceModel experience) {
+        viewedExperiences.add(experience);
+    }
+    public boolean isViewed(ExperienceModel experience) {
+        return viewedExperiences.contains(experience);
+    }
+    public List<ExperienceModel> getViewedExperiences(int size) {
+        int toIndex = viewedExperiences.size();
+        int fromIndex = Math.max((toIndex-size), 0);
+        return viewedExperiences.subList(fromIndex, toIndex);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -174,7 +203,7 @@ public class UserModel {
             return false;
         }
         UserModel other = (UserModel) o;
-        return this.userId == other.userId && this.email.equals(other.email);
+        return this.getUserId() == other.getUserId() && this.getEmail().equals(other.getEmail());
     }
 
     @Override

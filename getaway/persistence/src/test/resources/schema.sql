@@ -1,6 +1,5 @@
 CREATE TABLE IF NOT EXISTS categories
 (
-    -- crear sequence aparte para que no falle
     categoryId SERIAL NOT NULL,
     categoryName VARCHAR(20) NOT NULL,
     PRIMARY KEY (categoryId),
@@ -37,7 +36,7 @@ CREATE TABLE IF NOT EXISTS users
     userName VARCHAR(50) NOT NULL,
     userSurname VARCHAR(50) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    imgId INT,
+    imgId INT NOT NULL,
     password VARCHAR(255) NOT NULL,
     PRIMARY KEY (userId),
     UNIQUE(email),
@@ -47,38 +46,24 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS experiences
 (
     experienceId SERIAL NOT NULL,
-    experienceName VARCHAR(255) NOT NULL,
+    experienceName VARCHAR(50) NOT NULL,
     price DECIMAL,
-    address VARCHAR(255) NOT NULL,
+    address VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL,
     description TEXT,
     siteUrl TEXT,
     cityId INT NOT NULL,
     categoryId INT NOT NULL,
     userId INT NOT NULL,
+    imgId INT NOT NULL,
+    observable BOOLEAN NOT NULL DEFAULT TRUE,
+    views INT NOT NULL DEFAULT 0,
     PRIMARY KEY (experienceId),
     UNIQUE(experienceName, address, cityId),
     FOREIGN KEY (cityId) REFERENCES cities (cityId) ON DELETE CASCADE,
     FOREIGN KEY (categoryId) REFERENCES categories (categoryId) ON DELETE CASCADE,
-    FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE
-    );
-
-CREATE TABLE IF NOT EXISTS views
-(
-    experienceId INT NOT NULL,
-    viewCount INT,
-    PRIMARY KEY (experienceId),
-    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
-    );
-
-CREATE TABLE IF NOT EXISTS imagesExperiences
-(
-    imgId INT NOT NULL,
-    experienceId INT NOT NULL,
-    isCover BOOLEAN NOT NULL,
-    PRIMARY KEY (imgId),
-    FOREIGN KEY (imgId) REFERENCES images (imgId) ON DELETE CASCADE,
-    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
+    FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE,
+    FOREIGN KEY (imgId) REFERENCES images (imgId) ON DELETE CASCADE
     );
 
 CREATE TABLE IF NOT EXISTS reviews
@@ -138,4 +123,13 @@ CREATE TABLE IF NOT EXISTS favuserexperience(
     PRIMARY KEY (userId, experienceId),
     FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE,
     FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE
-);
+    );
+
+CREATE TABLE IF NOT EXISTS viewed
+(
+    experienceId INT NOT NULL,
+    userId INT NOT NULL,
+    PRIMARY KEY (experienceId, userId),
+    FOREIGN KEY (experienceId) REFERENCES experiences (experienceId) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES users (userId) ON DELETE CASCADE
+    );

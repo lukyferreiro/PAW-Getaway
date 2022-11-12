@@ -30,7 +30,7 @@ public class ReviewForm {
     public String getScore() {
         return score;
     }
-    public Long getLongScore(){
+    public long getLongScore(){
         return Long.parseLong(score);
     }
     public void setTitle(String title) {

@@ -49,7 +49,7 @@ public class RoleModel {
             return false;
         }
         RoleModel other = (RoleModel) o;
-        return this.roleId == other.roleId && this.roleName.equals(other.roleName);
+        return this.getRoleId() == other.getRoleId() && this.getRoleName().equals(other.getRoleName());
     }
 
     @Override

@@ -52,7 +52,7 @@ public class CountryModel {
             return false;
         }
         CountryModel other = (CountryModel) o;
-        return this.countryId == other.countryId && this.countryName.equals(other.countryName);
+        return this.getCountryId() == other.getCountryId() && this.getCountryName().equals(other.getCountryName());
     }
 
     @Override

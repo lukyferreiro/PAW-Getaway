@@ -37,6 +37,13 @@ public class VerificationToken {
         this.expirationDate = expirationDate;
     }
 
+    public VerificationToken(long id, String value, UserModel user, LocalDateTime expirationDate) {
+        this.id = id;
+        this.value = value;
+        this.user = user;
+        this.expirationDate = expirationDate;
+    }
+
     public boolean isValid() {
         return expirationDate.compareTo(LocalDateTime.now()) > 0;
     }
@@ -74,7 +81,7 @@ public class VerificationToken {
             return false;
         }
         VerificationToken verificationToken = (VerificationToken) o;
-        return this.id == verificationToken.id;
+        return this.getId() == verificationToken.getId();
     }
 
     @Override

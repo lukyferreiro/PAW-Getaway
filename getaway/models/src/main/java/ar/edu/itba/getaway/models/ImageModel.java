@@ -26,7 +26,7 @@ public class ImageModel {
         this.image = image;
     }
 
-    public ImageModel(byte[] image, long imageId) {
+    public ImageModel( long imageId, byte[] image) {
         this.image = image;
         this.imageId = imageId;
     }
@@ -53,7 +53,7 @@ public class ImageModel {
             return false;
         }
         ImageModel image = (ImageModel) o;
-        return this.imageId == image.imageId;
+        return this.getImageId() == image.getImageId();
     }
 
     @Override

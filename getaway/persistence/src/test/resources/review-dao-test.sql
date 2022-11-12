@@ -8,55 +8,36 @@ TRUNCATE TABLE reviews RESTART IDENTITY AND COMMIT NO CHECK;
 -- Add at least three users (in case we limit 1 review per experience per user)
 INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (1, 'owner', 'user', 'owner@mail.com', null, 'contra1');
 INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (2, 'owner2', 'user2', 'owner2@mail.com', null, 'contra2');
-INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (3, 'owner3', 'user3', 'owner3@mail.com', null, 'contra3');
-INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (4, 'owner4', 'user4', 'owner4@mail.com', null, 'contra4');
 
 -- Populate categories
-INSERT INTO categories(categoryname) VALUES ('Aventura');
-INSERT INTO categories(categoryname) VALUES ('Gastronomia');
-INSERT INTO categories(categoryname) VALUES ('Hoteleria');
-INSERT INTO categories(categoryname) VALUES ('Relax');
-INSERT INTO categories(categoryname) VALUES ('Vida_nocturna');
-INSERT INTO categories(categoryname) VALUES ('Historico');
+INSERT INTO categories(categoryid, categoryname) VALUES (1, 'Aventura');
+INSERT INTO categories(categoryid, categoryname) VALUES (2, 'Gastronomia');
+INSERT INTO categories(categoryid, categoryname) VALUES (3, 'Hoteleria');
+INSERT INTO categories(categoryid, categoryname) VALUES (4, 'Relax');
+INSERT INTO categories(categoryid, categoryname) VALUES (5, 'Vida_nocturna');
+INSERT INTO categories(categoryid, categoryname) VALUES (6, 'Historico');
 
 -- Add country
-INSERT INTO countries(countryname) VALUES ('Test Country');
+INSERT INTO countries(countryid, countryname) VALUES (1, 'Test Country');
 
 -- Add at least two cities
-INSERT INTO cities(cityname, countryid) VALUES('Test City One', 1);
-INSERT INTO cities(cityname, countryid) VALUES('Test City Two', 1);
+INSERT INTO cities(cityid, cityname, countryid) VALUES(1, 'Test City One', 1);
+INSERT INTO cities(cityid, cityname, countryid) VALUES(2, 'Test City Two', 1);
 
--- Add 1 experience of each category
+INSERT INTO images(imgid, imageObject) VALUES(1, '0x1234');
+INSERT INTO images(imgid, imageObject) VALUES(7, '0x1234');
+INSERT INTO images(imgid, imageObject) VALUES(8, '0x1234');
+
 -- Add 3 to adventure with different price ranges and cities for filter testing
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
-VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 1, 'owner@mail.com');
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
-VALUES (7, 'testaventura2', 1500, 'diraventura2', null, null, 1, 1, 2, 'owner2@mail.com');
-INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email)
-VALUES (8, 'testaventura3', 2000, 'diraventura3', null, null, 2, 1, 2, 'owner2@mail.com');
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
+VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 1, 'owner@mail.com', 1, true, 0);
 
 -- Add 3 reviews to each adventure for review specific filter
 
 -- ADV 1: avg_score=2
 INSERT INTO reviews(reviewid, title, description, score, experienceid, reviewdate, userid)
-VALUES (1, 'Title1', 'Desc1', 1, 1, '2022-01-01', 1);
+VALUES (1, 'Title1', 'Desc1', 1, 1, '2022-01-01 00:00:00', 1);
 INSERT INTO reviews(reviewid, title, description, score, experienceid, reviewdate, userid)
-VALUES (2, 'Title2', 'Desc2', 2, 1, '2022-01-01', 2);
+VALUES (2, 'Title2', 'Desc2', 2, 1, '2022-01-01 00:00:00', 2);
 INSERT INTO reviews(reviewid, title, description, score, experienceid, reviewdate, userid)
-VALUES (3, 'Title3', 'Desc3', 3, 1, '2022-01-01', 3);
-
--- ADV 2: avg_score=4
-INSERT INTO reviews(reviewid, title, description, score, experienceid, reviewdate, userid)
-VALUES (4, 'Title4', 'Desc4', 3, 7, '2022-01-01', 1);
-INSERT INTO reviews(reviewid, title, description, score, experienceid, reviewdate, userid)
-VALUES (5, 'Title5', 'Desc5', 4, 7, '2022-01-01', 2);
-INSERT INTO reviews(reviewid, title, description, score, experienceid, reviewdate, userid)
-VALUES (6, 'Title6', 'Desc6', 5, 7, '2022-01-01', 3);
-
--- ADV 3: avg_score=5
-INSERT INTO reviews(reviewid, title, description, score, experienceid, reviewdate, userid)
-VALUES (7, 'Title7', 'Desc7', 5, 8, '2022-01-01', 1);
-INSERT INTO reviews(reviewid, title, description, score, experienceid, reviewdate, userid)
-VALUES (8, 'Title8', 'Desc8', 5, 8, '2022-01-01', 2);
-INSERT INTO reviews(reviewid, title, description, score, experienceid, reviewdate, userid)
-VALUES (9, 'Title9', 'Desc9', 5, 8, '2022-01-01', 3);
+VALUES (3, 'Title3', 'Desc3', 3, 1, '2022-01-01 00:00:00', 1);
