@@ -295,7 +295,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             recommendedByFavsFullList.addAll(recommendedByViews);
         }
         if (recommendedByFavsFullList.size() < CAROUSEL_LENGTH) {
-            bestRanked = experienceDao.getBestRanked(CAROUSEL_LENGTH - recommendedByFavsFullList.size(), recommendedByFavsFullList.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
+            bestRanked = experienceDao.getRecommendedBestRanked(CAROUSEL_LENGTH - recommendedByFavsFullList.size(), recommendedByFavsFullList.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
             alreadyRecommended.addAll(bestRanked.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
             recommendedByFavsFullList.addAll(bestRanked);
         }

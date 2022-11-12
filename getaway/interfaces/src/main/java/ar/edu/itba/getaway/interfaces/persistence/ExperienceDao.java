@@ -22,7 +22,7 @@ public interface ExperienceDao {
     //Recommendation methods
     List<ExperienceModel> getRecommendedByFavs(UserModel user, int maxResults);
     List<ExperienceModel> getRecommendedByViews(UserModel user, int maxResults, List<Long> alreadyAdded);
-    List<ExperienceModel> getBestRanked(int maxResults, List<Long> alreadyAdded);
+    List<ExperienceModel> getRecommendedBestRanked(int maxResults, List<Long> alreadyAdded);
 
     List<Long> reviewedExperiencesId(UserModel user);
     List<ExperienceModel> getRecommendedByReviewsCity(UserModel user, int maxResults, List<Long> alreadyAdded, List<Long> reviewedIds);

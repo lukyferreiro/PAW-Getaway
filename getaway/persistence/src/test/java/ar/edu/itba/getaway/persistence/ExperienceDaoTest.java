@@ -42,21 +42,27 @@ public class ExperienceDaoTest {
     //Experience data
     private final static CategoryModel CATEGORY_1 = new CategoryModel(1L, "Aventura");
     private final static CategoryModel CATEGORY_2 = new CategoryModel(2L, "Gastronomia");
+    private final static CategoryModel CATEGORY_6 = new CategoryModel(6L, "Historico");
 
     private final static CountryModel COUNTRY_1 = new CountryModel(1L, "Test Country");
 
     private final static CityModel CITY_1 = new CityModel(1L, COUNTRY_1, "Test City One");
     private final static CityModel CITY_2 = new CityModel(2L, COUNTRY_1, "Test City Two");
+    private final static CityModel CITY_3 = new CityModel(3L, COUNTRY_1, "Test City Three");
 
     private final ImageModel IMAGE_ADV_1 = new ImageModel(1, null);
     private final ImageModel IMAGE_ADV_2 = new ImageModel(7, null);
     private final ImageModel IMAGE_ADV_3 = new ImageModel(8, null);
-    private final ImageModel IMAGE_GAS= new ImageModel(4, null);
+    private final ImageModel IMAGE_GAS= new ImageModel(2, null);
+    private final ImageModel IMAGE_TO_DELETE= new ImageModel(50, null);
+    private final ImageModel IMAGE_TO_RECOMMEND= new ImageModel(51, null);
 
-    private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, "mail@aventura1.com", null, 0.0, CITY_1, CATEGORY_1, USER_1, IMAGE_ADV_1, true, 0);
-    private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2L, "testgastro", "dirgastro", null, null, null, 1000.0, CITY_1, CATEGORY_2, USER_1, IMAGE_GAS, true, 0);
-    private final ExperienceModel DEFAULT_ADV2 = new ExperienceModel(7L, "testaventura2", "diraventura2", null, null, null, 1500.0, CITY_1, CATEGORY_1, USER_2, IMAGE_ADV_2, true, 0);
-    private final ExperienceModel DEFAULT_ADV3 = new ExperienceModel(8L, "testaventura3", "diraventura3", null, null, null, 2000.0, CITY_2, CATEGORY_1, USER_2, IMAGE_ADV_3, true, 0);
+    private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, "owner@mail.com", null, 0.0, CITY_1, CATEGORY_1, USER_1, IMAGE_ADV_1, true, 0);
+    private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2L, "testgastro", "dirgastro", null, "owner@mail.com", null, 1000.0, CITY_1, CATEGORY_2, USER_1, IMAGE_GAS, true, 0);
+    private final ExperienceModel DEFAULT_ADV2 = new ExperienceModel(7L, "testaventura2", "diraventura2", null, "owner2@mail.com", null, 1500.0, CITY_1, CATEGORY_1, USER_2, IMAGE_ADV_2, true, 0);
+    private final ExperienceModel DEFAULT_ADV3 = new ExperienceModel(8L, "testaventura3", "diraventura3", null, "owner2@mail.com", null, 2000.0, CITY_2, CATEGORY_1, USER_2, IMAGE_ADV_3, true, 0);
+    private final ExperienceModel TO_DELETE_EXP = new ExperienceModel(50L, "todelete", "delete", null, "owner@mail.com", null, null, CITY_3, CATEGORY_6, USER_2, IMAGE_TO_DELETE, true, 0);
+    private final ExperienceModel TO_RECOMMEND_EXP = new ExperienceModel(51L, "torecommend", "recommend1", null, "owner@mail.com", null, null, CITY_3, CATEGORY_2, USER_1, IMAGE_TO_RECOMMEND, true, 0);
 
     private final List<ExperienceModel> DEF_LIST_ALL = new ArrayList<>(Arrays.asList(DEFAULT_ADV, DEFAULT_ADV2, DEFAULT_ADV3));
 
@@ -126,10 +132,10 @@ public class ExperienceDaoTest {
     @Test
     @Rollback
     public void testDeleteExperience() {
-        ExperienceModel toDeleteExperience = experienceDao.getExperienceById(DEFAULT_GAS.getExperienceId()).orElse(DEFAULT_ADV);
+        ExperienceModel toDeleteExperience = experienceDao.getExperienceById(TO_DELETE_EXP.getExperienceId()).orElse(TO_DELETE_EXP);
         experienceDao.deleteExperience(toDeleteExperience);
         em.flush();
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "experiences", "experienceId = " + DEFAULT_GAS.getExperienceId()));
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "experiences", "experienceId = " + TO_DELETE_EXP.getExperienceId()));
     }
 
     @Test
@@ -137,6 +143,14 @@ public class ExperienceDaoTest {
         Optional<ExperienceModel> experienceModel = experienceDao.getExperienceById(1L);
         assertTrue(experienceModel.isPresent());
         assertEquals(DEFAULT_ADV,experienceModel.get());
+    }
+
+    @Test
+    public void testAverageScoreFormula() {
+        Optional<ExperienceModel> experienceModel = experienceDao.getExperienceById(1L);
+        assertTrue(experienceModel.isPresent());
+        assertEquals(DEFAULT_ADV,experienceModel.get());
+        assertEquals(2, experienceModel.get().getAverageScore());
     }
 
     @Test
@@ -222,11 +236,7 @@ public class ExperienceDaoTest {
     @Test
     public void testListByCategoryPriceCityAndScoreTwo() {
         List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, 1750.0, 3L, CITY_2, NO_ORDER, 1, PAGE_SIZE);
-
         assertTrue(experienceModelList.isEmpty());
-        assertFalse(experienceModelList.contains(DEFAULT_ADV));
-        assertFalse(experienceModelList.contains(DEFAULT_ADV2));
-        assertFalse(experienceModelList.contains(DEFAULT_ADV3));
     }
 
     @Test
@@ -238,7 +248,6 @@ public class ExperienceDaoTest {
         assertEquals( DEFAULT_ADV2, experienceModelList.get(1));
         assertEquals( DEFAULT_ADV, experienceModelList.get(2));
     }
-
 
     @Test
     public void testGetByName() {
@@ -254,6 +263,79 @@ public class ExperienceDaoTest {
         assertEquals(1, experienceDao.getCountByName("aventura2"));
     }
 
-    //TODO test get average score and recommendation methods
+    @Test
+    public void testGetRecommendedByFavs() {
+        List<ExperienceModel> recommended = experienceDao.getRecommendedByFavs(USER_1, PAGE_SIZE);
+        assertNotNull(recommended);
+        assertFalse(recommended.isEmpty());
+        assertEquals(1, recommended.size());
+        assertTrue(recommended.contains(DEFAULT_ADV3));
+    }
 
+    @Test
+    public void testGetRecommendedByViews() {
+        List<Long> alreadyAdded = new ArrayList<>();
+        alreadyAdded.add(8L);
+        List<ExperienceModel> recommended = experienceDao.getRecommendedByViews(USER_1, PAGE_SIZE, alreadyAdded);
+        assertNotNull(recommended);
+        assertFalse(recommended.isEmpty());
+        assertEquals(1, recommended.size());
+        assertTrue(recommended.contains(DEFAULT_ADV2));
+    }
+
+    @Test
+    public void testGetBestRanked() {
+        List<Long> alreadyAdded = new ArrayList<>();
+        alreadyAdded.add(8L);
+        alreadyAdded.add(7L);
+        List<ExperienceModel> recommended = experienceDao.getRecommendedBestRanked(PAGE_SIZE, alreadyAdded);
+        assertNotNull(recommended);
+        assertFalse(recommended.isEmpty());
+        assertEquals(3, recommended.size());
+
+        assertTrue(recommended.contains(DEFAULT_ADV));
+        assertTrue(recommended.contains(DEFAULT_GAS));
+        assertTrue(recommended.contains(TO_DELETE_EXP));
+    }
+
+    @Test
+    public void getReviewedExperiencesId() {
+        List<Long> reviewedIds = experienceDao.reviewedExperiencesId(USER_1);
+        assertNotNull(reviewedIds);
+        assertFalse(reviewedIds.isEmpty());
+        assertEquals(3, reviewedIds.size());
+        assertTrue(reviewedIds.contains(1L));
+        assertTrue(reviewedIds.contains(7L));
+        assertTrue(reviewedIds.contains(8L));
+    }
+
+    @Test
+    public void testGetRecommendedByReviewsCity() {
+        List<Long> reviewedIds = experienceDao.reviewedExperiencesId(USER_1);
+        List<ExperienceModel> recommended = experienceDao.getRecommendedByReviewsCity(USER_1, PAGE_SIZE, new ArrayList<>(), reviewedIds);
+        assertNotNull(recommended);
+        assertFalse(recommended.isEmpty());
+        assertEquals(1, recommended.size());
+        assertTrue(recommended.contains(DEFAULT_GAS));
+    }
+
+    @Test
+    public void testGetRecommendedByReviewsProvider() {
+        List<Long> reviewedIds = experienceDao.reviewedExperiencesId(USER_1);
+        List<ExperienceModel> recommended = experienceDao.getRecommendedByReviewsProvider(USER_1, PAGE_SIZE, new ArrayList<>(), reviewedIds);
+        assertNotNull(recommended);
+        assertFalse(recommended.isEmpty());
+        assertEquals(1, recommended.size());
+        assertTrue(recommended.contains(TO_DELETE_EXP));
+    }
+
+    @Test
+    public void testGetRecommendedByReviewsCategory() {
+        List<Long> reviewedIds = experienceDao.reviewedExperiencesId(USER_1);
+        List<ExperienceModel> recommended = experienceDao.getRecommendedByReviewsCategory(USER_1, PAGE_SIZE, new ArrayList<>(), reviewedIds);
+        assertNotNull(recommended);
+        assertFalse(recommended.isEmpty());
+        assertEquals(1, recommended.size());
+        assertTrue(recommended.contains(TO_RECOMMEND_EXP));
+    }
 }
