@@ -133,18 +133,6 @@ public class UserModel {
         return favExperiences;
     }
 
-    public List<ExperienceModel> getFavExperiences(int page, int pageSize, Optional<OrderByModel> orderByModel) {
-        if (orderByModel.isPresent()) {
-            favExperiences.sort(orderByModel.get().comparator);
-        } else {
-            favExperiences.sort(OrderByModel.OrderByAZ.comparator);
-        }
-
-        int fromIndex = (page - 1) * pageSize;
-        int toIndex = Math.min((fromIndex + pageSize), favExperiences.size());
-        return favExperiences.subList(fromIndex, toIndex);
-    }
-
     public void addFav(ExperienceModel experience) {
         favExperiences.add(experience);
     }
@@ -188,10 +176,8 @@ public class UserModel {
     public boolean isViewed(ExperienceModel experience) {
         return viewedExperiences.contains(experience);
     }
-    public List<ExperienceModel> getViewedExperiences(int size) {
-        int toIndex = viewedExperiences.size();
-        int fromIndex = Math.max((toIndex-size), 0);
-        return viewedExperiences.subList(fromIndex, toIndex);
+    public List<ExperienceModel> getViewedExperiences() {
+        return viewedExperiences;
     }
 
     @Override

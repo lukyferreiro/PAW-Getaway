@@ -46,6 +46,8 @@
                               <jsp:param name="reviewId" value="${review.reviewId}"/>
                               <jsp:param name="isEditing" value="${isEditing}"/>
                               <jsp:param name="experienceName" value="${review.experience.experienceName}"/>
+                              <jsp:param name="experienceId" value="${review.experience.experienceId}"/>
+                              <jsp:param name="experienceCategory" value="${review.experience.category.categoryName}"/>
                               <jsp:param name="observable" value="${review.experience.observable}"/>
                            </jsp:include>
                         </div>

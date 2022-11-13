@@ -50,10 +50,11 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public Optional<ExperienceModel> getVisibleExperienceById(long experienceId) {
+    public Optional<ExperienceModel> getVisibleExperienceById(long experienceId, UserModel user) {
         LOGGER.debug("Get experience with id {}", experienceId);
-        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId = :experienceId AND exp.observable = true", ExperienceModel.class);
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId = :experienceId AND (exp.observable = true OR exp.user = :user)", ExperienceModel.class);
         query.setParameter("experienceId", experienceId);
+        query.setParameter("user", user);
         return query.getResultList().stream().findFirst();
     }
 
@@ -129,9 +130,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
         LOGGER.debug("List experiences of user with id {}", user.getUserId());
         String orderQuery = getOrderQuery(order);
         if(name.equals("%") || name.equals("_")){
-            name= '/' + name;
+            name = '/' + name;
         }
-        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user " + orderQuery, ExperienceModel.class);
+        final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name, '%')) AND exp.user =:user " + orderQuery, ExperienceModel.class);
         query.setParameter("name", name);
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
@@ -142,7 +143,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     @Override
     public long getCountExperiencesByUser(String name, UserModel user) {
         LOGGER.debug("Get count of experiences of user with id {}", user.getUserId());
-        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) AND exp.user =:user", Long.class);
+        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(exp) FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name, '%')) AND exp.user =:user", Long.class);
         query.setParameter("name", name);
         query.setParameter("user", user);
         return query.getSingleResult();
@@ -184,8 +185,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
         final TypedQuery<ExperienceModel> queryForExperiences;
         if (idList.size() > 0) {
             LOGGER.debug("Selecting experiences contained in ");
-            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.experienceId IN (:idList) " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.experienceId IN (:idList) AND exp.user != :user " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
             queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setParameter("user", user);
             queryForExperiences.setMaxResults(maxResults);
             return queryForExperiences.getResultList();
         }
@@ -224,8 +226,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
         final TypedQuery<ExperienceModel> queryForExperiences;
         if (idList.size() > 0) {
-            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.experienceId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.experienceId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.user != :user " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
             queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setParameter("user", user);
             queryForExperiences.setParameter("alreadyAdded", alreadyAdded);
             queryForExperiences.setMaxResults(maxResults);
             return queryForExperiences.getResultList();
@@ -291,8 +294,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
         final TypedQuery<ExperienceModel> queryForExperiences;
         if (idList.size() > 0) {
-            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.city.cityId IN (:idList) AND exp.experienceId NOT IN (:reviewedIds) AND exp.experienceId NOT IN (:alreadyAdded) " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.city.cityId IN (:idList) AND exp.experienceId NOT IN (:reviewedIds) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.user != :user " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
             queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setParameter("user", user);
             queryForExperiences.setParameter("reviewedIds", reviewedIds);
             queryForExperiences.setParameter("alreadyAdded", alreadyAdded);
             queryForExperiences.setMaxResults(maxResults);
@@ -339,8 +343,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
 
         if (idList.size() > 0) {
-            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.user.userId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.experienceId NOT IN (:reviewedIds) " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.user.userId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.experienceId NOT IN (:reviewedIds) AND exp.user != :user " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
             queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setParameter("user", user);
             queryForExperiences.setParameter("reviewedIds", reviewedIds);
             queryForExperiences.setParameter("alreadyAdded", alreadyAdded);
             queryForExperiences.setMaxResults(maxResults);
@@ -387,8 +392,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
         final TypedQuery<ExperienceModel> queryForExperiences;
         if (idList.size() > 0) {
-            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.category.categoryId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.experienceId NOT IN (:reviewedIds) " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.category.categoryId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.experienceId NOT IN (:reviewedIds) AND exp.user != :user " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
             queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setParameter("user", user);
             queryForExperiences.setParameter("reviewedIds", reviewedIds);
             queryForExperiences.setParameter("alreadyAdded", alreadyAdded);
             queryForExperiences.setMaxResults(maxResults);

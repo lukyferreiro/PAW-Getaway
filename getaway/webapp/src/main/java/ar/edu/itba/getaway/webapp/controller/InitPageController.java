@@ -34,8 +34,8 @@ public class InitPageController {
 
     @RequestMapping(value = "/")
     public ModelAndView init(Principal principal,
-                             @RequestParam Optional<Long> experience,
-                             @RequestParam Optional<Boolean> set,
+                             @RequestParam("experience") Optional<Long> experience,
+                             @RequestParam("set") Optional<Boolean> set,
                              @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                              HttpServletRequest request) {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
@@ -50,7 +50,6 @@ public class InitPageController {
         }
 
         List<List<ExperienceModel>> listByCategory;
-
         if (user != null) {
             if (experience.isPresent()) {
                 final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), user);
@@ -67,6 +66,13 @@ public class InitPageController {
         }
 
         mav.addObject("listByCategory", listByCategory);
+
+        if(set.isPresent()){
+            mav.addObject("successFav", set.get());
+        } else {
+            mav.addObject("successFav", false);
+        }
+
         return mav;
     }
 

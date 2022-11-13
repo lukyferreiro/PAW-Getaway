@@ -3,12 +3,16 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 
-<div class="card m-2" <c:if test="${param.isEditing}"> style="height: 320px;" </c:if> >
+<div class="card m-2" <c:if test="${param.isEditing}"> style="height: 310px;" </c:if>>
    <c:if test="${param.isEditing}">
       <div class="card-title m-2 d-flex justify-content-center align-content-center">
-         <h4 class="text-center" style="font-weight: bold; text-decoration: underline; word-break: break-all;">
-            <c:out value="${param.experienceName}"/>
-         </h4>
+         <a href="<c:url value="/experiences/${param.experienceCategory}/${param.experienceId}">
+                           <c:param name="view" value="${true}"/> </c:url>">
+            <h4 class="text-center" style="font-weight: bold; text-decoration: underline; word-break: break-all; color:black;">
+               <c:out value="${param.experienceName}"/>
+            </h4>
+         </a>
+
       </div>
    </c:if>
    <div class="card-title m-2 d-flex justify-content-between">
@@ -42,11 +46,11 @@
          <h2 class="m-0 align-self-center" style="font-size: x-large">
             <c:out value="${param.title}"/>
          </h2>
-         <h6 style="font-size: medium" id="reviewDescription">
+         <h6 class="m-0" style="font-size: medium;" id="reviewDescription">
             <c:out value="${param.description}"/>
          </h6>
          <c:if test="${!param.observable && param.isEditing}">
-            <p class="obs-info"><spring:message code="experience.notVisible" /></p>
+            <p class="obs-info"><spring:message code="experience.notVisible"/></p>
          </c:if>
       </div>
    </div>

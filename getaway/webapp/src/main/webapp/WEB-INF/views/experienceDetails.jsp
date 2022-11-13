@@ -40,6 +40,9 @@
             <c:if test="${successReview}">
                <div id="snackbar"><spring:message code="reviewDetail.success"/></div>
             </c:if>
+            <c:if test="${successFav}">
+               <div id="snackbar"><spring:message code="favExperience.success"/></div>
+            </c:if>
 
             <!-- --------------RESEÑAS-------------- -->
             <div class="mx-5 my-3">
@@ -73,6 +76,9 @@
                                  <jsp:param name="profileImageId" value="${review.user.imageId}"/>
                                  <jsp:param name="reviewId" value="${review.reviewId}"/>
                                  <jsp:param name="isEditing" value="${false}"/>
+                                 <jsp:param name="experienceName" value="${review.experience.experienceName}"/>
+                                 <jsp:param name="experienceId" value="${review.experience.experienceId}"/>
+                                 <jsp:param name="experienceCategory" value="${review.experience.category.categoryName}"/>
                                  <jsp:param name="observable" value="${review.experience.observable}"/>
                               </jsp:include>
                            </div>

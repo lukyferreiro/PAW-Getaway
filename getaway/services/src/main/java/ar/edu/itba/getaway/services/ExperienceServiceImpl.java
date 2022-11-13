@@ -86,7 +86,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public Optional<ExperienceModel> getVisibleExperienceById(long experienceId, UserModel user) {
         LOGGER.debug("Retrieving experience with id {}", experienceId);
-        Optional<ExperienceModel> maybeExperience = experienceDao.getVisibleExperienceById(experienceId);
+        final Optional<ExperienceModel> maybeExperience = experienceDao.getVisibleExperienceById(experienceId, user);
         maybeExperience.ifPresent(experienceModel -> experienceModel.setIsFav(user != null && user.isFav(experienceModel)));
         return maybeExperience;
     }
@@ -143,6 +143,26 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getMaxPriceByCategory(category);
     }
 
+    private List<ExperienceModel> getFavExperiences(UserModel user, int page, Optional<OrderByModel> orderByModel) {
+        List<ExperienceModel> auxList = new ArrayList<>();
+        List<ExperienceModel> userFavs = user.getFavExperiences();
+        for (ExperienceModel exp : userFavs) {
+            if (exp.getObservable()) {
+                auxList.add(exp);
+            }
+        }
+        if (orderByModel.isPresent()) {
+            auxList.sort(orderByModel.get().getComparator());
+        } else {
+            auxList.sort(OrderByModel.OrderByAZ.getComparator());
+        }
+
+        int fromIndex = (page - 1) * RESULT_PAGE_SIZE;
+        int toIndex = Math.min((fromIndex + RESULT_PAGE_SIZE), auxList.size());
+        return auxList.subList(fromIndex, toIndex);
+    }
+
+
     @Override
     public Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page) {
         LOGGER.debug("Requested page {}", page);
@@ -162,7 +182,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             } else if (page < 0) {
                 page = 1;
             }
-            experienceModelList = user.getFavExperiences(page, RESULT_PAGE_SIZE, order);
+            experienceModelList = getFavExperiences(user, page, order);
         } else {
             totalPages = 1;
         }
@@ -215,9 +235,8 @@ public class ExperienceServiceImpl implements ExperienceService {
         LOGGER.debug("Retrieving all experiences listed by categories");
         final List<CategoryModel> categories = categoryService.listAllCategories();
 
-        for (int i = 0; i < categories.size(); i++) {
-//            listExperiencesByCategory.add(new ArrayList<>());
-            listExperiencesByCategory.add(listExperiencesByBestRanked(categories.get(i), user));
+        for (CategoryModel category : categories) {
+            listExperiencesByCategory.add(listExperiencesByBestRanked(category, user));
         }
         return listExperiencesByCategory;
     }
@@ -271,10 +290,23 @@ public class ExperienceServiceImpl implements ExperienceService {
         updateExperienceWithoutImg(experience);
     }
 
+    private List<ExperienceModel> getViewedExperiences(UserModel user) {
+        List<ExperienceModel> auxList = new ArrayList<>();
+        List<ExperienceModel> userViews = user.getViewedExperiences();
+        for (ExperienceModel exp : userViews) {
+            if (exp.getObservable()) {
+                auxList.add(exp);
+            }
+        }
+        int toIndex = auxList.size();
+        int fromIndex = Math.max((toIndex - CAROUSEL_LENGTH), 0);
+        return auxList.subList(fromIndex, toIndex);
+    }
+
     @Override
     public List<List<ExperienceModel>> userLandingPage(UserModel user) {
         final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
-        List<ExperienceModel> viewedExperiences = user.getViewedExperiences(CAROUSEL_LENGTH);
+        List<ExperienceModel> viewedExperiences = getViewedExperiences(user);
 
         //Adding viewed experiences to user
         for (ExperienceModel experience : viewedExperiences) {
@@ -301,13 +333,13 @@ public class ExperienceServiceImpl implements ExperienceService {
         }
 
         //Adding recommendedByFavs to general list
-        for (ExperienceModel experience: recommendedByFavsFullList) {
+        for (ExperienceModel experience : recommendedByFavsFullList) {
             experience.setIsFav(user.isFav(experience));
         }
         listExperiencesByCategory.add(recommendedByFavsFullList);
 
         //Check if user hasReviews to get recommendations
-        if (user.hasReviews()){
+        if (user.hasReviews()) {
             //Getting recommendedByReviews
             //Firstly, we look at the city where the user has made the most reviews
             //Secondly, we look at the provider to whom the user has made the most reviews
@@ -330,7 +362,7 @@ public class ExperienceServiceImpl implements ExperienceService {
                 recommendedByReviewsFullList.addAll(recommendedByReviewsCategory);
             }
 
-            for (ExperienceModel experience: recommendedByReviewsFullList) {
+            for (ExperienceModel experience : recommendedByReviewsFullList) {
                 experience.setIsFav(user.isFav(experience));
             }
             listExperiencesByCategory.add(recommendedByReviewsFullList);

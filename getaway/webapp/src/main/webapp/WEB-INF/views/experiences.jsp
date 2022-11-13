@@ -15,6 +15,10 @@
          <jsp:param name="categoryName" value="${categoryName}"/>
       </jsp:include>
 
+      <c:if test="${successFav}">
+         <div id="snackbar"><spring:message code="favExperience.success"/></div>
+      </c:if>
+
       <div class="container-fluid p-0 mt-3 d-flex">
          <div class="container-filters container-fluid px-2 py-0 mx-2 my-0 d-flex flex-column justify-content-start align-items-center border-end">
             <p class="filters-title m-0">

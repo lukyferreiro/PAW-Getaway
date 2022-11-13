@@ -13,6 +13,10 @@
 <div class="container-main">
     <%@ include file="../components/navbar.jsp" %>
 
+    <c:if test="${successFav}">
+        <div id="snackbar"><spring:message code="favExperience.success"/></div>
+    </c:if>
+
     <jsp:include page="/WEB-INF/components/carousel.jsp">
         <jsp:param name="listByCategory" value="${listByCategory}"/>
         <jsp:param name="isLogged" value="${isLogged}"/>

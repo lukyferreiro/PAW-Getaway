@@ -32,8 +32,8 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = TestConfig.class)
 @Sql(scripts = "classpath:password-reset-token-dao-test.sql")
 public class PasswordResetTokenDaoTest {
-    /**Data for tests**/
 
+    /**Data for tests**/
 
     //TO BE CREATED TOKEN DATA
     private final String token2 = "6789x";
@@ -98,7 +98,6 @@ public class PasswordResetTokenDaoTest {
         assertTrue(passwordResetToken.isPresent());
         assertEquals(token1, passwordResetToken.get().getValue());
         assertEquals(1L, passwordResetToken.get().getId());
-
         assertEquals(USER_2, passwordResetToken.get().getUser());
     }
 

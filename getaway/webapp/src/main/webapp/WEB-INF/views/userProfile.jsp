@@ -13,7 +13,7 @@
          <%@ include file="../components/navbar.jsp" %>
 
          <div class="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
-            <div class="container-lg w-100 my-3 modalContainer d-flex flex-column justify-content-center align-items-center">
+            <div class="container-lg w-100 modalContainer d-flex flex-column justify-content-center align-items-center">
                <div class="m-2">
                   <h1><spring:message code="profile.description"/></h1>
                </div>

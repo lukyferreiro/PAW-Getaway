@@ -54,17 +54,17 @@ public class ExperienceDaoTest {
     private final ImageModel IMAGE_ADV_2 = new ImageModel(7, null);
     private final ImageModel IMAGE_ADV_3 = new ImageModel(8, null);
     private final ImageModel IMAGE_GAS= new ImageModel(2, null);
+    private final ImageModel IMAGE_GAS2= new ImageModel(3, null);
     private final ImageModel IMAGE_TO_DELETE= new ImageModel(50, null);
     private final ImageModel IMAGE_TO_RECOMMEND= new ImageModel(51, null);
 
     private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, "owner@mail.com", null, 0.0, CITY_1, CATEGORY_1, USER_1, IMAGE_ADV_1, true, 0);
     private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2L, "testgastro", "dirgastro", null, "owner@mail.com", null, 1000.0, CITY_1, CATEGORY_2, USER_1, IMAGE_GAS, true, 0);
+    private final ExperienceModel DEFAULT_GAS2 = new ExperienceModel(3L, "testgastro2", "dirgastro2", null, "owner@mail.com", null, 1000.0, CITY_1, CATEGORY_2, USER_2, IMAGE_GAS2, true, 0);
     private final ExperienceModel DEFAULT_ADV2 = new ExperienceModel(7L, "testaventura2", "diraventura2", null, "owner2@mail.com", null, 1500.0, CITY_1, CATEGORY_1, USER_2, IMAGE_ADV_2, true, 0);
     private final ExperienceModel DEFAULT_ADV3 = new ExperienceModel(8L, "testaventura3", "diraventura3", null, "owner2@mail.com", null, 2000.0, CITY_2, CATEGORY_1, USER_2, IMAGE_ADV_3, true, 0);
     private final ExperienceModel TO_DELETE_EXP = new ExperienceModel(50L, "todelete", "delete", null, "owner@mail.com", null, null, CITY_3, CATEGORY_6, USER_2, IMAGE_TO_DELETE, true, 0);
-    private final ExperienceModel TO_RECOMMEND_EXP = new ExperienceModel(51L, "torecommend", "recommend1", null, "owner@mail.com", null, null, CITY_3, CATEGORY_2, USER_1, IMAGE_TO_RECOMMEND, true, 0);
-
-    private final List<ExperienceModel> DEF_LIST_ALL = new ArrayList<>(Arrays.asList(DEFAULT_ADV, DEFAULT_ADV2, DEFAULT_ADV3));
+    private final ExperienceModel TO_RECOMMEND_EXP = new ExperienceModel(51L, "torecommend", "recommend1", null, "owner@mail.com", null, null, CITY_3, CATEGORY_2, USER_2, IMAGE_TO_RECOMMEND, true, 0);
 
     private final Long DEFAULT_SCORE = 0L;
     private final Optional<OrderByModel> NO_ORDER = Optional.empty();
@@ -308,7 +308,7 @@ public class ExperienceDaoTest {
 
         assertTrue(recommended.contains(DEFAULT_ADV));
         assertTrue(recommended.contains(DEFAULT_GAS));
-        assertTrue(recommended.contains(TO_DELETE_EXP));
+        assertTrue(recommended.contains(DEFAULT_GAS2));
     }
 
     @Test
@@ -329,7 +329,7 @@ public class ExperienceDaoTest {
         assertNotNull(recommended);
         assertFalse(recommended.isEmpty());
         assertEquals(1, recommended.size());
-        assertTrue(recommended.contains(DEFAULT_GAS));
+        assertTrue(recommended.contains(DEFAULT_GAS2));
     }
 
     @Test
@@ -338,8 +338,10 @@ public class ExperienceDaoTest {
         List<ExperienceModel> recommended = experienceDao.getRecommendedByReviewsProvider(USER_1, PAGE_SIZE, new ArrayList<>(), reviewedIds);
         assertNotNull(recommended);
         assertFalse(recommended.isEmpty());
-        assertEquals(1, recommended.size());
+        assertEquals(3, recommended.size());
         assertTrue(recommended.contains(TO_DELETE_EXP));
+        assertTrue(recommended.contains(TO_RECOMMEND_EXP));
+        assertTrue(recommended.contains(DEFAULT_GAS2));
     }
 
     @Test

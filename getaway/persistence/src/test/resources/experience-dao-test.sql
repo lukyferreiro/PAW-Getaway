@@ -53,6 +53,7 @@ INSERT INTO cities(cityid, cityname, countryid) VALUES(3, 'Test City Three', 1);
 -- Add images (with value null) for consistency
 INSERT INTO images(imgid, imageObject) VALUES(1, '0x1234');
 INSERT INTO images(imgid, imageObject) VALUES(2, '0x1234');
+INSERT INTO images(imgid, imageObject) VALUES(3, '0x1234');
 INSERT INTO images(imgid, imageObject) VALUES(5, '0x1234');
 INSERT INTO images(imgid, imageObject) VALUES(7, '0x1234');
 INSERT INTO images(imgid, imageObject) VALUES(8, '0x1234');
@@ -66,6 +67,8 @@ VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 1, 'owner@mail.co
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
 VALUES (2, 'testgastro', 0, 'dirgastro', null, null, 1, 2, 1, 'owner@mail.com', 2, true, 0);
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
+VALUES (3, 'testgastro2', 0, 'dirgastro2', null, null, 1, 2, 2, 'owner@mail.com', 3, true, 0);
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
 VALUES (7, 'testaventura2', 1500, 'diraventura2', null, null, 1, 1, 2, 'owner2@mail.com', 7, true, 0);
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
 VALUES (8, 'testaventura3', 2000, 'diraventura3', null, null, 2, 1, 2, 'owner2@mail.com', 8, true, 0);
@@ -73,7 +76,7 @@ VALUES (8, 'testaventura3', 2000, 'diraventura3', null, null, 2, 1, 2, 'owner2@m
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
 VALUES (50, 'todelete', null, 'delete', null, null, 3, 6, 2, 'owner@mail.com', 50, true, 0);
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
-VALUES (51, 'torecommend', null, 'recommend1', null, null, 3, 1, 1, 'owner@mail.com', 51, true, 0);
+VALUES (51, 'torecommend', null, 'recommend1', null, null, 3, 1, 2, 'owner@mail.com', 51, true, 0);
 
 -- User 1 favs
 INSERT INTO favuserexperience(userid, experienceid) VALUES (1, 1);

@@ -28,6 +28,10 @@ public enum OrderByModel {
         this.comparator = comparator;
     }
 
+    public Comparator<? super ExperienceModel> getComparator() {
+        return comparator;
+    }
+
     public String getSqlQuery() {
         return SqlQuery;
     }

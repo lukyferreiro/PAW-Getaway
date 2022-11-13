@@ -87,7 +87,7 @@ public class ExperienceController {
         // FavExperiences
         if (owner != null) {
             if(experience.isPresent()){
-                final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(),owner);
+                final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), owner);
                 favAndViewExperienceService.setFav(owner, set, addFavExperience);
             }
         } else if (set.isPresent()) {
@@ -101,6 +101,12 @@ public class ExperienceController {
         } else {
             currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, null, orderBy, pageNum, owner);
             mav.addObject("cityId", -1);
+        }
+
+        if(set.isPresent()){
+            mav.addObject("successFav", set.get());
+        } else {
+            mav.addObject("successFav", false);
         }
 
         final List<ExperienceModel> currentExperiences = currentPage.getContent();
@@ -140,14 +146,15 @@ public class ExperienceController {
         //This declaration of category is in order to check if the categoryName is valid
         final CategoryModel category = categoryService.getCategoryByName(categoryName).orElseThrow(CategoryNotFoundException::new);
         UserModel owner = null;
+
         if (principal != null) {
             final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
             if (user.isPresent()) {
                 owner = user.get();
             }
         }
-        final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId, owner).orElseThrow(ExperienceNotFoundException::new);
 
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId, owner).orElseThrow(ExperienceNotFoundException::new);
         final Page<ReviewModel> currentPage = reviewService.getReviewAndUser(experience, pageNum);
         final List<ReviewModel> reviews = currentPage.getContent();
 
@@ -164,6 +171,12 @@ public class ExperienceController {
         mav.addObject("minPage", currentPage.getMinPage());
         mav.addObject("maxPage", currentPage.getMaxPage());
         mav.addObject("totalPages", currentPage.getTotalPages());
+
+        if(set.isPresent()){
+            mav.addObject("successFav", set.get());
+        } else {
+            mav.addObject("successFav", false);
+        }
 
         if (owner != null) {
             if (view.isPresent() || setObs.isPresent()) {

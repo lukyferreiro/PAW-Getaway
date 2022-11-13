@@ -129,6 +129,7 @@ public class UserReviewsController {
 
         mav.addObject("endpoint", request.getServletPath());
         mav.addObject("review", review);
+        mav.addObject("experience", review.getExperience());
 
         return mav;
     }

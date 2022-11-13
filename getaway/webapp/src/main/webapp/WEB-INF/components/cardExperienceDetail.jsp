@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<div class="card mx-5 my-3 px-4 pt-4">
+<div class="card mx-5 my-3 px-5 pt-4">
    <div class="d-flex justify-content-center align-content-center">
       <h1 class="text-center" style="word-break: break-all">
          <c:out value="${param.name}"/>

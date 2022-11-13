@@ -48,7 +48,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public List<ReviewModel> getReviewsByUser(UserModel user, int page, int pageSize) {
-        final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE user = :user", ReviewModel.class);
+        final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel r WHERE user = :user AND r.experience.observable = true", ReviewModel.class);
         query.setParameter("user", user);
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
@@ -57,7 +57,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public long getReviewByUserCount(UserModel user) {
-        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.user) FROM ReviewModel r WHERE r.user = :user", Long.class);
+        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.user) FROM ReviewModel r WHERE r.user = :user AND r.experience.observable = true", Long.class);
         query.setParameter("user", user);
         return query.getSingleResult();
     }

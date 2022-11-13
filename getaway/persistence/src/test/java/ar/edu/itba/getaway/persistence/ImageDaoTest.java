@@ -2,7 +2,6 @@ package ar.edu.itba.getaway.persistence;
 
 import ar.edu.itba.getaway.models.ImageModel;
 import ar.edu.itba.getaway.persistence.config.TestConfig;
-import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
 import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
 import org.junit.Before;
 import org.junit.Test;

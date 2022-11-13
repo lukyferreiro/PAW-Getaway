@@ -46,9 +46,10 @@ public class ReviewFormController {
                                          Principal principal,
                                          HttpServletRequest request) {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
-
         final ModelAndView mav = new ModelAndView("reviewForm");
+        final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         mav.addObject("endpoint", request.getServletPath());
+        mav.addObject("experience", experience);
         return mav;
     }
 

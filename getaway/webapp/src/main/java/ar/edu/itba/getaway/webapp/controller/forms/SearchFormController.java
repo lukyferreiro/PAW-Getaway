@@ -76,6 +76,12 @@ public class SearchFormController {
             mav.addObject("orderBy", orderBy.get());
         }
 
+        if(set.isPresent()){
+            mav.addObject("successFav", set.get());
+        } else {
+            mav.addObject("successFav", false);
+        }
+
         mav.addObject("totalResults", currentPage.getTotalResults());
         mav.addObject("path", request.getServletPath());
         mav.addObject("orderByModels", orderByModels);

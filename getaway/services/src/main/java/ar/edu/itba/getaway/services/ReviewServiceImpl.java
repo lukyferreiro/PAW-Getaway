@@ -64,6 +64,7 @@ public class ReviewServiceImpl implements ReviewService {
     public Page<ReviewModel> getReviewAndUser(ExperienceModel experience, int page) {
         LOGGER.debug("Retrieving all reviews and user of experience with id {}", experience.getExperienceId());
         LOGGER.debug("Requested page {}", page);
+
         int totalPages;
         List<ReviewModel> reviewUserModelList = new ArrayList<>();
         final long total = reviewDao.getReviewByExperienceCount(experience);
@@ -129,8 +130,8 @@ public class ReviewServiceImpl implements ReviewService {
         try {
             final String categoryName = reviewModel.getExperience().getCategory().getCategoryName();
             final long experienceId = reviewModel.getExperience().getExperienceId();
-//            final String url = new URL("http", appBaseUrl, 8080, "/webapp_war/experiences/" + categoryName + '/' + experienceId).toString();
-            final String url = new URL("http", appBaseUrl, "/paw-2022b-1/experiences/" + categoryName + '/' + experienceId).toString();
+            final String url = new URL("http", appBaseUrl, 8080, "/webapp_war/experiences/" + categoryName + '/' + experienceId).toString();
+//            final String url = new URL("http", appBaseUrl, "/paw-2022b-1/experiences/" + categoryName + '/' + experienceId).toString();
             final Map<String, Object> variables = new HashMap<>();
             variables.put("review", reviewModel);
             variables.put("myExperienceUrl", url);

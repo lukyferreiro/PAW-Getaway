@@ -19,6 +19,11 @@
                <form:form modelAttribute="reviewForm" action="${postPath}" id="submitForm" method="post" acceptCharset="UTF-8"
                           enctype="multipart/form-data" cssStyle="width: 100%;">
                   <div class="p-4 m-4">
+                     <div class="col m-2">
+                        <h3 class="text-center" style="word-break: break-all">
+                           <spring:message code="reviewFormEdit.title" arguments="${experience.experienceName}"/>
+                        </h3>
+                     </div>
                      <div class="col m-2"> <!--Titulo de la review-->
                         <form:label path="title" class="form-label d-flex justify-content-between">
                            <div>

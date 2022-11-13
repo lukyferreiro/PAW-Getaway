@@ -13,6 +13,10 @@
       <div class="container-main">
          <%@ include file="../components/navbar.jsp" %>
 
+         <c:if test="${successFav}">
+            <div id="snackbar"><spring:message code="favExperience.success"/></div>
+         </c:if>
+
          <c:choose>
             <c:when test="${experiences.size() == 0}">
                <div class="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
