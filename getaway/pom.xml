@@ -241,7 +241,6 @@
                 <artifactId>hibernate-jpa-2.1-api</artifactId>
                 <version>${org.hibernate.jpa.version}</version>
             </dependency>
-            <!--TODO check esta dependencia-->
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-java8</artifactId>

@@ -15,5 +15,5 @@ public class MyUserDetails extends User {
 
     public MyUserDetails(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-    } // TODO si no se usa volarlo
+    }
 }

@@ -12,5 +12,5 @@ public interface CategoryService {
 
     Optional<CategoryModel> getCategoryByName(String categoryName);
 
-    int getCategoriesCount(); //TODO si no se usa volarlo
+    int getCategoriesCount();
 }
