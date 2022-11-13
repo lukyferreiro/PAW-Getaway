@@ -56,27 +56,35 @@ public class ReviewModel {
     public long getReviewId() {
         return reviewId;
     }
+
     public void setReviewId(long reviewId) {
         this.reviewId = reviewId;
     }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
     public long getScore() {
         return score;
     }
+
     public void setScore(long score) {
         this.score = score;
     }
+
     public String getStringScore() {
         return String.valueOf(score);
     }
@@ -86,25 +94,29 @@ public class ReviewModel {
     public void setReviewDate(LocalDate reviewDate) {
         this.reviewDate = reviewDate;
     }
+
     public ExperienceModel getExperience() {
         return experience;
     }
+
     public void setExperience(ExperienceModel experience) {
         this.experience = experience;
     }
+
     public UserModel getUser() {
         return user;
     }
+
     public void setUser(UserModel user) {
         this.user = user;
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o){
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (!(o instanceof ReviewModel)){
+        if (!(o instanceof ReviewModel)) {
             return false;
         }
         ReviewModel other = (ReviewModel) o;

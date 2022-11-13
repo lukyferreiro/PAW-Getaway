@@ -23,12 +23,12 @@ public class UserDaoImpl implements UserDao {
 
         final Optional<UserModel> user = getUserByEmail(email);
 
-        if(user.isPresent()){
+        if (user.isPresent()) {
             throw new DuplicateUserException();
         }
 
         final Collection<RoleModel> roleModels = new ArrayList<>();
-        for (Roles role: roles) {
+        for (Roles role : roles) {
             roleModels.add(getRoleByName(role).get());
         }
 

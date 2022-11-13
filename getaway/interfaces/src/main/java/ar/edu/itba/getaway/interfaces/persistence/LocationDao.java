@@ -8,10 +8,16 @@ import java.util.Optional;
 
 public interface LocationDao {
     List<CityModel> listAllCities();
-    Optional<CityModel> getCityById (long cityId);
-    List<CityModel> getCitiesByCountry (CountryModel country);
-    Optional<CityModel> getCityByName (String cityName);
-    List<CountryModel> listAllCountries ();
-    Optional<CountryModel> getCountryById (long countryId);
-    Optional<CountryModel> getCountryByName (String countryName);
+
+    Optional<CityModel> getCityById(long cityId);
+
+    List<CityModel> getCitiesByCountry(CountryModel country);
+
+    Optional<CityModel> getCityByName(String cityName);
+
+    List<CountryModel> listAllCountries();
+
+    Optional<CountryModel> getCountryById(long countryId);
+
+    Optional<CountryModel> getCountryByName(String countryName);
 }

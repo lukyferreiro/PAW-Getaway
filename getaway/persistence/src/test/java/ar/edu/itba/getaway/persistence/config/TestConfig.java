@@ -23,7 +23,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-@ComponentScan({ "ar.edu.itba.getaway.persistence" })
+@ComponentScan({"ar.edu.itba.getaway.persistence"})
 @EnableTransactionManagement
 @Configuration
 public class TestConfig {
@@ -50,14 +50,14 @@ public class TestConfig {
 //    }
 
     @Bean
-    public DataSourceInitializer dataSourceInitializer(final DataSource ds){
+    public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
         final DataSourceInitializer dsInit = new DataSourceInitializer();
         dsInit.setDataSource(ds);
         dsInit.setDatabasePopulator(dataSourcePopulator());
         return dsInit;
     }
 
-    private DatabasePopulator dataSourcePopulator(){
+    private DatabasePopulator dataSourcePopulator() {
         final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
         dbp.addScripts(hsqldbSql, schemaSql);//Esto lo que hace es que setee el modo compatibilidad con postgres.
         return dbp;

@@ -62,7 +62,7 @@ public class UserExperiencesController {
         final ModelAndView mav = new ModelAndView("userFavourites");
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
 
-        if(experience.isPresent()){
+        if (experience.isPresent()) {
             final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), user);
             favAndViewExperienceService.setFav(user, set, addFavExperience);
         }
@@ -73,7 +73,7 @@ public class UserExperiencesController {
         final Page<ExperienceModel> currentPage = experienceService.listExperiencesFavsByUser(user, orderBy, pageNum);
         final List<ExperienceModel> experienceList = currentPage.getContent();
 
-        if(orderBy.isPresent()){
+        if (orderBy.isPresent()) {
             request.setAttribute("orderBy", orderBy);
             mav.addObject("orderBy", orderBy.get());
         }
@@ -89,7 +89,7 @@ public class UserExperiencesController {
         return mav;
     }
 
-    @RequestMapping(value = "/user/experiences",method = {RequestMethod.GET} )
+    @RequestMapping(value = "/user/experiences", method = {RequestMethod.GET})
     public ModelAndView experience(Principal principal,
                                    @RequestParam Optional<String> userQuery,
                                    @RequestParam Optional<Long> experience,
@@ -114,7 +114,7 @@ public class UserExperiencesController {
         mav.addObject("orderByModels", orderByModels);
 
         //Observable
-        if(experience.isPresent() && set.isPresent()){
+        if (experience.isPresent() && set.isPresent()) {
             final ExperienceModel myExperience = experienceService.getExperienceById(experience.get()).orElseThrow(ExperienceNotFoundException::new);
             experienceService.changeVisibility(myExperience, set.get());
         }
@@ -192,9 +192,9 @@ public class UserExperiencesController {
         final CityModel city = experience.getCity();
         final String cityName = city.getCityName();
 
-        if(form.getExperienceName() == null){
+        if (form.getExperienceName() == null) {
             form.setExperienceName(experience.getExperienceName());
-            if(experience.getPrice() != null){
+            if (experience.getPrice() != null) {
                 form.setExperiencePrice(experience.getPrice().toString());
             }
             form.setExperienceInfo(experience.getDescription());
@@ -203,7 +203,7 @@ public class UserExperiencesController {
             form.setExperienceAddress(experience.getAddress());
         } else {
             form.setExperienceName(form.getExperienceName());
-            if(experience.getPrice() != null){
+            if (experience.getPrice() != null) {
                 form.setExperiencePrice(form.getExperiencePrice());
             }
             form.setExperienceInfo(form.getExperienceInfo());
@@ -227,7 +227,7 @@ public class UserExperiencesController {
 
     @PreAuthorize("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
     @RequestMapping(value = "/user/experiences/edit/{experienceId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView experienceEditPost(@PathVariable(value="experienceId") final long experienceId,
+    public ModelAndView experienceEditPost(@PathVariable(value = "experienceId") final long experienceId,
                                            @Valid @ModelAttribute("experienceForm") final ExperienceForm form,
                                            final BindingResult errors,
                                            @ModelAttribute("searchForm") final SearchForm searchForm,
@@ -239,28 +239,28 @@ public class UserExperiencesController {
         }
 
         final MultipartFile experienceImg = form.getExperienceImg();
-        if(!experienceImg.isEmpty()) {
+        if (!experienceImg.isEmpty()) {
             if (!contentTypes.contains(experienceImg.getContentType())) {
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageFormat");
-                return experienceEdit(experienceId, form, searchForm ,request);
+                return experienceEdit(experienceId, form, searchForm, request);
             }
-            if(experienceImg.getSize() > MAX_SIZE_PER_FILE){
+            if (experienceImg.getSize() > MAX_SIZE_PER_FILE) {
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageSize");
-                return experienceEdit(experienceId, form, searchForm ,request);
+                return experienceEdit(experienceId, form, searchForm, request);
             }
         }
 
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final ImageModel imageModel = experience.getExperienceImage();
         final UserModel user = experience.getUser();
-        final CategoryModel category = categoryService.getCategoryById(form.getExperienceCategory()+1).orElseThrow(CategoryNotFoundException::new);
+        final CategoryModel category = categoryService.getCategoryById(form.getExperienceCategory() + 1).orElseThrow(CategoryNotFoundException::new);
         final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).orElseThrow(CityNotFoundException::new);
         final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
         final String description = (form.getExperienceInfo().isEmpty()) ? null : form.getExperienceInfo();
         final String url = (form.getExperienceUrl().isEmpty()) ? null : form.getExperienceUrl();
         final byte[] image = (experienceImg.isEmpty()) ? imageModel.getImage() : experienceImg.getBytes();
 
-        final ExperienceModel toUpdateExperience = new ExperienceModel(experienceId,form.getExperienceName(), form.getExperienceAddress(), description,
+        final ExperienceModel toUpdateExperience = new ExperienceModel(experienceId, form.getExperienceName(), form.getExperienceAddress(), description,
                 form.getExperienceMail(), url, price, cityModel, category, user, imageModel, experience.getObservable(), experience.getViews());
 
         experienceService.updateExperience(toUpdateExperience, image);

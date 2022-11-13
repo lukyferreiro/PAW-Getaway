@@ -27,7 +27,9 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = TestConfig.class)
 @Sql(scripts = "classpath:location-dao-test.sql")
 public class LocationDaoTest {
-    /** Data for tests **/
+    /**
+     * Data for tests
+     **/
     private final static CountryModel COUNTRY_1 = new CountryModel(1L, "TestCountryFirst");
     private final static CountryModel COUNTRY_2 = new CountryModel(2L, "TestCountrySecond");
 
@@ -38,7 +40,7 @@ public class LocationDaoTest {
     private final static CityModel CITY_3 = new CityModel(3L, COUNTRY_2, "Test SecondOne");
     private final static CityModel CITY_4 = new CityModel(4L, COUNTRY_2, "Test SecondTwo");
 
-    private final static List<CityModel> CITY_LIST = new ArrayList<>(Arrays.asList(CITY_1,CITY_2, CITY_3, CITY_4));
+    private final static List<CityModel> CITY_LIST = new ArrayList<>(Arrays.asList(CITY_1, CITY_2, CITY_3, CITY_4));
     /****/
 
     @Autowired

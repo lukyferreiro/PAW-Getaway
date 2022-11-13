@@ -12,7 +12,7 @@
     font-size: large;
 }
 
-.dropdown-item::selection, .dropdown-item:focus{
+.dropdown-item::selection, .dropdown-item:focus {
     background-color: #FAB672;
 }
 
@@ -35,7 +35,7 @@
     flex: 5;
 }
 
-.card{
+.card {
     border: 1.5px solid black;
 }
 

@@ -33,7 +33,9 @@ import static org.junit.Assert.*;
 @Sql(scripts = "classpath:password-reset-token-dao-test.sql")
 public class PasswordResetTokenDaoTest {
 
-    /**Data for tests**/
+    /**
+     * Data for tests
+     **/
 
     //TO BE CREATED TOKEN DATA
     private final String token2 = "6789x";
@@ -50,7 +52,7 @@ public class PasswordResetTokenDaoTest {
     private final static String NAME_1 = "usuario";
     private final static String SURNAME_1 = "uno";
     private final static String EMAIL_1 = "uno@mail.com";
-    private final static ImageModel IMAGE_1 = new ImageModel( 15L, null);
+    private final static ImageModel IMAGE_1 = new ImageModel(15L, null);
 
     private final static UserModel USER_1 = new UserModel(1, PASSWORD_1, NAME_1, SURNAME_1, EMAIL_1, DEFAULT_ROLES_MODELS, IMAGE_1);
 
@@ -59,13 +61,13 @@ public class PasswordResetTokenDaoTest {
     private final static String NAME_2 = "usuario2";
     private final static String SURNAME_2 = "dos";
     private final static String EMAIL_2 = "dos@mail.com";
-    private final static ImageModel IMAGE_2 = new ImageModel( 16L, null);
+    private final static ImageModel IMAGE_2 = new ImageModel(16L, null);
 
     private final static UserModel USER_2 = new UserModel(2, PASSWORD_2, NAME_2, SURNAME_2, EMAIL_2, DEFAULT_ROLES_MODELS, IMAGE_2);
 
     //CREATED TOKEN DATA
     private final String token1 = "12345";
-    private final PasswordResetToken RESET = new PasswordResetToken(1,token1, USER_2, LocalDateTime.of(2020, 3, 23, 0, 0));
+    private final PasswordResetToken RESET = new PasswordResetToken(1, token1, USER_2, LocalDateTime.of(2020, 3, 23, 0, 0));
 
     /****/
     @Autowired

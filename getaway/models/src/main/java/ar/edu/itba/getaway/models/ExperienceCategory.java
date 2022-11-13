@@ -10,7 +10,7 @@ public enum ExperienceCategory {
     Vida_nocturna,
     Historico;
 
-    public static boolean contains(String value){
+    public static boolean contains(String value) {
         return Arrays.stream(values()).map(Enum::name).anyMatch(code -> code.equals(value));
     }
 }

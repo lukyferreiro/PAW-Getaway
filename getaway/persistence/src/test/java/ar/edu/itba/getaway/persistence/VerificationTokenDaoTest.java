@@ -31,7 +31,9 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = TestConfig.class)
 @Sql(scripts = "classpath:verification-token-dao-test.sql")
 public class VerificationTokenDaoTest {
-    /**Data for tests**/
+    /**
+     * Data for tests
+     **/
     //TO BE CREATED TOKEN DATA
     private final String token2 = "6789x";
     private static final LocalDateTime EXPIRATION_DATE = LocalDateTime.of(2021, 5, 29, 12, 30);
@@ -56,13 +58,13 @@ public class VerificationTokenDaoTest {
     private final static String NAME_2 = "usuario2";
     private final static String SURNAME_2 = "dos";
     private final static String EMAIL_2 = "dos@mail.com";
-    private final static ImageModel IMAGE_2 = new ImageModel(  16L, null);
+    private final static ImageModel IMAGE_2 = new ImageModel(16L, null);
 
     private final static UserModel USER_2 = new UserModel(2, PASSWORD_2, NAME_2, SURNAME_2, EMAIL_2, DEFAULT_ROLES_MODELS, IMAGE_2);
 
     //CREATED TOKEN DATA
     private final String token1 = "12345";
-    private final VerificationToken VERIF = new VerificationToken(1,token1, USER_2, LocalDateTime.of(2020, 3, 23, 0, 0));
+    private final VerificationToken VERIF = new VerificationToken(1, token1, USER_2, LocalDateTime.of(2020, 3, 23, 0, 0));
 
     /****/
     @Autowired

@@ -40,28 +40,33 @@ public class CityModel {
     public long getCityId() {
         return cityId;
     }
+
     public void setCityId(long cityId) {
         this.cityId = cityId;
     }
+
     public CountryModel getCountry() {
         return country;
     }
+
     public void setCountry(CountryModel country) {
         this.country = country;
     }
+
     public String getCityName() {
         return cityName;
     }
+
     public void setCityName(String cityName) {
         this.cityName = cityName;
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o){
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (!(o instanceof CityModel)){
+        if (!(o instanceof CityModel)) {
             return false;
         }
         CityModel other = (CityModel) o;

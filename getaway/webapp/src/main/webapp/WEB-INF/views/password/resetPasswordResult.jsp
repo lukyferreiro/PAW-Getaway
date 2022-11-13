@@ -4,58 +4,58 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
-   <head>
-      <title><spring:message code="pageName"/> - <spring:message code="resetPasswordResult.title"/></title>
-      <%@ include file="../../components/includes/headers.jsp" %>
-   </head>
+<head>
+    <title><spring:message code="pageName"/> - <spring:message code="resetPasswordResult.title"/></title>
+    <%@ include file="../../components/includes/headers.jsp" %>
+</head>
 
-   <body>
-      <div class="container-main">
-         <%@ include file="../../components/simpleNavbar.jsp" %>
+<body>
+<div class="container-main">
+    <%@ include file="../../components/simpleNavbar.jsp" %>
 
-         <div class="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
-            <div class="w-100 modalContainer">
-               <div class="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">
-                  <c:choose>
-                     <c:when test="${success}">
+    <div class="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
+        <div class="w-100 modalContainer">
+            <div class="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">
+                <c:choose>
+                    <c:when test="${success}">
                         <div class="col-12">
-                           <h1 class="text-center title">
-                              <spring:message code="resetPasswordResult.successfull"/>
-                           </h1>
-                           <p class="subtitle text-center mb-4">
-                              <spring:message code="resetPasswordResult.successfull.description"/>
-                           </p>
+                            <h1 class="text-center title">
+                                <spring:message code="resetPasswordResult.successfull"/>
+                            </h1>
+                            <p class="subtitle text-center mb-4">
+                                <spring:message code="resetPasswordResult.successfull.description"/>
+                            </p>
                         </div>
-                     </c:when>
-                     <c:otherwise>
+                    </c:when>
+                    <c:otherwise>
                         <div class="col-12">
-                           <h1 class="text-center title">
-                              <spring:message code="resetPasswordResult.error"/>
-                           </h1>
-                           <p class="subtitle text-center mb-4">
-                              <spring:message code="resetPasswordResult.error.description"/>
-                           </p>
+                            <h1 class="text-center title">
+                                <spring:message code="resetPasswordResult.error"/>
+                            </h1>
+                            <p class="subtitle text-center mb-4">
+                                <spring:message code="resetPasswordResult.error.description"/>
+                            </p>
                         </div>
                         <div class="col-12 d-flex align-items-center justify-content-center">
-                           <i class="fas fa-exclamation-circle fa-7x" id="error" style="color:red;"></i>
+                            <i class="fas fa-exclamation-circle fa-7x" id="error" style="color:red;"></i>
                         </div>
-                     </c:otherwise>
-                  </c:choose>
-                  <div class="col-12 px-0 mt-4 d-flex align-items-center justify-content-center">
-                     <a href="<c:url value = "/"/>">
+                    </c:otherwise>
+                </c:choose>
+                <div class="col-12 px-0 mt-4 d-flex align-items-center justify-content-center">
+                    <a href="<c:url value = "/"/>">
                         <button type="button" class="btn btn-continue">
-                           <spring:message code="resetPasswordResult.homeBtn"/>
+                            <spring:message code="resetPasswordResult.homeBtn"/>
                         </button>
-                     </a>
-                  </div>
-               </div>
+                    </a>
+                </div>
             </div>
-         </div>
+        </div>
+    </div>
 
-         <%@ include file="../../components/footer.jsp" %>
-      </div>
+    <%@ include file="../../components/footer.jsp" %>
+</div>
 
-      <%@ include file="../../components/includes/bottomScripts.jsp" %>
-   </body>
+<%@ include file="../../components/includes/bottomScripts.jsp" %>
+</body>
 </html>
 

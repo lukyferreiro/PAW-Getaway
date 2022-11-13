@@ -4,23 +4,23 @@ let star3 = document.getElementById("star3");
 let star4 = document.getElementById("star4");
 let star5 = document.getElementById("star5");
 
-window.addEventListener("load", ()=>{
+window.addEventListener("load", () => {
     let score = document.getElementById("scoreInput");
-    if(score.value === "1"){
+    if (score.value === "1") {
         star1.click();
-    }else if(score.value === "2"){
+    } else if (score.value === "2") {
         star1.click();
         star2.click();
-    }else if(score.value === "3"){
+    } else if (score.value === "3") {
         star1.click();
         star2.click();
         star3.click();
-    }else if(score.value === "4"){
+    } else if (score.value === "4") {
         star1.click();
         star2.click();
         star3.click();
         star4.click();
-    }else if(score.value === "5"){
+    } else if (score.value === "5") {
         star1.click();
         star2.click();
         star3.click();

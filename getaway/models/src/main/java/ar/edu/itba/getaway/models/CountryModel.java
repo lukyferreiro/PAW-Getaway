@@ -33,22 +33,25 @@ public class CountryModel {
     public long getCountryId() {
         return countryId;
     }
+
     public void setCountryId(long countryId) {
         this.countryId = countryId;
     }
+
     public String getCountryName() {
         return countryName;
     }
+
     public void setCountryName(String countryName) {
         this.countryName = countryName;
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o){
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (!(o instanceof CountryModel)){
+        if (!(o instanceof CountryModel)) {
             return false;
         }
         CountryModel other = (CountryModel) o;

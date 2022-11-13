@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "categories")
-public class CategoryModel{
+public class CategoryModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categories_categoryId_seq")
@@ -34,22 +34,25 @@ public class CategoryModel{
     public long getCategoryId() {
         return categoryId;
     }
+
     public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
     }
+
     public String getCategoryName() {
         return categoryName;
     }
+
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o){
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (!(o instanceof CategoryModel)){
+        if (!(o instanceof CategoryModel)) {
             return false;
         }
         CategoryModel other = (CategoryModel) o;

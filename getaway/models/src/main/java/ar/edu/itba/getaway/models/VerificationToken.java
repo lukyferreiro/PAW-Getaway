@@ -47,37 +47,45 @@ public class VerificationToken {
     public boolean isValid() {
         return expirationDate.compareTo(LocalDateTime.now()) > 0;
     }
+
     public String getValue() {
         return value;
     }
+
     public void setValue(String value) {
         this.value = value;
     }
+
     public long getId() {
         return id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
+
     public UserModel getUser() {
         return user;
     }
+
     public void setUser(UserModel user) {
         this.user = user;
     }
+
     public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
+
     public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o){
+        if (this == o) {
             return true;
         }
-        if (!(o instanceof VerificationToken)){
+        if (!(o instanceof VerificationToken)) {
             return false;
         }
         VerificationToken verificationToken = (VerificationToken) o;

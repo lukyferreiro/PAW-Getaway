@@ -108,8 +108,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public List<ExperienceModel> listExperiencesSearch(String name, Optional<OrderByModel> order, int page, int pageSize) {
         LOGGER.debug("List experiences that contains {}", name);
         String orderQuery = getOrderQuery(order);
-        if(name.equals("%") || name.equals("_")){
-            name= '/' + name;
+        if (name.equals("%") || name.equals("_")) {
+            name = '/' + name;
         }
         final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE (LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.cityName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.country.countryName) LIKE LOWER(CONCAT('%', :name,'%'))) AND exp.observable=true " + orderQuery, ExperienceModel.class);
         query.setParameter("name", name);
@@ -129,7 +129,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     public List<ExperienceModel> listExperiencesSearchByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize) {
         LOGGER.debug("List experiences of user with id {}", user.getUserId());
         String orderQuery = getOrderQuery(order);
-        if(name.equals("%") || name.equals("_")){
+        if (name.equals("%") || name.equals("_")) {
             name = '/' + name;
         }
         final TypedQuery<ExperienceModel> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name, '%')) AND exp.user =:user " + orderQuery, ExperienceModel.class);
@@ -149,7 +149,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         return query.getSingleResult();
     }
 
-    private String getOrderQuery(Optional<OrderByModel> order){
+    private String getOrderQuery(Optional<OrderByModel> order) {
         if (order.isPresent()) {
             return order.get().getSqlQuery();
         }
@@ -219,7 +219,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         queryForIds.setParameter("userid", user.getUserId());
         List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
 
-        if (alreadyAdded.size() == 0){
+        if (alreadyAdded.size() == 0) {
             alreadyAdded.add(-1L);
         }
 
@@ -238,8 +238,8 @@ public class ExperienceDaoImpl implements ExperienceDao {
         return new ArrayList<>();
     }
 
-    public List<ExperienceModel> getRecommendedBestRanked(int maxResults, List<Long> alreadyAdded){
-        if (alreadyAdded.size() == 0){
+    public List<ExperienceModel> getRecommendedBestRanked(int maxResults, List<Long> alreadyAdded) {
+        if (alreadyAdded.size() == 0) {
             alreadyAdded.add(-1L);
         }
 
@@ -250,11 +250,11 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public  List<Long> reviewedExperiencesId(UserModel user){
+    public List<Long> reviewedExperiencesId(UserModel user) {
         final Query queryForReviewedExperiencesId = em.createNativeQuery("SELECT experienceid FROM reviews WHERE userid=:userid");
         queryForReviewedExperiencesId.setParameter("userid", user.getUserId());
         List<Number> resultingIds = (List<Number>) queryForReviewedExperiencesId.getResultList();
-        return  resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        return resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
     }
 
     @Override
@@ -288,7 +288,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         List<Number> resultingIds = (List<Number>) queryForCityIds.getResultList();
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
 
-        if (alreadyAdded.size() == 0){
+        if (alreadyAdded.size() == 0) {
             alreadyAdded.add(-1L);
         }
 
@@ -338,7 +338,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
         final TypedQuery<ExperienceModel> queryForExperiences;
 
-        if (alreadyAdded.size() == 0){
+        if (alreadyAdded.size() == 0) {
             alreadyAdded.add(-1L);
         }
 
@@ -385,7 +385,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         queryForCategoryIds.setParameter("userid", user.getUserId());
         List<Number> resultingIds = (List<Number>) queryForCategoryIds.getResultList();
 
-        if (alreadyAdded.size() == 0){
+        if (alreadyAdded.size() == 0) {
             alreadyAdded.add(-1L);
         }
 

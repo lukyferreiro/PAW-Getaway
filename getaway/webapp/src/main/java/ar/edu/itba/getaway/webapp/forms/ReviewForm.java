@@ -24,21 +24,27 @@ public class ReviewForm {
     public String getTitle() {
         return title;
     }
+
     public String getDescription() {
         return description;
     }
+
     public String getScore() {
         return score;
     }
-    public long getLongScore(){
+
+    public long getLongScore() {
         return Long.parseLong(score);
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
     public void setScore(String score) {
         this.score = score;
     }

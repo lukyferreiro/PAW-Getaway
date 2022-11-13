@@ -121,7 +121,7 @@ public class UserReviewsController {
         form.setScore(review.getStringScore());
         form.setDescription(review.getDescription());
 
-        if(form.getTitle() == null){
+        if (form.getTitle() == null) {
             form.setTitle(review.getTitle());
             form.setDescription(review.getDescription());
             form.setScore(review.getStringScore());

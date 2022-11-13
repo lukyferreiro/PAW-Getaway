@@ -53,10 +53,10 @@ public class UserProfileController {
     }
 
     @RequestMapping(value = "/user/profile/edit", method = {RequestMethod.GET})
-    public ModelAndView editProfileGet(@ModelAttribute ("editProfileForm") final EditProfileForm editProfileForm,
+    public ModelAndView editProfileGet(@ModelAttribute("editProfileForm") final EditProfileForm editProfileForm,
                                        @ModelAttribute("searchForm") final SearchForm searchForm,
                                        Principal principal,
-                                       HttpServletRequest request){
+                                       HttpServletRequest request) {
         LOGGER.debug("Endpoint GET {}", request.getServletPath());
 
         final ModelAndView mav = new ModelAndView("userProfileEdit");
@@ -70,7 +70,7 @@ public class UserProfileController {
     }
 
     @RequestMapping(value = "/user/profile/edit", method = {RequestMethod.POST})
-    public ModelAndView editProfilePost(@Valid @ModelAttribute ("editProfileForm") final EditProfileForm editProfileForm,
+    public ModelAndView editProfilePost(@Valid @ModelAttribute("editProfileForm") final EditProfileForm editProfileForm,
                                         final BindingResult errors,
                                         @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
                                         Principal principal,

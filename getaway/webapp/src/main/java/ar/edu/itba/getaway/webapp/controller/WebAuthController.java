@@ -84,7 +84,7 @@ public class WebAuthController {
         return new ModelAndView("redirect:/user/verifyAccount/status/send");
     }
 
-    @RequestMapping(path ="/login")
+    @RequestMapping(path = "/login")
     public ModelAndView login(@RequestParam(value = "error", defaultValue = "false") boolean error) {
         final ModelAndView mav = new ModelAndView("login");
         mav.addObject("error", error);
@@ -105,7 +105,7 @@ public class WebAuthController {
         if (userOptional.isPresent()) {
             forceLogin(userOptional.get(), request);
             mav = new ModelAndView("redirect:/user/verifyAccount/result/successfully");
-            return mav ;
+            return mav;
         }
         mav = new ModelAndView("redirect:/user/verifyAccount/result/unsuccessfully");
         return mav;
@@ -125,7 +125,7 @@ public class WebAuthController {
     }
 
     @RequestMapping(path = "/user/verifyAccount/result/unsuccessfully")
-    public ModelAndView unsuccesfullyAccountVerification()  {
+    public ModelAndView unsuccesfullyAccountVerification() {
         return new ModelAndView("/verifyAccount/verifyUnsuccessfully");
     }
 
@@ -134,7 +134,7 @@ public class WebAuthController {
         return new ModelAndView("/verifyAccount/verifySuccessfully");
     }
 
-    @RequestMapping(path ="/pleaseVerify")
+    @RequestMapping(path = "/pleaseVerify")
     public ModelAndView pleaseVerify() {
         return new ModelAndView("verifyAccount/pleaseVerify");
     }

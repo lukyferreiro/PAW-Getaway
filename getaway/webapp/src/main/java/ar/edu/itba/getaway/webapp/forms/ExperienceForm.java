@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class  ExperienceForm {
+public class ExperienceForm {
 
     @NotEmpty
     @Size(min = 3, max = 50)
@@ -52,60 +52,79 @@ public class  ExperienceForm {
     public String getExperienceAddress() {
         return experienceAddress;
     }
+
     public String getExperienceCity() {
         return experienceCity;
     }
+
     public String getExperienceCountry() {
         return experienceCountry;
     }
+
     public String getExperienceUrl() {
         return experienceUrl;
     }
+
     public long getExperienceCategory() {
         return experienceCategory;
     }
+
     public MultipartFile getExperienceImg() {
         return experienceImg;
     }
+
     public String getExperienceInfo() {
         return experienceInfo;
     }
+
     public String getExperienceMail() {
         return experienceMail;
     }
+
     public String getExperienceName() {
         return experienceName;
     }
+
     public String getExperiencePrice() {
         return experiencePrice;
     }
+
     public void setExperienceAddress(String experienceAddress) {
         this.experienceAddress = experienceAddress;
     }
+
     public void setExperienceCategory(long experienceCategory) {
         this.experienceCategory = experienceCategory;
     }
+
     public void setExperienceImg(MultipartFile experienceImg) {
         this.experienceImg = experienceImg;
     }
+
     public void setExperienceInfo(String experienceInfo) {
         this.experienceInfo = experienceInfo;
     }
+
     public void setExperienceMail(String experienceMail) {
         this.experienceMail = experienceMail;
     }
+
     public void setExperienceName(String experienceName) {
         this.experienceName = experienceName;
     }
+
     public void setExperienceCountry(String experienceCountry) {
         this.experienceCountry = experienceCountry;
     }
+
     public void setExperienceCity(String experienceCity) {
         this.experienceCity = experienceCity;
     }
+
     public void setExperienceUrl(String experienceUrl) {
         this.experienceUrl = experienceUrl;
     }
+
     public void setExperiencePrice(String experiencePrice) {
         this.experiencePrice = experiencePrice;
     }

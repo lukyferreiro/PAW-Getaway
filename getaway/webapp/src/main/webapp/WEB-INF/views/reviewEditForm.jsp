@@ -4,86 +4,92 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
-   <head>
-      <title><spring:message code="pageName"/> - <spring:message code="editReview.title"/></title>
-      <%@ include file="../components/includes/headers.jsp" %>
-   </head>
+<head>
+    <title><spring:message code="pageName"/> - <spring:message code="editReview.title"/></title>
+    <%@ include file="../components/includes/headers.jsp" %>
+</head>
 
-   <body>
-      <div class="container-main">
-         <%@ include file="../components/navbar.jsp" %>
+<body>
+<div class="container-main">
+    <%@ include file="../components/navbar.jsp" %>
 
-         <div class="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
-            <div class="container-lg w-100 modalContainer d-flex flex-column justify-content-center align-items-center">
-               <c:url value="${endpoint}" var="postPath"/>
-               <form:form modelAttribute="reviewForm" action="${postPath}" id="submitForm" method="post" acceptCharset="UTF-8"
-                          enctype="multipart/form-data" cssStyle="width: 100%;">
-                  <div class="p-4 m-4">
-                     <div class="col m-2">
+    <div class="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
+        <div class="container-lg w-100 modalContainer d-flex flex-column justify-content-center align-items-center">
+            <c:url value="${endpoint}" var="postPath"/>
+            <form:form modelAttribute="reviewForm" action="${postPath}" id="submitForm" method="post"
+                       acceptCharset="UTF-8"
+                       enctype="multipart/form-data" cssStyle="width: 100%;">
+                <div class="p-4 m-4">
+                    <div class="col m-2">
                         <h3 class="text-center" style="word-break: break-all">
-                           <spring:message code="reviewFormEdit.title" arguments="${experience.experienceName}"/>
+                            <spring:message code="reviewFormEdit.title" arguments="${experience.experienceName}"/>
                         </h3>
-                     </div>
-                     <div class="col m-2"> <!--Titulo de la review-->
+                    </div>
+                    <div class="col m-2"> <!--Titulo de la review-->
                         <form:label path="title" class="form-label d-flex justify-content-between">
-                           <div>
-                              <spring:message code="review.title"/>
-                              <span class="required-field">*</span>
-                           </div>
-                           <div class="align-self-center">
-                              <h6 class="max-input-text"> <spring:message code="reviewForm.maxInput" arguments="50"/> </h6>
-                           </div>
+                            <div>
+                                <spring:message code="review.title"/>
+                                <span class="required-field">*</span>
+                            </div>
+                            <div class="align-self-center">
+                                <h6 class="max-input-text"><spring:message code="reviewForm.maxInput"
+                                                                           arguments="50"/></h6>
+                            </div>
                         </form:label>
-                        <form:input maxlength="50" path="title" type="text" class="form-control" cssErrorClass="form-control is-invalid"/>
+                        <form:input maxlength="50" path="title" type="text" class="form-control"
+                                    cssErrorClass="form-control is-invalid"/>
                         <form:errors path="title" element="p" cssClass="form-error-label"/>
-                     </div>
-                     <div class="col m-2"> <!--Descripcion de la review-->
+                    </div>
+                    <div class="col m-2"> <!--Descripcion de la review-->
                         <form:label path="description" class="form-label d-flex justify-content-between">
-                           <div>
-                              <spring:message code="review.description"/>
-                              <span class="required-field">*</span>
-                           </div>
-                           <div class="align-self-center">
-                              <h6 class="max-input-text"> <spring:message code="reviewForm.maxInput" arguments="255"/> </h6>
-                           </div>
+                            <div>
+                                <spring:message code="review.description"/>
+                                <span class="required-field">*</span>
+                            </div>
+                            <div class="align-self-center">
+                                <h6 class="max-input-text"><spring:message code="reviewForm.maxInput"
+                                                                           arguments="255"/></h6>
+                            </div>
                         </form:label>
-                        <form:textarea maxlength="255" path="description" class="form-control" cssErrorClass="form-control is-invalid" rows="4" cssStyle="max-height: 200px;"/>
+                        <form:textarea maxlength="255" path="description" class="form-control"
+                                       cssErrorClass="form-control is-invalid" rows="4" cssStyle="max-height: 200px;"/>
                         <form:errors path="description" element="p" cssClass="form-error-label"/>
-                     </div>
-                     <div class="col m-2"> <!--Rating-->
+                    </div>
+                    <div class="col m-2"> <!--Rating-->
                         <form:label path="score" class="form-label">
-                           <spring:message code="review.scoreAssign"/>
-                           <span class="required-field">*</span>
+                            <spring:message code="review.scoreAssign"/>
+                            <span class="required-field">*</span>
                         </form:label>
                         <spring:message code="reviewForm.score.placeholder" var="placeholder"/>
                         <jsp:include page="/WEB-INF/components/starForm.jsp"/>
-                        <form:input value="${review.score}" path="score" type="hidden" class="form-control" cssErrorClass="form-control is-invalid" id="scoreInput"/>
+                        <form:input value="${review.score}" path="score" type="hidden" class="form-control"
+                                    cssErrorClass="form-control is-invalid" id="scoreInput"/>
                         <form:errors path="score" element="p" cssClass="form-error-label"/>
-                     </div>
-                  </div>
-                  <div class="p-0 mt-3 mb-0 d-flex justify-content-around">
-                     <a href="<c:url value = "/user/reviews"/>">
+                    </div>
+                </div>
+                <div class="p-0 mt-3 mb-0 d-flex justify-content-around">
+                    <a href="<c:url value = "/user/reviews"/>">
                         <button class="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
-                           <spring:message code="experienceForm.cancel"/>
+                            <spring:message code="experienceForm.cancel"/>
                         </button>
-                     </a>
-                     <button type="submit" class="btn btn-submit-form px-3 py-2" id="submitFormButton" form="submitForm">
+                    </a>
+                    <button type="submit" class="btn btn-submit-form px-3 py-2" id="submitFormButton" form="submitForm">
                         <spring:message code="experienceForm.submit"/>
-                     </button>
-                  </div>
-               </form:form>
-            </div>
-         </div>
+                    </button>
+                </div>
+            </form:form>
+        </div>
+    </div>
 
 
-         <%@ include file="../components/footer.jsp" %>
-      </div>
+    <%@ include file="../components/footer.jsp" %>
+</div>
 
-      <%@ include file="../components/includes/bottomScripts.jsp" %>
-      <script src='<c:url value="/resources/js/submitStarsButton.js"/>'></script>
-      <script src='<c:url value="/resources/js/submitButton.js"/>'></script>
-      <script src='<c:url value="/resources/js/cancelButton.js"/>'></script>
-      <script src="https://kit.fontawesome.com/5ea815c1d0.js"></script>
+<%@ include file="../components/includes/bottomScripts.jsp" %>
+<script src='<c:url value="/resources/js/submitStarsButton.js"/>'></script>
+<script src='<c:url value="/resources/js/submitButton.js"/>'></script>
+<script src='<c:url value="/resources/js/cancelButton.js"/>'></script>
+<script src="https://kit.fontawesome.com/5ea815c1d0.js"></script>
 
-   </body>
+</body>
 </html>

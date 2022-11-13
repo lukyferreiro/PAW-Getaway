@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
     public Collection<Roles> getRolesByUser(UserModel user) {
         final List<Roles> userRoles = new ArrayList<>();
         final Collection<RoleModel> userRoleModels = user.getRoles();
-        for (RoleModel role: userRoleModels) {
+        for (RoleModel role : userRoleModels) {
             userRoles.add(role.getRoleName());
         }
         return userRoles;

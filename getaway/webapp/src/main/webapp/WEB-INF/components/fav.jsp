@@ -3,8 +3,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <c:choose>
-   <c:when test="${param.isFav}">
-      <a href="<c:url value="${param.path}">
+    <c:when test="${param.isFav}">
+        <a href="<c:url value="${param.path}">
            <c:choose>
               <c:when test="${param.search}">
                  <c:param name="query" value="${param.query}"/>
@@ -29,14 +29,14 @@
             <c:param name="set" value="${false}"/>
             <c:param name="experience" value="${param.experienceId}"/>
         </c:url>"
-      >
-         <button type="button" class="btn btn-fav" id="setFalse">
-            <i class="fas fa-heart heart-color"></i>
-         </button>
-      </a>
-   </c:when>
-   <c:otherwise>
-      <a href="<c:url value="${param.path}">
+        >
+            <button type="button" class="btn btn-fav" id="setFalse">
+                <i class="fas fa-heart heart-color"></i>
+            </button>
+        </a>
+    </c:when>
+    <c:otherwise>
+        <a href="<c:url value="${param.path}">
            <c:choose>
               <c:when test="${param.search}">
                  <c:param name="query" value="${param.query}"/>
@@ -55,11 +55,11 @@
             <c:param name="set" value="${true}"/>
             <c:param name="experience" value="${param.experienceId}"/>
         </c:url>"
-      >
-         <button type="button" class="btn btn-fav" id="setTrue">
-            <i class="fa fa-heart-o" onmouseover="this.className = 'fas fa-heart heart-color';"
-                                     onmouseleave="this.className = 'fa fa-heart-o';"></i>
-         </button>
-      </a>
-   </c:otherwise>
+        >
+            <button type="button" class="btn btn-fav" id="setTrue">
+                <i class="fa fa-heart-o" onmouseover="this.className = 'fas fa-heart heart-color';"
+                   onmouseleave="this.className = 'fa fa-heart-o';"></i>
+            </button>
+        </a>
+    </c:otherwise>
 </c:choose>

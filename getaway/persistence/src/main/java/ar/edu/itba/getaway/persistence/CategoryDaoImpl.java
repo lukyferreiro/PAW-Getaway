@@ -34,7 +34,7 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public Optional<CategoryModel> getCategoryByName(String categoryName){
+    public Optional<CategoryModel> getCategoryByName(String categoryName) {
         LOGGER.debug("Get category with name {}", categoryName);
         final TypedQuery<CategoryModel> query = em.createQuery("FROM CategoryModel WHERE categoryName = :categoryName", CategoryModel.class);
         query.setParameter("categoryName", categoryName);
@@ -42,7 +42,7 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public int getCategoriesCount (){
+    public int getCategoriesCount() {
         LOGGER.debug("Get count of categories");
         return em.createQuery("FROM CategoryModel", CategoryModel.class).getResultList().size();
     }

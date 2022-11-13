@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CategoryDao {
-    List<CategoryModel> listAllCategories ();
-    Optional<CategoryModel> getCategoryById (long categoryId);
-    Optional<CategoryModel> getCategoryByName (String categoryName);
-    int getCategoriesCount ();
+    List<CategoryModel> listAllCategories();
+
+    Optional<CategoryModel> getCategoryById(long categoryId);
+
+    Optional<CategoryModel> getCategoryByName(String categoryName);
+
+    int getCategoriesCount();
 }

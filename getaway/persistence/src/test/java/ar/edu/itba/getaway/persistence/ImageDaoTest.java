@@ -35,9 +35,9 @@ public class ImageDaoTest {
     @PersistenceContext
     private EntityManager em;
 
-    private static final byte[] imgInfo1={1,2,3,4};
-    private static final byte[] imgInfo2={5,6,7,8};
-    private static final byte[] imgInfo3={33,18,86};
+    private static final byte[] imgInfo1 = {1, 2, 3, 4};
+    private static final byte[] imgInfo2 = {5, 6, 7, 8};
+    private static final byte[] imgInfo3 = {33, 18, 86};
 
     private static final ImageModel TO_UPDATE_IMAGE = new ImageModel(1L, imgInfo1);
     private static final ImageModel TO_DELETE_IMAGE = new ImageModel(2L, imgInfo2);
@@ -64,7 +64,7 @@ public class ImageDaoTest {
     public void testUpdateImg() {
         imageDao.updateImg(imgInfo2, TO_UPDATE_IMAGE);
         Optional<ImageModel> imageModel = imageDao.getImgById(TO_UPDATE_IMAGE.getImageId());
-        assertArrayEquals(imgInfo2,imageModel.get().getImage());
+        assertArrayEquals(imgInfo2, imageModel.get().getImage());
     }
 
     @Test
@@ -84,6 +84,6 @@ public class ImageDaoTest {
 
         System.out.println(Arrays.toString(imageModel.get().getImage()));
 
-        assertArrayEquals(imgInfo3,imageModel.get().getImage());
+        assertArrayEquals(imgInfo3, imageModel.get().getImage());
     }
 }

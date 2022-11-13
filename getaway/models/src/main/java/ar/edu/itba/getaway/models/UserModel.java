@@ -77,36 +77,47 @@ public class UserModel {
     public ImageModel getProfileImage() {
         return profileImage;
     }
+
     public void setProfileImageId(ImageModel profileImage) {
         this.profileImage = profileImage;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
+
     public String getSurname() {
         return surname;
     }
+
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
+
     public long getUserId() {
         return userId;
     }
+
     public void setUserId(long userId) {
         this.userId = userId;
     }
@@ -115,12 +126,15 @@ public class UserModel {
     public Collection<RoleModel> getRoles() {
         return roles;
     }
+
     public void addRole(RoleModel role) {
         roles.add(role);
     }
+
     public void removeRole(RoleModel role) {
         roles.remove(role);
     }
+
     public boolean hasRole(String role) {
         return roles.stream().anyMatch(p -> p.getRoleName().name().equals(role));
     }
@@ -129,15 +143,18 @@ public class UserModel {
     public int getFavCount() {
         return favExperiences.size();
     }
+
     public List<ExperienceModel> getFavExperiences() {
         return favExperiences;
     }
     public void addFav(ExperienceModel experience) {
         favExperiences.add(experience);
     }
+
     public void removeFav(ExperienceModel experience) {
         favExperiences.remove(experience);
     }
+
     public boolean isFav(ExperienceModel experience) {
         return favExperiences.contains(experience);
     }
@@ -160,21 +177,23 @@ public class UserModel {
     }
 
     @Transient
-    public boolean hasExperiences(){
+    public boolean hasExperiences() {
         return hasExperiences;
     }
 
     @Transient
-    public boolean hasReviews(){
+    public boolean hasReviews() {
         return hasReviews;
     }
 
     public void addViewed(ExperienceModel experience) {
         viewedExperiences.add(experience);
     }
+
     public boolean isViewed(ExperienceModel experience) {
         return viewedExperiences.contains(experience);
     }
+
     public List<ExperienceModel> getViewedExperiences() {
         return viewedExperiences;
     }

@@ -71,12 +71,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
-            .and().authorizeRequests()
+                .and().authorizeRequests()
                 //Session routes
                 .antMatchers("/login/**").anonymous()
                 .antMatchers("/logout/**").authenticated()
-                .antMatchers(HttpMethod.GET,"/register/**").anonymous()
-                .antMatchers(HttpMethod.POST,"/register/**").anonymous()
+                .antMatchers(HttpMethod.GET, "/register/**").anonymous()
+                .antMatchers(HttpMethod.POST, "/register/**").anonymous()
                 .antMatchers("/access-denied/**").permitAll()
                 //Verify Account
                 .antMatchers("/pleaseVerify").hasRole("NOT_VERIFIED")
@@ -86,20 +86,20 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/verifyAccount/result/successfully/**").hasRole("VERIFIED")
                 .antMatchers("/user/verifyAccount/{token}/**").permitAll()
                 //Reset Password
-                .antMatchers(HttpMethod.GET,"/user/resetPasswordRequest/**").anonymous()
-                .antMatchers(HttpMethod.POST,"/user/resetPasswordRequest/**").anonymous()
+                .antMatchers(HttpMethod.GET, "/user/resetPasswordRequest/**").anonymous()
+                .antMatchers(HttpMethod.POST, "/user/resetPasswordRequest/**").anonymous()
                 .antMatchers("/user/resetPassword/{token}/**").anonymous()
-                .antMatchers(HttpMethod.GET,"/user/resetPassword/**").denyAll()
-                .antMatchers(HttpMethod.POST,"/user/resetPassword/**").anonymous()
+                .antMatchers(HttpMethod.GET, "/user/resetPassword/**").denyAll()
+                .antMatchers(HttpMethod.POST, "/user/resetPassword/**").anonymous()
                 //User
-                .antMatchers(HttpMethod.GET,"/search_result/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/search_result/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/user/profile/edit/**").hasRole("VERIFIED")
-                .antMatchers(HttpMethod.POST,"/user/profile/edit/**").hasRole("VERIFIED")
-                .antMatchers(HttpMethod.GET,"/user/profile/**").authenticated()
-                .antMatchers(HttpMethod.GET,"/user/experiences/**").hasRole("PROVIDER")
-                .antMatchers(HttpMethod.GET,"/user/favourites/**").authenticated()
-                .antMatchers(HttpMethod.GET,"/user/reviews/**").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.GET, "/search_result/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/search_result/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/user/profile/edit/**").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.POST, "/user/profile/edit/**").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.GET, "/user/profile/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/user/experiences/**").hasRole("PROVIDER")
+                .antMatchers(HttpMethod.GET, "/user/favourites/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/user/reviews/**").hasRole("VERIFIED")
                 .antMatchers("/user/profileImage/{imageId:[0-9]+}/**").permitAll()
 //              ------------------------------SE USA @PreAuthorize-------------------------------
 //                .antMatchers(HttpMethod.GET,"/user/experiences/delete/{experienceId:[0-9]+").access("...")
@@ -111,36 +111,36 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers(HttpMethod.GET,"/user/reviews/edit/{reviewId:[0-9]+").access("...")
 //                .antMatchers(HttpMethod.POST,"/user/reviews/edit/{reviewId:[0-9]+").access("...")
                 //Experiences
-                .antMatchers(HttpMethod.GET,"/create_experience/**").hasRole("VERIFIED")
-                .antMatchers(HttpMethod.POST,"/create_experience/**").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.GET, "/create_experience/**").hasRole("VERIFIED")
+                .antMatchers(HttpMethod.POST, "/create_experience/**").hasRole("VERIFIED")
                 //Reviews
                 .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review/**").hasRole("VERIFIED")
                 .antMatchers(HttpMethod.POST, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review/**").hasRole("VERIFIED")
                 //PermitAll Experiences
-                .antMatchers(HttpMethod.GET,"/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/experiences/{experienceId:[0-9]+}/image/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/experiences/{experienceId:[0-9]+}/image/**").permitAll()
                 //else
                 .antMatchers("/**").permitAll()
-            .and().formLogin()
+                .and().formLogin()
                 .loginPage("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/", false) //Tras logearme me lleva a /
                 .failureUrl("/login?error=true")
-            .and().rememberMe()
+                .and().rememberMe()
                 .rememberMeParameter("rememberMe")
                 .userDetailsService(myUserDetailsService)
                 .key(FileCopyUtils.copyToString(new InputStreamReader(rememberMeKey.getInputStream())))
                 .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-            .and().logout()
+                .and().logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
-            .and().exceptionHandling()
+                .and().exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())
 //                    .accessDeniedPage("/")
-            .and().csrf().disable();
+                .and().csrf().disable();
     }
 
 }

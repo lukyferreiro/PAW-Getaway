@@ -97,87 +97,112 @@ public class ExperienceModel {
     public long getExperienceId() {
         return experienceId;
     }
+
     public void setExperienceId(long experienceId) {
         this.experienceId = experienceId;
     }
+
     public String getExperienceName() {
         return experienceName;
     }
+
     public void setExperienceName(String experienceName) {
         this.experienceName = experienceName;
     }
+
     public Double getPrice() {
         return price;
     }
+
     public void setPrice(Double price) {
         this.price = price;
     }
+
     public String getAddress() {
         return address;
     }
+
     public void setAddress(String address) {
         this.address = address;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
+
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
     public String getSiteUrl() {
         return siteUrl;
     }
+
     public void setSiteUrl(String siteUrl) {
         this.siteUrl = siteUrl;
     }
+
     public CityModel getCity() {
         return city;
     }
+
     public void setCity(CityModel city) {
         this.city = city;
     }
+
     public CategoryModel getCategory() {
         return category;
     }
+
     public void setCategory(CategoryModel category) {
         this.category = category;
     }
+
     public UserModel getUser() {
         return user;
     }
+
     public void setUser(UserModel user) {
         this.user = user;
     }
+
     public boolean getObservable() {
         return observable;
     }
+
     public void setObservable(boolean observable) {
         this.observable = observable;
     }
+
     public int getViews() {
         return views;
     }
+
     public void increaseViews() {
-        this.views++ ;
+        this.views++;
     }
+
     public ImageModel getExperienceImage() {
         return experienceImage;
     }
+
     public void setExperienceImage(ImageModel experienceImage) {
         this.experienceImage = experienceImage;
     }
 
     //    Image methods
-    public byte[] getImage(){
-        if(experienceImage == null){
+    public byte[] getImage() {
+        if (experienceImage == null) {
             return null;
-        }else {
+        } else {
             return experienceImage.getImage();
         }
     }
@@ -201,7 +226,7 @@ public class ExperienceModel {
         return isFav;
     }
 
-    public void setIsFav(boolean isFav){
+    public void setIsFav(boolean isFav) {
         this.isFav = isFav;
     }
 

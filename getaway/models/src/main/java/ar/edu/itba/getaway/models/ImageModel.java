@@ -22,11 +22,11 @@ public class ImageModel {
         // Just for Hibernate
     }
 
-    public ImageModel(byte[] image ) {
+    public ImageModel(byte[] image) {
         this.image = image;
     }
 
-    public ImageModel( long imageId, byte[] image) {
+    public ImageModel(long imageId, byte[] image) {
         this.image = image;
         this.imageId = imageId;
     }
@@ -34,22 +34,25 @@ public class ImageModel {
     public long getImageId() {
         return imageId;
     }
+
     public void setImageId(long imageId) {
         this.imageId = imageId;
     }
+
     public byte[] getImage() {
         return image;
     }
+
     public void setImage(byte[] image) {
         this.image = image;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o){
+        if (this == o) {
             return true;
         }
-        if (!(o instanceof ImageModel)){
+        if (!(o instanceof ImageModel)) {
             return false;
         }
         ImageModel image = (ImageModel) o;

@@ -44,7 +44,7 @@ public class InitPageController {
         UserModel user = null;
         if (principal != null) {
             final Optional<UserModel> maybeUser = userService.getUserByEmail(principal.getName());
-            if(maybeUser.isPresent()){
+            if (maybeUser.isPresent()) {
                 user = maybeUser.get();
             }
         }
@@ -67,7 +67,7 @@ public class InitPageController {
 
         mav.addObject("listByCategory", listByCategory);
 
-        if(set.isPresent()){
+        if (set.isPresent()) {
             mav.addObject("successFav", set.get());
         } else {
             mav.addObject("successFav", false);

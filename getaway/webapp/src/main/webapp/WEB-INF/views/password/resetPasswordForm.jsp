@@ -4,84 +4,88 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
-   <head>
-      <title><spring:message code="pageName"/> - <spring:message code="reset.newPassword.title"/></title>
-      <%@ include file="../../components/includes/headers.jsp" %>
-      <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
-   </head>
+<head>
+    <title><spring:message code="pageName"/> - <spring:message code="reset.newPassword.title"/></title>
+    <%@ include file="../../components/includes/headers.jsp" %>
+    <link href='<c:url value="/resources/css/resetRequest.css"/>' rel="stylesheet">
+</head>
 
-   <body>
-      <div class="container-main">
-         <%@ include file="../../components/simpleNavbar.jsp" %>
+<body>
+<div class="container-main">
+    <%@ include file="../../components/simpleNavbar.jsp" %>
 
-         <div class="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
-            <div class="w-100 modalContainer">
-               <div class="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">
-                  <div class="col-12">
-                     <h1 class="text-center title">
+    <div class="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
+        <div class="w-100 modalContainer">
+            <div class="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">
+                <div class="col-12">
+                    <h1 class="text-center title">
                         <spring:message code="reset.newPassword.description"/>
-                     </h1>
-                  </div>
-                  <div class="col-12">
-                     <div class="container-fluid">
+                    </h1>
+                </div>
+                <div class="col-12">
+                    <div class="container-fluid">
                         <div class="row">
-                           <c:url var="postUrl" value='/user/resetPassword'/>
-                           <form:form id="passReset" modelAttribute="resetPasswordForm" action="${postUrl}" method="POST" acceptCharset="UTF-8">
-                              <form:input type="hidden" path="token" name="token" value="${token}"/>
-                              <div class="form-group mt-2 mb-4">
-                                 <form:label path="password" for="password" class="form-label">
-                                    <spring:message code="reset.newPassword.input"/>
-                                    <span class="required-field">*</span>
-                                 </form:label>
-                                 <div class="input-group d-flex justify-content-start align-items-center">
-                                    <spring:message code="resetPasswordForm.password.placeholder" var="placeholder"/>
-                                    <form:input type="password" path="password" cssClass="form-control input" placeholder="${placeholder}"
-                                                id="password1" name="password" cssErrorClass="form-control is-invalid"/>
-                                    <div class="input-group-append">
-                                       <button id="passwordEye1" type="button" tabindex="-1"
-                                               class="btn btn-lg form-control btn-eye input-group-text">
-                                          <i id="eye1" class="far fa-eye-slash"></i>
-                                       </button>
+                            <c:url var="postUrl" value='/user/resetPassword'/>
+                            <form:form id="passReset" modelAttribute="resetPasswordForm" action="${postUrl}"
+                                       method="POST" acceptCharset="UTF-8">
+                                <form:input type="hidden" path="token" name="token" value="${token}"/>
+                                <div class="form-group mt-2 mb-4">
+                                    <form:label path="password" for="password" class="form-label">
+                                        <spring:message code="reset.newPassword.input"/>
+                                        <span class="required-field">*</span>
+                                    </form:label>
+                                    <div class="input-group d-flex justify-content-start align-items-center">
+                                        <spring:message code="resetPasswordForm.password.placeholder"
+                                                        var="placeholder"/>
+                                        <form:input type="password" path="password" cssClass="form-control input"
+                                                    placeholder="${placeholder}"
+                                                    id="password1" name="password"
+                                                    cssErrorClass="form-control is-invalid"/>
+                                        <div class="input-group-append">
+                                            <button id="passwordEye1" type="button" tabindex="-1"
+                                                    class="btn btn-lg form-control btn-eye input-group-text">
+                                                <i id="eye1" class="far fa-eye-slash"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                 </div>
-                                 <form:errors path="password" cssClass="form-error-label" element="p"/>
-                              </div>
-                              <div class="form-group">
-                                 <form:label path="confirmPassword" class="form-label" for="confirmPassword">
-                                    <spring:message code="reset.newPassword.input2"/>
-                                    <span class="required-field">*</span>
-                                 </form:label>
-                                 <div class="input-group d-flex justify-content-start align-items-center">
-                                    <form:input type="password" path="confirmPassword" cssClass="form-control input"
-                                                id="password2" name="confirmPassword"
-                                                cssErrorClass="form-control is-invalid"/>
-                                    <div class="input-group-append">
-                                       <button id="passwordEye2" type="button" tabindex="-1"
-                                               class="btn btn-lg form-control btn-eye input-group-text">
-                                          <i id="eye2" class="far fa-eye-slash"></i>
-                                       </button>
+                                    <form:errors path="password" cssClass="form-error-label" element="p"/>
+                                </div>
+                                <div class="form-group">
+                                    <form:label path="confirmPassword" class="form-label" for="confirmPassword">
+                                        <spring:message code="reset.newPassword.input2"/>
+                                        <span class="required-field">*</span>
+                                    </form:label>
+                                    <div class="input-group d-flex justify-content-start align-items-center">
+                                        <form:input type="password" path="confirmPassword" cssClass="form-control input"
+                                                    id="password2" name="confirmPassword"
+                                                    cssErrorClass="form-control is-invalid"/>
+                                        <div class="input-group-append">
+                                            <button id="passwordEye2" type="button" tabindex="-1"
+                                                    class="btn btn-lg form-control btn-eye input-group-text">
+                                                <i id="eye2" class="far fa-eye-slash"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                 </div>
-                                 <form:errors path="confirmPassword" cssClass="form-error-label" element="p"/>
-                              </div>
+                                    <form:errors path="confirmPassword" cssClass="form-error-label" element="p"/>
+                                </div>
 
-                              <div class="col-12 mt-3 d-flex align-items-center justify-content-center">
-                                 <button form="passReset" id="sumbitBtn" type="submit" class="btn btn-continue">
-                                    <spring:message code="reset.newPassword.applyBtn"/>
-                                 </button>
-                              </div>
-                           </form:form>
+                                <div class="col-12 mt-3 d-flex align-items-center justify-content-center">
+                                    <button form="passReset" id="sumbitBtn" type="submit" class="btn btn-continue">
+                                        <spring:message code="reset.newPassword.applyBtn"/>
+                                    </button>
+                                </div>
+                            </form:form>
                         </div>
-                     </div>
-                  </div>
-               </div>
+                    </div>
+                </div>
             </div>
-         </div>
+        </div>
+    </div>
 
-         <%@ include file="../../components/footer.jsp" %>
-      </div>
+    <%@ include file="../../components/footer.jsp" %>
+</div>
 
-      <%@ include file="../../components/includes/bottomScripts.jsp" %>
-      <script src="<c:url value='/resources/js/resetPassword.js'/>"></script>
-   </body>
+<%@ include file="../../components/includes/bottomScripts.jsp" %>
+<script src="<c:url value='/resources/js/resetPassword.js'/>"></script>
+</body>
 </html>

@@ -40,7 +40,7 @@ public class ImagesController {
     @RequestMapping(value = "/user/profileImage/{imageId:[0-9]+}",
             method = {RequestMethod.GET},
             produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    public byte[] getUserProfileImage(@PathVariable("imageId") final long imageId){
+    public byte[] getUserProfileImage(@PathVariable("imageId") final long imageId) {
         LOGGER.info("Retrieving profileImage {}", imageId);
         final ImageModel imageModel = imageService.getImgById(imageId).orElseThrow(ImageNotFoundException::new);
         return imageModel.getImage();

@@ -90,18 +90,18 @@ public class ExperienceFormController {
         final MultipartFile experienceImg = form.getExperienceImg();
         if (!experienceImg.isEmpty()) {
             if (!contentTypes.contains(experienceImg.getContentType())) {
-                form.setExperienceCategory(form.getExperienceCategory()+1);
+                form.setExperienceCategory(form.getExperienceCategory() + 1);
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageFormat");
                 return createExperienceForm(form, searchForm, principal, request);
             }
-            if(experienceImg.getSize() > MAX_SIZE_PER_FILE){
+            if (experienceImg.getSize() > MAX_SIZE_PER_FILE) {
                 errors.rejectValue("experienceImg", "experienceForm.validation.imageSize");
-                return createExperienceForm(form, searchForm, principal ,request);
+                return createExperienceForm(form, searchForm, principal, request);
             }
         }
 
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
-        final CategoryModel category = categoryService.getCategoryById(form.getExperienceCategory()+1).orElseThrow(CategoryNotFoundException::new);
+        final CategoryModel category = categoryService.getCategoryById(form.getExperienceCategory() + 1).orElseThrow(CategoryNotFoundException::new);
         final CityModel cityModel = locationService.getCityByName(form.getExperienceCity()).orElseThrow(CityNotFoundException::new);
         final Double price = (form.getExperiencePrice().isEmpty()) ? null : Double.parseDouble(form.getExperiencePrice());
         final String description = (form.getExperienceInfo().isEmpty()) ? null : form.getExperienceInfo();

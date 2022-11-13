@@ -14,6 +14,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
+
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
@@ -29,7 +30,9 @@ import java.util.*;
 @ContextConfiguration(classes = TestConfig.class)
 @Sql(scripts = "classpath:review-dao-test.sql")
 public class ReviewDaoTest {
-    /** Data for tests **/
+    /**
+     * Data for tests
+     **/
 
     //User data
     private static final RoleModel USER_MODEL = new RoleModel(2L, Roles.USER);
@@ -99,7 +102,7 @@ public class ReviewDaoTest {
 
     @Test
     public void testGetReviewsByUser() {
-        final List<ReviewModel> reviewModelList = reviewDao.getReviewsByUser(USER_1,1,PAGE_SIZE);
+        final List<ReviewModel> reviewModelList = reviewDao.getReviewsByUser(USER_1, 1, PAGE_SIZE);
         assertFalse(reviewModelList.isEmpty());
         assertTrue(reviewModelList.contains(R1));
         assertTrue(reviewModelList.contains(R3));
@@ -118,11 +121,11 @@ public class ReviewDaoTest {
     @Test
     @Rollback
     public void testUpdateReview() {
-        reviewDao.updateReview(new ReviewModel(R1.getReviewId(),"TitleUpdate", "DescUpdate", 5L, R1.getExperience(), R1.getReviewDate(), R1.getUser()));
+        reviewDao.updateReview(new ReviewModel(R1.getReviewId(), "TitleUpdate", "DescUpdate", 5L, R1.getExperience(), R1.getReviewDate(), R1.getUser()));
         Optional<ReviewModel> reviewModel = reviewDao.getReviewById(1L);
         assertTrue(reviewModel.isPresent());
-        assertEquals( "TitleUpdate", reviewModel.get().getTitle());
-        assertEquals( "DescUpdate", reviewModel.get().getDescription());
+        assertEquals("TitleUpdate", reviewModel.get().getTitle());
+        assertEquals("DescUpdate", reviewModel.get().getDescription());
         assertEquals(5L, reviewModel.get().getScore());
     }
 }

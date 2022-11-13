@@ -11,8 +11,12 @@ import java.util.Optional;
 public interface ReviewService {
     ReviewModel createReview(String title, String description, long score, ExperienceModel experienceModel, LocalDate reviewDate, UserModel userModel);
     void updateReview(ReviewModel reviewModel);
+
     void deleteReview(ReviewModel review);
+
     Page<ReviewModel> getReviewAndUser(ExperienceModel experience, int page);
+
     Optional<ReviewModel> getReviewById(long reviewId);
+
     Page<ReviewModel> getReviewsByUser(UserModel user, int page);
 }

@@ -22,7 +22,7 @@ public class RoleModel {
         // Just for Hibernate
     }
 
-    public RoleModel(long roleId, Roles roleName){
+    public RoleModel(long roleId, Roles roleName) {
         this.roleId = roleId;
         this.roleName = roleName;
     }
@@ -30,22 +30,25 @@ public class RoleModel {
     public long getRoleId() {
         return roleId;
     }
+
     public void setRoleId(long roleId) {
         this.roleId = roleId;
     }
+
     public Roles getRoleName() {
         return roleName;
     }
+
     public void setRoleName(Roles roleName) {
         this.roleName = roleName;
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o){
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (!(o instanceof RoleModel)){
+        if (!(o instanceof RoleModel)) {
             return false;
         }
         RoleModel other = (RoleModel) o;

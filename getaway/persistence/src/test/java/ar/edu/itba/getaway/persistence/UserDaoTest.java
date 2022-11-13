@@ -29,16 +29,18 @@ import java.util.*;
 @ContextConfiguration(classes = TestConfig.class)
 @Sql(scripts = "classpath:user-dao-test.sql")
 public class UserDaoTest {
-    /** Data for tests **/
+    /**
+     * Data for tests
+     **/
     private final static String PASSWORD = "password";
     private final static String NAME = "NAME";
     private final static String SURNAME = "SURNAME";
     private final static String EMAIL = "e@mail.com";
-    private final static ImageModel IMAGE = new ImageModel( 15L, null);
-    private final static ImageModel IMAGE_2 = new ImageModel( 16L, null);
-    private final static ImageModel IMAGE_3 = new ImageModel( 17L, null);
+    private final static ImageModel IMAGE = new ImageModel(15L, null);
+    private final static ImageModel IMAGE_2 = new ImageModel(16L, null);
+    private final static ImageModel IMAGE_3 = new ImageModel(17L, null);
 
-    private final static ImageModel IMAGE_CREATE = new ImageModel( 18L, null);
+    private final static ImageModel IMAGE_CREATE = new ImageModel(18L, null);
     private static final Collection<Roles> DEFAULT_ROLES = new ArrayList<>(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     private static final RoleModel PROVIDER_MODEL = new RoleModel(1L, Roles.PROVIDER);
@@ -131,13 +133,13 @@ public class UserDaoTest {
     }
 
     @Test
-    public void testGetUserByIdNotFound(){
-       final Optional<UserModel> notFoundUser = userDao.getUserById(50L);
-       assertFalse(notFoundUser.isPresent());
+    public void testGetUserByIdNotFound() {
+        final Optional<UserModel> notFoundUser = userDao.getUserById(50L);
+        assertFalse(notFoundUser.isPresent());
     }
 
     @Test
-    public void testGetUserByEmail(){
+    public void testGetUserByEmail() {
         final Optional<UserModel> user = userDao.getUserByEmail("uno@mail.com");
 
         assertNotNull(user);
@@ -147,7 +149,7 @@ public class UserDaoTest {
         assertEquals("usuario", user.get().getName());
         assertEquals("uno", user.get().getSurname());
         assertEquals("uno@mail.com", user.get().getEmail());
-        assertEquals(IMAGE , user.get().getProfileImage());
+        assertEquals(IMAGE, user.get().getProfileImage());
 
         assertEquals(DEFAULT_ROLES_MODELS, user.get().getRoles());
         assertTrue(user.get().getRoles().contains(USER_MODEL));
@@ -157,28 +159,31 @@ public class UserDaoTest {
     }
 
     @Test
-    public void testGetRoleByNameProvider(){
+    public void testGetRoleByNameProvider() {
         final Optional<RoleModel> roleModel = userDao.getRoleByName(Roles.PROVIDER);
         assertTrue(roleModel.isPresent());
         assertEquals(1, roleModel.get().getRoleId());
         assertEquals(Roles.PROVIDER, roleModel.get().getRoleName());
     }
+
     @Test
-    public void testGetRoleByNameUser(){
+    public void testGetRoleByNameUser() {
         final Optional<RoleModel> roleModel = userDao.getRoleByName(Roles.USER);
         assertTrue(roleModel.isPresent());
         assertEquals(2, roleModel.get().getRoleId());
         assertEquals(Roles.USER, roleModel.get().getRoleName());
     }
+
     @Test
-    public void testGetRoleByNameVerified(){
+    public void testGetRoleByNameVerified() {
         final Optional<RoleModel> roleModel = userDao.getRoleByName(Roles.VERIFIED);
         assertTrue(roleModel.isPresent());
         assertEquals(3, roleModel.get().getRoleId());
         assertEquals(Roles.VERIFIED, roleModel.get().getRoleName());
     }
+
     @Test
-    public void testGetRoleByNameNotVerified(){
+    public void testGetRoleByNameNotVerified() {
         final Optional<RoleModel> roleModel = userDao.getRoleByName(Roles.NOT_VERIFIED);
         assertTrue(roleModel.isPresent());
         assertEquals(4, roleModel.get().getRoleId());
@@ -187,7 +192,7 @@ public class UserDaoTest {
 
     @Test
     @Rollback
-    public void testUpdateRoles(){
+    public void testUpdateRoles() {
         userDao.updateRoles(USER_TO_UPDATE_ROLE, Roles.NOT_VERIFIED, Roles.VERIFIED);
         final Optional<UserModel> user = userDao.getUserById(USER_TO_UPDATE_ROLE.getUserId());
         assertTrue(user.isPresent());
@@ -212,7 +217,7 @@ public class UserDaoTest {
 
     @Test
     @Rollback
-    public void testUpdatePassword(){
+    public void testUpdatePassword() {
         final Optional<UserModel> userBeforeUpdate = userDao.getUserById(MAIN_USER.getUserId());
         userDao.updatePassword(MAIN_USER, "newpwd");
         final Optional<UserModel> user = userDao.getUserById(MAIN_USER.getUserId());
@@ -225,7 +230,7 @@ public class UserDaoTest {
         assertEquals(userBeforeUpdate.get().getRoles(), user.get().getRoles());
         assertEquals(userBeforeUpdate.get().getProfileImage(), user.get().getProfileImage());
 
-        assertEquals("newpwd",user.get().getPassword());
+        assertEquals("newpwd", user.get().getPassword());
     }
 
     @Test

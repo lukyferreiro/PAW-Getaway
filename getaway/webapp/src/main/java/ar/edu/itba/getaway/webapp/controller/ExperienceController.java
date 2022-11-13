@@ -86,7 +86,7 @@ public class ExperienceController {
 
         // FavExperiences
         if (owner != null) {
-            if(experience.isPresent()){
+            if (experience.isPresent()) {
                 final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), owner);
                 favAndViewExperienceService.setFav(owner, set, addFavExperience);
             }
@@ -103,7 +103,7 @@ public class ExperienceController {
             mav.addObject("cityId", -1);
         }
 
-        if(set.isPresent()){
+        if (set.isPresent()) {
             mav.addObject("successFav", set.get());
         } else {
             mav.addObject("successFav", false);
@@ -172,7 +172,7 @@ public class ExperienceController {
         mav.addObject("maxPage", currentPage.getMaxPage());
         mav.addObject("totalPages", currentPage.getTotalPages());
 
-        if(set.isPresent()){
+        if (set.isPresent()) {
             mav.addObject("successFav", set.get());
         } else {
             mav.addObject("successFav", false);
