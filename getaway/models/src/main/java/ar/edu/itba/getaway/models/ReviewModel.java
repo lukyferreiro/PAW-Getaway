@@ -1,7 +1,7 @@
 package ar.edu.itba.getaway.models;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -19,7 +19,7 @@ public class ReviewModel {
     @Column(name = "score", nullable = false)
     private long score;
     @Column(name = "reviewDate", nullable = false)
-    private Date reviewDate;
+    private LocalDate reviewDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "experienceId", nullable = false)
@@ -34,7 +34,7 @@ public class ReviewModel {
         // Just for Hibernate
     }
 
-    public ReviewModel(String title, String description, long score, ExperienceModel experience, Date reviewDate, UserModel user) {
+    public ReviewModel(String title, String description, long score, ExperienceModel experience, LocalDate reviewDate, UserModel user) {
         this.title = title;
         this.description = description;
         this.score = score;
@@ -43,7 +43,7 @@ public class ReviewModel {
         this.user = user;
     }
 
-    public ReviewModel(long reviewId, String title, String description, long score, ExperienceModel experience, Date reviewDate, UserModel user) {
+    public ReviewModel(long reviewId, String title, String description, long score, ExperienceModel experience, LocalDate reviewDate, UserModel user) {
         this.reviewId = reviewId;
         this.title = title;
         this.description = description;
@@ -80,10 +80,10 @@ public class ReviewModel {
     public String getStringScore() {
         return String.valueOf(score);
     }
-    public Date getReviewDate() {
+    public LocalDate getReviewDate() {
         return reviewDate;
     }
-    public void setReviewDate(Date reviewDate) {
+    public void setReviewDate(LocalDate reviewDate) {
         this.reviewDate = reviewDate;
     }
     public ExperienceModel getExperience() {

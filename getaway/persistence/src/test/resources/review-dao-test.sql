@@ -36,8 +36,8 @@ VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 1, 'owner@mail.co
 
 -- ADV 1: avg_score=2
 INSERT INTO reviews(reviewid, title, description, score, experienceid, reviewdate, userid)
-VALUES (1, 'Title1', 'Desc1', 1, 1, '2022-01-01 00:00:00', 1);
+VALUES (1, 'Title1', 'Desc1', 1, 1, '2022-01-01', 1);
 INSERT INTO reviews(reviewid, title, description, score, experienceid, reviewdate, userid)
-VALUES (2, 'Title2', 'Desc2', 2, 1, '2022-01-01 00:00:00', 2);
+VALUES (2, 'Title2', 'Desc2', 2, 1, '2022-01-01', 2);
 INSERT INTO reviews(reviewid, title, description, score, experienceid, reviewdate, userid)
-VALUES (3, 'Title3', 'Desc3', 3, 1, '2022-01-01 00:00:00', 1);
+VALUES (3, 'Title3', 'Desc3', 3, 1, '2022-01-01', 1);

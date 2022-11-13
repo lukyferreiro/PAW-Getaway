@@ -21,7 +21,11 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.sql.Time;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -151,7 +155,7 @@ public class UserReviewsController {
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final ReviewModel review = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
         final ReviewModel newReviewModel = new ReviewModel(reviewId, form.getTitle(), form.getDescription(),
-                form.getLongScore(),review.getExperience(), Date.from(Instant.now()), user);
+                form.getLongScore(),review.getExperience(), LocalDate.now(), user);
 
         reviewService.updateReview(newReviewModel);
 

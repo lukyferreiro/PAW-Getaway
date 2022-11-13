@@ -132,7 +132,6 @@ public class UserModel {
     public List<ExperienceModel> getFavExperiences() {
         return favExperiences;
     }
-
     public void addFav(ExperienceModel experience) {
         favExperiences.add(experience);
     }
@@ -143,7 +142,7 @@ public class UserModel {
         return favExperiences.contains(experience);
     }
 
-    //    Image methods
+    // Image methods
     public long getImageId() {
         if (profileImage == null) {
             return -1;

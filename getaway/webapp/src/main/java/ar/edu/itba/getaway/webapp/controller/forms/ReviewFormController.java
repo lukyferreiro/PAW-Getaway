@@ -23,8 +23,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Controller
 public class ReviewFormController {
@@ -71,7 +72,7 @@ public class ReviewFormController {
         final UserModel user = userService.getUserByEmail(principal.getName()).orElseThrow(UserNotFoundException::new);
         final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId, user).orElseThrow(ExperienceNotFoundException::new);
 
-        final Date date = Date.from(Instant.now());
+        final LocalDate date = LocalDate.now();
 
         reviewService.createReview(form.getTitle(), form.getDescription(), form.getLongScore(), experience, date, user);
 

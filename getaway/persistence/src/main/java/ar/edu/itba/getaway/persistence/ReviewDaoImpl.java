@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.LocalDate;
 import java.util.*;
 
 @Repository
@@ -21,7 +22,7 @@ public class ReviewDaoImpl implements ReviewDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewDaoImpl.class);
 
     @Override
-    public ReviewModel createReview(String title, String description, long score, ExperienceModel experienceModel, Date reviewDate, UserModel userModel) {
+    public ReviewModel createReview(String title, String description, long score, ExperienceModel experienceModel, LocalDate reviewDate, UserModel userModel) {
         final ReviewModel reviewModel = new ReviewModel(title, description, score, experienceModel, reviewDate, userModel);
         em.persist(reviewModel);
         LOGGER.debug("Created new review with id {} by user with id {}", reviewModel.getReviewId(), userModel.getUserId());
