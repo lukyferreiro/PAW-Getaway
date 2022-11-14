@@ -32,6 +32,7 @@ public class UserDaoTest {
     /**
      * Data for tests
      **/
+
     private final static String PASSWORD = "password";
     private final static String NAME = "NAME";
     private final static String SURNAME = "SURNAME";
@@ -53,6 +54,21 @@ public class UserDaoTest {
     private static final UserModel MAIN_USER = new UserModel(10L, "contra1", "usuario", "uno", "uno@mail.com", DEFAULT_ROLES_MODELS, IMAGE);
     private static final UserModel USER_TO_ADD_ROLE = new UserModel(20L, "contra2", "usuario2", "dos", "dos@mail.com", DEFAULT_ROLES_MODELS, IMAGE_2);
     private static final UserModel USER_TO_UPDATE_ROLE = new UserModel(30L, "contra3", "usuario3", "tres", "tres@mail.com", DEFAULT_ROLES_MODELS, IMAGE_3);
+
+
+    private final static CategoryModel CATEGORY_1 = new CategoryModel(1L, "Aventura");
+    private final static CategoryModel CATEGORY_2 = new CategoryModel(2L, "Gastronomia");
+    private final static CategoryModel CATEGORY_6 = new CategoryModel(6L, "Historico");
+
+    private final static CountryModel COUNTRY_1 = new CountryModel(1L, "Test Country");
+
+    private final static CityModel CITY_1 = new CityModel(1L, COUNTRY_1, "Test City One");
+    private final ImageModel IMAGE_ADV_1 = new ImageModel(1, null);
+    private final ImageModel IMAGE_GAS = new ImageModel(2, null);
+
+    private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, "owner@mail.com", null, 0.0, CITY_1, CATEGORY_1, MAIN_USER, IMAGE_ADV_1, true, 0);
+    private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2L, "testgastro", "dirgastro", null, "owner@mail.com", null, 1000.0, CITY_1, CATEGORY_2, MAIN_USER, IMAGE_GAS, true, 0);
+
 
     /****/
 
@@ -123,13 +139,23 @@ public class UserDaoTest {
         assertEquals("uno", user.get().getSurname());
         assertEquals("uno@mail.com", user.get().getEmail());
         assertEquals(IMAGE, user.get().getProfileImage());
-        assertFalse(user.get().hasExperiences());
+        assertTrue(user.get().hasExperiences());
         assertFalse(user.get().hasReviews());
 
         ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.get().getRoles());
 
         assertTrue(arrayRoles.contains(USER_MODEL));
         assertTrue(arrayRoles.contains(NOT_VERIFIED_MODEL));
+
+        List<ExperienceModel> favs = user.get().getFavExperiences();
+
+        assertTrue(favs.contains(DEFAULT_ADV));
+        assertTrue(favs.contains(DEFAULT_GAS));
+
+        List<ExperienceModel> viewed = user.get().getViewedExperiences();
+
+        assertTrue(viewed.contains(DEFAULT_ADV));
+        assertTrue(viewed.contains(DEFAULT_GAS));
     }
 
     @Test

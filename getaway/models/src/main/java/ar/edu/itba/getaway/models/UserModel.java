@@ -140,10 +140,6 @@ public class UserModel {
     }
 
     // Favs methods
-    public int getFavCount() {
-        return favExperiences.size();
-    }
-
     public List<ExperienceModel> getFavExperiences() {
         return favExperiences;
     }

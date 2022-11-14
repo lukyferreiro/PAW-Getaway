@@ -82,7 +82,6 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getExperienceById(experienceId);
     }
 
-
     @Override
     public Optional<ExperienceModel> getVisibleExperienceById(long experienceId, UserModel user) {
         LOGGER.debug("Retrieving experience with id {}", experienceId);
@@ -162,13 +161,25 @@ public class ExperienceServiceImpl implements ExperienceService {
         return auxList.subList(fromIndex, toIndex);
     }
 
+    private long getFavCount(UserModel user) {
+        List<ExperienceModel> favList = user.getFavExperiences();
+        long toRet = 0;
+
+        for (ExperienceModel exp : favList) {
+            if (exp.getObservable()) {
+                toRet++;
+            }
+        }
+
+        return toRet;
+    }
 
     @Override
     public Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page) {
         LOGGER.debug("Requested page {}", page);
         int totalPages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
-        final long total = user.getFavCount();
+        final long total = getFavCount(user);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -273,7 +284,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         }
 
         LOGGER.debug("Max page value service: {}", totalPages);
-        return new Page<>(experienceModelList, page, totalPages, (long) total);
+        return new Page<>(experienceModelList, page, totalPages, total);
     }
 
     @Transactional

@@ -30,3 +30,38 @@ INSERT INTO userRoles(roleid, userid) VALUES (4,20);
 -- Adding default_roles to userid 3
 INSERT INTO userRoles(roleid, userid) VALUES (2,30);
 INSERT INTO userRoles(roleid, userid) VALUES (4,30);
+
+-- Populate categories
+INSERT INTO categories(categoryid, categoryname) VALUES (1, 'Aventura');
+INSERT INTO categories(categoryid, categoryname) VALUES (2, 'Gastronomia');
+INSERT INTO categories(categoryid, categoryname) VALUES (3, 'Hoteleria');
+INSERT INTO categories(categoryid, categoryname) VALUES (4, 'Relax');
+INSERT INTO categories(categoryid, categoryname) VALUES (5, 'Vida_nocturna');
+INSERT INTO categories(categoryid, categoryname) VALUES (6, 'Historico');
+
+-- Add country
+INSERT INTO countries(countryid, countryname) VALUES (1, 'Test Country');
+
+-- Add at least two cities
+INSERT INTO cities(cityid, cityname, countryid) VALUES(1, 'Test City One', 1);
+INSERT INTO cities(cityid, cityname, countryid) VALUES(2, 'Test City Two', 1);
+INSERT INTO cities(cityid, cityname, countryid) VALUES(3, 'Test City Three', 1);
+
+-- Add images (with value null) for consistency
+INSERT INTO images(imgid, imageObject) VALUES(1, '0x1234');
+INSERT INTO images(imgid, imageObject) VALUES(2, '0x1234');
+
+-- Add 1 experience of each category
+-- Add 3 to adventure with different price ranges and cities for filter testing
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
+VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 10, 'owner@mail.com', 1, true, 0);
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
+VALUES (2, 'testgastro', 0, 'dirgastro', null, null, 1, 2, 10, 'owner@mail.com', 2, true, 0);
+
+-- User 1 favs
+INSERT INTO favuserexperience(userid, experienceid) VALUES (10, 1);
+INSERT INTO favuserexperience(userid, experienceid) VALUES (10, 2);
+
+-- User 1 views
+INSERT INTO viewed(userid, experienceid) VALUES (10,1)
+INSERT INTO viewed(userid, experienceid) VALUES (10,2)
