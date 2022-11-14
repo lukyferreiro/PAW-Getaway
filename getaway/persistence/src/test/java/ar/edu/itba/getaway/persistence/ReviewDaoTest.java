@@ -111,7 +111,6 @@ public class ReviewDaoTest {
     @Test
     @Rollback
     public void testDeleteReview() {
-//        reviewDao.deleteReview(R1);
         ReviewModel toDeleteReview = reviewDao.getReviewById(1L).orElse(R1);
         reviewDao.deleteReview(toDeleteReview);
         em.flush();

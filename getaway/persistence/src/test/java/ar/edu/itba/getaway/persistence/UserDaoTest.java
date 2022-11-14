@@ -83,8 +83,6 @@ public class UserDaoTest {
 
         assertNotNull(user);
 
-        System.out.println(user.getUserId());
-
         assertEquals(PASSWORD, user.getPassword());
         assertEquals(NAME, user.getName());
         assertEquals(SURNAME, user.getSurname());
@@ -125,6 +123,8 @@ public class UserDaoTest {
         assertEquals("uno", user.get().getSurname());
         assertEquals("uno@mail.com", user.get().getEmail());
         assertEquals(IMAGE, user.get().getProfileImage());
+        assertFalse(user.get().hasExperiences());
+        assertFalse(user.get().hasReviews());
 
         ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.get().getRoles());
 
@@ -151,7 +151,6 @@ public class UserDaoTest {
         assertEquals("uno@mail.com", user.get().getEmail());
         assertEquals(IMAGE, user.get().getProfileImage());
 
-        assertEquals(DEFAULT_ROLES_MODELS, user.get().getRoles());
         assertTrue(user.get().getRoles().contains(USER_MODEL));
         assertTrue(user.get().getRoles().contains(NOT_VERIFIED_MODEL));
         assertFalse(user.get().getRoles().contains(VERIFIED_MODEL));
@@ -218,17 +217,16 @@ public class UserDaoTest {
     @Test
     @Rollback
     public void testUpdatePassword() {
-        final Optional<UserModel> userBeforeUpdate = userDao.getUserById(MAIN_USER.getUserId());
         userDao.updatePassword(MAIN_USER, "newpwd");
         final Optional<UserModel> user = userDao.getUserById(MAIN_USER.getUserId());
         assertTrue(user.isPresent());
 
         //Check if all the other info is the same
-        assertEquals(userBeforeUpdate.get().getEmail(), user.get().getEmail());
-        assertEquals(userBeforeUpdate.get().getName(), user.get().getName());
-        assertEquals(userBeforeUpdate.get().getSurname(), user.get().getSurname());
-        assertEquals(userBeforeUpdate.get().getRoles(), user.get().getRoles());
-        assertEquals(userBeforeUpdate.get().getProfileImage(), user.get().getProfileImage());
+        assertEquals(MAIN_USER.getEmail(), user.get().getEmail());
+        assertEquals(MAIN_USER.getName(), user.get().getName());
+        assertEquals(MAIN_USER.getSurname(), user.get().getSurname());
+        assertEquals(MAIN_USER.getRoles(), user.get().getRoles());
+        assertEquals(MAIN_USER.getProfileImage(), user.get().getProfileImage());
 
         assertEquals("newpwd", user.get().getPassword());
     }
@@ -236,16 +234,15 @@ public class UserDaoTest {
     @Test
     @Rollback
     public void testUpdateUserInfo() {
-        final Optional<UserModel> userBeforeUpdate = userDao.getUserById(MAIN_USER.getUserId());
         userDao.updateUserInfo(MAIN_USER, new UserInfo("newusuario", "newuno"));
         final Optional<UserModel> user = userDao.getUserById(MAIN_USER.getUserId());
         assertTrue(user.isPresent());
 
         //Check if all the other info is the same
-        assertEquals(userBeforeUpdate.get().getEmail(), user.get().getEmail());
-        assertEquals(userBeforeUpdate.get().getRoles(), user.get().getRoles());
-        assertEquals(userBeforeUpdate.get().getPassword(), user.get().getPassword());
-        assertEquals(userBeforeUpdate.get().getProfileImage(), user.get().getProfileImage());
+        assertEquals(MAIN_USER.getEmail(), user.get().getEmail());
+        assertEquals(MAIN_USER.getRoles(), user.get().getRoles());
+        assertEquals(MAIN_USER.getPassword(), user.get().getPassword());
+        assertEquals(MAIN_USER.getProfileImage(), user.get().getProfileImage());
 
         assertEquals("newusuario", user.get().getName());
         assertEquals("newuno", user.get().getSurname());

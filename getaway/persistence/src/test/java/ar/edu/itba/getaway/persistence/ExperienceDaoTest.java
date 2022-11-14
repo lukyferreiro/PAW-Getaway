@@ -146,13 +146,7 @@ public class ExperienceDaoTest {
         Optional<ExperienceModel> experienceModel = experienceDao.getExperienceById(1L);
         assertTrue(experienceModel.isPresent());
         assertEquals(DEFAULT_ADV, experienceModel.get());
-    }
-
-    @Test
-    public void testAverageScoreFormula() {
-        Optional<ExperienceModel> experienceModel = experienceDao.getExperienceById(1L);
-        assertTrue(experienceModel.isPresent());
-        assertEquals(DEFAULT_ADV, experienceModel.get());
+        //testing averageScore formula
         assertEquals(2, experienceModel.get().getAverageScore());
     }
 
