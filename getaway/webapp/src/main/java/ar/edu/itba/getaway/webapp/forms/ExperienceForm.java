@@ -15,7 +15,7 @@ public class ExperienceForm {
     private String experienceName;
 
     @NotNull
-    private long experienceCategory;
+    private Long experienceCategory;
 
     @NotEmpty
     private String experienceCountry;
@@ -65,7 +65,7 @@ public class ExperienceForm {
         return experienceUrl;
     }
 
-    public long getExperienceCategory() {
+    public Long getExperienceCategory() {
         return experienceCategory;
     }
 
@@ -93,8 +93,14 @@ public class ExperienceForm {
         this.experienceAddress = experienceAddress;
     }
 
-    public void setExperienceCategory(long experienceCategory) {
+    public void setExperienceCategory(Long experienceCategory) {
         this.experienceCategory = experienceCategory;
+    }
+
+    public void increaseExperienceCategory(){
+        if(this.experienceCategory != null){
+            this.experienceCategory++;
+        }
     }
 
     public void setExperienceImg(MultipartFile experienceImg) {
@@ -128,4 +134,5 @@ public class ExperienceForm {
     public void setExperiencePrice(String experiencePrice) {
         this.experiencePrice = experiencePrice;
     }
+
 }

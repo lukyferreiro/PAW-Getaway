@@ -48,7 +48,7 @@
                         </form:label>
                         <form:select path="experienceCategory" class="form-select"
                                      cssErrorClass="form-control is-invalid">
-                            <c:if test="${formCategory == 0}">
+                            <c:if test="${formCategory == null}">
                                 <option value="" disabled selected hidden><c:out value="${placeholder}"/></option>
                             </c:if>
                             <c:forEach var="category" items="${categories}">

@@ -23,7 +23,7 @@
                              src="<c:url value='/experiences/${param.id}/image'/>" alt="Imagen"/>
                     </c:when>
                     <c:otherwise>
-                        <img class="container-fluid p-0" style="height: fit-content; max-height: 550px;"
+                        <img class="container-fluid p-0" style="height: fit-content; max-height: 450px;"
                              alt="Imagen ${param.experienceCategoryName}"
                              src="<c:url value="/resources/images/${param.experienceCategoryName}.svg" />">
                     </c:otherwise>
@@ -120,17 +120,17 @@
                             <jsp:param name="avgReview" value="${param.reviewAvg}"/>
                         </jsp:include>
                     </div>
-
-                    <div>
-                        <c:if test="${!param.observable}">
-                            <p class="obs-info"><spring:message code="experience.notVisible"/></p>
-                        </c:if>
-                    </div>
                 </div>
                 <div class="col-2 p-0"></div>
             </div>
         </div>
     </div>
+
+    <c:if test="${!param.observable}">
+        <div class="my-1 d-flex justify-content-center align-content-center">
+            <h6 class="obs-info"><spring:message code="experience.notVisible"/></h6>
+        </div>
+    </c:if>
 
     <c:if test="${param.isEditing}">
         <div class="btn-group my-2 d-flex justify-content-center align-content-center" role="group">

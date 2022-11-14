@@ -6,8 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
@@ -33,22 +31,6 @@ public class TestConfig {
     @Value("classpath:schema.sql")
     private Resource schemaSql;
 
-//    @Bean
-//    public DataSource dataSource() {
-//        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
-//        ds.setDriverClass(JDBCDriver.class);
-//        //Corre en memoria y la bd se llama getaway
-//        ds.setUrl("jdbc:hsqldb:mem:getaway");
-//        ds.setUsername("ha");
-//        ds.setPassword("");
-//        return ds;
-//    }
-//
-//    @Bean
-//    public PlatformTransactionManager transactionManager(final DataSource ds){
-//        return new DataSourceTransactionManager(ds);
-//    }
-
     @Bean
     public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
         final DataSourceInitializer dsInit = new DataSourceInitializer();
@@ -59,7 +41,7 @@ public class TestConfig {
 
     private DatabasePopulator dataSourcePopulator() {
         final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-        dbp.addScripts(hsqldbSql, schemaSql);//Esto lo que hace es que setee el modo compatibilidad con postgres.
+        dbp.addScripts(hsqldbSql, schemaSql);  //Esto lo que hace es que setee el modo compatibilidad con postgres.
         return dbp;
     }
 
@@ -86,8 +68,6 @@ public class TestConfig {
         final Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-//        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
-//        properties.setProperty("format_sql", "true");
         factoryBean.setJpaProperties(properties);
         return factoryBean;
     }

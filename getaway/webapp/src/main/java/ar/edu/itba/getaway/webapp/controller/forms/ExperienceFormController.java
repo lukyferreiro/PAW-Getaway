@@ -84,6 +84,7 @@ public class ExperienceFormController {
         LOGGER.debug("User tries to create an experience with category id: {}", form.getExperienceCategory());
 
         if (errors.hasErrors()) {
+            form.increaseExperienceCategory();
             return createExperienceForm(form, searchForm, principal, request);
         }
 
