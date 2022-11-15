@@ -12,5 +12,5 @@ public interface CategoryDao {
 
     Optional<CategoryModel> getCategoryByName(String categoryName);
 
-    int getCategoriesCount();
+//    int getCategoriesCount();
 }

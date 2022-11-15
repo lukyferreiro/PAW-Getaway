@@ -11,13 +11,13 @@ public interface LocationService {
 
     Optional<CityModel> getCityById(long cityId);
 
-    List<CityModel> getCitiesByCountry(CountryModel country);
+//    List<CityModel> getCitiesByCountry(CountryModel country);
 
     Optional<CityModel> getCityByName(String cityName);
 
-    List<CountryModel> listAllCountries();
+//    List<CountryModel> listAllCountries();
 
-    Optional<CountryModel> getCountryById(long countryId);
+//    Optional<CountryModel> getCountryById(long countryId);
 
     Optional<CountryModel> getCountryByName();
 }

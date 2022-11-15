@@ -68,15 +68,10 @@ public class UserExperiencesController {
         }
 
         final OrderByModel[] orderByModels = OrderByModel.getUserOrderByModel();
-        mav.addObject("orderBy", OrderByModel.OrderByAZ);
+        mav.addObject("orderBy", orderBy.orElse(OrderByModel.OrderByAZ));
 
         final Page<ExperienceModel> currentPage = experienceService.listExperiencesFavsByUser(user, orderBy, pageNum);
         final List<ExperienceModel> experienceList = currentPage.getContent();
-
-        if (orderBy.isPresent()) {
-            request.setAttribute("orderBy", orderBy);
-            mav.addObject("orderBy", orderBy.get());
-        }
 
         mav.addObject("path", request.getServletPath());
         mav.addObject("currentPage", currentPage.getCurrentPage());
@@ -109,8 +104,7 @@ public class UserExperiencesController {
 
         // Order By
         final OrderByModel[] orderByModels = OrderByModel.getProviderOrderByModel();
-        mav.addObject("orderBy", OrderByModel.OrderByAZ);
-        orderBy.ifPresent(orderByModel -> mav.addObject("orderBy", orderByModel));
+        mav.addObject("orderBy", orderBy.orElse(OrderByModel.OrderByAZ));
         mav.addObject("orderByModels", orderByModels);
 
         //Observable

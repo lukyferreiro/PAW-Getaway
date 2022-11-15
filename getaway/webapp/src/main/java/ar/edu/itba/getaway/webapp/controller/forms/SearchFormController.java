@@ -64,17 +64,10 @@ public class SearchFormController {
         final Page<ExperienceModel> currentPage = experienceService.listExperiencesSearch(searchForm.getQuery(), orderBy, pageNum, owner);
 
         final OrderByModel[] orderByModels = OrderByModel.getUserOrderByModel();
-        mav.addObject("orderBy", OrderByModel.OrderByAZ);
+        mav.addObject("orderBy",orderBy.orElse(OrderByModel.OrderByAZ));
         final List<ExperienceModel> experienceModels = currentPage.getContent();
 
-        if (query.isPresent()) {
-            request.setAttribute("query", query);
-            mav.addObject("query", query.get());
-        }
-        if (orderBy.isPresent()) {
-            request.setAttribute("orderBy", orderBy);
-            mav.addObject("orderBy", orderBy.get());
-        }
+        query.ifPresent(s -> mav.addObject("query", s));
 
         if (set.isPresent()) {
             mav.addObject("successFav", set.get());
@@ -95,24 +88,4 @@ public class SearchFormController {
 
         return mav;
     }
-
-//    @RequestMapping(value = "/search_result", method = {RequestMethod.POST})
-//    public ModelAndView searchByName(@Valid @ModelAttribute("searchForm") final SearchForm searchForm,
-//                                     final BindingResult errors,
-//                                     Principal principal,
-//                                     HttpServletRequest request) {
-//
-//        if (errors.hasErrors()) {
-//            LOGGER.debug("Error in the search input");
-//            return createSearchForm(searchForm,Optional.empty(),Optional.empty(),Optional.empty(),Optional.empty(),1,principal,request);
-//        }
-//
-//        LOGGER.debug("Endpoint POST /search_result");
-//        final ModelAndView mav = new ModelAndView("redirect:/search_result");
-//
-//        mav.addObject("query", searchForm.getQuery());
-//
-//        return mav;
-//    }
-
 }

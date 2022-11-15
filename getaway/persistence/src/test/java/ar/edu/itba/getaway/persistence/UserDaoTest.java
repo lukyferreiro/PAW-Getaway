@@ -177,10 +177,20 @@ public class UserDaoTest {
         assertEquals("uno@mail.com", user.get().getEmail());
         assertEquals(IMAGE, user.get().getProfileImage());
 
-        assertTrue(user.get().getRoles().contains(USER_MODEL));
-        assertTrue(user.get().getRoles().contains(NOT_VERIFIED_MODEL));
-        assertFalse(user.get().getRoles().contains(VERIFIED_MODEL));
-        assertFalse(user.get().getRoles().contains(PROVIDER_MODEL));
+        ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.get().getRoles());
+
+        assertTrue(arrayRoles.contains(USER_MODEL));
+        assertTrue(arrayRoles.contains(NOT_VERIFIED_MODEL));
+
+        List<ExperienceModel> favs = user.get().getFavExperiences();
+
+        assertTrue(favs.contains(DEFAULT_ADV));
+        assertTrue(favs.contains(DEFAULT_GAS));
+
+        List<ExperienceModel> viewed = user.get().getViewedExperiences();
+
+        assertTrue(viewed.contains(DEFAULT_ADV));
+        assertTrue(viewed.contains(DEFAULT_GAS));
     }
 
     @Test

@@ -41,10 +41,10 @@ public class CategoryDaoImpl implements CategoryDao {
         return query.getResultList().stream().findFirst();
     }
 
-    @Override
-    public int getCategoriesCount() {
-        LOGGER.debug("Get count of categories");
-        return em.createQuery("FROM CategoryModel", CategoryModel.class).getResultList().size();
-    }
+//    @Override
+//    public int getCategoriesCount() {
+//        LOGGER.debug("Get count of categories");
+//        return em.createQuery("FROM CategoryModel", CategoryModel.class).getResultList().size();
+//    }
 
 }

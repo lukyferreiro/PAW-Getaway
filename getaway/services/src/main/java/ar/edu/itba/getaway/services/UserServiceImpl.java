@@ -35,11 +35,11 @@ public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     private final Collection<Roles> DEFAULT_ROLES = Collections.unmodifiableCollection(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
-    @Override
-    public Optional<UserModel> getUserById(long id) {
-        LOGGER.debug("Retrieving user with id {}", id);
-        return userDao.getUserById(id);
-    }
+//    @Override
+//    public Optional<UserModel> getUserById(long id) {
+//        LOGGER.debug("Retrieving user with id {}", id);
+//        return userDao.getUserById(id);
+//    }
 
     @Override
     public Optional<UserModel> getUserByEmail(String email) {
