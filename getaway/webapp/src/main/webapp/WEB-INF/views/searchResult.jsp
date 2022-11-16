@@ -14,7 +14,7 @@
     <%@ include file="../components/navbar.jsp" %>
 
     <c:if test="${successFav}">
-        <div id="snackbar"><spring:message code="favExperience.success"/></div>
+        <div id="snackbar" style="left:37%;"><spring:message code="favExperience.success"/></div>
     </c:if>
 
     <c:choose>

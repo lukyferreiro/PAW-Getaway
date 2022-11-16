@@ -40,8 +40,8 @@
         <c:if test="${successReview}">
             <div id="snackbar"><spring:message code="reviewDetail.success"/></div>
         </c:if>
-        <c:if test="${successFav}">
-            <div id="snackbar"><spring:message code="favExperience.success"/></div>
+        <c:if test="${successFav}" >
+            <div id="snackbar" style="left:37%;"><spring:message code="favExperience.success"/></div>
         </c:if>
 
         <!-- --------------RESEÑAS-------------- -->

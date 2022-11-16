@@ -8,12 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
 
 import java.util.Locale;
 
@@ -141,6 +144,18 @@ public class ErrorsController {
         final String error = messageSource.getMessage("errors.BadRequest", null, locale);
         final Long code = Long.valueOf(HttpStatus.BAD_REQUEST.toString());
         final ModelAndView mav = new ModelAndView(ERROR_VIEW);
+        mav.addObject("description", error);
+        mav.addObject("code", code);
+        return mav;
+    }
+
+    @ResponseStatus(code = HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ModelAndView accessDenied() {
+        final Locale locale = LocaleContextHolder.getLocale();
+        final String error = messageSource.getMessage("errors.accessDenied", null, locale);
+        final Long code = Long.valueOf(HttpStatus.FORBIDDEN.toString());
+        final ModelAndView mav = new ModelAndView("errors");
         mav.addObject("description", error);
         mav.addObject("code", code);
         return mav;

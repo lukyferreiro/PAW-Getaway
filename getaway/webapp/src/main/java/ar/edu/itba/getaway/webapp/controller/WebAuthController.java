@@ -2,7 +2,6 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.getaway.interfaces.exceptions.AccessDeniedException;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.webapp.forms.*;
 import ar.edu.itba.getaway.interfaces.services.UserService;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -48,7 +48,6 @@ public class WebAuthController {
         final String error = messageSource.getMessage("errors.accessDenied", null, locale);
         final Long code = Long.valueOf(HttpStatus.FORBIDDEN.toString());
         final ModelAndView mav = new ModelAndView("errors");
-
         mav.addObject("description", error);
         mav.addObject("code", code);
         return mav;

@@ -16,7 +16,7 @@
     </jsp:include>
 
     <c:if test="${successFav}">
-        <div id="snackbar"><spring:message code="favExperience.success"/></div>
+        <div id="snackbar" style="left:37%;"><spring:message code="favExperience.success"/></div>
     </c:if>
 
     <div class="container-fluid p-0 mt-3 d-flex">

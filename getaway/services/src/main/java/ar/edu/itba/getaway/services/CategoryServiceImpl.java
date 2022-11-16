@@ -37,9 +37,4 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryDao.getCategoryByName(categoryName);
     }
 
-//    @Override
-//    public int getCategoriesCount() {
-//        LOGGER.debug("Retrieving cant of categories");
-//        return categoryDao.getCategoriesCount();
-//    }
 }

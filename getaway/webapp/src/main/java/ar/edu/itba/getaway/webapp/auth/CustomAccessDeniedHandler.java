@@ -40,6 +40,9 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             }
         }
 
+        System.out.println("------------------");
+        System.out.println("ACA LLEGUE 2222222");
+        System.out.println("------------------");
         response.sendRedirect(request.getContextPath() + "/access-denied");
     }
 
