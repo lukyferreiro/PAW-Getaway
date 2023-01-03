@@ -14,45 +14,25 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 @EnableTransactionManagement
 @EnableAsync
-@EnableWebMvc
 @ComponentScan({"ar.edu.itba.getaway.webapp.controller", "ar.edu.itba.getaway.services", "ar.edu.itba.getaway.persistence"})
 @Configuration
-public class WebConfig extends WebMvcConfigurerAdapter {
+public class WebConfig {
+
+    private static final int MAX_SIZE_PER_FILE = 10000000;
 
     @Bean(name = "appBaseUrl")
     public String appBaseUrl() {
 //        return "localhost";
-       return "pawserver.it.itba.edu.ar";
-    }
-
-    private static final int MAX_SIZE_PER_FILE = 10000000;
-
-    @Bean
-    public ViewResolver viewResolver() {
-        final InternalResourceViewResolver vr = new InternalResourceViewResolver();
-        vr.setViewClass(JstlView.class);
-        vr.setPrefix("/WEB-INF/views/");
-        vr.setSuffix(".jsp");
-        return vr;
-    }
-
-    @Override
-    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+        return "pawserver.it.itba.edu.ar";
     }
 
     @Bean
@@ -60,7 +40,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:i18n/messages");
         messageSource.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
-        messageSource.setCacheSeconds(5);
+        messageSource.setCacheSeconds((int) TimeUnit.SECONDS.toSeconds(5));
         return messageSource;
     }
 
@@ -93,10 +73,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         multipartResolver.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
         return multipartResolver;
     }
-
-    //-------------------------------------------
-    //----------Para la segunda entrega----------
-    //-------------------------------------------
 
     // Cambiamos el transaction manager por uno que entienda de JPA
     @Bean

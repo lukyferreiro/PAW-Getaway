@@ -17,9 +17,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.InputStreamReader;
@@ -71,6 +73,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().headers().cacheControl().disable()
                 .and().authorizeRequests()
                 //Session routes
                 .antMatchers("/login/**").anonymous()
@@ -123,23 +127,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/experiences/{experienceId:[0-9]+}/image/**").permitAll()
                 //else
                 .antMatchers("/**").permitAll()
-                .and().formLogin()
-                .loginPage("/login")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/", false) //Tras logearme me lleva a /
-                .failureUrl("/login?error=true")
-                .and().rememberMe()
-                .rememberMeParameter("rememberMe")
-                .userDetailsService(myUserDetailsService)
-                .key(FileCopyUtils.copyToString(new InputStreamReader(rememberMeKey.getInputStream())))
-                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                .and().logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
                 .and().exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler())
-//                    .accessDeniedPage("/")
+                    .accessDeniedHandler(accessDeniedHandler())
+                .and().addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .and().csrf().disable();
     }
 
