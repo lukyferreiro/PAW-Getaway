@@ -2,7 +2,7 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.getaway.webapp.dto.UserDto;
+import ar.edu.itba.getaway.webapp.dto.response.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
