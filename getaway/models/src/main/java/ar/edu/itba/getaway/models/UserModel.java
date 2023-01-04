@@ -23,7 +23,7 @@ public class UserModel {
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "imgId")
     private ImageModel profileImage;
 
@@ -77,47 +77,36 @@ public class UserModel {
     public ImageModel getProfileImage() {
         return profileImage;
     }
-
     public void setProfileImageId(ImageModel profileImage) {
         this.profileImage = profileImage;
     }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
-
     public String getSurname() {
         return surname;
     }
-
     public void setSurname(String surname) {
         this.surname = surname;
     }
-
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
-
     public long getUserId() {
         return userId;
     }
-
     public void setUserId(long userId) {
         this.userId = userId;
     }
@@ -126,17 +115,21 @@ public class UserModel {
     public Collection<RoleModel> getRoles() {
         return roles;
     }
-
     public void addRole(RoleModel role) {
         roles.add(role);
     }
-
     public void removeRole(RoleModel role) {
         roles.remove(role);
     }
-
     public boolean hasRole(String role) {
         return roles.stream().anyMatch(p -> p.getRoleName().name().equals(role));
+    }
+    public boolean isProvider() {
+        return roles.stream().anyMatch(p -> p.getRoleName().name().equals(Roles.PROVIDER.name()));
+    }
+
+    public boolean isVerified() {
+        return roles.stream().anyMatch(p -> p.getRoleName().name().equals(Roles.VERIFIED.name()));
     }
 
     // Favs methods
@@ -146,11 +139,9 @@ public class UserModel {
     public void addFav(ExperienceModel experience) {
         favExperiences.add(experience);
     }
-
     public void removeFav(ExperienceModel experience) {
         favExperiences.remove(experience);
     }
-
     public boolean isFav(ExperienceModel experience) {
         return favExperiences.contains(experience);
     }

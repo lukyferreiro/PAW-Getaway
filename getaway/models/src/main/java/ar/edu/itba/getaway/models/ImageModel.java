@@ -17,34 +17,42 @@ public class ImageModel {
     @Basic(fetch = FetchType.LAZY, optional = false)
     private byte[] image;
 
+    @Column(name = "imgMimeType", nullable = false)
+    private String mimeType;
+
     /* default */
     protected ImageModel() {
         // Just for Hibernate
     }
 
-    public ImageModel(byte[] image) {
+    public ImageModel(byte[] image, String mimeType) {
         this.image = image;
+        this.mimeType = mimeType;
     }
 
-    public ImageModel(long imageId, byte[] image) {
+    public ImageModel(long imageId, byte[] image, String mimeType) {
         this.image = image;
         this.imageId = imageId;
+        this.mimeType = mimeType;
     }
 
     public long getImageId() {
         return imageId;
     }
-
     public void setImageId(long imageId) {
         this.imageId = imageId;
     }
-
     public byte[] getImage() {
         return image;
     }
-
     public void setImage(byte[] image) {
         this.image = image;
+    }
+    public String getMimeType() {
+        return mimeType;
+    }
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 
     @Override
