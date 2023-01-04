@@ -13,7 +13,7 @@ public class ExperienceModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "experiences_experienceId_seq")
     @SequenceGenerator(sequenceName = "experiences_experienceId_seq", name = "experiences_experienceId_seq", allocationSize = 1)
     @Column(name = "experienceId")
-    private long experienceId;
+    private Long experienceId;
     @Column(name = "experienceName", nullable = false, unique = true)
     private String experienceName;
     @Column(name = "price", nullable = true)
@@ -78,7 +78,7 @@ public class ExperienceModel {
         this.views = views;
     }
 
-    public ExperienceModel(long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage, boolean observable, int views) {
+    public ExperienceModel(Long experienceId, String experienceName, String address, String description, String email, String siteUrl, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage, boolean observable, int views) {
         this.experienceId = experienceId;
         this.experienceName = experienceName;
         this.address = address;
@@ -94,11 +94,11 @@ public class ExperienceModel {
         this.views = views;
     }
 
-    public long getExperienceId() {
+    public Long getExperienceId() {
         return experienceId;
     }
 
-    public void setExperienceId(long experienceId) {
+    public void setExperienceId(Long experienceId) {
         this.experienceId = experienceId;
     }
 

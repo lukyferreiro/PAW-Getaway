@@ -39,7 +39,7 @@ public class MyUserDetailsService implements UserDetailsService {
         return new MyUserDetails(email, userModel.getPassword(), authorities);
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(Collection<Roles> roles) {
+    public static Collection<? extends GrantedAuthority> getAuthorities(Collection<Roles> roles) {
         return roles.stream().map((role) -> new SimpleGrantedAuthority("ROLE_" + role.name())).collect(Collectors.toList());
     }
 }

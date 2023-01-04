@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS images
 (
     imgId SERIAL NOT NULL,
     imageObject BYTEA,
+    imgMimeType TEXT,
     PRIMARY KEY (imgId)
 );
 
@@ -116,6 +117,16 @@ CREATE TABLE IF NOT EXISTS passwordResetToken
     FOREIGN KEY (passTokenUserId) REFERENCES USERS (userId) ON DELETE CASCADE,
     PRIMARY KEY (passTokenId)
 );
+
+CREATE TABLE IF NOT EXISTS sessionRefreshToken
+(
+    sessionTokenId SERIAL,
+    sessionTokenUserId INT NOT NULL,
+    sessionToken TEXT,
+    sessionTokenExpirationDate TIMESTAMP NOT NULL,
+    FOREIGN KEY (sessionTokenUserId) REFERENCES USERS (userId) ON DELETE CASCADE,
+    PRIMARY KEY (sessionTokenId)
+    );
 
 CREATE TABLE IF NOT EXISTS favuserexperience(
     userId INT NOT NULL,
