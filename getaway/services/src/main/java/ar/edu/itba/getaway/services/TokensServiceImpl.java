@@ -1,6 +1,8 @@
 package ar.edu.itba.getaway.services;
 
+import ar.edu.itba.getaway.interfaces.persistence.SessionRefreshTokenDao;
 import ar.edu.itba.getaway.models.PasswordResetToken;
+import ar.edu.itba.getaway.models.SessionRefreshToken;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.VerificationToken;
 import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
@@ -13,14 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class TokensServiceImpl implements TokensService {
@@ -29,6 +29,8 @@ public class TokensServiceImpl implements TokensService {
     private VerificationTokenDao verificationTokenDao;
     @Autowired
     private PasswordResetTokenDao passwordResetTokenDao;
+    @Autowired
+    private SessionRefreshTokenDao sessionRefreshTokenDao;
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -51,6 +53,14 @@ public class TokensServiceImpl implements TokensService {
         String token = UUID.randomUUID().toString();
         LOGGER.debug("Created password token {}", token);
         return passwordResetTokenDao.createToken(user, token, PasswordResetToken.generateTokenExpirationDate());
+    }
+
+    @Override
+    public SessionRefreshToken generateSessionRefreshToken(UserModel user) {
+        return sessionRefreshTokenDao.createToken(user,
+                SessionRefreshToken.generateSessionToken(),
+                SessionRefreshToken.generateTokenExpirationDate()
+        );
     }
 
     @Override
@@ -80,4 +90,22 @@ public class TokensServiceImpl implements TokensService {
             LOGGER.warn("Error, mail to reset password not sent");
         }
     }
+
+    @Transactional
+    @Override
+    public SessionRefreshToken getSessionRefreshToken(UserModel user) {
+        LOGGER.debug("Retrieving session refresh token for user");
+        final Optional<SessionRefreshToken> tokenOpt = sessionRefreshTokenDao.getTokenByUser(user);
+
+        if (tokenOpt.isPresent()) {
+            final SessionRefreshToken sessionRefreshToken = tokenOpt.get();
+            if (!sessionRefreshToken.isValid()) {
+                sessionRefreshToken.refresh();
+            }
+            return sessionRefreshToken;
+        }
+
+        return generateSessionRefreshToken(user);
+    }
+
 }

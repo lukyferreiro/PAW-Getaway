@@ -1,43 +1,54 @@
 package ar.edu.itba.getaway.models;
 
 import javax.persistence.*;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.Objects;
 
 @Entity
-@Table(name = "verificationToken")
-public class VerificationToken {
+@Table(name = "sessionRefreshToken")
+public class SessionRefreshToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "verificationToken_verifId_seq")
-    @SequenceGenerator(sequenceName = "verificationToken_verifId_seq", name = "verificationToken_verifId_seq", allocationSize = 1)
-    @Column(name = "verifId")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sessionRefreshToken_sessionTokenId_seq")
+    @SequenceGenerator(sequenceName = "sessionRefreshToken_sessionTokenId_seq", name = "sessionRefreshToken_sessionTokenId_seq", allocationSize = 1)
+    @Column(name = "sessionTokenId")
     private long id;
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "verifUserId")
+    @JoinColumn(name = "sessionTokenUserId")
     private UserModel user;
-    @Column(name = "verifToken", nullable = false)
+    @Column(name = "sessionToken", nullable = false)
     private String value;
-    @Column(name = "verifExpirationDate", nullable = false)
+    @Column(name = "sessionTokenExpirationDate", nullable = false)
     private LocalDateTime expirationDate;
-    private static final Integer TOKEN_DURATION_DAYS = 1;
+
+    private static final Integer TOKEN_DURATION_DAYS = 5;
+    private static final SecureRandom secureRandom = new SecureRandom();
+    private static final Base64.Encoder base64Encoder = Base64.getEncoder();
 
     public static LocalDateTime generateTokenExpirationDate() {
         return LocalDateTime.now().plusDays(TOKEN_DURATION_DAYS);
     }
 
+    public static String generateSessionToken() {
+        final byte[] bytes = new byte[64];
+        secureRandom.nextBytes(bytes);
+        return base64Encoder.encodeToString(bytes);
+    }
+
     /* default */
-    protected VerificationToken() {
+    protected SessionRefreshToken() {
         // Just for Hibernate
     }
 
-    public VerificationToken(String value, UserModel user, LocalDateTime expirationDate) {
+    public SessionRefreshToken(String value, UserModel user, LocalDateTime expirationDate) {
         this.value = value;
         this.user = user;
         this.expirationDate = expirationDate;
     }
 
-    public VerificationToken(long id, String value, UserModel user, LocalDateTime expirationDate) {
+    public SessionRefreshToken(long id, String value, UserModel user, LocalDateTime expirationDate) {
         this.id = id;
         this.value = value;
         this.user = user;
@@ -85,16 +96,25 @@ public class VerificationToken {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof VerificationToken)) {
+        if (!(o instanceof SessionRefreshToken)) {
             return false;
         }
-        VerificationToken verificationToken = (VerificationToken) o;
-        return this.getId() == verificationToken.getId();
+        SessionRefreshToken sessionRefreshToken = (SessionRefreshToken) o;
+        return this.getId() == sessionRefreshToken.getId();
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void refresh() {
+        setValue(generateSessionToken());
+        resetExpirationDate();
+    }
+
+    public void resetExpirationDate() {
+        expirationDate = generateTokenExpirationDate();
     }
 
 }

@@ -13,7 +13,7 @@ public class PasswordResetToken {
     @SequenceGenerator(sequenceName = "passwordResetToken_passTokenId_seq", name = "passwordResetToken_passTokenId_seq", allocationSize = 1)
     @Column(name = "passTokenId")
     private long id;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "passTokenUserId")
     private UserModel user;
     @Column(name = "passToken", nullable = false)
