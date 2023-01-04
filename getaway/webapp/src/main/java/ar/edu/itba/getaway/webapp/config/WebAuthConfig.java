@@ -1,8 +1,6 @@
 package ar.edu.itba.getaway.webapp.config;
 
-import ar.edu.itba.getaway.webapp.auth.AntMatcherVoter;
-import ar.edu.itba.getaway.webapp.auth.CustomAccessDeniedHandler;
-import ar.edu.itba.getaway.webapp.auth.MyUserDetailsService;
+import ar.edu.itba.getaway.webapp.auth.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,12 +18,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.util.FileCopyUtils;
 
-import java.io.InputStreamReader;
-import java.util.concurrent.TimeUnit;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -35,13 +32,25 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MyUserDetailsService myUserDetailsService;
+    @Autowired
+    private AuthFilter authFilter;
 
-    @Value("classpath:auth/auth_key.pem")
-    private Resource rememberMeKey;
+//    @Value("classpath:auth/auth_key.pem")
+//    private Resource rememberMeKey;
+
+    @Bean
+    public JwtUtil jwtUtil(@Value("classpath:auth/auth_key.pem") Resource authKey) throws IOException {
+        return new JwtUtil(authKey);
+    }
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         return new CustomAccessDeniedHandler();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new CustomAuthenticationErrorHandler();
     }
 
     @Bean
@@ -74,63 +83,80 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint())
+                .accessDeniedHandler(accessDeniedHandler())
                 .and().headers().cacheControl().disable()
                 .and().authorizeRequests()
-                //Session routes
-                .antMatchers("/login/**").anonymous()
-                .antMatchers("/logout/**").authenticated()
-                .antMatchers(HttpMethod.GET, "/register/**").anonymous()
-                .antMatchers(HttpMethod.POST, "/register/**").anonymous()
-                .antMatchers("/access-denied/**").permitAll()
-                //Verify Account
-                .antMatchers("/pleaseVerify").hasRole("NOT_VERIFIED")
-                .antMatchers("/user/verifyAccount/result/unsuccessfully/**").hasRole("NOT_VERIFIED")
-                .antMatchers("/user/verifyAccount/status/resend/**").hasRole("NOT_VERIFIED")
-                .antMatchers("/user/verifyAccount/status/send/**").hasRole("NOT_VERIFIED")
-                .antMatchers("/user/verifyAccount/result/successfully/**").hasRole("VERIFIED")
-                .antMatchers("/user/verifyAccount/{token}/**").permitAll()
-                //Reset Password
-                .antMatchers(HttpMethod.GET, "/user/resetPasswordRequest/**").anonymous()
-                .antMatchers(HttpMethod.POST, "/user/resetPasswordRequest/**").anonymous()
-                .antMatchers("/user/resetPassword/{token}/**").anonymous()
-                .antMatchers(HttpMethod.GET, "/user/resetPassword/**").denyAll()
-                .antMatchers(HttpMethod.POST, "/user/resetPassword/**").anonymous()
-                //User
-                .antMatchers(HttpMethod.GET, "/search_result/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/search_result/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/user/profile/edit/**").hasRole("VERIFIED")
-                .antMatchers(HttpMethod.POST, "/user/profile/edit/**").hasRole("VERIFIED")
-                .antMatchers(HttpMethod.GET, "/user/profile/**").authenticated()
-                .antMatchers(HttpMethod.GET, "/user/experiences/**").hasRole("PROVIDER")
-                .antMatchers(HttpMethod.GET, "/user/favourites/**").authenticated()
-                .antMatchers(HttpMethod.GET, "/user/reviews/**").hasRole("VERIFIED")
-                .antMatchers("/user/profileImage/{imageId:[0-9]+}/**").permitAll()
-//              ------------------------------SE USA @PreAuthorize-------------------------------
-//                .antMatchers(HttpMethod.GET,"/user/experiences/delete/{experienceId:[0-9]+").access("...")
-//                .antMatchers(HttpMethod.POST,"/user/experiences/delete/{experienceId:[0-9]+").access("...")
-//                .antMatchers(HttpMethod.GET,"/user/experiences/edit/{experienceId:[0-9]+").access("...")
-//                .antMatchers(HttpMethod.POST,"/user/experiences/edit/{experienceId:[0-9]+").access("...")
-//                .antMatchers(HttpMethod.GET,"/user/reviews/delete/{reviewId:[0-9]+").access("...")
-//                .antMatchers(HttpMethod.POST,"/user/reviews/delete/{reviewId:[0-9]+").access("...")
-//                .antMatchers(HttpMethod.GET,"/user/reviews/edit/{reviewId:[0-9]+").access("...")
-//                .antMatchers(HttpMethod.POST,"/user/reviews/edit/{reviewId:[0-9]+").access("...")
-                //Experiences
-                .antMatchers(HttpMethod.GET, "/create_experience/**").hasRole("VERIFIED")
-                .antMatchers(HttpMethod.POST, "/create_experience/**").hasRole("VERIFIED")
-                //Reviews
-                .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review/**").hasRole("VERIFIED")
-                .antMatchers(HttpMethod.POST, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review/**").hasRole("VERIFIED")
+                //------------------- /users -------------------
+
+
+                //------------------- /experiences -------------------
+
+
+                //------------------- /reviews -------------------
+
+
+                //------------------- /location -------------------
+
+
+                //------------------- Others --------------------
+                .antMatchers("api/**").permitAll()
+
+                //-------------------Session routes-------------------
+//                .antMatchers("/login/**").anonymous()
+//                .antMatchers("/logout/**").authenticated()
+//                .antMatchers(HttpMethod.GET, "/register/**").anonymous()
+//                .antMatchers(HttpMethod.POST, "/register/**").anonymous()
+//                .antMatchers("/access-denied/**").permitAll()
+                //-------------------Verify Account-------------------
+//                .antMatchers("/pleaseVerify").hasRole("NOT_VERIFIED")
+//                .antMatchers("/user/verifyAccount/result/unsuccessfully/**").hasRole("NOT_VERIFIED")
+//                .antMatchers("/user/verifyAccount/status/resend/**").hasRole("NOT_VERIFIED")
+//                .antMatchers("/user/verifyAccount/status/send/**").hasRole("NOT_VERIFIED")
+//                .antMatchers("/user/verifyAccount/result/successfully/**").hasRole("VERIFIED")
+//                .antMatchers("/user/verifyAccount/{token}/**").permitAll()
+                //-------------------Reset Password-------------------
+//                .antMatchers(HttpMethod.GET, "/user/resetPasswordRequest/**").anonymous()
+//                .antMatchers(HttpMethod.POST, "/user/resetPasswordRequest/**").anonymous()
+//                .antMatchers("/user/resetPassword/{token}/**").anonymous()
+//                .antMatchers(HttpMethod.GET, "/user/resetPassword/**").denyAll()
+//                .antMatchers(HttpMethod.POST, "/user/resetPassword/**").anonymous()
+                //-------------------User-------------------
+//                .antMatchers(HttpMethod.GET, "/search_result/**").permitAll()
+//                .antMatchers(HttpMethod.POST, "/search_result/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/user/profile/edit/**").hasRole("VERIFIED")
+//                .antMatchers(HttpMethod.POST, "/user/profile/edit/**").hasRole("VERIFIED")
+//                .antMatchers(HttpMethod.GET, "/user/profile/**").authenticated()
+//                .antMatchers(HttpMethod.GET, "/user/experiences/**").hasRole("PROVIDER")
+//                .antMatchers(HttpMethod.GET, "/user/favourites/**").authenticated()
+//                .antMatchers(HttpMethod.GET, "/user/reviews/**").hasRole("VERIFIED")
+//                .antMatchers("/user/profileImage/{imageId:[0-9]+}/**").permitAll()
+                //------------------------------SE USA @PreAuthorize-------------------------------
+                //                .antMatchers(HttpMethod.GET,"/user/experiences/delete/{experienceId:[0-9]+").access("...")
+                //                .antMatchers(HttpMethod.POST,"/user/experiences/delete/{experienceId:[0-9]+").access("...")
+                //                .antMatchers(HttpMethod.GET,"/user/experiences/edit/{experienceId:[0-9]+").access("...")
+                //                .antMatchers(HttpMethod.POST,"/user/experiences/edit/{experienceId:[0-9]+").access("...")
+                //                .antMatchers(HttpMethod.GET,"/user/reviews/delete/{reviewId:[0-9]+").access("...")
+                //                .antMatchers(HttpMethod.POST,"/user/reviews/delete/{reviewId:[0-9]+").access("...")
+                //                .antMatchers(HttpMethod.GET,"/user/reviews/edit/{reviewId:[0-9]+").access("...")
+                //                .antMatchers(HttpMethod.POST,"/user/reviews/edit/{reviewId:[0-9]+").access("...")
+                //-------------------Experiences-------------------
+//                .antMatchers(HttpMethod.GET, "/create_experience/**").hasRole("VERIFIED")
+//                .antMatchers(HttpMethod.POST, "/create_experience/**").hasRole("VERIFIED")
+                //-------------------Reviews-------------------
+//                .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review/**").hasRole("VERIFIED")
+//                .antMatchers(HttpMethod.POST, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review/**").hasRole("VERIFIED")
                 //PermitAll Experiences
-                .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/experiences/{experienceId:[0-9]+}/image/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
+//                .antMatchers(HttpMethod.POST, "/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/experiences/{experienceId:[0-9]+}/image/**").permitAll()
                 //else
-                .antMatchers("/**").permitAll()
-                .and().exceptionHandling()
-                    .accessDeniedHandler(accessDeniedHandler())
-                .and().addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
-                .and().csrf().disable();
+//                .antMatchers("/**").permitAll()
+                .and().csrf().disable()
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+
     }
 
 }
