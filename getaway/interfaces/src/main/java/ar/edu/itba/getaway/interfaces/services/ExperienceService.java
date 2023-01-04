@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.interfaces.services;
 
+import ar.edu.itba.getaway.interfaces.exceptions.DuplicateExperienceException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ExperienceService {
-    ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, byte[] image);
+    ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, byte[] image) throws DuplicateExperienceException;
 
     void updateExperience(ExperienceModel experienceModel, byte[] image);
 
