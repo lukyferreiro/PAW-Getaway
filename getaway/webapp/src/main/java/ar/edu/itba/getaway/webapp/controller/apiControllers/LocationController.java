@@ -34,7 +34,7 @@ public class LocationController {
     @Path("/country")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCountries() {
-        LOGGER.info("Called /locations/states GET");
+        LOGGER.info("Called /locations/contry GET");
 
         Collection<CountryModel> countries = locationService.getCountries();
         Collection<CountryDto> countryDtos = CountryDto.mapCountryToDto(countries, uriInfo);
@@ -46,7 +46,7 @@ public class LocationController {
     @Path("/country/{id}/cities")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCountryCities(@PathParam("id") final long id) {
-        LOGGER.info("Called /locations/states/{}/cities GET", id);
+        LOGGER.info("Called /locations/country/{}/cities GET", id);
 
         CountryModel country = locationService.getCountryById(id).orElseThrow(CountryNotFoundException::new);
         Collection<CityModel> cities = locationService.getCitiesByCountry(country);

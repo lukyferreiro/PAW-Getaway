@@ -12,8 +12,8 @@ public class CityDto {
     private long id;
     private String name;
 
-    public static Collection<CityDto> mapCityToDto(Collection<CityModel> states) {
-        return states.stream().map(CityDto::new).collect(Collectors.toList());
+    public static Collection<CityDto> mapCityToDto(Collection<CityModel> cities) {
+        return cities.stream().map(CityDto::new).collect(Collectors.toList());
     }
 
     public CityDto() {
