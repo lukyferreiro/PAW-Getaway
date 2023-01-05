@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller.apiControllers;
 
+import ar.edu.itba.getaway.interfaces.exceptions.ContentExpectedException;
 import ar.edu.itba.getaway.interfaces.exceptions.DuplicateExperienceException;
 import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
@@ -19,7 +20,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
 
-@Path("/experience")
+@Path("/experiences")
 @Component
 public class ExperienceController {
     @Autowired
@@ -33,7 +34,7 @@ public class ExperienceController {
     @Path("/")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperiences() {
-        LOGGER.info("Called /experience GET");
+        LOGGER.info("Called /experiences GET");
 
         Collection<ExperienceModel> experiences = experienceService.getExperiences();
         Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences, uriInfo);
@@ -55,7 +56,7 @@ public class ExperienceController {
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response registerExperience(@Valid final ExperienceDto experienceDto) throws DuplicateExperienceException {
-        LOGGER.info("Called /experience/ POST");
+        LOGGER.info("Called /experiences/ POST");
         if (experienceDto == null) {
             throw new ContentExpectedException();
         }
@@ -75,7 +76,7 @@ public class ExperienceController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response updateExperience(@Valid ExperienceDto experienceDto, @PathParam("id") final long id){
-        LOGGER.info("Called /user/ PUT");
+        LOGGER.info("Called /experiences/{} PUT", id);
 
         if (experienceDto == null) {
             throw new ContentExpectedException();

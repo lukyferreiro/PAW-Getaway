@@ -33,7 +33,6 @@ public class UserDto {
 
     public UserDto(UserModel user, UriInfo uriInfo) {
         final UriBuilder uriBuilder = getUserUriBuilder(user, uriInfo);
-
         this.id = user.getUserId();
         this.name = user.getName();
         this.surname = user.getSurname();
@@ -41,11 +40,11 @@ public class UserDto {
         this.favsCount = user.getFavExperiences().size();
         this.selfUrl = uriBuilder.clone().build().toString();
         if (user.getProfileImage() != null) {
-            this.profileImageUrl = uriBuilder.clone().path("profileImage").build().toString();
+            this.profileImageUrl = uriBuilder.clone().path("profileImage").build().toString();  // /user/{id}/profileImage
         } else {
             this.profileImageUrl = "";
         }
-        this.experiencesUrl = uriBuilder.clone().path("experiences").build().toString();
+        this.experiencesUrl = uriBuilder.clone().path("experiences").build().toString();    // /user/{id}/experiences
     }
 
     public long getId() {

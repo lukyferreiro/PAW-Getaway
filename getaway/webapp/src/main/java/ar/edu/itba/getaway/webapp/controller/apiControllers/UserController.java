@@ -13,7 +13,6 @@ import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.webapp.auth.JwtUtil;
 import ar.edu.itba.getaway.webapp.dto.request.*;
 import ar.edu.itba.getaway.webapp.dto.response.UserDto;
-import ar.edu.itba.getaway.webapp.dto.validations.ImageTypeConstraint;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -92,7 +91,7 @@ public class UserController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response updateUser(@Valid UserInfoDto userInfoDto, @PathParam("id") final long id) {
-        LOGGER.info("Called /user/ PUT");
+        LOGGER.info("Called /users/ PUT");
 
         if (userInfoDto == null) {
             throw new ContentExpectedException();
@@ -210,8 +209,7 @@ public class UserController {
     @Path("/{id}/profileImage")
     public Response updateUserProfileImage(@Context final HttpServletRequest request,
                                            @NotNull(message = "{NotEmpty.profileImage.image}")
-                                           @ImageTypeConstraint(contentType = {"image/png", "image/jpeg", "image/gif"},
-                                                   message = "..")  //TODO poner un mensaje
+                                           //TODO poner un mensaje
                                            @FormDataParam("profileImage") FormDataBodyPart profileImage,
                                            @PathParam("id") final long id) throws IOException {
 

@@ -41,9 +41,9 @@ public class ReviewDto {
         this.reviewDate = review.getReviewDate();
         this.user = new UserDto(review.getUser(), uriInfo);
         this.selfUrl = getReviewUriBuilder(review, uriInfo).build().toString();
-        this.experienceUrl = uriInfo.getBaseUriBuilder().path("jobs")
+        this.experienceUrl = uriInfo.getBaseUriBuilder().path("experience")
                 .path(review.getExperience().getExperienceId().toString())
-                .build().toString();
+                .build().toString();    // /experience/{id}
     }
 
 }

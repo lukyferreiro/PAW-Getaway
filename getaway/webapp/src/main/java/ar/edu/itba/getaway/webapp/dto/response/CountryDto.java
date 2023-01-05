@@ -8,9 +8,8 @@ import java.util.stream.Collectors;
 
 public class CountryDto {
     private long id;
-    private String citiesUrl;
-
     private String name;
+    private String citiesUrl;
 
     public static Collection<CountryDto> mapCountryToDto(Collection<CountryModel> countries, UriInfo uriInfo) {
         return countries.stream().map(country -> new CountryDto(country, uriInfo)).collect(Collectors.toList());
@@ -29,7 +28,7 @@ public class CountryDto {
                 .path("country")
                 .path(String.valueOf(country.getCountryId()))
                 .path("cities")
-                .build().toString();
+                .build().toString();    // /location/country/{id}/cities
     }
 
     public long getId() {
