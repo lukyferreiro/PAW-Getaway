@@ -3,12 +3,11 @@ package ar.edu.itba.getaway.webapp.controller.apiControllers;
 import ar.edu.itba.getaway.interfaces.exceptions.*;
 import ar.edu.itba.getaway.interfaces.services.ExperienceService;
 import ar.edu.itba.getaway.interfaces.services.ImageService;
+import ar.edu.itba.getaway.interfaces.services.ReviewService;
 import ar.edu.itba.getaway.interfaces.services.UserService;
-import ar.edu.itba.getaway.models.CityModel;
-import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.NewImageModel;
-import ar.edu.itba.getaway.models.UserModel;
+import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
+import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.dto.validations.ImageTypeConstraint;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -37,6 +36,8 @@ public class ExperienceController {
     @Autowired
     private ImageService imageService;
     @Autowired
+    private ReviewService reviewService;
+    @Autowired
     private int maxRequestSize;
     @Context
     private SecurityContext securityContext;
@@ -55,7 +56,8 @@ public class ExperienceController {
         Collection<ExperienceModel> experiences = experienceService.getExperiences();
         Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences, uriInfo);
 
-        return Response.ok(new GenericEntity<Collection<ExperienceDto>>(experienceDto) {}).build();
+        return Response.ok(new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
+        }).build();
     }
 
     // Endpoint para obtener las experiencias de una categoria
@@ -66,6 +68,10 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperiencesFromCategory(@PathParam("category") final String category) {
         //TODO
+        LOGGER.info("Called /experiences/{} GET", category);
+
+//        Collection<ExperienceModel> experiences = experienceService.getExperiencesListByCategories(userService.get)
+
         return null;
     }
 
@@ -74,7 +80,8 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response registerExperience(@Context final HttpServletRequest request,
                                        @Valid final ExperienceDto experienceDto,
-                                       @ImageTypeConstraint(contentType = {"image/png", "image/jpeg"}, message = "...") //TODO poner texto
+                                       @ImageTypeConstraint(contentType = {"image/png", "image/jpeg"}, message = "...")
+                                       //TODO poner texto
                                        @FormDataParam("images") FormDataBodyPart img) throws DuplicateExperienceException {
         LOGGER.info("Called /experiences/ POST");
         if (experienceDto == null) {
@@ -133,8 +140,9 @@ public class ExperienceController {
     public Response updateExperience(@Context final HttpServletRequest request,
                                      @Valid ExperienceDto experienceDto,
                                      @PathParam("id") final long id,
-                                     @ImageTypeConstraint(contentType = {"image/png", "image/jpeg"}, message = "...")  //TODO poner mensaje
-                                     @FormDataParam("images") FormDataBodyPart img){
+                                     @ImageTypeConstraint(contentType = {"image/png", "image/jpeg"}, message = "...")
+                                     //TODO poner mensaje
+                                     @FormDataParam("images") FormDataBodyPart img) {
         LOGGER.info("Called /experiences/{} PUT", id);
 
         if (request.getContentLength() == -1 || request.getContentLength() > maxRequestSize) {
@@ -185,8 +193,13 @@ public class ExperienceController {
     @Path("/{id}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperienceReviews(@PathParam("id") final long id) {
-        //TODO
-        return null;
+        //TODO chequear si esta bien lo hice yo (gordo)
+
+        LOGGER.info("Called /experience/category/{} GET", id);
+        final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
+        final ReviewDto reviewDto = new ReviewDto(reviewModel, uriInfo);
+        return Response.ok(reviewDto).build();
+
     }
 
     // Endpoint para crear una reseña en la experiencia
@@ -194,7 +207,10 @@ public class ExperienceController {
     @Path("/{id}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response createExperienceReview(@PathParam("id") final long id) {
-        //TODO
+        //TODO idem el de arriba , faltan parametros?
+        LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
+        final ReviewModel reviewModel = reviewService.createReview()
+
         return null;
     }
 }
