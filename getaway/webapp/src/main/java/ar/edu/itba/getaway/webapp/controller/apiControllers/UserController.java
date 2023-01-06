@@ -4,12 +4,11 @@ import ar.edu.itba.getaway.interfaces.exceptions.ContentExpectedException;
 import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.interfaces.exceptions.MaxUploadSizeRequestException;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.interfaces.services.ExperienceService;
 import ar.edu.itba.getaway.interfaces.services.TokensService;
 import ar.edu.itba.getaway.interfaces.services.UserService;
-import ar.edu.itba.getaway.models.ImageModel;
-import ar.edu.itba.getaway.models.NewImageModel;
-import ar.edu.itba.getaway.models.UserInfo;
-import ar.edu.itba.getaway.models.UserModel;
+import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.auth.JwtUtil;
 import ar.edu.itba.getaway.webapp.dto.request.*;
 import ar.edu.itba.getaway.webapp.dto.response.UserDto;
@@ -40,6 +39,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private TokensService tokensService;
+    @Autowired
+    private ExperienceService experienceService;
 
     @Autowired
     private int maxRequestSize;
@@ -232,11 +233,15 @@ public class UserController {
     @GET
     @Path("/{id}/experiences")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getUserExperiences() {
+    public Response getUserExperiences(@PathParam("id") final long id,@Valid final UserDto registerDto) {
+        LOGGER.info("Called /{}/experiences GET", id);
+       // final Page<ExperienceModel> experienceModel = experienceService.listExperiencesListByUser()
         return null;
     }
 
     //TODO ver si hace falta un endpoint para obtener los favs del usuario
+    //TODO no se como pasarle el order como parametro para retornar la lista de experiencias, el resto los tengo mas
+    // o menos pensado
 
 
     private void assureUserResourceCorrelation(UserModel user, long userId) {

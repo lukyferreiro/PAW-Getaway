@@ -6,8 +6,10 @@ import ar.edu.itba.getaway.interfaces.services.ImageService;
 import ar.edu.itba.getaway.interfaces.services.ReviewService;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
+import ar.edu.itba.getaway.webapp.dto.response.UserDto;
 import ar.edu.itba.getaway.webapp.dto.validations.ImageTypeConstraint;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -198,6 +200,7 @@ public class ExperienceController {
         LOGGER.info("Called /experience/category/{} GET", id);
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
         final ReviewDto reviewDto = new ReviewDto(reviewModel, uriInfo);
+        LOGGER.info("Return review with id {}", id);
         return Response.ok(reviewDto).build();
 
     }
@@ -206,11 +209,11 @@ public class ExperienceController {
     @POST
     @Path("/{id}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createExperienceReview(@PathParam("id") final long id) {
+    public Response createExperienceReview(@PathParam("id") final long id, @Valid NewReviewDto newReviewDto, @Valid ReviewDto reviewDto, @Valid UserDto userDto) {
         //TODO idem el de arriba , faltan parametros?
         LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
-        final ReviewModel reviewModel = reviewService.createReview()
+        final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new), reviewDto.getReviewDate(), userService.getUserById(userDto.getId()).orElseThrow(UserNotFoundException::new));
+        return Response.created(ReviewDto.getReviewUriBuilder(reviewModel, uriInfo).build()).build();
 
-        return null;
     }
 }

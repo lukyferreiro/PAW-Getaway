@@ -46,4 +46,15 @@ public class ReviewDto {
                 .build().toString();    // /experience/{id}
     }
 
+    public LocalDate getReviewDate() {
+        return reviewDate;
+    }
+
+    public UserDto getUser() {
+        return user;
+    }
+
+    public long getScore() {
+        return score;
+    }
 }
