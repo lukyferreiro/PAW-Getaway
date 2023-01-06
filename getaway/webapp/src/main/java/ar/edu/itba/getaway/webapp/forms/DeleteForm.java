@@ -1,4 +1,4 @@
-package ar.edu.itba.getaway.webapp.forms;
-
-public class DeleteForm {
-}
+//package ar.edu.itba.getaway.webapp.forms;
+//
+//public class DeleteForm {
+//}
