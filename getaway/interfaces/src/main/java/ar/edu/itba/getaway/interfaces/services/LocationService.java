@@ -9,9 +9,15 @@ import java.util.Optional;
 public interface LocationService {
     List<CityModel> listAllCities();
 
+    List<CountryModel> listAllCountries();
+
     Optional<CityModel> getCityById(long cityId);
+
+    Optional<CountryModel> getCountryById(long countryId);
 
     Optional<CityModel> getCityByName(String cityName);
 
     Optional<CountryModel> getCountryByName();
+
+    List<CityModel> getCitiesByCountry(CountryModel country);
 }

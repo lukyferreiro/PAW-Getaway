@@ -1,11 +1,9 @@
 package ar.edu.itba.getaway.webapp.controller.apiControllers;
 
 import ar.edu.itba.getaway.interfaces.exceptions.*;
-import ar.edu.itba.getaway.interfaces.services.ExperienceService;
-import ar.edu.itba.getaway.interfaces.services.ImageService;
-import ar.edu.itba.getaway.interfaces.services.ReviewService;
-import ar.edu.itba.getaway.interfaces.services.UserService;
+import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
@@ -26,13 +24,17 @@ import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 
 @Path("/experiences")
 @Component
 public class ExperienceController {
     @Autowired
     private ExperienceService experienceService;
+    @Autowired
+    private CategoryService categoryService;
+    @Autowired
+    private LocationService locationService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -48,19 +50,18 @@ public class ExperienceController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
 
-    // Endpoint para obtener todas las experiencias
-    @GET
-    @Path("/")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getExperiences( /*TODO recibir los filtos como @QueryParam */) {
-        LOGGER.info("Called /experiences GET");
-
-        Collection<ExperienceModel> experiences = experienceService.getExperiences();
-        Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences, uriInfo);
-
-        return Response.ok(new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
-        }).build();
-    }
+//    @GET
+//    @Path("/")
+//    @Produces(value = {MediaType.APPLICATION_JSON})
+//    public Response getExperiencesFiltered( /*TODO recibir los filtos como @QueryParam */) {
+//        LOGGER.info("Called /experiences GET");
+//
+//        Collection<ExperienceModel> experiences = experienceService.getExperiences();
+//        Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences, uriInfo);
+//
+//        return Response.ok(new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
+//        }).build();
+//    }
 
     // Endpoint para obtener las experiencias de una categoria
     // TODO capaz este endpoint no haga falta, y se pueda filtar directamente por la
@@ -68,12 +69,47 @@ public class ExperienceController {
     @GET
     @Path("/{category}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getExperiencesFromCategory(@PathParam("category") final String category) {
+    public Response getExperiencesFromCategory(@PathParam("category") final String category,
+                                               @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
+                                               @QueryParam("price") @DefaultValue("-1") Double maxPrice,
+                                               @QueryParam("score") @DefaultValue("5") Long maxScore,
+                                               @QueryParam("city") Long cityId,
+                                               @QueryParam("page") @DefaultValue("0") int page,
+                                               @QueryParam("pageSize") @DefaultValue("6") int pageSize
+                                               ) {
         //TODO
         LOGGER.info("Called /experiences/{} GET", category);
 
-//        Collection<ExperienceModel> experiences = experienceService.getExperiencesListByCategories(userService.get)
+        CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
+        CityModel cityModel = locationService.getCityById(cityId).orElse(null);
+        if(maxPrice == -1){
+            maxPrice = experienceService.getMaxPriceByCategory(categoryModel).orElse(0.0);
+        }
+        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        Page<ExperienceModel> experiences = experienceService.listExperiencesByFilter(categoryModel, maxPrice, maxScore,cityModel, Optional.of(order), page,  user);
 
+        if (experiences == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        final Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);
+
+        final UriBuilder uriBuilder = uriInfo
+                .getAbsolutePathBuilder()
+                .queryParam("category", category)
+                .queryParam("order", order)
+                .queryParam("price", maxPrice)
+                .queryParam("score", maxScore)
+                .queryParam("page", page)
+                .queryParam("pageSize", pageSize);
+
+
+            if (cityModel != null) {
+                uriBuilder.queryParam("city", cityId);
+            }
+
+
+//        return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
+//        }, uriBuilder);
         return null;
     }
 
@@ -112,7 +148,7 @@ public class ExperienceController {
             experience = experienceService.createExperience(experienceDto.getName(),
                     experienceDto.getAddress(), experienceDto.getDescription(),
                     experienceDto.getContactEmail(), experienceDto.getSelfUrl(),
-                    experienceDto.getPrice(), experienceDto.getCity(),
+                    experienceDto.getPrice(), locationService.getCityById(experienceDto.getCity().getId()).orElse(null),
                     experienceDto.getCategory(), user,
                     imageToUpload.getImage());
         } catch (DuplicateExperienceException e) {
@@ -217,3 +253,4 @@ public class ExperienceController {
 
     }
 }
+

@@ -28,9 +28,21 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    public List<CountryModel> listAllCountries() {
+        LOGGER.debug("Retrieving all countries");
+        return locationDao.listAllCountries();
+    }
+
+    @Override
     public Optional<CityModel> getCityById(long cityId) {
         LOGGER.debug("Retrieving city with id {}", cityId);
         return locationDao.getCityById(cityId);
+    }
+
+    @Override
+    public Optional<CountryModel> getCountryById(long countryId) {
+        LOGGER.debug("Retrieving country with id {}", countryId);
+        return locationDao.getCountryById(countryId);
     }
 
     @Override
@@ -43,5 +55,11 @@ public class LocationServiceImpl implements LocationService {
     public Optional<CountryModel> getCountryByName() {
         LOGGER.debug("Retrieving country with name {}", ARGENTINA);
         return locationDao.getCountryByName(ARGENTINA);
+    }
+
+    @Override
+    public List<CityModel> getCitiesByCountry(CountryModel country) {
+        LOGGER.debug("Retrieving cities from country with name {}", country);
+        return locationDao.getCitiesByCountry(country);
     }
 }

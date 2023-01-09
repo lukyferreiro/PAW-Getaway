@@ -36,7 +36,7 @@ public class LocationController {
     public Response getCountries() {
         LOGGER.info("Called /locations/contry GET");
 
-        Collection<CountryModel> countries = locationService.getCountries();
+        Collection<CountryModel> countries = locationService.listAllCountries();
         Collection<CountryDto> countryDtos = CountryDto.mapCountryToDto(countries, uriInfo);
 
         return Response.ok(new GenericEntity<Collection<CountryDto>>(countryDtos) {}).build();
