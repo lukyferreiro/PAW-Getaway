@@ -52,22 +52,7 @@ public class ExperienceController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
 
-//    @GET
-//    @Path("/")
-//    @Produces(value = {MediaType.APPLICATION_JSON})
-//    public Response getExperiencesFiltered( /*TODO recibir los filtos como @QueryParam */) {
-//        LOGGER.info("Called /experiences GET");
-//
-//        Collection<ExperienceModel> experiences = experienceService.getExperiences();
-//        Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences, uriInfo);
-//
-//        return Response.ok(new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
-//        }).build();
-//    }
-
     // Endpoint para obtener las experiencias de una categoria
-    // TODO capaz este endpoint no haga falta, y se pueda filtar directamente por la
-    // categoria en el endpoint anterior @QueryParam("category")
     @GET
     @Path("/{category}")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -79,7 +64,6 @@ public class ExperienceController {
                                                @QueryParam("page") @DefaultValue("0") int page,
                                                @QueryParam("pageSize") @DefaultValue("6") int pageSize
                                                ) {
-        //TODO
         LOGGER.info("Called /experiences/{} GET", category);
 
         CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
@@ -149,7 +133,7 @@ public class ExperienceController {
             experience = experienceService.createExperience(experienceDto.getName(),
                     experienceDto.getAddress(), experienceDto.getDescription(),
                     experienceDto.getContactEmail(), experienceDto.getSelfUrl(),
-                    experienceDto.getPrice(), locationService.getCityById(experienceDto.getCity().getId()).orElse(null),
+                    experienceDto.getPrice(), locationService.getCityById(experienceDto.getCity().getId()).orElseThrow(CityNotFoundException::new),
                     experienceDto.getCategory(), user,
                     imageToUpload.getImage());
         } catch (DuplicateExperienceException e) {
