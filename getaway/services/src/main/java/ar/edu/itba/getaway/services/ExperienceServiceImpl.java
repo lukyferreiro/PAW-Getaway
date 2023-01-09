@@ -144,6 +144,8 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     private List<ExperienceModel> getFavExperiences(UserModel user, int page, Optional<OrderByModel> orderByModel) {
         List<ExperienceModel> auxList = new ArrayList<>();
+
+        //TODO: make this a method in experiencedao
         List<ExperienceModel> userFavs = user.getFavExperiences();
         for (ExperienceModel exp : userFavs) {
             if (exp.getObservable()) {

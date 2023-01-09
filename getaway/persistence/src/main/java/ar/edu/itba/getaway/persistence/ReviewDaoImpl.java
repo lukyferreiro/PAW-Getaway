@@ -47,6 +47,7 @@ public class ReviewDaoImpl implements ReviewDao {
         return Optional.ofNullable(em.find(ReviewModel.class, reviewId));
     }
 
+    //TODO: change pagination methods
     @Override
     public List<ReviewModel> getReviewsByUser(UserModel user, int page, int pageSize) {
         final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel r WHERE user = :user AND r.experience.observable = true", ReviewModel.class);
@@ -55,14 +56,12 @@ public class ReviewDaoImpl implements ReviewDao {
         query.setMaxResults(pageSize);
         return query.getResultList();
     }
-
     @Override
     public long getReviewByUserCount(UserModel user) {
         final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.user) FROM ReviewModel r WHERE r.user = :user AND r.experience.observable = true", Long.class);
         query.setParameter("user", user);
         return query.getSingleResult();
     }
-
     @Override
     public List<ReviewModel> getReviewsByExperience(ExperienceModel experience, int page, int pageSize) {
         final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE experience = :experience", ReviewModel.class);
@@ -71,7 +70,6 @@ public class ReviewDaoImpl implements ReviewDao {
         query.setMaxResults(pageSize);
         return query.getResultList();
     }
-
     @Override
     public long getReviewByExperienceCount(ExperienceModel experience) {
         final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.experience) FROM ReviewModel r WHERE r.experience = :experience", Long.class);
