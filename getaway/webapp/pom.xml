@@ -128,9 +128,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
         </dependency>
-
-
-
         <!-- Para el FINAL -->
         <!-- JERSEY -->
         <dependency>
@@ -173,13 +170,12 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
         </dependency>
-        <!--TODO ver si va esto-->
-<!--        <dependency>-->
-<!--            <groupId>ar.edu.itba.getaway</groupId>-->
-<!--            <artifactId>frontend</artifactId>-->
-<!--            <version>${project.parent.version}</version>-->
-<!--            <type>pom</type>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>ar.edu.itba.getaway</groupId>
+            <artifactId>frontend</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
 
     <build>
