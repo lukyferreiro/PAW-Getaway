@@ -10,9 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class ReviewDaoImpl implements ReviewDao {
@@ -49,33 +51,82 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public List<ReviewModel> getReviewsByUser(UserModel user, int page, int pageSize) {
-        final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel r WHERE user = :user AND r.experience.observable = true", ReviewModel.class);
-        query.setParameter("user", user);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        return query.getResultList();
+        LOGGER.debug("List reviews of user with id {}", user.getUserId());
+
+        Query queryForIds = em.createNativeQuery(
+                "SELECT reviewId \n" +
+                        "FROM reviews NATURAL JOIN experiences \n" +
+                        "WHERE observable = true AND userid = :userId"
+        );
+
+        queryForIds.setParameter("userId", user.getUserId());
+
+        List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
+
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<ReviewModel> queryForReviews;
+        if (idList.size() > 0) {
+            LOGGER.debug("Selecting experiences contained in ");
+            queryForReviews = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList) ", ReviewModel.class);
+            queryForReviews.setParameter("idList", idList);
+            queryForReviews.setMaxResults(pageSize);
+            queryForReviews.setFirstResult((page - 1) * pageSize);
+            return queryForReviews.getResultList();
+        }
+
+        LOGGER.debug("User with id {} has no reviews yet", user.getUserId());
+        return new ArrayList<>();
     }
 
     @Override
     public long getReviewByUserCount(UserModel user) {
-        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.user) FROM ReviewModel r WHERE r.user = :user AND r.experience.observable = true", Long.class);
-        query.setParameter("user", user);
-        return query.getSingleResult();
+        Query query = em.createNativeQuery(
+                "SELECT COUNT(experienceid) \n" +
+                        "FROM favuserexperience NATURAL JOIN experiences\n" +
+                        "WHERE observable = true AND userid = :userId"
+        );
+
+        query.setParameter("userId", user.getUserId());
+        return (Integer) query.getSingleResult();
     }
 
     @Override
     public List<ReviewModel> getReviewsByExperience(ExperienceModel experience, int page, int pageSize) {
-        final TypedQuery<ReviewModel> query = em.createQuery("FROM ReviewModel WHERE experience = :experience", ReviewModel.class);
-        query.setParameter("experience", experience);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        return query.getResultList();
-    }
+            LOGGER.debug("List reviews of user with id {}", experience.getExperienceId());
 
+            Query queryForIds = em.createNativeQuery(
+                    "SELECT reviewId \n" +
+                            "FROM reviews\n" +
+                            "WHERE observable = true AND experienceId = :experienceId"
+            );
+
+            queryForIds.setParameter("experienceId", experience.getExperienceId());
+
+            List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
+
+            List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+            final TypedQuery<ReviewModel> queryForReviews;
+            if (idList.size() > 0) {
+                LOGGER.debug("Selecting experiences contained in ");
+                queryForReviews = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList) ", ReviewModel.class);
+                queryForReviews.setParameter("idList", idList);
+                queryForReviews.setMaxResults(pageSize);
+                queryForReviews.setFirstResult((page - 1) * pageSize);
+                return queryForReviews.getResultList();
+            }
+
+            LOGGER.debug("User with id {} has no reviews yet", experience.getExperienceId());
+            return new ArrayList<>();
+    }
     @Override
     public long getReviewByExperienceCount(ExperienceModel experience) {
-        final TypedQuery<Long> query = em.createQuery("SELECT COUNT(r.experience) FROM ReviewModel r WHERE r.experience = :experience", Long.class);
-        query.setParameter("experience", experience);
-        return query.getSingleResult();
+        Query query = em.createNativeQuery(
+                "SELECT COUNT(reviewId) \n" +
+                        "FROM reviews\n" +
+                        "WHERE observable = true AND experienceId = :experienceId"
+        );
+
+        query.setParameter("experienceId", experience.getExperienceId());
+        return (Integer) query.getSingleResult();
     }
 }

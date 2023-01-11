@@ -26,6 +26,8 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Optional;
 
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+
 @Path("/experiences")
 @Component
 public class ExperienceController {
@@ -50,22 +52,7 @@ public class ExperienceController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
 
-//    @GET
-//    @Path("/")
-//    @Produces(value = {MediaType.APPLICATION_JSON})
-//    public Response getExperiencesFiltered( /*TODO recibir los filtos como @QueryParam */) {
-//        LOGGER.info("Called /experiences GET");
-//
-//        Collection<ExperienceModel> experiences = experienceService.getExperiences();
-//        Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences, uriInfo);
-//
-//        return Response.ok(new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
-//        }).build();
-//    }
-
     // Endpoint para obtener las experiencias de una categoria
-    // TODO capaz este endpoint no haga falta, y se pueda filtar directamente por la
-    // categoria en el endpoint anterior @QueryParam("category")
     @GET
     @Path("/{category}")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -77,7 +64,6 @@ public class ExperienceController {
                                                @QueryParam("page") @DefaultValue("0") int page,
                                                @QueryParam("pageSize") @DefaultValue("6") int pageSize
                                                ) {
-        //TODO
         LOGGER.info("Called /experiences/{} GET", category);
 
         CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
@@ -108,9 +94,8 @@ public class ExperienceController {
             }
 
 
-//        return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
-//        }, uriBuilder);
-        return null;
+        return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
+        }, uriBuilder);
     }
 
     // Endpoint para crear una experiencia
@@ -148,7 +133,7 @@ public class ExperienceController {
             experience = experienceService.createExperience(experienceDto.getName(),
                     experienceDto.getAddress(), experienceDto.getDescription(),
                     experienceDto.getContactEmail(), experienceDto.getSelfUrl(),
-                    experienceDto.getPrice(), locationService.getCityById(experienceDto.getCity().getId()).orElse(null),
+                    experienceDto.getPrice(), locationService.getCityById(experienceDto.getCity().getId()).orElseThrow(CityNotFoundException::new),
                     experienceDto.getCategory(), user,
                     imageToUpload.getImage());
         } catch (DuplicateExperienceException e) {
@@ -251,6 +236,49 @@ public class ExperienceController {
         final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new), reviewDto.getReviewDate(), userService.getUserById(userDto.getId()).orElseThrow(UserNotFoundException::new));
         return Response.created(ReviewDto.getReviewUriBuilder(reviewModel, uriInfo).build()).build();
 
+    }
+
+
+    private <T, K> Response createPaginationResponse(Page<T> results,
+                                                     GenericEntity<K> resultsDto,
+                                                     UriBuilder uriBuilder) {
+        if (results.getContent().isEmpty()) {
+            if (results.getCurrentPage() == 0) {
+                return Response.noContent().build();
+            } else {
+                return Response.status(NOT_FOUND).build();
+            }
+        }
+
+        final Response.ResponseBuilder response = Response.ok(resultsDto);
+
+        addPaginationLinks(response, results, uriBuilder);
+
+        return response.build();
+    }
+
+    private <T> void addPaginationLinks(Response.ResponseBuilder responseBuilder,
+                                        Page<T> results,
+                                        UriBuilder uriBuilder) {
+
+        final int page = results.getCurrentPage();
+
+        final int first = 0;
+        final int last = results.getMaxPage();
+        final int prev = page - 1;
+        final int next = page + 1;
+
+        responseBuilder.link(uriBuilder.clone().queryParam("page", first).build(), "first");
+
+        responseBuilder.link(uriBuilder.clone().queryParam("page", last).build(), "last");
+
+        if (page != first) {
+            responseBuilder.link(uriBuilder.clone().queryParam("page", prev).build(), "prev");
+        }
+
+        if (page != last) {
+            responseBuilder.link(uriBuilder.clone().queryParam("page", next).build(), "next");
+        }
     }
 }
 

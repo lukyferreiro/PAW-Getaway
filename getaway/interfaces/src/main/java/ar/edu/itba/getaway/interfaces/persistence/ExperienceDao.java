@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.interfaces.persistence;
 
 import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.models.pagination.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,11 @@ public interface ExperienceDao {
     List<ExperienceModel> listExperiencesSearchByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize);
 
     long getCountExperiencesByUser(String name, UserModel user);
+
+    List<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page, int pageSize);
+
+    long getCountListExperiencesFavsByUser(UserModel user);
+
 
     //Recommendation methods
     List<ExperienceModel> getRecommendedByFavs(UserModel user, int maxResults);
