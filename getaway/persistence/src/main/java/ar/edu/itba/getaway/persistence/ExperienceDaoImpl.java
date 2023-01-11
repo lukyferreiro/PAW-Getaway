@@ -237,6 +237,48 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
+    public List<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page, int pageSize){
+        LOGGER.debug("List experiences of user with id {}", user.getUserId());
+        String orderQuery = getOrderQuery(order);
+
+        Query queryForIds = em.createNativeQuery(
+                "SELECT experienceId \n" +
+                        "FROM favuserexperience NATURAL JOIN experiences \n" +
+                        "WHERE observable = true AND userid = :userId"
+        );
+
+        queryForIds.setParameter("userId", user.getUserId());
+
+        List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
+
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<ExperienceModel> queryForExperiences;
+        if (idList.size() > 0) {
+            LOGGER.debug("Selecting experiences contained in ");
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList) " + orderQuery, ExperienceModel.class);
+            queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setMaxResults(pageSize);
+            queryForExperiences.setFirstResult((page - 1) * pageSize);
+            return queryForExperiences.getResultList();
+        }
+
+        LOGGER.debug("User with id {} has no observable faved experiences", user.getUserId());
+        return new ArrayList<>();
+    }
+
+    @Override
+    public long getCountListExperiencesFavsByUser(UserModel user) {
+        Query query = em.createNativeQuery(
+                "SELECT COUNT(experienceid) \n" +
+                        "FROM favuserexperience NATURAL JOIN experiences \n" +
+                        "WHERE observable = true AND userid = :userId"
+        );
+
+        query.setParameter("userId", user.getUserId());
+        return (Integer) query.getSingleResult();
+    }
+
+    @Override
     public List<ExperienceModel> getRecommendedByFavs(UserModel user, int maxResults) {
         LOGGER.debug("Getting possible ids of experiences to recommend based on user {} favourites", user.getUserId());
         final Query queryForIds = em.createNativeQuery(

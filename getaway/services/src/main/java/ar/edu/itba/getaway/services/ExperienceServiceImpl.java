@@ -142,46 +142,12 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceDao.getMaxPriceByCategory(category);
     }
 
-    private List<ExperienceModel> getFavExperiences(UserModel user, int page, Optional<OrderByModel> orderByModel) {
-        List<ExperienceModel> auxList = new ArrayList<>();
-
-        //TODO: make this a method in experiencedao
-        List<ExperienceModel> userFavs = user.getFavExperiences();
-        for (ExperienceModel exp : userFavs) {
-            if (exp.getObservable()) {
-                auxList.add(exp);
-            }
-        }
-        if (orderByModel.isPresent()) {
-            auxList.sort(orderByModel.get().getComparator());
-        } else {
-            auxList.sort(OrderByModel.OrderByAZ.getComparator());
-        }
-
-        int fromIndex = (page - 1) * RESULT_PAGE_SIZE;
-        int toIndex = Math.min((fromIndex + RESULT_PAGE_SIZE), auxList.size());
-        return auxList.subList(fromIndex, toIndex);
-    }
-
-    private long getFavCount(UserModel user) {
-        List<ExperienceModel> favList = user.getFavExperiences();
-        long toRet = 0;
-
-        for (ExperienceModel exp : favList) {
-            if (exp.getObservable()) {
-                toRet++;
-            }
-        }
-
-        return toRet;
-    }
-
     @Override
     public Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page) {
         LOGGER.debug("Requested page {}", page);
         int totalPages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
-        final long total = getFavCount(user);
+        final long total = experienceDao.getCountListExperiencesFavsByUser(user);
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -195,7 +161,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             } else if (page < 0) {
                 page = 1;
             }
-            experienceModelList = getFavExperiences(user, page, order);
+            experienceModelList = experienceDao.listExperiencesFavsByUser(user, order, page, RESULT_PAGE_SIZE);
         } else {
             totalPages = 1;
         }

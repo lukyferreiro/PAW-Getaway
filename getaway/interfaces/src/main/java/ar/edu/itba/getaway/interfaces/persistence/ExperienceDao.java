@@ -33,10 +33,9 @@ public interface ExperienceDao {
 
     long getCountExperiencesByUser(String name, UserModel user);
 
-    //TODO: implement
     List<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page, int pageSize);
 
-    long getCountListExperiencesFavsByUser(UserModel user, int page, int pageSize);
+    long getCountListExperiencesFavsByUser(UserModel user);
 
 
     //Recommendation methods
