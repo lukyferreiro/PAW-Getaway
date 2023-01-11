@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,22 +23,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @ComponentScan("ar.edu.itba.getaway.webapp.auth")
+@PropertySource(value= {"classpath:application.properties"})
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MyUserDetailsService myUserDetailsService;
     @Autowired
     private AuthFilter authFilter;
-
-//    @Value("classpath:auth/auth_key.pem")
-//    private Resource rememberMeKey;
 
     @Bean
     public JwtUtil jwtUtil(@Value("classpath:auth/auth_key.pem") Resource authKey) throws IOException {
@@ -74,34 +80,56 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Collections.singletonList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+        configuration.setExposedHeaders(Arrays.asList("x-auth-token", "authorization", "X-Total-Pages", "Content-Disposition"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     @Override
     public void configure(final WebSecurity web) {
-        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/403");
+        web.ignoring().antMatchers("/", "*.css", "/*.js", "/favicon.ico", "/manifest.json");
     }
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
+        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+        filter.setEncoding("UTF-8");
+        filter.setForceEncoding(true);
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint())
-                .accessDeniedHandler(accessDeniedHandler())
+                    .authenticationEntryPoint(authenticationEntryPoint())
+                    .accessDeniedHandler(accessDeniedHandler())
                 .and().headers().cacheControl().disable()
                 .and().authorizeRequests()
                 //------------------- /users -------------------
-
-
+                    .antMatchers(HttpMethod.POST, "/api/users").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/users/{id}").anonymous()
+                    .antMatchers(HttpMethod.PUT, "/api/users/{id}").access("@antMatcherVoter.userEditHimself(authentication, #id)")
+                    .antMatchers(HttpMethod.GET, "/api/users/{id}/profileImage").anonymous()
+                    .antMatchers(HttpMethod.PUT, "/api/users/{id}/profileImage").access("@antMatcherVoter.userEditHimself(authentication, #id)")
+                    .antMatchers(HttpMethod.GET, "/api/users/{id}/experiences").anonymous()
+                    .antMatchers(HttpMethod.PUT, "/api/users/emailVerification").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/users/emailVerification").anonymous()
+                    .antMatchers(HttpMethod.PUT, "/api/users/passwordReset").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/users/passwordReset").anonymous()
                 //------------------- /experiences -------------------
-
+                    //TODO
 
                 //------------------- /reviews -------------------
-
-
+                    .antMatchers(HttpMethod.GET, "/api/reviews/{id}").anonymous()
                 //------------------- /location -------------------
-
-
+                    .antMatchers(HttpMethod.GET, "/api/location/country").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/location/country/{id}/cities").anonymous()
                 //------------------- Others --------------------
-                .antMatchers("api/**").permitAll()
+                    .antMatchers("/**").permitAll()
 
                 //-------------------Session routes-------------------
 //                .antMatchers("/login/**").anonymous()

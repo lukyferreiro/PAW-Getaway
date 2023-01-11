@@ -1,10 +1,12 @@
 package ar.edu.itba.getaway.webapp.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -17,6 +19,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -27,13 +31,16 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class WebConfig {
 
-    private static final int MAX_SIZE_PER_FILE = 10000000;
+//    private static final Integer MAX_SIZE_PER_FILE = 10000000;
+    private static final Integer MAX_REQUEST_SIZE = 3500000;
 
-    @Bean(name = "appBaseUrl")
-    public String appBaseUrl() {
-//        return "localhost";
-        return "pawserver.it.itba.edu.ar";
+    private static final boolean DEV_BUILD = false;
+    private static boolean isOnDevBuild() {
+        return DEV_BUILD;
     }
+
+    @Autowired
+    Environment environment;
 
     @Bean
     public MessageSource messageSource() {
@@ -41,6 +48,7 @@ public class WebConfig {
         messageSource.setBasename("classpath:i18n/messages");
         messageSource.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
         messageSource.setCacheSeconds((int) TimeUnit.SECONDS.toSeconds(5));
+        messageSource.setFallbackToSystemLocale(false);
         return messageSource;
     }
 
@@ -58,20 +66,21 @@ public class WebConfig {
 //        ds.setUsername("adrzztklademib");
 //        ds.setPassword("580c8ba69151e9ba288d107d1b28f9dfc3706838eccbfb4d4d9ca1cde2f6f86e");
         //Usuario PAW
-        ds.setUrl("jdbc:postgresql://10.16.1.110/paw-2022b-1");
-        ds.setUsername("paw-2022b-1");
-        ds.setPassword("qo16kZtyI");
+//        ds.setUrl("jdbc:postgresql://10.16.1.110/paw-2022b-1");
+//        ds.setUsername("paw-2022b-1");
+//        ds.setPassword("qo16kZtyI");
+
+        if (isOnDevBuild()) {
+            ds.setUrl(environment.getRequiredProperty("db.dev.url"));
+            ds.setUsername(environment.getRequiredProperty("db.dev.username"));
+            ds.setPassword(environment.getRequiredProperty("db.dev.password"));
+        } else {
+            ds.setUrl(environment.getRequiredProperty("db.prod.url"));
+            ds.setUsername(environment.getRequiredProperty("db.prod.username"));
+            ds.setPassword(environment.getRequiredProperty("db.prod.password"));
+        }
 
         return ds;
-    }
-
-    @Bean(name = "multipartResolver")
-    public CommonsMultipartResolver multipartResolver() {
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSizePerFile(MAX_SIZE_PER_FILE);
-        multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE * 6);
-        multipartResolver.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
-        return multipartResolver;
     }
 
     // Cambiamos el transaction manager por uno que entienda de JPA
@@ -96,6 +105,37 @@ public class WebConfig {
         properties.setProperty("format_sql", "true");
         factoryBean.setJpaProperties(properties);
         return factoryBean;
+    }
+
+//    @Bean(name = "multipartResolver")
+//    public CommonsMultipartResolver multipartResolver() {
+//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+//        multipartResolver.setMaxUploadSizePerFile(MAX_SIZE_PER_FILE);
+//        multipartResolver.setMaxUploadSize(MAX_SIZE_PER_FILE * 6);
+//        multipartResolver.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
+//        return multipartResolver;
+//    }
+
+    @Bean(name = "maxRequestSize")
+    public Integer maxRequestSize() {
+        return MAX_REQUEST_SIZE;
+    }
+
+//    @Bean(name = "appBaseUrl")
+//    public String appBaseUrl() {
+////        return "localhost";
+//        return "pawserver.it.itba.edu.ar";
+//    }
+
+    @Bean(name = "appBaseUrl")
+    public URL appBaseUrl() throws MalformedURLException {
+        if (isOnDevBuild()) {
+            return new URL(environment.getRequiredProperty("app.prod.protocol"), environment.getRequiredProperty("app.dev.host"),
+                    Integer.parseInt(environment.getRequiredProperty("app.dev.port")), environment.getRequiredProperty("app.dev.webContext"));
+        } else {
+            return new URL(environment.getRequiredProperty("app.prod.protocol"), environment.getRequiredProperty("app.prod.host"),
+                    Integer.parseInt(environment.getRequiredProperty("app.prod.port")), environment.getRequiredProperty("app.prod.webContext"));
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
 import ar.edu.itba.getaway.interfaces.exceptions.ReviewNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.ExperienceService;
 import ar.edu.itba.getaway.interfaces.services.ReviewService;
+import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.UserModel;
@@ -20,6 +21,8 @@ public class AntMatcherVoter {
     private ExperienceService experienceService;
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private UserService userService;
 
     public boolean canEditExperienceById(Authentication authentication, long experienceId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
@@ -47,5 +50,9 @@ public class AntMatcherVoter {
         final ReviewModel reviewModel = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
         final Optional<UserModel> userModel = Optional.of(reviewModel.getUser());
         return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
+    }
+
+    public boolean userEditHimself(Authentication authentication, long userId) {
+        //TODO
     }
 }

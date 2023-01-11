@@ -224,6 +224,7 @@ public class UserController {
         LOGGER.info("Called /users/{}/profileImage PUT", id);
 
         InputStream in = profileImage.getEntityAs(InputStream.class);
+        //TODO
         userService.updateProfileImage(new NewImageModel(StreamUtils.copyToByteArray(in), profileImage.getMediaType().toString()), user);
 
         return Response.ok().build();
@@ -235,7 +236,8 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserExperiences(@PathParam("id") final long id,@Valid final UserDto registerDto) {
         LOGGER.info("Called /{}/experiences GET", id);
-       // final Page<ExperienceModel> experienceModel = experienceService.listExperiencesListByUser()
+        // final Page<ExperienceModel> experienceModel = experienceService.listExperiencesListByUser()
+        //TODO
         return null;
     }
 
