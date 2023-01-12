@@ -14,6 +14,7 @@ public interface UserService {
     Optional<UserModel> getUserByEmail(String email);
 
     UserModel getUserByExperience(ExperienceModel experience);
+
     Optional<UserModel> getUserBySessionRefreshToken(String token);
 
     Optional<UserModel> verifyAccount(String token);
@@ -27,6 +28,8 @@ public interface UserService {
     Optional<UserModel> updatePassword(String token, String password);
 
     void updateUserInfo(UserModel userModel, UserInfo userInfo);
+
+    void updateUserImage(UserModel userModel, ImageModel imageModel);
 
     void addRole(UserModel user, Roles newRole);
 

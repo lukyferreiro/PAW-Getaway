@@ -206,6 +206,23 @@ public class UserController {
     }
 
     //Endpoint para editar la imagen de perfil del usuario
+
+
+    //    @PUT
+//    @Path("/{userId}/image")
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
+//    @Produces("application/vnd.campus.api.v1+json")
+//    public Response putUserProfileImage(@PathParam("userId") Long userId,
+//                                        @FormDataParam("file") InputStream fileStream,
+//                                        @FormDataParam("file") FormDataContentDisposition fileMetadata) throws IOException {
+//        Optional<byte[]> image = userService.getProfileImage(userId);
+//        if(!image.isPresent()) {
+//            userService.updateProfileImage(userId, IOUtils.toByteArray(fileStream));
+//            return Response.created(uriInfo.getAbsolutePath()).build();
+//        }
+//        userService.updateProfileImage(userId, IOUtils.toByteArray(fileStream));
+//        return Response.ok().build();
+//    }
     @PUT
     @Path("/{id}/profileImage")
     public Response updateUserProfileImage(@Context final HttpServletRequest request,
@@ -225,8 +242,9 @@ public class UserController {
 
         InputStream in = profileImage.getEntityAs(InputStream.class);
         //TODO
-        userService.updateProfileImage(new NewImageModel(StreamUtils.copyToByteArray(in), profileImage.getMediaType().toString()), user);
+        //userService.updateProfileImage(new NewImageModel(StreamUtils.copyToByteArray(in), profileImage.getMediaType().toString()), user);
 
+        userService.updateUserImage(user, new ImageModel(StreamUtils.copyToByteArray(in), profileImage.getMediaType().toString()));
         return Response.ok().build();
     }
 
@@ -234,7 +252,7 @@ public class UserController {
     @GET
     @Path("/{id}/experiences")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getUserExperiences(@PathParam("id") final long id,@Valid final UserDto registerDto) {
+    public Response getUserExperiences(@PathParam("id") final long id, @Valid final UserDto registerDto) {
         LOGGER.info("Called /{}/experiences GET", id);
         // final Page<ExperienceModel> experienceModel = experienceService.listExperiencesListByUser()
         //TODO

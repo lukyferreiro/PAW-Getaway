@@ -21,5 +21,7 @@ public interface UserDao {
 
     Optional<UserModel> updateUserInfo(UserModel user, UserInfo userInfo);
 
+    Optional<UserModel> updateUserImage(UserModel user, ImageModel imageModel);
+
     Optional<UserModel> addRole(UserModel user, Roles newRole);
 }

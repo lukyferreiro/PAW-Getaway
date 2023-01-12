@@ -161,6 +161,13 @@ public class UserServiceImpl implements UserService {
         userDao.updateUserInfo(user, userInfo);
     }
 
+    @Transactional
+    @Override
+    public void updateUserImage(UserModel user, ImageModel imageModel) {
+        LOGGER.debug("Updating user image for user {}", user.getUserId());
+        userDao.updateUserImage(user, imageModel);
+    }
+
     @Override
     public void addRole(UserModel user, Roles newRole) {
         LOGGER.debug("Adding role {} to user with id {}", newRole.name(), user.getUserId());
