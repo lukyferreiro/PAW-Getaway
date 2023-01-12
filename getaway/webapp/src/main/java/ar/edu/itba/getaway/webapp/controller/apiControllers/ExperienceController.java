@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -63,16 +64,16 @@ public class ExperienceController {
                                                @QueryParam("city") Long cityId,
                                                @QueryParam("page") @DefaultValue("0") int page,
                                                @QueryParam("pageSize") @DefaultValue("6") int pageSize
-                                               ) {
+    ) {
         LOGGER.info("Called /experiences/{} GET", category);
 
         CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
         CityModel cityModel = locationService.getCityById(cityId).orElse(null);
-        if(maxPrice == -1){
+        if (maxPrice == -1) {
             maxPrice = experienceService.getMaxPriceByCategory(categoryModel).orElse(0.0);
         }
         final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-        Page<ExperienceModel> experiences = experienceService.listExperiencesByFilter(categoryModel, maxPrice, maxScore,cityModel, Optional.of(order), page,  user);
+        Page<ExperienceModel> experiences = experienceService.listExperiencesByFilter(categoryModel, maxPrice, maxScore, cityModel, Optional.of(order), page, user);
 
         if (experiences == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -89,9 +90,9 @@ public class ExperienceController {
                 .queryParam("pageSize", pageSize);
 
 
-            if (cityModel != null) {
-                uriBuilder.queryParam("city", cityId);
-            }
+        if (cityModel != null) {
+            uriBuilder.queryParam("city", cityId);
+        }
 
 
         return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
@@ -207,8 +208,15 @@ public class ExperienceController {
     @Path("/{id}/image")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperienceImage(@PathParam("id") final long id) {
-        //TODO
-        return null;
+
+        final ImageModel imageModel = imageService.getImgById(id).orElseThrow(ImageNotFoundException::new);
+
+        if (imageModel.getImage() != null) {
+            Response.ResponseBuilder response = Response.ok(new ByteArrayInputStream(imageModel.getImage()));
+            return response.build();
+        }
+        return Response.noContent().build();
+
     }
 
     // Endpoint para obtener la reseñas de una experiencia
