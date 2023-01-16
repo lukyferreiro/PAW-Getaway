@@ -136,7 +136,7 @@ public class ExperienceController {
                     experienceDto.getContactEmail(), experienceDto.getSelfUrl(),
                     experienceDto.getPrice(), locationService.getCityById(experienceDto.getCity().getId()).orElseThrow(CityNotFoundException::new),
                     experienceDto.getCategory(), user,
-                    imageToUpload.getImage());
+                    imageToUpload.getImage(), imageToUpload.getMimeType());
         } catch (DuplicateExperienceException e) {
             LOGGER.warn("Error in experienceDto ExperienceForm, there is already an experience with this id");
             throw new DuplicateExperienceException();
@@ -198,7 +198,7 @@ public class ExperienceController {
             }
         }
 
-        experienceService.updateExperience(experience, imageToUpload.getImage());
+        experienceService.updateExperience(experience, imageToUpload.getImage(), imageToUpload.getMimeType());
 
         return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
     }

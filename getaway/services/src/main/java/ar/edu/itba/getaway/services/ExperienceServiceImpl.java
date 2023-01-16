@@ -39,9 +39,9 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     @Transactional
-    public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, byte[] image) {
+    public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, byte[] image, String mimeType) {
         LOGGER.debug("Creating experience with name {}", name);
-        final ImageModel experienceImage = imageService.createImg(image);
+        final ImageModel experienceImage = imageService.createImg(image, mimeType);
         final ExperienceModel experienceModel = experienceDao.createExperience(name, address, description, email, url, price, city, category, user, experienceImage);
         if (!user.hasRole(Roles.PROVIDER.name())) {
             LOGGER.debug("User gains role provider when they creates an experience for first time");
@@ -52,10 +52,10 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Transactional
     @Override
-    public void updateExperience(ExperienceModel experienceModel, byte[] image) {
+    public void updateExperience(ExperienceModel experienceModel, byte[] image, String mimeType) {
         LOGGER.debug("Updating experience with id {}", experienceModel.getExperienceId());
         experienceDao.updateExperience(experienceModel);
-        imageService.updateImg(image, experienceModel.getExperienceImage());
+        imageService.updateImg(image, mimeType, experienceModel.getExperienceImage());
         LOGGER.debug("Experience {} updated", experienceModel.getExperienceId());
     }
 

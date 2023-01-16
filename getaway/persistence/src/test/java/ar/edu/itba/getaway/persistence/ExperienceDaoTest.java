@@ -22,6 +22,8 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.*;
 
+//TODO: fix count java lang type, fix search by name, change double dao calls in recommendation tests, add getfav tests
+
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -36,8 +38,11 @@ public class ExperienceDaoTest {
     private static final RoleModel NOT_VERIFIED_MODEL = new RoleModel(4L, Roles.NOT_VERIFIED);
     private static final Collection<RoleModel> DEFAULT_ROLES_MODELS = new ArrayList<>(Arrays.asList(USER_MODEL, NOT_VERIFIED_MODEL));
 
-    private final static ImageModel U_IMAGE_1 = new ImageModel(15L, null);
-    private final static ImageModel U_IMAGE_2 = new ImageModel(16L, null);
+    private static final String DEFAULT_TYPE = "JPG";
+    private static final byte[] DEFAULT_IMG_OBJECT = {1, 2, 3, 4};
+
+    private final static ImageModel U_IMAGE_1 = new ImageModel(15L, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final static ImageModel U_IMAGE_2 = new ImageModel(16L, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
 
     private final static UserModel USER_1 = new UserModel(1L, "contra1", "owner", "user", "owner@mail.com", DEFAULT_ROLES_MODELS, U_IMAGE_1);
     private final static UserModel USER_2 = new UserModel(2L, "contra2", "owner2", "user2", "owner2@mail.com", DEFAULT_ROLES_MODELS, U_IMAGE_2);
@@ -53,13 +58,13 @@ public class ExperienceDaoTest {
     private final static CityModel CITY_2 = new CityModel(2L, COUNTRY_1, "Test City Two");
     private final static CityModel CITY_3 = new CityModel(3L, COUNTRY_1, "Test City Three");
 
-    private final ImageModel IMAGE_ADV_1 = new ImageModel(1, null);
-    private final ImageModel IMAGE_ADV_2 = new ImageModel(7, null);
-    private final ImageModel IMAGE_ADV_3 = new ImageModel(8, null);
-    private final ImageModel IMAGE_GAS = new ImageModel(2, null);
-    private final ImageModel IMAGE_GAS2 = new ImageModel(3, null);
-    private final ImageModel IMAGE_TO_DELETE = new ImageModel(50, null);
-    private final ImageModel IMAGE_TO_RECOMMEND = new ImageModel(51, null);
+    private final ImageModel IMAGE_ADV_1 = new ImageModel(1, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final ImageModel IMAGE_ADV_2 = new ImageModel(7, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final ImageModel IMAGE_ADV_3 = new ImageModel(8, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final ImageModel IMAGE_GAS = new ImageModel(2, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final ImageModel IMAGE_GAS2 = new ImageModel(3, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final ImageModel IMAGE_TO_DELETE = new ImageModel(50, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final ImageModel IMAGE_TO_RECOMMEND = new ImageModel(51, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
 
     private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, "owner@mail.com", null, 0.0, CITY_1, CATEGORY_1, USER_1, IMAGE_ADV_1, true, 0);
     private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2L, "testgastro", "dirgastro", null, "owner@mail.com", null, 1000.0, CITY_1, CATEGORY_2, USER_1, IMAGE_GAS, true, 0);
@@ -70,10 +75,11 @@ public class ExperienceDaoTest {
     private final ExperienceModel TO_RECOMMEND_EXP = new ExperienceModel(51L, "torecommend", "recommend1", null, "owner@mail.com", null, null, CITY_3, CATEGORY_2, USER_2, IMAGE_TO_RECOMMEND, true, 0);
 
     private final Long DEFAULT_SCORE = 0L;
+    private final Double DEFAULT_MAX_PRICE = 100000D;
     private final Optional<OrderByModel> NO_ORDER = Optional.empty();
     private final Integer PAGE_SIZE = 3;
 
-    private final ImageModel IMAGE = new ImageModel(5, null);
+    private final ImageModel IMAGE = new ImageModel(5, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
     /****/
 
     @Autowired
@@ -111,25 +117,23 @@ public class ExperienceDaoTest {
     @Test
     @Rollback
     public void testUpdateExperience() {
-        ExperienceModel exp = new ExperienceModel(1L, "TestUpdate", "DirectionUpdate", "newdesc", "newemail", "newsite", 235.0, CITY_2, CATEGORY_2, USER_1, IMAGE, true, 0);
-        experienceDao.updateExperience(exp);
+        ExperienceModel experienceModel = new ExperienceModel(1L, "TestUpdate", "DirectionUpdate", "newdesc", "newemail", "newsite", 235.0, CITY_2, CATEGORY_2, USER_1, IMAGE, true, 0);
+        experienceDao.updateExperience(experienceModel);
 
-        Optional<ExperienceModel> experienceModelOptional = experienceDao.getExperienceById(1L);
-        assertTrue(experienceModelOptional.isPresent());
+        ExperienceModel experienceModelOptional = em.find(ExperienceModel.class, experienceModel.getExperienceId());
+        assertNotNull(experienceModelOptional);
 
-        ExperienceModel experienceModel = experienceModelOptional.get();
+        assertEquals("TestUpdate", experienceModelOptional.getExperienceName());
+        assertEquals("DirectionUpdate", experienceModelOptional.getAddress());
+        assertEquals("newdesc", experienceModelOptional.getDescription());
+        assertEquals("newsite", experienceModelOptional.getSiteUrl());
+        assertEquals("newemail", experienceModelOptional.getEmail());
+        assertEquals(new Double(235), experienceModelOptional.getPrice());
 
-        assertEquals("TestUpdate", experienceModel.getExperienceName());
-        assertEquals("DirectionUpdate", experienceModel.getAddress());
-        assertEquals("newdesc", experienceModel.getDescription());
-        assertEquals("newsite", experienceModel.getSiteUrl());
-        assertEquals("newemail", experienceModel.getEmail());
-        assertEquals(new Double(235), experienceModel.getPrice());
-
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "experiences", "experienceId = " + experienceModel.getExperienceId()));
-        assertEquals(USER_1, experienceModel.getUser());
-        assertEquals(CATEGORY_2, experienceModel.getCategory());
-        assertEquals(CITY_2, experienceModel.getCity());
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "experiences", "experienceId = " + experienceModelOptional.getExperienceId()));
+        assertEquals(USER_1, experienceModelOptional.getUser());
+        assertEquals(CATEGORY_2, experienceModelOptional.getCategory());
+        assertEquals(CITY_2, experienceModelOptional.getCity());
     }
 
     @Test
@@ -152,8 +156,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategory() {
-        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategory(CATEGORY_1);
-        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, maxPrice.get(), DEFAULT_SCORE, null, NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, DEFAULT_MAX_PRICE, DEFAULT_SCORE, null, NO_ORDER, 1, PAGE_SIZE);
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
         assertTrue(experienceModelList.contains(DEFAULT_ADV2));
@@ -162,8 +165,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryAndCity() {
-        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategory(CATEGORY_1);
-        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, maxPrice.get(), DEFAULT_SCORE, CITY_1, NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, DEFAULT_MAX_PRICE, DEFAULT_SCORE, CITY_1, NO_ORDER, 1, PAGE_SIZE);
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
         assertTrue(experienceModelList.contains(DEFAULT_ADV2));
@@ -190,8 +192,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryAndScore() {
-        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategory(CATEGORY_1);
-        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, maxPrice.get(), 3L, null, NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, DEFAULT_MAX_PRICE, 3L, null, NO_ORDER, 1, PAGE_SIZE);
 
         assertFalse(experienceModelList.isEmpty());
         assertFalse(experienceModelList.contains(DEFAULT_ADV));
@@ -201,8 +202,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListByCategoryCityAndScore() {
-        final Optional<Double> maxPrice = experienceDao.getMaxPriceByCategory(CATEGORY_1);
-        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, maxPrice.get(), 3L, CITY_1, NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, DEFAULT_MAX_PRICE, 3L, CITY_1, NO_ORDER, 1, PAGE_SIZE);
 
         assertFalse(experienceModelList.isEmpty());
         assertFalse(experienceModelList.contains(DEFAULT_ADV));

@@ -44,7 +44,11 @@ public class ReviewDaoTest {
     private final static CategoryModel CATEGORY_1 = new CategoryModel(1L, "Aventura");
     private final static CountryModel COUNTRY_1 = new CountryModel(1L, "Test Country");
     private final static CityModel CITY_1 = new CityModel(1L, COUNTRY_1, "Test City One");
-    private final ImageModel IMAGE_ADV_1 = new ImageModel(1, null);
+
+    private static final String DEFAULT_TYPE = "JPG";
+    private static final byte[] DEFAULT_IMG_OBJECT = {1, 2, 3, 4};
+
+    private final ImageModel IMAGE_ADV_1 = new ImageModel(1, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
     private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, "mail@aventura1.com", null, 0.0, CITY_1, CATEGORY_1, USER_1, IMAGE_ADV_1, true, 0);
 
     //Reviews data
@@ -121,10 +125,10 @@ public class ReviewDaoTest {
     @Rollback
     public void testUpdateReview() {
         reviewDao.updateReview(new ReviewModel(R1.getReviewId(), "TitleUpdate", "DescUpdate", 5L, R1.getExperience(), R1.getReviewDate(), R1.getUser()));
-        Optional<ReviewModel> reviewModel = reviewDao.getReviewById(1L);
-        assertTrue(reviewModel.isPresent());
-        assertEquals("TitleUpdate", reviewModel.get().getTitle());
-        assertEquals("DescUpdate", reviewModel.get().getDescription());
-        assertEquals(5L, reviewModel.get().getScore());
+        ReviewModel reviewModel = em.find(ReviewModel.class, 1L);
+        assertNotNull(reviewModel);
+        assertEquals("TitleUpdate", reviewModel.getTitle());
+        assertEquals("DescUpdate", reviewModel.getDescription());
+        assertEquals(5L, reviewModel.getScore());
     }
 }

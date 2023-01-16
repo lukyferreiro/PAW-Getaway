@@ -24,9 +24,9 @@ INSERT INTO countries(countryid, countryname) VALUES (1, 'Test Country');
 INSERT INTO cities(cityid, cityname, countryid) VALUES(1, 'Test City One', 1);
 INSERT INTO cities(cityid, cityname, countryid) VALUES(2, 'Test City Two', 1);
 
-INSERT INTO images(imgid, imageObject) VALUES(1, '0x1234');
-INSERT INTO images(imgid, imageObject) VALUES(7, '0x1234');
-INSERT INTO images(imgid, imageObject) VALUES(8, '0x1234');
+INSERT INTO images(imgid, imageObject, imgMimeType) VALUES(1, '0x1234', 'JPG');
+INSERT INTO images(imgid, imageObject, imgMimeType) VALUES(7, '0x1234', 'JPG');
+INSERT INTO images(imgid, imageObject, imgMimeType) VALUES(8, '0x1234', 'JPG');
 
 -- Add 3 to adventure with different price ranges and cities for filter testing
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)

@@ -37,11 +37,15 @@ public class UserDaoTest {
     private final static String NAME = "NAME";
     private final static String SURNAME = "SURNAME";
     private final static String EMAIL = "e@mail.com";
-    private final static ImageModel IMAGE = new ImageModel(15L, null);
-    private final static ImageModel IMAGE_2 = new ImageModel(16L, null);
-    private final static ImageModel IMAGE_3 = new ImageModel(17L, null);
 
-    private final static ImageModel IMAGE_CREATE = new ImageModel(18L, null);
+    private static final String DEFAULT_TYPE = "JPG";
+    private static final byte[] DEFAULT_IMG_OBJECT = {1, 2, 3, 4};
+
+    private final static ImageModel IMAGE = new ImageModel(15L, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final static ImageModel IMAGE_2 = new ImageModel(16L, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final static ImageModel IMAGE_3 = new ImageModel(17L, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+
+    private final static ImageModel IMAGE_CREATE = new ImageModel(18L, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
     private static final Collection<Roles> DEFAULT_ROLES = new ArrayList<>(Arrays.asList(Roles.USER, Roles.NOT_VERIFIED));
 
     private static final RoleModel PROVIDER_MODEL = new RoleModel(1L, Roles.PROVIDER);
@@ -63,8 +67,8 @@ public class UserDaoTest {
     private final static CountryModel COUNTRY_1 = new CountryModel(1L, "Test Country");
 
     private final static CityModel CITY_1 = new CityModel(1L, COUNTRY_1, "Test City One");
-    private final ImageModel IMAGE_ADV_1 = new ImageModel(1, null);
-    private final ImageModel IMAGE_GAS = new ImageModel(2, null);
+    private final ImageModel IMAGE_ADV_1 = new ImageModel(1, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final ImageModel IMAGE_GAS = new ImageModel(2, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
 
     private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, "owner@mail.com", null, 0.0, CITY_1, CATEGORY_1, MAIN_USER, IMAGE_ADV_1, true, 0);
     private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2L, "testgastro", "dirgastro", null, "owner@mail.com", null, 1000.0, CITY_1, CATEGORY_2, MAIN_USER, IMAGE_GAS, true, 0);
@@ -89,6 +93,7 @@ public class UserDaoTest {
     @Test
     @Rollback
     public void testCreateUser() {
+        //TODO: fix detached entity passed to persist: ar.edu.itba.getaway.models.ImageModel
         UserModel user = null;
         try {
             user = userDao.createUser(PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES, IMAGE_CREATE);
@@ -229,11 +234,10 @@ public class UserDaoTest {
     @Rollback
     public void testUpdateRoles() {
         userDao.updateRoles(USER_TO_UPDATE_ROLE, Roles.NOT_VERIFIED, Roles.VERIFIED);
-        final Optional<UserModel> user = userDao.getUserById(USER_TO_UPDATE_ROLE.getUserId());
-        assertTrue(user.isPresent());
-        final ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.get().getRoles());
+        UserModel user = em.find(UserModel.class, USER_TO_UPDATE_ROLE.getUserId());
 
-        System.out.println(user.get().getUserId());
+        assertNotNull(user);
+        final ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.getRoles());
 
         //Asserts to check changes in userModel
         assertTrue(arrayRoles.contains(USER_MODEL));
@@ -254,45 +258,46 @@ public class UserDaoTest {
     @Rollback
     public void testUpdatePassword() {
         userDao.updatePassword(MAIN_USER, "newpwd");
-        final Optional<UserModel> user = userDao.getUserById(MAIN_USER.getUserId());
-        assertTrue(user.isPresent());
+        UserModel user = em.find(UserModel.class, MAIN_USER.getUserId());
 
+        assertNotNull(user);
         //Check if all the other info is the same
-        assertEquals(MAIN_USER.getEmail(), user.get().getEmail());
-        assertEquals(MAIN_USER.getName(), user.get().getName());
-        assertEquals(MAIN_USER.getSurname(), user.get().getSurname());
-        assertEquals(MAIN_USER.getRoles(), user.get().getRoles());
-        assertEquals(MAIN_USER.getProfileImage(), user.get().getProfileImage());
+        assertEquals(MAIN_USER.getEmail(), user.getEmail());
+        assertEquals(MAIN_USER.getName(), user.getName());
+        assertEquals(MAIN_USER.getSurname(), user.getSurname());
+        assertEquals(MAIN_USER.getRoles(), user.getRoles());
+        assertEquals(MAIN_USER.getProfileImage(), user.getProfileImage());
 
-        assertEquals("newpwd", user.get().getPassword());
+        assertEquals("newpwd", user.getPassword());
     }
 
     @Test
     @Rollback
     public void testUpdateUserInfo() {
         userDao.updateUserInfo(MAIN_USER, new UserInfo("newusuario", "newuno"));
-        final Optional<UserModel> user = userDao.getUserById(MAIN_USER.getUserId());
-        assertTrue(user.isPresent());
+        UserModel user = em.find(UserModel.class, MAIN_USER.getUserId());
+
+        assertNotNull(user);
 
         //Check if all the other info is the same
-        assertEquals(MAIN_USER.getEmail(), user.get().getEmail());
-        assertEquals(MAIN_USER.getRoles(), user.get().getRoles());
-        assertEquals(MAIN_USER.getPassword(), user.get().getPassword());
-        assertEquals(MAIN_USER.getProfileImage(), user.get().getProfileImage());
+        assertEquals(MAIN_USER.getEmail(), user.getEmail());
+        assertEquals(MAIN_USER.getRoles(), user.getRoles());
+        assertEquals(MAIN_USER.getPassword(), user.getPassword());
+        assertEquals(MAIN_USER.getProfileImage(), user.getProfileImage());
 
-        assertEquals("newusuario", user.get().getName());
-        assertEquals("newuno", user.get().getSurname());
+        assertEquals("newusuario", user.getName());
+        assertEquals("newuno", user.getSurname());
     }
 
     @Test
     @Rollback
     public void testAddRole() {
         userDao.addRole(USER_TO_ADD_ROLE, Roles.PROVIDER);
-        final Optional<UserModel> user = userDao.getUserById(USER_TO_ADD_ROLE.getUserId());
-        assertTrue(user.isPresent());
-        System.out.println(user.get().getUserId());
+        UserModel user = em.find(UserModel.class, USER_TO_ADD_ROLE.getUserId());
 
-        final ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.get().getRoles());
+        assertNotNull(user);
+
+        final ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.getRoles());
 
         assertTrue(arrayRoles.contains(USER_MODEL));
         assertTrue(arrayRoles.contains(NOT_VERIFIED_MODEL));

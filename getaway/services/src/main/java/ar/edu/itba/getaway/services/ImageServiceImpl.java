@@ -20,17 +20,17 @@ public class ImageServiceImpl implements ImageService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageServiceImpl.class);
 
     @Override
-    public ImageModel createImg(byte[] image) {
-        final ImageModel img = imageDao.createImg(image);
+    public ImageModel createImg(byte[] image, String mimeType) {
+        final ImageModel img = imageDao.createImg(image, mimeType);
         LOGGER.info("Created image with id {}", img.getImageId());
         return img;
     }
 
     @Transactional
     @Override
-    public void updateImg(byte[] image, ImageModel imageModel) {
+    public void updateImg(byte[] image, String mimeType, ImageModel imageModel) {
         LOGGER.debug("Updating image with id {}", imageModel.getImageId());
-        imageDao.updateImg(image, imageModel);
+        imageDao.updateImg(image, mimeType, imageModel);
     }
 
     @Override

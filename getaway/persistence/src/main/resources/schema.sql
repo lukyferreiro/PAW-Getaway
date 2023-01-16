@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS images
 (
     imgId SERIAL NOT NULL,
     imageObject BYTEA,
-    imgMimeType TEXT,
+    imgMimeType VARCHAR(10),
     PRIMARY KEY (imgId)
 );
 

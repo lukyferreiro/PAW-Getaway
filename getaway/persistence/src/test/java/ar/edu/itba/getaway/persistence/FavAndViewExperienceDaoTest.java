@@ -36,8 +36,11 @@ public class FavAndViewExperienceDaoTest {
     private static final RoleModel NOT_VERIFIED_MODEL = new RoleModel(4L, Roles.NOT_VERIFIED);
     private static final Collection<RoleModel> DEFAULT_ROLES_MODELS = new ArrayList<>(Arrays.asList(USER_MODEL, NOT_VERIFIED_MODEL));
 
-    private final static ImageModel U_IMAGE_1 = new ImageModel(15L, null);
-    private final static ImageModel U_IMAGE_2 = new ImageModel(16L, null);
+    private static final String DEFAULT_TYPE = "JPG";
+    private static final byte[] DEFAULT_IMG_OBJECT = {1, 2, 3, 4};
+
+    private final static ImageModel U_IMAGE_1 = new ImageModel(15L, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final static ImageModel U_IMAGE_2 = new ImageModel(16L, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
 
     private final static UserModel USER_1 = new UserModel(1L, "contra1", "owner", "user", "owner@mail.com", DEFAULT_ROLES_MODELS, U_IMAGE_1);
     private final static UserModel USER_2 = new UserModel(2L, "contra2", "owner2", "user2", "owner2@mail.com", DEFAULT_ROLES_MODELS, U_IMAGE_2);
@@ -51,10 +54,10 @@ public class FavAndViewExperienceDaoTest {
     private final static CityModel CITY_1 = new CityModel(1L, COUNTRY_1, "Test City One");
     private final static CityModel CITY_2 = new CityModel(2L, COUNTRY_1, "Test City Two");
 
-    private final ImageModel IMAGE_ADV_1 = new ImageModel(1, null);
-    private final ImageModel IMAGE_ADV_2 = new ImageModel(7, null);
-    private final ImageModel IMAGE_ADV_3 = new ImageModel(8, null);
-    private final ImageModel IMAGE_GAS = new ImageModel(4, null);
+    private final ImageModel IMAGE_ADV_1 = new ImageModel(1, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final ImageModel IMAGE_ADV_2 = new ImageModel(7, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final ImageModel IMAGE_ADV_3 = new ImageModel(8, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
+    private final ImageModel IMAGE_GAS = new ImageModel(4, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
 
     private final ExperienceModel DEFAULT_ADV = new ExperienceModel(1L, "testaventura", "diraventura", null, "mail@aventura1.com", null, 0.0, CITY_1, CATEGORY_1, USER_1, IMAGE_ADV_1, true, 0);
     private final ExperienceModel DEFAULT_GAS = new ExperienceModel(2L, "testgastro", "dirgastro", null, null, null, 1000.0, CITY_1, CATEGORY_2, USER_1, IMAGE_GAS, true, 0);

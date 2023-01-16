@@ -18,16 +18,17 @@ public class ImageDaoImpl implements ImageDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(LocationDaoImpl.class);
 
     @Override
-    public ImageModel createImg(byte[] image) {
-        final ImageModel imageModel = new ImageModel(image);
+    public ImageModel createImg(byte[] image, String mimeType){
+        final ImageModel imageModel = new ImageModel(image, mimeType);
         em.persist(imageModel);
         return imageModel;
     }
 
     @Override
-    public void updateImg(byte[] image, ImageModel imageModel) {
+    public void updateImg(byte[] image, String mimeType, ImageModel imageModel) {
         LOGGER.debug("Update image with id {}", imageModel.getImageId());
         imageModel.setImage(image);
+        imageModel.setMimeType(mimeType);
         em.merge(imageModel);
     }
 

@@ -74,7 +74,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         Query queryForIds = em.createNativeQuery(
                 "SELECT experienceId \n" +
                     "FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid\n" +
-                    "WHERE categoryid = :categoryid AND COALESCE(price,0) <= :max\n AND observable = true" +
+                    "WHERE categoryid = :categoryId AND COALESCE(price,0) <= :max\n AND observable = true\n" +
                     "GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=:score"
         );
 
@@ -87,7 +87,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
             queryForIds.setParameter("cityId", city.getCityId());
         }
 
-        queryForIds.setParameter("categoryid", category.getCategoryId());
+        queryForIds.setParameter("categoryId", category.getCategoryId());
         queryForIds.setParameter("max", max);
         queryForIds.setParameter("score", score);
 

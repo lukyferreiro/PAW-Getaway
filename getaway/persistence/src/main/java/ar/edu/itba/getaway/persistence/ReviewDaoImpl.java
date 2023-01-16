@@ -55,19 +55,21 @@ public class ReviewDaoImpl implements ReviewDao {
 
         Query queryForIds = em.createNativeQuery(
                 "SELECT reviewId \n" +
-                        "FROM reviews NATURAL JOIN experiences \n" +
-                        "WHERE observable = true AND userid = :userId"
+                    "FROM reviews JOIN experiences ON experiences.experienceid = reviews.experienceid\n " +
+                    "WHERE observable = true AND reviews.userId = :userId"
         );
 
         queryForIds.setParameter("userId", user.getUserId());
 
         List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
 
+        System.out.println(String.format("Cantidad de reviews que cumplen: %d\n", resultingIds.size()));
+
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
         final TypedQuery<ReviewModel> queryForReviews;
         if (idList.size() > 0) {
             LOGGER.debug("Selecting experiences contained in ");
-            queryForReviews = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList) ", ReviewModel.class);
+            queryForReviews = em.createQuery("SELECT rev FROM ReviewModel rev WHERE rev.reviewId IN (:idList) ", ReviewModel.class);
             queryForReviews.setParameter("idList", idList);
             queryForReviews.setMaxResults(pageSize);
             queryForReviews.setFirstResult((page - 1) * pageSize);
@@ -82,7 +84,7 @@ public class ReviewDaoImpl implements ReviewDao {
     public long getReviewByUserCount(UserModel user) {
         Query query = em.createNativeQuery(
                 "SELECT COUNT(experienceid) \n" +
-                        "FROM favuserexperience NATURAL JOIN experiences\n" +
+                        "FROM reviews NATURAL JOIN experiences\n" +
                         "WHERE observable = true AND userid = :userId"
         );
 
@@ -92,12 +94,12 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public List<ReviewModel> getReviewsByExperience(ExperienceModel experience, int page, int pageSize) {
-            LOGGER.debug("List reviews of user with id {}", experience.getExperienceId());
+            LOGGER.debug("List reviews of experience with id {}", experience.getExperienceId());
 
             Query queryForIds = em.createNativeQuery(
                     "SELECT reviewId \n" +
-                            "FROM reviews\n" +
-                            "WHERE observable = true AND experienceId = :experienceId"
+                            "FROM reviews JOIN experiences ON experiences.experienceid = reviews.experienceid\n " +
+                            "WHERE observable = true AND reviews.experienceId = :experienceId"
             );
 
             queryForIds.setParameter("experienceId", experience.getExperienceId());
@@ -107,22 +109,22 @@ public class ReviewDaoImpl implements ReviewDao {
             List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
             final TypedQuery<ReviewModel> queryForReviews;
             if (idList.size() > 0) {
-                LOGGER.debug("Selecting experiences contained in ");
-                queryForReviews = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList) ", ReviewModel.class);
+                LOGGER.debug("Selecting reviews contained in ");
+                queryForReviews = em.createQuery("SELECT  rev FROM ReviewModel rev WHERE rev.reviewId IN (:idList) ", ReviewModel.class);
                 queryForReviews.setParameter("idList", idList);
                 queryForReviews.setMaxResults(pageSize);
                 queryForReviews.setFirstResult((page - 1) * pageSize);
                 return queryForReviews.getResultList();
             }
 
-            LOGGER.debug("User with id {} has no reviews yet", experience.getExperienceId());
+            LOGGER.debug("Experience with id {} has no reviews yet", experience.getExperienceId());
             return new ArrayList<>();
     }
     @Override
     public long getReviewByExperienceCount(ExperienceModel experience) {
         Query query = em.createNativeQuery(
                 "SELECT COUNT(reviewId) \n" +
-                        "FROM reviews\n" +
+                        "FROM reviews NATURAL JOIN experiences\n" +
                         "WHERE observable = true AND experienceId = :experienceId"
         );
 

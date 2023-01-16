@@ -5,9 +5,9 @@ import ar.edu.itba.getaway.models.ImageModel;
 import java.util.Optional;
 
 public interface ImageService {
-    ImageModel createImg(byte[] image);
+    ImageModel createImg(byte[] image, String mimeType);
 
-    void updateImg(byte[] image, ImageModel imageModel);
+    void updateImg(byte[] image, String mimeType, ImageModel imageModel);
 
     void deleteImg(ImageModel imageModel);
 

@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException {
-        final ImageModel imageModel = imageService.createImg(null);
+        final ImageModel imageModel = imageService.createImg(null, null);
         LOGGER.debug("Creating user with email {}", email);
         final UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES, imageModel);
         LOGGER.debug("Creating verification token to user with id {}", userModel.getUserId());

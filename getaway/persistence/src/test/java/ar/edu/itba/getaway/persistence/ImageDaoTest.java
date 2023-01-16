@@ -39,9 +39,12 @@ public class ImageDaoTest {
     private static final byte[] imgInfo2 = {5, 6, 7, 8};
     private static final byte[] imgInfo3 = {33, 18, 86};
 
-    private static final ImageModel TO_UPDATE_IMAGE = new ImageModel(1L, imgInfo1);
-    private static final ImageModel TO_DELETE_IMAGE = new ImageModel(2L, imgInfo2);
-    private static final ImageModel TO_GET_IMAGE = new ImageModel(3L, imgInfo3);
+    private static final String DEFAULT_TYPE = "JPG";
+
+    private static final ImageModel TO_UPDATE_IMAGE = new ImageModel(1L, imgInfo1, DEFAULT_TYPE);
+    private static final ImageModel TO_DELETE_IMAGE = new ImageModel(2L, imgInfo2, DEFAULT_TYPE);
+    private static final ImageModel TO_GET_IMAGE = new ImageModel(3L, imgInfo3, DEFAULT_TYPE);
+
 
     private JdbcTemplate jdbcTemplate;
 
@@ -53,7 +56,7 @@ public class ImageDaoTest {
     @Test
     @Rollback
     public void testCreateImg() {
-        final ImageModel imageModel = imageDao.createImg(imgInfo1);
+        final ImageModel imageModel = imageDao.createImg(imgInfo1, DEFAULT_TYPE);
         assertNotNull(imageModel);
         assertEquals(imgInfo1, imageModel.getImage());
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "images", "imgId = " + imageModel.getImageId()));
@@ -62,15 +65,16 @@ public class ImageDaoTest {
     @Test
     @Rollback
     public void testUpdateImg() {
-        imageDao.updateImg(imgInfo2, TO_UPDATE_IMAGE);
-        Optional<ImageModel> imageModel = imageDao.getImgById(TO_UPDATE_IMAGE.getImageId());
-        assertArrayEquals(imgInfo2, imageModel.get().getImage());
+        imageDao.updateImg(imgInfo2, DEFAULT_TYPE, TO_UPDATE_IMAGE);
+        ImageModel imageModel = em.find(ImageModel.class, TO_UPDATE_IMAGE.getImageId());
+        assertNotNull(imageModel);
+        assertArrayEquals(imgInfo2, imageModel.getImage());
     }
 
     @Test
     @Rollback
     public void testDeleteImg() {
-        ImageModel toDeleteImage = imageDao.getImgById(TO_DELETE_IMAGE.getImageId()).orElse(TO_DELETE_IMAGE);
+        ImageModel toDeleteImage = em.find(ImageModel.class, TO_DELETE_IMAGE.getImageId());
         imageDao.deleteImg(toDeleteImage);
         em.flush();
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "images", "imgId = " + TO_DELETE_IMAGE.getImageId()));
@@ -78,12 +82,12 @@ public class ImageDaoTest {
 
     @Test
     public void getImgById() {
-        final Optional<ImageModel> imageModel = imageDao.getImgById(TO_GET_IMAGE.getImageId());
-        assertTrue(imageModel.isPresent());
-        assertEquals(TO_GET_IMAGE, imageModel.get());
+        ImageModel imageModel = em.find(ImageModel.class, TO_GET_IMAGE.getImageId());
+        assertNotNull(imageModel);
+        assertEquals(TO_GET_IMAGE, imageModel);
 
-        System.out.println(Arrays.toString(imageModel.get().getImage()));
+        System.out.println(Arrays.toString(imageModel.getImage()));
 
-        assertArrayEquals(imgInfo3, imageModel.get().getImage());
+        assertArrayEquals(imgInfo3, imageModel.getImage());
     }
 }
