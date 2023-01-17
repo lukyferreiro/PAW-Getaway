@@ -22,7 +22,7 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.*;
 
-//TODO: fix count java lang type, fix search by name, change double dao calls in recommendation tests, add getfav tests
+//TODO: fix count java lang type, fix search by name
 
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -139,7 +139,7 @@ public class ExperienceDaoTest {
     @Test
     @Rollback
     public void testDeleteExperience() {
-        ExperienceModel toDeleteExperience = experienceDao.getExperienceById(TO_DELETE_EXP.getExperienceId()).orElse(TO_DELETE_EXP);
+        ExperienceModel toDeleteExperience = em.find(ExperienceModel.class, TO_DELETE_EXP.getExperienceId());
         experienceDao.deleteExperience(toDeleteExperience);
         em.flush();
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "experiences", "experienceId = " + TO_DELETE_EXP.getExperienceId()));
@@ -273,6 +273,20 @@ public class ExperienceDaoTest {
         assertEquals(2, experienceDao.getCountExperiencesByUser("test", USER_1));
     }
 
+
+    @Test
+    public void testListExperiencesFavsByUser() {
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesFavsByUser(USER_1, NO_ORDER,1,PAGE_SIZE);
+        assertFalse(experienceModelList.isEmpty());
+        assertTrue(experienceModelList.contains(DEFAULT_ADV));
+        assertTrue(experienceModelList.contains(DEFAULT_GAS));
+    }
+
+    @Test
+    public void testGetCountListExperiencesFavsByUser() {
+        assertEquals(2, experienceDao.getCountListExperiencesFavsByUser(USER_1));
+    }
+
     @Test
     public void testGetRecommendedByFavs() {
         List<ExperienceModel> recommended = experienceDao.getRecommendedByFavs(USER_1, PAGE_SIZE);
@@ -321,7 +335,10 @@ public class ExperienceDaoTest {
 
     @Test
     public void testGetRecommendedByReviewsCity() {
-        List<Long> reviewedIds = experienceDao.reviewedExperiencesId(USER_1);
+        List<Long> reviewedIds = new ArrayList<>();
+        reviewedIds.add(1L);
+        reviewedIds.add(7L);
+        reviewedIds.add(8L);
         List<ExperienceModel> recommended = experienceDao.getRecommendedByReviewsCity(USER_1, PAGE_SIZE, new ArrayList<>(), reviewedIds);
         assertNotNull(recommended);
         assertFalse(recommended.isEmpty());
@@ -331,7 +348,10 @@ public class ExperienceDaoTest {
 
     @Test
     public void testGetRecommendedByReviewsProvider() {
-        List<Long> reviewedIds = experienceDao.reviewedExperiencesId(USER_1);
+        List<Long> reviewedIds = new ArrayList<>();
+        reviewedIds.add(1L);
+        reviewedIds.add(7L);
+        reviewedIds.add(8L);
         List<ExperienceModel> recommended = experienceDao.getRecommendedByReviewsProvider(USER_1, PAGE_SIZE, new ArrayList<>(), reviewedIds);
         assertNotNull(recommended);
         assertFalse(recommended.isEmpty());
@@ -343,7 +363,10 @@ public class ExperienceDaoTest {
 
     @Test
     public void testGetRecommendedByReviewsCategory() {
-        List<Long> reviewedIds = experienceDao.reviewedExperiencesId(USER_1);
+        List<Long> reviewedIds = new ArrayList<>();
+        reviewedIds.add(1L);
+        reviewedIds.add(7L);
+        reviewedIds.add(8L);
         List<ExperienceModel> recommended = experienceDao.getRecommendedByReviewsCategory(USER_1, PAGE_SIZE, new ArrayList<>(), reviewedIds);
         assertNotNull(recommended);
         assertFalse(recommended.isEmpty());

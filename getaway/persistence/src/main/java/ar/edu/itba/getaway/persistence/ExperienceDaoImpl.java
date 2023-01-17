@@ -152,7 +152,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
         Query queryForIds = em.createNativeQuery(
                 "SELECT experienceId \n" +
                         "FROM experiences NATURAL JOIN (cities NATURAL JOIN countries) \n" +
-                        "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(cityName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(countryName) LIKE LOWER(CONCAT('%', :name,'%'))) AND observable = true"
+                        "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(description) LIKE LOWER(CONCAT('%', :name,'%'))" +
+                        " OR LOWER(address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(cityName) LIKE LOWER(CONCAT('%', :name,'%')) " +
+                        "OR LOWER(countryName) LIKE LOWER(CONCAT('%', :name,'%'))) AND observable = true"
         );
 
         queryForIds.setParameter("name", name);

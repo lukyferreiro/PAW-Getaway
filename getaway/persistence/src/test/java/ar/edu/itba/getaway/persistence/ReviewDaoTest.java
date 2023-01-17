@@ -115,7 +115,7 @@ public class ReviewDaoTest {
     @Test
     @Rollback
     public void testDeleteReview() {
-        ReviewModel toDeleteReview = reviewDao.getReviewById(1L).orElse(R1);
+        ReviewModel toDeleteReview = em.find(ReviewModel.class, 1L);
         reviewDao.deleteReview(toDeleteReview);
         em.flush();
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "reviewId = " + toDeleteReview.getReviewId()));
