@@ -241,7 +241,7 @@ public class UserController {
         LOGGER.info("Called /users/{}/profileImage PUT", id);
 
         InputStream in = profileImage.getEntityAs(InputStream.class);
-        //TODO
+        //TODO: use imageService to updateImage
         //userService.updateProfileImage(new NewImageModel(StreamUtils.copyToByteArray(in), profileImage.getMediaType().toString()), user);
 
         userService.updateUserImage(user, new ImageModel(StreamUtils.copyToByteArray(in), profileImage.getMediaType().toString()));

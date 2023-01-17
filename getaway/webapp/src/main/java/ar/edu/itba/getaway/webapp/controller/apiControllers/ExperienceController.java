@@ -61,9 +61,8 @@ public class ExperienceController {
                                                @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
                                                @QueryParam("price") @DefaultValue("-1") Double maxPrice,
                                                @QueryParam("score") @DefaultValue("5") Long maxScore,
-                                               @QueryParam("city") Long cityId,
-                                               @QueryParam("page") @DefaultValue("0") int page,
-                                               @QueryParam("pageSize") @DefaultValue("6") int pageSize
+                                               @QueryParam("city") @DefaultValue("-1") Long cityId,
+                                               @QueryParam("page") @DefaultValue("1") int page
     ) {
         LOGGER.info("Called /experiences/{} GET", category);
 
@@ -86,14 +85,12 @@ public class ExperienceController {
                 .queryParam("order", order)
                 .queryParam("price", maxPrice)
                 .queryParam("score", maxScore)
-                .queryParam("page", page)
-                .queryParam("pageSize", pageSize);
+                .queryParam("page", page);
 
 
         if (cityModel != null) {
             uriBuilder.queryParam("city", cityId);
         }
-
 
         return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
         }, uriBuilder);
@@ -104,8 +101,7 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response registerExperience(@Context final HttpServletRequest request,
                                        @Valid final ExperienceDto experienceDto,
-                                       @ImageTypeConstraint(contentType = {"image/png", "image/jpeg"}, message = "...")
-                                       //TODO poner texto
+                                       @ImageTypeConstraint(contentType = {"image/png", "image/jpeg", "image/jpg"}, message = "experienceForm.validation.imageFormat")
                                        @FormDataParam("images") FormDataBodyPart img) throws DuplicateExperienceException {
         LOGGER.info("Called /experiences/ POST");
         if (experienceDto == null) {
@@ -164,8 +160,7 @@ public class ExperienceController {
     public Response updateExperience(@Context final HttpServletRequest request,
                                      @Valid ExperienceDto experienceDto,
                                      @PathParam("id") final long id,
-                                     @ImageTypeConstraint(contentType = {"image/png", "image/jpeg"}, message = "...")
-                                     //TODO poner mensaje
+                                     @ImageTypeConstraint(contentType = {"image/png", "image/jpeg", "image/jpg"}, message = "experienceForm.validation.imageFormat")
                                      @FormDataParam("images") FormDataBodyPart img) {
         LOGGER.info("Called /experiences/{} PUT", id);
 
@@ -216,22 +211,27 @@ public class ExperienceController {
             return response.build();
         }
         return Response.noContent().build();
-
     }
 
     // Endpoint para obtener la reseñas de una experiencia
     @GET
     @Path("/{id}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getExperienceReviews(@PathParam("id") final long id) {
-        //TODO chequear si esta bien lo hice yo (gordo)
+    public Response getExperienceReviews(@PathParam("id") final long id,
+                                         @QueryParam("page") @DefaultValue("1") int page
+    ) {
+        LOGGER.info("Called /experiences/{}/reviews GET", id);
+        final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+        Page<ReviewModel> reviewModelList = reviewService.getReviewAndUser(experienceModel, page);
 
-        LOGGER.info("Called /experience/category/{} GET", id);
-        final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
-        final ReviewDto reviewDto = new ReviewDto(reviewModel, uriInfo);
-        LOGGER.info("Return review with id {}", id);
-        return Response.ok(reviewDto).build();
+        final Collection<ReviewDto> reviewDto = ReviewDto.mapReviewToDto(reviewModelList.getContent(), uriInfo);
 
+        final UriBuilder uriBuilder = uriInfo
+                .getAbsolutePathBuilder()
+                .queryParam("page", page);
+
+        return createPaginationResponse(reviewModelList, new GenericEntity<Collection<ReviewDto>>(reviewDto) {
+        }, uriBuilder);
     }
 
     // Endpoint para crear una reseña en la experiencia
@@ -239,13 +239,10 @@ public class ExperienceController {
     @Path("/{id}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response createExperienceReview(@PathParam("id") final long id, @Valid NewReviewDto newReviewDto, @Valid ReviewDto reviewDto, @Valid UserDto userDto) {
-        //TODO idem el de arriba , faltan parametros?
         LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
         final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new), reviewDto.getReviewDate(), userService.getUserById(userDto.getId()).orElseThrow(UserNotFoundException::new));
         return Response.created(ReviewDto.getReviewUriBuilder(reviewModel, uriInfo).build()).build();
-
     }
-
 
     private <T, K> Response createPaginationResponse(Page<T> results,
                                                      GenericEntity<K> resultsDto,

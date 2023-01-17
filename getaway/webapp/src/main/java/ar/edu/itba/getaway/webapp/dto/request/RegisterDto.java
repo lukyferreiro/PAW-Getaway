@@ -7,30 +7,27 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class RegisterDto {
-
-    //TODO poner los messages
-
-    @NotEmpty(message = "..")
-    @Size(max = 50, message = "..")
+    @NotEmpty(message = "NotEmpty")
+    @Size(max = 50, message = "Size.registerForm.name")
     @Pattern(regexp = "^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$",
-             message = "..")
+             message = "Pattern.registerForm.name")
     private String name;
 
-    @NotEmpty(message = "..")
-    @Size(max = 50, message = "..")
+    @NotEmpty(message = "NotEmpty")
+    @Size(max = 50, message = "Size.registerForm.surname")
     @Pattern(regexp = "^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$",
-            message = "..")
+            message = "Pattern.registerForm.surname")
     private String surname;
 
-    @NotEmpty(message = "..")
-    @Size(max = 255, message = "..")
-    @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$", message = "..")
+    @NotEmpty(message = "NotEmpty")
+    @Size(max = 255, message = "Size.registerForm.email")
+    @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$", message = "Pattern.registerForm.email")
     private String email;
 
     //https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
-    @NotEmpty(message = "..")
-    @Size(min = 8, max = 25, message = "..")
-    @Pattern(regexp = "^[A-Za-z0-9@$!%*#?&_]*$", message = "..")
+    @NotEmpty(message = "NotEmpty")
+    @Size(min = 8, max = 25, message = "Size.registerForm.password")
+    @Pattern(regexp = "^[A-Za-z0-9@$!%*#?&_]*$", message = "Pattern.registerForm.password")
     private String password;
 
     public String getPassword() {
