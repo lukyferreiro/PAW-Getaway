@@ -26,7 +26,7 @@
                     </c:when>
                     <c:otherwise>
                         <img class="container-fluid p-0" style="height: fit-content" alt="Imagen ${user.email}"
-                             src="<c:url value="/resources/images/user_default.png" />">
+                             src="<c:url value="/public/images/user_default.png/images/user_default.png" />">
                     </c:otherwise>
                 </c:choose>
             </div>

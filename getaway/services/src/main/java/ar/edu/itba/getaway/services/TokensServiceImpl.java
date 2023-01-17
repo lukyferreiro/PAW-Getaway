@@ -96,7 +96,6 @@ public class TokensServiceImpl implements TokensService {
     public SessionRefreshToken getSessionRefreshToken(UserModel user) {
         LOGGER.debug("Retrieving session refresh token for user");
         final Optional<SessionRefreshToken> tokenOpt = sessionRefreshTokenDao.getTokenByUser(user);
-
         if (tokenOpt.isPresent()) {
             final SessionRefreshToken sessionRefreshToken = tokenOpt.get();
             if (!sessionRefreshToken.isValid()) {
@@ -104,7 +103,6 @@ public class TokensServiceImpl implements TokensService {
             }
             return sessionRefreshToken;
         }
-
         return generateSessionRefreshToken(user);
     }
 

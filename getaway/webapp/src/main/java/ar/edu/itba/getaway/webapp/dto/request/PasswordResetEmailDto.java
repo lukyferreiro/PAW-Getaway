@@ -10,7 +10,7 @@ public class PasswordResetEmailDto {
     @NotEmpty
     @Size(max = 255)
     @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$")
-    String email;
+    private String email;
 
     public PasswordResetEmailDto() {
     }

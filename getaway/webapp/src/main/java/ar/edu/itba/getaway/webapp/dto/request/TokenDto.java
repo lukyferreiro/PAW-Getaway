@@ -5,7 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class TokenDto {
 
     @NotEmpty
-    String token;
+    private String token;
 
     public TokenDto() {
     }

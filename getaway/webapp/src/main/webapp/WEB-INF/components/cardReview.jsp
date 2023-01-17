@@ -24,7 +24,7 @@
                          style="margin-right: 8px"/>
                 </c:when>
                 <c:otherwise>
-                    <img class="user-img" src="<c:url value="/resources/images/user_default.png" />" alt="Imagen"/>
+                    <img class="user-img" src="<c:url value="/public/images/user_default.png/images/user_default.png" />" alt="Imagen"/>
                 </c:otherwise>
             </c:choose>
             <div class="d-flex flex-column justify-content-center align-content-center">

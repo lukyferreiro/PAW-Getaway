@@ -39,7 +39,7 @@
                     <div class="d-flex justify-content-center align-content-center"
                          style="margin: 0 20px 0 auto; flex:1;">
                         <button class="btn btn-search-navbar p-0" type="submit" form="searchExperiencePrivateForm">
-                            <img src="<c:url value="/resources/images/ic_lupa.svg"/>" alt="Icono lupa">
+                            <img src="<c:url value="/public/images/ic_lupa.svg/images/ic_lupa.svg"/>" alt="Icono lupa">
                         </button>
                         <spring:message code="navbar.search" var="placeholder"/>
                         <c:url value="/user/experiences" var="searchPrivateGetPath"/>
@@ -58,7 +58,7 @@
                         <c:when test="${experienceList.size() == 0}">
                             <div class="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
                                 <div class="d-flex justify-content-center align-content-center">
-                                    <img src="<c:url value="/resources/images/ic_no_search.jpeg"/>" alt="Imagen lupa"
+                                    <img src="<c:url value="/public/images/ic_no_search.jpeg/images/ic_no_search.jpeg"/>" alt="Imagen lupa"
                                          style="width: 150px; height:150px; min-width: 150px; min-height: 150px; margin-right: 5px;">
                                     <h4 class="d-flex align-self-center">
                                         <spring:message code="experience.emptyResult"/>

@@ -11,7 +11,9 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.auth.JwtUtil;
 import ar.edu.itba.getaway.webapp.dto.request.*;
+import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.UserDto;
+import ar.edu.itba.getaway.webapp.dto.validations.ImageTypeConstraint;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -28,7 +30,9 @@ import javax.ws.rs.core.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 @Path("/users")
@@ -206,45 +210,28 @@ public class UserController {
     }
 
     //Endpoint para editar la imagen de perfil del usuario
-
-
-    //    @PUT
-//    @Path("/{userId}/image")
-//    @Consumes(MediaType.MULTIPART_FORM_DATA)
-//    @Produces("application/vnd.campus.api.v1+json")
-//    public Response putUserProfileImage(@PathParam("userId") Long userId,
-//                                        @FormDataParam("file") InputStream fileStream,
-//                                        @FormDataParam("file") FormDataContentDisposition fileMetadata) throws IOException {
-//        Optional<byte[]> image = userService.getProfileImage(userId);
-//        if(!image.isPresent()) {
-//            userService.updateProfileImage(userId, IOUtils.toByteArray(fileStream));
-//            return Response.created(uriInfo.getAbsolutePath()).build();
-//        }
-//        userService.updateProfileImage(userId, IOUtils.toByteArray(fileStream));
-//        return Response.ok().build();
-//    }
     @PUT
-    @Path("/{id}/profileImage")
-    public Response updateUserProfileImage(@Context final HttpServletRequest request,
-                                           @NotNull(message = "{NotEmpty.profileImage.image}")
-                                           //TODO poner un mensaje
-                                           @FormDataParam("profileImage") FormDataBodyPart profileImage,
-                                           @PathParam("id") final long id) throws IOException {
+    @Path("/{id}/image")
+    public Response putUserProfileImage(
+            @Context final HttpServletRequest request,
+            @PathParam("id") final Long userId,
+            @NotNull(message = "...")
+            @ImageTypeConstraint(contentType = {"image/png", "image/jpeg", "image/jpg"}, message = "..")
+            @FormDataParam("image") FormDataBodyPart profileImage) throws IOException {
 
         if (request.getContentLength() == -1 || request.getContentLength() > maxRequestSize) {
             throw new MaxUploadSizeRequestException();
         }
 
         final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-        assureUserResourceCorrelation(user, id);
+        assureUserResourceCorrelation(user, userId);
 
-        LOGGER.info("Called /users/{}/profileImage PUT", id);
+        LOGGER.info("Called /users/{}/image PUT", userId);
 
+        //TODO chequear esto
         InputStream in = profileImage.getEntityAs(InputStream.class);
-        //TODO: use imageService to updateImage
-        //userService.updateProfileImage(new NewImageModel(StreamUtils.copyToByteArray(in), profileImage.getMediaType().toString()), user);
+        userService.updateUserImage(user, new ImageModel(user.getImageId(), StreamUtils.copyToByteArray(in), profileImage.getMediaType().toString()));
 
-        userService.updateUserImage(user, new ImageModel(StreamUtils.copyToByteArray(in), profileImage.getMediaType().toString()));
         return Response.ok().build();
     }
 
@@ -252,11 +239,27 @@ public class UserController {
     @GET
     @Path("/{id}/experiences")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getUserExperiences(@PathParam("id") final long id, @Valid final UserDto registerDto) {
-        LOGGER.info("Called /{}/experiences GET", id);
-        // final Page<ExperienceModel> experienceModel = experienceService.listExperiencesListByUser()
-        //TODO
-        return null;
+    public Response getUserExperiences(
+            @PathParam("id") final long id,
+            @QueryParam("order") @DefaultValue("OrderByAZ") String order,
+            @QueryParam("page") @DefaultValue("1") int page) {
+        LOGGER.info("Called /users/{}/experiences GET", id);
+
+        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        assureUserResourceCorrelation(user, id);
+        final Page<ExperienceModel> experiences = experienceService.listExperiencesListByUser(name, user, order, page);
+
+        if (experiences == null) {
+            return Response.status(BAD_REQUEST).build();
+        }
+
+        final Collection<ExperienceDto> experienceDtos = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);
+
+        final UriBuilder uriBuilder = uriInfo
+                .getAbsolutePathBuilder()
+                .queryParam("order", order);
+        return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDtos) {
+        }, uriBuilder);
     }
 
     //TODO ver si hace falta un endpoint para obtener los favs del usuario
@@ -276,6 +279,48 @@ public class UserController {
 
     private void addSessionRefreshTokenHeader(final Response.ResponseBuilder response, final UserModel user) {
         response.header(JwtUtil.REFRESH_TOKEN_HEADER, tokensService.getSessionRefreshToken(user).getValue());
+    }
+
+    private <T, K> Response createPaginationResponse(Page<T> results,
+                                                     GenericEntity<K> resultsDto,
+                                                     UriBuilder uriBuilder) {
+        if (results.getContent().isEmpty()) {
+            if (results.getCurrentPage() == 0) {
+                return Response.noContent().build();
+            } else {
+                return Response.status(NOT_FOUND).build();
+            }
+        }
+
+        final Response.ResponseBuilder response = Response.ok(resultsDto);
+
+        addPaginationLinks(response, results, uriBuilder);
+
+        return response.build();
+    }
+
+    private <T> void addPaginationLinks(Response.ResponseBuilder responseBuilder,
+                                        Page<T> results,
+                                        UriBuilder uriBuilder) {
+
+        final int page = results.getCurrentPage();
+
+        final int first = 0;
+        final int last = results.getMaxPage();
+        final int prev = page - 1;
+        final int next = page + 1;
+
+        responseBuilder.link(uriBuilder.clone().queryParam("page", first).build(), "first");
+
+        responseBuilder.link(uriBuilder.clone().queryParam("page", last).build(), "last");
+
+        if (page != first) {
+            responseBuilder.link(uriBuilder.clone().queryParam("page", prev).build(), "prev");
+        }
+
+        if (page != last) {
+            responseBuilder.link(uriBuilder.clone().queryParam("page", next).build(), "next");
+        }
     }
 
 }

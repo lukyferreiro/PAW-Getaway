@@ -34,7 +34,7 @@
                             <div class="row">
                                 <div class="col-12"> <!--Email-->
                                     <label class="form-label d-flex align-items-center" for="email">
-                                        <img src="<c:url value="/resources/images/ic_user.svg"/>" alt="Imagen perfil"
+                                        <img src="<c:url value="/public/images/ic_user.svg/images/ic_user.svg"/>" alt="Imagen perfil"
                                              style="margin-right: 5px;">
                                         <spring:message code="loginForm.email.title"/>
                                     </label>
@@ -48,7 +48,7 @@
                                     <div class="row">
                                         <div class="col-6 px-0">
                                             <label class="form-label d-flex align-items-center" for="password">
-                                                <img src="<c:url value="/resources/images/ic_password.svg"/>"
+                                                <img src="<c:url value="/public/images/ic_password.svg/images/ic_password.svg"/>"
                                                      alt="Imagen perfil" style="margin-right: 5px;">
                                                 <spring:message code="loginForm.password.title"/>
                                             </label>
