@@ -5,6 +5,7 @@ import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.interfaces.exceptions.MaxUploadSizeRequestException;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.ExperienceService;
+import ar.edu.itba.getaway.interfaces.services.ImageService;
 import ar.edu.itba.getaway.interfaces.services.TokensService;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.*;
@@ -31,6 +32,7 @@ import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Optional;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
@@ -41,6 +43,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ImageService imageService;
     @Autowired
     private TokensService tokensService;
     @Autowired
@@ -228,9 +232,10 @@ public class UserController {
 
         LOGGER.info("Called /users/{}/image PUT", userId);
 
-        //TODO chequear esto
+
         InputStream in = profileImage.getEntityAs(InputStream.class);
-        userService.updateUserImage(user, new ImageModel(user.getImageId(), StreamUtils.copyToByteArray(in), profileImage.getMediaType().toString()));
+
+        imageService.updateImg(StreamUtils.copyToByteArray(in), profileImage.getMediaType().toString(), user.getProfileImage());
 
         return Response.ok().build();
     }
@@ -240,14 +245,15 @@ public class UserController {
     @Path("/{id}/experiences")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserExperiences(
+            @QueryParam("name") @DefaultValue("") String name,
             @PathParam("id") final long id,
-            @QueryParam("order") @DefaultValue("OrderByAZ") String order,
+            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/experiences GET", id);
 
         final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
         assureUserResourceCorrelation(user, id);
-        final Page<ExperienceModel> experiences = experienceService.listExperiencesListByUser(name, user, order, page);
+        final Page<ExperienceModel> experiences = experienceService.listExperiencesSearchByUser(name, user, Optional.of(order), page);
 
         if (experiences == null) {
             return Response.status(BAD_REQUEST).build();
@@ -260,11 +266,37 @@ public class UserController {
                 .queryParam("order", order);
         return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDtos) {
         }, uriBuilder);
+
+
     }
 
-    //TODO ver si hace falta un endpoint para obtener los favs del usuario
-    //TODO no se como pasarle el order como parametro para retornar la lista de experiencias, el resto los tengo mas
-    // o menos pensado
+    @GET
+    @Path("/{id}/favExperiences")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getUserFavExperiences(
+            @PathParam("id") final long id,
+            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
+            @QueryParam("page") @DefaultValue("1") int page) {
+        LOGGER.info("Called /users/{}/favExperiences GET", id);
+
+        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        assureUserResourceCorrelation(user, id);
+        final Page<ExperienceModel> favExperiences = experienceService.listExperiencesFavsByUser(user, Optional.of(order), page);
+
+        if (favExperiences == null) {
+            return Response.status(BAD_REQUEST).build();
+        }
+
+        final Collection<ExperienceDto> experienceDtos = ExperienceDto.mapExperienceToDto(favExperiences.getContent(), uriInfo);
+
+        final UriBuilder uriBuilder = uriInfo
+                .getAbsolutePathBuilder()
+                .queryParam("order", order);
+        return createPaginationResponse(favExperiences, new GenericEntity<Collection<ExperienceDto>>(experienceDtos) {
+        }, uriBuilder);
+
+
+    }
 
 
     private void assureUserResourceCorrelation(UserModel user, long userId) {

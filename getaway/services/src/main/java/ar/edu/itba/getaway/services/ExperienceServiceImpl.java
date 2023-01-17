@@ -226,7 +226,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> listExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page) {
+    public Page<ExperienceModel> listExperiencesSearchByUser(String name, UserModel user, Optional<OrderByModel> order, int page) {
         LOGGER.debug("Requested page {}", page);
 
         int totalPages;

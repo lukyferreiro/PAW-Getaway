@@ -32,7 +32,7 @@ public interface ExperienceService {
 
     boolean experienceBelongsToUser(UserModel user, ExperienceModel experience);
 
-    Page<ExperienceModel> listExperiencesListByUser(String name, UserModel user, Optional<OrderByModel> order, int page);
+    Page<ExperienceModel> listExperiencesSearchByUser(String name, UserModel user, Optional<OrderByModel> order, int page);
 
     void updateExperienceWithoutImg(ExperienceModel toUpdateExperience);
 
