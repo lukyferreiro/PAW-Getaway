@@ -54,5 +54,6 @@ public class AntMatcherVoter {
 
     public boolean userEditHimself(Authentication authentication, long userId) {
         //TODO
+        return false;
     }
 }
