@@ -22,7 +22,7 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.*;
 
-//TODO: fix count java lang type, fix search by name
+//TODO: fix search by name
 
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)

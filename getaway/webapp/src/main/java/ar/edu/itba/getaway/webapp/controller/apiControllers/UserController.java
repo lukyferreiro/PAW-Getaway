@@ -4,15 +4,13 @@ import ar.edu.itba.getaway.interfaces.exceptions.ContentExpectedException;
 import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
 import ar.edu.itba.getaway.interfaces.exceptions.MaxUploadSizeRequestException;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
-import ar.edu.itba.getaway.interfaces.services.ExperienceService;
-import ar.edu.itba.getaway.interfaces.services.ImageService;
-import ar.edu.itba.getaway.interfaces.services.TokensService;
-import ar.edu.itba.getaway.interfaces.services.UserService;
+import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.auth.JwtUtil;
 import ar.edu.itba.getaway.webapp.dto.request.*;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
+import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.UserDto;
 import ar.edu.itba.getaway.webapp.dto.validations.ImageTypeConstraint;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -49,6 +47,8 @@ public class UserController {
     private TokensService tokensService;
     @Autowired
     private ExperienceService experienceService;
+    @Autowired
+    private ReviewService reviewService;
 
     @Autowired
     private int maxRequestSize;
@@ -263,12 +263,38 @@ public class UserController {
 
         final UriBuilder uriBuilder = uriInfo
                 .getAbsolutePathBuilder()
-                .queryParam("order", order);
+                .queryParam("order", order)
+                .queryParam("page", page)
+                .queryParam("name", name);
         return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDtos) {
         }, uriBuilder);
-
-
     }
+
+    //Endpoint para obtener las reseñas creadas por un usuario
+    @GET
+    @Path("/{id}/reviews")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getUserReviews(
+            @PathParam("id") final long id,
+            @QueryParam("page") @DefaultValue("1") int page) {
+        LOGGER.info("Called /users/{}/experiences GET", id);
+
+        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        assureUserResourceCorrelation(user, id);
+        final Page<ReviewModel> reviews = reviewService.getReviewsByUser(user, page);
+
+        if (reviews == null) {
+            return Response.status(BAD_REQUEST).build();
+        }
+
+        final Collection<ReviewDto> reviewDtos = ReviewDto.mapReviewToDto(reviews.getContent(), uriInfo);
+
+        final UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder()
+                .queryParam("page", page);
+        return createPaginationResponse(reviews, new GenericEntity<Collection<ReviewDto>>(reviewDtos) {
+        }, uriBuilder);
+    }
+
 
     @GET
     @Path("/{id}/favExperiences")
@@ -291,11 +317,11 @@ public class UserController {
 
         final UriBuilder uriBuilder = uriInfo
                 .getAbsolutePathBuilder()
-                .queryParam("order", order);
+                .queryParam("order", order)
+                .queryParam("page", page);
+
         return createPaginationResponse(favExperiences, new GenericEntity<Collection<ExperienceDto>>(experienceDtos) {
         }, uriBuilder);
-
-
     }
 
 

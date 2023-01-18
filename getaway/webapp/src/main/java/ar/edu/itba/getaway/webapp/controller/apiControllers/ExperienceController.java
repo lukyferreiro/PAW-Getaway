@@ -203,9 +203,33 @@ public class ExperienceController {
             }
         }
 
-        experienceService.updateExperience(experience, imageToUpload.getImage(), imageToUpload.getMimeType());
+        final CityModel cityModel = locationService.getCityByName(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
+        final CategoryModel categoryModel = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
+
+        final ExperienceModel toUpdateExperience = new ExperienceModel(id, experienceDto.getName(), experienceDto.getAddress(), experienceDto.getInformation(),
+        experienceDto.getMail(), experienceDto.getUrl(),  Double.parseDouble(experienceDto.getPrice()), cityModel, categoryModel, user, experience.getExperienceImage(), experience.getObservable(), experience.getViews());
+
+        experienceService.updateExperience(toUpdateExperience, imageToUpload.getImage(), imageToUpload.getMimeType());
         LOGGER.info("The experience with id {} has been updated successfully", id);
         return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
+    }
+
+    // Endpoint para eliminar una experiencia
+    @DELETE
+    @Path("/{id}")
+    @Produces(value = {MediaType.APPLICATION_JSON,})
+    public Response deleteExperience(@PathParam("id") final long id) {
+        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+
+        if (experienceModel.getUser().getUserId() != (user.getUserId())) {
+            LOGGER.error("Error, user with id {} is trying to update the experience with id {} that belongs to user with id {}",
+                    user.getUserId(), id, experienceModel.getUser().getUserId());
+            throw new IllegalOperationException();
+        }
+
+        experienceService.deleteExperience(experienceModel);
+        return Response.noContent().build();
     }
 
     // Endpoint para obtener la imagen de una experiencia

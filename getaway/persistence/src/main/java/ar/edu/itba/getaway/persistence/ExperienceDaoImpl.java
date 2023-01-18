@@ -130,7 +130,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         query.setParameter("category", category);
         query.setParameter("max", max);
         query.setParameter("score", score);
-        return (Integer) query.getSingleResult();
+        return ((BigInteger) query.getSingleResult()).intValue();
     }
 
     @Override
@@ -184,7 +184,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
                         "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(cityName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(countryName) LIKE LOWER(CONCAT('%', :name,'%'))) AND observable = true"
         );
         query.setParameter("name", name);
-        return (Integer) query.getSingleResult();
+        return ((BigInteger) query.getSingleResult()).intValue();
     }
 
     @Override
@@ -228,7 +228,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         );
         query.setParameter("name", name);
         query.setParameter("userId", user.getUserId());
-        return (Integer) query.getSingleResult();
+        return ((BigInteger) query.getSingleResult()).intValue();
     }
 
     private String getOrderQuery(Optional<OrderByModel> order) {
@@ -277,7 +277,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         );
 
         query.setParameter("userId", user.getUserId());
-        return (Integer) query.getSingleResult();
+        return ((BigInteger) query.getSingleResult()).intValue();
     }
 
     @Override
