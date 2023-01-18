@@ -31,7 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private MessageSource messageSource;
     @Autowired
-    private String appBaseUrl;
+    private URL appBaseUrl;
 
     private final Locale locale = LocaleContextHolder.getLocale();
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImpl.class);
@@ -132,13 +132,14 @@ public class ReviewServiceImpl implements ReviewService {
             final String categoryName = reviewModel.getExperience().getCategory().getCategoryName();
             final long experienceId = reviewModel.getExperience().getExperienceId();
 //            final String url = new URL("http", appBaseUrl, 8080, "/webapp_war/experiences/" + categoryName + '/' + experienceId).toString();
-            final String url = new URL("http", appBaseUrl, "/paw-2022b-1/experiences/" + categoryName + '/' + experienceId).toString();
+//            final String url = new URL("http", appBaseUrl, "/paw-2022b-1/experiences/" + categoryName + '/' + experienceId).toString();
+            final String url = appBaseUrl.toString() + "/experiences/" + categoryName + "/" + experienceId;
             final Map<String, Object> variables = new HashMap<>();
             variables.put("review", reviewModel);
             variables.put("myExperienceUrl", url);
             variables.put("to", reviewModel.getExperience().getUser().getEmail());
             emailService.sendMail("newReview", messageSource.getMessage("email.newReview", new Object[]{}, locale), variables, locale);
-        } catch (MessagingException | MalformedURLException e) {
+        } catch (MessagingException e) {
             LOGGER.warn("Error, mail to verify account not sent");
         }
     }

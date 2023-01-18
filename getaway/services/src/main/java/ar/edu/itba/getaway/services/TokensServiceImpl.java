@@ -34,7 +34,7 @@ public class TokensServiceImpl implements TokensService {
     @Autowired
     private EmailService emailService;
     @Autowired
-    private String appBaseUrl;
+    private URL appBaseUrl;
     @Autowired
     private MessageSource messageSource;
 
@@ -67,12 +67,13 @@ public class TokensServiceImpl implements TokensService {
     public void sendVerificationToken(UserModel userModel, VerificationToken token) {
         try {
 //            final String url = new URL("http", appBaseUrl, 8080, "/webapp_war/user/verifyAccount/" + token.getValue()).toString();
-            final String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount/" + token.getValue()).toString();
+//            final String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount/" + token.getValue()).toString();
+            final String url = appBaseUrl.toString() + "/user/verifyAccount/" + token.getValue();
             final Map<String, Object> variables = new HashMap<>();
             variables.put("confirmationURL", url);
             variables.put("to", userModel.getEmail());
             emailService.sendMail("verification", messageSource.getMessage("email.verifyAccount", new Object[]{}, locale), variables, locale);
-        } catch (MessagingException | MalformedURLException e) {
+        } catch (MessagingException e) {
             LOGGER.warn("Error, mail to verify account not sent");
         }
     }
@@ -81,12 +82,13 @@ public class TokensServiceImpl implements TokensService {
     public void sendPasswordResetToken(UserModel userModel, PasswordResetToken token) {
         try {
 //           final String url = new URL("http", appBaseUrl, 8080, "/webapp_war/user/resetPassword/" + token.getValue()).toString();
-            final String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/resetPassword/" + token.getValue()).toString();
+//            final String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/resetPassword/" + token.getValue()).toString();
+            final String url = appBaseUrl.toString() + "/user/resetPassword/" + token.getValue();
             final Map<String, Object> variables = new HashMap<>();
             variables.put("confirmationURL", url);
             variables.put("to", userModel.getEmail());
             emailService.sendMail("passwordReset", messageSource.getMessage("email.resetPassword", new Object[]{}, locale), variables, locale);
-        } catch (MessagingException | MalformedURLException e) {
+        } catch (MessagingException e) {
             LOGGER.warn("Error, mail to reset password not sent");
         }
     }

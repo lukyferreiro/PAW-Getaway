@@ -34,9 +34,8 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 @ComponentScan("ar.edu.itba.getaway.webapp.auth")
-@PropertySource(value= {"classpath:application.properties"})
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired

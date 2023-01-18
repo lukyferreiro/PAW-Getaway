@@ -1,18 +1,15 @@
 package ar.edu.itba.getaway.webapp.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -34,13 +31,10 @@ public class WebConfig {
 //    private static final Integer MAX_SIZE_PER_FILE = 10000000;
     private static final Integer MAX_REQUEST_SIZE = 3500000;
 
-    private static final boolean DEV_BUILD = false;
+    private static final boolean DEV_BUILD = true;
     private static boolean isOnDevBuild() {
         return DEV_BUILD;
     }
-
-    @Autowired
-    Environment environment;
 
     @Bean
     public MessageSource messageSource() {
@@ -71,13 +65,13 @@ public class WebConfig {
 //        ds.setPassword("qo16kZtyI");
 
         if (isOnDevBuild()) {
-            ds.setUrl(environment.getRequiredProperty("db.dev.url"));
-            ds.setUsername(environment.getRequiredProperty("db.dev.username"));
-            ds.setPassword(environment.getRequiredProperty("db.dev.password"));
+            ds.setUrl("jdbc:postgresql://localhost/postgres");
+            ds.setUsername("postgres");
+            ds.setPassword("getawaydb");
         } else {
-            ds.setUrl(environment.getRequiredProperty("db.prod.url"));
-            ds.setUsername(environment.getRequiredProperty("db.prod.username"));
-            ds.setPassword(environment.getRequiredProperty("db.prod.password"));
+            ds.setUrl("jdbc:postgresql://10.16.1.110/paw-2022b-1");
+            ds.setUsername("paw-2022b-1");
+            ds.setPassword("qo16kZtyI");
         }
 
         return ds;
@@ -130,11 +124,9 @@ public class WebConfig {
     @Bean(name = "appBaseUrl")
     public URL appBaseUrl() throws MalformedURLException {
         if (isOnDevBuild()) {
-            return new URL(environment.getRequiredProperty("app.prod.protocol"), environment.getRequiredProperty("app.dev.host"),
-                    Integer.parseInt(environment.getRequiredProperty("app.dev.port")), environment.getRequiredProperty("app.dev.webContext"));
+            return new URL("http", "localhost", 4200, "/webapp_war");
         } else {
-            return new URL(environment.getRequiredProperty("app.prod.protocol"), environment.getRequiredProperty("app.prod.host"),
-                    Integer.parseInt(environment.getRequiredProperty("app.prod.port")), environment.getRequiredProperty("app.prod.webContext"));
+            return new URL("http", "pawserver.it.itba.edu.ar", 8080, "/paw-2022b-1");
         }
     }
 
