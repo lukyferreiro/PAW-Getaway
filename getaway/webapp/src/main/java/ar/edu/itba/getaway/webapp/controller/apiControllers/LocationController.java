@@ -18,7 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.*;
 import java.util.Collection;
 
-@Path("/location")
+@Path("location")
 @Component
 public class LocationController {
 

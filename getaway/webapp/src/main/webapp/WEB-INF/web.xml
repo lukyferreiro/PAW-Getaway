@@ -6,7 +6,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd%22%3E">
 
-    <display-name>PAW Demo Web Application</display-name>
+    <display-name>Getaway</display-name>
 
     <context-param>
         <param-name>contextClass</param-name>
@@ -39,10 +39,10 @@
                 ar.edu.itba.getaway.webapp.mappers,
             </param-value>
         </init-param>
-<!--        <init-param>-->
-<!--            <param-name>jersey.config.beanValidation.enableOutputValidationErrorEntity.server</param-name>-->
-<!--            <param-value>true</param-value>-->
-<!--        </init-param>-->
+        <init-param>
+            <param-name>jersey.config.beanValidation.enableOutputValidationErrorEntity.server</param-name>
+            <param-value>true</param-value>
+        </init-param>
         <!-- pass to next filter if Jersey/App returns 404 -->
         <init-param>
             <param-name>jersey.config.servlet.filter.forwardOn404</param-name>
@@ -105,10 +105,10 @@
         <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/api/*</url-pattern>
     </filter-mapping>
-    <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/auth/*</url-pattern>
-    </filter-mapping>
+<!--    <filter-mapping>-->
+<!--        <filter-name>springSecurityFilterChain</filter-name>-->
+<!--        <url-pattern>/auth/*</url-pattern>-->
+<!--    </filter-mapping>-->
 
     <filter>
         <filter-name>openEntityManagerInViewFilter</filter-name>
@@ -130,9 +130,9 @@
     </filter-mapping>
 
     <!--TODO ver si va esto -->
-<!--    <error-page>-->
-<!--        <error-code>404</error-code>-->
-<!--        <location>/404</location>-->
-<!--    </error-page>-->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/index.html</location>
+    </error-page>
 
 </web-app>

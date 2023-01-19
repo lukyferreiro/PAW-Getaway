@@ -51,7 +51,7 @@
             <artifactId>interfaces</artifactId>
             <version>${parent.version}</version>
         </dependency>
-<!--        &lt;!&ndash;Modulo persistence&ndash;&gt;-->
+        <!--Modulo persistence-->
 <!--        <dependency>-->
 <!--            <groupId>ar.edu.itba.getaway</groupId>-->
 <!--            <artifactId>persistence</artifactId>-->

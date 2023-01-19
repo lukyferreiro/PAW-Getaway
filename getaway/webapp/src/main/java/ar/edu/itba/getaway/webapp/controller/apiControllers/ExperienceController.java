@@ -30,7 +30,7 @@ import java.util.Optional;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
-@Path("/experiences")
+@Path("experiences")
 @Component
 public class ExperienceController {
     @Autowired

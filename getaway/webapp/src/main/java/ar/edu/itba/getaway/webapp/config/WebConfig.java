@@ -77,13 +77,11 @@ public class WebConfig {
         return ds;
     }
 
-    // Cambiamos el transaction manager por uno que entienda de JPA
     @Bean
     public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
     }
 
-    //Para definir nuestro entity manager usando JPA, y Hibernate como implementación concreta
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();

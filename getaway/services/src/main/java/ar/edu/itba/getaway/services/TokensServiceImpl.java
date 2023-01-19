@@ -93,7 +93,6 @@ public class TokensServiceImpl implements TokensService {
         }
     }
 
-    @Transactional
     @Override
     public SessionRefreshToken getSessionRefreshToken(UserModel user) {
         LOGGER.debug("Retrieving session refresh token for user");
