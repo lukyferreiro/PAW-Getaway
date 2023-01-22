@@ -1,0 +1,124 @@
+/*------ Filters Section -------*/
+.container-filters {
+    flex: 1;
+    font-size: medium;
+}
+
+.filters-title {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.filter-form {
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.checkbox-price {
+    margin-right: 10px;
+    min-width: 30px;
+}
+
+/*https://stackoverflow.com/questions/64435290/how-can-i-change-the-checked-background-color-of-this-bootstrap-4-toggle-switc*/
+
+.form-check-input:focus {
+    background-color: rgba(249, 157, 50, 0.5);
+    border: var(--primary-color);
+    box-shadow: 0 0 0 0 rgba(255, 197, 132, 0.5);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%280, 0, 0, 0.25%29'/%3e%3c/svg%3e") !important;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border: none var(--primary-color);
+}
+
+.form-check-input:not(:checked) {
+    background-color: rgba(249, 157, 50, 0.5);
+}
+
+.container-slider-price {
+    width: 100%;
+    margin: 20px 0;
+}
+
+.slider-price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.slider {
+    flex: 4;
+}
+
+.slider-price .value {
+    font-size: small;
+    font-weight: 500;
+}
+
+.slider-price .value.left {
+    margin-right: 5px;
+}
+
+.slider-price .value.right {
+    margin-left: 5px;
+}
+
+#customRange {
+    -webkit-appearance: none;
+    height: 3px;
+    width: 100%;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+}
+
+#customRange::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    border: 1px solid var(--primary-color);
+}
+
+#customRange::-moz-range-progress {
+    background: var(--primary-color);
+}
+
+.btn-search {
+    border-color: var(--primary-color);
+    background-color: transparent;
+    color: black;
+}
+
+.btn-search:hover, .btn-search:focus {
+    border-color: var(--primary-color);
+    background-color: var(--secondary-color);
+    color: black;
+    --bs-btn-focus-shadow-rgb: none;
+}
+
+.btn-clean-filter {
+    border-color: var(--primary-color);
+    background-color: transparent;
+    color: black;
+}
+
+.btn-clean-filter:hover, .btn-clean-filter:focus {
+    border-color: var(--primary-color);
+    background-color: transparent;
+    color: black;
+    --bs-btn-focus-shadow-rgb: none;
+}
+
+.orderInfo {
+    display: inline-block;
+    vertical-align: middle
+}

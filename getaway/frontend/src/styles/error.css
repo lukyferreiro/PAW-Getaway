@@ -1,0 +1,23 @@
+.btn-error {
+    font-size: x-large;
+    font-weight: bold;
+    color: white;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    padding: 5px 15px;
+    margin: 10px;
+}
+
+.btn-error:hover {
+    color: white;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
+.btn-error:focus {
+    color: white;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+}

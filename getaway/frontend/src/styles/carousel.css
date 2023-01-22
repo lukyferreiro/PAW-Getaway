@@ -1,0 +1,21 @@
+.row {
+    margin: 1%;
+    justify-content: space-around;
+}
+
+.nav button {
+    position: absolute;
+    top: 50%;
+    transform: translatey(-50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    outline: none;
+    border: 1px solid #000;
+    cursor: pointer;
+    background-color: #FAB672;
+}
+
+.carousel-control-next {
+    margin: 150px 0 !important;
+}
