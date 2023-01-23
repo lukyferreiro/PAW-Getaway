@@ -92,30 +92,25 @@
     background: var(--primary-color);
 }
 
-.btn-search {
-    border-color: var(--primary-color);
-    background-color: transparent;
-    color: black;
+.btn-search, .btn-clean-filter {
+    border-color: var(--primary-color) !important;
+    background-color: transparent !important;
+    color: black !important;
 }
 
 .btn-search:hover, .btn-search:focus {
-    border-color: var(--primary-color);
-    background-color: var(--secondary-color);
-    color: black;
-    --bs-btn-focus-shadow-rgb: none;
+    border-color: var(--primary-color) !important;
+    background-color: var(--secondary-color) !important;
+    color: black !important;
+    --bs-btn-focus-shadow-rgb: none !important;
 }
 
-.btn-clean-filter {
-    border-color: var(--primary-color);
-    background-color: transparent;
-    color: black;
-}
 
 .btn-clean-filter:hover, .btn-clean-filter:focus {
-    border-color: var(--primary-color);
-    background-color: transparent;
-    color: black;
-    --bs-btn-focus-shadow-rgb: none;
+    border-color: var(--primary-color) !important;
+    background-color: transparent !important;
+    color: black !important;
+    --bs-btn-focus-shadow-rgb: none !important;
 }
 
 .orderInfo {

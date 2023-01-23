@@ -1,5 +1,5 @@
 .navbar {
-    background-color: var(--background-color);
+    background-color: var(--background-color) !important;
 }
 
 .logo {
@@ -68,7 +68,7 @@
 }
 
 .separator {
-    border: 2px solid black;
-    margin: 0;
-    padding: 0;
+    border: 2px solid black !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }

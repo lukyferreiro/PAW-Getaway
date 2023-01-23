@@ -23,33 +23,30 @@ function App() {
 
         <BrowserRouter basename={process.env.REACT_APP_CONTEXT}>
 
-            <div className="container-main">
+            <Navbar/>
+            <hr className="separator"/>
 
-                <Navbar/>
-                <hr className="separator"/>
-
-                <Routes>
-                    <Route path='/' element={<Landing/>}>
-                        <Route index element={<Landing/>}/>
-                        <Route path='user' element={<UserPage/>}>
-                            <Route index element={<UserProfile/>}/>
-                            <Route path='profile' element={<UserProfile/>}/>
-                            <Route path='experiences' element={<UserExperiences/>}/>
-                            <Route path='favourites' element={<UserFavourites/>}/>
-                            <Route path='reviews' element={<UserReviews/>}/>
-                        </Route>
-                        <Route path='experiences' element={<Experiences/>}/>
-                        <Route path='experiences/:experienceId' element={<ExperienceDetails/>}/>
-                        <Route path='createExperience' element={<CreateExperience/>}/>
-                        <Route path='error' element={<Error/>}/>
-                        <Route path='*' element={<Custom404/>}/>
+            <Routes>
+                <Route path='/' element={<Landing/>}>
+                    <Route index element={<Landing/>}/>
+                    <Route path='user' element={<UserPage/>}>
+                        <Route index element={<UserProfile/>}/>
+                        <Route path='profile' element={<UserProfile/>}/>
+                        <Route path='experiences' element={<UserExperiences/>}/>
+                        <Route path='favourites' element={<UserFavourites/>}/>
+                        <Route path='reviews' element={<UserReviews/>}/>
                     </Route>
-                    <Route path='/login' element={<Login/>}/>
-                    <Route path='/register' element={<Register/>}/>
-                </Routes>
+                    <Route path='experiences' element={<Experiences/>}/>
+                    <Route path='experiences/:experienceId' element={<ExperienceDetails/>}/>
+                    <Route path='createExperience' element={<CreateExperience/>}/>
+                    <Route path='error' element={<Error/>}/>
+                    <Route path='*' element={<Custom404/>}/>
+                </Route>
+                <Route path='/login' element={<Login/>}/>
+                <Route path='/register' element={<Register/>}/>
+            </Routes>
 
-                <Footer/>
-            </div>
+            <Footer/>
 
         </BrowserRouter>
     )

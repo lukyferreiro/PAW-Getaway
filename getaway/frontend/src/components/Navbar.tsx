@@ -23,7 +23,6 @@ export default function Navbar() {
     ]
 
     return (
-
         <div className="navbar container-fluid p-0 d-flex flex-column">
             <div className="container-fluid px-2 pt-2 d-flex">
                 <Link to="/" className="logo d-flex">
