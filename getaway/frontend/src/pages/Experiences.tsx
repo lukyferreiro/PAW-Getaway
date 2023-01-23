@@ -1,6 +1,7 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import OrderDropdown from "../components/OrderDropdown";
+import CardExperience from "../components/CardExperience";
 
 export default function Experiences() {
 
@@ -110,6 +111,8 @@ export default function Experiences() {
                             <h1 className="d-flex align-self-center">
                                 {t('Experience.emptyResult')}
                             </h1>
+                        <CardExperience
+                        />
                     </div>
                 </div>
 
