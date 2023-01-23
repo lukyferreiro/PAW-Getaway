@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller.apiControllers;
 
+import ar.edu.itba.getaway.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.getaway.interfaces.exceptions.CountryNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.LocationService;
 import ar.edu.itba.getaway.models.CityModel;
@@ -55,5 +56,15 @@ public class LocationController {
         return Response.ok(new GenericEntity<Collection<CityDto>>(citiesDtos) {}).build();
     }
 
-    //TODO: add get for specific city?
+    //TODO: check
+    @GET
+    @Path("/cities/{id}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getCityById(@PathParam("id") final long id) {
+        LOGGER.info("Called /locations/contry GET");
+
+        CityModel city = locationService.getCityById(id).orElseThrow(CityNotFoundException::new);
+
+        return Response.ok(new CityDto(city)).build();
+    }
 }

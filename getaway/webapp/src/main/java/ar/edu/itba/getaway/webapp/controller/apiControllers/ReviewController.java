@@ -44,8 +44,6 @@ public class ReviewController {
 
         final ReviewModel review = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
 
-        System.out.println(review.getTitle());
-
         return Response.ok(new ReviewDto(review, uriInfo)).build();
     }
 

@@ -9,6 +9,7 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.auth.JwtUtil;
 import ar.edu.itba.getaway.webapp.dto.request.*;
+import ar.edu.itba.getaway.webapp.dto.response.CountryDto;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.UserDto;
@@ -252,6 +253,8 @@ public class UserController {
         LOGGER.info("Called /users/{}/experiences GET", id);
 
         final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
+
         assureUserResourceCorrelation(user, id);
         final Page<ExperienceModel> experiences = experienceService.listExperiencesSearchByUser(name, user, Optional.of(order), page);
 
@@ -266,6 +269,7 @@ public class UserController {
                 .queryParam("order", order)
                 .queryParam("page", page)
                 .queryParam("name", name);
+
         return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDtos) {
         }, uriBuilder);
     }
@@ -280,6 +284,8 @@ public class UserController {
         LOGGER.info("Called /users/{}/experiences GET", id);
 
         final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
+
         assureUserResourceCorrelation(user, id);
         final Page<ReviewModel> reviews = reviewService.getReviewsByUser(user, page);
 
@@ -306,6 +312,8 @@ public class UserController {
         LOGGER.info("Called /users/{}/favExperiences GET", id);
 
         final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
+
         assureUserResourceCorrelation(user, id);
         final Page<ExperienceModel> favExperiences = experienceService.listExperiencesFavsByUser(user, Optional.of(order), page);
 

@@ -71,6 +71,8 @@ public class ExperienceController {
         }
         final CityModel cityModel = locationService.getCityById(cityId).orElse(null);
         final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
         final Page<ExperienceModel> experiences = experienceService.listExperiencesByFilter(categoryModel, maxPrice, maxScore, cityModel, Optional.of(order), page, user);
 
         if (experiences == null) {
