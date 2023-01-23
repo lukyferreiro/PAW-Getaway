@@ -1,7 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./styles/global.css";
 import App from "./App";
+
+import "./styles/cardExperience.css";
+import "./styles/carousel.css";
+import "./styles/delete.css";
+import "./styles/error.css";
+import "./styles/experienceDetail.css";
+import "./styles/filtersSection.css";
+import "./styles/form.css";
+import "./styles/global.css";
+import "./styles/icons.css";
+import "./styles/loginRegister.css";
+import "./styles/navbar.css";
+import "./styles/resetRequest.css";
+import "./styles/snackbar.css";
+import "./styles/table.css";
+
 // Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 // Bootstrap Bundle JS

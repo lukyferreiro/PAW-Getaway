@@ -13,7 +13,7 @@
 }
 
 .dropdown-item::selection, .dropdown-item:focus {
-    background-color: #FAB672;
+    background-color: #FAB672 !important;
 }
 
 .container-main {

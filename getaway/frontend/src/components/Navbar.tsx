@@ -1,8 +1,8 @@
 import {useTranslation} from "react-i18next"
 import "../common/i18n/index"
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import {Link, useLocation, useNavigate} from 'react-router-dom'
 import Category from "../types/Category"
-import "../styles/navbar.css"
+import {CategoryModel} from "../types";
 
 export default function Navbar() {
 
@@ -10,15 +10,16 @@ export default function Navbar() {
     let navigate = useNavigate()
     let location = useLocation()
     const pathname = location?.pathname
+    const queries = location?.search
 
     //TODO obtenerlas de un llamado a la API ??
-    const categories: Category[] = [
-        { path: '/aventura', name: 'Aventura' },
-        { path: '/gastronomia', name: 'Gastronomia' },
-        { path: '/relax', name: 'Relax' },
-        { path: '/historico', name: 'Historico' },
-        { path: '/vidaNocturna', name: 'Vida nocturna' },
-        //TODO,
+    const categories: CategoryModel[] = [
+        {categoryId: 1, name: 'Aventura'},
+        {categoryId: 2, name: 'Gastronomia'},
+        {categoryId: 3, name: 'Hoteleria'},
+        {categoryId: 4, name: 'Relax'},
+        {categoryId: 5, name: 'Historico'},
+        {categoryId: 6, name: 'Vida_nocturna'},
     ]
 
     return (
@@ -26,79 +27,84 @@ export default function Navbar() {
         <div className="navbar container-fluid p-0 d-flex flex-column">
             <div className="container-fluid px-2 pt-2 d-flex">
                 <Link to="/" className="logo d-flex">
-                    <img className="logo-img" src="public/images/getaway-icon.png" alt="Logo"/>
+                    <img className="logo-img" src={'./images/getaway-icon.png'} alt="Logo"/>
                     <span className="logo-text align-self-center text-uppercase font-weight-bold">
                         {t('PageName')}
                     </span>
                 </Link>
                 <div className="container-navbar-buttons d-flex justify-content-between align-items-center">
-                    {/*TODO este div tiene style="margin-right: 40px;*/}
-                    <div className={`d-flex justify-items-center align-items-center`} >
+                    <div className="d-flex justify-items-center align-items-center"
+                         style={{marginRight: '40px'}}>
                         <button className="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm">
-                            <img src="public/images/ic_lupa.svg" alt="Icono lupa"/>
+                            <img src={'./images/ic_lupa.svg'} alt="Lupa"/>
                         </button>
-                        Buscar
-                        {/*<spring:message code="navbar.search" var="placeholder"/>*/}
                         {/*<c:url value="/search_result" var="searchGetPath"/>*/}
-                        {/*<form:form modelAttribute="searchForm" action="${searchGetPath}" id="searchExperienceForm" method="get"*/}
-                        {/*           acceptCharset="UTF-8" cssClass="my-auto">*/}
-                        {/*    <form:input path="query" type="text" className="form-control" cssErrorClass="form-control is-invalid"*/}
-                        {/*                placeholder="${placeholder}"/>*/}
-                        {/*    <form:errors path="query" element="p" cssClass="form-error-label"/>*/}
-                        {/*</form:form>*/}
+                        {/*TODO agregar onSubmit*/}
+                        <form className="my-auto">
+                            {/*TODO cuando falle agregar cssErrorClass="form-control is-invalid*/}
+                            <input type="text" className="form-control" placeholder={t('Navbar.search')}/>
+                            {/*<form:input path="query" type="text" className="form-control" cssErrorClass="form-control is-invalid"*/}
+                            {/*            placeholder="${placeholder}"/>*/}
+                            {/*<form:errors path="query" element="p" cssClass="form-error-label"/>*/}
+                        </form>
                     </div>
 
-                    {/*TODO este a tiene style="margin-right: 40px;*/}
-                    <Link to="/createExperience">
-                        <button type="button" className="btn button-primary">
-                            {t('Navbar.CreateExperience')}
+                    {/*TODO que solo aparezca si el user es provider*/}
+                    <Link to="/createExperience" style={{marginRight: '40px'}}>
+                        <button type="button" className='btn button-primary'>
+                            {t('Navbar.createExperience')}
                         </button>
                     </Link>
 
+                    {/*TODO ver como hacer el case de si el usuario esta logeado o no*/}
                     {/*<c:choose>*/}
                     {/*    <c:when test="${loggedUser == null}">*/}
-                    {/*        <a href="<c:url value="/login"/>">*/}
-                    {/*            <button type="button" className="btn button-primary">*/}
-                    {/*                <spring:message code="navbar.login"/>*/}
-                    {/*            </button>*/}
-                    {/*        </a>*/}
+                    <Link to="/login">
+                        <button type="button" className="btn button-primary">
+                            {t('Navbar.login')}
+                        </button>
+                    </Link>
                     {/*    </c:when>*/}
                     {/*    <c:otherwise>*/}
-                    {/*        <div className="dropdown">*/}
-                    {/*            <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"*/}
-                    {/*                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">*/}
-                    {/*                <img src="<c:url value="/public/images/ic_user_white.svg/images/ic_user_white.svg"/>" alt="Icono usuario"*/}
-                    {/*                     style="width:35px; height:35px;">*/}
-                    {/*            </button>*/}
+                    <div className="dropdown">
+                        <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src={'./images/ic_user_white.svg'} alt="Icono usuario" style={{
+                                width: "35px",
+                                height: "35px"
+                            }}/>
+                        </button>
 
-                    {/*            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="left: -50px;">*/}
-                    {/*                <a className="dropdown-item" href="<c:url value="/user/profile"/>">*/}
-                    {/*                    <img src="<c:url value="/public/images/ic_user.svg/images/ic_user.svg"/>" alt="Icono perfil">*/}
-                    {/*                        <spring:message code="navbar.profile"/>*/}
-                    {/*                </a>*/}
-                    {/*                <c:if test="${loggedUser.hasRole('PROVIDER')}">*/}
-                    {/*                    <a className="dropdown-item" href="<c:url value="/user/experiences"/>">*/}
-                    {/*                        <img src="<c:url value="/public/images/ic_experiences.svg/images/ic_experiences.svg"/>"*/}
-                    {/*                             alt="Icono experiencias">*/}
-                    {/*                            <spring:message code="navbar.experiences"/>*/}
-                    {/*                    </a>*/}
-                    {/*                </c:if>*/}
-                    {/*                <a className="dropdown-item" href="<c:url value="/user/favourites"/>">*/}
-                    {/*                    <img src="<c:url value="/public/images/ic_fav.svg/images/ic_fav.svg"/>" alt="Icono favoritos">*/}
-                    {/*                        <spring:message code="navbar.favourites"/>*/}
-                    {/*                </a>*/}
-                    {/*                <c:if test="${loggedUser.hasRole('VERIFIED')}">*/}
-                    {/*                    <a className="dropdown-item" href="<c:url value="/user/reviews"/>">*/}
-                    {/*                        <img src="<c:url value="/public/images/ic_review.svg/images/ic_review.svg"/>" alt="Icono reseñas">*/}
-                    {/*                            <spring:message code="navbar.reviews"/>*/}
-                    {/*                    </a>*/}
-                    {/*                </c:if>*/}
-                    {/*                <a className="dropdown-item" href="<c:url value="/logout"/>">*/}
-                    {/*                    <img src="<c:url value="/public/images/ic_logout.svg/images/ic_logout.svg"/>" alt="Icono cerrar sesion">*/}
-                    {/*                        <spring:message code="navbar.logout"/>*/}
-                    {/*                </a>*/}
-                    {/*            </ul>*/}
-                    {/*        </div>*/}
+                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{left: "-50px"}}>
+                            <Link to="/user/profile" className="dropdown-item">
+                                <img src={'./images/ic_user.svg'} alt="Icono perfil"/>
+                                {t('Navbar.profile')}
+                            </Link>
+                            {/*TODO que solo este si el usuario es provider*/}
+                            {/*<c:if test="${loggedUser.hasRole('PROVIDER')}">*/}
+                            <Link to="/user/experiences" className="dropdown-item">
+                                <img src={'./images/ic_experiences.svg'} alt="Icono experiencias"/>
+                                {t('Navbar.experiences')}
+                            </Link>
+                            {/*</c:if>*/}
+                            <Link to="/user/favourites" className="dropdown-item">
+                                <img src={'./images/ic_fav.svg'} alt="Icono favoritos"/>
+                                {t('Navbar.favourites')}
+                            </Link>
+                            {/*TODO que solo este si el usuario es VERIFIED*/}
+                            {/*<c:if test="${loggedUser.hasRole('VERIFIED')}">*/}
+                            <Link to="/user/reviews" className="dropdown-item">
+                                <img src={'./images/ic_review.svg'} alt="Icono reseñas"/>
+                                {t('Navbar.reviews')}
+                            </Link>
+                            {/*</c:if>*/}
+                            {/*TODO agregar onClick que haga el logout*/}
+                            <button className="dropdown-item">
+                                <img src={'./images/ic_logout.svg'} alt="Icono cerrar sesion"/>
+                                {t('Navbar.logout')}
+                            </button>
+                        </ul>
+                    </div>
                     {/*    </c:otherwise>*/}
                     {/*</c:choose>*/}
                 </div>
@@ -107,10 +113,10 @@ export default function Navbar() {
             <div className="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0">
 
                 {categories.map((category) => (
-                    <Link to={category.path}>
-                        <button type="button" className={`btn btn-category ${pathname === category.path ? "isActive" : ""}`}>
-                            <img src={`public/images/${category.name}`} alt="Logo aventura"/>
-                            {t('Navbar.categories.' + category.path)}
+                    <Link to={{pathname: "/experiences", search:`?category=${category.name}`}} >
+                        <button type="button" className={`btn btn-category ${queries?.includes(`category=${category.name}`) ? 'isActive' : ''}`}>
+                            <img src={`./images/${category.name}.svg`} alt={`${category.name}`}/>
+                            {t('Navbar.categories.' + category.name)}
                         </button>
                     </Link>
                 ))}
@@ -160,8 +166,6 @@ export default function Navbar() {
             </div>
         </div>
 
-    // <hr className="separator"/>
-
-    );
+    )
 
 }

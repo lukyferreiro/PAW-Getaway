@@ -1,5 +1,6 @@
 import React from 'react'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
+
 import Landing from "./pages/Landing";
 import UserPage from "./pages/UserPage";
 import UserProfile from "./pages/UserProfile";
