@@ -31,7 +31,7 @@ public class LocationController {
     private static final Logger LOGGER = LoggerFactory.getLogger(LocationController.class);
 
     @GET
-    @Path("/country")
+    @Path("/countries")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCountries() {
         LOGGER.info("Called /locations/contry GET");
@@ -43,7 +43,7 @@ public class LocationController {
     }
 
     @GET
-    @Path("/country/{id}/cities")
+    @Path("/countries/{id}/cities")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCountryCities(@PathParam("id") final long id) {
         LOGGER.info("Called /locations/country/{}/cities GET", id);
@@ -54,4 +54,6 @@ public class LocationController {
 
         return Response.ok(new GenericEntity<Collection<CityDto>>(citiesDtos) {}).build();
     }
+
+    //TODO: add get for specific city?
 }

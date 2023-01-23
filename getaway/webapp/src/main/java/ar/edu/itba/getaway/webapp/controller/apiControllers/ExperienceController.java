@@ -8,10 +8,7 @@ import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
-import ar.edu.itba.getaway.webapp.dto.response.UserDto;
-import ar.edu.itba.getaway.webapp.dto.validations.ImageTypeConstraint;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -153,7 +150,7 @@ public class ExperienceController {
 
     // Endpoint para obtener una experiencia a partir de su ID
     @GET
-    @Path("/{id}")
+    @Path("/experience/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperienceId(@PathParam("id") final long id) {
         LOGGER.info("Called /experiences/{} GET", id);
@@ -164,7 +161,7 @@ public class ExperienceController {
 
     // Endpoint para editar una experiencia
     @PUT
-    @Path("/{id}")
+    @Path("/experience/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response updateExperience(
@@ -216,7 +213,7 @@ public class ExperienceController {
 
     // Endpoint para eliminar una experiencia
     @DELETE
-    @Path("/{id}")
+    @Path("/experience/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response deleteExperience(@PathParam("id") final long id) {
         final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
@@ -234,7 +231,7 @@ public class ExperienceController {
 
     // Endpoint para obtener la imagen de una experiencia
     @GET
-    @Path("/{id}/image")
+    @Path("/experience/{id}/image")
     @Produces({"image/*", MediaType.APPLICATION_JSON})
     public Response getExperienceImage(@PathParam("id") final long id) {
 
@@ -259,7 +256,7 @@ public class ExperienceController {
 
     // Endpoint para obtener la reseñas de una experiencia
     @GET
-    @Path("/{id}/reviews")
+    @Path("/experience/{id}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperienceReviews(
             @PathParam("id") final long id,
@@ -281,11 +278,12 @@ public class ExperienceController {
 
     // Endpoint para crear una reseña en la experiencia
     @POST
-    @Path("/{id}/reviews")
+    @Path("/experience/{id}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createExperienceReview(@PathParam("id") final long id, @Valid NewReviewDto newReviewDto, @Valid ReviewDto reviewDto, @Valid UserDto userDto) {
+    public Response createExperienceReview(@PathParam("id") final long id, @Valid NewReviewDto newReviewDto) {
         LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
-        final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new), reviewDto.getReviewDate(), userService.getUserById(userDto.getId()).orElseThrow(UserNotFoundException::new));
+        //TODO: check usage of localdate.now()
+        final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new), LocalDate.now(), userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new));
         return Response.created(ReviewDto.getReviewUriBuilder(reviewModel, uriInfo).build()).build();
     }
 

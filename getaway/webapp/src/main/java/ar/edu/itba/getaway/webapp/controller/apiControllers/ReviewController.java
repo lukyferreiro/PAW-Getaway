@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
-@Path("reviews")
+@Path("/reviews")
 @Component
 public class ReviewController {
 
@@ -43,6 +43,8 @@ public class ReviewController {
         LOGGER.info("Called /reviews/{} GET", id);
 
         final ReviewModel review = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
+
+        System.out.println(review.getTitle());
 
         return Response.ok(new ReviewDto(review, uriInfo)).build();
     }
