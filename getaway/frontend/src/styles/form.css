@@ -1,6 +1,6 @@
 .form-label {
-    font-size: large;
-    font-weight: bold;
+    font-size: large !important;
+    font-weight: bold !important;
 }
 
 .form-control:focus, .form-control:active {
@@ -9,72 +9,73 @@
 }
 
 .optional-text {
-    font-size: small;
-    font-weight: normal;
+    font-size: small !important;
+    font-weight: normal !important;
+    margin-left: 8px !important;
 }
 
 .max-input-text {
-    font-size: small;
-    font-weight: normal;
-    color: rgba(0, 0, 0, 0.5);
-    margin: 0 10px 0 0;
+    font-size: small !important;
+    font-weight: normal !important;
+    color: rgba(0, 0, 0, 0.5) !important;
+    margin: 0 10px 0 0 !important;
 }
 
 .required-field {
-    color: red;
-    margin-left: 5px;
+    color: red !important;
+    margin-left: 5px !important;
 }
 
 .form-error-label {
-    color: red;
-    margin: 0;
-    padding: 0 4px;
+    color: red !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
 }
 
 /*---------------------------*/
 .btn-submit-form {
-    font-size: x-large;
-    font-weight: bold;
-    color: white;
-    border-color: var(--primary-color);
-    background-color: var(--primary-color);
+    font-size: x-large !important;
+    font-weight: bold !important;
+    color: white !important;
+    border-color: var(--primary-color) !important;
+    background-color: var(--primary-color) !important;
 }
 
 .btn-submit-form:hover, .btn-submit-form:focus {
-    color: white;
-    border-color: var(--primary-color);
-    background-color: var(--primary-color);
-    transform: scale(1.02);
-    transition: 0.3s;
+    color: white !important;
+    border-color: var(--primary-color) !important;
+    background-color: var(--primary-color) !important;
+    transform: scale(1.02) !important;
+    transition: 0.3s !important;
 }
 
 .btn-submit-form:disabled {
-    color: white;
-    border-color: var(--third-color);
-    background-color: var(--third-color);
+    color: white !important;
+    border-color: var(--third-color) !important;
+    background-color: var(--third-color) !important;
 }
 
 /*---------------------------*/
 .btn-cancel-form {
-    font-size: x-large;
-    font-weight: bold;
-    color: var(--primary-color);
-    border-color: var(--primary-color);
-    background-color: white;
+    font-size: x-large !important;
+    font-weight: bold !important;
+    color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    background-color: white !important;
 }
 
 .btn-cancel-form:hover, .btn-cancel-form:focus {
-    color: var(--primary-color);
-    border-color: var(--primary-color);
-    background-color: white;
-    transform: scale(1.02);
-    transition: 0.3s;
+    color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    background-color: white !important;
+    transform: scale(1.02) !important;
+    transition: 0.3s !important;
 }
 
 .btn-cancel-form:disabled {
-    color: var(--primary-color);
-    border-color: var(--primary-color);
-    background-color: white;
+    color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    background-color: white !important;
 }
 
 
