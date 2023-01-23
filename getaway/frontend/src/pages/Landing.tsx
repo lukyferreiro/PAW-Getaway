@@ -7,10 +7,7 @@ export default function Landing() {
     const {t} = useTranslation();
 
     return (
-        <div className="h-100">
-            <Outlet/>
-        </div>
-
+        <Outlet/>
     )
 
 }

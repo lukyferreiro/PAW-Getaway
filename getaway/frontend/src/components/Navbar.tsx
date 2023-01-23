@@ -1,16 +1,18 @@
 import {useTranslation} from "react-i18next"
 import "../common/i18n/index"
 import {Link, useLocation, useNavigate} from 'react-router-dom'
-import Category from "../types/Category"
 import {CategoryModel} from "../types";
+import {getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
 
 export default function Navbar() {
 
     const {t} = useTranslation()
     let navigate = useNavigate()
     let location = useLocation()
+
+    const query = useQuery()
     const pathname = location?.pathname
-    const queries = location?.search
+    const categoryQuery = getQueryOrDefaultMultiple(query, "category");
 
     //TODO obtenerlas de un llamado a la API ??
     const categories: CategoryModel[] = [
@@ -113,7 +115,7 @@ export default function Navbar() {
 
                 {categories.map((category) => (
                     <Link to={{pathname: "/experiences", search:`?category=${category.name}`}} >
-                        <button type="button" className={`btn btn-category ${queries?.includes(`category=${category.name}`) ? 'isActive' : ''}`}>
+                        <button type="button" className={`btn btn-category ${categoryQuery?.includes(`category=${category.name}`) ? 'isActive' : ''}`}>
                             <img src={`./images/${category.name}.svg`} alt={`${category.name}`}/>
                             {t('Navbar.categories.' + category.name)}
                         </button>

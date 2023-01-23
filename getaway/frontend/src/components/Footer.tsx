@@ -8,7 +8,7 @@ export default function Footer() {
 
     return (
         <div className="footer container-fluid p-0 mt-auto d-flex justify-content-center align-items-center font-weight-bold">
-            {t('Footer', {year: date})}
+            {t('Copyright', {year: date})}
         </div>
     );
 }

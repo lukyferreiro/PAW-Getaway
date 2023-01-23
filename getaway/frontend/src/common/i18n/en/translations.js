@@ -21,6 +21,6 @@ export const TRANSLATIONS_EN = {
         logout: "Cerrar sesion",
     },
 
-    Footer: "Getaway Copyright © {{year}} - Todos los derechos reservados",
+    Copyright: "Getaway Copyright © {{year}} - Todos los derechos reservados",
 
 };
