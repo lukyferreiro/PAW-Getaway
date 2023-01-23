@@ -1,5 +1,5 @@
 * {
-    font-family: "Cambria", sans-serif;
+    font-family: "Cambria", sans-serif !important;
     --primary-color: #F99D32;
     --secondary-color: rgb(255, 197, 132);
     --third-color: #FAB672;

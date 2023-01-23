@@ -117,7 +117,7 @@ export default function Navbar() {
                     <Link to={{pathname: "/experiences", search:`?category=${category.name}`}} >
                         <button type="button" className={`btn btn-category ${categoryQuery?.includes(`category=${category.name}`) ? 'isActive' : ''}`}>
                             <img src={`./images/${category.name}.svg`} alt={`${category.name}`}/>
-                            {t('Navbar.categories.' + category.name)}
+                            {t('Categories.' + category.name)}
                         </button>
                     </Link>
                 ))}

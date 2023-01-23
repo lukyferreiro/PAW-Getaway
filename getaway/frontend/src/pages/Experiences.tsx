@@ -17,7 +17,7 @@ export default function Experiences() {
                 <form id="submitForm" className="filter-form">
                     <div>
                         <label key="cityId" className="form-label">
-                            {t('Filters.city')}
+                            {t('Filters.city.field')}
                         </label>
                         <select name="cityId" className="form-select" style={{boxShadow: "none"}}>
                             <option disabled selected>
@@ -60,7 +60,7 @@ export default function Experiences() {
 
                     <div>
                         <label className="form-label">
-                            {t('Review.scoreAssign')}
+                            {t('Filters.scoreAssign')}
                         </label>
                         {/*TODO poner las estrellas*/}
                         {/*<jsp:include page="/WEB-INF/components/starForm.jsp"/>*/}
@@ -108,7 +108,7 @@ export default function Experiences() {
                         <img src={'./images/ic_no_search.jpeg'} alt="Imagen lupa"
                              style={{width: "150px", height: "150px", minWidth: "150px", minHeight: "150px", marginRight: "5px"}}/>
                             <h1 className="d-flex align-self-center">
-                                {t('Experience.emptyResult')}
+                                {t('EmptyResult')}
                             </h1>
                     </div>
                 </div>
