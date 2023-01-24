@@ -55,6 +55,7 @@ public class ExperienceModel {
     @Formula(value = "(select count(*) from reviews where reviews.experienceId = experienceId)")
     private long reviewCount;
 
+    //TODO: ver si puede eliminarse
     @Transient
     private boolean isFav;
 

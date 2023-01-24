@@ -16,8 +16,9 @@ public class UserDto {
     private Integer favsCount;
     private String selfUrl;
     private String profileImageUrl;
-
     private String experiencesUrl;
+
+    //TODO:
 
     public static Collection<UserDto> mapUserToDto(Collection<UserModel> users, UriInfo uriInfo) {
         return users.stream().map(u -> new UserDto(u, uriInfo)).collect(Collectors.toList());

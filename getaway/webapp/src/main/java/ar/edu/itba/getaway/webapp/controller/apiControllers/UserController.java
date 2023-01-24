@@ -36,7 +36,7 @@ import java.util.Optional;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
-@Path("/users")
+@Path("users")
 @Component
 public class UserController {
 
@@ -252,8 +252,8 @@ public class UserController {
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/experiences GET", id);
 
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
         assureUserResourceCorrelation(user, id);
         final Page<ExperienceModel> experiences = experienceService.listExperiencesSearchByUser(name, user, Optional.of(order), page);
@@ -283,11 +283,16 @@ public class UserController {
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/experiences GET", id);
 
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
         assureUserResourceCorrelation(user, id);
         final Page<ReviewModel> reviews = reviewService.getReviewsByUser(user, page);
+
+        for (ReviewModel rev: reviews.getContent()
+             ) {
+            System.out.println(rev.getTitle());
+        }
 
         if (reviews == null) {
             return Response.status(BAD_REQUEST).build();
@@ -297,6 +302,7 @@ public class UserController {
 
         final UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder()
                 .queryParam("page", page);
+
         return createPaginationResponse(reviews, new GenericEntity<Collection<ReviewDto>>(reviewDtos) {
         }, uriBuilder);
     }
@@ -311,8 +317,8 @@ public class UserController {
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/favExperiences GET", id);
 
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
         assureUserResourceCorrelation(user, id);
         final Page<ExperienceModel> favExperiences = experienceService.listExperiencesFavsByUser(user, Optional.of(order), page);

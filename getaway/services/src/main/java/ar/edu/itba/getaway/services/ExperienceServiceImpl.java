@@ -97,6 +97,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         LOGGER.debug("Requested page {} ", page);
         final long total = experienceDao.countListByFilter(category, max, score, city);
+
         if (total > 0) {
             LOGGER.debug("Total experiences found: {}", total);
 

@@ -69,21 +69,22 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public List<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, int pageSize) {
+        LOGGER.debug("Getting experiences by current filter");
         String orderQuery = getOrderQuery(order);
 
         Query queryForIds = em.createNativeQuery(
-                "SELECT experienceId \n" +
-                    "FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid\n" +
-                    "WHERE categoryid = :categoryId AND COALESCE(price,0) <= :max\n AND observable = true\n" +
-                    "GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=:score"
+                "SELECT experiences.experienceId \n" +
+                    "FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" +
+                    "WHERE categoryid = :categoryId AND COALESCE(price,0) <= :max AND observable = true \n" +
+                    "GROUP BY experiences.experienceId HAVING AVG(COALESCE(score,0))>=:score"
         );
 
         if (city != null) {
             queryForIds = em.createNativeQuery(
-                    "SELECT experienceId \n" +
-                        "FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid\n" +
-                        "WHERE categoryid = :categoryId AND COALESCE(price,0) <= :max AND cityid = :cityId AND observable = true\n" +
-                        "GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=:score");
+                    "SELECT experiences.experienceId \n" +
+                        "FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" +
+                        "WHERE categoryid = :categoryId AND COALESCE(price,0) <= :max AND cityid = :cityId AND observable = true \n" +
+                        "GROUP BY experiences.experienceId HAVING AVG(COALESCE(score,0))>=:score");
             queryForIds.setParameter("cityId", city.getCityId());
         }
 
@@ -110,26 +111,28 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public long countListByFilter(CategoryModel category, Double max, Long score, CityModel city) {
+        LOGGER.debug("Getting count of experiences by current filter");
         Query query = em.createNativeQuery(
-                "SELECT count(experienceId) \n" +
-                        "FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid\n" +
-                        "WHERE categoryid = :categoryid AND COALESCE(price,0) <= :max\n AND observable = true" +
-                        "GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=:score"
+                "SELECT COALESCE(COUNT (experiences.experienceid), 0) \n" +
+                        "FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" +
+                        "WHERE categoryid = :categoryid AND COALESCE(price,0) <= :max AND observable = true \n" +
+                        "HAVING AVG(COALESCE(score,0))>=:score"
         );
 
         if (city != null) {
             query = em.createNativeQuery(
-                    "SELECT count(experienceId) \n" +
-                            "FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid\n" +
-                            "WHERE categoryid = :categoryid AND COALESCE(price,0) <= :max\n AND cityid = :cityid AND observable = true" +
-                            "GROUP BY experiences.experienceid HAVING AVG(COALESCE(score,0))>=:score"
+                    "SELECT COALESCE(COUNT (experiences.experienceid), 0) \n" +
+                            "FROM experiences LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" +
+                            "WHERE categoryid = :categoryid AND COALESCE(price,0) <= :max AND cityid = :cityId AND observable = true \n" +
+                            "HAVING AVG(COALESCE(score,0))>=:score"
             );
             query.setParameter("cityId", city.getCityId());
         }
 
-        query.setParameter("category", category);
+        query.setParameter("categoryid", category.getCategoryId());
         query.setParameter("max", max);
         query.setParameter("score", score);
+
         return ((BigInteger) query.getSingleResult()).intValue();
     }
 
@@ -244,9 +247,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
         String orderQuery = getOrderQuery(order);
 
         Query queryForIds = em.createNativeQuery(
-                "SELECT experienceId \n" +
-                        "FROM favuserexperience NATURAL JOIN experiences \n" +
-                        "WHERE observable = true AND userid = :userId"
+                "SELECT favuserexperience.experienceid \n" +
+                        "FROM favuserexperience JOIN experiences ON favuserexperience.experienceId = experiences.experienceid \n" +
+                        "WHERE observable = true AND favuserexperience.userid = :userId"
         );
 
         queryForIds.setParameter("userId", user.getUserId());
@@ -271,9 +274,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
     @Override
     public long getCountListExperiencesFavsByUser(UserModel user) {
         Query query = em.createNativeQuery(
-                "SELECT COUNT(experienceid) \n" +
-                        "FROM favuserexperience NATURAL JOIN experiences \n" +
-                        "WHERE observable = true AND userid = :userId"
+                "SELECT COUNT(favuserexperience.experienceid) \n" +
+                "FROM favuserexperience JOIN experiences ON favuserexperience.experienceId = experiences.experienceid \n" +
+                "WHERE observable = true AND favuserexperience.userid = :userId"
         );
 
         query.setParameter("userId", user.getUserId());

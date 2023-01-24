@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -83,13 +84,13 @@ public class ReviewDaoImpl implements ReviewDao {
     @Override
     public long getReviewByUserCount(UserModel user) {
         Query query = em.createNativeQuery(
-                "SELECT COUNT(experienceid) \n" +
-                        "FROM reviews NATURAL JOIN experiences\n" +
-                        "WHERE observable = true AND userid = :userId"
+                "SELECT COUNT(reviewid) \n" +
+                        "FROM reviews JOIN experiences ON experiences.experienceid = reviews.experienceid\n" +
+                        "WHERE observable = true AND reviews.userid = :userId"
         );
 
         query.setParameter("userId", user.getUserId());
-        return (Integer) query.getSingleResult();
+        return ((BigInteger) query.getSingleResult()).intValue();
     }
 
     @Override
@@ -120,15 +121,16 @@ public class ReviewDaoImpl implements ReviewDao {
             LOGGER.debug("Experience with id {} has no reviews yet", experience.getExperienceId());
             return new ArrayList<>();
     }
+
     @Override
     public long getReviewByExperienceCount(ExperienceModel experience) {
         Query query = em.createNativeQuery(
                 "SELECT COUNT(reviewId) \n" +
-                        "FROM reviews NATURAL JOIN experiences\n" +
-                        "WHERE observable = true AND experienceId = :experienceId"
+                        "FROM reviews JOIN experiences ON experiences.experienceid = reviews.experienceid\n " +
+                        "WHERE observable = true AND reviews.experienceId = :experienceId"
         );
 
         query.setParameter("experienceId", experience.getExperienceId());
-        return (Integer) query.getSingleResult();
+        return ((BigInteger) query.getSingleResult()).intValue();
     }
 }

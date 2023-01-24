@@ -59,7 +59,7 @@ public class ExperienceController {
             @PathParam("category") final String category,
             @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
             @QueryParam("price") @DefaultValue("-1") Double maxPrice,
-            @QueryParam("score") @DefaultValue("5") Long maxScore,
+            @QueryParam("score") @DefaultValue("0") Long maxScore,
             @QueryParam("city") @DefaultValue("-1") Long cityId,
             @QueryParam("page") @DefaultValue("1") int page
     ) {
@@ -70,13 +70,19 @@ public class ExperienceController {
             maxPrice = experienceService.getMaxPriceByCategory(categoryModel).orElse(0.0);
         }
         final CityModel cityModel = locationService.getCityById(cityId).orElse(null);
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
+        //        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
 
         final Page<ExperienceModel> experiences = experienceService.listExperiencesByFilter(categoryModel, maxPrice, maxScore, cityModel, Optional.of(order), page, user);
 
         if (experiences == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        if (experiences.getContent().isEmpty()) {
+            return Response.noContent().build();
         }
 
         final Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);

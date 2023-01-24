@@ -4,15 +4,13 @@ import ar.edu.itba.getaway.models.ReviewModel;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.annotation.XmlType;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@XmlType(name = "")
 public class ReviewDto {
 
-    private Long id;
+    private long id;
     private String title;
     private String description;
     private long score;
@@ -41,20 +39,54 @@ public class ReviewDto {
         this.reviewDate = review.getReviewDate();
         this.user = new UserDto(review.getUser(), uriInfo);
         this.selfUrl = getReviewUriBuilder(review, uriInfo).build().toString();
-        this.experienceUrl = uriInfo.getBaseUriBuilder().path("experience")
+        this.experienceUrl = uriInfo.getBaseUriBuilder().path("experiences").path("experience")
                 .path(review.getExperience().getExperienceId().toString())
-                .build().toString();    // /experience/{id}
+                .build().toString();    // /experiences/experience/{id}
     }
 
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public long getScore() {
+        return score;
+    }
+    public void setScore(long score) {
+        this.score = score;
+    }
     public LocalDate getReviewDate() {
         return reviewDate;
     }
-
     public UserDto getUser() {
         return user;
     }
-
-    public long getScore() {
-        return score;
+    public void setUser(UserDto user) {
+        this.user = user;
+    }
+    public String getSelfUrl() {
+        return selfUrl;
+    }
+    public void setSelfUrl(String selfUrl) {
+        this.selfUrl = selfUrl;
+    }
+    public String getExperienceUrl() {
+        return experienceUrl;
+    }
+    public void setExperienceUrl(String experienceUrl) {
+        this.experienceUrl = experienceUrl;
     }
 }

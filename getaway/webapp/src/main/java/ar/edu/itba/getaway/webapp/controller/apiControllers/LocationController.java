@@ -31,37 +31,49 @@ public class LocationController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LocationController.class);
 
+    // Endpoint para obtener el listado completo de países
     @GET
     @Path("/countries")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCountries() {
-        LOGGER.info("Called /locations/contry GET");
+        LOGGER.info("Called /locations/countries GET");
 
         Collection<CountryModel> countries = locationService.listAllCountries();
+
+        if(countries.isEmpty()) {
+            return Response.noContent().build();
+        }
+
         Collection<CountryDto> countryDtos = CountryDto.mapCountryToDto(countries, uriInfo);
 
         return Response.ok(new GenericEntity<Collection<CountryDto>>(countryDtos) {}).build();
     }
 
+    // Endpoint para obtener el listado completo de ciudades del país {id}
     @GET
     @Path("/countries/{id}/cities")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCountryCities(@PathParam("id") final long id) {
-        LOGGER.info("Called /locations/country/{}/cities GET", id);
+        LOGGER.info("Called /locations/countries/{}/cities GET", id);
 
         CountryModel country = locationService.getCountryById(id).orElseThrow(CountryNotFoundException::new);
         Collection<CityModel> cities = locationService.getCitiesByCountry(country);
+
+        if(cities.isEmpty()) {
+            return Response.noContent().build();
+        }
+
         Collection<CityDto> citiesDtos = CityDto.mapCityToDto(cities);
 
         return Response.ok(new GenericEntity<Collection<CityDto>>(citiesDtos) {}).build();
     }
 
-    //TODO: check
+    // Endpoint para obtener información de la ciudad {id}
     @GET
     @Path("/cities/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCityById(@PathParam("id") final long id) {
-        LOGGER.info("Called /locations/contry GET");
+        LOGGER.info("Called /locations/cities/{} GET", id);
 
         CityModel city = locationService.getCityById(id).orElseThrow(CityNotFoundException::new);
 

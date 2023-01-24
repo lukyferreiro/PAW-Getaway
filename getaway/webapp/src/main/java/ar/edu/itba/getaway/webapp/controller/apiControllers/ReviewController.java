@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
-@Path("/reviews")
+@Path("reviews")
 @Component
 public class ReviewController {
 
