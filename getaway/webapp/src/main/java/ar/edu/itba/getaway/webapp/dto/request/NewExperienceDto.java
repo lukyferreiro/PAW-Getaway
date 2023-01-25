@@ -47,11 +47,15 @@ public class NewExperienceDto {
 
     @Size(max = 500, message = "...")
     @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\";$%#&=:¿?!¡\\n\\s\\t/.-])*$", message = "...")
-    private String information;
+    private String description;
 
     @ImageTypeConstraint(contentType = {"image/png", "image/jpeg", "image/jpg"}, message = "experienceForm.validation.imageFormat")
     @FormDataParam("images")
     private FormDataBodyPart image;
+
+    public NewExperienceDto() {
+        // Used by Jersey
+    }
 
     public String getName() {
         return name;
@@ -123,12 +127,12 @@ public class NewExperienceDto {
         this.mail = mail;
     }
 
-    public String getInformation() {
-        return information;
+    public String getDescription() {
+        return description;
     }
 
-    public void setInformation(String information) {
-        this.information = information;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public FormDataBodyPart getImage() {

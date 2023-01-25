@@ -54,7 +54,9 @@ public class ReviewController {
     public Response editReview(@PathParam("id") final Long id,
                                @Context final HttpServletRequest request,
                                @Valid NewReviewDto reviewDto) {
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        // final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
         assureUserResourceCorrelation(user, reviewModel.getUser().getUserId());
 
@@ -70,7 +72,9 @@ public class ReviewController {
     @Path("/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response deleteReview(@PathParam("id") final long id) {
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
         assureUserResourceCorrelation(user, reviewModel.getUser().getUserId());
         reviewService.deleteReview(reviewModel);

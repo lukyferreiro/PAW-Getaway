@@ -108,6 +108,9 @@ public class UserController {
         }
 
         final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
+
         assureUserResourceCorrelation(user, id);
         userService.updateUserInfo(user, new UserInfo(userInfoDto.getName(), userInfoDto.getSurname()));
 
@@ -126,7 +129,9 @@ public class UserController {
             throw new ContentExpectedException();
         }
 
-        final UserModel user = userService.verifyAccount(tokenDto.getToken()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.verifyAccount(tokenDto.getToken()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
         final Response.ResponseBuilder responseBuilder = Response.noContent();
 
         if (user.isVerified()) {
@@ -146,7 +151,9 @@ public class UserController {
     public Response resendUserVerification() {
         LOGGER.info("Called /users/emailVerification POST");
 
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
         userService.resendVerificationToken(user);
 
         return Response.noContent().build();
@@ -164,7 +171,9 @@ public class UserController {
             throw new ContentExpectedException();
         }
 
-        final UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
         userService.generateNewPassword(user);
 
         return Response.noContent().build();
@@ -228,7 +237,9 @@ public class UserController {
             throw new MaxUploadSizeRequestException();
         }
 
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
         assureUserResourceCorrelation(user, userId);
 
         LOGGER.info("Called /users/{}/image PUT", userId);
@@ -246,8 +257,8 @@ public class UserController {
     @Path("/{id}/experiences")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserExperiences(
-            @QueryParam("name") @DefaultValue("") String name,
             @PathParam("id") final long id,
+            @QueryParam("name") @DefaultValue("") String name,
             @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/experiences GET", id);
@@ -260,6 +271,10 @@ public class UserController {
 
         if (experiences == null) {
             return Response.status(BAD_REQUEST).build();
+        }
+
+        if(experiences.getContent().isEmpty()) {
+            return Response.noContent().build();
         }
 
         final Collection<ExperienceDto> experienceDtos = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);
@@ -289,13 +304,12 @@ public class UserController {
         assureUserResourceCorrelation(user, id);
         final Page<ReviewModel> reviews = reviewService.getReviewsByUser(user, page);
 
-        for (ReviewModel rev: reviews.getContent()
-             ) {
-            System.out.println(rev.getTitle());
-        }
-
         if (reviews == null) {
             return Response.status(BAD_REQUEST).build();
+        }
+
+        if(reviews.getContent().isEmpty()) {
+            return Response.noContent().build();
         }
 
         final Collection<ReviewDto> reviewDtos = ReviewDto.mapReviewToDto(reviews.getContent(), uriInfo);
@@ -306,7 +320,6 @@ public class UserController {
         return createPaginationResponse(reviews, new GenericEntity<Collection<ReviewDto>>(reviewDtos) {
         }, uriBuilder);
     }
-
 
     @GET
     @Path("/{id}/favExperiences")
@@ -325,6 +338,10 @@ public class UserController {
 
         if (favExperiences == null) {
             return Response.status(BAD_REQUEST).build();
+        }
+
+        if(favExperiences.getContent().isEmpty()) {
+            return Response.noContent().build();
         }
 
         final Collection<ExperienceDto> experienceDtos = ExperienceDto.mapExperienceToDto(favExperiences.getContent(), uriInfo);

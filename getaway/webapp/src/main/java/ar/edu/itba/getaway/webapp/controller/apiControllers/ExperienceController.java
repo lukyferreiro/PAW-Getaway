@@ -71,7 +71,9 @@ public class ExperienceController {
         }
         final CityModel cityModel = locationService.getCityById(cityId).orElse(null);
 
-        //        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        //TODO: change for deployment
+
+        //final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
         final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
 
@@ -108,7 +110,7 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response registerExperience(
             @Context final HttpServletRequest request,
-            @Valid final NewExperienceDto experienceDto) throws DuplicateExperienceException, IOException {
+            @Valid final NewExperienceDto experienceDto) throws DuplicateExperienceException {
 
         LOGGER.info("Called /experiences/ POST");
 
@@ -120,7 +122,9 @@ public class ExperienceController {
             throw new MaxUploadSizeRequestException();
         }
 
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
 
         final FormDataBodyPart img = experienceDto.getImage();
         NewImageModel imageToUpload = null;
@@ -143,7 +147,7 @@ public class ExperienceController {
         try {
             experience = experienceService.createExperience(
                 experienceDto.getName(), experienceDto.getAddress(),
-                experienceDto.getInformation(), experienceDto.getMail(),
+                experienceDto.getDescription(), experienceDto.getMail(),
                 experienceDto.getUrl(), Double.parseDouble(experienceDto.getPrice()),
                 city, category, user, imageToUpload.getImage(),
                 imageToUpload.getMimeType());
@@ -211,7 +215,7 @@ public class ExperienceController {
         final CityModel cityModel = locationService.getCityByName(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel categoryModel = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
-        final ExperienceModel toUpdateExperience = new ExperienceModel(id, experienceDto.getName(), experienceDto.getAddress(), experienceDto.getInformation(),
+        final ExperienceModel toUpdateExperience = new ExperienceModel(id, experienceDto.getName(), experienceDto.getAddress(), experienceDto.getDescription(),
         experienceDto.getMail(), experienceDto.getUrl(),  Double.parseDouble(experienceDto.getPrice()), cityModel, categoryModel, user, experience.getExperienceImage(), experience.getObservable(), experience.getViews());
 
         experienceService.updateExperience(toUpdateExperience, imageToUpload.getImage(), imageToUpload.getMimeType());

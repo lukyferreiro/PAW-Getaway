@@ -111,7 +111,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //------------------- /users -------------------
                     .antMatchers(HttpMethod.POST, "/api/users").anonymous()
                     .antMatchers(HttpMethod.GET, "/api/users/{id}").anonymous()
-                    .antMatchers(HttpMethod.PUT, "/api/users/{id}").access("@antMatcherVoter.userEditHimself(authentication, #id)")
+//                    .antMatchers(HttpMethod.PUT, "/api/users/{id}").access("@antMatcherVoter.userEditHimself(authentication, #id)")
                     .antMatchers(HttpMethod.GET, "/api/users/{id}/profileImage").anonymous()
                     .antMatchers(HttpMethod.PUT, "/api/users/{id}/profileImage").access("@antMatcherVoter.userEditHimself(authentication, #id)")
                     .antMatchers(HttpMethod.GET, "/api/users/{id}/experiences").anonymous()
