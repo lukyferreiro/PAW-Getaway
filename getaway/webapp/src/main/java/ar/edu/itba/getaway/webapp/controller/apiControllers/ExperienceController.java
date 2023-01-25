@@ -190,7 +190,8 @@ public class ExperienceController {
             throw new ContentExpectedException();
         }
 
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
 
         if (experience.getUser().getUserId() != (user.getUserId())) {
@@ -228,7 +229,8 @@ public class ExperienceController {
     @Path("/experience/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response deleteExperience(@PathParam("id") final long id) {
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
         final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
 
         if (experienceModel.getUser().getUserId() != (user.getUserId())) {
@@ -295,7 +297,12 @@ public class ExperienceController {
     public Response createExperienceReview(@PathParam("id") final long id, @Valid NewReviewDto newReviewDto) {
         LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
         //TODO: check usage of localdate.now()
-        final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new), LocalDate.now(), userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new));
+
+        //        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+
+        final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experience, LocalDate.now(), user);
         return Response.created(ReviewDto.getReviewUriBuilder(reviewModel, uriInfo).build()).build();
     }
 
