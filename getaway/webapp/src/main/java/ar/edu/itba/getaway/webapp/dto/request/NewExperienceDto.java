@@ -1,10 +1,9 @@
 package ar.edu.itba.getaway.webapp.dto.request;
 
-import ar.edu.itba.getaway.webapp.dto.validations.ImageTypeConstraint;
+import ar.edu.itba.getaway.webapp.constraints.ImageTypeConstraint;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;

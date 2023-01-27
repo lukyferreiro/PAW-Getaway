@@ -4,10 +4,11 @@ import ar.edu.itba.getaway.models.UserModel;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class UserDto {
+public class UserDto implements Serializable {
 
     private long id;
     private String name;

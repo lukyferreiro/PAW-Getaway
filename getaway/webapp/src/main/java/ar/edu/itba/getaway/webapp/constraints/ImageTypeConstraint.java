@@ -1,4 +1,4 @@
-package ar.edu.itba.getaway.webapp.dto.validations;
+package ar.edu.itba.getaway.webapp.constraints;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

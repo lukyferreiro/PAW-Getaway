@@ -1,4 +1,4 @@
-package ar.edu.itba.getaway.webapp.dto.validations;
+package ar.edu.itba.getaway.webapp.constraints;
 
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 

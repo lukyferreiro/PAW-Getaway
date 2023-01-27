@@ -4,11 +4,12 @@ import ar.edu.itba.getaway.models.ReviewModel;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class ReviewDto {
+public class ReviewDto implements Serializable {
 
     private long id;
     private String title;

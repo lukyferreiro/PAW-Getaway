@@ -3,10 +3,11 @@ package ar.edu.itba.getaway.webapp.dto.response;
 import ar.edu.itba.getaway.models.CityModel;
 
 import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class CityDto {
+public class CityDto implements Serializable {
 
     private long id;
     private String name;
