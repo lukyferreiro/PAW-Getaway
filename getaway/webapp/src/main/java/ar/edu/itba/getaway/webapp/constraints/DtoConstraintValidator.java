@@ -1,6 +1,6 @@
 package ar.edu.itba.getaway.webapp.constraints;
 
-import ar.edu.itba.getaway.webapp.security.exceptions.DtoValidationException;
+import ar.edu.itba.getaway.webapp.constraints.exceptions.DtoValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
