@@ -118,15 +118,15 @@ CREATE TABLE IF NOT EXISTS passwordResetToken
     PRIMARY KEY (passTokenId)
 );
 
-CREATE TABLE IF NOT EXISTS sessionRefreshToken
-(
-    sessionTokenId SERIAL,
-    sessionTokenUserId INT NOT NULL,
-    sessionToken TEXT,
-    sessionTokenExpirationDate TIMESTAMP NOT NULL,
-    FOREIGN KEY (sessionTokenUserId) REFERENCES USERS (userId) ON DELETE CASCADE,
-    PRIMARY KEY (sessionTokenId)
-    );
+-- CREATE TABLE IF NOT EXISTS sessionRefreshToken
+-- (
+--     sessionTokenId SERIAL,
+--     sessionTokenUserId INT NOT NULL,
+--     sessionToken TEXT,
+--     sessionTokenExpirationDate TIMESTAMP NOT NULL,
+--     FOREIGN KEY (sessionTokenUserId) REFERENCES USERS (userId) ON DELETE CASCADE,
+--     PRIMARY KEY (sessionTokenId)
+--     );
 
 CREATE TABLE IF NOT EXISTS favuserexperience(
     userId INT NOT NULL,

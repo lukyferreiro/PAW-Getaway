@@ -1,8 +1,8 @@
 package ar.edu.itba.getaway.services;
 
-import ar.edu.itba.getaway.interfaces.persistence.SessionRefreshTokenDao;
+//import ar.edu.itba.getaway.interfaces.persistence.SessionRefreshTokenDao;
 import ar.edu.itba.getaway.models.PasswordResetToken;
-import ar.edu.itba.getaway.models.SessionRefreshToken;
+//import ar.edu.itba.getaway.models.SessionRefreshToken;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.VerificationToken;
 import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
@@ -29,8 +29,8 @@ public class TokensServiceImpl implements TokensService {
     private VerificationTokenDao verificationTokenDao;
     @Autowired
     private PasswordResetTokenDao passwordResetTokenDao;
-    @Autowired
-    private SessionRefreshTokenDao sessionRefreshTokenDao;
+//    @Autowired
+//    private SessionRefreshTokenDao sessionRefreshTokenDao;
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -55,13 +55,13 @@ public class TokensServiceImpl implements TokensService {
         return passwordResetTokenDao.createToken(user, token, PasswordResetToken.generateTokenExpirationDate());
     }
 
-    @Override
-    public SessionRefreshToken generateSessionRefreshToken(UserModel user) {
-        return sessionRefreshTokenDao.createToken(user,
-                SessionRefreshToken.generateSessionToken(),
-                SessionRefreshToken.generateTokenExpirationDate()
-        );
-    }
+//    @Override
+//    public SessionRefreshToken generateSessionRefreshToken(UserModel user) {
+//        return sessionRefreshTokenDao.createToken(user,
+//                SessionRefreshToken.generateSessionToken(),
+//                SessionRefreshToken.generateTokenExpirationDate()
+//        );
+//    }
 
     @Override
     public void sendVerificationToken(UserModel userModel, VerificationToken token) {
@@ -93,18 +93,18 @@ public class TokensServiceImpl implements TokensService {
         }
     }
 
-    @Override
-    public SessionRefreshToken getSessionRefreshToken(UserModel user) {
-        LOGGER.debug("Retrieving session refresh token for user");
-        final Optional<SessionRefreshToken> tokenOpt = sessionRefreshTokenDao.getTokenByUser(user);
-        if (tokenOpt.isPresent()) {
-            final SessionRefreshToken sessionRefreshToken = tokenOpt.get();
-            if (!sessionRefreshToken.isValid()) {
-                sessionRefreshToken.refresh();
-            }
-            return sessionRefreshToken;
-        }
-        return generateSessionRefreshToken(user);
-    }
+//    @Override
+//    public SessionRefreshToken getSessionRefreshToken(UserModel user) {
+//        LOGGER.debug("Retrieving session refresh token for user");
+//        final Optional<SessionRefreshToken> tokenOpt = sessionRefreshTokenDao.getTokenByUser(user);
+//        if (tokenOpt.isPresent()) {
+//            final SessionRefreshToken sessionRefreshToken = tokenOpt.get();
+//            if (!sessionRefreshToken.isValid()) {
+//                sessionRefreshToken.refresh();
+//            }
+//            return sessionRefreshToken;
+//        }
+//        return generateSessionRefreshToken(user);
+//    }
 
 }

@@ -1,7 +1,7 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
-import ar.edu.itba.getaway.interfaces.persistence.SessionRefreshTokenDao;
+//import ar.edu.itba.getaway.interfaces.persistence.SessionRefreshTokenDao;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
 import ar.edu.itba.getaway.interfaces.persistence.UserDao;
@@ -26,8 +26,8 @@ public class UserServiceImpl implements UserService {
     private VerificationTokenDao verificationTokenDao;
     @Autowired
     private PasswordResetTokenDao passwordResetTokenDao;
-    @Autowired
-    private SessionRefreshTokenDao sessionRefreshTokenDao;
+//    @Autowired
+//    private SessionRefreshTokenDao sessionRefreshTokenDao;
     @Autowired
     private ImageService imageService;
     @Autowired
@@ -56,11 +56,11 @@ public class UserServiceImpl implements UserService {
         return experience.getUser();
     }
 
-    @Transactional
-    @Override
-    public Optional<UserModel> getUserBySessionRefreshToken(String token) {
-        LOGGER.debug("Retrieving user for token with value {}", token);
-        return sessionRefreshTokenDao.getTokenByValue(token).filter(SessionRefreshToken::isValid).map(SessionRefreshToken::getUser);
+//    @Transactional
+//    @Override
+//    public Optional<UserModel> getUserBySessionRefreshToken(String token) {
+//        LOGGER.debug("Retrieving user for token with value {}", token);
+//        return sessionRefreshTokenDao.getTokenByValue(token).filter(SessionRefreshToken::isValid).map(SessionRefreshToken::getUser);
     }
 
     @Transactional
@@ -129,6 +129,12 @@ public class UserServiceImpl implements UserService {
         passwordResetTokenOptional.ifPresent(passwordResetToken -> passwordResetTokenDao.removeToken(passwordResetToken));
         final PasswordResetToken passwordResetToken = tokensService.generatePasswordResetToken(userModel);
         tokensService.sendPasswordResetToken(userModel, passwordResetToken);
+    }
+
+    @Transactional
+    @Override
+    public boolean updateUser(long userId, UserModel user) {
+        return userDao.updateUser(userId, user);
     }
 
     @Transactional

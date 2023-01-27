@@ -62,6 +62,16 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public boolean updateUser(long userId, UserModel user) {
+        final Optional<UserModel> userModel = getUserById(userId);
+        if(!userModel.isPresent()) {
+            return false;
+        }
+        userModel.get().merge(user);
+        return true;
+    }
+
+    @Override
     public Optional<UserModel> updateRoles(UserModel user, Roles oldVal, Roles newVal) {
         final RoleModel oldRole = getRoleByName(oldVal).get();
         user.removeRole(oldRole);

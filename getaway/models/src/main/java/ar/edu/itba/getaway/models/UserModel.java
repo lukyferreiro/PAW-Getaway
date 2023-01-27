@@ -48,8 +48,14 @@ public class UserModel {
     @Formula(value = "(select count(*) from reviews where reviews.userId = userId)!=0")
     private boolean hasReviews;
 
+    @Transient
+    private boolean isVerified;
+
+    @Transient
+    private boolean isProvider;
+
     /* default */
-    protected UserModel() {
+    public UserModel() {
         // Just for Hibernate
     }
 
@@ -60,7 +66,20 @@ public class UserModel {
         this.email = email;
         this.roles = new ArrayList<>(roles);
         this.profileImage = profileImage;
+        this.isVerified = this.isVerified();
+        this.isProvider = this.isProvider();
     }
+
+    public UserModel(long userId, String name, String surname, String email, ImageModel profileImage, boolean isVerified, boolean isProvider) {
+        this.userId = userId;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.profileImage = profileImage;
+        this.isVerified = isVerified;
+        this.isProvider = isProvider;
+    }
+
 
     public UserModel(long userId, String password, String name, String surname, String email, Collection<RoleModel> roles, ImageModel profileImage) {
         this.userId = userId;
@@ -72,6 +91,8 @@ public class UserModel {
         this.profileImage = profileImage;
         this.favExperiences = new ArrayList<>();
         this.viewedExperiences = new ArrayList<>();
+        this.isVerified = this.isVerified();
+        this.isProvider = this.isProvider();
     }
 
     public ImageModel getProfileImage() {
@@ -183,6 +204,15 @@ public class UserModel {
 
     public List<ExperienceModel> getViewedExperiences() {
         return viewedExperiences;
+    }
+
+
+    public void merge(UserModel user) {
+        this.name = this.name.equals(user.getName())  ? this.name : user.getName();
+        this.surname = this.surname.equals(user.getSurname())  ? this.surname : user.getSurname();
+        this.password = this.password.equals(user.getPassword())  ? this.password : user.getPassword();
+        this.isVerified = this.isVerified == user.isVerified() ? this.isVerified : user.isVerified();
+        this.isProvider = this.isProvider == user.isProvider() ? this.isProvider : user.isProvider();
     }
 
     @Override

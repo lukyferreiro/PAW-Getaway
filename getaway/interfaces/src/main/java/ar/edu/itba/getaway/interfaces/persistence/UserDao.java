@@ -15,6 +15,7 @@ public interface UserDao {
 
     Optional<RoleModel> getRoleByName(Roles role);
 
+    boolean updateUser(long userId, UserModel user);
     Optional<UserModel> updateRoles(UserModel user, Roles oldVal, Roles newVal);
 
     Optional<UserModel> updatePassword(UserModel user, String password);

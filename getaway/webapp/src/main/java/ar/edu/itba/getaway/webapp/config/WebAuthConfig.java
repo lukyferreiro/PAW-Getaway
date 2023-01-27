@@ -1,18 +1,19 @@
 package ar.edu.itba.getaway.webapp.config;
 
-import ar.edu.itba.getaway.webapp.auth.*;
+import ar.edu.itba.getaway.webapp.security.api.*;
+import ar.edu.itba.getaway.webapp.security.api.handlers.AuthFailureHandler;
+import ar.edu.itba.getaway.webapp.security.api.handlers.AuthSuccessHandler;
+import ar.edu.itba.getaway.webapp.security.api.handlers.CustomAccessDeniedHandler;
+import ar.edu.itba.getaway.webapp.security.services.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,7 +21,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -28,25 +28,40 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
-@ComponentScan("ar.edu.itba.getaway.webapp.auth")
+@ComponentScan("ar.edu.itba.getaway.webapp.security")
+@PropertySource(value= {"classpath:application.properties"})
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MyUserDetailsService myUserDetailsService;
+
     @Autowired
-    private AuthFilter authFilter;
+    private AuthEntryPoint authEntryPoint;
+
+    @Autowired
+    private BasicAuthProvider basicAuthProvider;
+
+    @Autowired
+    private JwtAuthProvider jwtAuthProvider;
+
+    @Autowired
+    private AuthSuccessHandler authSuccessHandler;
+
+    @Autowired
+    private AuthFailureHandler authFailureHandler;
 
     @Bean
-    public JwtUtil jwtUtil(@Value("classpath:auth/auth_key.pem") Resource authKey) throws IOException {
-        return new JwtUtil(authKey);
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public AntMatcherVoter antMatcherVoter() { return new AntMatcherVoter();}
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
@@ -54,8 +69,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationEntryPoint authenticationEntryPoint() {
-        return new CustomAuthenticationErrorHandler();
+    public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 
     @Bean
@@ -64,19 +79,19 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public AntMatcherVoter antMatcherVoter() {
-        return new AntMatcherVoter();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder());
+        auth.authenticationProvider(basicAuthProvider).authenticationProvider(jwtAuthProvider);
+    }
+
+    @Bean
+    public BridgeAuthFilter bridgeAuthFilter() throws Exception {
+        BridgeAuthFilter bridgeAuthFilter = new BridgeAuthFilter();
+        bridgeAuthFilter.setAuthenticationManager(authenticationManagerBean());
+        bridgeAuthFilter.setAuthenticationSuccessHandler(authSuccessHandler);
+        bridgeAuthFilter.setAuthenticationFailureHandler(authFailureHandler);
+        return bridgeAuthFilter;
     }
 
     @Bean
@@ -101,32 +116,49 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().exceptionHandling()
-                    .authenticationEntryPoint(authenticationEntryPoint())
+        http
+//                .cors()
+//                .and()
+                .csrf().disable()
+                .exceptionHandling()
+                    .authenticationEntryPoint(authEntryPoint)
                     .accessDeniedHandler(accessDeniedHandler())
-                .and().headers().cacheControl().disable()
+                .and()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                //TODO check si esto va
+//                .and()
+//                    .headers().cacheControl().disable()
                 .and().authorizeRequests()
                 //------------------- /users -------------------
                     .antMatchers(HttpMethod.POST, "/api/users").anonymous()
                     .antMatchers(HttpMethod.GET, "/api/users/{id}").anonymous()
-//                    .antMatchers(HttpMethod.PUT, "/api/users/{id}").access("@antMatcherVoter.userEditHimself(authentication, #id)")
+                    .antMatchers(HttpMethod.PUT, "/api/users/{id}").anonymous()
                     .antMatchers(HttpMethod.GET, "/api/users/{id}/profileImage").anonymous()
-                    .antMatchers(HttpMethod.PUT, "/api/users/{id}/profileImage").access("@antMatcherVoter.userEditHimself(authentication, #id)")
+                    .antMatchers(HttpMethod.PUT, "/api/users/{id}/profileImage").anonymous()
                     .antMatchers(HttpMethod.GET, "/api/users/{id}/experiences").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/users/{id}/reviews").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/users/{id}/favExperiences").anonymous()
                     .antMatchers(HttpMethod.PUT, "/api/users/emailVerification").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/users/emailVerification").anonymous()
                     .antMatchers(HttpMethod.PUT, "/api/users/passwordReset").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/users/passwordReset").anonymous()
                 //------------------- /experiences -------------------
-                    //TODO
-
+                    .antMatchers(HttpMethod.GET, "/api/experiences/{category}").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/experiences").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/experiences/experience/{id}").anonymous()
+                    .antMatchers(HttpMethod.PUT, "/api/experiences/experience/{id}").anonymous()
+                    .antMatchers(HttpMethod.DELETE, "/api/experiences/experience/{id}").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/experiences/experience/{id}/image").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/experiences/experience/{id}/reviews").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/experiences/experience/{id}/reviews").anonymous()
                 //------------------- /reviews -------------------
                     .antMatchers(HttpMethod.GET, "/api/reviews/{id}").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/reviews/{id}").anonymous()
+                    .antMatchers(HttpMethod.DELETE, "/api/reviews/{id}").anonymous()
                 //------------------- /location -------------------
-                    .antMatchers(HttpMethod.GET, "/api/location/country").anonymous()
-                    .antMatchers(HttpMethod.GET, "/api/location/country/{id}/cities").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/location/countries").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/location/countries/{id}/cities").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/location/cities/{id}").anonymous()
                 //------------------- Others --------------------
                     .antMatchers("/**").permitAll()
 
@@ -181,8 +213,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers(HttpMethod.GET, "/experiences/{experienceId:[0-9]+}/image/**").permitAll()
                 //else
 //                .antMatchers("/**").permitAll()
-                .and().csrf().disable()
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+                .and()
+                    .addFilterBefore(bridgeAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 
