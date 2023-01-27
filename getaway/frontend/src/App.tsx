@@ -17,6 +17,7 @@ import Register from "./pages/Register";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Home from "./pages/Home";
 
 function App() {
     return (
@@ -28,7 +29,7 @@ function App() {
 
             <Routes>
                 <Route path='/' element={<Landing/>}>
-                    <Route index element={<Landing/>}/>
+                    <Route index element={<Home/>}/>
                     <Route path='user' element={<UserPage/>}>
                         <Route index element={<UserProfile/>}/>
                         <Route path='profile' element={<UserProfile/>}/>
