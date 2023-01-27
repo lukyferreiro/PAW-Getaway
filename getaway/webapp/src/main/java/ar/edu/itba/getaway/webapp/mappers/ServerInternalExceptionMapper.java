@@ -1,10 +1,13 @@
 package ar.edu.itba.getaway.webapp.mappers;
 
 import ar.edu.itba.getaway.interfaces.exceptions.ServerInternalException;
+import ar.edu.itba.getaway.webapp.mappers.util.ExceptionMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
@@ -12,9 +15,12 @@ import javax.ws.rs.ext.Provider;
 public class ServerInternalExceptionMapper implements ExceptionMapper<ServerInternalException> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerInternalExceptionMapper.class);
 
+    @Context
+    private UriInfo uriInfo;
+
     @Override
-    public Response toResponse(ServerInternalException exception) {
+    public Response toResponse(ServerInternalException e) {
         LOGGER.error("Server internal exception mapper");
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exception.getMessage()).build();
+        return ExceptionMapperUtil.toResponse(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage(), uriInfo);
     }
 }

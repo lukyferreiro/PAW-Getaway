@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.mappers;
 
+import ar.edu.itba.getaway.webapp.mappers.util.ExceptionMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,25 +10,23 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Singleton;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-@Singleton
-@Component
 @Provider
 public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundException> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NotFoundExceptionMapper.class);
 
-    @Autowired
-    private MessageSource messageSource;
+    @Context
+    private UriInfo uriInfo;
 
     @Override
-    public Response toResponse(NotFoundException exception) {
+    public Response toResponse(NotFoundException e) {
         LOGGER.error("Not found exception mapper");
-        //TODO poner mensaje
-        final String message = messageSource.getMessage("...", null, LocaleContextHolder.getLocale());
-        return Response.status(Response.Status.NOT_FOUND).entity(message).build();
+        return ExceptionMapperUtil.toResponse(Response.Status.NOT_FOUND, e.getMessage(), uriInfo);
     }
 }

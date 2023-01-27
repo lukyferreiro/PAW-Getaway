@@ -1,40 +1,33 @@
 package ar.edu.itba.getaway.webapp.mappers;
 
+import ar.edu.itba.getaway.webapp.mappers.util.ExceptionMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Component;
 
+import javax.inject.Singleton;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
 public class GlobalExceptionMapper extends Throwable implements ExceptionMapper<Throwable> {
 
-    @Autowired
-    private MessageSource messageSource;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionMapper.class);
+
+    @Context
+    private UriInfo uriInfo;
+
     @Override
-    public Response toResponse(Throwable exception) {
-        LOGGER.error("Server error exception mapper");
-
-        final int status;
-        final String message;
-
-        if (exception instanceof WebApplicationException) {
-            status = ((WebApplicationException) exception).getResponse().getStatus();
-            message = exception.getMessage();
-        } else {
-            status = Response.Status.INTERNAL_SERVER_ERROR.getStatusCode();
-            //TODO poner mensaje
-            message = messageSource.getMessage("...", null, LocaleContextHolder.getLocale());
-        }
-
-        return Response.status(status).entity(message).build();
+    public Response toResponse(Throwable e) {
+        LOGGER.error("Global exception mapper");
+        return ExceptionMapperUtil.toResponse(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage(), uriInfo);
     }
 
 }

@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.webapp.mappers;
 
 import ar.edu.itba.getaway.interfaces.exceptions.CityNotFoundException;
+import ar.edu.itba.getaway.webapp.mappers.util.ExceptionMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,9 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Singleton;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
@@ -22,13 +25,13 @@ public class CityNotFoundExceptionMapper implements ExceptionMapper<CityNotFound
     @Autowired
     private MessageSource messageSource;
 
-    public CityNotFoundExceptionMapper() {
-    }
+    @Context
+    private UriInfo uriInfo;
 
     @Override
-    public Response toResponse(CityNotFoundException ex) {
+    public Response toResponse(CityNotFoundException e) {
         LOGGER.error("City not found exception mapper");
-        final String message = messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale());
-        return Response.status(Response.Status.NOT_FOUND).entity(message).build();
+        final String message = messageSource.getMessage(e.getMessage(), null, LocaleContextHolder.getLocale());
+        return ExceptionMapperUtil.toResponse(Response.Status.NOT_FOUND, message, uriInfo);
     }
 }
