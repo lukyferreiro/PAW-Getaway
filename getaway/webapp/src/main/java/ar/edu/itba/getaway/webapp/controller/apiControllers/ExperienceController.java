@@ -53,7 +53,7 @@ public class ExperienceController {
 
     // Endpoint para obtener las experiencias de una categoria
     @GET
-    @Path("/{category}")
+    @Path("/category/{category}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperiencesFromCategory(
             @PathParam("category") final String category,
@@ -105,6 +105,40 @@ public class ExperienceController {
         }, uriBuilder);
     }
 
+    @GET
+    @Path("/name/{name}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getExperiencesBySearch(
+            @PathParam("name") final String name,
+            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
+            @QueryParam("page") @DefaultValue("1") int page
+    ) {
+        LOGGER.info("Called /experiences/{} GET", name);
+
+        //TODO: change for deployment
+        //final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
+        final Page<ExperienceModel> experiences = experienceService.listExperiencesSearch(name, Optional.of(order), page, user);
+
+        if (experiences == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        if (experiences.getContent().isEmpty()) {
+            return Response.noContent().build();
+        }
+
+        final Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);
+
+        final UriBuilder uriBuilder = uriInfo
+                .getAbsolutePathBuilder()
+                .queryParam("order", order)
+                .queryParam("page", page);
+
+        return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
+        }, uriBuilder);
+    }
     // Endpoint para crear una experiencia
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON,})
