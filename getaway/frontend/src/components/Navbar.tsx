@@ -3,6 +3,9 @@ import "../common/i18n/index"
 import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {CategoryModel} from "../types";
 import {getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
+import React, {useState} from "react";
+import Modal from 'react-modal';
+import '../styles/navbar.css'
 
 export default function Navbar() {
 
@@ -18,6 +21,9 @@ export default function Navbar() {
     const isLogged = false;
     const isProvider = true;
     const isVerified = true;
+
+    const [isOpen, setIsOpen] = useState(false);
+
 
     //TODO obtenerlas de un llamado a la API ??
     const categories: CategoryModel[] = [
@@ -65,12 +71,135 @@ export default function Navbar() {
 
 
                     {!isLogged &&
-                    <Link to="/login">
-                        <button type="button" className="btn button-primary">
+                    //<Link to="/login">
+                        <button type="button" className="btn button-primary" onClick={() => setIsOpen(true)}>
                             {t('Navbar.login')}
                         </button>
-                    </Link>
+                    //</Link>
                     }
+                    {isOpen && (
+                        <Modal
+                            className="modal-pop-up"
+                            isOpen={isOpen}
+                            contentLabel="PopUpSignIn"
+                            onRequestClose={() => setIsOpen(false)}
+                        >
+                            <div
+                                className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
+                                <div className="container-lg w-100 p-2">
+                                    <div className="row w-100 m-0 p-5 align-items-center justify-content-center">
+                                        <div className="col-12">
+                                            <h1 className="text-center title">
+                                                {t('Navbar.loginTitle')}
+                                            </h1>
+                                            <p className="subtitle text-center">
+                                                {t('Navbar.loginDescription')}
+                                            </p>
+                                        </div>
+                                        <div className="col-12">
+                                            <div className="container-fluid px-0">
+                                           {/*     <c:url value="/login" var="postPath"/>*/}
+                                           {/*     <form id="loginForm" action="${postPath}" accept-charset="UTF-8"*/}
+                                           {/*           method="POST"*/}
+                                           {/*           encType="application/x-www-form-urlencoded">*/}
+                                                <form>
+
+                                                    <div className="row">
+                                                        <div className="col-12">  {/*  Email */}
+                                                            <label className="form-label d-flex align-items-center"
+                                                                   htmlFor="email">
+                                                                {/*<img*/}
+                                                                {/*    src="<c:url value="/public/images/ic_user.svg/images/ic_user.svg"/>"*/}
+                                                                {/*    alt="Imagen perfil"*/}
+                                                                {/*    style="margin-right: 5px;"/>*/}
+                                                                    {t('Navbar.email')}
+                                                            </label>
+                                                            <input type="text" id="email" name="email"
+                                                                   className="form-control mb-2"
+                                                                   aria-describedby="email input"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="col-12 mt-2">
+                                                        <div className="container-fluid">
+                                                            <div className="row">
+                                                                <div className="col-6 px-0">
+                                                                    <label
+                                                                        className="form-label d-flex align-items-center"
+                                                                        htmlFor="password">
+                                                                        {/*<img*/}
+                                                                        {/*    src="<c:url value="/public/images/ic_password.svg/images/ic_password.svg"/>"*/}
+                                                                        {/*    alt="Imagen perfil"*/}
+                                                                        {/*    style="margin-right: 5px;">*/}
+                                                                        {t('Navbar.password')}
+                                                                    </label>
+                                                                </div>
+                                                                {/*<div*/}
+                                                                {/*    className="col-6 px-0 d-flex justify-content-end form-label">*/}
+                                           {/*                         <Link to="/user/resetPasswordRequest"*/}
+                                           {/*                            tabIndex="-1">*/}
+                                           {/*<span className="text-right" style="font-size: medium; ">*/}
+                                           {/*    <spring:message code="loginForm.forgotPassword"/>*/}
+                                           {/*</span>*/}
+                                           {/*                         </Link>*/}
+                                           {/*                     </div>*/}
+                                                                <div
+                                                                    className="col-12 px-0 d-flex justify-content-start align-items-center">
+                                                                    <div
+                                                                        className="input-group d-flex justify-content-start align-items-center">
+                                                                        <input type="password" className="form-control"
+                                                                               id="password" name="password"
+                                                                               aria-describedby="password input"/>
+                                                                        <div className="input-group-append">
+                                                                            {/*<button id="passwordEye" type="button"*/}
+                                                                            {/*        tabIndex="-1"*/}
+                                                                            {/*        className="btn btn-lg form-control btn-eye input-group-text">*/}
+                                                                            {/*    <i id="eye"*/}
+                                                                            {/*       className="far fa-eye-slash"></i>*/}
+                                                                            {/*</button>*/}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                           {/*                     <c:if test="${error==true}">*/}
+                                           {/*                         <div*/}
+                                           {/*                             className="col-12 mt-2 px-0 d-flex justify-content-start align-items-center">*/}
+                                           {/*                             <p className="mb-0 form-error-label">*/}
+                                           {/*                                 <spring:message code="loginForm.error"/>*/}
+                                           {/*                             </p>*/}
+                                           {/*                         </div>*/}
+                                           {/*                     </c:if>*/}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div
+                                                        className="col-12 mt-3 d-flex justify-content-start align-items-center">
+                                                        <input type="checkbox" id="rememberMe" name="rememberMe"/>
+                                                        <label className="mb-0 mx-2" htmlFor="rememberMe">
+                                                            {t('Navbar.rememberMe')}
+                                                        </label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                            <button form="loginForm" type="submit" className="w-100 btn-login my-2">
+                                                {t('Navbar.login')}
+                                            </button>
+                                        </div>
+                                        <div className="col-12 mt-4">
+                                            <p className="mb-0 text-center">
+                                                {t('Navbar.newUser')}
+                                                <Link to="/register">
+                                                    {t('Navbar.createAccount')}
+                                                </Link>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Modal>
+                    )}
                     {isLogged &&
                     <div className="dropdown">
                         <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"

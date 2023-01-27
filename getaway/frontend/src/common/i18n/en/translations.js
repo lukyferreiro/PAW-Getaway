@@ -12,13 +12,20 @@ export const TRANSLATIONS_EN = {
     },
 
     Navbar: {
+        createAccount:"Crea una cuenta",
         createExperience: "Crear experiencia",
+        email: "Email",
         search: "Buscar",
         login: "Iniciar sesion",
+        loginTitle: "Iniciar sesion en Getaway",
+        loginDescription:"Experiencias nuevas todos los d\u00EDas",
+        newUser:"¿Eres nuevo en Getaway?",
+        password:"Contraseña",
         profile: "Mi perfil",
         experiences: "Mis experiencias",
         favourites: "Mis favoritos",
         reviews: "Mis reseñas",
+        rememberMe: "Recuerdame",
         logout: "Cerrar sesion",
     },
 
