@@ -281,25 +281,26 @@ public class ExperienceController {
     @GET
     @Path("/experience/{id}/image")
     @Produces({"image/*", MediaType.APPLICATION_JSON})
-    public Response getExperienceImage(@PathParam("id") final long id) {
+    public Response getExperienceImage(@PathParam("id") final long id, @Context Request request) {
 
-        final ImageModel image = imageService.getImgById(id).orElseThrow(ImageNotFoundException::new);
+        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(UserNotFoundException::new);
+        final ImageModel img = experience.getExperienceImage();
 
-        if (image.getImage() != null) {
-            final CacheControl cacheControl = new CacheControl();
-            cacheControl.setNoTransform(false);
-            cacheControl.getCacheExtension().put("public", null);
-            cacheControl.setMaxAge(31536000);
-            cacheControl.getCacheExtension().put("immutable", null);
-
-            return Response.ok(image.getImage())
-                    .type(image.getMimeType())
-                    .cacheControl(cacheControl)
-                    .build();
-//            Response.ResponseBuilder response = Response.ok(new ByteArrayInputStream(imageModel.getImage()));
-//            return response.build();
+        if (img == null) {
+            return Response.status(NOT_FOUND).build();
         }
-        return Response.noContent().build();
+
+        final EntityTag eTag = new EntityTag(String.valueOf(img.getImageId()));
+        final CacheControl cacheControl = new CacheControl();
+        cacheControl.setNoCache(true);
+
+        Response.ResponseBuilder responseBuilder = request.evaluatePreconditions(eTag);
+        if (responseBuilder == null) {
+            final byte[] profileImage = img.getImage();
+            responseBuilder = Response.ok(profileImage).type(img.getMimeType()).tag(eTag);
+        }
+
+        return responseBuilder.cacheControl(cacheControl).build();
     }
 
     // Endpoint para obtener la reseñas de una experiencia
