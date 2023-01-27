@@ -14,6 +14,11 @@ export default function Navbar() {
     const pathname = location?.pathname
     const categoryQuery = getQueryOrDefaultMultiple(query, "category");
 
+    //Esto lo vamos a tener q obtener de alguna manera, por ahora lo fuerzo para ver que funcione
+    const isLogged = false;
+    const isProvider = true;
+    const isVerified = true;
+
     //TODO obtenerlas de un llamado a la API ??
     const categories: CategoryModel[] = [
         {categoryId: 1, name: 'Aventura'},
@@ -50,23 +55,23 @@ export default function Navbar() {
                         </form>
                     </div>
 
-                    {/*TODO que solo aparezca si el user es provider*/}
+
+                    {isLogged && isProvider &&
                     <Link to="/createExperience" style={{marginRight: '40px'}}>
                         <button type="button" className='btn button-primary'>
                             {t('Navbar.createExperience')}
                         </button>
-                    </Link>
+                    </Link>}
 
-                    {/*TODO ver como hacer el case de si el usuario esta logeado o no*/}
-                    {/*<c:choose>*/}
-                    {/*    <c:when test="${loggedUser == null}">*/}
+
+                    {!isLogged &&
                     <Link to="/login">
                         <button type="button" className="btn button-primary">
                             {t('Navbar.login')}
                         </button>
                     </Link>
-                    {/*    </c:when>*/}
-                    {/*    <c:otherwise>*/}
+                    }
+                    {isLogged &&
                     <div className="dropdown">
                         <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -81,33 +86,26 @@ export default function Navbar() {
                                 <img src={'./images/ic_user.svg'} alt="Icono perfil"/>
                                 {t('Navbar.profile')}
                             </Link>
-                            {/*TODO que solo este si el usuario es provider*/}
-                            {/*<c:if test="${loggedUser.hasRole('PROVIDER')}">*/}
-                            <Link to="/user/experiences" className="dropdown-item">
+
+                            {isProvider && <Link to="/user/experiences" className="dropdown-item">
                                 <img src={'./images/ic_experiences.svg'} alt="Icono experiencias"/>
                                 {t('Navbar.experiences')}
-                            </Link>
-                            {/*</c:if>*/}
+                            </Link>}
                             <Link to="/user/favourites" className="dropdown-item">
                                 <img src={'./images/ic_fav.svg'} alt="Icono favoritos"/>
                                 {t('Navbar.favourites')}
                             </Link>
-                            {/*TODO que solo este si el usuario es VERIFIED*/}
-                            {/*<c:if test="${loggedUser.hasRole('VERIFIED')}">*/}
-                            <Link to="/user/reviews" className="dropdown-item">
+                            {isVerified && <Link to="/user/reviews" className="dropdown-item">
                                 <img src={'./images/ic_review.svg'} alt="Icono reseñas"/>
                                 {t('Navbar.reviews')}
-                            </Link>
-                            {/*</c:if>*/}
+                            </Link>}
                             {/*TODO agregar onClick que haga el logout*/}
                             <button className="dropdown-item">
                                 <img src={'./images/ic_logout.svg'} alt="Icono cerrar sesion"/>
                                 {t('Navbar.logout')}
                             </button>
                         </ul>
-                    </div>
-                    {/*    </c:otherwise>*/}
-                    {/*</c:choose>*/}
+                    </div>}
                 </div>
             </div>
 
