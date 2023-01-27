@@ -28,6 +28,13 @@
         </listener-class>
     </listener>
 
+    <listener>
+        <listener-class>
+            org.springframework.web.context.request.RequestContextListener
+        </listener-class>
+    </listener>
+
+<!--    TODO check si es un servlet o filter-->
     <servlet>
         <servlet-name>jersey-servlet</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
@@ -48,20 +55,20 @@
             <param-name>jersey.config.servlet.filter.forwardOn404</param-name>
             <param-value>true</param-value>
         </init-param>
-        <!-- For NoHandlerFoundException -->
-        <init-param>
-            <param-name>throwExceptionIfNoHandlerFound</param-name>
-            <param-value>true</param-value>
-        </init-param>
         <init-param>
             <param-name>jersey.config.server.provider.classnames</param-name>
             <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
         </init-param>
-        <init-param>
-            <param-name>jersey.config.server.response.setStatusOverSendError</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
+        <!-- For NoHandlerFoundException -->
+<!--        <init-param>-->
+<!--            <param-name>throwExceptionIfNoHandlerFound</param-name>-->
+<!--            <param-value>true</param-value>-->
+<!--        </init-param>-->
+<!--        <init-param>-->
+<!--            <param-name>jersey.config.server.response.setStatusOverSendError</param-name>-->
+<!--            <param-value>true</param-value>-->
+<!--        </init-param>-->
+<!--        <load-on-startup>1</load-on-startup>-->
     </servlet>
 
     <servlet-mapping>
@@ -69,20 +76,48 @@
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>/resources/*</url-pattern>
-    </servlet-mapping>
+<!--    <filter>-->
+<!--        <filter-name>jersey</filter-name>-->
+<!--        <filter-class>org.glassfish.jersey.servlet.ServletContainer</filter-class>-->
+<!--        <init-param>-->
+<!--            <param-name>jersey.config.server.provider.packages</param-name>-->
+<!--            <param-value>-->
+<!--                ar.edu.itba.getaway.webapp.controller,-->
+<!--                ar.edu.itba.getaway.webapp.config,-->
+<!--                ar.edu.itba.getaway.webapp.mappers,-->
+<!--            </param-value>-->
+<!--        </init-param>-->
+<!--        <init-param>-->
+<!--            <param-name>jersey.config.server.provider.classnames</param-name>-->
+<!--            <param-value>-->
+<!--                org.glassfish.jersey.media.multipart.MultiPartFeature,-->
+<!--            </param-value>-->
+<!--        </init-param>-->
+<!--        <init-param>-->
+<!--            <param-name>jersey.config.servlet.filter.forwardOn404</param-name>-->
+<!--            <param-value>true</param-value>-->
+<!--        </init-param>-->
+<!--    </filter>-->
 
-    <!--TODO ver si va esto -->
-    <servlet>
-        <servlet-name>index</servlet-name>
-        <jsp-file>/resources/index.html</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>index</servlet-name>
-        <url-pattern>/*</url-pattern>
-    </servlet-mapping>
+<!--    <filter-mapping>-->
+<!--        <filter-name>jersey</filter-name>-->
+<!--        <url-pattern>/api/*</url-pattern>-->
+<!--    </filter-mapping>-->
+
+
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>default</servlet-name>-->
+<!--        <url-pattern>/resources/*</url-pattern>-->
+<!--    </servlet-mapping>-->
+
+<!--    <servlet>-->
+<!--        <servlet-name>index</servlet-name>-->
+<!--        <jsp-file>/resources/index.html</jsp-file>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>index</servlet-name>-->
+<!--        <url-pattern>/*</url-pattern>-->
+<!--    </servlet-mapping>-->
 
     <filter>
         <filter-name>charsetFilter</filter-name>
@@ -105,10 +140,6 @@
         <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/api/*</url-pattern>
     </filter-mapping>
-<!--    <filter-mapping>-->
-<!--        <filter-name>springSecurityFilterChain</filter-name>-->
-<!--        <url-pattern>/auth/*</url-pattern>-->
-<!--    </filter-mapping>-->
 
     <filter>
         <filter-name>openEntityManagerInViewFilter</filter-name>
@@ -120,14 +151,14 @@
     </filter-mapping>
 
 
-    <filter>
-        <filter-name>ResourcesCacheFilter</filter-name>
-        <filter-class>ar.edu.itba.getaway.webapp.config.ResourcesCacheFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>ResourcesCacheFilter</filter-name>
-        <url-pattern>/resources/*</url-pattern>
-    </filter-mapping>
+<!--    <filter>-->
+<!--        <filter-name>ResourcesCacheFilter</filter-name>-->
+<!--        <filter-class>ar.edu.itba.getaway.webapp.security.api.CacheControlFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>ResourcesCacheFilter</filter-name>-->
+<!--        <url-pattern>/resources/*</url-pattern>-->
+<!--    </filter-mapping>-->
 
     <!--TODO ver si va esto -->
     <error-page>

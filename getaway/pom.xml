@@ -11,47 +11,36 @@
     <name>getaway</name>
 
     <properties>
+        <main.basedir>${project.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <!--SPRING-->
-        <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
-        <!--JETTY-->
+        <org.springframework.version>4.3.22.RELEASE</org.springframework.version>
+        <spring-security.version>4.2.11.RELEASE</spring-security.version>
         <servlet-api.version>2.5</servlet-api.version>
         <jstl.version>1.2</jstl.version>
-        <!--JDBC-->
         <postgresql.version>42.2.5</postgresql.version>
-        <!--Mockito-->
         <mockito.version>2.25.1</mockito.version>
-        <!--JUNIT-->
         <junit.version>4.13.2</junit.version>
-        <!--HSQLDB-->
         <hsqldb.version>2.4.1</hsqldb.version>
-        <!--API-->
         <javax.validation-api.version>1.0.0.GA</javax.validation-api.version>
         <org.hibernate.validator>4.3.1.Final</org.hibernate.validator>
-        <!--Javax XML bind-->
         <jaxb.version>2.3.1</jaxb.version>
-        <!-- For images upload -->
         <commons-fileupload.version>1.4</commons-fileupload.version>
-        <!--Mail y Thymeleaf-->
         <mail.version>1.4.7</mail.version>
         <thymeleaf.version>3.0.12.RELEASE</thymeleaf.version>
-        <!--Spring security-->
-        <spring-security.version>4.0.4.RELEASE</spring-security.version>
-        <!--Logging (Logback)-->
         <org.slf4j.version>1.7.5</org.slf4j.version>
         <logback.version>1.1.2</logback.version>
         <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
-        <!--Plugin que genera el war para omitir la configuración de desarrollo-->
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
-        <!--Hibernate-->
         <org.hibernate.version>5.1.0.Final</org.hibernate.version>
         <org.hibernate.jpa.version>1.0.0.Final</org.hibernate.jpa.version>
-        <!-- Para el FINAL -->
-        <!-- JERSEY -->
         <jersey.version>3.0-SNAPSHOT</jersey.version>
-        <jjwt.version>0.9.1</jjwt.version>
+        <jjwt.version>0.7.0</jjwt.version>
+<!--        TODO check -->
+        <jackson.version>2.13.1</jackson.version>
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <org.springframework.hateoas.version>0.25.1.RELEASE</org.springframework.hateoas.version>
     </properties>
 
     <repositories>
@@ -135,22 +124,22 @@
                 <scope>test</scope>
             </dependency>
             <!--API-->
-<!--            <dependency>-->
-<!--                <groupId>javax.validation</groupId>-->
-<!--                <artifactId>validation-api</artifactId>-->
-<!--                <version>${javax.validation-api.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>org.hibernate</groupId>-->
-<!--                <artifactId>hibernate-validator</artifactId>-->
-<!--                <version>${org.hibernate.validator}</version>-->
-<!--                <exclusions>-->
-<!--                    <exclusion>-->
-<!--                        <groupId>org.jboss.logging</groupId>-->
-<!--                        <artifactId>jboss-logging</artifactId>-->
-<!--                    </exclusion>-->
-<!--                </exclusions>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${javax.validation-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${org.hibernate.validator}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.jboss.logging</groupId>
+                        <artifactId>jboss-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
             <!--Javax XML bind-->
             <dependency>
                 <groupId>javax.xml.bind</groupId>
@@ -343,6 +332,31 @@
                 <version>${jjwt.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.hateoas</groupId>
+                <artifactId>spring-hateoas</artifactId>
+                <version>${org.springframework.hateoas.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-parameter-names</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jdk8</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>3.1.0</version>
@@ -356,10 +370,9 @@
         <module>models</module>
         <module>persistence</module>
         <module>services</module>
-        <module>frontend</module>
+<!--        <module>frontend</module>-->
     </modules>
 
-    <!--Plugin que genera el war para omitir la configuración de desarrollo-->
     <build>
         <plugins>
             <plugin>
@@ -367,9 +380,12 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${maven-war-plugin.version}</version>
                 <configuration>
-                    <packagingExcludes>
-                        **/logback-test.xml
-                    </packagingExcludes>
+                    <packagingExcludes>**/logback-test.xml</packagingExcludes>
+                    <webResources>
+                        <resource>
+                            <directory>../frontend/build</directory>
+                        </resource>
+                    </webResources>
                 </configuration>
             </plugin>
             <plugin>
@@ -384,6 +400,22 @@
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${org.mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
         </plugins>
     </build>
