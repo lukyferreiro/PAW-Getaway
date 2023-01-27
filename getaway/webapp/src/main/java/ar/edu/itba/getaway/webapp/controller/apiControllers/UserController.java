@@ -7,13 +7,12 @@ import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
-import ar.edu.itba.getaway.webapp.auth.JwtUtil;
+//import ar.edu.itba.getaway.webapp.security.JwtUtil;
 import ar.edu.itba.getaway.webapp.dto.request.*;
-import ar.edu.itba.getaway.webapp.dto.response.CountryDto;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.UserDto;
-import ar.edu.itba.getaway.webapp.dto.validations.ImageTypeConstraint;
+import ar.edu.itba.getaway.webapp.constraints.ImageTypeConstraint;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -60,8 +59,8 @@ public class UserController {
     @Context
     private UriInfo uriInfo;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+//    @Autowired
+//    private JwtUtil jwtUtil;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
@@ -118,30 +117,30 @@ public class UserController {
     }
 
     //Endpoint para la verificacion del mail
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(value = {MediaType.APPLICATION_JSON,})
-    @Path("/emailVerification")
-    public Response verifyUser(@Valid TokenDto tokenDto) {
-        LOGGER.info("Called /users/emailVerification PUT");
-
-        if (tokenDto == null) {
-            throw new ContentExpectedException();
-        }
-
-//        final UserModel user = userService.verifyAccount(tokenDto.getToken()).orElseThrow(UserNotFoundException::new);
-        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
-
-        final Response.ResponseBuilder responseBuilder = Response.noContent();
-
-        if (user.isVerified()) {
-            addAuthorizationHeader(responseBuilder, user);
-            if (securityContext.getUserPrincipal() == null) {
-                addSessionRefreshTokenHeader(responseBuilder, user);
-            }
-        }
-        return responseBuilder.build();
-    }
+//    @PUT
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(value = {MediaType.APPLICATION_JSON,})
+//    @Path("/emailVerification")
+//    public Response verifyUser(@Valid TokenDto tokenDto) {
+//        LOGGER.info("Called /users/emailVerification PUT");
+//
+//        if (tokenDto == null) {
+//            throw new ContentExpectedException();
+//        }
+//
+////        final UserModel user = userService.verifyAccount(tokenDto.getToken()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+//
+//        final Response.ResponseBuilder responseBuilder = Response.noContent();
+//
+//        if (user.isVerified()) {
+//            addAuthorizationHeader(responseBuilder, user);
+//            if (securityContext.getUserPrincipal() == null) {
+//                addSessionRefreshTokenHeader(responseBuilder, user);
+//            }
+//        }
+//        return responseBuilder.build();
+//    }
 
     //Endpoint para la verificacion del mail
     @POST
@@ -225,7 +224,7 @@ public class UserController {
 
     //Endpoint para editar la imagen de perfil del usuario
     @PUT
-    @Path("/{id}/image")
+    @Path("/{id}/profileImage")
     public Response putUserProfileImage(
             @Context final HttpServletRequest request,
             @PathParam("id") final Long userId,
@@ -362,13 +361,13 @@ public class UserController {
         }
     }
 
-    private void addAuthorizationHeader(final Response.ResponseBuilder response, final UserModel user) {
-        response.header(JwtUtil.JWT_HEADER, jwtUtil.generateToken(user, uriInfo.getBaseUri().toString()));
-    }
-
-    private void addSessionRefreshTokenHeader(final Response.ResponseBuilder response, final UserModel user) {
-        response.header(JwtUtil.REFRESH_TOKEN_HEADER, tokensService.getSessionRefreshToken(user).getValue());
-    }
+//    private void addAuthorizationHeader(final Response.ResponseBuilder response, final UserModel user) {
+//        response.header(JwtUtil.JWT_HEADER, jwtUtil.generateToken(user, uriInfo.getBaseUri().toString()));
+//    }
+//
+//    private void addSessionRefreshTokenHeader(final Response.ResponseBuilder response, final UserModel user) {
+//        response.header(JwtUtil.REFRESH_TOKEN_HEADER, tokensService.getSessionRefreshToken(user).getValue());
+//    }
 
     private <T, K> Response createPaginationResponse(Page<T> results,
                                                      GenericEntity<K> resultsDto,
@@ -410,6 +409,7 @@ public class UserController {
         if (page != last) {
             responseBuilder.link(uriBuilder.clone().queryParam("page", next).build(), "next");
         }
+
     }
 
 }
