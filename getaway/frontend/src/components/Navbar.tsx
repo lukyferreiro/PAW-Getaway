@@ -134,15 +134,15 @@ export default function Navbar() {
                                                                         {t('Navbar.password')}
                                                                     </label>
                                                                 </div>
-                                                                {/*<div*/}
-                                                                {/*    className="col-6 px-0 d-flex justify-content-end form-label">*/}
-                                           {/*                         <Link to="/user/resetPasswordRequest"*/}
-                                           {/*                            tabIndex="-1">*/}
-                                           {/*<span className="text-right" style="font-size: medium; ">*/}
-                                           {/*    <spring:message code="loginForm.forgotPassword"/>*/}
-                                           {/*</span>*/}
-                                           {/*                         </Link>*/}
-                                           {/*                     </div>*/}
+                                                                <div
+                                                                    className="col-6 px-0 d-flex justify-content-end form-label">
+                                                                    <Link to="/user/resetPasswordRequest"
+                                                                       tabIndex={-1}>
+                                           <span className="text-right" style={{fontSize: "medium" }}>
+                                               {t('Navbar.forgotPassword')}
+                                           </span>
+                                                                    </Link>
+                                                                </div>
                                                                 <div
                                                                     className="col-12 px-0 d-flex justify-content-start align-items-center">
                                                                     <div
@@ -150,14 +150,14 @@ export default function Navbar() {
                                                                         <input type="password" className="form-control"
                                                                                id="password" name="password"
                                                                                aria-describedby="password input"/>
-                                                                        <div className="input-group-append">
-                                                                            {/*<button id="passwordEye" type="button"*/}
-                                                                            {/*        tabIndex="-1"*/}
-                                                                            {/*        className="btn btn-lg form-control btn-eye input-group-text">*/}
-                                                                            {/*    <i id="eye"*/}
-                                                                            {/*       className="far fa-eye-slash"></i>*/}
-                                                                            {/*</button>*/}
-                                                                        </div>
+                                                                        {/*<div className="input-group-append">*/}
+                                                                        {/*    <button id="passwordEye" type="button"*/}
+                                                                        {/*            tabIndex={-1}*/}
+                                                                        {/*            className="btn btn-lg form-control btn-eye input-group-text">*/}
+                                                                        {/*        <i id="eye"*/}
+                                                                        {/*           className="far fa-eye-slash"></i>*/}
+                                                                        {/*    </button>*/}
+                                                                        {/*</div>*/}
                                                                     </div>
                                                                 </div>
                                            {/*                     <c:if test="${error==true}">*/}

@@ -16,6 +16,7 @@ export const TRANSLATIONS_ES = {
         createExperience: "Create experience",
         email: "Email",
         search: "Search",
+        forgotPassword: "Forgot yor password?",
         login: "Sign in",
         loginTitle: "Sign in to Getaway",
         loginDescription: "New experiences every day",

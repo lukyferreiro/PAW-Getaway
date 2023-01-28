@@ -16,6 +16,7 @@ export const TRANSLATIONS_EN = {
         createExperience: "Crear experiencia",
         email: "Email",
         search: "Buscar",
+        forgotPassword: "¿Olvidaste tu contraseña?",
         login: "Iniciar sesion",
         loginTitle: "Iniciar sesion en Getaway",
         loginDescription:"Experiencias nuevas todos los d\u00EDas",
