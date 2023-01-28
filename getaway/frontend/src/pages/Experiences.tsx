@@ -2,11 +2,24 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import OrderDropdown from "../components/OrderDropdown";
 import CardExperience from "../components/CardExperience";
+import {Slider, Typography} from '@mui/material';
+import { useState } from "react";
 
 export default function Experiences() {
 
+    //Por ahora lo hago fijo
+    {/*    /!*TODO obtener el max price de todas las experiencias*!/*/}
+    const maxPrice = 100;
+
+    const [value, setValue] = useState<number>(maxPrice);
+
+    const handleChange = (event: Event, newValue: number | number[]) => {
+        if (typeof newValue === 'number') {
+            setValue(newValue);
+        }
+    };
     const {t} = useTranslation();
-    //Podemos hacer que nos pasen como props esta lista de experiencias, por aca la creo forzada aca
+    //Podemos hacer que nos pasen como props esta lista de experiencias, por ahora la creo forzada aca
     const experiences: string | any[] =
         [
             <CardExperience/>,
@@ -44,26 +57,26 @@ export default function Experiences() {
                     </div>
 
                     <div className="container-slider-price">
-                        <label key="maxPrice" className="form-label">
-                            {t('Filters.price.title')}
-                        </label>
-                        <output id="priceRange" name="priceRange" htmlFor="customRange">
-                            {/*TODO obtener el max price de todas las experiencias*/}
-                            100000
-                        </output>
+
+                        <Typography id="non-linear-slider" gutterBottom className="form-label">
+                            {t('Filters.price.title')}: {value}
+                        </Typography>
                         <div className="slider-price">
                             <div className="value left">
                                 {t('Filters.price.min')}
                             </div>
                             <div className="slider">
-                                {/*TODO ver como agregar esto al input*/}
-                                {/*onInput={document.getElementById('priceRange').value = this.value | null}*/}
-                                <input id="customRange" name="customRange" type="range"
-                                       min="0" max="TODO" value="TODO"/>
                             </div>
+                            <Slider
+                                value={value}
+                                min={5}
+                                step={1}
+                                max={maxPrice}
+                                onChange={handleChange}
+                                valueLabelDisplay="auto"
+                            />
                             <div className="value right">
-                                {/*TODO obtener el maximo actual, usar useState*/}
-                                100
+                                {maxPrice}
                             </div>
                         </div>
                     </div>
