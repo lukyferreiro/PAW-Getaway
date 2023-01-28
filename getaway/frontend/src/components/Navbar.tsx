@@ -7,6 +7,7 @@ import React, {useState} from "react";
 import Modal from 'react-modal';
 import '../styles/navbar.css'
 
+
 export default function Navbar() {
 
     const {t} = useTranslation()
@@ -23,6 +24,7 @@ export default function Navbar() {
     const isVerified = true;
 
     const [isOpen, setIsOpen] = useState(false);
+
 
 
     //TODO obtenerlas de un llamado a la API ??
@@ -102,16 +104,14 @@ export default function Navbar() {
                                            {/*     <form id="loginForm" action="${postPath}" accept-charset="UTF-8"*/}
                                            {/*           method="POST"*/}
                                            {/*           encType="application/x-www-form-urlencoded">*/}
-                                                <form>
-
                                                     <div className="row">
                                                         <div className="col-12">  {/*  Email */}
                                                             <label className="form-label d-flex align-items-center"
                                                                    htmlFor="email">
-                                                                {/*<img*/}
-                                                                {/*    src="<c:url value="/public/images/ic_user.svg/images/ic_user.svg"/>"*/}
-                                                                {/*    alt="Imagen perfil"*/}
-                                                                {/*    style="margin-right: 5px;"/>*/}
+                                                                <img
+                                                                    src={"./images/ic_user.svg"}
+                                                                    alt="Imagen perfil"
+                                                                    style={{marginRight: "5px"}}/>
                                                                     {t('Navbar.email')}
                                                             </label>
                                                             <input type="text" id="email" name="email"
@@ -127,10 +127,10 @@ export default function Navbar() {
                                                                     <label
                                                                         className="form-label d-flex align-items-center"
                                                                         htmlFor="password">
-                                                                        {/*<img*/}
-                                                                        {/*    src="<c:url value="/public/images/ic_password.svg/images/ic_password.svg"/>"*/}
-                                                                        {/*    alt="Imagen perfil"*/}
-                                                                        {/*    style="margin-right: 5px;">*/}
+                                                                        <img
+                                                                            src={"./images/ic_password.svg"}
+                                                                            alt="Imagen perfil"
+                                                                            style={{marginRight: "5px"}}/>
                                                                         {t('Navbar.password')}
                                                                     </label>
                                                                 </div>
@@ -179,7 +179,7 @@ export default function Navbar() {
                                                             {t('Navbar.rememberMe')}
                                                         </label>
                                                     </div>
-                                                </form>
+                                                {/*</form>*/}
                                             </div>
                                         </div>
                                         <div className="col-12 d-flex align-items-center justify-content-center">
