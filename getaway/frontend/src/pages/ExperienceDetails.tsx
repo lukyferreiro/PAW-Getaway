@@ -11,6 +11,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import CardExperience from "../components/CardExperience";
+import CardExperienceDetails from "../components/CardExperienceDetails";
 export default function ExperienceDetails() {
 
     const {t} = useTranslation();
@@ -58,173 +60,21 @@ export default function ExperienceDetails() {
             score: 5,
             reviewsCount: 0}
 
-    const isEditing = true;
-    const hasImage = false;
+
     return (
-        <div className="card mx-5 my-3 px-5 pt-4">
-            <div className="d-flex justify-content-center align-content-center">
-                <h1 className="text-center" style={{wordBreak: "break-all"}}>
-                    {experience.name}
-                </h1>
+        <div className="container-fluid px-5 d-flex justify-content-center align-content-center flex-column">
+            <div className="card mx-5 my-3 px-5 pt-4">
+                <div className="d-flex justify-content-center align-content-center">
+                    <h1 className="text-center" style={{wordBreak: "break-all"}}>
+                        {experience.name}
+                    </h1>
+                </div>
+
+                <CardExperienceDetails experience={experience}
+                                categoryModel={categoryModel}/>
             </div>
 
-            <div className="d-flex flex-wrap justify-content-center align-content-center">
-                <div className="d-flex flex-column">
-                    <div className="p-2" style={{width: "600px"}}>
-                        {hasImage &&
-                        <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "550px"}}
-                             src={`/experiences/${experience.experienceId}/image.svg`} alt="Imagen"/>}
-                        {!hasImage &&
-                            <div>
-                                <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "450px"}}
-                                     src={`./images/${categoryModel.name}.svg`} alt={`${categoryModel.name}`}/>
-                                <h5 className="mt-3 text-center">
-                                    {t('ExperienceDetail.imageDefault')}
-                                </h5>
-                            </div>
-                        }
-
-                    </div>
-                </div>
-                <div style={{flex:"5", minWidth: "350px"}}>
-                    <div className="row">
-                        <div className="col-3 p-0"></div>
-                        <div className="card-body col-7 h-100">
-                            <div>{/*  Direccion y ciudad */}
-                                <h5 className="information-title">
-                                    {t('Experience.address')}
-                                </h5>
-                                <p className="information-text">
-                                    {experience.address}
-                                </p>
-                            </div>
-
-                            <div> {/*Precio*/}
-                                <h5 className="information-title">
-                                    {t('Experience.price')}
-                                </h5>
-                                <p className="information-text">
-                                    {/*<c:when test="${param.price == ''}">*/}
-                                    {/*    <spring:message code="experienceDetail.price.noPrice"/>*/}
-                                    {/*</c:when>*/}
-                                    {experience.price == 0 &&
-                                        <h5>
-                                            {t('ExperienceDetail.priceFree')}
-                                        </h5>
-                                    }
-                                    {experience.price > 0 &&
-                                    <h5>
-                                        $ {experience.price}
-                                    </h5>
-                                    }
-                                </p>
-                            </div>
-
-                            <div> {/* Descripcion */}
-                                <h5 className="information-title">
-                                    {t('ExperienceDetail.description')}
-                                </h5>
-                                <p className="information-text" id="experienceDescription">
-                                    {experience.description == '' &&
-                                        <div>
-                                            {t('ExperienceDetail.noData')}
-                                        </div>
-                                    }
-                                    {experience.description != '' &&
-                                    <div>
-                                        {experience.description}
-                                    </div>}
-                                </p>
-                            </div>
-
-                            <div> {/* URL */}
-                                <h5 className="information-title">
-                                    {t('ExperienceDetail.url')}
-                                </h5>
-                                {experience.siteUrl == '' &&
-                                <p className="information-text">
-                                    {t('ExperienceDetail.noData')}
-                                </p>
-                                }
-                                {experience.siteUrl != '' &&
-                                    <Link to={experience.siteUrl}>
-                                        <p className="information-text">
-                                            {experience.siteUrl}
-                                        </p>
-                                    </Link>
-                                }
-                            </div>
-
-                            <div> {/*  Email de contacto */}
-                                <h5 className="information-title">
-                                    {t('ExperienceDetail.email')}
-                                </h5>
-                                <p className="information-text">
-                                    {experience.email}
-                                </p>
-                            </div>
-
-                            <div className="d-flex"> {/* Ranking */}
-                                <h6 className="information-title">
-                                    {t('ExperienceDetails.review')}: {experience.reviewsCount}
-                                </h6>
-                                {/*<jsp:include page="/WEB-INF/components/starAvg.jsp">*/}
-                                {/*    <jsp:param name="avgReview" value="${param.reviewAvg}"/>*/}
-                                {/*</jsp:include>*/}
-                            </div>
-                        </div>
-                        <div className="col-2 p-0"></div>
-                    </div>
-                </div>
         </div>
 
-            {!experience.observable &&
-            <div className="my-1 d-flex justify-content-center align-content-center">
-                <h6 className="obs-info">
-                    {t('ExperienceDetail.notVisible')}
-                </h6>
-            </div>
-            }
-
-            {isEditing &&
-            <div className="btn-group my-2 d-flex justify-content-center align-content-center" role="group">
-                {experience.observable &&
-                    <div>
-                        {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
-                        {/*   ${false}"/> </c:url>">*/}
-                        <IconButton aria-label="visibilityOn" component="span" style={{fontSize: "xxx-large"}} id="setFalse">
-                            <VisibilityIcon/>
-                        </IconButton>
-                        {/*</a>*/}
-                    </div>
-
-                 }
-                {!experience.observable &&
-                    <div>
-                         {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
-                         {/*   ${true}"/> </c:url>">*/}
-                        <IconButton aria-label="visibilityOff" component="span" style={{fontSize: "xx-large"}} id="setTrue">
-                            <VisibilityOffIcon/>
-                        </IconButton>
-                     {/*</a>  */}
-                    </div>
-
-                }
-
-                {/*<a href="<c:url value="/user/experiences/edit/${param.id}"/>">*/}
-                        <IconButton aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
-                            <EditIcon />
-                        </IconButton>
-                {/*</a>*/}
-                {/*<a href="<c:url value="/user/experiences/delete/${param.id}"/>">*/}
-                <IconButton aria-label="trash" component="span" style={{fontSize: "xx-large"}}>
-                    <DeleteIcon />
-                </IconButton>
-                {/*</a>*/}
-            </div>
-            }
-
-
-        </div>
     );
 }
