@@ -66,6 +66,17 @@ export const TRANSLATIONS_EN = {
         image: "Imagen",
     },
 
+    ExperienceDetail:{
+        imageDefault:"Esta imagen no se corresponde con la experiencia",
+        priceFree: "Gratis",
+        description:"Descripci\u00F3n",
+        noData:"Informaci\u00F3n no brindada",
+        url:"Sitio oficial",
+        email: "Email",
+        review: "Reseñas",
+        notVisible:"La experiencia est\u00E1 oculta en este momento"
+    },
+
     EmptyResult: "Parece que no hay ninguna experiencia que coincida con tu búsqueda",
 
     Button: {

@@ -66,6 +66,16 @@ export const TRANSLATIONS_ES = {
         image: "Image",
     },
 
+    ExperienceDetail:{
+        imageDefault:"This image does not belong to the experience",
+        priceFree: "Free",
+        description:"Description",
+        noData:"Information not provided",
+        url:"Official site",
+        email: "Email",
+        review: "Reviews",
+        notVisible:"This experience is not currently visible"
+    },
     EmptyResult: "It seems there are no experiences matching your search",
 
     Button: {
