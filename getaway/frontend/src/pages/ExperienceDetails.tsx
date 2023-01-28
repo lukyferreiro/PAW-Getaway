@@ -13,6 +13,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CardExperience from "../components/CardExperience";
 import CardExperienceDetails from "../components/CardExperienceDetails";
+import CardReview from "../components/CardReview";
 export default function ExperienceDetails() {
 
     const {t} = useTranslation();
@@ -58,7 +59,7 @@ export default function ExperienceDetails() {
             observable: true,
             views: 200,
             score: 5,
-            reviewsCount: 0}
+            reviewsCount: 1}
 
 
     return (
@@ -74,6 +75,25 @@ export default function ExperienceDetails() {
                                 categoryModel={categoryModel}/>
             </div>
 
+            {/*REVIEWS*/}
+            <div className="d-flex mb-3 flex-column">
+                <div className="mx-5 my-2 d-flex flex-wrap">
+                    {experience.reviewsCount == 0 &&
+                    <div className="d-flex justify-content-center mb-2" style={{fontSize: "x-large"}}>
+                        {t('ExperienceDetail.noReviews')}
+                    </div>
+                    }
+                    {experience.reviewsCount > 0 &&
+                    <div className="pl-5 pr-2 w-50"
+                         style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
+                        <CardReview/>
+                        <CardReview/>
+                        <CardReview/>
+                    </div>
+
+                    }
+                </div>
+            </div>
         </div>
 
     );

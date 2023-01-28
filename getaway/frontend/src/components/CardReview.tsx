@@ -5,6 +5,10 @@ import CityModel from "../types/CityModel";
 import {CategoryModel, ExperienceModel, ReviewModel} from "../types";
 import UserModel from "../types/UserModel";
 import { Link } from "react-router-dom";
+import {IconButton} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import React from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function CardReview() {
 
@@ -62,80 +66,84 @@ export default function CardReview() {
         user: userModel
     }
 
+    const isEditing = true;
+    const hasImage = false;
 
     return (
-<div></div>
+        <div className="card m-2">
+            {isEditing &&
+            <div className="card-title m-2 d-flex justify-content-center align-content-center">
+    {/*            <a href="<c:url value="/experiences/${param.experienceCategory}/${param.experienceId}">*/}
+    {/*<c:param name=" view" value=" ${true}"/> </c:url>">*/}
+                    <h4 className="text-center"
+                        style={{fontWeight: "bold", textDecoration: "underline", wordBreak: "break-all", color:"black"}}>
+                        {experience.name}
+                    </h4>
+                {/*</a>*/}
 
-    //     <div className={"card m-2"}>
-    //     <c:if test="${param.isEditing}">
-    //         <div className="card-title m-2 d-flex justify-content-center align-content-center">
-    //         <Link to="/experiences/${experience.category}/${experience.experienceId}">
-    //         <c:param name="view" value="${true}"/></c:url>">
-    //         <h4 class="text-center"
-    //                         style="font-weight: bold; text-decoration: underline; word-break: break-all; color:black;">
-    //                         <c:out value="${experience.name}"/>
-    //                     </h4>
-    //                 </Link>
-    //
-    //             </div>
-    //         </c:if>
-    //         <div className="card-title m-2 d-flex justify-content-between">
-    //         <div className="d-flex">
-    //          <c:choose>
-    //              <c:when test="${param.hasImage}">
-    //                  <img className="user-img" src="<c:url value='/user/profileImage/${param.profileImageId}'/>" alt="Imagen" />
-    //                       style="margin-right: 8px"/>
-    //              </c:when>
-    //              <c:otherwise>
-    //                 <img className="user-img" src="<c:url value=" />public/images/user_default.png/images/user_default.png" />" alt="Imagen"/>
-    //            </c:otherwise>
-    //          </c:choose>
-    //         <div className="d-flex flex-column justify-content-center align-content-center">
-    //         <h5 className="my-1">
-    //         {t('review.user', {userName: UserModel.name}, {userSurname: UserModel.surname})}
-    //     </h5>
-    //         <h6 className="my-1" style="font-size: small;">
-    //             {t('review.date', {reviewDate: ReviewModel.date})}
-    //         </h6>
-    //     </div>
-    //     </div>
-    // <div class="my-2 d-flex">
-    //     {/*<jsp:include page="/WEB-INF/components/starAvg.jsp">*/}
-    //     {/*    <jsp:param name="avgReview" value="${param.score}"/>*/}
-    //     {/*</jsp:include>*/}
-    // </div>
-    // <div className="card-body m-2 p-0">
-    //     <div className="card-text">
-    //         <h2 className="m-0 align-self-center" style="font-size: x-large">
-    //             <c:out value="${param.title}"/>
-    //         </h2>
-    //         <h6 className="m-0" style="font-size: medium;" id="reviewDescription">
-    //             <c:out value="${param.description}"/>
-    //         </h6>
-    //         <c:if test="${!param.observable && param.isEditing}">
-    //             <p className="obs-info">{t('experience.notVisible')}/></p>
-    //         </c:if>
-    //     </div>
-    // </div>
-    // <c:if test="${param.isEditing}">
-    //     <div className="btn-group card-body container-fluid p-1 d-flex justify-content-center align-items-end"
-    //          role="group">
-    //         <Link to="/user/reviews/edit/${param.reviewId}/">
-    //             <button type="button" class="btn btn-pencil" style="font-size: large">
-    //                 <i className="bi bi-pencil"></i>
-    //             </button>
-    //         </Link>
-    //         <Link="/>user/reviews/delete/${reviewModel.reviewId}"/>
-    //         <button type="button" className="btn btn-trash" style="font-size: large">
-    //             <i className="bi bi-trash"></i>
-    //         </button>
-    //     </Link>
-    // </div>
-    //
-    // </c:if>
-    //
-    // <script src='<c:url value="/resources/js/revParse.js"/>'></script>
+            </div>
+            }
 
+            <div className="card-title m-2 d-flex justify-content-between">
+                <div className="d-flex">
+                    {hasImage &&
+                    <img className="user-img" src="<c:url value='/user/profileImage/${param.profileImageId}'/>"
+                         alt="Imagen"
+                         style={{marginRight: "8px"}}/>
+                    }
+                    {!hasImage &&
+                    <img className="user-img"
+                         src="./images/user_default.png" alt="Imagen"/>
+                    }
+
+                    <div className="d-flex flex-column justify-content-center align-content-center">
+                        <h5 className="my-1">
+                            {userModel.name} , {userModel.surname}
+                        </h5>
+                        <h6 className="my-1" style={{fontSize: "small"}}>
+                            {reviewModel.date}
+                        </h6>
+                    </div>
+                </div>
+                <div className="my-2 d-flex">
+                {/*<jsp:include page="/WEB-INF/components/starAvg.jsp">*/}
+                {/*<jsp:param name="avgReview" value="${param.score}"/>*/}
+                {/*</jsp:include>*/}
+                </div>
+            </div>
+
+            <div className="card-body m-2 p-0">
+                <div className="card-text">
+                    <h2 className="m-0 align-self-center" style={{fontSize: "x-large"}}>
+                        {reviewModel.title}
+                    </h2>
+                    <h6 className="m-0" style={{fontSize: "medium"}} id="reviewDescription">
+                        {reviewModel.description}
+                    </h6>
+                    {/* No me acuerdo si era chquear que la experience o la review sea observable*/}
+                    {!experience.observable && isEditing &&
+                        <p className="obs-info">
+                            {t('ExperienceDetail.notVisible')}
+                        </p>
+                    }
+                </div>
+            </div>
+
+            {isEditing &&
+                <div className="btn-group card-body container-fluid p-1 d-flex justify-content-center align-items-end"
+                     role="group">
+                    {/*<a href="<c:url value="/user/reviews/edit/${param.reviewId}"/>">*/}
+                    <IconButton aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
+                        <EditIcon />
+                    </IconButton>
+                    {/*</a>*/}
+                    {/*<a href="<c:url value="/user/reviews/delete/${param.reviewId}"/>">*/}
+                    <IconButton aria-label="trash" component="span" style={{fontSize: "xx-large"}}>
+                        <DeleteIcon />
+                    </IconButton>
+                    {/*</a>*/}
+                </div>
+            }
+        </div>
     );
-
 }
