@@ -8,7 +8,9 @@ import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
+import ar.edu.itba.getaway.webapp.dto.response.UserDto;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.util.StreamUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.IOException;
@@ -50,6 +53,7 @@ public class ExperienceController {
     private UriInfo uriInfo;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
+    private static final String ACCEPTED_MIME_TYPES = "image/";
 
     // Endpoint para obtener las experiencias de una categoria
     @GET
@@ -248,7 +252,7 @@ public class ExperienceController {
 
     // Endpoint para obtener la imagen de una experiencia
     @GET
-    @Path("/experience/{id}/image")
+    @Path("/experience/{id}/experienceImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON})
     public Response getExperienceImage(@PathParam("id") final long id, @Context Request request) {
 
@@ -270,6 +274,32 @@ public class ExperienceController {
         }
 
         return responseBuilder.cacheControl(cacheControl).build();
+    }
+
+    @PUT
+    @Path("/experience/{id}/experienceImage")
+    @Produces({"image/*", MediaType.APPLICATION_JSON})
+    public Response updateExperienceImage(
+            @PathParam("id") long id,
+            @FormDataParam("experienceImage") final FormDataBodyPart experienceImageBody,
+            @Size(max = 1024 * 1024) @FormDataParam("experienceImage") byte[] experienceImageBytes) {
+
+        if (experienceImageBody == null) {
+            throw new ContentExpectedException();
+        }
+
+        if (experienceImageBody.getMediaType().toString().contains(ACCEPTED_MIME_TYPES)) {
+            throw new IllegalContentTypeException();
+        }
+
+//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+
+        imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), experience.getExperienceImage());
+
+        return Response.noContent()
+                .contentLocation(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).path("profileImage").build())
+                .build();
     }
 
     // Endpoint para obtener la reseñas de una experiencia

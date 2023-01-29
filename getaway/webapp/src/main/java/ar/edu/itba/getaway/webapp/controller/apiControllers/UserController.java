@@ -2,7 +2,7 @@ package ar.edu.itba.getaway.webapp.controller.apiControllers;
 
 import ar.edu.itba.getaway.interfaces.exceptions.ContentExpectedException;
 import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
-import ar.edu.itba.getaway.interfaces.exceptions.MaxUploadSizeRequestException;
+import ar.edu.itba.getaway.interfaces.exceptions.IllegalContentTypeException;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
@@ -12,23 +12,18 @@ import ar.edu.itba.getaway.webapp.dto.request.*;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.UserDto;
-import ar.edu.itba.getaway.webapp.dto.validations.ImageTypeConstraint;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StreamUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -63,6 +58,7 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+    private static final String ACCEPTED_MIME_TYPES = "image/";
 
     //Endpoint que crea un usuario nuevo
     @POST
@@ -229,24 +225,24 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}/profileImage")
     public Response putUserProfileImage(
-            @Context final HttpServletRequest request,
-            @PathParam("id") final Long userId,
-            @FormDataParam("image") FormDataBodyPart profileImageBody,
-            @FormDataParam("image") byte[] profileImageBytes) throws IOException {
-        LOGGER.info("Called /users/{}/image PUT", userId);
+            @PathParam("id") long id,
+            @FormDataParam("profileImage") final FormDataBodyPart profileImageBody,
+            @Size(max = 1024 * 1024) @FormDataParam("profileImage") byte[] profileImageBytes) {
 
-        if (request.getContentLength() == -1 || request.getContentLength() > maxRequestSize) {
-            throw new MaxUploadSizeRequestException();
+        if (profileImageBody == null) {
+            throw new ContentExpectedException();
         }
 
-//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+        if (profileImageBody.getMediaType().toString().contains(ACCEPTED_MIME_TYPES)) {
+            throw new IllegalContentTypeException();
+        }
 
-        assureUserResourceCorrelation(user, userId);
+        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
+
+        //TODO: add security
 
         imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
 
-//        return Response.ok().build();
         return Response.noContent()
                 .contentLocation(UserDto.getUserUriBuilder(user, uriInfo).path("profileImage").build())
                 .build();

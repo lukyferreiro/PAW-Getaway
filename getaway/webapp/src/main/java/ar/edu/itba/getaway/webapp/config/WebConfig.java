@@ -113,12 +113,6 @@ public class WebConfig {
         return MAX_REQUEST_SIZE;
     }
 
-//    @Bean(name = "appBaseUrl")
-//    public String appBaseUrl() {
-////        return "localhost";
-//        return "pawserver.it.itba.edu.ar";
-//    }
-
     @Bean(name = "appBaseUrl")
     public URL appBaseUrl() throws MalformedURLException {
         if (isOnDevBuild()) {
