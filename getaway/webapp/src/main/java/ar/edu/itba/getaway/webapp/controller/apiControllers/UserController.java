@@ -9,7 +9,6 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.auth.JwtUtil;
 import ar.edu.itba.getaway.webapp.dto.request.*;
-import ar.edu.itba.getaway.webapp.dto.response.CountryDto;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.UserDto;
@@ -207,7 +206,8 @@ public class UserController {
         final ImageModel img = user.getProfileImage();
 
         if (img == null) {
-            return Response.status(NOT_FOUND).build();
+//            return Response.status(NOT_FOUND).build();
+            return Response.noContent().build();
         }
 
         final EntityTag eTag = new EntityTag(String.valueOf(img.getImageId()));
@@ -225,13 +225,15 @@ public class UserController {
 
     //Endpoint para editar la imagen de perfil del usuario
     @PUT
-    @Path("/{id}/image")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}/profileImage")
     public Response putUserProfileImage(
             @Context final HttpServletRequest request,
             @PathParam("id") final Long userId,
-            @NotNull(message = "...")
-            @ImageTypeConstraint(contentType = {"image/png", "image/jpeg", "image/jpg"}, message = "..")
-            @FormDataParam("image") FormDataBodyPart profileImage) throws IOException {
+            @FormDataParam("image") FormDataBodyPart profileImageBody,
+            @FormDataParam("image") byte[] profileImageBytes) throws IOException {
+        LOGGER.info("Called /users/{}/image PUT", userId);
 
         if (request.getContentLength() == -1 || request.getContentLength() > maxRequestSize) {
             throw new MaxUploadSizeRequestException();
@@ -242,14 +244,12 @@ public class UserController {
 
         assureUserResourceCorrelation(user, userId);
 
-        LOGGER.info("Called /users/{}/image PUT", userId);
+        imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
 
-
-        InputStream in = profileImage.getEntityAs(InputStream.class);
-
-        imageService.updateImg(StreamUtils.copyToByteArray(in), profileImage.getMediaType().toString(), user.getProfileImage());
-
-        return Response.ok().build();
+//        return Response.ok().build();
+        return Response.noContent()
+                .contentLocation(UserDto.getUserUriBuilder(user, uriInfo).path("profileImage").build())
+                .build();
     }
 
     //Endpoint para obtener las experiencias creadas por un usuario

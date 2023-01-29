@@ -113,7 +113,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/users/{id}").anonymous()
 //                    .antMatchers(HttpMethod.PUT, "/api/users/{id}").access("@antMatcherVoter.userEditHimself(authentication, #id)")
                     .antMatchers(HttpMethod.GET, "/api/users/{id}/profileImage").anonymous()
-                    .antMatchers(HttpMethod.PUT, "/api/users/{id}/profileImage").access("@antMatcherVoter.userEditHimself(authentication, #id)")
+//                    .antMatchers(HttpMethod.PUT, "/api/users/{id}/profileImage").access("@antMatcherVoter.userEditHimself(authentication, #id)")
                     .antMatchers(HttpMethod.GET, "/api/users/{id}/experiences").anonymous()
                     .antMatchers(HttpMethod.PUT, "/api/users/emailVerification").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/users/emailVerification").anonymous()
@@ -121,6 +121,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, "/api/users/passwordReset").anonymous()
                 //------------------- /experiences -------------------
                     //TODO
+                    .antMatchers(HttpMethod.POST, "/api/experiences").anonymous()
+
 
                 //------------------- /reviews -------------------
                     .antMatchers(HttpMethod.GET, "/api/reviews/{id}").anonymous()

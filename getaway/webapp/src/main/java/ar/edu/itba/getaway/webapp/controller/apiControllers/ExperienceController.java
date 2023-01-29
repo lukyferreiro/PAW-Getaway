@@ -139,41 +139,20 @@ public class ExperienceController {
         return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
         }, uriBuilder);
     }
+
     // Endpoint para crear una experiencia
     @POST
-    @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response registerExperience(
-            @Context final HttpServletRequest request,
-            @Valid final NewExperienceDto experienceDto) throws DuplicateExperienceException {
-
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response registerExperience(@Valid final NewExperienceDto experienceDto) throws DuplicateExperienceException {
         LOGGER.info("Called /experiences/ POST");
 
         if (experienceDto == null) {
             throw new ContentExpectedException();
         }
 
-        if (request.getContentLength() == -1 || request.getContentLength() > maxRequestSize) {
-            throw new MaxUploadSizeRequestException();
-        }
-
 //        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
         final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
-
-        final FormDataBodyPart img = experienceDto.getImage();
-        NewImageModel imageToUpload = null;
-
-        if (img != null) {
-            InputStream in = img.getEntityAs(InputStream.class);
-            try {
-                imageToUpload = new NewImageModel(StreamUtils.copyToByteArray(in), img.getMediaType().toString());
-            } catch (IOException e) {
-                LOGGER.error("Error getting bytes from images");
-                throw new ServerInternalException();
-            }
-        }
-
-        //TODO tengo dudas de esto
         final CityModel city = locationService.getCityByName(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel category = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
@@ -183,8 +162,7 @@ public class ExperienceController {
                 experienceDto.getName(), experienceDto.getAddress(),
                 experienceDto.getDescription(), experienceDto.getMail(),
                 experienceDto.getUrl(), Double.parseDouble(experienceDto.getPrice()),
-                city, category, user, imageToUpload.getImage(),
-                imageToUpload.getMimeType());
+                city, category, user);
         } catch (DuplicateExperienceException e) {
             LOGGER.warn("Error in experienceDto ExperienceForm, there is already an experience with this id");
             throw new DuplicateExperienceException();
@@ -200,7 +178,11 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperienceId(@PathParam("id") final long id) {
         LOGGER.info("Called /experiences/{} GET", id);
-        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+
+        //        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
         final ExperienceDto experienceDto = new ExperienceDto(experience, uriInfo);
         return Response.ok(experienceDto).build();
     }
@@ -209,7 +191,7 @@ public class ExperienceController {
     @PUT
     @Path("/experience/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(value = {MediaType.APPLICATION_JSON,})
+    @Produces(value = {MediaType.APPLICATION_JSON})
     public Response updateExperience(
             @Context final HttpServletRequest request,
             @Valid NewExperienceDto experienceDto,
@@ -234,26 +216,13 @@ public class ExperienceController {
             throw new IllegalOperationException();
         }
 
-        final FormDataBodyPart img = experienceDto.getImage();
-        NewImageModel imageToUpload = null;
-
-        if (img != null) {
-            InputStream in = img.getEntityAs(InputStream.class);
-            try {
-                imageToUpload = new NewImageModel(StreamUtils.copyToByteArray(in), img.getMediaType().toString());
-            } catch (IOException e) {
-                LOGGER.error("Error getting bytes from images");
-                throw new ServerInternalException();
-            }
-        }
-
         final CityModel cityModel = locationService.getCityByName(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel categoryModel = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
         final ExperienceModel toUpdateExperience = new ExperienceModel(id, experienceDto.getName(), experienceDto.getAddress(), experienceDto.getDescription(),
         experienceDto.getMail(), experienceDto.getUrl(),  Double.parseDouble(experienceDto.getPrice()), cityModel, categoryModel, user, experience.getExperienceImage(), experience.getObservable(), experience.getViews());
 
-        experienceService.updateExperience(toUpdateExperience, imageToUpload.getImage(), imageToUpload.getMimeType());
+        experienceService.updateExperience(toUpdateExperience);
         LOGGER.info("The experience with id {} has been updated successfully", id);
         return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
     }
@@ -261,7 +230,7 @@ public class ExperienceController {
     // Endpoint para eliminar una experiencia
     @DELETE
     @Path("/experience/{id}")
-    @Produces(value = {MediaType.APPLICATION_JSON,})
+    @Produces(value = {MediaType.APPLICATION_JSON})
     public Response deleteExperience(@PathParam("id") final long id) {
 //        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
         final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);

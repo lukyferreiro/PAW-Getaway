@@ -56,7 +56,6 @@ public class UserServiceImpl implements UserService {
         return experience.getUser();
     }
 
-    @Transactional
     @Override
     public Optional<UserModel> getUserBySessionRefreshToken(String token) {
         LOGGER.debug("Retrieving user for token with value {}", token);

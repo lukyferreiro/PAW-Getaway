@@ -26,8 +26,7 @@ public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundExceptio
     @Override
     public Response toResponse(NotFoundException exception) {
         LOGGER.error("Not found exception mapper");
-        //TODO poner mensaje
-        final String message = messageSource.getMessage("...", null, LocaleContextHolder.getLocale());
+        final String message = messageSource.getMessage("errors.NotFound.Resource", null, LocaleContextHolder.getLocale());
         return Response.status(Response.Status.NOT_FOUND).entity(message).build();
     }
 }

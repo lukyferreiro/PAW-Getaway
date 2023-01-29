@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ExperienceService {
-    ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, byte[] image, String mimeType) throws DuplicateExperienceException;
+    ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user) throws DuplicateExperienceException;
 
-    void updateExperience(ExperienceModel experienceModel, byte[] image, String mimeType);
+    void updateExperience(ExperienceModel experienceModel);
 
     void deleteExperience(ExperienceModel experienceModel);
 

@@ -94,15 +94,15 @@ public class AuthFilter extends OncePerRequestFilter {
                 if (checkLoginPath(request, response)) {
                     return;
                 }
-                auth = tryBearerAuthentication(payload, response);
+//                auth = tryBearerAuthentication(payload, response);
             }
 
             if (checkAuthenticationSuccess(request, response)) {
                 return;
             }
 
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            LOGGER.debug("Populated security context with authorization: {}", auth);
+//            SecurityContextHolder.getContext().setAuthentication(auth);
+//            LOGGER.debug("Populated security context with authorization: {}", auth);
 
         } catch (AuthenticationException e) {
             if (checkAuthenticationError(request, response)) {
@@ -114,27 +114,27 @@ public class AuthFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
-    private Authentication tryBearerAuthentication(final String payload, final HttpServletResponse response) throws AuthenticationException {
+//    private Authentication tryBearerAuthentication(final String payload, final HttpServletResponse response) throws AuthenticationException {
 
         //Try first with JWT
-        UserDetails userDetails = jwtUtil.decodeToken(payload);
-        if (userDetails != null) {
-            return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
-        }
+//        UserDetails userDetails = jwtUtil.decodeToken(payload);
+//        if (userDetails != null) {
+//            return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+//        }
 
         //If JWT is invalid try with refresh token
-        final Optional<UserModel> userOpt = userService.getUserBySessionRefreshToken(payload);
+//        final Optional<UserModel> userOpt = userService.getUserBySessionRefreshToken(payload);
 
-        if (!userOpt.isPresent()) {
-            throw new AuthenticationCredentialsNotFoundException("Invalid refresh token.");
-        }
-
-        final UserModel user = userOpt.get();
-        addAuthorizationHeader(response, user);
-
-        return new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(),
-                MyUserDetailsService.getAuthorities(userService.getRolesByUser(user)));
-    }
+//        if (!userOpt.isPresent()) {
+//            throw new AuthenticationCredentialsNotFoundException("Invalid refresh token.");
+//        }
+//
+//        final UserModel user = userOpt.get();
+//        addAuthorizationHeader(response, user);
+//
+//        return new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(),
+//                MyUserDetailsService.getAuthorities(userService.getRolesByUser(user)));
+//    }
 
     private Authentication tryBasicAuthentication(final String payload, final HttpServletResponse response) throws AuthenticationException {
 
@@ -155,7 +155,7 @@ public class AuthFilter extends OncePerRequestFilter {
         final UserModel user = userService.getUserByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
 
         addAuthorizationHeader(response, user);
-        addSessionRefreshTokenHeader(response, user);
+//        addSessionRefreshTokenHeader(response, user);
 
         return auth;
     }
@@ -164,9 +164,9 @@ public class AuthFilter extends OncePerRequestFilter {
         response.addHeader(JwtUtil.JWT_HEADER, jwtUtil.generateToken(user, appBaseUrl.toString()));
     }
 
-    private void addSessionRefreshTokenHeader(final HttpServletResponse response, final UserModel user) {
-        response.addHeader(JwtUtil.REFRESH_TOKEN_HEADER, tokensService.getSessionRefreshToken(user).getValue());
-    }
+//    private void addSessionRefreshTokenHeader(final HttpServletResponse response, final UserModel user) {
+//        response.addHeader(JwtUtil.REFRESH_TOKEN_HEADER, tokensService.getSessionRefreshToken(user).getValue());
+//    }
 
     private AuthorizationType parseAuthorizationType(final String authHeader) {
         if (authHeader.startsWith("Bearer ")) {

@@ -30,8 +30,7 @@ public class GlobalExceptionMapper extends Throwable implements ExceptionMapper<
             message = exception.getMessage();
         } else {
             status = Response.Status.INTERNAL_SERVER_ERROR.getStatusCode();
-            //TODO poner mensaje
-            message = messageSource.getMessage("...", null, LocaleContextHolder.getLocale());
+            message = messageSource.getMessage("errors.ServerError", null, LocaleContextHolder.getLocale());
         }
 
         return Response.status(status).entity(message).build();
