@@ -1,8 +1,6 @@
 package ar.edu.itba.getaway.webapp.security.api.handlers;
 
 import ar.edu.itba.getaway.webapp.security.api.AuthFailureMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;

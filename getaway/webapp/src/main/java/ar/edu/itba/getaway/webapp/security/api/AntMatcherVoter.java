@@ -11,6 +11,8 @@ import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.webapp.security.models.BasicAuthToken;
 import ar.edu.itba.getaway.webapp.security.models.MyUserDetails;
+import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
+import ar.edu.itba.getaway.webapp.security.services.AuthFacadeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -54,25 +56,32 @@ public class AntMatcherVoter {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
         final ExperienceModel experienceModel = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final Optional<UserModel> userModel = Optional.of(experienceModel.getUser());
-        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
+        //        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
+        return userModel.map(model -> model.equals(getUser(authentication))).orElse(false);
     }
 
     public boolean canEditReviewById(Authentication authentication, long reviewId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
         final ReviewModel reviewModel = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
         final Optional<UserModel> userModel = Optional.of(reviewModel.getUser());
-        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
+//        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
+        return userModel.map(model -> model.equals(getUser(authentication))).orElse(false);
+
     }
 
     public boolean canDeleteReviewById(Authentication authentication, long reviewId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
         final ReviewModel reviewModel = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
         final Optional<UserModel> userModel = Optional.of(reviewModel.getUser());
-        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
+//        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
+        return userModel.map(model -> model.equals(getUser(authentication))).orElse(false);
     }
 
     public boolean userEditHimself(Authentication authentication, long userId) {
-        //TODO
-        return false;
+        if (authentication instanceof AnonymousAuthenticationToken) return false;
+        //Usuario que quiero editar
+        final Optional<UserModel> userToEdit = userService.getUserById(userId);
+//        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
+        return userToEdit.map(model -> model.equals(getUser(authentication))).orElse(false);
     }
 }

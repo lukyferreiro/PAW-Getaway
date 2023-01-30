@@ -43,20 +43,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MyUserDetailsService myUserDetailsService;
 
-//    @Autowired
-//    private AuthEntryPoint authEntryPoint;
-
     @Autowired
     private BasicAuthProvider basicAuthProvider;
 
     @Autowired
     private JwtAuthProvider jwtAuthProvider;
-
-//    @Autowired
-//    private AuthSuccessHandler authSuccessHandler;
-//
-//    @Autowired
-//    private AuthFailureHandler authFailureHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -153,21 +144,21 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //permitAll, porque no se usa solo para usuarios logueados va para cualquiera
                     .antMatchers(HttpMethod.GET, "/api/users/{id}").permitAll()
                     //logueado y hay que revisar que el id sea el mismo del logueado
-                    .antMatchers(HttpMethod.PUT, "/api/users/{id}").anonymous()
+                    .antMatchers(HttpMethod.PUT, "/api/users/{id}").access("@antMatcherVoter.userEditHimself(authentication, #id)")
                     //permitAll, igual que el get by id
                     .antMatchers(HttpMethod.GET, "/api/users/{id}/profileImage").permitAll()
-                    //logueado y el id es el mismo del logueado
-                    .antMatchers(HttpMethod.PUT, "/api/users/{id}/profileImage").anonymous()
+                    //logueado y hay que revisar que el id sea el mismo del logueado
+                    .antMatchers(HttpMethod.PUT, "/api/users/{id}/profileImage").access("@antMatcherVoter.userEditHimself(authentication, #id)")
                     //logueado y tiene que tener rol PROVIDER
-                    .antMatchers(HttpMethod.GET, "/api/users/{id}/experiences").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/users/{id}/experiences").hasAuthority("PROVIDER")    //TODO check si es hasRole
                     //logueado y tiene que tener rol VERIFIED
-                    .antMatchers(HttpMethod.GET, "/api/users/{id}/reviews").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/users/{id}/reviews").hasAuthority("VERIFIED")    //TODO check si es hasRole
                     //logueado y tiene que tener rol USER nada más
-                    .antMatchers(HttpMethod.GET, "/api/users/{id}/favExperiences").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/users/{id}/favExperiences").authenticated()
                     //logueado y rol NOT VERIFIED
-                    .antMatchers(HttpMethod.PUT, "/api/users/emailVerification").anonymous()
-                    .antMatchers(HttpMethod.POST, "/api/users/emailVerification").anonymous()
-                    //no estoy seguro como conviene manejarlo, porque no esta logueado creo
+                    .antMatchers(HttpMethod.PUT, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")    //TODO check si es hasRole
+                    .antMatchers(HttpMethod.POST, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")    //TODO check si es hasRole
+                    //¿Olvidaste tu contraseña?
                     .antMatchers(HttpMethod.PUT, "/api/users/passwordReset").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/users/passwordReset").anonymous()
                 //------------------- /experiences -------------------
@@ -175,22 +166,22 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/experiences/category/{category}").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/name/{name}").permitAll()
                     //logueado y VERIFIED (rol PROVIDER) se asigna en el momento
-                    .antMatchers(HttpMethod.POST, "/api/experiences").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/experiences").hasAuthority("VERIFIED")    //TODO check si es hasRole
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/experience/{id}").permitAll()
                     //logueado, VERIFIED y PROVIDER, chequear que sea el mismo usuario
-                    .antMatchers(HttpMethod.PUT, "/api/experiences/experience/{id}").anonymous()
-                    .antMatchers(HttpMethod.DELETE, "/api/experiences/experience/{id}").anonymous()
+                    .antMatchers(HttpMethod.PUT, "/api/experiences/experience/{id}").access("@antMatcherVoter.canEditExperienceById(authentication, #id)")
+                    .antMatchers(HttpMethod.DELETE, "/api/experiences/experience/{id}").access("@antMatcherVoter.canDeleteExperienceById(authentication, #id)")
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/experience/{id}/experienceImage").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/experience/{id}/reviews").permitAll()
                     //logueado y VERIFIED
-                    .antMatchers(HttpMethod.POST, "/api/experiences/experience/{id}/reviews").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/experiences/experience/{id}/reviews").hasAuthority("VERIFIED")    //TODO check si es hasRole
                 //------------------- /reviews -------------------
                     //logueado y VERIFIED, chequear que sea el mismo usuario
-                    .antMatchers(HttpMethod.GET, "/api/reviews/{id}").anonymous()
-                    .antMatchers(HttpMethod.PUT, "/api/reviews/{id}").anonymous()
-                    .antMatchers(HttpMethod.DELETE, "/api/reviews/{id}").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/reviews/{id}").hasAuthority("VERIFIED")    //TODO check si es hasRole
+                    .antMatchers(HttpMethod.PUT, "/api/reviews/{id}").access("@antMatcherVoter.canEditReviewById(authentication, #id)")
+                    .antMatchers(HttpMethod.DELETE, "/api/reviews/{id}").access("@antMatcherVoter.canDeleteReviewById(authentication, #id)")
                 //------------------- /location -------------------
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/location/countries").permitAll()
@@ -198,58 +189,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/location/cities/{id}").permitAll()
                 //------------------- Others --------------------
                     .antMatchers("/**").permitAll()
-
-                //-------------------Session routes-------------------
-//                .antMatchers("/login/**").anonymous()
-//                .antMatchers("/logout/**").authenticated()
-//                .antMatchers(HttpMethod.GET, "/register/**").anonymous()
-//                .antMatchers(HttpMethod.POST, "/register/**").anonymous()
-//                .antMatchers("/access-denied/**").permitAll()
-                //-------------------Verify Account-------------------
-//                .antMatchers("/pleaseVerify").hasRole("NOT_VERIFIED")
-//                .antMatchers("/user/verifyAccount/result/unsuccessfully/**").hasRole("NOT_VERIFIED")
-//                .antMatchers("/user/verifyAccount/status/resend/**").hasRole("NOT_VERIFIED")
-//                .antMatchers("/user/verifyAccount/status/send/**").hasRole("NOT_VERIFIED")
-//                .antMatchers("/user/verifyAccount/result/successfully/**").hasRole("VERIFIED")
-//                .antMatchers("/user/verifyAccount/{token}/**").permitAll()
-                //-------------------Reset Password-------------------
-//                .antMatchers(HttpMethod.GET, "/user/resetPasswordRequest/**").anonymous()
-//                .antMatchers(HttpMethod.POST, "/user/resetPasswordRequest/**").anonymous()
-//                .antMatchers("/user/resetPassword/{token}/**").anonymous()
-//                .antMatchers(HttpMethod.GET, "/user/resetPassword/**").denyAll()
-//                .antMatchers(HttpMethod.POST, "/user/resetPassword/**").anonymous()
-                //-------------------User-------------------
-//                .antMatchers(HttpMethod.GET, "/search_result/**").permitAll()
-//                .antMatchers(HttpMethod.POST, "/search_result/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/user/profile/edit/**").hasRole("VERIFIED")
-//                .antMatchers(HttpMethod.POST, "/user/profile/edit/**").hasRole("VERIFIED")
-//                .antMatchers(HttpMethod.GET, "/user/profile/**").authenticated()
-//                .antMatchers(HttpMethod.GET, "/user/experiences/**").hasRole("PROVIDER")
-//                .antMatchers(HttpMethod.GET, "/user/favourites/**").authenticated()
-//                .antMatchers(HttpMethod.GET, "/user/reviews/**").hasRole("VERIFIED")
-//                .antMatchers("/user/profileImage/{imageId:[0-9]+}/**").permitAll()
-                //------------------------------SE USA @PreAuthorize-------------------------------
-                //                .antMatchers(HttpMethod.GET,"/user/experiences/delete/{experienceId:[0-9]+").access("...")
-                //                .antMatchers(HttpMethod.POST,"/user/experiences/delete/{experienceId:[0-9]+").access("...")
-                //                .antMatchers(HttpMethod.GET,"/user/experiences/edit/{experienceId:[0-9]+").access("...")
-                //                .antMatchers(HttpMethod.POST,"/user/experiences/edit/{experienceId:[0-9]+").access("...")
-                //                .antMatchers(HttpMethod.GET,"/user/reviews/delete/{reviewId:[0-9]+").access("...")
-                //                .antMatchers(HttpMethod.POST,"/user/reviews/delete/{reviewId:[0-9]+").access("...")
-                //                .antMatchers(HttpMethod.GET,"/user/reviews/edit/{reviewId:[0-9]+").access("...")
-                //                .antMatchers(HttpMethod.POST,"/user/reviews/edit/{reviewId:[0-9]+").access("...")
-                //-------------------Experiences-------------------
-//                .antMatchers(HttpMethod.GET, "/create_experience/**").hasRole("VERIFIED")
-//                .antMatchers(HttpMethod.POST, "/create_experience/**").hasRole("VERIFIED")
-                //-------------------Reviews-------------------
-//                .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review/**").hasRole("VERIFIED")
-//                .antMatchers(HttpMethod.POST, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/create_review/**").hasRole("VERIFIED")
-                //PermitAll Experiences
-//                .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
-//                .antMatchers(HttpMethod.POST, "/experiences/{categoryName:[A-Za-z_]+}/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/experiences/{experienceId:[0-9]+}/image/**").permitAll()
-                //else
-//                .antMatchers("/**").permitAll()
                 .and()
                     .addFilterBefore(bridgeAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 

@@ -16,8 +16,7 @@ import java.io.IOException;
 public class CustomAccessDeniedHandler implements org.springframework.security.web.access.AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exception) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-
+        final ObjectMapper mapper = new ObjectMapper();
         final ApiErrorDto errorDetails = new ApiErrorDto();
         final HttpStatus status = HttpStatus.FORBIDDEN;
         errorDetails.setTitle(status.getReasonPhrase());

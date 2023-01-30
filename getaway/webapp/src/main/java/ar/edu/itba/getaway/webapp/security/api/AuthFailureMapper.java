@@ -20,8 +20,7 @@ public class AuthFailureMapper {
 
     public static void handleFailure(HttpServletRequest request, HttpServletResponse response,
                                      AuthenticationException exception) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-
+        final ObjectMapper mapper = new ObjectMapper();
         final HttpStatus status = HttpStatus.UNAUTHORIZED;
         final ApiErrorDto errorDetails = new ApiErrorDto();
 
