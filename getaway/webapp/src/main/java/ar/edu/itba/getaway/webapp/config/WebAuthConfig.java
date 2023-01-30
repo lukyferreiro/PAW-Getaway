@@ -148,32 +148,51 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 //                    .headers().cacheControl().disable()
                 .and().authorizeRequests()
                 //------------------- /users -------------------
+                    //anonymous porque sino no se puede acceder a boton register
                     .antMatchers(HttpMethod.POST, "/api/users").anonymous()
-                    .antMatchers(HttpMethod.GET, "/api/users/{id}").anonymous()
+                    //permitAll, porque no se usa solo para usuarios logueados va para cualquiera
+                    .antMatchers(HttpMethod.GET, "/api/users/{id}").permitAll()
+                    //logueado y hay que revisar que el id sea el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{id}").anonymous()
-                    .antMatchers(HttpMethod.GET, "/api/users/{id}/profileImage").anonymous()
+                    //permitAll, igual que el get by id
+                    .antMatchers(HttpMethod.GET, "/api/users/{id}/profileImage").permitAll()
+                    //logueado y el id es el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{id}/profileImage").anonymous()
+                    //logueado y tiene que tener rol PROVIDER
                     .antMatchers(HttpMethod.GET, "/api/users/{id}/experiences").anonymous()
+                    //logueado y tiene que tener rol VERIFIED
                     .antMatchers(HttpMethod.GET, "/api/users/{id}/reviews").anonymous()
+                    //logueado y tiene que tener rol USER nada más
                     .antMatchers(HttpMethod.GET, "/api/users/{id}/favExperiences").anonymous()
+                    //logueado y rol NOT VERIFIED
                     .antMatchers(HttpMethod.PUT, "/api/users/emailVerification").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/users/emailVerification").anonymous()
+                    //no estoy seguro como conviene manejarlo, porque no esta logueado creo
                     .antMatchers(HttpMethod.PUT, "/api/users/passwordReset").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/users/passwordReset").anonymous()
                 //------------------- /experiences -------------------
-                    .antMatchers(HttpMethod.GET, "/api/experiences/{category}").anonymous()
+                    //permitAll para explorar
+                    .antMatchers(HttpMethod.GET, "/api/experiences/category/{category}").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/experiences/name/{name}").permitAll()
+                    //logueado y VERIFIED (rol PROVIDER) se asigna en el momento
                     .antMatchers(HttpMethod.POST, "/api/experiences").anonymous()
-                    .antMatchers(HttpMethod.GET, "/api/experiences/experience/{id}").anonymous()
+                    //permitAll para explorar
+                    .antMatchers(HttpMethod.GET, "/api/experiences/experience/{id}").permitAll()
+                    //logueado, VERIFIED y PROVIDER, chequear que sea el mismo usuario
                     .antMatchers(HttpMethod.PUT, "/api/experiences/experience/{id}").anonymous()
                     .antMatchers(HttpMethod.DELETE, "/api/experiences/experience/{id}").anonymous()
-                    .antMatchers(HttpMethod.GET, "/api/experiences/experience/{id}/image").anonymous()
-                    .antMatchers(HttpMethod.GET, "/api/experiences/experience/{id}/reviews").anonymous()
+                    //permitAll para explorar
+                    .antMatchers(HttpMethod.GET, "/api/experiences/experience/{id}/experienceImage").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/experiences/experience/{id}/reviews").permitAll()
+                    //logueado y VERIFIED
                     .antMatchers(HttpMethod.POST, "/api/experiences/experience/{id}/reviews").anonymous()
                 //------------------- /reviews -------------------
+                    //logueado y VERIFIED, chequear que sea el mismo usuario
                     .antMatchers(HttpMethod.GET, "/api/reviews/{id}").anonymous()
-                    .antMatchers(HttpMethod.POST, "/api/reviews/{id}").anonymous()
+                    .antMatchers(HttpMethod.PUT, "/api/reviews/{id}").anonymous()
                     .antMatchers(HttpMethod.DELETE, "/api/reviews/{id}").anonymous()
                 //------------------- /location -------------------
+                    //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/location/countries").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/location/countries/{id}/cities").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/location/cities/{id}").permitAll()
