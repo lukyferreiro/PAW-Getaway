@@ -72,3 +72,11 @@
     margin: 0 !important;
     padding: 0 !important;
 }
+
+.modal-pop-up {
+    width: 50%;
+    border-radius: 20px;
+    border: 1px solid var(--primary-color);
+    background-color: whitesmoke;
+    margin: 10% 25%;
+}

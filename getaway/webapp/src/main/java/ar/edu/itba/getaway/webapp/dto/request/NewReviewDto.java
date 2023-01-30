@@ -6,23 +6,20 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class NewReviewDto {
-
-    //TODO poner los messages
-
-    @NotEmpty(message = "...")
-    @Size(min = 3, max = 50, message = "...")
+    @NotEmpty(message = "NotEmpty")
+    @Size(min = 3, max = 50, message = "Size.reviewForm.title")
     @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\"$%#&=:¿?!¡/.-])*$",
-             message = "...")
+             message = "Pattern.reviewForm.title")
     private String title;
 
-    @NotEmpty(message = "...")
-    @Size(min = 3, max = 255, message = "...")
+    @NotEmpty(message = "NotEmpty")
+    @Size(min = 3, max = 255, message = "Size.reviewForm.description")
     @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\"$%#&=:;\\n\\s\\t¿?!¡/.-])*$",
-            message = "...")
+            message = "Pattern.reviewForm.description")
     private String description;
 
-    @NotEmpty(message = "...")
-    @Pattern(regexp = "^([1-5])$", message = "...")
+    @NotEmpty(message = "NotEmpty")
+    @Pattern(regexp = "^([1-5])$", message = "Pattern.reviewForm.score")
     private String score;
 
     public String getTitle() {

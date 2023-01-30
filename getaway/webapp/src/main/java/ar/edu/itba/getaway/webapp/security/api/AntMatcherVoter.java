@@ -70,4 +70,9 @@ public class AntMatcherVoter {
         final Optional<UserModel> userModel = Optional.of(reviewModel.getUser());
         return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
     }
+
+    public boolean userEditHimself(Authentication authentication, long userId) {
+        //TODO
+        return false;
+    }
 }

@@ -12,13 +12,21 @@ export const TRANSLATIONS_ES = {
     },
 
     Navbar: {
+        createAccount: "Sign up",
         createExperience: "Create experience",
+        email: "Email",
         search: "Search",
+        forgotPassword: "Forgot yor password?",
         login: "Sign in",
+        loginTitle: "Sign in to Getaway",
+        loginDescription: "New experiences every day",
+        newUser: "New to Getaway?",
+        password:"Password",
         profile: "My profile",
         experiences: "My experiences",
         favourites: "My favourites",
         reviews: "My reviews",
+        rememberMe: "Remember me",
         logout: "Log out",
     },
 
@@ -58,6 +66,17 @@ export const TRANSLATIONS_ES = {
         image: "Image",
     },
 
+    ExperienceDetail:{
+        imageDefault:"This image does not belong to the experience",
+        priceFree: "Free",
+        description:"Description",
+        noData:"Information not provided",
+        url:"Official site",
+        email: "Email",
+        review: "Reviews",
+        notVisible:"This experience is not currently visible",
+        noReviews:"This experience has no reviews yet. Be the first to write one!"
+    },
     EmptyResult: "It seems there are no experiences matching your search",
 
     Button: {

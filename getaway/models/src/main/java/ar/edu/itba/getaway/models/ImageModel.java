@@ -17,7 +17,7 @@ public class ImageModel {
     @Basic(fetch = FetchType.LAZY, optional = false)
     private byte[] image;
 
-    @Column(name = "imgMimeType", nullable = false)
+    @Column(name = "imgMimeType", nullable = true)
     private String mimeType;
 
     /* default */
