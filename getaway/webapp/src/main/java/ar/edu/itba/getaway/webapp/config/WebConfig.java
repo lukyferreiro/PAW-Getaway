@@ -127,23 +127,23 @@ public class WebConfig {
         }
     }
 
-//    @Bean
-//    public ObjectMapper objectMapper() {
-//        MappingJackson2HttpMessageConverter jacksonMessageConverter = new MappingJackson2HttpMessageConverter();
-//        ObjectMapper objectMapper = jacksonMessageConverter.getObjectMapper();
-//
-//        objectMapper.registerModule(new Jdk8Module());
-//        objectMapper.registerModule(new JavaTimeModule());
-//        objectMapper.registerModule(new ParameterNamesModule());
-//
-//        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-//        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-//        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-//
-//        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-//        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-//        return jacksonMessageConverter.getObjectMapper();
-//    }
+    @Bean
+    public ObjectMapper objectMapper() {
+        MappingJackson2HttpMessageConverter jacksonMessageConverter = new MappingJackson2HttpMessageConverter();
+        ObjectMapper objectMapper = jacksonMessageConverter.getObjectMapper();
+
+        objectMapper.registerModule(new Jdk8Module());
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.registerModule(new ParameterNamesModule());
+
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+        return jacksonMessageConverter.getObjectMapper();
+    }
 
     @Bean
     public AuthFacade authFacade() {

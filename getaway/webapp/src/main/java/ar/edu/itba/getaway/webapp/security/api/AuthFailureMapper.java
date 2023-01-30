@@ -20,9 +20,10 @@ public class AuthFailureMapper {
 
     public static void handleFailure(HttpServletRequest request, HttpServletResponse response,
                                      AuthenticationException exception) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
 
         final HttpStatus status = HttpStatus.UNAUTHORIZED;
-//        final ApiErrorDto errorDetails = new ApiErrorDto();
+        final ApiErrorDto errorDetails = new ApiErrorDto();
 
         if (exception instanceof InvalidAuthTokenException || exception instanceof InsufficientAuthenticationException) {
             response.addHeader("WWW-Authenticate", "Basic realm=\"myRealm\"");
@@ -31,12 +32,12 @@ public class AuthFailureMapper {
             response.addHeader("WWW-Authenticate", "Bearer error=\"invalid_token\"");
         }
 
-//        errorDetails.setTitle(status.getReasonPhrase());
-//        errorDetails.setMessage(exception.getMessage());
-//        errorDetails.setStatus(status.value());
-//        errorDetails.setPath(request.getRequestURI());
+        errorDetails.setTitle(status.getReasonPhrase());
+        errorDetails.setMessage(exception.getMessage());
+        errorDetails.setStatus(status.value());
+        errorDetails.setPath(request.getRequestURI());
         response.setStatus(status.value());
         response.setContentType(MediaType.APPLICATION_JSON);
-//        mapper.writeValue(response.getWriter(), errorDetails);
+        mapper.writeValue(response.getWriter(), errorDetails);
     }
 }

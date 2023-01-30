@@ -174,9 +174,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, "/api/reviews/{id}").anonymous()
                     .antMatchers(HttpMethod.DELETE, "/api/reviews/{id}").anonymous()
                 //------------------- /location -------------------
-                    .antMatchers(HttpMethod.GET, "/api/location/countries").anonymous()
-                    .antMatchers(HttpMethod.GET, "/api/location/countries/{id}/cities").anonymous()
-                    .antMatchers(HttpMethod.GET, "/api/location/cities/{id}").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/location/countries").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/location/countries/{id}/cities").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/location/cities/{id}").permitAll()
                 //------------------- Others --------------------
                     .antMatchers("/**").permitAll()
 

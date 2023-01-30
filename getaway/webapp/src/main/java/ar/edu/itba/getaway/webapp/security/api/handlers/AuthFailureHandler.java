@@ -13,10 +13,6 @@ import java.io.IOException;
 
 @Component
 public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
-
-//    @Autowired
-//    ObjectMapper mapper;
-
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         AuthFailureMapper.handleFailure(request, response, exception);
