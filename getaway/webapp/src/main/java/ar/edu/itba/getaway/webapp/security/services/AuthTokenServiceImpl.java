@@ -27,11 +27,6 @@ public class AuthTokenServiceImpl implements AuthTokenService {
 
     @Autowired
     Settings settings;
-//    @Autowired
-//    TokenIssuer tokenIssuer;
-//
-//    @Autowired
-//    TokenParser tokenParser;
 
     @Override
     public String issueToken(String username, Set<Roles> roles) {
@@ -39,14 +34,8 @@ public class AuthTokenServiceImpl implements AuthTokenService {
         final ZonedDateTime issuedDate = ZonedDateTime.now();
         final ZonedDateTime expirationDate = issuedDate.plusSeconds(validFor);
         final AuthTokenDetails authTokenDetails = new AuthTokenDetails(id, username, roles, issuedDate, expirationDate);
-//        return tokenIssuer.issueToken(authTokenDetails);
         return issueToken(authTokenDetails);
     }
-
-//    @Override
-//    public AuthTokenDetails parseToken(String token) {
-//        return tokenParser.parseToken(token);
-//    }
 
     @Override
     public String refreshToken(AuthTokenDetails currentAuthTokenDetails) {
@@ -55,7 +44,6 @@ public class AuthTokenServiceImpl implements AuthTokenService {
         final AuthTokenDetails newTokenDetails = new AuthTokenDetails(
                 currentAuthTokenDetails.getId(), currentAuthTokenDetails.getUsername(),
                 currentAuthTokenDetails.getRoles(), issuedDate, expirationDate);
-//        return tokenIssuer.issueToken(newTokenDetails);
         return issueToken(newTokenDetails);
     }
 

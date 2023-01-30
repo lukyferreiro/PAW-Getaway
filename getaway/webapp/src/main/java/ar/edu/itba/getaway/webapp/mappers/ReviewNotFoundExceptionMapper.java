@@ -21,7 +21,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class ReviewNotFoundExceptionMapper implements ExceptionMapper<ReviewNotFoundException> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReviewNotFoundException.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReviewNotFoundExceptionMapper.class);
 
     @Autowired
     private MessageSource messageSource;

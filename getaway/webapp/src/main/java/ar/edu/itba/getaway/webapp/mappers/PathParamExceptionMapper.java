@@ -14,7 +14,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class PathParamExceptionMapper implements ExceptionMapper<ParamException.PathParamException> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ParamException.PathParamException.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PathParamExceptionMapper.class);
 
     @Context
     private UriInfo uriInfo;

@@ -14,7 +14,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class NotAcceptableExceptionMapper implements ExceptionMapper<NotAcceptableException> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NotAcceptableException.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NotAcceptableExceptionMapper.class);
 
     @Context
     private UriInfo uriInfo;

@@ -15,7 +15,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class NotAllowedExceptionMapper implements ExceptionMapper<NotAllowedException> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReviewNotFoundException.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NotAllowedExceptionMapper.class);
 
     @Context
     private UriInfo uriInfo;

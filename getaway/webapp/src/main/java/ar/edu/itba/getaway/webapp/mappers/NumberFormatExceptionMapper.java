@@ -13,7 +13,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class NumberFormatExceptionMapper implements ExceptionMapper<NumberFormatException> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NumberFormatException.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NumberFormatExceptionMapper.class);
 
     @Context
     private UriInfo uriInfo;

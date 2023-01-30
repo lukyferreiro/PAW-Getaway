@@ -13,7 +13,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class IllegalArgumentExceptionMapper implements ExceptionMapper<IllegalArgumentException> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IllegalArgumentException.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IllegalArgumentExceptionMapper.class);
 
     @Context
     private UriInfo uriInfo;

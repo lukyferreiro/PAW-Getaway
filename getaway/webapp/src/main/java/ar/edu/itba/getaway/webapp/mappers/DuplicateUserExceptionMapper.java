@@ -21,7 +21,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class DuplicateUserExceptionMapper implements ExceptionMapper<DuplicateUserException> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ContentExpectedExceptionMapper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DuplicateUserExceptionMapper.class);
 
     @Autowired
     private MessageSource messageSource;

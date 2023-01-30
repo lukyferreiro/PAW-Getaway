@@ -21,7 +21,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class IllegalOperationExceptionMapper implements ExceptionMapper<IllegalOperationException> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IllegalOperationException.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IllegalOperationExceptionMapper.class);
 
     @Autowired
     private MessageSource messageSource;

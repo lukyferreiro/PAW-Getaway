@@ -14,7 +14,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class AccessDeniedExceptionMapper implements ExceptionMapper<AccessDeniedException> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccessDeniedException.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccessDeniedExceptionMapper.class);
 
     @Context
     private UriInfo uriInfo;
