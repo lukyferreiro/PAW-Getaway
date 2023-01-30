@@ -13,11 +13,8 @@ import java.io.IOException;
 @Component
 public class AuthEntryPoint implements AuthenticationEntryPoint {
 
-    @Autowired
-    private ObjectMapper mapper;
-
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
-        AuthFailureMapper.handleFailure(request, response, exception, mapper);
+        AuthFailureMapper.handleFailure(request, response, exception);
     }
 }

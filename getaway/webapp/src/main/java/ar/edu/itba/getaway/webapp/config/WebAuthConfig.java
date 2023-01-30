@@ -21,7 +21,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -40,8 +43,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MyUserDetailsService myUserDetailsService;
 
-    @Autowired
-    private AuthEntryPoint authEntryPoint;
+//    @Autowired
+//    private AuthEntryPoint authEntryPoint;
 
     @Autowired
     private BasicAuthProvider basicAuthProvider;
@@ -49,11 +52,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthProvider jwtAuthProvider;
 
-    @Autowired
-    private AuthSuccessHandler authSuccessHandler;
-
-    @Autowired
-    private AuthFailureHandler authFailureHandler;
+//    @Autowired
+//    private AuthSuccessHandler authSuccessHandler;
+//
+//    @Autowired
+//    private AuthFailureHandler authFailureHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -62,6 +65,21 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AntMatcherVoter antMatcherVoter() { return new AntMatcherVoter();}
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new AuthEntryPoint();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new AuthSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new AuthFailureHandler();
+    }
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
@@ -89,8 +107,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public BridgeAuthFilter bridgeAuthFilter() throws Exception {
         BridgeAuthFilter bridgeAuthFilter = new BridgeAuthFilter();
         bridgeAuthFilter.setAuthenticationManager(authenticationManagerBean());
-        bridgeAuthFilter.setAuthenticationSuccessHandler(authSuccessHandler);
-        bridgeAuthFilter.setAuthenticationFailureHandler(authFailureHandler);
+        bridgeAuthFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+        bridgeAuthFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
         return bridgeAuthFilter;
     }
 
@@ -117,11 +135,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
         http
-//                .cors()
-//                .and()
+                .cors()
+                .and()
                 .csrf().disable()
                 .exceptionHandling()
-                    .authenticationEntryPoint(authEntryPoint)
+                    .authenticationEntryPoint(authenticationEntryPoint())
                     .accessDeniedHandler(accessDeniedHandler())
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
