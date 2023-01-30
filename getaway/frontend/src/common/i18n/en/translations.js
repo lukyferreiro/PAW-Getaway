@@ -12,13 +12,21 @@ export const TRANSLATIONS_EN = {
     },
 
     Navbar: {
+        createAccount:"Crea una cuenta",
         createExperience: "Crear experiencia",
+        email: "Email",
         search: "Buscar",
+        forgotPassword: "¿Olvidaste tu contraseña?",
         login: "Iniciar sesion",
+        loginTitle: "Iniciar sesion en Getaway",
+        loginDescription:"Experiencias nuevas todos los d\u00EDas",
+        newUser:"¿Eres nuevo en Getaway?",
+        password:"Contraseña",
         profile: "Mi perfil",
         experiences: "Mis experiencias",
         favourites: "Mis favoritos",
         reviews: "Mis reseñas",
+        rememberMe: "Recuerdame",
         logout: "Cerrar sesion",
     },
 
@@ -56,6 +64,18 @@ export const TRANSLATIONS_EN = {
         city: "Ciudad",
         address: "Direccion",
         image: "Imagen",
+    },
+
+    ExperienceDetail:{
+        imageDefault:"Esta imagen no se corresponde con la experiencia",
+        priceFree: "Gratis",
+        description:"Descripci\u00F3n",
+        noData:"Informaci\u00F3n no brindada",
+        url:"Sitio oficial",
+        email: "Email",
+        review: "Reseñas",
+        notVisible:"La experiencia est\u00E1 oculta en este momento",
+        noReviews:"Esta experiencia no tiene rese\u00F1as a\u00FAn. S\u00E9 el primero en realizar una!"
     },
 
     EmptyResult: "Parece que no hay ninguna experiencia que coincida con tu búsqueda",

@@ -1,14 +1,9 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {Outlet} from "react-router-dom";
 import Carrousel from "../components/Carrousel";
-import CountryModel from "../types/CountryModel";
-import CityModel from "../types/CityModel";
-import {CategoryModel, ExperienceModel} from "../types";
-import UserModel from "../types/UserModel";
 import CardExperience from "../components/CardExperience";
 
-export default function Landing() {
+export default function Home() {
 
     const {t} = useTranslation();
     const experiences =
@@ -21,8 +16,8 @@ export default function Landing() {
         ]
     return (
         <div>
-            <Outlet/>
-            {/*<Carrousel experiences={experiences} show={3}/>*/}
+            {/*<Outlet/>*/}
+            <Carrousel experiences={experiences} show={3}/>
         </div>
 
     )

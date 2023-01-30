@@ -8,7 +8,9 @@ import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
+import ar.edu.itba.getaway.webapp.dto.response.UserDto;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.util.StreamUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.IOException;
@@ -50,10 +53,11 @@ public class ExperienceController {
     private UriInfo uriInfo;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
+    private static final String ACCEPTED_MIME_TYPES = "image/";
 
     // Endpoint para obtener las experiencias de una categoria
     @GET
-    @Path("/{category}")
+    @Path("/category/{category}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperiencesFromCategory(
             @PathParam("category") final String category,
@@ -105,41 +109,54 @@ public class ExperienceController {
         }, uriBuilder);
     }
 
+    @GET
+    @Path("/name/{name}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getExperiencesBySearch(
+            @PathParam("name") final String name,
+            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
+            @QueryParam("page") @DefaultValue("1") int page
+    ) {
+        LOGGER.info("Called /experiences/{} GET", name);
+
+        //TODO: change for deployment
+        //final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
+        final Page<ExperienceModel> experiences = experienceService.listExperiencesSearch(name, Optional.of(order), page, user);
+
+        if (experiences == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        if (experiences.getContent().isEmpty()) {
+            return Response.noContent().build();
+        }
+
+        final Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);
+
+        final UriBuilder uriBuilder = uriInfo
+                .getAbsolutePathBuilder()
+                .queryParam("order", order)
+                .queryParam("page", page);
+
+        return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
+        }, uriBuilder);
+    }
+
     // Endpoint para crear una experiencia
     @POST
-    @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response registerExperience(
-            @Context final HttpServletRequest request,
-            @Valid final NewExperienceDto experienceDto) throws DuplicateExperienceException {
-
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response registerExperience(@Valid final NewExperienceDto experienceDto) throws DuplicateExperienceException {
         LOGGER.info("Called /experiences/ POST");
 
         if (experienceDto == null) {
             throw new ContentExpectedException();
         }
 
-        if (request.getContentLength() == -1 || request.getContentLength() > maxRequestSize) {
-            throw new MaxUploadSizeRequestException();
-        }
-
 //        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
         final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
-
-        final FormDataBodyPart img = experienceDto.getImage();
-        NewImageModel imageToUpload = null;
-
-        if (img != null) {
-            InputStream in = img.getEntityAs(InputStream.class);
-            try {
-                imageToUpload = new NewImageModel(StreamUtils.copyToByteArray(in), img.getMediaType().toString());
-            } catch (IOException e) {
-                LOGGER.error("Error getting bytes from images");
-                throw new ServerInternalException();
-            }
-        }
-
-        //TODO tengo dudas de esto
         final CityModel city = locationService.getCityByName(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel category = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
@@ -149,8 +166,7 @@ public class ExperienceController {
                 experienceDto.getName(), experienceDto.getAddress(),
                 experienceDto.getDescription(), experienceDto.getMail(),
                 experienceDto.getUrl(), Double.parseDouble(experienceDto.getPrice()),
-                city, category, user, imageToUpload.getImage(),
-                imageToUpload.getMimeType());
+                city, category, user);
         } catch (DuplicateExperienceException e) {
             LOGGER.warn("Error in experienceDto ExperienceForm, there is already an experience with this id");
             throw new DuplicateExperienceException();
@@ -166,7 +182,11 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperienceId(@PathParam("id") final long id) {
         LOGGER.info("Called /experiences/{} GET", id);
-        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+
+        //        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
         final ExperienceDto experienceDto = new ExperienceDto(experience, uriInfo);
         return Response.ok(experienceDto).build();
     }
@@ -175,7 +195,7 @@ public class ExperienceController {
     @PUT
     @Path("/experience/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(value = {MediaType.APPLICATION_JSON,})
+    @Produces(value = {MediaType.APPLICATION_JSON})
     public Response updateExperience(
             @Context final HttpServletRequest request,
             @Valid NewExperienceDto experienceDto,
@@ -190,7 +210,8 @@ public class ExperienceController {
             throw new ContentExpectedException();
         }
 
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
 
         if (experience.getUser().getUserId() != (user.getUserId())) {
@@ -199,26 +220,13 @@ public class ExperienceController {
             throw new IllegalOperationException();
         }
 
-        final FormDataBodyPart img = experienceDto.getImage();
-        NewImageModel imageToUpload = null;
-
-        if (img != null) {
-            InputStream in = img.getEntityAs(InputStream.class);
-            try {
-                imageToUpload = new NewImageModel(StreamUtils.copyToByteArray(in), img.getMediaType().toString());
-            } catch (IOException e) {
-                LOGGER.error("Error getting bytes from images");
-                throw new ServerInternalException();
-            }
-        }
-
         final CityModel cityModel = locationService.getCityByName(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel categoryModel = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
         final ExperienceModel toUpdateExperience = new ExperienceModel(id, experienceDto.getName(), experienceDto.getAddress(), experienceDto.getDescription(),
         experienceDto.getMail(), experienceDto.getUrl(),  Double.parseDouble(experienceDto.getPrice()), cityModel, categoryModel, user, experience.getExperienceImage(), experience.getObservable(), experience.getViews());
 
-        experienceService.updateExperience(toUpdateExperience, imageToUpload.getImage(), imageToUpload.getMimeType());
+        experienceService.updateExperience(toUpdateExperience);
         LOGGER.info("The experience with id {} has been updated successfully", id);
         return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
     }
@@ -226,9 +234,10 @@ public class ExperienceController {
     // Endpoint para eliminar una experiencia
     @DELETE
     @Path("/experience/{id}")
-    @Produces(value = {MediaType.APPLICATION_JSON,})
+    @Produces(value = {MediaType.APPLICATION_JSON})
     public Response deleteExperience(@PathParam("id") final long id) {
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
         final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
 
         if (experienceModel.getUser().getUserId() != (user.getUserId())) {
@@ -243,27 +252,54 @@ public class ExperienceController {
 
     // Endpoint para obtener la imagen de una experiencia
     @GET
-    @Path("/experience/{id}/image")
+    @Path("/experience/{id}/experienceImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON})
-    public Response getExperienceImage(@PathParam("id") final long id) {
+    public Response getExperienceImage(@PathParam("id") final long id, @Context Request request) {
 
-        final ImageModel image = imageService.getImgById(id).orElseThrow(ImageNotFoundException::new);
+        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(UserNotFoundException::new);
+        final ImageModel img = experience.getExperienceImage();
 
-        if (image.getImage() != null) {
-            final CacheControl cacheControl = new CacheControl();
-            cacheControl.setNoTransform(false);
-            cacheControl.getCacheExtension().put("public", null);
-            cacheControl.setMaxAge(31536000);
-            cacheControl.getCacheExtension().put("immutable", null);
-
-            return Response.ok(image.getImage())
-                    .type(image.getMimeType())
-                    .cacheControl(cacheControl)
-                    .build();
-//            Response.ResponseBuilder response = Response.ok(new ByteArrayInputStream(imageModel.getImage()));
-//            return response.build();
+        if (img == null) {
+            return Response.status(NOT_FOUND).build();
         }
-        return Response.noContent().build();
+
+        final EntityTag eTag = new EntityTag(String.valueOf(img.getImageId()));
+        final CacheControl cacheControl = new CacheControl();
+        cacheControl.setNoCache(true);
+
+        Response.ResponseBuilder responseBuilder = request.evaluatePreconditions(eTag);
+        if (responseBuilder == null) {
+            final byte[] profileImage = img.getImage();
+            responseBuilder = Response.ok(profileImage).type(img.getMimeType()).tag(eTag);
+        }
+
+        return responseBuilder.cacheControl(cacheControl).build();
+    }
+
+    @PUT
+    @Path("/experience/{id}/experienceImage")
+    @Produces({"image/*", MediaType.APPLICATION_JSON})
+    public Response updateExperienceImage(
+            @PathParam("id") long id,
+            @FormDataParam("experienceImage") final FormDataBodyPart experienceImageBody,
+            @Size(max = 1024 * 1024) @FormDataParam("experienceImage") byte[] experienceImageBytes) {
+
+        if (experienceImageBody == null) {
+            throw new ContentExpectedException();
+        }
+
+        if (experienceImageBody.getMediaType().toString().contains(ACCEPTED_MIME_TYPES)) {
+            throw new IllegalContentTypeException();
+        }
+
+//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+
+        imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), experience.getExperienceImage());
+
+        return Response.noContent()
+                .contentLocation(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).path("profileImage").build())
+                .build();
     }
 
     // Endpoint para obtener la reseñas de una experiencia
@@ -295,7 +331,12 @@ public class ExperienceController {
     public Response createExperienceReview(@PathParam("id") final long id, @Valid NewReviewDto newReviewDto) {
         LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
         //TODO: check usage of localdate.now()
-        final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new), LocalDate.now(), userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new));
+
+        //        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+
+        final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experience, LocalDate.now(), user);
         return Response.created(ReviewDto.getReviewUriBuilder(reviewModel, uriInfo).build()).build();
     }
 

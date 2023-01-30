@@ -1,56 +1,48 @@
 package ar.edu.itba.getaway.webapp.dto.request;
 
-import ar.edu.itba.getaway.webapp.constraints.ImageTypeConstraint;
-import org.glassfish.jersey.media.multipart.FormDataBodyPart;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class NewExperienceDto {
 
-    @NotEmpty(message = "...")
+    @NotEmpty(message = "NotEmpty")
     @Size(min = 3, max = 50)
-    @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\"·#$%&=:¿?!¡/.-]*$", message = "...")
+    @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\"·#$%&=:¿?!¡/.-]*$", message = "Pattern.experienceForm.experienceName")
     private String name;
 
-    @NotNull(message = "...")
+    @NotNull(message = "NotNull")
     private Long category;
 
-    @NotEmpty(message = "...")
+    @NotEmpty(message = "NotEmpty")
     private String country;
 
-    @NotEmpty(message = "...")
+    @NotEmpty(message = "NotEmpty")
     private String city;
 
-    @NotEmpty(message = "...")
-    @Size(min = 5, max = 100, message = "...")
-    @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\"·#$%&=:¿?!¡/.-]*$", message = "...")
+    @NotEmpty(message = "NotEmpty")
+    @Size(min = 5, max = 100, message = "Size.experienceForm.experienceAddress")
+    @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\"·#$%&=:¿?!¡/.-]*$", message = "Pattern.experienceForm.experienceAddress")
     private String address;
 
-    @Size(max = 7, message = "...")
-    @Pattern(regexp = "^((0|([1-9][0-9]*))(\\.[0-9]{1,2})?)?$", message = "...")
+    @Size(max = 7, message = "Size.experienceForm.experiencePrice")
+    @Pattern(regexp = "^((0|([1-9][0-9]*))(\\.[0-9]{1,2})?)?$", message = "Pattern.experienceForm.experiencePrice")
     private String price;
 
     // https://regexr.com/39nr7
-    @Size(max = 500, message = "...")
-    @Pattern(regexp = "^([(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*))?$", message = "...")
+    @Size(max = 500, message = "Size.experienceForm.experienceUrl")
+    @Pattern(regexp = "^([(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*))?$", message = "Pattern.experienceForm.experienceUrl")
     private String url;
 
-    @NotEmpty(message = "")
-    @Size(max = 255, message = "...")
-    @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$", message = "...")
+    @NotEmpty(message = "NotEmpty")
+    @Size(max = 255, message = "Size.experienceForm.experienceMail")
+    @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$", message = "Pattern.experienceForm.experienceMail")
     private String mail;
 
-    @Size(max = 500, message = "...")
-    @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\";$%#&=:¿?!¡\\n\\s\\t/.-])*$", message = "...")
+    @Size(max = 500, message = "Size.experienceForm.experienceInfo")
+    @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\";$%#&=:¿?!¡\\n\\s\\t/.-])*$", message = "Pattern.experienceForm.experienceInfo")
     private String description;
-
-    @ImageTypeConstraint(contentType = {"image/png", "image/jpeg", "image/jpg"}, message = "experienceForm.validation.imageFormat")
-    @FormDataParam("images")
-    private FormDataBodyPart image;
 
     public NewExperienceDto() {
         // Used by Jersey
@@ -132,13 +124,5 @@ public class NewExperienceDto {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public FormDataBodyPart getImage() {
-        return image;
-    }
-
-    public void setImage(FormDataBodyPart image) {
-        this.image = image;
     }
 }
