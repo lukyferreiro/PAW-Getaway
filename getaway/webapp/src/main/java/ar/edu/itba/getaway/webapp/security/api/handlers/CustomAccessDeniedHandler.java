@@ -2,7 +2,6 @@ package ar.edu.itba.getaway.webapp.security.api.handlers;
 
 import ar.edu.itba.getaway.webapp.dto.response.ApiErrorDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
@@ -15,10 +14,6 @@ import java.io.IOException;
 //https://www.baeldung.com/spring-security-custom-access-denied-page
 @Component
 public class CustomAccessDeniedHandler implements org.springframework.security.web.access.AccessDeniedHandler {
-//
-//    @Autowired
-//    private ObjectMapper mapper;
-
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exception) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

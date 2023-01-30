@@ -38,6 +38,6 @@ public class AuthFailureMapper {
         errorDetails.setPath(request.getRequestURI());
         response.setStatus(status.value());
         response.setContentType(MediaType.APPLICATION_JSON);
-        mapper.writeValue(response.getWriter(), errorDetails);
+        response.getWriter().write(mapper.writeValueAsString(errorDetails));
     }
 }

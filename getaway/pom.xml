@@ -38,7 +38,7 @@
         <jersey.version>3.0-SNAPSHOT</jersey.version>
         <jjwt.version>0.7.0</jjwt.version>
 <!--        TODO check -->
-        <jackson.version>2.13.1</jackson.version>
+        <jackson.version>2.9.4</jackson.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
         <org.springframework.hateoas.version>0.25.1.RELEASE</org.springframework.hateoas.version>
     </properties>
