@@ -90,6 +90,21 @@ public class UserController {
         return Response.ok(new UserDto(user, uriInfo)).build();
     }
 
+    //Endpoint que devuelve informacion de un usuario segun el ID
+    @GET
+    @Path("/currentUser")
+    @Produces(value = {MediaType.APPLICATION_JSON,})
+    public Response getCurrentUser() {
+        LOGGER.info("Called /users/currentUser GET");
+        final Optional<UserModel> user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail());
+
+        if(user.isPresent()){
+            return Response.ok(new UserDto(user.get(), uriInfo)).build();
+        }
+
+        return Response.noContent().build();
+    }
+
     //Endpoint para editar la informacion del usuario
     @PUT
     @Path("/{id}")
@@ -113,30 +128,23 @@ public class UserController {
     }
 
     //Endpoint para la verificacion del mail
-//    @PUT
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(value = {MediaType.APPLICATION_JSON,})
-//    @Path("/emailVerification")
-//    public Response verifyUser(@Valid TokenDto tokenDto) {
-//        LOGGER.info("Called /users/emailVerification PUT");
-//
-//        if (tokenDto == null) {
-//            throw new ContentExpectedException();
-//        }
-//
-////        final UserModel user = userService.verifyAccount(tokenDto.getToken()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
-//
-//        final Response.ResponseBuilder responseBuilder = Response.noContent();
-//
-//        if (user.isVerified()) {
-//            addAuthorizationHeader(responseBuilder, user);
-//            if (securityContext.getUserPrincipal() == null) {
-//                addSessionRefreshTokenHeader(responseBuilder, user);
-//            }
-//        }
-//        return responseBuilder.build();
-//    }
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = {MediaType.APPLICATION_JSON,})
+    @Path("/emailVerification")
+    public Response verifyUser(@Valid TokenDto tokenDto) {
+        LOGGER.info("Called /users/emailVerification PUT");
+
+        if (tokenDto == null) {
+            throw new ContentExpectedException();
+        }
+
+        final UserModel user = userService.verifyAccount(tokenDto.getToken()).orElseThrow(UserNotFoundException::new);
+
+        final Response.ResponseBuilder responseBuilder = Response.noContent();
+
+        return responseBuilder.build();
+    }
 
     //Endpoint para la verificacion del mail
     @POST

@@ -143,6 +143,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, "/api/users").anonymous()
                     //permitAll, porque no se usa solo para usuarios logueados va para cualquiera
                     .antMatchers(HttpMethod.GET, "/api/users/{id}").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/users/currentUser").permitAll() //TODO: maybe authenticated
                     //logueado y hay que revisar que el id sea el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{id}").access("@antMatcherVoter.userEditHimself(authentication, #id)")
                     //permitAll, igual que el get by id
@@ -177,6 +178,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/experiences/experience/{id}/reviews").permitAll()
                     //logueado y VERIFIED
                     .antMatchers(HttpMethod.POST, "/api/experiences/experience/{id}/reviews").hasAuthority("VERIFIED")    //TODO check si es hasRole
+                    .antMatchers(HttpMethod.PUT, "/experience/{id}/{set}").authenticated()
                 //------------------- /reviews -------------------
                     //logueado y VERIFIED, chequear que sea el mismo usuario
                     .antMatchers(HttpMethod.GET, "/api/reviews/{id}").hasAuthority("VERIFIED")    //TODO check si es hasRole

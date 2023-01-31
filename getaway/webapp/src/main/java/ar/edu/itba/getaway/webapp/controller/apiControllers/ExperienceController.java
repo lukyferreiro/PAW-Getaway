@@ -15,6 +15,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
@@ -36,6 +37,8 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 public class ExperienceController {
     @Autowired
     private ExperienceService experienceService;
+    @Autowired
+    private FavAndViewExperienceService favAndViewExperienceService;
     @Autowired
     private CategoryService categoryService;
     @Autowired
@@ -77,9 +80,9 @@ public class ExperienceController {
         final CityModel cityModel = locationService.getCityById(cityId).orElse(null);
 
         //TODO: change for deployment
-
+        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElse(null);
         //final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
 
         final Page<ExperienceModel> experiences = experienceService.listExperiencesByFilter(categoryModel, maxPrice, maxScore, cityModel, Optional.of(order), page, user);
@@ -120,10 +123,12 @@ public class ExperienceController {
     ) {
         LOGGER.info("Called /experiences/{} GET", name);
 
-        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElse(null);
 //        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
         final Page<ExperienceModel> experiences = experienceService.listExperiencesSearch(name, Optional.of(order), page, user);
+
+        LOGGER.info("llego1");
 
         if (experiences == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -132,6 +137,7 @@ public class ExperienceController {
         if (experiences.getContent().isEmpty()) {
             return Response.noContent().build();
         }
+        LOGGER.info("llego2");
 
         final Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);
 
@@ -139,6 +145,8 @@ public class ExperienceController {
                 .getAbsolutePathBuilder()
                 .queryParam("order", order)
                 .queryParam("page", page);
+
+        LOGGER.info("llego3");
 
         return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
         }, uriBuilder);
@@ -183,7 +191,7 @@ public class ExperienceController {
     public Response getExperienceId(@PathParam("id") final long id) {
         LOGGER.info("Called /experiences/{} GET", id);
 
-        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElse(null);
 //        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
@@ -339,6 +347,25 @@ public class ExperienceController {
 
         final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experience, LocalDate.now(), user);
         return Response.created(ReviewDto.getReviewUriBuilder(reviewModel, uriInfo).build()).build();
+    }
+
+    //TODO:chcek
+    @PUT
+    @Path("/experience/{id}/{set}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response favExperience(@PathParam("id") final long id, @PathParam("set") final boolean set) {
+        LOGGER.info("Called /experiences/{} GET", id);
+
+        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
+//        final ExperienceDto experienceDto = new ExperienceDto(experience, uriInfo);
+
+        favAndViewExperienceService.setFav(user, set, experience);
+
+//        return Response.ok(experienceDto).build();
+        return Response.noContent().build();
     }
 
     private <T, K> Response createPaginationResponse(Page<T> results,

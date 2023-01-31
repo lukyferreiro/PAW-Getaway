@@ -41,15 +41,13 @@ public class FavAndViewExperienceServiceImpl implements FavAndViewExperienceServ
 
     @Transactional
     @Override
-    public void setFav(UserModel user, Optional<Boolean> set, Optional<ExperienceModel> experience) {
-        if (experience.isPresent() && set.isPresent()) {
-            if (set.get()) {
-                if (!isFav(user, experience.get())) {
-                    addFav(user, experience.get());
-                }
-            } else {
-                deleteFav(user, experience.get());
+    public void setFav(UserModel user, boolean set, ExperienceModel experience) {
+        if (set) {
+            if (!isFav(user, experience)) {
+                addFav(user, experience);
             }
+        } else {
+            deleteFav(user, experience);
         }
     }
 
