@@ -142,6 +142,7 @@ public class UserController {
 
         final UserModel user = userService.verifyAccount(tokenDto.getToken()).orElseThrow(UserNotFoundException::new);
 
+        //TODO: maybe return user
         final Response.ResponseBuilder responseBuilder = Response.noContent();
 
         return responseBuilder.build();
@@ -149,7 +150,6 @@ public class UserController {
 
     //Endpoint para la verificacion del mail
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
     @Path("/emailVerification")
     public Response resendUserVerification() {
@@ -176,11 +176,13 @@ public class UserController {
             throw new ContentExpectedException();
         }
 
-        final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
-
+        //TODO: check
+        LOGGER.info(passwordResetEmailDto.getEmail());
+        UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
         userService.generateNewPassword(user);
+
+
+//        userService.generateNewPassword(user);
 
         return Response.noContent().build();
     }

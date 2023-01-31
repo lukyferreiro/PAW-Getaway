@@ -144,6 +144,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //permitAll, porque no se usa solo para usuarios logueados va para cualquiera
                     .antMatchers(HttpMethod.GET, "/api/users/{id}").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/users/currentUser").permitAll() //TODO: maybe authenticated
+                    //logueado y rol NOT VERIFIED
+                    .antMatchers(HttpMethod.PUT, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")    //TODO check si es hasRole
+                    .antMatchers(HttpMethod.POST, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")    //TODO check si es hasRole
+                    //¿Olvidaste tu contraseña?
+                    .antMatchers(HttpMethod.PUT, "/api/users/passwordReset").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/users/passwordReset").anonymous()
                     //logueado y hay que revisar que el id sea el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{id}").access("@antMatcherVoter.userEditHimself(authentication, #id)")
                     //permitAll, igual que el get by id
@@ -156,12 +162,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/users/{id}/reviews").hasAuthority("VERIFIED")    //TODO check si es hasRole
                     //logueado y tiene que tener rol USER nada más
                     .antMatchers(HttpMethod.GET, "/api/users/{id}/favExperiences").authenticated()
-                    //logueado y rol NOT VERIFIED
-                    .antMatchers(HttpMethod.PUT, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")    //TODO check si es hasRole
-                    .antMatchers(HttpMethod.POST, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")    //TODO check si es hasRole
-                    //¿Olvidaste tu contraseña?
-                    .antMatchers(HttpMethod.PUT, "/api/users/passwordReset").anonymous()
-                    .antMatchers(HttpMethod.POST, "/api/users/passwordReset").anonymous()
                 //------------------- /experiences -------------------
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/category/{category}").permitAll()

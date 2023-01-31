@@ -51,7 +51,7 @@ public class AntMatcherVoter {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
         final ExperienceModel experienceModel = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final Optional<UserModel> userModel = Optional.of(experienceModel.getUser());
-        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
+        return userModel.map(model -> model.equals(getUser(authentication))).orElse(false);
     }
 
     public boolean canDeleteExperienceById(Authentication authentication, long experienceId) {
@@ -68,7 +68,6 @@ public class AntMatcherVoter {
         final Optional<UserModel> userModel = Optional.of(reviewModel.getUser());
 //        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
         return userModel.map(model -> model.equals(getUser(authentication))).orElse(false);
-
     }
 
     public boolean canDeleteReviewById(Authentication authentication, long reviewId) {
