@@ -2,6 +2,7 @@ package ar.edu.itba.getaway.webapp.security.api;
 
 import ar.edu.itba.getaway.webapp.security.models.BasicAuthToken;
 import ar.edu.itba.getaway.webapp.security.models.JwtAuthToken;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -17,9 +18,11 @@ public class BridgeAuthFilter extends AbstractAuthenticationProcessingFilter {
     private static final int BASIC_TOKEN_OFFSET = 6;
     private static final int JWT_TOKEN_OFFSET = 7;
 
+    //TODO: check como usar esto
     @Override
     protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        return true;
+        String header = request.getHeader("Authorization");
+        return header != null;
     }
 
     @Override

@@ -9,6 +9,7 @@ import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
+import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,10 @@ public class ReviewController {
     private ReviewService reviewService;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private AuthFacade authFacade;
     @Context
     private UriInfo uriInfo;
-
-    @Context
-    private SecurityContext securityContext;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
@@ -54,8 +53,8 @@ public class ReviewController {
     public Response editReview(@PathParam("id") final Long id,
                                @Context final HttpServletRequest request,
                                @Valid NewReviewDto reviewDto) {
-        // final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+         final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
         assureUserResourceCorrelation(user, reviewModel.getUser().getUserId());
@@ -72,8 +71,8 @@ public class ReviewController {
     @Path("/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response deleteReview(@PathParam("id") final long id) {
-//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
         assureUserResourceCorrelation(user, reviewModel.getUser().getUserId());

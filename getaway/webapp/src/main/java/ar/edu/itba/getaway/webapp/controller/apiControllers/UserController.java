@@ -13,6 +13,7 @@ import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.UserDto;
 import ar.edu.itba.getaway.webapp.constraints.ImageTypeConstraint;
+import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -45,12 +46,10 @@ public class UserController {
     private ExperienceService experienceService;
     @Autowired
     private ReviewService reviewService;
-
+    @Autowired
+    private AuthFacade authFacade;
     @Autowired
     private int maxRequestSize;
-
-    @Context
-    private SecurityContext securityContext;
 
     @Context
     private UriInfo uriInfo;
@@ -103,7 +102,7 @@ public class UserController {
             throw new ContentExpectedException();
         }
 
-        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
 //        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
 
@@ -147,8 +146,8 @@ public class UserController {
     public Response resendUserVerification() {
         LOGGER.info("Called /users/emailVerification POST");
 
-//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
         userService.resendVerificationToken(user);
 
@@ -167,8 +166,8 @@ public class UserController {
             throw new ContentExpectedException();
         }
 
-//        final UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
-        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
         userService.generateNewPassword(user);
 
@@ -238,9 +237,10 @@ public class UserController {
             throw new IllegalContentTypeException();
         }
 
-        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
-        //TODO: add security
+        assureUserResourceCorrelation(user, id);
 
         imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
 
@@ -260,8 +260,8 @@ public class UserController {
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/experiences GET", id);
 
-//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
         assureUserResourceCorrelation(user, id);
         final Page<ExperienceModel> experiences = experienceService.listExperiencesSearchByUser(name, user, Optional.of(order), page);
@@ -295,8 +295,8 @@ public class UserController {
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/experiences GET", id);
 
-//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
         assureUserResourceCorrelation(user, id);
         final Page<ReviewModel> reviews = reviewService.getReviewsByUser(user, page);
@@ -327,8 +327,8 @@ public class UserController {
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/favExperiences GET", id);
 
-//        final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
         assureUserResourceCorrelation(user, id);
         final Page<ExperienceModel> favExperiences = experienceService.listExperiencesFavsByUser(user, Optional.of(order), page);

@@ -10,6 +10,7 @@ import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.webapp.security.models.BasicAuthToken;
+import ar.edu.itba.getaway.webapp.security.models.JwtAuthToken;
 import ar.edu.itba.getaway.webapp.security.models.MyUserDetails;
 import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
 import ar.edu.itba.getaway.webapp.security.services.AuthFacadeImpl;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.ws.rs.ForbiddenException;
 import java.util.Optional;
 
 @Component
@@ -81,7 +83,11 @@ public class AntMatcherVoter {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
         //Usuario que quiero editar
         final Optional<UserModel> userToEdit = userService.getUserById(userId);
+
+        if (isVerified(authentication)) {
+            return userToEdit.map(model -> model.equals(getUser(authentication))).orElse(false);
+        }
+        return false;
 //        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
-        return userToEdit.map(model -> model.equals(getUser(authentication))).orElse(false);
     }
 }
