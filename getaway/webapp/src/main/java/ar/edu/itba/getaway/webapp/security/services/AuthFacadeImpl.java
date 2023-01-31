@@ -4,6 +4,7 @@ import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.webapp.security.models.BasicAuthToken;
+import ar.edu.itba.getaway.webapp.security.models.JwtAuthToken;
 import ar.edu.itba.getaway.webapp.security.models.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,11 +20,17 @@ public class AuthFacadeImpl implements AuthFacade {
     @Override
     public UserModel getCurrentUser() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(!(SecurityContextHolder.getContext().getAuthentication() instanceof BasicAuthToken)) {
+
+        if(authentication instanceof BasicAuthToken) {
+            final String username = (String) authentication.getPrincipal();
+            return userService.getUserByEmail(username).orElseThrow(UserNotFoundException::new);
+        }
+        else if (authentication instanceof JwtAuthToken) {
             return ((MyUserDetails)(authentication.getPrincipal())).toUserModel();
         }
-        final String username = (String) authentication.getPrincipal();
-        return userService.getUserByEmail(username).orElseThrow(UserNotFoundException::new);
+        else /*Case: anonymous*/ {
+            return null;
+        }
     }
 
     public Long getCurrentUserId() {

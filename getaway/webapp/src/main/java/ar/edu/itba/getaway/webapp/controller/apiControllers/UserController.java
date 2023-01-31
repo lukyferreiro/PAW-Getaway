@@ -96,10 +96,10 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response getCurrentUser() {
         LOGGER.info("Called /users/currentUser GET");
-        final Optional<UserModel> user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail());
+        final UserModel user = authFacade.getCurrentUser();
 
-        if(user.isPresent()){
-            return Response.ok(new UserDto(user.get(), uriInfo)).build();
+        if(user != null){
+            return Response.ok(new UserDto(user, uriInfo)).build();
         }
 
         return Response.noContent().build();
@@ -117,7 +117,8 @@ public class UserController {
             throw new ContentExpectedException();
         }
 
-        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = authFacade.getCurrentUser();
+//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
 //        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
 
@@ -154,7 +155,8 @@ public class UserController {
     public Response resendUserVerification() {
         LOGGER.info("Called /users/emailVerification POST");
 
-        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = authFacade.getCurrentUser();
+//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
 //        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
         userService.resendVerificationToken(user);
@@ -174,7 +176,8 @@ public class UserController {
             throw new ContentExpectedException();
         }
 
-        final UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = authFacade.getCurrentUser();
+//        final UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
 //        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
         userService.generateNewPassword(user);
@@ -245,7 +248,8 @@ public class UserController {
             throw new IllegalContentTypeException();
         }
 
-        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = authFacade.getCurrentUser();
+//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
 //        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
         assureUserResourceCorrelation(user, id);
@@ -268,7 +272,9 @@ public class UserController {
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/experiences GET", id);
 
-        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+
+        final UserModel user = authFacade.getCurrentUser();
+//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
 //        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
         assureUserResourceCorrelation(user, id);
@@ -303,7 +309,8 @@ public class UserController {
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/experiences GET", id);
 
-        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = authFacade.getCurrentUser();
+//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
 //        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
         assureUserResourceCorrelation(user, id);
@@ -335,7 +342,8 @@ public class UserController {
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/favExperiences GET", id);
 
-        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
+        final UserModel user = authFacade.getCurrentUser();
+//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
 //        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
         assureUserResourceCorrelation(user, id);
