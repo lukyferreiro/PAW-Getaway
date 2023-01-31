@@ -51,9 +51,9 @@ public class LocationController {
 
     // Endpoint para obtener el listado completo de ciudades del país {id}
     @GET
-    @Path("/countries/{id}/cities")
+    @Path("/countries/{countryId}/cities")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getCountryCities(@PathParam("id") final long id) {
+    public Response getCountryCities(@PathParam("countryId") final long id) {
         LOGGER.info("Called /locations/countries/{}/cities GET", id);
 
         CountryModel country = locationService.getCountryById(id).orElseThrow(CountryNotFoundException::new);
@@ -70,7 +70,7 @@ public class LocationController {
 
     // Endpoint para obtener información de la ciudad {id}
     @GET
-    @Path("/cities/{id}")
+    @Path("/cities/{cityId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCityById(@PathParam("id") final long id) {
         LOGGER.info("Called /locations/cities/{} GET", id);

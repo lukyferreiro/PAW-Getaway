@@ -81,9 +81,9 @@ public class UserController {
 
     //Endpoint que devuelve informacion de un usuario segun el ID
     @GET
-    @Path("/{id}")
+    @Path("/{userId}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response getUser(@PathParam("id") final long id) {
+    public Response getUser(@PathParam("userId") final long id) {
         LOGGER.info("Called /users/{} GET", id);
         final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
         LOGGER.info("Return user with id {}", id);
@@ -107,10 +107,10 @@ public class UserController {
 
     //Endpoint para editar la informacion del usuario
     @PUT
-    @Path("/{id}")
+    @Path("/{userId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response updateUser(@Valid UserInfoDto userInfoDto, @PathParam("id") final long id) {
+    public Response updateUser(@Valid UserInfoDto userInfoDto, @PathParam("userId") final long id) {
         LOGGER.info("Called /users/ PUT");
 
         if (userInfoDto == null) {
@@ -206,9 +206,9 @@ public class UserController {
 
     //Endpoint para obtener la imagen de perfil del usuario
     @GET
-    @Path("/{id}/profileImage")
+    @Path("/{userId}/profileImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON})
-    public Response getUserProfileImage(@PathParam("id") final long id, @Context Request request) {
+    public Response getUserProfileImage(@PathParam("userId") final long id, @Context Request request) {
         LOGGER.info("Called /users/{}/profileImage GET", id);
 
         final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
@@ -236,9 +236,9 @@ public class UserController {
     @PUT
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{id}/profileImage")
+    @Path("/{userId}/profileImage")
     public Response putUserProfileImage(
-            @PathParam("id") long id,
+            @PathParam("userId") long id,
             @FormDataParam("profileImage") final FormDataBodyPart profileImageBody,
             @Size(max = 1024 * 1024) @FormDataParam("profileImage") byte[] profileImageBytes) {
 
@@ -265,10 +265,10 @@ public class UserController {
 
     //Endpoint para obtener las experiencias creadas por un usuario
     @GET
-    @Path("/{id}/experiences")
+    @Path("/{userId}/experiences")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserExperiences(
-            @PathParam("id") final long id,
+            @PathParam("userId") final long id,
             @QueryParam("name") @DefaultValue("") String name,
             @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
             @QueryParam("page") @DefaultValue("1") int page) {
@@ -304,10 +304,10 @@ public class UserController {
 
     //Endpoint para obtener las reseñas creadas por un usuario
     @GET
-    @Path("/{id}/reviews")
+    @Path("/{userId}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserReviews(
-            @PathParam("id") final long id,
+            @PathParam("userId") final long id,
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/experiences GET", id);
 
@@ -336,10 +336,10 @@ public class UserController {
     }
 
     @GET
-    @Path("/{id}/favExperiences")
+    @Path("/{userId}/favExperiences")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserFavExperiences(
-            @PathParam("id") final long id,
+            @PathParam("userId") final long id,
             @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/favExperiences GET", id);

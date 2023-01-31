@@ -36,9 +36,9 @@ public class ReviewController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
     @GET
-    @Path("/{id}")
+    @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getReview(@PathParam("id") final Long id) {
+    public Response getReview(@PathParam("reviewId") final Long id) {
         LOGGER.info("Called /reviews/{} GET", id);
 
         final ReviewModel review = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
@@ -48,9 +48,9 @@ public class ReviewController {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/{id}")
+    @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response editReview(@PathParam("id") final Long id,
+    public Response editReview(@PathParam("reviewId") final Long id,
                                @Context final HttpServletRequest request,
                                @Valid NewReviewDto reviewDto) {
         final UserModel user = authFacade.getCurrentUser();
@@ -69,9 +69,9 @@ public class ReviewController {
     }
 
     @DELETE
-    @Path("/{id}")
+    @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response deleteReview(@PathParam("id") final long id) {
+    public Response deleteReview(@PathParam("reviewId") final long id) {
         final UserModel user = authFacade.getCurrentUser();
 //        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
 //        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);

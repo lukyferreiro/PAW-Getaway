@@ -10,10 +10,7 @@ import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.webapp.security.models.BasicAuthToken;
-import ar.edu.itba.getaway.webapp.security.models.JwtAuthToken;
 import ar.edu.itba.getaway.webapp.security.models.MyUserDetails;
-import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
-import ar.edu.itba.getaway.webapp.security.services.AuthFacadeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,45 +34,47 @@ public class AntMatcherVoter {
         }
         return ((MyUserDetails)(authentication.getPrincipal())).toUserModel();
     }
-    private Long getUserId(Authentication authentication) {
-        return getUser(authentication).getUserId();
-    }
-    private boolean isVerified(Authentication authentication) {
-        return getUser(authentication).isVerified();
-    }
-    private boolean isProvider(Authentication authentication) {
-        return getUser(authentication).isProvider();
-    }
 
     public boolean canEditExperienceById(Authentication authentication, long experienceId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
         final ExperienceModel experienceModel = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final Optional<UserModel> userModel = Optional.of(experienceModel.getUser());
-        return userModel.map(model -> model.equals(getUser(authentication))).orElse(false);
+        final UserModel userModel = experienceModel.getUser();
+        UserModel user = getUser(authentication);
+        System.out.println(user.getEmail());
+        return userModel.equals(user);
     }
 
     public boolean canDeleteExperienceById(Authentication authentication, long experienceId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
         final ExperienceModel experienceModel = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final Optional<UserModel> userModel = Optional.of(experienceModel.getUser());
+        final UserModel userModel = experienceModel.getUser();
         //        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
-        return userModel.map(model -> model.equals(getUser(authentication))).orElse(false);
+        UserModel user = getUser(authentication);
+        System.out.println(user.getEmail());
+        return userModel.equals(user);
     }
 
     public boolean canEditReviewById(Authentication authentication, long reviewId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
         final ReviewModel reviewModel = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
-        final Optional<UserModel> userModel = Optional.of(reviewModel.getUser());
+        final UserModel userModel = reviewModel.getUser();
+
+        UserModel user = getUser(authentication);
+        System.out.println(user.getEmail());
+
 //        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
-        return userModel.map(model -> model.equals(getUser(authentication))).orElse(false);
+        return userModel.equals(user);
     }
 
     public boolean canDeleteReviewById(Authentication authentication, long reviewId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
         final ReviewModel reviewModel = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
-        final Optional<UserModel> userModel = Optional.of(reviewModel.getUser());
+        final UserModel userModel = reviewModel.getUser();
 //        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
-        return userModel.map(model -> model.equals(getUser(authentication))).orElse(false);
+
+        UserModel user = getUser(authentication);
+        System.out.println(user.getEmail());
+        return userModel.equals(user);
     }
 
     public boolean userEditHimself(Authentication authentication, long userId) {
@@ -83,8 +82,13 @@ public class AntMatcherVoter {
         //Usuario que quiero editar
         final Optional<UserModel> userToEdit = userService.getUserById(userId);
 
-        if (isVerified(authentication)) {
-            return userToEdit.map(model -> model.equals(getUser(authentication))).orElse(false);
+        UserModel user = getUser(authentication);
+        System.out.println(user.getEmail());
+
+        if (user.isVerified()) {
+            if(userToEdit.isPresent()) {
+                return userToEdit.get().equals(user);
+            }
         }
         return false;
 //        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
