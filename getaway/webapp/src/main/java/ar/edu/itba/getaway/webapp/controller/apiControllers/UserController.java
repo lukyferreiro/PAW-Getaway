@@ -275,7 +275,7 @@ public class UserController {
                 .queryParam("page", page)
                 .queryParam("name", name);
 
-        return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDtos) {
+        return PaginationResponse.createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDtos) {
         }, uriBuilder);
     }
 
@@ -305,7 +305,7 @@ public class UserController {
         final UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder()
                 .queryParam("page", page);
 
-        return createPaginationResponse(reviews, new GenericEntity<Collection<ReviewDto>>(reviewDtos) {
+        return PaginationResponse.createPaginationResponse(reviews, new GenericEntity<Collection<ReviewDto>>(reviewDtos) {
         }, uriBuilder);
     }
 
@@ -337,51 +337,9 @@ public class UserController {
                 .queryParam("order", order)
                 .queryParam("page", page);
 
-        return createPaginationResponse(favExperiences, new GenericEntity<Collection<ExperienceDto>>(experienceDtos) {
+        return PaginationResponse.createPaginationResponse(favExperiences, new GenericEntity<Collection<ExperienceDto>>(experienceDtos) {
         }, uriBuilder);
     }
 
-    private <T, K> Response createPaginationResponse(Page<T> results,
-                                                     GenericEntity<K> resultsDto,
-                                                     UriBuilder uriBuilder) {
-        if (results.getContent().isEmpty()) {
-            if (results.getCurrentPage() == 0) {
-                return Response.noContent().build();
-            } else {
-                return Response.status(NOT_FOUND).build();
-            }
-        }
-
-        final Response.ResponseBuilder response = Response.ok(resultsDto);
-
-        addPaginationLinks(response, results, uriBuilder);
-
-        return response.build();
-    }
-
-    private <T> void addPaginationLinks(Response.ResponseBuilder responseBuilder,
-                                        Page<T> results,
-                                        UriBuilder uriBuilder) {
-
-        final int page = results.getCurrentPage();
-
-        final int first = 0;
-        final int last = results.getMaxPage();
-        final int prev = page - 1;
-        final int next = page + 1;
-
-        responseBuilder.link(uriBuilder.clone().queryParam("page", first).build(), "first");
-
-        responseBuilder.link(uriBuilder.clone().queryParam("page", last).build(), "last");
-
-        if (page != first) {
-            responseBuilder.link(uriBuilder.clone().queryParam("page", prev).build(), "prev");
-        }
-
-        if (page != last) {
-            responseBuilder.link(uriBuilder.clone().queryParam("page", next).build(), "next");
-        }
-
-    }
 
 }

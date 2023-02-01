@@ -99,7 +99,7 @@ public class ExperienceController {
             uriBuilder.queryParam("city", cityId);
         }
 
-        return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
+        return PaginationResponse.createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
         }, uriBuilder);
     }
 
@@ -137,7 +137,7 @@ public class ExperienceController {
 
         LOGGER.info("llego3");
 
-        return createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
+        return PaginationResponse.createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
         }, uriBuilder);
     }
 
@@ -288,7 +288,7 @@ public class ExperienceController {
         imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), experience.getExperienceImage());
 
         return Response.noContent()
-                .contentLocation(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).path("profileImage").build())
+                .contentLocation(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).path("experienceImage").build())
                 .build();
     }
 
@@ -310,7 +310,7 @@ public class ExperienceController {
                 .getAbsolutePathBuilder()
                 .queryParam("page", page);
 
-        return createPaginationResponse(reviewModelList, new GenericEntity<Collection<ReviewDto>>(reviewDto) {
+        return PaginationResponse.createPaginationResponse(reviewModelList, new GenericEntity<Collection<ReviewDto>>(reviewDto) {
         }, uriBuilder);
     }
 
@@ -342,48 +342,6 @@ public class ExperienceController {
         favAndViewExperienceService.setFav(user, set, experience);
 
         return Response.noContent().build();
-    }
-
-    private <T, K> Response createPaginationResponse(Page<T> results,
-                                                     GenericEntity<K> resultsDto,
-                                                     UriBuilder uriBuilder) {
-        if (results.getContent().isEmpty()) {
-            if (results.getCurrentPage() == 0) {
-                return Response.noContent().build();
-            } else {
-                return Response.status(NOT_FOUND).build();
-            }
-        }
-
-        final Response.ResponseBuilder response = Response.ok(resultsDto);
-
-        addPaginationLinks(response, results, uriBuilder);
-
-        return response.build();
-    }
-
-    private <T> void addPaginationLinks(Response.ResponseBuilder responseBuilder,
-                                        Page<T> results,
-                                        UriBuilder uriBuilder) {
-
-        final int page = results.getCurrentPage();
-
-        final int first = 0;
-        final int last = results.getMaxPage();
-        final int prev = page - 1;
-        final int next = page + 1;
-
-        responseBuilder.link(uriBuilder.clone().queryParam("page", first).build(), "first");
-
-        responseBuilder.link(uriBuilder.clone().queryParam("page", last).build(), "last");
-
-        if (page != first) {
-            responseBuilder.link(uriBuilder.clone().queryParam("page", prev).build(), "prev");
-        }
-
-        if (page != last) {
-            responseBuilder.link(uriBuilder.clone().queryParam("page", next).build(), "next");
-        }
     }
 }
 
