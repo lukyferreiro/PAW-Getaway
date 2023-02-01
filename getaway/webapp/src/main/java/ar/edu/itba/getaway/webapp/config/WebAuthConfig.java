@@ -172,6 +172,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/experiences/experience/{experienceId}").permitAll()
                     //logueado, VERIFIED y PROVIDER, chequear que sea el mismo usuario
                     .antMatchers(HttpMethod.PUT, "/api/experiences/experience/{experienceId}").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
+                    .antMatchers(HttpMethod.PUT, "/api/experiences/experience/{experienceId}/experienceImage").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
                     .antMatchers(HttpMethod.DELETE, "/api/experiences/experience/{experienceId}").access("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/experience/{experienceId}/experienceImage").permitAll()

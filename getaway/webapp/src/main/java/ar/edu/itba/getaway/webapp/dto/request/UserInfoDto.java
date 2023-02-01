@@ -6,19 +6,16 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserInfoDto {
-
-    //TODO poner los messages
-
-    @NotEmpty(message = "..")
-    @Size(max = 50, message = "..")
+    @NotEmpty(message = "NotEmpty")
+    @Size(max = 50, message = "Size.registerForm.name")
     @Pattern(regexp = "^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$",
-            message = "..")
+            message = "Pattern.registerForm.name")
     private String name;
 
-    @NotEmpty(message = "..")
-    @Size(max = 50, message = "..")
+    @NotEmpty(message = "NotEmpty")
+    @Size(max = 50, message = "Size.registerForm.surname")
     @Pattern(regexp = "^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$",
-            message = "..")
+            message = "Pattern.registerForm.surname")
     private String surname;
 
 

@@ -64,8 +64,6 @@ public class ReviewDaoImpl implements ReviewDao {
 
         List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
 
-        System.out.println(String.format("Cantidad de reviews que cumplen: %d\n", resultingIds.size()));
-
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
         final TypedQuery<ReviewModel> queryForReviews;
         if (idList.size() > 0) {

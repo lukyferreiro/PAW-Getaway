@@ -8,24 +8,19 @@ import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
-import ar.edu.itba.getaway.webapp.dto.response.UserDto;
 import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StreamUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
@@ -79,13 +74,7 @@ public class ExperienceController {
         }
         final CityModel cityModel = locationService.getCityById(cityId).orElse(null);
 
-        //TODO: change for deployment
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElse(null);
-        //final UserModel user = userService.getUserByEmail(securityContext.getUserPrincipal().getName()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
-
-
         final Page<ExperienceModel> experiences = experienceService.listExperiencesByFilter(categoryModel, maxPrice, maxScore, cityModel, Optional.of(order), page, user);
 
         if (experiences == null) {
@@ -125,8 +114,6 @@ public class ExperienceController {
         LOGGER.info("Called /experiences/{} GET", name);
 
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElse(null);
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
         final Page<ExperienceModel> experiences = experienceService.listExperiencesSearch(name, Optional.of(order), page, user);
 
@@ -165,9 +152,6 @@ public class ExperienceController {
         }
 
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
-
         final CityModel city = locationService.getCityByName(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel category = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
@@ -195,9 +179,6 @@ public class ExperienceController {
         LOGGER.info("Called /experiences/{} GET", id);
 
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElse(null);
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
-
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
         final ExperienceDto experienceDto = new ExperienceDto(experience, uriInfo);
         return Response.ok(experienceDto).build();
@@ -223,8 +204,6 @@ public class ExperienceController {
         }
 
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
 
         if (experience.getUser().getUserId() != (user.getUserId())) {
@@ -250,8 +229,6 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response deleteExperience(@PathParam("experienceId") final long id) {
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
         final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
 
         if (experienceModel.getUser().getUserId() != (user.getUserId())) {
@@ -302,13 +279,10 @@ public class ExperienceController {
             throw new ContentExpectedException();
         }
 
-        if (experienceImageBody.getMediaType().toString().contains(ACCEPTED_MIME_TYPES)) {
+        if (!experienceImageBody.getMediaType().toString().contains(ACCEPTED_MIME_TYPES)) {
             throw new IllegalContentTypeException();
         }
 
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
-        final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
 
         imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), experience.getExperienceImage());
@@ -349,8 +323,6 @@ public class ExperienceController {
         //TODO: check usage of localdate.now()
 
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
 
         final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experience, LocalDate.now(), user);
@@ -365,15 +337,10 @@ public class ExperienceController {
         LOGGER.info("Called /experiences/{} GET", id);
 
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
-
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
-//        final ExperienceDto experienceDto = new ExperienceDto(experience, uriInfo);
 
         favAndViewExperienceService.setFav(user, set, experience);
 
-//        return Response.ok(experienceDto).build();
         return Response.noContent().build();
     }
 

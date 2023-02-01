@@ -41,8 +41,6 @@ public class AntMatcherVoter {
         UserModel user = getUser(authentication);
 
         if(userModel.isPresent()) {
-            System.out.println("Authorized:");
-            System.out.println(userModel.get().equals(user));
             return userModel.get().equals(user);
         }
 
@@ -56,8 +54,6 @@ public class AntMatcherVoter {
         UserModel user = getUser(authentication);
 
         if(userModel.isPresent()) {
-            System.out.println("Authorized:");
-            System.out.println(userModel.get().equals(user));
             return userModel.get().equals(user);
         }
 
@@ -71,8 +67,6 @@ public class AntMatcherVoter {
         UserModel user = getUser(authentication);
 
         if(userModel.isPresent()) {
-            System.out.println("Authorized:");
-            System.out.println(userModel.get().equals(user));
             return userModel.get().equals(user);
         }
 
@@ -86,8 +80,6 @@ public class AntMatcherVoter {
         UserModel user = getUser(authentication);
 
         if(userModel.isPresent()) {
-            System.out.println("Authorized:");
-            System.out.println(userModel.get().equals(user));
             return userModel.get().equals(user);
         }
 
@@ -100,16 +92,12 @@ public class AntMatcherVoter {
         final Optional<UserModel> userToEdit = userService.getUserById(userId);
 
         UserModel user = getUser(authentication);
-        System.out.println(user.getEmail());
 
         if (user.isVerified()) {
             if(userToEdit.isPresent()) {
-                System.out.println("Authorized:");
-                System.out.println(userToEdit.get().equals(user));
                 return userToEdit.get().equals(user);
             }
         }
         return false;
-//        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
     }
 }

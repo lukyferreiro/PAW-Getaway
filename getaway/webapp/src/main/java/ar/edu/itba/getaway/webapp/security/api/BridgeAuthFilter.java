@@ -18,7 +18,6 @@ public class BridgeAuthFilter extends AbstractAuthenticationProcessingFilter {
     private static final int BASIC_TOKEN_OFFSET = 6;
     private static final int JWT_TOKEN_OFFSET = 7;
 
-    //TODO: check como usar esto
     @Override
     protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
         String header = request.getHeader("Authorization");

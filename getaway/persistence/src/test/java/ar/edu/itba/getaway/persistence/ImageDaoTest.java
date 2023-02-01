@@ -85,9 +85,6 @@ public class ImageDaoTest {
         ImageModel imageModel = em.find(ImageModel.class, TO_GET_IMAGE.getImageId());
         assertNotNull(imageModel);
         assertEquals(TO_GET_IMAGE, imageModel);
-
-        System.out.println(Arrays.toString(imageModel.getImage()));
-
         assertArrayEquals(imgInfo3, imageModel.getImage());
     }
 }

@@ -7,12 +7,10 @@ import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
-//import ar.edu.itba.getaway.webapp.security.JwtUtil;
 import ar.edu.itba.getaway.webapp.dto.request.*;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.UserDto;
-import ar.edu.itba.getaway.webapp.constraints.ImageTypeConstraint;
 import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -53,9 +51,6 @@ public class UserController {
 
     @Context
     private UriInfo uriInfo;
-
-//    @Autowired
-//    private JwtUtil jwtUtil;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private static final String ACCEPTED_MIME_TYPES = "image/";
@@ -118,11 +113,9 @@ public class UserController {
         }
 
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
-
-        assureUserResourceCorrelation(user, id);
+        // TODO: check if useless due to antmatcher
+        //        assureUserResourceCorrelation(user, id);
         userService.updateUserInfo(user, new UserInfo(userInfoDto.getName(), userInfoDto.getSurname()));
 
         return Response.ok().build();
@@ -143,9 +136,7 @@ public class UserController {
         final UserModel user = userService.verifyAccount(tokenDto.getToken()).orElseThrow(UserNotFoundException::new);
 
         //TODO: maybe return user
-        final Response.ResponseBuilder responseBuilder = Response.noContent();
-
-        return responseBuilder.build();
+        return Response.ok().build();
     }
 
     //Endpoint para la verificacion del mail
@@ -156,8 +147,6 @@ public class UserController {
         LOGGER.info("Called /users/emailVerification POST");
 
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(1).orElseThrow(UserNotFoundException::new);
 
         userService.resendVerificationToken(user);
 
@@ -180,9 +169,6 @@ public class UserController {
         LOGGER.info(passwordResetEmailDto.getEmail());
         UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
         userService.generateNewPassword(user);
-
-
-//        userService.generateNewPassword(user);
 
         return Response.noContent().build();
     }
@@ -234,7 +220,6 @@ public class UserController {
 
     //Endpoint para editar la imagen de perfil del usuario
     @PUT
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{userId}/profileImage")
     public Response putUserProfileImage(
@@ -246,15 +231,11 @@ public class UserController {
             throw new ContentExpectedException();
         }
 
-        if (profileImageBody.getMediaType().toString().contains(ACCEPTED_MIME_TYPES)) {
+        if (!profileImageBody.getMediaType().toString().contains(ACCEPTED_MIME_TYPES)) {
             throw new IllegalContentTypeException();
         }
 
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
-
-        assureUserResourceCorrelation(user, id);
 
         imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
 
@@ -274,12 +255,8 @@ public class UserController {
             @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("Called /users/{}/experiences GET", id);
 
-
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
-        assureUserResourceCorrelation(user, id);
         final Page<ExperienceModel> experiences = experienceService.listExperiencesSearchByUser(name, user, Optional.of(order), page);
 
         if (experiences == null) {
@@ -312,10 +289,7 @@ public class UserController {
         LOGGER.info("Called /users/{}/experiences GET", id);
 
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
-        assureUserResourceCorrelation(user, id);
         final Page<ReviewModel> reviews = reviewService.getReviewsByUser(user, page);
 
         if (reviews == null) {
@@ -345,10 +319,7 @@ public class UserController {
         LOGGER.info("Called /users/{}/favExperiences GET", id);
 
         final UserModel user = authFacade.getCurrentUser();
-//        final UserModel user = userService.getUserByEmail(authFacade.getCurrentUser().getEmail()).orElseThrow(UserNotFoundException::new);
-//        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
-        assureUserResourceCorrelation(user, id);
         final Page<ExperienceModel> favExperiences = experienceService.listExperiencesFavsByUser(user, Optional.of(order), page);
 
         if (favExperiences == null) {
@@ -369,21 +340,6 @@ public class UserController {
         return createPaginationResponse(favExperiences, new GenericEntity<Collection<ExperienceDto>>(experienceDtos) {
         }, uriBuilder);
     }
-
-
-    private void assureUserResourceCorrelation(UserModel user, long userId) {
-        if (user.getUserId() != userId) {
-            throw new ForbiddenException();
-        }
-    }
-
-//    private void addAuthorizationHeader(final Response.ResponseBuilder response, final UserModel user) {
-//        response.header(JwtUtil.JWT_HEADER, jwtUtil.generateToken(user, uriInfo.getBaseUri().toString()));
-//    }
-//
-//    private void addSessionRefreshTokenHeader(final Response.ResponseBuilder response, final UserModel user) {
-//        response.header(JwtUtil.REFRESH_TOKEN_HEADER, tokensService.getSessionRefreshToken(user).getValue());
-//    }
 
     private <T, K> Response createPaginationResponse(Page<T> results,
                                                      GenericEntity<K> resultsDto,
