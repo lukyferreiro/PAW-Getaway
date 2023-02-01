@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -106,5 +107,53 @@ public class UserDaoImpl implements UserDao {
         final RoleModel roleModel = getRoleByName(newRole).get();
         user.addRole(roleModel);
         return Optional.ofNullable(em.merge(user));
+    }
+
+    @Override
+    public Optional<UserModel> getUserByExperienceId(long experienceId) {
+        Query queryForIds = em.createNativeQuery(
+                "SELECT userid \n" +
+                        "FROM experiences \n" +
+                        "WHERE  experienceId = :experienceId"
+        );
+
+        queryForIds.setParameter("experienceId", experienceId);
+
+        List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
+
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<UserModel> queryForUser;
+        if (idList.size() > 0) {
+            LOGGER.debug("Selecting experiences contained in ");
+            queryForUser = em.createQuery("SELECT user FROM UserModel user WHERE user.userId IN (:idList) ", UserModel.class);
+            queryForUser.setParameter("idList", idList);
+            return Optional.ofNullable(queryForUser.getSingleResult());
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<UserModel> getUserByReviewId(long reviewId) {
+        Query queryForIds = em.createNativeQuery(
+                "SELECT userid \n" +
+                        "FROM reviews \n" +
+                        "WHERE  reviewId = :reviewId"
+        );
+
+        queryForIds.setParameter("reviewId", reviewId);
+
+        List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
+
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<UserModel> queryForUser;
+        if (idList.size() > 0) {
+            LOGGER.debug("Selecting experiences contained in ");
+            queryForUser = em.createQuery("SELECT user FROM UserModel user WHERE user.userId IN (:idList) ", UserModel.class);
+            queryForUser.setParameter("idList", idList);
+            return Optional.ofNullable(queryForUser.getSingleResult());
+        }
+
+        return Optional.empty();
     }
 }

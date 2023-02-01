@@ -16,6 +16,7 @@ public interface UserDao {
     Optional<RoleModel> getRoleByName(Roles role);
 
     boolean updateUser(long userId, UserModel user);
+
     Optional<UserModel> updateRoles(UserModel user, Roles oldVal, Roles newVal);
 
     Optional<UserModel> updatePassword(UserModel user, String password);
@@ -25,4 +26,8 @@ public interface UserDao {
     Optional<UserModel> updateUserImage(UserModel user, ImageModel imageModel);
 
     Optional<UserModel> addRole(UserModel user, Roles newRole);
+
+    Optional<UserModel> getUserByExperienceId(long experienceId);
+
+    Optional<UserModel> getUserByReviewId(long reviewId);
 }

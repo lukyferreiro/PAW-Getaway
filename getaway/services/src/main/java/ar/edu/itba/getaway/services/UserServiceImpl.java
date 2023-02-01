@@ -51,9 +51,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserModel getUserByExperience(ExperienceModel experience) {
-        LOGGER.debug("Retrieving user who creates experience with id {}", experience.getExperienceId());
-        return experience.getUser();
+    public Optional<UserModel> getUserByExperienceId(long experienceId) {
+        LOGGER.debug("Retrieving user who created experience with id {}", experienceId);
+        return userDao.getUserByExperienceId(experienceId);
+    }
+
+    @Override
+    public Optional<UserModel> getUserByReviewId(long reviewId) {
+        LOGGER.debug("Retrieving user who created review with id {}", reviewId);
+        return userDao.getUserByReviewId(reviewId);
     }
 
 //    @Transactional

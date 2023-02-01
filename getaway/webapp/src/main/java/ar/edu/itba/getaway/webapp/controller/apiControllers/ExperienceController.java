@@ -241,7 +241,7 @@ public class ExperienceController {
 
         experienceService.updateExperience(toUpdateExperience);
         LOGGER.info("The experience with id {} has been updated successfully", id);
-        return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
+        return Response.ok().build();
     }
 
     // Endpoint para eliminar una experiencia

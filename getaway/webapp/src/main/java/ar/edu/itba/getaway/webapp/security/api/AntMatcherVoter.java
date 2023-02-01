@@ -37,44 +37,61 @@ public class AntMatcherVoter {
 
     public boolean canEditExperienceById(Authentication authentication, long experienceId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
-        final ExperienceModel experienceModel = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final UserModel userModel = experienceModel.getUser();
+        final Optional<UserModel> userModel = userService.getUserByExperienceId(experienceId);
         UserModel user = getUser(authentication);
-        System.out.println(user.getEmail());
-        return userModel.equals(user);
+
+        if(userModel.isPresent()) {
+            System.out.println("Authorized:");
+            System.out.println(userModel.get().equals(user));
+            return userModel.get().equals(user);
+        }
+
+        throw new ExperienceNotFoundException();
+
     }
 
     public boolean canDeleteExperienceById(Authentication authentication, long experienceId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
-        final ExperienceModel experienceModel = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final UserModel userModel = experienceModel.getUser();
-        //        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
+        final Optional<UserModel> userModel = userService.getUserByExperienceId(experienceId);
         UserModel user = getUser(authentication);
-        System.out.println(user.getEmail());
-        return userModel.equals(user);
+
+        if(userModel.isPresent()) {
+            System.out.println("Authorized:");
+            System.out.println(userModel.get().equals(user));
+            return userModel.get().equals(user);
+        }
+
+        throw new ExperienceNotFoundException();
+
     }
 
     public boolean canEditReviewById(Authentication authentication, long reviewId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
-        final ReviewModel reviewModel = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
-        final UserModel userModel = reviewModel.getUser();
-
+        final Optional<UserModel> userModel = userService.getUserByReviewId(reviewId);
         UserModel user = getUser(authentication);
-        System.out.println(user.getEmail());
 
-//        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
-        return userModel.equals(user);
+        if(userModel.isPresent()) {
+            System.out.println("Authorized:");
+            System.out.println(userModel.get().equals(user));
+            return userModel.get().equals(user);
+        }
+
+        throw new ReviewNotFoundException();
+
     }
 
     public boolean canDeleteReviewById(Authentication authentication, long reviewId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
-        final ReviewModel reviewModel = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
-        final UserModel userModel = reviewModel.getUser();
-//        return userModel.map(model -> model.getEmail().equals(authentication.getName())).orElse(false);
-
+        final Optional<UserModel> userModel = userService.getUserByReviewId(reviewId);
         UserModel user = getUser(authentication);
-        System.out.println(user.getEmail());
-        return userModel.equals(user);
+
+        if(userModel.isPresent()) {
+            System.out.println("Authorized:");
+            System.out.println(userModel.get().equals(user));
+            return userModel.get().equals(user);
+        }
+
+        throw new ReviewNotFoundException();
     }
 
     public boolean userEditHimself(Authentication authentication, long userId) {
@@ -87,6 +104,8 @@ public class AntMatcherVoter {
 
         if (user.isVerified()) {
             if(userToEdit.isPresent()) {
+                System.out.println("Authorized:");
+                System.out.println(userToEdit.get().equals(user));
                 return userToEdit.get().equals(user);
             }
         }

@@ -72,7 +72,7 @@ public class LocationController {
     @GET
     @Path("/cities/{cityId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getCityById(@PathParam("id") final long id) {
+    public Response getCityById(@PathParam("cityId") final long id) {
         LOGGER.info("Called /locations/cities/{} GET", id);
 
         CityModel city = locationService.getCityById(id).orElseThrow(CityNotFoundException::new);

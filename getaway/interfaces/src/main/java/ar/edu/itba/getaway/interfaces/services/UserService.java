@@ -13,7 +13,9 @@ public interface UserService {
 
     Optional<UserModel> getUserByEmail(String email);
 
-    UserModel getUserByExperience(ExperienceModel experience);
+    Optional<UserModel> getUserByExperienceId(long experienceId);
+
+    Optional<UserModel> getUserByReviewId(long reviewId);
 
 //    Optional<UserModel> getUserBySessionRefreshToken(String token);
 
@@ -24,6 +26,7 @@ public interface UserService {
     boolean validatePasswordReset(String token);
 
     void generateNewPassword(UserModel userModel);
+
     boolean updateUser(long userId, UserModel user);
 
     Optional<UserModel> updatePassword(String token, String password);
