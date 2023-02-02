@@ -40,7 +40,10 @@ export default function ExperienceDetails() {
         userId: 1,
         name: "LUCAS FERREIRO PA",
         surname: "LUCAS FERREIRO PA",
-        email: "lferreiro@itba.edu.ar PA"
+        email: "lferreiro@itba.edu.ar PA",
+        favsCount: 2,
+        verified: true,
+        provider: true,
     }
 
     //TODO: Habria q recibirla por el id que se clickea e ir a buscar esta info a la api

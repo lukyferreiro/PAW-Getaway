@@ -18,6 +18,8 @@ public class UserDto implements Serializable {
     private String selfUrl;
     private String profileImageUrl;
     private String experiencesUrl;
+    private boolean isVerified;
+    private boolean isProvider;
 
     //TODO:
 
@@ -47,6 +49,8 @@ public class UserDto implements Serializable {
             this.profileImageUrl = "";
         }
         this.experiencesUrl = uriBuilder.clone().path("experiences").build().toString();    // /user/{id}/experiences
+        this.isVerified = user.isVerified();
+        this.isProvider = user.isProvider();
     }
 
     public long getId() {
@@ -96,6 +100,21 @@ public class UserDto implements Serializable {
     }
     public void setExperiencesUrl(String experiencesUrl) {
         this.experiencesUrl = experiencesUrl;
+    }
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
+    public boolean isProvider() {
+        return isProvider;
+    }
+
+    public void setProvider(boolean provider) {
+        isProvider = provider;
     }
 }
 

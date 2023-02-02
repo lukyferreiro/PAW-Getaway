@@ -42,7 +42,7 @@ createExperienceFormButton.addEventListener("click", () => {
 
 // async function getCities(country = ''){
 //     // Default options are marked with *
-//     let url=`http://localhost:8080/webapp_war_exploded/create_experience/get_cities?country=${country}`;
+//     let url=`http://localhost:8080/create_experience/get_cities?country=${country}`;
 //
 //     console.log(url)
 //
@@ -68,7 +68,7 @@ createExperienceFormButton.addEventListener("click", () => {
 //
 //         getCities(countryInput.value);
 //
-//         httpCitiesRequest.open("GET","http://localhost:8080/webapp_war/create_experience/get_cities/",true);
+//         httpCitiesRequest.open("GET","http://localhost:8080/create_experience/get_cities/",true);
 //         httpCitiesRequest.send();
 //
 //         cityInput.removeAttribute('disabled');

@@ -137,7 +137,7 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON,})
     @Path("/emailVerification")
     public Response verifyUser(
-            @Valid TokenDto tokenDto
+            @Valid final TokenDto tokenDto
     ) {
 
         LOGGER.info("Called /users/emailVerification PUT");
@@ -224,7 +224,6 @@ public class UserController {
         final ImageModel img = user.getProfileImage();
 
         if (img == null) {
-//            return Response.status(NOT_FOUND).build();
             return Response.noContent().build();
         }
 
