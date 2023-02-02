@@ -36,7 +36,10 @@ export default function CardReview() {
         userId: 1,
         name: "LUCAS FERREIRO PA",
         surname: "LUCAS FERREIRO PA",
-        email: "lferreiro@itba.edu.ar PA"
+        email: "lferreiro@itba.edu.ar PA",
+        favsCount: 0,
+        verified: true,
+        provider: true
     }
 
     const experience: ExperienceModel =

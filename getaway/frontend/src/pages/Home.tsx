@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import Carrousel from "../components/Carrousel";
+import Carousel from "../components/Carousel";
 import CardExperience from "../components/CardExperience";
 
 export default function Home() {
@@ -16,8 +16,8 @@ export default function Home() {
         ]
     return (
         <div>
-            {/*<Outlet/>*/}
-            <Carrousel experiences={experiences} show={3}/>
+            <Carousel experiences={experiences} show={3}/>
+            <Carousel experiences={experiences} show={3}/>
         </div>
 
     )

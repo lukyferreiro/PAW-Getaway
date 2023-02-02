@@ -1,14 +1,10 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {CategoryModel, ExperienceModel} from "../types";
-import CityModel from "../types/CityModel";
-import UserModel from "../types/UserModel";
-import CountryModel from "../types/CountryModel";
 import '../styles/carousel.css'
 import {useEffect, useState} from "react"; //will be added later
 
 
-export default function Carrousel(props: { experiences: any; show:any;}) {
+export default function Carousel(props: { experiences: any; show:any;}) {
 
     const {t} = useTranslation();
 

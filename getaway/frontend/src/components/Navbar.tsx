@@ -81,6 +81,7 @@ export default function Navbar() {
                     }
                     {isOpen && (
                         <Modal
+                            style={{overlay:{zIndex:100}}}
                             className="modal-pop-up"
                             isOpen={isOpen}
                             contentLabel="PopUpSignIn"
@@ -138,7 +139,7 @@ export default function Navbar() {
                                                                     className="col-6 px-0 d-flex justify-content-end form-label">
                                                                     <Link to="/user/resetPasswordRequest"
                                                                        tabIndex={-1}>
-                                           <span className="text-right" style={{fontSize: "medium" }}>
+                                           <span className="text-right" style={{fontSize: "medium" }} onClick={() => setIsOpen(false)}>
                                                {t('Navbar.forgotPassword')}
                                            </span>
                                                                     </Link>
@@ -190,7 +191,7 @@ export default function Navbar() {
                                         <div className="col-12 mt-4">
                                             <p className="mb-0 text-center">
                                                 {t('Navbar.newUser')}
-                                                <Link to="/register">
+                                                <Link to="/register" onClick={() => setIsOpen(false)}>
                                                     {t('Navbar.createAccount')}
                                                 </Link>
                                             </p>

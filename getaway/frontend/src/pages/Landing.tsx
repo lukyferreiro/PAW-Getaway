@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {Outlet} from "react-router-dom";
-import Carrousel from "../components/Carrousel";
+import Carousel from "../components/Carousel";
 import CountryModel from "../types/CountryModel";
 import CityModel from "../types/CityModel";
 import {CategoryModel, ExperienceModel} from "../types";
@@ -22,7 +22,6 @@ export default function Landing() {
     return (
         <div>
             <Outlet/>
-            {/*<Carrousel experiences={experiences} show={3}/>*/}
         </div>
 
     )
