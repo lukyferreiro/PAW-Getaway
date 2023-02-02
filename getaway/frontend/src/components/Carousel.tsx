@@ -4,11 +4,11 @@ import '../styles/carousel.css'
 import {useEffect, useState} from "react"; //will be added later
 
 
-export default function Carousel(props: { experiences: any; show:any;}) {
+export default function Carousel(props: {title:any, experiences: any; show:any;}) {
 
     const {t} = useTranslation();
 
-    const {experiences, show} = props
+    const {title, experiences, show} = props
     const [currentIndex, setCurrentIndex] = useState(0)
     const [length, setLength] = useState(experiences.length)
 
@@ -30,6 +30,9 @@ export default function Carousel(props: { experiences: any; show:any;}) {
     }
     return (
         <div className="carousel-container">
+            <div className="d-flex justify-content-center align-content-center">
+                <h2>{title}</h2>
+            </div>
             <div className="carousel-wrapper">
                 {
                     currentIndex > 0 &&

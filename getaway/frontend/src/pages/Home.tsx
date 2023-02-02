@@ -16,8 +16,8 @@ export default function Home() {
         ]
     return (
         <div>
-            <Carousel experiences={experiences} show={3}/>
-            <Carousel experiences={experiences} show={3}/>
+            <Carousel title={"Las experiencias mas buscadas"} experiences={experiences} show={3}/>
+            <Carousel title={"Segun tus favs"} experiences={experiences} show={3}/>
         </div>
 
     )
