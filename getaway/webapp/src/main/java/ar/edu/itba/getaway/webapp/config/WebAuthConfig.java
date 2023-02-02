@@ -161,7 +161,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //logueado y tiene que tener rol VERIFIED
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}/reviews").hasAuthority("VERIFIED")    //TODO check si es hasRole
                     //logueado y tiene que tener rol USER nada más
-                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/favExperiences").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/favExperiences").access("@antMatcherVoter.accessFavs(authentication, #userId)")
                 //------------------- /experiences -------------------
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/category/{category}").permitAll()

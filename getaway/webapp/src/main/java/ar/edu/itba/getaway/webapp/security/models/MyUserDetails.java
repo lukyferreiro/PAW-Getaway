@@ -28,11 +28,6 @@ public class MyUserDetails extends User {
         this.image = image;
     }
 
-    public UserModel toUserModel() {
-        // Remember that this.getUsername() = email
-        return new UserModel(userId, name, surname, this.getUsername(), image, isVerified, isProvider);
-    }
-
     public Long getUserId() {
         return userId;
     }

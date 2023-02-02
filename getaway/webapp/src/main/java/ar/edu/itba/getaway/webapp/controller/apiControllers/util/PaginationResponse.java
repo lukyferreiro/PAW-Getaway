@@ -1,11 +1,10 @@
-package ar.edu.itba.getaway.webapp.controller.apiControllers;
+package ar.edu.itba.getaway.webapp.controller.apiControllers.util;
 
 import ar.edu.itba.getaway.models.pagination.Page;
 
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 

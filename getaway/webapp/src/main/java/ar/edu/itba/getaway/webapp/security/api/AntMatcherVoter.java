@@ -21,16 +21,12 @@ public class AntMatcherVoter {
     private UserService userService;
 
     private UserModel getUser(Authentication authentication) {
-//        if(authentication instanceof BasicAuthToken) {
-//            return userService.getUserByEmail(((BasicAuthToken)authentication).getPrincipal()).orElseThrow(UserNotFoundException::new);
-//        }
-//        return ((MyUserDetails)(authentication.getPrincipal())).toUserModel();
-
         if(authentication instanceof BasicAuthToken) {
-            return userService.getUserByEmail(((BasicAuthToken)authentication).getPrincipal()).orElseThrow(UserNotFoundException::new);
+            final String username = (String) authentication.getPrincipal();
+            return userService.getUserByEmail(username).orElseThrow(UserNotFoundException::new);
         }
         else if (authentication instanceof JwtAuthToken) {
-            return ((MyUserDetails)(authentication.getPrincipal())).toUserModel();
+            return userService.getUserByEmail(((MyUserDetails)(authentication.getPrincipal())).getUsername()).orElseThrow(UserNotFoundException::new);
         }
         else /*Case: anonymous*/ {
             return null;
@@ -102,4 +98,14 @@ public class AntMatcherVoter {
         }
         return false;
     }
+
+    public boolean accessFavs(Authentication authentication, long userId) {
+        if (authentication instanceof AnonymousAuthenticationToken) return false;
+        final Optional<UserModel> userToAccess = userService.getUserById(userId);
+
+        final UserModel user = getUser(authentication);
+
+        return userToAccess.map(userModel -> userModel.equals(user)).orElse(false);
+    }
+
 }

@@ -4,6 +4,7 @@ import ar.edu.itba.getaway.interfaces.exceptions.*;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
+import ar.edu.itba.getaway.webapp.controller.apiControllers.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
@@ -138,8 +139,6 @@ public class ExperienceController {
 
         final Page<ExperienceModel> experiences = experienceService.listExperiencesSearch(name, Optional.of(order), page, user);
 
-        LOGGER.info("llego1");
-
         if (experiences == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -147,16 +146,12 @@ public class ExperienceController {
         if (experiences.getContent().isEmpty()) {
             return Response.noContent().build();
         }
-        LOGGER.info("llego2");
-
         final Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);
 
         final UriBuilder uriBuilder = uriInfo
                 .getAbsolutePathBuilder()
                 .queryParam("order", order)
                 .queryParam("page", page);
-
-        LOGGER.info("llego3");
 
         return PaginationResponse.createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
         }, uriBuilder);
