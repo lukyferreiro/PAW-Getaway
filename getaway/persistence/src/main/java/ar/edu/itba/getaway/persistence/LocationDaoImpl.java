@@ -3,6 +3,7 @@ package ar.edu.itba.getaway.persistence;
 import ar.edu.itba.getaway.models.CityModel;
 import ar.edu.itba.getaway.models.CountryModel;
 import ar.edu.itba.getaway.interfaces.persistence.LocationDao;
+import ar.edu.itba.getaway.models.OrderByModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -35,7 +36,7 @@ public class LocationDaoImpl implements LocationDao {
     @Override
     public List<CityModel> getCitiesByCountry(CountryModel country) {
         LOGGER.debug("Get cities from country with countryId {}", country.getCountryId());
-        final TypedQuery<CityModel> query = em.createQuery("FROM CityModel WHERE country = :country", CityModel.class);
+        final TypedQuery<CityModel> query = em.createQuery("FROM CityModel WHERE country = :country ORDER BY cityName ASC" , CityModel.class);
         query.setParameter("country", country);
         return query.getResultList();
     }

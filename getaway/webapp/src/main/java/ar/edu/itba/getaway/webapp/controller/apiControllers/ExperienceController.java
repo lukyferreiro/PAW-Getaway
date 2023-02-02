@@ -23,6 +23,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
@@ -53,6 +54,26 @@ public class ExperienceController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
     private static final String ACCEPTED_MIME_TYPES = "image/";
+
+    // Endpoint para carousel de landing page
+    @GET
+    @Path("/landingPage")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getLandingPageExperiences(){
+        UserModel user = authFacade.getCurrentUser();
+
+        List<List<ExperienceModel>> landingPageList;
+
+        if (user != null ){
+            landingPageList = experienceService.userLandingPage(user);
+        }
+        else {
+            landingPageList = experienceService.getExperiencesListByCategories(user);
+        }
+
+        //TODO: ver como devolver lista de lista
+        return Response.ok().build();
+    }
 
     // Endpoint para obtener las experiencias de una categoria
     @GET
@@ -186,6 +207,11 @@ public class ExperienceController {
 
         final UserModel user = authFacade.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
+
+        if (!experience.getUser().equals(user)) {
+            experienceService.increaseViews(experience);
+        }
+
         final ExperienceDto experienceDto = new ExperienceDto(experience, uriInfo);
         return Response.ok(experienceDto).build();
     }
@@ -351,11 +377,11 @@ public class ExperienceController {
 
     //TODO:chcek
     @PUT
-    @Path("/experience/{experienceId}/{set}")
+    @Path("/experience/{experienceId}/fav")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response favExperience(
             @PathParam("experienceId") final long id,
-            @PathParam("set") final boolean set
+            @QueryParam("set") final boolean set
     ) {
         LOGGER.info("Called /experiences/{} GET", id);
 
@@ -363,6 +389,23 @@ public class ExperienceController {
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
 
         favAndViewExperienceService.setFav(user, set, experience);
+
+        return Response.noContent().build();
+    }
+
+    @PUT
+    @Path("/experience/{experienceId}/observable")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response observable(
+            @PathParam("experienceId") final long id,
+            @QueryParam("set") final boolean set
+    ) {
+        LOGGER.info("Called /experiences/{} GET", id);
+
+        final UserModel user = authFacade.getCurrentUser();
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
+
+        experienceService.changeVisibility(experience, set);
 
         return Response.noContent().build();
     }

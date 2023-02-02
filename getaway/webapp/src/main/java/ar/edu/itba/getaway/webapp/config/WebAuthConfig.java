@@ -179,7 +179,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/experiences/experience/{experienceId}/reviews").permitAll()
                     //logueado y VERIFIED
                     .antMatchers(HttpMethod.POST, "/api/experiences/experience/{experienceId}/reviews").hasAuthority("VERIFIED")    //TODO check si es hasRole
-                    .antMatchers(HttpMethod.PUT, "/experience/{experienceId}/{set}").authenticated()
+                    .antMatchers(HttpMethod.PUT, "/experience/{experienceId}/fav").authenticated()
+                    .antMatchers(HttpMethod.PUT, "/experience/{experienceId}/observable").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
                 //------------------- /reviews -------------------
                     //logueado y VERIFIED, chequear que sea el mismo usuario
                     .antMatchers(HttpMethod.GET, "/api/reviews/{reviewId}").hasAuthority("VERIFIED")    //TODO check si es hasRole
