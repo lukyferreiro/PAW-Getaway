@@ -9,6 +9,9 @@ class Settings {
     @Value("${authentication.jwt.secret}")
     private String secret;
 
+    @Value("${authentication.jwt.validFor}")
+    private Long validFor;
+
     @Value("${authentication.jwt.clockSkew}")
     private Long clockSkew;
 
@@ -24,6 +27,10 @@ class Settings {
 
     public String getSecret() {
         return secret;
+    }
+
+    public Long getValidFor() {
+        return validFor;
     }
 
     public Long getClockSkew() {

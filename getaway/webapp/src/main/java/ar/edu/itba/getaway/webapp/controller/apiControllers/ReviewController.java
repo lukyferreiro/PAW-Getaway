@@ -33,7 +33,10 @@ public class ReviewController {
     @GET
     @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getReview(@PathParam("reviewId") final Long id) {
+    public Response getReview(
+            @PathParam("reviewId") final Long id
+    ) {
+
         LOGGER.info("Called /reviews/{} GET", id);
 
         final ReviewModel review = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
@@ -45,9 +48,11 @@ public class ReviewController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response editReview(@PathParam("reviewId") final Long id,
-                               @Context final HttpServletRequest request,
-                               @Valid NewReviewDto reviewDto) {
+    public Response editReview(
+            @PathParam("reviewId") final Long id,
+            @Context final HttpServletRequest request,
+            @Valid NewReviewDto reviewDto
+    ) {
 
         LOGGER.info("Called /reviews/{} PUT", id);
 

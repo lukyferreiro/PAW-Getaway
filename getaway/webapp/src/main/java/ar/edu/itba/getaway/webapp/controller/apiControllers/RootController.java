@@ -16,8 +16,8 @@ public class RootController {
     @Context
     private UriInfo uriInfo;
 
-    @Produces(MediaType.APPLICATION_JSON)
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public Response listEndpoints() {
         return Response.ok(new RootDto(uriInfo)).build();
     }

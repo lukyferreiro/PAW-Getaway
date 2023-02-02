@@ -58,7 +58,10 @@ public class UserController {
     //Endpoint que crea un usuario nuevo
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response registerUser(@Valid final RegisterDto registerDto) throws DuplicateUserException {
+    public Response registerUser(
+            @Valid final RegisterDto registerDto
+    ) throws DuplicateUserException {
+
         LOGGER.info("Called /users/ POST");
         if (registerDto == null) {
             throw new ContentExpectedException();
@@ -78,7 +81,10 @@ public class UserController {
     @GET
     @Path("/{userId}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response getUser(@PathParam("userId") final long id) {
+    public Response getUser(
+            @PathParam("userId") final long id
+    ) {
+
         LOGGER.info("Called /users/{} GET", id);
         final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
         LOGGER.info("Return user with id {}", id);
@@ -105,7 +111,11 @@ public class UserController {
     @Path("/{userId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response updateUser(@Valid UserInfoDto userInfoDto, @PathParam("userId") final long id) {
+    public Response updateUser(
+            @Valid UserInfoDto userInfoDto,
+            @PathParam("userId") final long id
+    ) {
+
         LOGGER.info("Called /users/ PUT");
 
         if (userInfoDto == null) {
@@ -126,7 +136,10 @@ public class UserController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
     @Path("/emailVerification")
-    public Response verifyUser(@Valid TokenDto tokenDto) {
+    public Response verifyUser(
+            @Valid TokenDto tokenDto
+    ) {
+
         LOGGER.info("Called /users/emailVerification PUT");
 
         if (tokenDto == null) {
@@ -158,7 +171,10 @@ public class UserController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/passwordReset")
-    public Response sendResetPasswordEmail(@Valid final PasswordResetEmailDto passwordResetEmailDto) {
+    public Response sendResetPasswordEmail(
+            @Valid final PasswordResetEmailDto passwordResetEmailDto
+    ) {
+
         LOGGER.info("Called /users/passwordReset POST");
 
         if (passwordResetEmailDto == null) {
@@ -178,7 +194,10 @@ public class UserController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/passwordReset")
-    public Response resetPassword(@Valid final PasswordResetDto passwordResetDto) {
+    public Response resetPassword(
+            @Valid final PasswordResetDto passwordResetDto
+    ) {
+
         LOGGER.info("Called /users/passwordReset PUT");
 
         if (passwordResetDto == null) {
@@ -194,7 +213,11 @@ public class UserController {
     @GET
     @Path("/{userId}/profileImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON})
-    public Response getUserProfileImage(@PathParam("userId") final long id, @Context Request request) {
+    public Response getUserProfileImage(
+            @PathParam("userId") final long id,
+            @Context Request request
+    ) {
+
         LOGGER.info("Called /users/{}/profileImage GET", id);
 
         final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
@@ -225,7 +248,8 @@ public class UserController {
     public Response putUserProfileImage(
             @PathParam("userId") long id,
             @FormDataParam("profileImage") final FormDataBodyPart profileImageBody,
-            @Size(max = 1024 * 1024) @FormDataParam("profileImage") byte[] profileImageBytes) {
+            @Size(max = 1024 * 1024) @FormDataParam("profileImage") byte[] profileImageBytes
+    ) {
 
         if (profileImageBody == null) {
             throw new ContentExpectedException();
@@ -252,7 +276,9 @@ public class UserController {
             @PathParam("userId") final long id,
             @QueryParam("name") @DefaultValue("") String name,
             @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
-            @QueryParam("page") @DefaultValue("1") int page) {
+            @QueryParam("page") @DefaultValue("1") int page
+    ) {
+
         LOGGER.info("Called /users/{}/experiences GET", id);
 
         final UserModel user = authFacade.getCurrentUser();
@@ -285,7 +311,9 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserReviews(
             @PathParam("userId") final long id,
-            @QueryParam("page") @DefaultValue("1") int page) {
+            @QueryParam("page") @DefaultValue("1") int page
+    ) {
+
         LOGGER.info("Called /users/{}/experiences GET", id);
 
         final UserModel user = authFacade.getCurrentUser();
@@ -315,7 +343,9 @@ public class UserController {
     public Response getUserFavExperiences(
             @PathParam("userId") final long id,
             @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
-            @QueryParam("page") @DefaultValue("1") int page) {
+            @QueryParam("page") @DefaultValue("1") int page
+    ) {
+
         LOGGER.info("Called /users/{}/favExperiences GET", id);
 
         final UserModel user = authFacade.getCurrentUser();

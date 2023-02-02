@@ -53,7 +53,10 @@ public class LocationController {
     @GET
     @Path("/countries/{countryId}/cities")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getCountryCities(@PathParam("countryId") final long id) {
+    public Response getCountryCities(
+            @PathParam("countryId") final long id
+    ) {
+
         LOGGER.info("Called /locations/countries/{}/cities GET", id);
 
         CountryModel country = locationService.getCountryById(id).orElseThrow(CountryNotFoundException::new);
@@ -72,7 +75,10 @@ public class LocationController {
     @GET
     @Path("/cities/{cityId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getCityById(@PathParam("cityId") final long id) {
+    public Response getCityById(
+            @PathParam("cityId") final long id
+    ) {
+
         LOGGER.info("Called /locations/cities/{} GET", id);
 
         CityModel city = locationService.getCityById(id).orElseThrow(CityNotFoundException::new);
