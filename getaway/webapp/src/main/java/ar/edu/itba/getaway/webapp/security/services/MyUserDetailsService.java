@@ -46,7 +46,6 @@ public class MyUserDetailsService implements UserDetailsService {
         final UserModel userModel = userService.getUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(message + email));
 //        final Collection<Roles> userRoles = userService.getRolesByUser(userModel);
 //        Collection<? extends GrantedAuthority> authorities = getAuthorities(userRoles);
-//        LOGGER.debug("Logged user with email {} and authorities {}", email, authorities);
 //        return new MyUserDetails(email, userModel.getPassword(), authorities);
         final Collection<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("USER"));
@@ -58,6 +57,7 @@ public class MyUserDetailsService implements UserDetailsService {
         } else {
             authorities.add(new SimpleGrantedAuthority("NOT_VERIFIED"));
         }
+        LOGGER.debug("Logged user with email {} and authorities {}", email, authorities);
         final String password;
         if(userModel.getPassword() == null || !BCRYPT_HASH_PATTERN.matcher(userModel.getPassword()).matches()) {
             password = encoder.encode(userModel.getPassword());

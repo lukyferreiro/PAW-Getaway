@@ -3,7 +3,7 @@ package ar.edu.itba.getaway.webapp.security.services;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.webapp.security.exceptions.ExpiredAuthTokenException;
 import ar.edu.itba.getaway.webapp.security.exceptions.InvalidAuthTokenException;
-import ar.edu.itba.getaway.webapp.security.models.AuthTokenDetails;
+import ar.edu.itba.getaway.webapp.security.models.AuthToken;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,46 +22,33 @@ import java.util.stream.Collectors;
 @Component
 public class AuthTokenServiceImpl implements AuthTokenService {
 
-    @Value("${authentication.jwt.validFor}")
-    private Long validFor;
+//    @Value("${authentication.jwt.validFor}")
+//    private Long validFor;
 
     @Autowired
     Settings settings;
 
     @Override
-    public String issueToken(String username, Set<Roles> roles) {
+    public String issueToken(String email, Set<Roles> roles) {
         final String id = UUID.randomUUID().toString();
         final ZonedDateTime issuedDate = ZonedDateTime.now();
-        final ZonedDateTime expirationDate = issuedDate.plusSeconds(validFor);
-        final AuthTokenDetails authTokenDetails = new AuthTokenDetails(id, username, roles, issuedDate, expirationDate);
-        return issueToken(authTokenDetails);
+        final ZonedDateTime expirationDate = issuedDate.plusSeconds(settings.getValidFor());
+        final AuthToken authToken = new AuthToken(id, email, roles, issuedDate, expirationDate);
+        return createToken(authToken);
     }
 
     @Override
-    public String refreshToken(AuthTokenDetails currentAuthTokenDetails) {
+    public String refreshToken(AuthToken currentAuthToken) {
         final ZonedDateTime issuedDate = ZonedDateTime.now();
-        final ZonedDateTime expirationDate = issuedDate.plusSeconds(validFor);
-        final AuthTokenDetails newTokenDetails = new AuthTokenDetails(
-                currentAuthTokenDetails.getId(), currentAuthTokenDetails.getUsername(),
-                currentAuthTokenDetails.getRoles(), issuedDate, expirationDate);
-        return issueToken(newTokenDetails);
-    }
-
-    public String issueToken(AuthTokenDetails authTokenDetails) {
-        return Jwts.builder()
-                .setId(authTokenDetails.getId())
-                .setIssuer(settings.getIssuer())
-                .setAudience(settings.getAudience())
-                .setSubject(authTokenDetails.getUsername())
-                .setIssuedAt(Date.from(authTokenDetails.getIssuedDate().toInstant()))
-                .setExpiration(Date.from(authTokenDetails.getExpirationDate().toInstant()))
-                .claim(settings.getAuthoritiesClaimName(), authTokenDetails.getRoles())
-                .signWith(SignatureAlgorithm.HS512, settings.getSecret())
-                .compact();
+        final ZonedDateTime expirationDate = issuedDate.plusSeconds(settings.getValidFor());
+        final AuthToken newTokenDetails = new AuthToken(
+                currentAuthToken.getId(), currentAuthToken.getEmail(),
+                currentAuthToken.getRoles(), issuedDate, expirationDate);
+        return createToken(newTokenDetails);
     }
 
     @Override
-    public AuthTokenDetails parseToken(String token) {
+    public AuthToken parseToken(String token) {
         try {
             final Claims claims = Jwts.parser()
                     .setSigningKey(settings.getSecret())
@@ -70,7 +57,7 @@ public class AuthTokenServiceImpl implements AuthTokenService {
                     .parseClaimsJws(token)
                     .getBody();
 
-            return new AuthTokenDetails(extractTokenIdFromClaims(claims),
+            return new AuthToken(extractTokenIdFromClaims(claims),
                     extractUsernameFromClaims(claims),
                     extractAuthoritiesFromClaims(claims),
                     extractIssuedDateFromClaims(claims),
@@ -85,6 +72,19 @@ public class AuthTokenServiceImpl implements AuthTokenService {
         } catch (Exception e) {
             throw new InvalidAuthTokenException("Invalid token", e);
         }
+    }
+
+    private String createToken(AuthToken authToken) {
+        return Jwts.builder()
+                .setId(authToken.getId())
+                .setIssuer(settings.getIssuer())
+                .setAudience(settings.getAudience())
+                .setSubject(authToken.getEmail())
+                .setIssuedAt(Date.from(authToken.getIssuedDate().toInstant()))
+                .setExpiration(Date.from(authToken.getExpirationDate().toInstant()))
+                .claim(settings.getAuthoritiesClaimName(), authToken.getRoles())
+                .signWith(SignatureAlgorithm.HS512, settings.getSecret())
+                .compact();
     }
 
     private String extractTokenIdFromClaims(@NotNull Claims claims) {

@@ -10,7 +10,6 @@ import java.util.Collection;
 public class MyUserDetails extends User {
 
     //We consider the email as username
-
     private Long userId;
     private String name;
     private String surname;

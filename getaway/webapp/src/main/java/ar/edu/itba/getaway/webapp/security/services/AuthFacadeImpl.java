@@ -33,6 +33,7 @@ public class AuthFacadeImpl implements AuthFacade {
         }
     }
 
+    @Override
     public Long getCurrentUserId() {
         return getCurrentUser().getUserId();
     }

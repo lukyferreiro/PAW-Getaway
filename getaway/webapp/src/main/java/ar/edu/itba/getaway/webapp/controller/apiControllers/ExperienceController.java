@@ -144,7 +144,10 @@ public class ExperienceController {
     // Endpoint para crear una experiencia
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response registerExperience(@Valid final NewExperienceDto experienceDto) throws DuplicateExperienceException {
+    public Response registerExperience(
+            @Valid final NewExperienceDto experienceDto
+    ) throws DuplicateExperienceException {
+
         LOGGER.info("Called /experiences/ POST");
 
         if (experienceDto == null) {
@@ -175,7 +178,10 @@ public class ExperienceController {
     @GET
     @Path("/experience/{experienceId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getExperienceId(@PathParam("experienceId") final long id) {
+    public Response getExperienceId(
+            @PathParam("experienceId") final long id
+    ) {
+
         LOGGER.info("Called /experiences/{} GET", id);
 
         final UserModel user = authFacade.getCurrentUser();
@@ -192,7 +198,9 @@ public class ExperienceController {
     public Response updateExperience(
             @Context final HttpServletRequest request,
             @Valid NewExperienceDto experienceDto,
-            @PathParam("experienceId") final long id) {
+            @PathParam("experienceId") final long id
+    ) {
+
         LOGGER.info("Called /experiences/{} PUT", id);
 
         if (request.getContentLength() == -1 || request.getContentLength() > maxRequestSize) {
@@ -227,7 +235,10 @@ public class ExperienceController {
     @DELETE
     @Path("/experience/{experienceId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response deleteExperience(@PathParam("experienceId") final long id) {
+    public Response deleteExperience(
+            @PathParam("experienceId") final long id
+    ) {
+
         final UserModel user = authFacade.getCurrentUser();
         final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
 
@@ -245,7 +256,10 @@ public class ExperienceController {
     @GET
     @Path("/experience/{experienceId}/experienceImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON})
-    public Response getExperienceImage(@PathParam("experienceId") final long id, @Context Request request) {
+    public Response getExperienceImage(
+            @PathParam("experienceId") final long id,
+            @Context Request request
+    ) {
 
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(UserNotFoundException::new);
         final ImageModel img = experience.getExperienceImage();
@@ -273,7 +287,8 @@ public class ExperienceController {
     public Response updateExperienceImage(
             @PathParam("experienceId") long id,
             @FormDataParam("experienceImage") final FormDataBodyPart experienceImageBody,
-            @Size(max = 1024 * 1024) @FormDataParam("experienceImage") byte[] experienceImageBytes) {
+            @Size(max = 1024 * 1024) @FormDataParam("experienceImage") byte[] experienceImageBytes
+    ) {
 
         if (experienceImageBody == null) {
             throw new ContentExpectedException();
@@ -300,6 +315,7 @@ public class ExperienceController {
             @PathParam("experienceId") final long id,
             @QueryParam("page") @DefaultValue("1") int page
     ) {
+
         LOGGER.info("Called /experiences/{}/reviews GET", id);
         final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
         Page<ReviewModel> reviewModelList = reviewService.getReviewAndUser(experienceModel, page);
@@ -318,7 +334,11 @@ public class ExperienceController {
     @POST
     @Path("/experience/{experienceId}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createExperienceReview(@PathParam("experienceId") final long id, @Valid NewReviewDto newReviewDto) {
+    public Response createExperienceReview(
+            @PathParam("experienceId") final long id,
+            @Valid NewReviewDto newReviewDto
+    ) {
+
         LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
         //TODO: check usage of localdate.now()
 
@@ -333,7 +353,10 @@ public class ExperienceController {
     @PUT
     @Path("/experience/{experienceId}/{set}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response favExperience(@PathParam("experienceId") final long id, @PathParam("set") final boolean set) {
+    public Response favExperience(
+            @PathParam("experienceId") final long id,
+            @PathParam("set") final boolean set
+    ) {
         LOGGER.info("Called /experiences/{} GET", id);
 
         final UserModel user = authFacade.getCurrentUser();

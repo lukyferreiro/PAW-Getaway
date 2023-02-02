@@ -135,8 +135,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 //TODO check si esto va
-//                .and()
-//                    .headers().cacheControl().disable()
+                .and()
+                    .headers().cacheControl().disable()
                 .and().authorizeRequests()
                 //------------------- /users -------------------
                     //anonymous porque sino no se puede acceder a boton register

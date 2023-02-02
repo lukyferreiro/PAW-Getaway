@@ -4,7 +4,7 @@ import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.webapp.security.exceptions.InvalidUsernamePasswordException;
-import ar.edu.itba.getaway.webapp.security.models.AuthTokenDetails;
+import ar.edu.itba.getaway.webapp.security.models.AuthToken;
 import ar.edu.itba.getaway.webapp.security.models.BasicAuthToken;
 import ar.edu.itba.getaway.webapp.security.services.AuthTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Component
 public class BasicAuthProvider implements AuthenticationProvider {
 
+    //TODO aca creo que deberia ser MyUserDetailsService
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -56,7 +57,7 @@ public class BasicAuthProvider implements AuthenticationProvider {
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(credentials[0]);
         final String authenticationToken = tokenService.issueToken(credentials[0], mapToAuthority(userDetails.getAuthorities()));
-        final AuthTokenDetails tokenDetails = tokenService.parseToken(authenticationToken);
+        final AuthToken tokenDetails = tokenService.parseToken(authenticationToken);
         final BasicAuthToken trustedAuth = new BasicAuthToken(credentials[0], credentials[1], userDetails.getAuthorities(), tokenDetails);
         trustedAuth.setToken(authenticationToken);
         return trustedAuth;

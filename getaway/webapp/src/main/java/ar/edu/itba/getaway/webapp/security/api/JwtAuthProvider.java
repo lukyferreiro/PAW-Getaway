@@ -1,6 +1,6 @@
 package ar.edu.itba.getaway.webapp.security.api;
 
-import ar.edu.itba.getaway.webapp.security.models.AuthTokenDetails;
+import ar.edu.itba.getaway.webapp.security.models.AuthToken;
 import ar.edu.itba.getaway.webapp.security.models.JwtAuthToken;
 import ar.edu.itba.getaway.webapp.security.services.AuthTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +17,16 @@ public class JwtAuthProvider implements AuthenticationProvider {
     @Autowired
     private AuthTokenService authenticationTokenService;
 
+    //TODO aca creo que deberia ser MyUserDetailsService
     @Autowired
     private UserDetailsService userDetailsService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         final String token = (String) authentication.getCredentials();
-        final AuthTokenDetails authTokenDetails = authenticationTokenService.parseToken(token);
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authTokenDetails.getUsername());
-        return new JwtAuthToken(userDetails, authTokenDetails, userDetails.getAuthorities());
+        final AuthToken authToken = authenticationTokenService.parseToken(token);
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authToken.getEmail());
+        return new JwtAuthToken(userDetails, authToken, userDetails.getAuthorities());
     }
 
     @Override
