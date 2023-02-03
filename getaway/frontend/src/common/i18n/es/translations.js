@@ -22,12 +22,26 @@ export const TRANSLATIONS_ES = {
         loginDescription: "New experiences every day",
         newUser: "New to Getaway?",
         password:"Password",
+        confirmPassword:"Confirm password",
         profile: "My profile",
         experiences: "My experiences",
         favourites: "My favourites",
         reviews: "My reviews",
         rememberMe: "Remember me",
         logout: "Log out",
+        resetPasswordTitle:"Enter your email and get a link to recover your password",
+        resetPasswordButton:"Send",
+        createAccountPopUp: "Create your account",
+        createAccountDescription: "Add your info in order to start creating your experiences and reviews",
+        max: "(Max {{num}})",
+        name: "Name",
+        surname: "Surname",
+        createButton: "Create account",
+        emailPlaceholder:"jhondoe@example.com",
+        namePlaceholder:"Jhon",
+        surnamePlaceholder:"Doe",
+        passwordPlaceholder:"Between 8 and 25 characters"
+
     },
 
     Filters: {

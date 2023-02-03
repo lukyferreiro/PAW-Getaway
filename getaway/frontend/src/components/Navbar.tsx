@@ -23,7 +23,9 @@ export default function Navbar() {
     const isProvider = true;
     const isVerified = true;
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpenSignIn, setIsOpenSignIn] = useState(false);
+    const [isOpenPassword, setIsOpenPassword] = useState(false);
+    const [isOpenCreate, setIsOpenCreate] = useState(false);
 
 
 
@@ -74,18 +76,17 @@ export default function Navbar() {
 
                     {!isLogged &&
                     //<Link to="/login">
-                        <button type="button" className="btn button-primary" onClick={() => setIsOpen(true)}>
+                        <button type="button" className="btn button-primary" onClick={() => setIsOpenSignIn(true)}>
                             {t('Navbar.login')}
                         </button>
                     //</Link>
                     }
-                    {isOpen && (
                         <Modal
                             style={{overlay:{zIndex:100}}}
                             className="modal-pop-up"
-                            isOpen={isOpen}
+                            isOpen={isOpenSignIn}
                             contentLabel="PopUpSignIn"
-                            onRequestClose={() => setIsOpen(false)}
+                            onRequestClose={() => setIsOpenSignIn(false)}
                         >
                             <div
                                 className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
@@ -137,12 +138,15 @@ export default function Navbar() {
                                                                 </div>
                                                                 <div
                                                                     className="col-6 px-0 d-flex justify-content-end form-label">
-                                                                    <Link to="/user/resetPasswordRequest"
+                                                                    <div className="link-primary" onClick={() => {
+                                                                        setIsOpenSignIn(false)
+                                                                        setIsOpenPassword(true)
+                                                                    }}
                                                                        tabIndex={-1}>
-                                           <span className="text-right" style={{fontSize: "medium" }} onClick={() => setIsOpen(false)}>
+                                           <span className="text-right" style={{fontSize: "medium" }} onClick={() => setIsOpenSignIn(false)}>
                                                {t('Navbar.forgotPassword')}
                                            </span>
-                                                                    </Link>
+                                                                    </div>
                                                                 </div>
                                                                 <div
                                                                     className="col-12 px-0 d-flex justify-content-start align-items-center">
@@ -191,16 +195,244 @@ export default function Navbar() {
                                         <div className="col-12 mt-4">
                                             <p className="mb-0 text-center">
                                                 {t('Navbar.newUser')}
-                                                <Link to="/register" onClick={() => setIsOpen(false)}>
+                                                <div className="link-primary form-label" onClick={() => {
+                                                    setIsOpenSignIn(false)
+                                                    setIsOpenCreate(true)
+                                                }}
+                                                     tabIndex={-1}>
                                                     {t('Navbar.createAccount')}
-                                                </Link>
+                                                </div>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </Modal>
-                    )}
+
+                        <Modal
+                            style={{overlay:{zIndex:100}}}
+                            className="modal-pop-up"
+                            isOpen={isOpenPassword}
+                            contentLabel="PopUpPassword"
+                            onRequestClose={() => setIsOpenPassword(false)}
+                        >
+                            <div
+                                className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
+                                    <div
+                                        className="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">
+                                        <div className="col-12">
+                                            <h1 className="text-center title">
+                                                {t('Navbar.resetPasswordTitle')}
+                                            </h1>
+                                        </div>
+                                        <div className="col-12">
+                                            <div className="container-fluid">
+                                                <div className="row">
+                                                    {/*<form id="passResetRequest"*/}
+                                                    {/*           modelAttribute="resetPasswordEmailForm"*/}
+                                                    {/*           action="${postUrl}"*/}
+                                                    {/*           method="POST" acceptCharset="UTF-8">*/}
+                                                    <label className="form-label d-flex align-items-center"
+                                                           htmlFor="email">
+                                                        <img
+                                                            src={"./images/ic_user.svg"}
+                                                            alt="Imagen perfil"
+                                                            style={{marginRight: "5px"}}/>
+                                                        {t('Navbar.email')}
+                                                        <span className="required-field">*</span>
+
+                                                    </label>
+                                                    <input type="text" id="email" name="email"
+                                                           className="form-control mb-2"
+                                                           placeholder="juan@ejemplo.com"
+                                                           aria-describedby="email input"/>
+
+                                                        {/*<form:errors path="email" cssClass="form-error-label"*/}
+                                                        {/*             element="p"/>*/}
+                                                        <div
+                                                            className="col-12 mt-3 d-flex align-items-center justify-content-center">
+                                                            <button type="button" className='btn button-primary'>
+                                                            {/*<button form="passResetRequest" type="submit"*/}
+                                                            {/*        className="btn btn-continue">*/}
+                                                                {t('Navbar.resetPasswordButton')}
+                                                            </button>
+                                                        </div>
+                                                    {/*</form>*/}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </Modal>
+
+                    <Modal
+                        style={{overlay:{zIndex:100}}}
+                        className="modal-pop-up"
+                        isOpen={isOpenCreate}
+                        contentLabel="PopUpCreate"
+                        onRequestClose={() => setIsOpenCreate(false)}
+                    >
+                        <div
+                            className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
+                                <div className="row w-100 m-0 p-4 align-items-center justify-content-center">
+                                    <div className="col-12">
+                                        <h1 className="text-center title">
+                                            {t('Navbar.createAccountPopUp')}
+                                        </h1>
+                                        <p className="subtitle text-center">
+                                            {t('Navbar.createAccountDescription')}
+                                        </p>
+                                    </div>
+                                    <div className="col-12">
+                                        <div className="container-lg">
+                                            <div className="row">
+                                                {/*<c:url value="/register" var="postPath"/>*/}
+                                                {/*<form modelAttribute="registerForm" action="${postPath}"*/}
+                                                {/*           id="registerForm"*/}
+                                                {/*           method="post" acceptCharset="UTF-8">*/}
+                                                    <div className="form-group">
+                                                        <label className="form-label d-flex justify-content-between"
+                                                               htmlFor="email">
+                                                            <div>
+                                                                {t('Navbar.email')}
+                                                                <span className="required-field">*</span>
+                                                            </div>
+                                                            <div className="align-self-center">
+                                                                <h6 className="max-input-text">
+                                                                    {t('Navbar.max', {num: 255})}
+                                                                </h6>
+                                                            </div>
+                                                        </label>
+                                                        <input type="text" id="email" name="email"
+                                                               className="form-control mb-2"
+                                                               placeholder= {t('Navbar.emailPlaceholder')}
+                                                               aria-describedby="email input"
+                                                        maxLength={255}/>
+                                                        {/*<form:errors path="email" cssClass="form-error-label"*/}
+                                                        {/*             element="p"/>*/}
+                                                    </div>
+
+                                                    <div className="form-group">
+                                                        <label htmlFor="name"
+                                                                    className="form-label d-flex justify-content-between">
+                                                            <div>
+                                                                {t('Navbar.name')}
+                                                                <span className="required-field">*</span>
+                                                            </div>
+                                                            <div className="align-self-center">
+                                                                <h6 className="max-input-text">
+                                                                    {t('Navbar.max', {num: 50})}
+                                                                </h6>
+                                                            </div>
+                                                        </label>
+
+                                                        <input maxLength={50} type="text" name="name" id="name"
+                                                                    className="form-control"
+                                                               placeholder= {t('Navbar.namePlaceholder')}/>
+                                                        {/*<form:errors path="name" cssClass="form-error-label"*/}
+                                                        {/*             element="p"/>*/}
+                                                    </div>
+
+                                                    <div className="form-group">
+                                                        <label htmlFor="surname"
+                                                                    className="form-label d-flex justify-content-between">
+                                                            <div>
+                                                                {t('Navbar.surname')}
+                                                                <span className="required-field">*</span>
+                                                            </div>
+                                                            <div className="align-self-center">
+                                                                <h6 className="max-input-text">
+                                                                    {t('Navbar.max', {num: 50})}
+                                                                </h6>
+                                                            </div>
+                                                        </label>
+                                                        <input maxLength={50} type="text" name="surname" id="surname"
+                                                                    className="form-control"
+                                                               placeholder= {t('Navbar.surnamePlaceholder')}
+                                                        />
+                                                        {/*<form:errors path="surname" cssClass="form-error-label"*/}
+                                                        {/*             element="p"/>*/}
+                                                    </div>
+
+                                                    <div className="form-group">
+                                                        <label htmlFor="password"
+                                                                    className="form-label d-flex justify-content-between">
+                                                            <div>
+                                                                {t('Navbar.password')}
+                                                                <span className="required-field">*</span>
+                                                            </div>
+                                                            <div className="align-self-center">
+                                                                <h6 className="max-input-text">
+                                                                    {t('Navbar.max', {num: 25})}
+                                                                </h6>
+                                                            </div>
+                                                        </label>
+                                                        <div
+                                                            className="input-group d-flex justify-content-start align-items-center">
+                                                            <input type="password"
+                                                                   className="form-control"
+                                                                   id="password1" name="password"
+                                                                        aria-describedby="password input"
+                                                                   placeholder= {t('Navbar.passwordPlaceholder')}
+                                                            />
+                                                            <div className="input-group-append">
+                                                                {/*<button id="passwordEye1" type="button" tabIndex={-1}*/}
+                                                                {/*        className="btn btn-lg form-control btn-eye input-group-text">*/}
+                                                                {/*    <i id="eye1" className="far fa-eye-slash"></i>*/}
+                                                                {/*</button>*/}
+                                                            </div>
+                                                        </div>
+                                                        {/*<form:errors path="password" cssClass="form-error-label"*/}
+                                                        {/*             element="p"/>*/}
+                                                    </div>
+
+                                                    <div className="form-group">
+                                                        <label htmlFor="confirmPassword" className="form-label">
+                                                            {t('Navbar.confirmPassword')}
+                                                            <span className="required-field">*</span>
+                                                        </label>
+                                                        <div
+                                                            className="input-group d-flex justify-content-start align-items-center">
+                                                            <input type="password"
+                                                                   className="form-control"
+                                                                   id="password2" name="confirmPassword"
+                                                                        aria-describedby="password input"/>
+                                                            <div className="input-group-append">
+                                                                {/*<button id="passwordEye2" type="button" tabIndex="-1"*/}
+                                                                {/*        className="btn btn-lg form-control btn-eye input-group-text">*/}
+                                                                {/*    <i id="eye2" className="far fa-eye-slash"></i>*/}
+                                                                {/*</button>*/}
+                                                            </div>
+                                                        </div>
+                                                        {/*<form:errors path="confirmPassword" cssClass="form-error-label"*/}
+                                                        {/*             element="p"/>*/}
+                                                    </div>
+
+                                                    <div className="form-group">
+                                                        {/*<spring:hasBindErrors name="registerForm">*/}
+                                                        {/*    <c:if test="${errors.globalErrorCount > 0}">*/}
+                                                        {/*        <div className="alert alert-danger">*/}
+                                                        {/*            <form:errors/>*/}
+                                                        {/*        </div>*/}
+                                                        {/*    </c:if>*/}
+                                                        {/*</spring:hasBindErrors>*/}
+                                                    </div>
+
+                                                    <div
+                                                        className="col-12 px-0 d-flex align-items-center justify-content-center">
+                                                        <button type="button" id="registerFormButton"
+                                                                form="registerForm"
+                                                                className="w-100 btn-create-account my-2 ">
+                                                            {t('Navbar.createAccount')}
+                                                        </button>
+                                                    </div>
+                                                {/*</form>*/}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </Modal>
                     {isLogged &&
                     <div className="dropdown">
                         <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
