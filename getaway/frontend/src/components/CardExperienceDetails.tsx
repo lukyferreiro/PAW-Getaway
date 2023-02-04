@@ -9,7 +9,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import {CategoryModel, ExperienceModel} from "../types";
 
-export default function CardExperienceDetails(props: { experience: ExperienceModel; categoryModel:CategoryModel;}) {
+export default function CardExperienceDetails(props: { experience: ExperienceModel; categoryModel: CategoryModel; }) {
 
     const {experience, categoryModel} = props
     const {t} = useTranslation();
@@ -21,21 +21,21 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 <div className="d-flex flex-column">
                     <div className="p-2" style={{width: "600px"}}>
                         {hasImage &&
-                        <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "550px"}}
-                             src={`/experiences/${experience.experienceId}/image.svg`} alt="Imagen"/>}
+                            <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "550px"}}
+                                 src={`/experiences/${experience.experienceId}/image.svg`} alt="Imagen"/>}
                         {!hasImage &&
-                        <div>
-                            <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "450px"}}
-                                 src={`./images/${categoryModel.name}.svg`} alt={`${categoryModel.name}`}/>
-                            <h5 className="mt-3 text-center">
-                                {t('ExperienceDetail.imageDefault')}
-                            </h5>
-                        </div>
+                            <div>
+                                <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "450px"}}
+                                     src={`./images/${categoryModel.name}.svg`} alt={`${categoryModel.name}`}/>
+                                <h5 className="mt-3 text-center">
+                                    {t('ExperienceDetail.imageDefault')}
+                                </h5>
+                            </div>
                         }
 
                     </div>
                 </div>
-                <div style={{flex:"5", minWidth: "350px"}}>
+                <div style={{flex: "5", minWidth: "350px"}}>
                     <div className="row">
                         <div className="col-3 p-0"></div>
                         <div className="card-body col-7 h-100">
@@ -57,14 +57,14 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                     {/*    <spring:message code="experienceDetail.price.noPrice"/>*/}
                                     {/*</c:when>*/}
                                     {experience.price == 0 &&
-                                    <h5>
-                                        {t('ExperienceDetail.priceFree')}
-                                    </h5>
+                                        <h5>
+                                            {t('ExperienceDetail.priceFree')}
+                                        </h5>
                                     }
                                     {experience.price > 0 &&
-                                    <h5>
-                                        $ {experience.price}
-                                    </h5>
+                                        <h5>
+                                            $ {experience.price}
+                                        </h5>
                                     }
                                 </p>
                             </div>
@@ -75,14 +75,14 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                 </h5>
                                 <p className="information-text" id="experienceDescription">
                                     {experience.description == '' &&
-                                    <div>
-                                        {t('ExperienceDetail.noData')}
-                                    </div>
+                                        <div>
+                                            {t('ExperienceDetail.noData')}
+                                        </div>
                                     }
                                     {experience.description != '' &&
-                                    <div>
-                                        {experience.description}
-                                    </div>}
+                                        <div>
+                                            {experience.description}
+                                        </div>}
                                 </p>
                             </div>
 
@@ -91,16 +91,16 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                     {t('ExperienceDetail.url')}
                                 </h5>
                                 {experience.siteUrl == '' &&
-                                <p className="information-text">
-                                    {t('ExperienceDetail.noData')}
-                                </p>
+                                    <p className="information-text">
+                                        {t('ExperienceDetail.noData')}
+                                    </p>
                                 }
                                 {experience.siteUrl != '' &&
-                                <Link to={experience.siteUrl}>
-                                    <p className="information-text">
-                                        {experience.siteUrl}
-                                    </p>
-                                </Link>
+                                    <Link to={experience.siteUrl}>
+                                        <p className="information-text">
+                                            {experience.siteUrl}
+                                        </p>
+                                    </Link>
                                 }
                             </div>
 
@@ -128,49 +128,49 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
             </div>
 
             {!experience.observable &&
-            <div className="my-1 d-flex justify-content-center align-content-center">
-                <h6 className="obs-info">
-                    {t('ExperienceDetail.notVisible')}
-                </h6>
-            </div>
+                <div className="my-1 d-flex justify-content-center align-content-center">
+                    <h6 className="obs-info">
+                        {t('ExperienceDetail.notVisible')}
+                    </h6>
+                </div>
             }
 
             {isEditing &&
-            <div className="btn-group my-2 d-flex justify-content-center align-content-center" role="group">
-                {experience.observable &&
-                <div>
-                    {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
-                    {/*   ${false}"/> </c:url>">*/}
-                    <IconButton aria-label="visibilityOn" component="span" style={{fontSize: "xxx-large"}} id="setFalse">
-                        <VisibilityIcon/>
+                <div className="btn-group my-2 d-flex justify-content-center align-content-center" role="group">
+                    {experience.observable &&
+                        <div>
+                            {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
+                            {/*   ${false}"/> </c:url>">*/}
+                            <IconButton aria-label="visibilityOn" component="span" style={{fontSize: "xxx-large"}} id="setFalse">
+                                <VisibilityIcon/>
+                            </IconButton>
+                            {/*</a>*/}
+                        </div>
+
+                    }
+                    {!experience.observable &&
+                        <div>
+                            {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
+                            {/*   ${true}"/> </c:url>">*/}
+                            <IconButton aria-label="visibilityOff" component="span" style={{fontSize: "xx-large"}} id="setTrue">
+                                <VisibilityOffIcon/>
+                            </IconButton>
+                            {/*</a>  */}
+                        </div>
+
+                    }
+
+                    {/*<a href="<c:url value="/user/experiences/edit/${param.id}"/>">*/}
+                    <IconButton aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
+                        <EditIcon/>
+                    </IconButton>
+                    {/*</a>*/}
+                    {/*<a href="<c:url value="/user/experiences/delete/${param.id}"/>">*/}
+                    <IconButton aria-label="trash" component="span" style={{fontSize: "xx-large"}}>
+                        <DeleteIcon/>
                     </IconButton>
                     {/*</a>*/}
                 </div>
-
-                }
-                {!experience.observable &&
-                <div>
-                    {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
-                    {/*   ${true}"/> </c:url>">*/}
-                    <IconButton aria-label="visibilityOff" component="span" style={{fontSize: "xx-large"}} id="setTrue">
-                        <VisibilityOffIcon/>
-                    </IconButton>
-                    {/*</a>  */}
-                </div>
-
-                }
-
-                {/*<a href="<c:url value="/user/experiences/edit/${param.id}"/>">*/}
-                <IconButton aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
-                    <EditIcon />
-                </IconButton>
-                {/*</a>*/}
-                {/*<a href="<c:url value="/user/experiences/delete/${param.id}"/>">*/}
-                <IconButton aria-label="trash" component="span" style={{fontSize: "xx-large"}}>
-                    <DeleteIcon />
-                </IconButton>
-                {/*</a>*/}
-            </div>
             }
         </div>
     );

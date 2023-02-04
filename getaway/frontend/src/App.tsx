@@ -12,7 +12,6 @@ import ExperienceDetails from "./pages/ExperienceDetails";
 import CreateExperience from "./pages/CreateExperience";
 import Error from "./pages/Error";
 import Custom404 from "./pages/Custom404";
-import Login from "./pages/Login";
 import Register from "./pages/Register";
 
 import Navbar from "./components/Navbar";
@@ -43,7 +42,6 @@ function App() {
                     <Route path='error' element={<Error/>}/>
                     <Route path='*' element={<Custom404/>}/>
                 </Route>
-                <Route path='/login' element={<Login/>}/>
                 <Route path='/register' element={<Register/>}/>
             </Routes>
 

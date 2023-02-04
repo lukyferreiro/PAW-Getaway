@@ -11,7 +11,6 @@ export async function getPagedFetch<RetType>(
         const response = await authedFetch(urlPaged.toString(), {
             method: "GET",
         });
-
         const parsedResponse = await checkError<RetType>(response);
         const maxPage = response.headers.get("x-total-pages");
         return Result.ok(
@@ -22,10 +21,7 @@ export async function getPagedFetch<RetType>(
     }
 }
 
-function pageUrlMaker(
-    path: string,
-    page?: number,
-): URL {
+function pageUrlMaker(path: string, page?: number): URL {
     let url = new URL(path);
     if (page) {
         url.searchParams.append("page", page.toString());

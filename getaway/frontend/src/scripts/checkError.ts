@@ -10,16 +10,15 @@ export function checkError<RetType>(response: Response): Promise<RetType> {
         localStorage.removeItem("token");
         const basic = getCookie("basic-token");
         if (basic) {
-            authedFetch(response.url, {
-                headers: {Authorization: `Basic ${basic}`},
-            }).then((newResponse) => {
-                response = newResponse;
-                const token = newResponse.headers
-                    .get("Authorization")
-                    ?.toString()
-                    .split(" ")[1];
-                if (token) localStorage.setItem("token", token);
-                return handleResponseStatus(response);
+            authedFetch(response.url, {headers: {Authorization: `Basic ${basic}`},})
+                .then((newResponse) => {
+                    response = newResponse;
+                    const token = newResponse.headers
+                        .get("Authorization")?.toString().split(" ")[1];
+                    if (token){
+                        localStorage.setItem("token", token);
+                    }
+                    return handleResponseStatus(response);
             });
         }
     }

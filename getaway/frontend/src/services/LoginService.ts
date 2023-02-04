@@ -18,13 +18,8 @@ export class LoginService {
                     Authorization: "Basic " + hash,
                 },
             });
-
             const parsedResponse = await checkError<UserModel>(response);
-            parsedResponse.token = response.headers
-                .get("Authorization")
-                ?.toString()
-                .split(" ")[1];
-
+            parsedResponse.token = response.headers.get("Authorization")?.toString().split(" ")[1];
             return Result.ok(parsedResponse as UserModel);
         } catch (error: any) {
             return Result.failed(

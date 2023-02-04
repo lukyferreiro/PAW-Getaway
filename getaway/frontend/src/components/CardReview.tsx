@@ -4,7 +4,7 @@ import CountryModel from "../types/CountryModel";
 import CityModel from "../types/CityModel";
 import {CategoryModel, ExperienceModel, ReviewModel} from "../types";
 import UserModel from "../types/UserModel";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import React from "react";
@@ -57,7 +57,8 @@ export default function CardReview() {
             observable: true,
             views: 200,
             score: 5,
-            reviewsCount: 0}
+            reviewsCount: 0
+        }
 
     const reviewModel: ReviewModel = {
         reviewId: 1,
@@ -75,28 +76,33 @@ export default function CardReview() {
     return (
         <div className="card m-2">
             {isEditing &&
-            <div className="card-title m-2 d-flex justify-content-center align-content-center">
-    {/*            <a href="<c:url value="/experiences/${param.experienceCategory}/${param.experienceId}">*/}
-    {/*<c:param name=" view" value=" ${true}"/> </c:url>">*/}
+                <div className="card-title m-2 d-flex justify-content-center align-content-center">
+                    {/*            <a href="<c:url value="/experiences/${param.experienceCategory}/${param.experienceId}">*/}
+                    {/*<c:param name=" view" value=" ${true}"/> </c:url>">*/}
                     <h4 className="text-center"
-                        style={{fontWeight: "bold", textDecoration: "underline", wordBreak: "break-all", color:"black"}}>
+                        style={{
+                            fontWeight: "bold",
+                            textDecoration: "underline",
+                            wordBreak: "break-all",
+                            color: "black"
+                        }}>
                         {experience.name}
                     </h4>
-                {/*</a>*/}
+                    {/*</a>*/}
 
-            </div>
+                </div>
             }
 
             <div className="card-title m-2 d-flex justify-content-between">
                 <div className="d-flex">
                     {hasImage &&
-                    <img className="user-img" src="<c:url value='/user/profileImage/${param.profileImageId}'/>"
-                         alt="Imagen"
-                         style={{marginRight: "8px"}}/>
+                        <img className="user-img" src="<c:url value='/user/profileImage/${param.profileImageId}'/>"
+                             alt="Imagen"
+                             style={{marginRight: "8px"}}/>
                     }
                     {!hasImage &&
-                    <img className="user-img"
-                         src="./images/user_default.png" alt="Imagen"/>
+                        <img className="user-img"
+                             src="./images/user_default.png" alt="Imagen"/>
                     }
 
                     <div className="d-flex flex-column justify-content-center align-content-center">
@@ -109,9 +115,9 @@ export default function CardReview() {
                     </div>
                 </div>
                 <div className="my-2 d-flex">
-                {/*<jsp:include page="/WEB-INF/components/starAvg.jsp">*/}
-                {/*<jsp:param name="avgReview" value="${param.score}"/>*/}
-                {/*</jsp:include>*/}
+                    {/*<jsp:include page="/WEB-INF/components/starAvg.jsp">*/}
+                    {/*<jsp:param name="avgReview" value="${param.score}"/>*/}
+                    {/*</jsp:include>*/}
                 </div>
             </div>
 
@@ -137,12 +143,12 @@ export default function CardReview() {
                      role="group">
                     {/*<a href="<c:url value="/user/reviews/edit/${param.reviewId}"/>">*/}
                     <IconButton aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
-                        <EditIcon />
+                        <EditIcon/>
                     </IconButton>
                     {/*</a>*/}
                     {/*<a href="<c:url value="/user/reviews/delete/${param.reviewId}"/>">*/}
                     <IconButton aria-label="trash" component="span" style={{fontSize: "xx-large"}}>
-                        <DeleteIcon />
+                        <DeleteIcon/>
                     </IconButton>
                     {/*</a>*/}
                 </div>
