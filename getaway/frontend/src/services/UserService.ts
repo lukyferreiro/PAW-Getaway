@@ -55,6 +55,24 @@ export class UserService {
         });
     }
 
+    public async updateUserInfoById(
+        userId: number,
+        name?: string,
+        surname?: string
+    ) : Promise<Result<PutResponse>>{
+        const userToUpdate = JSON.stringify({
+            name: name,
+            surname: surname
+        });
+        return resultFetch<PutResponse> (this.basePath + "/" + userId, {
+            method: "PUT",
+            headers: {
+                "Content-Type": APPLICATION_JSON_TYPE,
+            },
+            body: userToUpdate,
+        });
+    }
+
     public async getUserProfileImage(userId: number): Promise<Result<Blob>> {
         return getImageFetch(this.basePath + "/" + userId + "/profileImage");
     }
@@ -109,10 +127,66 @@ export class UserService {
 
     }
 
+    public async verifyUser(
+        token?: string
+    ) : Promise<Result<PutResponse>> {
+        const url = new URL(this.basePath + "/emailVerification" );
+        if (typeof token === "string") {
+            url.searchParams.append("token", token);
+        }
+        return resultFetch<PutResponse>(url.toString(), {
+            method: "PUT",
+            headers: {},
+            body: {},
+        });
+    }
 
-    //  TODO
-    // PUT /userId
-    // PUT y POST de /emailVerification
-    // PUT y POST de /passwordReset
+    public async sendNewVerifyUserEmail(
+    ) : Promise<Result<PostResponse>> {
+        const url = new URL(this.basePath + "/emailVerification" );
+        return resultFetch<PostResponse>(url.toString(), {
+            method: "POST",
+            headers: {},
+            body: {},
+        });
+    }
+
+    public async resetPassword(
+        token?: string,
+        password?: string
+    ) : Promise<Result<PutResponse>> {
+        const url = new URL(this.basePath + "/passwordReset" );
+        const newPassword = JSON.stringify({
+            password: password
+        });
+        if (typeof token === "string") {
+            url.searchParams.append("token", token);
+        }
+        return resultFetch<PutResponse>(url.toString(), {
+            method: "PUT",
+            headers: {
+                "Content-Type": APPLICATION_JSON_TYPE,
+            },
+            body: newPassword,
+        });
+    }
+
+    public async sendPasswordResetEmail(
+        email?: string
+    ) : Promise<Result<PostResponse>> {
+        const url = new URL(this.basePath + "/passwordReset" );
+        const emailToSend = JSON.stringify({
+            email: email
+        });
+        return resultFetch<PostResponse>(url.toString(), {
+            method: "POST",
+            headers: {
+                "Content-Type": APPLICATION_JSON_TYPE,
+            },
+            body: emailToSend,
+        });
+    }
+
+    //TODO: check send password encrypted
 
 }

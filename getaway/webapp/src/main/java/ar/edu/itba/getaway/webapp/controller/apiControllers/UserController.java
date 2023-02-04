@@ -124,8 +124,6 @@ public class UserController {
 
         final UserModel user = authFacade.getCurrentUser();
 
-        // TODO: check if useless due to antmatcher
-        //        assureUserResourceCorrelation(user, id);
         userService.updateUserInfo(user, new UserInfo(userInfoDto.getName(), userInfoDto.getSurname()));
 
         return Response.ok().build();
@@ -137,19 +135,14 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON,})
     @Path("/emailVerification")
     public Response verifyUser(
-            @Valid final TokenDto tokenDto
+            @QueryParam("token") final String token
     ) {
 
         LOGGER.info("Called /users/emailVerification PUT");
 
-        if (tokenDto == null) {
-            throw new ContentExpectedException();
-        }
+        final UserModel user = userService.verifyAccount(token).orElseThrow(UserNotFoundException::new);
 
-        final UserModel user = userService.verifyAccount(tokenDto.getToken()).orElseThrow(UserNotFoundException::new);
-
-        //TODO: maybe return user
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     //Endpoint para la verificacion del mail
@@ -162,6 +155,27 @@ public class UserController {
         final UserModel user = authFacade.getCurrentUser();
 
         userService.resendVerificationToken(user);
+
+        return Response.noContent().build();
+    }
+
+    //Endpoint para resetear la contraseña
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/passwordReset")
+    public Response resetPassword(
+            @QueryParam("token") final String token,
+            @Valid final PasswordResetDto passwordResetDto
+    ) {
+
+        LOGGER.info("Called /users/passwordReset PUT");
+
+        if (passwordResetDto == null) {
+            throw new ContentExpectedException();
+        }
+
+        userService.updatePassword(token, passwordResetDto.getPassword()).orElseThrow(UserNotFoundException::new);
 
         return Response.noContent().build();
     }
@@ -185,26 +199,6 @@ public class UserController {
         LOGGER.info(passwordResetEmailDto.getEmail());
         UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
         userService.generateNewPassword(user);
-
-        return Response.noContent().build();
-    }
-
-    //Endpoint para resetear la contraseña
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/passwordReset")
-    public Response resetPassword(
-            @Valid final PasswordResetDto passwordResetDto
-    ) {
-
-        LOGGER.info("Called /users/passwordReset PUT");
-
-        if (passwordResetDto == null) {
-            throw new ContentExpectedException();
-        }
-
-        userService.updatePassword(passwordResetDto.getToken(), passwordResetDto.getPassword()).orElseThrow(UserNotFoundException::new);
 
         return Response.noContent().build();
     }

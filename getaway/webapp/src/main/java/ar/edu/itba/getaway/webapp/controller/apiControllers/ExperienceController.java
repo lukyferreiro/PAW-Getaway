@@ -7,7 +7,6 @@ import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.controller.apiControllers.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
-import ar.edu.itba.getaway.webapp.dto.response.CityDto;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
@@ -373,7 +372,6 @@ public class ExperienceController {
         return Response.created(ReviewDto.getReviewUriBuilder(reviewModel, uriInfo).build()).build();
     }
 
-    //TODO:chcek
     @PUT
     @Path("/experience/{experienceId}/fav")
     @Produces(value = {MediaType.APPLICATION_JSON})

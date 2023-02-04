@@ -12,9 +12,6 @@ public class PasswordResetDto {
     @Pattern(regexp = "^[A-Za-z0-9@$!%*#?&_]*$")
     private String password;
 
-    @NotEmpty
-    private String token;
-
     public String getPassword() {
         return password;
     }
@@ -22,13 +19,4 @@ public class PasswordResetDto {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
 }
