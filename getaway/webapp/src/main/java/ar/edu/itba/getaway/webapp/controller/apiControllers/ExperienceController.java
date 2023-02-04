@@ -7,6 +7,7 @@ import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.controller.apiControllers.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
+import ar.edu.itba.getaway.webapp.dto.response.CityDto;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
@@ -72,7 +73,9 @@ public class ExperienceController {
             landingPageList = experienceService.getExperiencesListByCategories(user);
         }
 
-        //TODO: ver como devolver lista de lista
+//        Collection<Collection<ExperienceDto>> experienceListsDtos = ExperienceDto.mapExperienceToDto(landingPageList);
+//
+//        return Response.ok(new GenericEntity<Collection<CityDto>>(citiesDtos) {}).build();
         return Response.ok().build();
     }
 

@@ -28,6 +28,10 @@ public class ExperienceDto implements Serializable {
     private CategoryModel category;
     private boolean isFav;
 
+    public static Collection<Collection<ExperienceDto>> mapExperienceListToDto (Collection<Collection<ExperienceModel>> experiences, UriInfo uriInfo) {
+        return null;
+    }
+
     public static Collection<ExperienceDto> mapExperienceToDto(Collection<ExperienceModel> experiences, UriInfo uriInfo) {
         return experiences.stream().map(exp -> new ExperienceDto(exp, uriInfo)).collect(Collectors.toList());
     }
