@@ -1,6 +1,6 @@
 import {useAuth} from "../hooks/useAuth"
 import {useLocation, Navigate, useNavigate, Location, To} from "react-router-dom"
-import React, {useEffect} from "react"
+import {useEffect} from "react"
 
 function getCorrectPrivilegeRoute(location: Location): To {
     const startsWithUserOrError = location.pathname.startsWith("/user") || location.pathname.startsWith("/error");

@@ -1,13 +1,11 @@
-import {useTranslation} from "react-i18next";
-import "../common/i18n/index";
+import {Outlet} from "react-router-dom";
+// @ts-ignore
 
 export default function UserPage() {
 
-    const {t} = useTranslation();
-
     return (
         <div>
-
+            <Outlet/>
         </div>
     );
 

@@ -5,10 +5,10 @@ import { setCookie } from "../scripts/cookies";
 
 export class LoginService {
     public async login(
-        username: string,
+        email: string,
         password: string
     ): Promise<Result<UserModel>> {
-        const credentials = username + ":" + password;
+        const credentials = email + ":" + password;
         const hash = btoa(credentials);
         setCookie("basic-token", hash, 7);
         try {
