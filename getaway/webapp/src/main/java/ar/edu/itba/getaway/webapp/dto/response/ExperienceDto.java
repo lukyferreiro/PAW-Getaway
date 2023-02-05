@@ -6,7 +6,9 @@ import ar.edu.itba.getaway.models.*;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ExperienceDto implements Serializable {
@@ -28,8 +30,15 @@ public class ExperienceDto implements Serializable {
     private CategoryModel category;
     private boolean isFav;
 
-    public static Collection<Collection<ExperienceDto>> mapExperienceListToDto (Collection<Collection<ExperienceModel>> experiences, UriInfo uriInfo) {
-        return null;
+    public static Collection<Collection<ExperienceDto>> mapExperienceListToDto (List<List<ExperienceModel>> experiences, UriInfo uriInfo) {
+        System.out.println("Entrando a metodo map...");
+        Collection<Collection<ExperienceDto>> toReturnList = new ArrayList<>();
+        for (Collection<ExperienceModel> subList: experiences) {
+            System.out.println("Mapeada una de las sublist");
+            toReturnList.add(mapExperienceToDto(subList, uriInfo));
+        }
+        System.out.println("Ready freddy");
+        return toReturnList;
     }
 
     public static Collection<ExperienceDto> mapExperienceToDto(Collection<ExperienceModel> experiences, UriInfo uriInfo) {
@@ -37,7 +46,7 @@ public class ExperienceDto implements Serializable {
     }
 
     public static UriBuilder getExperienceUriBuilder(ExperienceModel experience, UriInfo uriInfo) {
-        return uriInfo.getBaseUriBuilder().clone().path("experiences").path(String.valueOf(experience.getExperienceId()));
+        return uriInfo.getBaseUriBuilder().clone().path("experiences/experience").path(String.valueOf(experience.getExperienceId()));
     }
 
     public ExperienceDto() {

@@ -164,6 +164,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}/favExperiences").access("@antMatcherVoter.accessFavs(authentication, #userId)")
                 //------------------- /experiences -------------------
                     //permitAll para explorar
+                    .antMatchers(HttpMethod.GET, "/api/experiences/landingPage").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/category/{category}").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/name/{name}").permitAll()
                     //logueado y VERIFIED (rol PROVIDER) se asigna en el momento

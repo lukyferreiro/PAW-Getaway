@@ -6,14 +6,14 @@ import {authedFetch} from "../scripts/authedFetch";
 export class ReviewService {
     private readonly basePath = paths.BASE_URL + paths.REVIEWS;
 
-    public async getReviewById(reviewId:number): Promise<Result<ReviewModel>> {
+    public async getReviewById(reviewId: number): Promise<Result<ReviewModel>> {
         return resultFetch<ReviewModel>(this.basePath + "/" + reviewId, {
             method: "GET",
         });
     }
 
     public async updateReviewById(
-        reviewId:number,
+        reviewId: number,
         title?: string,
         description?: string,
         score?: string
@@ -32,7 +32,7 @@ export class ReviewService {
         });
     }
 
-    public async deleteReviewById(reviewId:number)  {
+    public async deleteReviewById(reviewId: number)  {
         return authedFetch(this.basePath + "/" + reviewId, {
             method: "DELETE",
         });

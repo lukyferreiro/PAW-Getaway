@@ -124,7 +124,6 @@ export class UserService {
             url.searchParams.append("order", order);
         }
         return getPagedFetch<ExperienceModel[]>(url.toString(), page);
-
     }
 
     public async verifyUser(
@@ -141,8 +140,7 @@ export class UserService {
         });
     }
 
-    public async sendNewVerifyUserEmail(
-    ) : Promise<Result<PostResponse>> {
+    public async sendNewVerifyUserEmail() : Promise<Result<PostResponse>> {
         const url = new URL(this.basePath + "/emailVerification" );
         return resultFetch<PostResponse>(url.toString(), {
             method: "POST",
@@ -188,5 +186,4 @@ export class UserService {
     }
 
     //TODO: check send password encrypted
-
 }

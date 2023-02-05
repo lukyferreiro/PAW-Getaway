@@ -11,13 +11,13 @@ export class LocationService {
         });
     }
 
-    public async getCitiesByCountry(countryId:number): Promise<Result<CityModel[]>> {
+    public async getCitiesByCountry(countryId: number): Promise<Result<CityModel[]>> {
         return resultFetch<CityModel[]>(this.basePath + "/" + countryId + "/cities", {
             method: "GET",
         });
     }
 
-    public async getCityById(cityId:number): Promise<Result<CityModel>> {
+    public async getCityById(cityId: number): Promise<Result<CityModel>> {
         return resultFetch<CityModel>(this.basePath + "/cities" + cityId, {
             method: "GET",
         });

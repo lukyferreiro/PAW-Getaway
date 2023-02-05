@@ -23,6 +23,7 @@ import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +57,7 @@ public class ExperienceController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
     private static final String ACCEPTED_MIME_TYPES = "image/";
 
+    //TODO: hacer andar
     // Endpoint para carousel de landing page
     @GET
     @Path("/landingPage")
@@ -69,13 +71,16 @@ public class ExperienceController {
             landingPageList = experienceService.userLandingPage(user);
         }
         else {
-            landingPageList = experienceService.getExperiencesListByCategories(user);
+            landingPageList = experienceService.getExperiencesListByCategories(null);
         }
 
-//        Collection<Collection<ExperienceDto>> experienceListsDtos = ExperienceDto.mapExperienceToDto(landingPageList);
-//
-//        return Response.ok(new GenericEntity<Collection<CityDto>>(citiesDtos) {}).build();
-        return Response.ok().build();
+        LOGGER.info("LLEGO");
+
+        Collection<Collection<ExperienceDto>> experienceListsDtos = ExperienceDto.mapExperienceListToDto(landingPageList, uriInfo);
+
+        LOGGER.info("LLEGO 2");
+
+        return Response.ok(new GenericEntity<Collection<Collection<ExperienceDto>>>(experienceListsDtos) {}).build();
     }
 
     // Endpoint para obtener las experiencias de una categoria

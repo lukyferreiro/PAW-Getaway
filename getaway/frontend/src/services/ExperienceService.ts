@@ -77,8 +77,8 @@ export class ExperienceService {
         return getPagedFetch<ExperienceModel[]>(url.toString(), page);
     }
 
-    public async getExperienceById(experienceId:number): Promise<Result<ExperienceModel>> {
-        return resultFetch<ExperienceModel>(this.basePath + "/experience/" +experienceId, {
+    public async getExperienceById(experienceId: number): Promise<Result<ExperienceModel>> {
+        return resultFetch<ExperienceModel>(this.basePath + "/experience/" + experienceId, {
             method: "GET",
         });
     }
@@ -115,21 +115,21 @@ export class ExperienceService {
         });
     }
 
-    public async deleteExperienceById(experienceId:number)  {
+    public async deleteExperienceById(experienceId: number)  {
         return authedFetch(this.basePath + "/experience/" + experienceId, {
             method: "DELETE",
         });
     }
 
     public async getExperienceImage(experienceId: number): Promise<Result<Blob>> {
-        return getImageFetch(this.basePath + "/" + experienceId + "/experienceImage");
+        return getImageFetch(this.basePath + "/experience" + experienceId + "/experienceImage");
     }
 
     public async updateExperienceImage(
-        userId: number
+        experienceId: number
     ): Promise<Result<PutResponse>> {
         const formData = new FormData();
-        return resultFetch<PutResponse>(this.basePath + "/" + userId + "/experienceImage", {
+        return resultFetch<PutResponse>(this.basePath + "/experience" + experienceId + "/experienceImage", {
             method: "PUT",
             headers: {},
             body: formData,
@@ -144,7 +144,7 @@ export class ExperienceService {
     }
 
     public async postNewReview(
-        experienceId:number,
+        experienceId: number,
         title?: string,
         description?: string,
         score?: string
@@ -164,7 +164,7 @@ export class ExperienceService {
     }
 
     public async setExperienceFav(
-        experienceId:number,
+        experienceId: number,
         set?: boolean
     ) {
         const url = new URL(this.basePath + "/experience/" + experienceId + "/fav");
@@ -180,7 +180,7 @@ export class ExperienceService {
     }
 
     public async setExperienceObservable(
-        experienceId:number,
+        experienceId: number,
         set?: boolean
     ) {
         const url = new URL(this.basePath + "/experience/" + experienceId + "/observable");
