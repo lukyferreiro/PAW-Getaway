@@ -19,14 +19,21 @@ export default function Navbar() {
     const categoryQuery = getQueryOrDefaultMultiple(query, "category");
 
     //Esto lo vamos a tener q obtener de alguna manera, por ahora lo fuerzo para ver que funcione
-    const isLogged = false;
-    const isProvider = true;
-    const isVerified = true;
+    const user = localStorage.getItem("user");
+
+    let isLogged = false;
+    let isProvider = false;
+    let isVerified = false;
+
+    if (user !== null) {
+        isLogged = true;
+        isProvider = localStorage.getItem("isProvider") === 'true';
+        isVerified = localStorage.getItem("isVerified") === 'true';
+    }
 
     const [isOpenSignIn, setIsOpenSignIn] = useState(false);
     const [isOpenPassword, setIsOpenPassword] = useState(false);
     const [isOpenCreate, setIsOpenCreate] = useState(false);
-
 
     //TODO obtenerlas de un llamado a la API ??
     const categories: CategoryModel[] = [
