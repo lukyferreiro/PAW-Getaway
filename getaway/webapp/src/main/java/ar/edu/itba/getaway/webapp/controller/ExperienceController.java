@@ -1,206 +1,410 @@
-//package ar.edu.itba.getaway.webapp.controller;
-//
-//import ar.edu.itba.getaway.interfaces.exceptions.CityNotFoundException;
-//import ar.edu.itba.getaway.interfaces.services.*;
-//import ar.edu.itba.getaway.models.*;
-//import ar.edu.itba.getaway.models.pagination.Page;
-//import ar.edu.itba.getaway.interfaces.exceptions.CategoryNotFoundException;
-//import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
-//import ar.edu.itba.getaway.webapp.forms.FilterForm;
-//import ar.edu.itba.getaway.webapp.forms.SearchForm;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.web.bind.annotation.*;
-//import org.springframework.web.servlet.ModelAndView;
-//
-//import javax.servlet.http.HttpServletRequest;
-//import javax.validation.Valid;
-//import java.security.Principal;
-//import java.util.List;
-//import java.util.Optional;
-//
-//@Controller
-//public class ExperienceController {
-//    @Autowired
-//    private UserService userService;
-//    @Autowired
-//    private ExperienceService experienceService;
-//    @Autowired
-//    private LocationService locationService;
-//    @Autowired
-//    private CategoryService categoryService;
-//    @Autowired
-//    private ReviewService reviewService;
-//    @Autowired
-//    private FavAndViewExperienceService favAndViewExperienceService;
-//
-//    private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
-//
-//    @RequestMapping(value = "/experiences/{categoryName:[A-Za-z_]+}", method = {RequestMethod.GET})
-//    public ModelAndView experienceGet(@PathVariable("categoryName") final String categoryName,
-//                                      @ModelAttribute("filterForm") final FilterForm form,
-//                                      @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
-//                                      Principal principal,
-//                                      HttpServletRequest request,
-//                                      @RequestParam Optional<OrderByModel> orderBy,
-//                                      @RequestParam Optional<Long> experience,
-//                                      @RequestParam Optional<Boolean> set,
-//                                      @RequestParam(value = "pageNum", defaultValue = "1") final Integer pageNum) {
-//        LOGGER.debug("Endpoint GET {}", request.getServletPath());
-//        final ModelAndView mav = new ModelAndView("experiences");
-//        final Page<ExperienceModel> currentPage;
-//
-//        final CategoryModel categoryModel = categoryService.getCategoryByName(categoryName).orElseThrow(CategoryNotFoundException::new);
-//
-//        // Order By
-//        final OrderByModel[] orderByModels = OrderByModel.getUserOrderByModel();
-//        mav.addObject("orderBy", orderBy.orElse(OrderByModel.OrderByAZ));
-//
-//        // Price
-//        Double max = experienceService.getMaxPriceByCategory(categoryModel).orElse(0D);
-//        Long scoreVal = 0L;
-//
-//        mav.addObject("max", max);
-//        if (form != null) {
-//            if (form.getMaxPrice() != null) {
-//                max = form.getMaxPrice();
-//            }
-//            scoreVal = form.getScoreVal();
-//        }
-//        mav.addObject("maxPrice", max);
-//        mav.addObject("score", scoreVal);
-//
-//        // City
-//        final List<CityModel> cityModels = locationService.listAllCities();
-//
-//        UserModel owner = null;
-//        if (principal != null) {
-//            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-//            if (user.isPresent()) {
-//                owner = user.get();
-//            }
-//        }
-//
-//        // FavExperiences
-//        if (owner != null) {
-//            if (experience.isPresent()) {
-//                final Optional<ExperienceModel> addFavExperience = experienceService.getVisibleExperienceById(experience.get(), owner);
-//                favAndViewExperienceService.setFav(owner, set, addFavExperience);
-//            }
-//        } else if (set.isPresent()) {
-//            return new ModelAndView("redirect:/login");
-//        }
-//
-//        if (form != null && form.getCityId() != null && !form.getCityId().equals("-1")) {
-//            final CityModel city = locationService.getCityById(Long.parseLong(form.getCityId())).orElseThrow(CityNotFoundException::new);
-//            currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, city, orderBy, pageNum, owner);
-//            mav.addObject("cityId", city.getCityId());
-//        } else {
-//            currentPage = experienceService.listExperiencesByFilter(categoryModel, max, scoreVal, null, orderBy, pageNum, owner);
-//            mav.addObject("cityId", -1);
-//        }
-//
-//        if (set.isPresent()) {
-//            mav.addObject("successFav", set.get());
-//        } else {
-//            mav.addObject("successFav", false);
-//        }
-//
-//        final List<ExperienceModel> currentExperiences = currentPage.getContent();
-//
-//        request.setAttribute("pageNum", pageNum);
-//        final String path = request.getServletPath();
-//
-//        mav.addObject("path", path);
-//        mav.addObject("orderByModels", orderByModels);
-//        mav.addObject("cities", cityModels);
-//        mav.addObject("dbCategoryName", categoryModel.getCategoryName());
-//        mav.addObject("categoryName", categoryName);
-//        mav.addObject("experiences", currentExperiences);
-//        mav.addObject("totalPages", currentPage.getTotalPages());
-//        mav.addObject("currentPage", currentPage.getCurrentPage());
-//        mav.addObject("minPage", currentPage.getMinPage());
-//        mav.addObject("maxPage", currentPage.getMaxPage());
-//
-//        return mav;
-//    }
-//
-//    @RequestMapping("/experiences/{categoryName:[A-Za-z_]+}/{experienceId:[0-9]+}")
-//    public ModelAndView experienceView(Principal principal,
-//                                       @PathVariable("categoryName") final String categoryName,
-//                                       @PathVariable("experienceId") final long experienceId,
-//                                       @RequestParam Optional<Boolean> view,
-//                                       @RequestParam Optional<Boolean> set,
-//                                       @RequestParam Optional<Boolean> setObs,
-//                                       @RequestParam Optional<Boolean> success,
-//                                       @RequestParam Optional<Boolean> successReview,
-//                                       @Valid @ModelAttribute("searchForm") final SearchForm searchForm,
-//                                       HttpServletRequest request,
-//                                       @RequestParam(value = "pageNum", defaultValue = "1") final int pageNum) {
-//        LOGGER.debug("Endpoint GET {}", request.getServletPath());
-//        final ModelAndView mav = new ModelAndView("experienceDetails");
-//
-//        //This declaration of category is in order to check if the categoryName is valid
-//        final CategoryModel category = categoryService.getCategoryByName(categoryName).orElseThrow(CategoryNotFoundException::new);
-//        UserModel owner = null;
-//
-//        if (principal != null) {
-//            final Optional<UserModel> user = userService.getUserByEmail(principal.getName());
-//            if (user.isPresent()) {
-//                owner = user.get();
-//            }
-//        }
-//
-//        final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId, owner).orElseThrow(ExperienceNotFoundException::new);
-//        final Page<ReviewModel> currentPage = reviewService.getReviewAndUser(experience, pageNum);
-//        final List<ReviewModel> reviews = currentPage.getContent();
-//
-//        LOGGER.debug("Experience with id {} has an average score of {}", experienceId, experience.getAverageScore());
-//
-//        request.setAttribute("pageNum", pageNum);
-//
-//        mav.addObject("dbCategoryName", category.getCategoryName());
-//        mav.addObject("experience", experience);
-//        mav.addObject("reviews", reviews);
-//        mav.addObject("success", success.isPresent());
-//        mav.addObject("successReview", successReview.isPresent());
-//        mav.addObject("currentPage", currentPage.getCurrentPage());
-//        mav.addObject("minPage", currentPage.getMinPage());
-//        mav.addObject("maxPage", currentPage.getMaxPage());
-//        mav.addObject("totalPages", currentPage.getTotalPages());
-//
-//        if (set.isPresent()) {
-//            mav.addObject("successFav", set.get());
-//        } else {
-//            mav.addObject("successFav", false);
-//        }
-//
-//        if (owner != null) {
-//            if (view.isPresent() || setObs.isPresent()) {
-//                //Si soy el usuario owner puedo editar la visibilidad
-//                if (experience.getUser().equals(owner)) {
-//                    setObs.ifPresent(aBoolean -> experienceService.changeVisibility(experience, aBoolean));
-//                } else { //El owner no suma visualizaciones
-//                    if (view.isPresent()) {
-//                        favAndViewExperienceService.setViewed(owner, experience);
-//                        experienceService.increaseViews(experience);
-//                    }
-//                }
-//            }
-//            favAndViewExperienceService.setFav(owner, set, Optional.of(experience));
-//            set.ifPresent(experience::setIsFav);
-//            mav.addObject("isEditing", experienceService.experienceBelongsToUser(owner, experience));
-//        } else {
-//            if (set.isPresent()) {
-//                return new ModelAndView("redirect:/login");
-//            } else if (view.isPresent()) {
-//                experienceService.increaseViews(experience);
-//            }
-//            mav.addObject("isEditing", false);
-//        }
-//
-//        return mav;
-//    }
-//}
+package ar.edu.itba.getaway.webapp.controller;
+
+import ar.edu.itba.getaway.interfaces.exceptions.*;
+import ar.edu.itba.getaway.interfaces.services.*;
+import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.models.pagination.Page;
+import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
+import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
+import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
+import ar.edu.itba.getaway.webapp.dto.response.AnonymousLandingPageDto;
+import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
+import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
+import ar.edu.itba.getaway.webapp.dto.response.UserLandingPageDto;
+import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+
+@Path("experiences")
+@Component
+public class ExperienceController {
+    @Autowired
+    private ExperienceService experienceService;
+    @Autowired
+    private FavAndViewExperienceService favAndViewExperienceService;
+    @Autowired
+    private CategoryService categoryService;
+    @Autowired
+    private LocationService locationService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ImageService imageService;
+    @Autowired
+    private ReviewService reviewService;
+    @Autowired
+    private int maxRequestSize;
+    @Autowired
+    private AuthFacade authFacade;
+    @Context
+    private UriInfo uriInfo;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
+    private static final String ACCEPTED_MIME_TYPES = "image/";
+
+    //TODO: hacer andar
+    // Endpoint para carousel de landing page
+    @GET
+    @Path("/landingPage")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getLandingPageExperiences(){
+        UserModel user = authFacade.getCurrentUser();
+
+        List<List<ExperienceModel>> landingPageList;
+
+        if (user != null ){
+            landingPageList = experienceService.userLandingPage(user);
+            return Response.ok(new GenericEntity<UserLandingPageDto>(new UserLandingPageDto(landingPageList, uriInfo)){}).build();
+        }
+        else {
+            landingPageList = experienceService.getExperiencesListByCategories(null);
+            return Response.ok(new GenericEntity<AnonymousLandingPageDto>(new AnonymousLandingPageDto(landingPageList, uriInfo)){}).build();
+
+        }
+    }
+
+    // Endpoint para obtener las experiencias de una categoria
+    @GET
+    @Path("/category/{category}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getExperiencesFromCategory(
+            @PathParam("category") final String category,
+            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
+            @QueryParam("price") @DefaultValue("-1") Double maxPrice,
+            @QueryParam("score") @DefaultValue("0") Long maxScore,
+            @QueryParam("city") @DefaultValue("-1") Long cityId,
+            @QueryParam("page") @DefaultValue("1") int page
+    ) {
+        LOGGER.info("Called /experiences/{} GET", category);
+
+        final CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
+        if (maxPrice == -1) {
+            maxPrice = experienceService.getMaxPriceByCategory(categoryModel).orElse(0.0);
+        }
+        final CityModel cityModel = locationService.getCityById(cityId).orElse(null);
+
+        final UserModel user = authFacade.getCurrentUser();
+        final Page<ExperienceModel> experiences = experienceService.listExperiencesByFilter(categoryModel, maxPrice, maxScore, cityModel, Optional.of(order), page, user);
+
+        if (experiences == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        if (experiences.getContent().isEmpty()) {
+            return Response.noContent().build();
+        }
+
+        final Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);
+
+        final UriBuilder uriBuilder = uriInfo
+                .getAbsolutePathBuilder()
+                .queryParam("category", category)
+                .queryParam("order", order)
+                .queryParam("price", maxPrice)
+                .queryParam("score", maxScore)
+                .queryParam("page", page);
+
+        if (cityModel != null) {
+            uriBuilder.queryParam("city", cityId);
+        }
+
+        return PaginationResponse.createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
+        }, uriBuilder);
+    }
+
+    @GET
+    @Path("/name/{name}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getExperiencesBySearch(
+            @PathParam("name") final String name,
+            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
+            @QueryParam("page") @DefaultValue("1") int page
+    ) {
+        LOGGER.info("Called /experiences/{} GET", name);
+
+        final UserModel user = authFacade.getCurrentUser();
+
+        final Page<ExperienceModel> experiences = experienceService.listExperiencesSearch(name, Optional.of(order), page, user);
+
+        if (experiences == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        if (experiences.getContent().isEmpty()) {
+            return Response.noContent().build();
+        }
+        final Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);
+
+        final UriBuilder uriBuilder = uriInfo
+                .getAbsolutePathBuilder()
+                .queryParam("order", order)
+                .queryParam("page", page);
+
+        return PaginationResponse.createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
+        }, uriBuilder);
+    }
+
+    // Endpoint para crear una experiencia
+    @POST
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response registerExperience(
+            @Valid final NewExperienceDto experienceDto
+    ) throws DuplicateExperienceException {
+
+        LOGGER.info("Called /experiences/ POST");
+
+        if (experienceDto == null) {
+            throw new ContentExpectedException();
+        }
+
+        final UserModel user = authFacade.getCurrentUser();
+        final CityModel city = locationService.getCityByName(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
+        final CategoryModel category = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
+
+        ExperienceModel experience;
+        try {
+            experience = experienceService.createExperience(
+                experienceDto.getName(), experienceDto.getAddress(),
+                experienceDto.getDescription(), experienceDto.getMail(),
+                experienceDto.getUrl(), Double.parseDouble(experienceDto.getPrice()),
+                city, category, user);
+        } catch (DuplicateExperienceException e) {
+            LOGGER.warn("Error in experienceDto ExperienceForm, there is already an experience with this id");
+            throw new DuplicateExperienceException();
+        }
+
+        LOGGER.info("Created experience with id {}", experience.getExperienceId());
+        return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
+    }
+
+    // Endpoint para obtener una experiencia a partir de su ID
+    @GET
+    @Path("/experience/{experienceId}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getExperienceId(
+            @PathParam("experienceId") final long id
+    ) {
+
+        LOGGER.info("Called /experiences/{} GET", id);
+
+        final UserModel user = authFacade.getCurrentUser();
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
+
+        if (!experience.getUser().equals(user)) {
+            experienceService.increaseViews(experience);
+        }
+
+        final ExperienceDto experienceDto = new ExperienceDto(experience, uriInfo);
+        return Response.ok(experienceDto).build();
+    }
+
+    // Endpoint para editar una experiencia
+    @PUT
+    @Path("/experience/{experienceId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response updateExperience(
+            @Context final HttpServletRequest request,
+            @Valid NewExperienceDto experienceDto,
+            @PathParam("experienceId") final long id
+    ) {
+
+        LOGGER.info("Called /experiences/{} PUT", id);
+
+        if (request.getContentLength() == -1 || request.getContentLength() > maxRequestSize) {
+            throw new MaxUploadSizeRequestException();
+        }
+
+        if (experienceDto == null) {
+            throw new ContentExpectedException();
+        }
+
+        final UserModel user = authFacade.getCurrentUser();
+        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+
+        if (experience.getUser().getUserId() != (user.getUserId())) {
+            LOGGER.error("Error, user with id {} is trying to update the experience with id {} that belongs to user with id {}",
+                    user.getUserId(), id, experience.getUser().getUserId());
+            throw new IllegalOperationException();
+        }
+
+        final CityModel cityModel = locationService.getCityByName(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
+        final CategoryModel categoryModel = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
+
+        final ExperienceModel toUpdateExperience = new ExperienceModel(id, experienceDto.getName(), experienceDto.getAddress(), experienceDto.getDescription(),
+        experienceDto.getMail(), experienceDto.getUrl(),  Double.parseDouble(experienceDto.getPrice()), cityModel, categoryModel, user, experience.getExperienceImage(), experience.getObservable(), experience.getViews());
+
+        experienceService.updateExperience(toUpdateExperience);
+        LOGGER.info("The experience with id {} has been updated successfully", id);
+        return Response.ok().build();
+    }
+
+    // Endpoint para eliminar una experiencia
+    @DELETE
+    @Path("/experience/{experienceId}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response deleteExperience(
+            @PathParam("experienceId") final long id
+    ) {
+
+        final UserModel user = authFacade.getCurrentUser();
+        final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+
+        if (experienceModel.getUser().getUserId() != (user.getUserId())) {
+            LOGGER.error("Error, user with id {} is trying to update the experience with id {} that belongs to user with id {}",
+                    user.getUserId(), id, experienceModel.getUser().getUserId());
+            throw new IllegalOperationException();
+        }
+
+        experienceService.deleteExperience(experienceModel);
+        return Response.noContent().build();
+    }
+
+    // Endpoint para obtener la imagen de una experiencia
+    @GET
+    @Path("/experience/{experienceId}/experienceImage")
+    @Produces({"image/*", MediaType.APPLICATION_JSON})
+    public Response getExperienceImage(
+            @PathParam("experienceId") final long id,
+            @Context Request request
+    ) {
+
+        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(UserNotFoundException::new);
+        final ImageModel img = experience.getExperienceImage();
+
+        if (img == null) {
+            return Response.status(NOT_FOUND).build();
+        }
+
+        final EntityTag eTag = new EntityTag(String.valueOf(img.getImageId()));
+        final CacheControl cacheControl = new CacheControl();
+        cacheControl.setNoCache(true);
+
+        Response.ResponseBuilder responseBuilder = request.evaluatePreconditions(eTag);
+        if (responseBuilder == null) {
+            final byte[] profileImage = img.getImage();
+            responseBuilder = Response.ok(profileImage).type(img.getMimeType()).tag(eTag);
+        }
+
+        return responseBuilder.cacheControl(cacheControl).build();
+    }
+
+    @PUT
+    @Path("/experience/{experienceId}/experienceImage")
+    @Produces({"image/*", MediaType.APPLICATION_JSON})
+    public Response updateExperienceImage(
+            @PathParam("experienceId") long id,
+            @FormDataParam("experienceImage") final FormDataBodyPart experienceImageBody,
+            @Size(max = 1024 * 1024) @FormDataParam("experienceImage") byte[] experienceImageBytes
+    ) {
+
+        if (experienceImageBody == null) {
+            throw new ContentExpectedException();
+        }
+
+        if (!experienceImageBody.getMediaType().toString().contains(ACCEPTED_MIME_TYPES)) {
+            throw new IllegalContentTypeException();
+        }
+
+        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+
+        imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), experience.getExperienceImage());
+
+        return Response.noContent()
+                .contentLocation(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).path("experienceImage").build())
+                .build();
+    }
+
+    // Endpoint para obtener la reseñas de una experiencia
+    @GET
+    @Path("/experience/{experienceId}/reviews")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getExperienceReviews(
+            @PathParam("experienceId") final long id,
+            @QueryParam("page") @DefaultValue("1") int page
+    ) {
+
+        LOGGER.info("Called /experiences/{}/reviews GET", id);
+        final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+        Page<ReviewModel> reviewModelList = reviewService.getReviewAndUser(experienceModel, page);
+
+        final Collection<ReviewDto> reviewDto = ReviewDto.mapReviewToDto(reviewModelList.getContent(), uriInfo);
+
+        final UriBuilder uriBuilder = uriInfo
+                .getAbsolutePathBuilder()
+                .queryParam("page", page);
+
+        return PaginationResponse.createPaginationResponse(reviewModelList, new GenericEntity<Collection<ReviewDto>>(reviewDto) {
+        }, uriBuilder);
+    }
+
+    // Endpoint para crear una reseña en la experiencia
+    @POST
+    @Path("/experience/{experienceId}/reviews")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response createExperienceReview(
+            @PathParam("experienceId") final long id,
+            @Valid NewReviewDto newReviewDto
+    ) {
+
+        LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
+        //TODO: check usage of localdate.now()
+
+        final UserModel user = authFacade.getCurrentUser();
+        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+
+        final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experience, LocalDate.now(), user);
+        return Response.created(ReviewDto.getReviewUriBuilder(reviewModel, uriInfo).build()).build();
+    }
+
+    @PUT
+    @Path("/experience/{experienceId}/fav")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response favExperience(
+            @PathParam("experienceId") final long id,
+            @QueryParam("set") final boolean set
+    ) {
+        LOGGER.info("Called /experiences/{} GET", id);
+
+        final UserModel user = authFacade.getCurrentUser();
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
+
+        favAndViewExperienceService.setFav(user, set, experience);
+
+        return Response.noContent().build();
+    }
+
+    @PUT
+    @Path("/experience/{experienceId}/observable")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response observable(
+            @PathParam("experienceId") final long id,
+            @QueryParam("set") final boolean set
+    ) {
+        LOGGER.info("Called /experiences/{} GET", id);
+
+        final UserModel user = authFacade.getCurrentUser();
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
+
+        experienceService.changeVisibility(experience, set);
+
+        return Response.noContent().build();
+    }
+}
+

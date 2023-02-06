@@ -3,7 +3,6 @@ package ar.edu.itba.getaway.webapp.security.services;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.getaway.webapp.controller.apiControllers.ExperienceController;
 import ar.edu.itba.getaway.webapp.security.models.BasicAuthToken;
 import ar.edu.itba.getaway.webapp.security.models.JwtAuthToken;
 import ar.edu.itba.getaway.webapp.security.models.MyUserDetails;

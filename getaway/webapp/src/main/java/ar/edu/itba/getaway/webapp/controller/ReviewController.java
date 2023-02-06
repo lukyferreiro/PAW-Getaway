@@ -1,9 +1,8 @@
-package ar.edu.itba.getaway.webapp.controller.apiControllers;
+package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.interfaces.exceptions.ReviewNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.ReviewService;
 import ar.edu.itba.getaway.models.ReviewModel;
-import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.security.services.AuthFacade;

@@ -1,6 +1,6 @@
 import {useAuth} from "../hooks/useAuth"
 import {useLocation, Navigate, useNavigate, Location, To} from "react-router-dom"
-import {useEffect} from "react"
+import {ReactNode, useEffect} from "react"
 
 function getCorrectPrivilegeRoute(location: Location): To {
     const startsWithUserOrError = location.pathname.startsWith("/user") || location.pathname.startsWith("/error");
@@ -10,7 +10,7 @@ function getCorrectPrivilegeRoute(location: Location): To {
     return "/";
 }
 
-function RequireAuth({children}: { children: JSX.Element }) {
+function RequireAuth({children}: { children: ReactNode }) {
     const {user, signin} = useAuth();
     const location = useLocation();
     const navigate = useNavigate();

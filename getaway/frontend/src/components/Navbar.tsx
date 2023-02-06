@@ -6,6 +6,7 @@ import {getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
 import React, {useState} from "react";
 import Modal from 'react-modal';
 import '../styles/navbar.css'
+import {useAuth} from "../hooks/useAuth";
 
 
 export default function Navbar() {
@@ -19,17 +20,12 @@ export default function Navbar() {
     const categoryQuery = getQueryOrDefaultMultiple(query, "category");
 
     //Esto lo vamos a tener q obtener de alguna manera, por ahora lo fuerzo para ver que funcione
-    const user = localStorage.getItem("user");
+    const {user, signout} = useAuth();
 
-    let isLogged = false;
-    let isProvider = false;
-    let isVerified = false;
 
-    if (user !== null) {
-        isLogged = true;
-        isProvider = localStorage.getItem("isProvider") === 'true';
-        isVerified = localStorage.getItem("isVerified") === 'true';
-    }
+    let isLogged = user !== null;
+    let isProvider = user?.provider;
+    let isVerified = user?.verified;
 
     const [isOpenSignIn, setIsOpenSignIn] = useState(false);
     const [isOpenPassword, setIsOpenPassword] = useState(false);
@@ -41,8 +37,8 @@ export default function Navbar() {
         {categoryId: 2, name: 'Gastronomia'},
         {categoryId: 3, name: 'Hoteleria'},
         {categoryId: 4, name: 'Relax'},
-        {categoryId: 5, name: 'Historico'},
-        {categoryId: 6, name: 'Vida_nocturna'},
+        {categoryId: 5, name: 'Vida_nocturna'},
+        {categoryId: 6, name: 'Historico'},
     ]
 
     return (
@@ -72,12 +68,19 @@ export default function Navbar() {
                     </div>
 
 
-                    {isLogged && isProvider &&
-                        <Link to="/createExperience" style={{marginRight: '40px'}}>
-                            <button type="button" className='btn button-primary'>
-                                {t('Navbar.createExperience')}
-                            </button>
-                        </Link>}
+                    <Link to="/createExperience" style={{marginRight: '40px'}}>
+                        <button type="button" onClick={ () => {
+                            if (user === null) {
+                                navigate("/login")
+                            }
+                            if (!isVerified) {
+                                navigate("/user/profile")
+                            }
+                        }} className='btn button-primary'
+                         >
+                            {t('Navbar.createExperience')}
+                        </button>
+                    </Link>
 
 
                     {!isLogged &&
@@ -467,8 +470,9 @@ export default function Navbar() {
                                     <img src={'./images/ic_review.svg'} alt="Icono reseñas"/>
                                     {t('Navbar.reviews')}
                                 </Link>}
-                                {/*TODO agregar onClick que haga el logout*/}
-                                <button className="dropdown-item">
+                                <button className="dropdown-item" onClick={ () => {
+                                    signout( () => navigate("/") )
+                                } }>
                                     <img src={'./images/ic_logout.svg'} alt="Icono cerrar sesion"/>
                                     {t('Navbar.logout')}
                                 </button>

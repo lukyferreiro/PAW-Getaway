@@ -1,4 +1,4 @@
-package ar.edu.itba.getaway.webapp.controller.apiControllers;
+package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.getaway.interfaces.exceptions.CountryNotFoundException;

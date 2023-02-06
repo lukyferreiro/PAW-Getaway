@@ -1,10 +1,9 @@
 import { paths, APPLICATION_JSON_TYPE } from "../common";
-import {ErrorResponse, ExperienceModel, PagedContent, PostResponse, PutResponse, Result, ReviewModel} from "../types";
+import {ErrorResponse, ExperienceModel, PagedContent, PostResponse, PutResponse, Result, ReviewModel, AnonymousLandingPageModel, UserLandingPageModel} from "../types";
 import {resultFetch} from "../scripts/resultFetch";
 import {getPagedFetch} from "../scripts/getPagedFetch";
 import {authedFetch} from "../scripts/authedFetch";
 import {getImageFetch} from "../scripts/getImageFetch";
-import exp from "constants";
 
 export class ExperienceService {
     private readonly basePath = paths.BASE_URL + paths.EXPERIENCES;
@@ -39,6 +38,18 @@ export class ExperienceService {
             },
             body: newExperience,
         });
+    }
+
+    public async getAnonymousLandingPage(): Promise<Result<AnonymousLandingPageModel>> {
+        return resultFetch<AnonymousLandingPageModel>(this.basePath + "/landingPage", {
+            method: "GET"
+        })
+    }
+
+    public async getUserLandingPage(): Promise<Result<UserLandingPageModel>> {
+        return resultFetch<UserLandingPageModel>(this.basePath + "/landingPage", {
+            method: "GET"
+        })
     }
 
     public async getExperiencesByCategory(

@@ -1,4 +1,4 @@
-package ar.edu.itba.getaway.webapp.controller.apiControllers.util;
+package ar.edu.itba.getaway.webapp.controller.util;
 
 import ar.edu.itba.getaway.models.pagination.Page;
 

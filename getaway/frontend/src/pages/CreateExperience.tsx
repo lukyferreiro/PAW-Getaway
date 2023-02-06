@@ -12,8 +12,8 @@ export default function CreateExperience() {
         {categoryId: 2, name: 'Gastronomia'},
         {categoryId: 3, name: 'Hoteleria'},
         {categoryId: 4, name: 'Relax'},
-        {categoryId: 5, name: 'Historico'},
-        {categoryId: 6, name: 'Vida_nocturna'},
+        {categoryId: 5, name: 'Vida_nocturna'},
+        {categoryId: 6, name: 'Historico'},
     ]
 
     //TODO obtenerlas de un llamado a la API ??

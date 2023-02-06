@@ -10,3 +10,5 @@ export { default as Result } from "./Result";
 export type {default as ReviewModel} from "./ReviewModel";
 export type {default as RoleModel} from "./RoleModel";
 export type {default as UserModel} from "./UserModel";
+export type {default as AnonymousLandingPageModel} from "./AnonymousLandingPageModel";
+export type {default as UserLandingPageModel} from "./UserLandingPageModel";
