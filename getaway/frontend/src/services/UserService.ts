@@ -49,7 +49,7 @@ export class UserService {
         });
     }
 
-    public async getUserCurrentUser(): Promise<Result<UserModel>> {
+    public async getCurrentUser(): Promise<Result<UserModel>> {
         return resultFetch<UserModel>(this.basePath + "/currentUser", {
             method: "GET",
         });

@@ -24,11 +24,11 @@
 }
 
 .modalContainer {
-    max-width: 50%;
-    border-radius: 20px;
-    border: 1px solid var(--primary-color);
-    background-color: whitesmoke;
-    margin: 15px 0;
+    max-width: 50% !important;
+    border-radius: 20px !important;
+    border: 1px solid var(--primary-color) !important;
+    background-color: whitesmoke !important;
+    margin: 15px 0 !important;
 }
 
 .container-experiences {
@@ -36,16 +36,16 @@
 }
 
 .card {
-    border: 1.5px solid black;
+    border: 1.5px solid black !important;
 }
 
 .page-link, .page-link:hover, .page-link:focus {
-    color: var(--primary-color);
+    color: var(--primary-color) !important;
     box-shadow: none !important;
 }
 
 .current-page-link {
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-color) !important;
     font-weight: 600 !important;
     color: black !important;
 }
