@@ -6,13 +6,13 @@ export class LocationService {
     private readonly basePath = paths.BASE_URL + paths.LOCATION;
 
     public async getCountries(): Promise<Result<CountryModel[]>> {
-        return resultFetch<CountryModel[]>(this.basePath, {
+        return resultFetch<CountryModel[]>(this.basePath + "/countries", {
             method: "GET",
         });
     }
 
     public async getCitiesByCountry(countryId: number): Promise<Result<CityModel[]>> {
-        return resultFetch<CityModel[]>(this.basePath + "/" + countryId + "/cities", {
+        return resultFetch<CityModel[]>(this.basePath + "/countries/" + countryId + "/cities", {
             method: "GET",
         });
     }
