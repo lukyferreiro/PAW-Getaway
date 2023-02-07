@@ -19,6 +19,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import {AuthProvider} from "./context/AuthContext";
 import Login from "./pages/Login";
+import CreateAccount from "./pages/CreateAccount";
 
 function App() {
     return (
@@ -41,6 +42,7 @@ function App() {
                         <Route path='experiences' element={<Experiences/>}/>
                         <Route path='experiences/:experienceId' element={<ExperienceDetails/>}/>
                         <Route path='createExperience' element={<CreateExperience/>}/>
+                        <Route path='createAccount' element={<CreateAccount/>}/>
                         <Route path='error' element={<Error/>}/>
                         <Route path='*' element={<Custom404/>}/>
                     </Route>
