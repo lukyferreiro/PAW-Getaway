@@ -10,6 +10,6 @@ export async function getImageFetch(url: string): Promise<Result<Blob>> {
         const parsedResponse = await checkImageError(response);
         return Result.ok(parsedResponse as Blob);
     } catch (err: any) {
-        return Result.failed(new ErrorResponse(parseInt(err.message), err.message));
+        return Result.failed(new ErrorResponse(parseInt(err.message), err.title, err.message));
     }
 }

@@ -20,7 +20,7 @@ export async function resultFetch<RetType>(
         }
         return Result.ok(parsedResponse as RetType);
     } catch (err: any) {
-        return Result.failed(new ErrorResponse(parseInt(err.message), err.message));
+        return Result.failed(new ErrorResponse(parseInt(err.message), err.title, err.message));
     }
 }
 

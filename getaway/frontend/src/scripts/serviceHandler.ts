@@ -9,18 +9,18 @@ export function serviceHandler<T>(
 ): void {
     promise.then((response: Result<T>) => {
         if (response.hasFailed()) {
-            if (response.getError().getCode() === 204) {
+            if (response.getError().getStatus() === 204) {
                 // @ts-ignore
                 setterFunction(undefined);
-            } else if (isNaN(response.getError().getCode())) {
+            } else if (isNaN(response.getError().getStatus())) {
                 return;
             } else {
-                navigate(`/error?code=${response.getError().getCode()}&description=${response.getError().getDescription()}`);
+                navigate(`/error?code=${response.getError().getStatus()}&message=${response.getError().getMessage()}`);
             }
         } else {
             setterFunction(response.getData());
         }
     })
-        .catch(() => navigate(`/error?code=500&description=Server error`))
+        .catch(() => navigate(`/error?code=500&message=Server error`))
         .finally(cleanerFunction);
 }
