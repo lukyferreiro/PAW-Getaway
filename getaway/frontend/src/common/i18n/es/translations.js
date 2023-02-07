@@ -78,6 +78,7 @@ export const TRANSLATIONS_ES = {
         city: "Ciudad",
         address: "Direcci\u00F3n",
         image: "Imagen",
+        placeholder: "Escribe para buscar"
     },
 
     ExperienceDetail: {
