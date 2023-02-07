@@ -162,7 +162,7 @@ export const TRANSLATIONS_ES = {
         description: "Parece que la pagina que estas buscando no existe",
     },
 
-    error: {
+    Error: {
         whoops: "Whoops!",
         backBtn: "Inicio",
         title: "Error {{errorCode}}",
