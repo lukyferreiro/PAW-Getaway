@@ -138,49 +138,6 @@ export default function Navbar() {
                         </button>
                     </Link>
                 ))}
-
-                {/*<a href="<c:url value="/experiences/Aventura"/>">*/}
-                {/*    <button type="button"*/}
-                {/*            className="btn btn-category <c:if test=" ${param.categoryName == 'Aventura'}"> isActive </c:if>">*/}
-                {/*        <img src="<c:url value="/public/images/Aventura.svg/images/Aventura.svg"/>" alt="Logo aventura"/>*/}
-                {/*        <spring:message code="navbar.filter.adventure"/>*/}
-                {/*    </button>*/}
-                {/*</a>*/}
-                {/*<a href="<c:url value="/experiences/Gastronomia"/>">*/}
-                {/*    <button type="button"*/}
-                {/*            className="btn btn-category <c:if test=" ${param.categoryName == 'Gastronomia'}"> isActive </c:if>">*/}
-                {/*        <img src="<c:url value="/public/images/Gastronomia.svg/images/Gastronomia.svg"/>" alt="Logo aventura"/>*/}
-                {/*        <spring:message code="navbar.filter.gastronomy"/>*/}
-                {/*    </button>*/}
-                {/*</a>*/}
-                {/*<a href="<c:url value="/experiences/Hoteleria"/>">*/}
-                {/*    <button type="button"*/}
-                {/*            className="btn btn-category <c:if test=" ${param.categoryName == 'Hoteleria'}"> isActive </c:if>">*/}
-                {/*        <img src="<c:url value="/public/images/Hoteleria.svg/images/Hoteleria.svg"/>" alt="Logo aventura"/>*/}
-                {/*        <spring:message code="navbar.filter.hotels"/>*/}
-                {/*    </button>*/}
-                {/*</a>*/}
-                {/*<a href="<c:url value="/experiences/Relax"/>">*/}
-                {/*    <button type="button"*/}
-                {/*            className="btn btn-category <c:if test=" ${param.categoryName == 'Relax'}"> isActive </c:if>">*/}
-                {/*        <img src="<c:url value="/public/images/Relax.svg/images/Relax.svg"/>" alt="Logo aventura"/>*/}
-                {/*        <spring:message code="navbar.filter.relax"/>*/}
-                {/*    </button>*/}
-                {/*</a>*/}
-                {/*<a href="<c:url value="/experiences/Vida_nocturna"/>">*/}
-                {/*    <button type="button"*/}
-                {/*            className="btn btn-category <c:if test=" ${param.categoryName == 'Vida_nocturna'}"> isActive </c:if>">*/}
-                {/*        <img src="<c:url value="/public/images/Vida_nocturna.svg/images/Vida_nocturna.svg"/>" alt="Logo aventura"/>*/}
-                {/*        <spring:message code="navbar.filter.night"/>*/}
-                {/*    </button>*/}
-                {/*</a>*/}
-                {/*<a href="<c:url value="/experiences/Historico"/>">*/}
-                {/*    <button type="button"*/}
-                {/*            className="btn btn-category <c:if test=" ${param.categoryName == 'Historico'}"> isActive </c:if>">*/}
-                {/*        <img src="<c:url value="/public/images/Historico.svg/images/Historico.svg"/>" alt="Logo aventura"/>*/}
-                {/*        <spring:message code="navbar.filter.historic"/>*/}
-                {/*    </button>*/}
-                {/*</a>*/}
             </div>
         </div>
 
