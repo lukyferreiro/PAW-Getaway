@@ -21,18 +21,17 @@ export default function Login() {
     let auth = useAuth();
     // @ts-ignore
     let from = location.state?.from?.pathname || "/";
-    const [invalidCred, setInvalidCred] = useState(false);
+    const [invalidCredentials, setInvalidCredendtials] = useState(false);
 
     const {register, handleSubmit} = useForm<FormData>({
         criteriaMode: "all",
     });
     const onSubmit = handleSubmit(({email, password, rememberMe}: FormData) => {
-            setInvalidCred(false);
-            loginService
-                .login(email, password)
+            setInvalidCredendtials(false);
+            loginService.login(email, password)
                 .then((user) =>
-                    user.hasFailed() ? setInvalidCred(true) :
-                        auth.signin(user.getData(), rememberMe, () => {
+                    user.hasFailed() ? setInvalidCredendtials(true) :
+                        auth.signIn(user.getData(), rememberMe, () => {
                             navigate(from, {replace: true});
                         })
                 )
@@ -123,7 +122,7 @@ export default function Login() {
                     </div>
 
                     <div className="col-12 d-flex align-items-center justify-content-center">
-                        {invalidCred && (
+                        {invalidCredentials && (
                             <p>Todo mal</p>
                         )}
                     </div>

@@ -6,8 +6,8 @@ import {removeCookie} from "../scripts/cookies"
 interface AuthContextType {
     user: UserModel | null
     setUser: Dispatch<SetStateAction<UserModel | null>>
-    signin: (user: UserModel, rememberMe: boolean, callback: VoidFunction) => void;
-    signout: (callback: VoidFunction) => void
+    signIn: (user: UserModel, rememberMe: boolean, callback: VoidFunction) => void;
+    signOut: (callback: VoidFunction) => void
 }
 
 export const AuthContext = createContext<AuthContextType>(null!)
@@ -16,8 +16,8 @@ export function AuthProvider({children}: { children: ReactNode }) {
 
     let [user, setUser] = useState<UserModel | null>(null)
 
-    let signin = (newUser: UserModel, rememberMe: boolean, callback: VoidFunction) => {
-        return internalAuthProvider.signin(() => {
+    let signIn = (newUser: UserModel, rememberMe: boolean, callback: VoidFunction) => {
+        return internalAuthProvider.signIn(() => {
             setUser(newUser)
             if (!localStorage.getItem("user")) {
                 localStorage.setItem("user", JSON.stringify(newUser))
@@ -30,8 +30,8 @@ export function AuthProvider({children}: { children: ReactNode }) {
         })
     }
 
-    let signout = (callback: VoidFunction) => {
-        return internalAuthProvider.signout(() => {
+    let signOut = (callback: VoidFunction) => {
+        return internalAuthProvider.signOut(() => {
             setUser(null)
             localStorage.removeItem("user")
             localStorage.removeItem("token")
@@ -43,7 +43,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
         })
     }
 
-    let value = {user, setUser, signin, signout}
+    let value = {user, setUser, signIn, signOut}
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

@@ -20,7 +20,7 @@ export default function Navbar() {
     const categoryQuery = getQueryOrDefaultMultiple(query, "category");
 
     //Esto lo vamos a tener q obtener de alguna manera, por ahora lo fuerzo para ver que funcione
-    const {user, signout} = useAuth();
+    const {user, signOut} = useAuth();
 
 
     let isLogged = user !== null;
@@ -471,7 +471,7 @@ export default function Navbar() {
                                     {t('Navbar.reviews')}
                                 </Link>}
                                 <button className="dropdown-item" onClick={ () => {
-                                    signout( () => navigate("/") )
+                                    signOut( () => navigate("/") )
                                 } }>
                                     <img src={'./images/ic_logout.svg'} alt="Icono cerrar sesion"/>
                                     {t('Navbar.logout')}

@@ -12,7 +12,7 @@ function getCorrectPrivilegeRoute(location: Location): To {
 
 export default function UserPage() {
 
-    const {user, signin} = useAuth();
+    const {user, signIn} = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const readUser = localStorage.getItem("user");
@@ -23,7 +23,7 @@ export default function UserPage() {
 
     useEffect(() => {
         if (readUser && readUser !== "")
-            signin(JSON.parse(readUser), rememberMe, () => navigate(correctRoute));
+            signIn(JSON.parse(readUser), rememberMe, () => navigate(correctRoute));
     }, []);
 
     if (!user && !readUser) {
