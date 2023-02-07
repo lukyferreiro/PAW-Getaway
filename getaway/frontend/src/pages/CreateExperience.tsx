@@ -4,7 +4,7 @@ import {CategoryModel, CityModel, CountryModel} from "../types";
 import {categoryService, experienceService, locationService} from "../services";
 import {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
-import {set, useForm} from "react-hook-form";
+import {useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 
 type FormDataExperience = {
@@ -22,13 +22,12 @@ type FormDataExperience = {
 export default function CreateExperience() {
 
     const {t} = useTranslation();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
 
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(1))
     const [countries, setCountries] = useState<CountryModel[]>(new Array(1))
-    const [cities, setCities] = useState<CityModel[]>(new Array(1))
-
-    const [selectedCountry, setSelectedCountry] = useState(null) ;
+    const [cities, setCities] = useState<CityModel[]>(new Array(0))
 
     useEffect(() => {
         serviceHandler(
@@ -45,16 +44,24 @@ export default function CreateExperience() {
             },
             () => {}
         ) ;
-        // TODO: only call after country is selected
+        // serviceHandler(
+        //     locationService.getCitiesByCountry(14),
+        //     navigate, (city) => {
+        //         setCities(city)
+        //     },
+        //     () => {}
+        // ) ;
+    }, [])
+
+    function loadCities(countryName: string){
         serviceHandler(
-            locationService.getCitiesByCountry(14),
+            locationService.getCitiesByCountry(parseInt(countryName)),
             navigate, (city) => {
                 setCities(city)
             },
             () => {}
         ) ;
-    }, [])
-
+    }
     const {register, handleSubmit, formState: { errors },}
         = useForm<FormDataExperience>({ criteriaMode: "all" });
 
@@ -122,7 +129,10 @@ export default function CreateExperience() {
                                 <span className="required-field">*</span>
                             </label>
                             <select className="form-select" required
-                                    {...register("category", {required: true})}>
+                                    {...register("category", {required: true})}
+                            >
+                                <option hidden value="">{t('Experience.placeholder')}</option>
+
                                 {/*<c:if test="${formCategory == null}">*/}
                                 {/*    <option value="" disabled selected hidden>*/}
                                 {/*        <c:out value="${placeholder}"/>*/}
@@ -178,7 +188,7 @@ export default function CreateExperience() {
                         </label>
                         <textarea maxLength={500} className="form-control" style={{maxHeight: "300px"}}
                                   {...register("description", {
-                                      required: true,
+                                      required: false,
                                       maxLength: 500,
                                       pattern: {
                                           value: /^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°";$%#&=:¿?!¡\n\s\t/.-])*$/,
@@ -275,14 +285,17 @@ export default function CreateExperience() {
                             </label>
                             <select id="experienceFormCountryInput" className="form-select" required
                                     {...register("country", {required: true})}
+                                    onChange={e => loadCities(e.target.value)}
                             >
+                                <option hidden value="">{t('Experience.placeholder')}</option>
+
                                 {/*<c:if test="${formCategory == null}">*/}
                                 {/*    <option value="" disabled selected hidden>*/}
                                 {/*        <c:out value="${placeholder}"/>*/}
                                 {/*    </option>*/}
                                 {/*</c:if>*/}
                                 {countries.map((country) => (
-                                    <option key={country.id} value={country.id}>
+                                    <option key={country.id} value={country.id} >
                                         {country.name}
                                     </option>
                                 ))}
@@ -300,9 +313,10 @@ export default function CreateExperience() {
                             </label>
                             <select id="experienceFormCityInput" className="form-select" required
                                     {...register("city", {required: true})}
+                                disabled={cities.length <= 0}
                             >
                                 {cities.map((city) => (
-                                    <option key={city.id} value={city.id}>
+                                    <option key={city.id} value={city.name}>
                                         {city.name}
                                     </option>
                                 ))}
@@ -353,7 +367,8 @@ export default function CreateExperience() {
 
                 <div className="p-0 mt-3 mb-0 d-flex justify-content-around">
                     {/*TODO hacer que vuelva para donde estaba antes*/}
-                    <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
+                    <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
+                            onClick={() => navigate(-1)}>
                         {t('Button.cancel')}
                     </button>
                     <button className="btn btn-submit-form px-3 py-2" id="createExperienceFormButton"
