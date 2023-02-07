@@ -94,9 +94,9 @@ export const TRANSLATIONS_EN = {
     User: {
         profile: {
             description: "Mi perfil",
-            name: "{{name}}",
-            surname: "{{surname}}",
-            email: "{{email}}",
+            name: "Nombre: {{name}}",
+            surname: "Apellido: {{surname}}",
+            email: "Email: {{email}}",
             editBtn: "Editar perfil",
             verifyAccountBtn: "Verifica tu cuenta",
         },

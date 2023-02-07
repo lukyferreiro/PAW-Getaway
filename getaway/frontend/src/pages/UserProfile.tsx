@@ -37,9 +37,9 @@ export default function UserProfile() {
                         {t('User.profile.description')}
                     </h1>
                 </div>
-                <div className="m-2" style={{maxWidth: "200px;"}}>
+                <div className="m-2" style={{maxWidth: "200px"}}>
                     <img className="container-fluid p-0" style={{height: "fit-content"}} alt="Imagen usuario"
-                         src={userImg ? userImg : './images/user_default-user-image.png'}/>
+                         src={userImg ? userImg : './images/user_default.png'}/>
                 </div>
                 <div className="m-1 justify-self-center align-self-center">
                     <h3>

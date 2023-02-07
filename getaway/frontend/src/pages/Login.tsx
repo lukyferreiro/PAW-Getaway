@@ -26,6 +26,7 @@ export default function Login() {
     const {register, handleSubmit} = useForm<FormData>({
         criteriaMode: "all",
     });
+
     const onSubmit = handleSubmit(({email, password, rememberMe}: FormData) => {
             setInvalidCredendtials(false);
             loginService.login(email, password)
@@ -38,6 +39,28 @@ export default function Login() {
                 .catch(() => navigate("/error?code=500"));
         }
     );
+
+    let eyeBtn = document.getElementById("passwordEye") ;
+    let passwordInput = document.getElementById("password");
+    let eye = document.getElementById("eye");
+    let visible = false;
+
+    // @ts-ignore
+    eyeBtn.addEventListener("click", () => {
+        if (visible) {
+            visible = false;
+            // @ts-ignore
+            passwordInput.setAttribute("type", "password");
+        } else {
+            visible = true;
+            // @ts-ignore
+            passwordInput.setAttribute("type", "text");
+        }
+        // @ts-ignore
+        eye.classList.toggle("fa-eye-slash");
+        // @ts-ignore
+        eye.classList.toggle("fa-eye");
+    });
 
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
@@ -58,10 +81,8 @@ export default function Login() {
                                     <div className="col-12">  {/*  Email */}
                                         <label className="form-label d-flex align-items-center"
                                                htmlFor="email">
-                                            <img
-                                                src={"./images/ic_user.svg"}
-                                                alt="Imagen perfil"
-                                                style={{marginRight: "5px"}}/>
+                                            <img src={"./images/ic_user.svg"} alt="Imagen perfil"
+                                                 style={{marginRight: "5px"}}/>
                                             {t('Navbar.email')}
                                         </label>
                                         <input type="text" id="email"
@@ -78,10 +99,8 @@ export default function Login() {
                                                 <label
                                                     className="form-label d-flex align-items-center"
                                                     htmlFor="password">
-                                                    <img
-                                                        src={"./images/ic_password.svg"}
-                                                        alt="Imagen perfil"
-                                                        style={{marginRight: "5px"}}/>
+                                                    <img src={"./images/ic_password.svg"} alt="Imagen perfil"
+                                                         style={{marginRight: "5px"}}/>
                                                     {t('Navbar.password')}
                                                 </label>
                                             </div>
@@ -95,12 +114,11 @@ export default function Login() {
                                             <div className="col-12 px-0 d-flex justify-content-start align-items-center">
                                                 <div className="input-group d-flex justify-content-start align-items-center">
                                                     <input type="password" className="form-control"
-                                                           id="password"
-                                                           aria-describedby="password input"
+                                                           id="password" aria-describedby="password input"
                                                            {...register("password", {})}/>
                                                     <div className="input-group-append">
-                                                        <button id="passwordEye" type="button"
-                                                                tabIndex={-1} className="btn btn-lg form-control btn-eye input-group-text">
+                                                        <button className="btn btn-lg form-control btn-eye input-group-text"
+                                                                id="passwordEye" type="button" tabIndex={-1} >
                                                             <i id="eye" className="far fa-eye-slash"></i>
                                                         </button>
                                                     </div>

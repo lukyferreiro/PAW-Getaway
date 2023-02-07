@@ -1,37 +1,37 @@
 .information-title {
-    font-size: x-large;
+    font-size: x-large !important;
 }
 
 .information-text {
-    font-size: medium;
+    font-size: medium !important;
 }
 
 .btn-create-review {
-    font-size: x-large;
-    font-weight: bold;
-    color: white;
-    border-color: var(--primary-color);
-    background-color: var(--primary-color);
-    padding: 10px 20px 10px 20px;
+    font-size: x-large !important;
+    font-weight: bold !important;
+    color: white !important;
+    border-color: var(--primary-color) !important;
+    background-color: var(--primary-color) !important;
+    padding: 10px 20px 10px 20px !important;
 }
 
 .btn-create-review:hover {
-    color: white;
-    border-color: var(--primary-color);
-    background-color: var(--primary-color);
-    transform: scale(1.1);
-    transition: 0.3s;
+    color: white !important;
+    border-color: var(--primary-color) !important;
+    background-color: var(--primary-color) !important;
+    transform: scale(1.1) !important;
+    transition: 0.3s !important;
 }
 
 .btn-create-review:focus {
-    color: white;
-    border-color: var(--primary-color);
-    background-color: var(--primary-color);
+    color: white !important;
+    border-color: var(--primary-color) !important;
+    background-color: var(--primary-color) !important;
 }
 
 /*---------------Reseñas------------------*/
 
 .user-img {
-    width: 60px;
-    height: 60px;
+    width: 60px !important;
+    height: 60px !important;
 }

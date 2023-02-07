@@ -1,72 +1,72 @@
 .star-rating {
-    display: flex;
-    flex-direction: row-reverse;
-    font-size: 1.5em;
-    justify-content: space-around;
-    padding: 0 .5em;
-    text-align: center;
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    font-size: 1.5em !important;
+    justify-content: space-around !important;
+    padding: 0 .5em !important;
+    text-align: center !important;
     /*width:5em;*/
 }
 
 .star-rating input {
-    display: none;
+    display: none !important;
 }
 
 .star-rating label {
-    color: #ccc;
-    cursor: pointer;
+    color: #ccc !important;
+    cursor: pointer !important;
 }
 
 .star-rating :checked ~ label {
-    color: gold;
+    color: gold !important;
 }
 
 .star-rating label:hover,
 .star-rating label:hover ~ label {
-    color: gold;
+    color: gold !important;
 }
 
 .fas.fa-star.star-color {
-    color: gold;
+    color: gold !important;
 }
 
 .fas.fa-star {
-    color: lightgrey;
+    color: lightgrey !important;
 }
 
 .fas.fa-heart.heart-color, .fa.fa-heart-o:hover {
-    color: red;
-    font-size: xx-large;
+    color: red !important;
+    font-size: xx-large !important;
 }
 
 .fa.fa-heart-o {
-    color: grey;
-    font-size: xx-large;
+    color: grey !important;
+    font-size: xx-large !important;
 }
 
 .btn-observable:hover, .btn-observable:focus,
 .btn-fav:hover, .btn-fav:focus,
 .btn-pencil:hover, .btn-pencil:focus,
 .btn-trash:hover, .btn-trash:focus {
-    border-color: transparent;
+    border-color: transparent !important;
 }
 
 .btn-pencil:hover, .btn-pencil:focus {
-    color: var(--primary-color);
+    color: var(--primary-color) !important;
 }
 
 .btn-trash:hover, .btn-trash:focus {
-    color: red;
+    color: red !important;
 }
 
 .btn-close {
-    color: black;
-    font-size: small;
+    color: black !important;
+    font-size: small !important;
 }
 
 .btn-close:hover, .btn-close:focus {
-    color: black;
-    transform: scale(1.02);
-    transition: 0.3s;
-    box-shadow: none;
+    color: black !important;
+    transform: scale(1.02) !important;
+    transition: 0.3s !important;
+    box-shadow: none !important;
 }

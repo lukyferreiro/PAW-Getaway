@@ -1,59 +1,59 @@
 .title {
-    font-size: xxx-large;
-    font-weight: 600;
-    margin-bottom: 10px;
+    font-size: xxx-large !important;
+    font-weight: 600 !important;
+    margin-bottom: 10px !important;
 }
 
 .subtitle {
-    font-size: x-large;
-    margin: 0;
+    font-size: x-large !important;
+    margin: 0 !important;
 }
 
 .input {
-    font-weight: 500;
-    font-size: 16px;
-    color: #282827;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    color: #282827 !important;
+    border: 1px solid #ccc !important;
+    border-radius: 8px !important;
 }
 
 #success {
-    color: rgb(130, 201, 30);
+    color: rgb(130, 201, 30) !important;
 }
 
 .btn-eye {
     border-radius: 0 8px 8px 0 !important;
-    background-color: rgba(128, 128, 128, 0.4);
-    border-color: rgba(128, 128, 128, 0.8);
-    color: black;
+    background-color: rgba(128, 128, 128, 0.4) !important;
+    border-color: rgba(128, 128, 128, 0.8) !important;
+    color: black !important;
 }
 
 .btn-eye:hover, .btn-eye:focus {
-    transition: 150ms linear;
-    background-color: rgba(128, 128, 128, 0.4);
-    border-color: rgba(128, 128, 128, 0.8);
-    color: black;
+    transition: 150ms linear !important;
+    background-color: rgba(128, 128, 128, 0.4) !important;
+    border-color: rgba(128, 128, 128, 0.8) !important;
+    color: black !important;
 }
 
 .btn-continue {
-    font-size: x-large;
-    font-weight: bold;
-    color: white;
-    border-color: var(--primary-color);
-    background-color: var(--primary-color);
-    padding: 10px 20px 10px 20px;
+    font-size: x-large !important;
+    font-weight: bold !important;
+    color: white !important;
+    border-color: var(--primary-color) !important;
+    background-color: var(--primary-color) !important;
+    padding: 10px 20px 10px 20px !important;
 }
 
 .btn-continue:hover, .btn-continue:focus {
-    color: white;
-    border-color: var(--primary-color);
-    background-color: var(--primary-color);
-    transform: scale(1.1);
-    transition: 0.3s;
+    color: white !important;
+    border-color: var(--primary-color) !important;
+    background-color: var(--primary-color) !important;
+    transform: scale(1.1) !important;
+    transition: 0.3s !important;
 }
 
 .btn-continue:disabled {
-    color: white;
-    border-color: var(--third-color);
-    background-color: var(--third-color);
+    color: white !important;
+    border-color: var(--third-color) !important;
+    background-color: var(--third-color) !important;
 }

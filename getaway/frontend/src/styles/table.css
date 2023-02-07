@@ -1,4 +1,4 @@
 .table td.fit, .table th.fit {
-    white-space: nowrap;
-    width: 1%;
+    white-space: nowrap !important;
+    width: 1% !important;
 }
