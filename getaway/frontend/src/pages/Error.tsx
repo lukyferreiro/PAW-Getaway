@@ -29,8 +29,8 @@ export default function Error() {
                     <h1 className="font-weight-bold m-0" style={{fontSize: "15vh"}}>
                         {t('Error.title', {errorCode: error})}
                     </h1>
-                    <h1 className="font-weight-bold text-center" style={{fontSize: "5vh;"}}>
-                        <span style={{color: "red;"}}>{t('error.whoops')}</span>
+                    <h1 className="font-weight-bold text-center" style={{fontSize: "5vh"}}>
+                        <span style={{color: "red"}}>{t('error.whoops')}</span>
                         {description}
                     </h1>
                     <Link to="/">
