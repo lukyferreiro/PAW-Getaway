@@ -21,26 +21,26 @@ export const TRANSLATIONS_ES = {
         loginTitle: "Sign in to Getaway",
         loginDescription: "New experiences every day",
         newUser: "New to Getaway?",
-        password:"Password",
-        confirmPassword:"Confirm password",
+        password: "Password",
+        confirmPassword: "Confirm password",
         profile: "My profile",
         experiences: "My experiences",
         favourites: "My favourites",
         reviews: "My reviews",
         rememberMe: "Remember me",
         logout: "Log out",
-        resetPasswordTitle:"Enter your email and get a link to recover your password",
-        resetPasswordButton:"Send",
+        resetPasswordTitle: "Enter your email and get a link to recover your password",
+        resetPasswordButton: "Send",
         createAccountPopUp: "Create your account",
         createAccountDescription: "Add your info in order to start creating your experiences and reviews",
         max: "(Max {{num}})",
         name: "Name",
         surname: "Surname",
         createButton: "Create account",
-        emailPlaceholder:"jhondoe@example.com",
-        namePlaceholder:"Jhon",
-        surnamePlaceholder:"Doe",
-        passwordPlaceholder:"Between 8 and 25 characters"
+        emailPlaceholder: "jhondoe@example.com",
+        namePlaceholder: "Jhon",
+        surnamePlaceholder: "Doe",
+        passwordPlaceholder: "Between 8 and 25 characters"
 
     },
 
@@ -80,17 +80,29 @@ export const TRANSLATIONS_ES = {
         image: "Image",
     },
 
-    ExperienceDetail:{
-        imageDefault:"This image does not belong to the experience",
+    ExperienceDetail: {
+        imageDefault: "This image does not belong to the experience",
         priceFree: "Free",
-        description:"Description",
-        noData:"Information not provided",
-        url:"Official site",
+        description: "Description",
+        noData: "Information not provided",
+        url: "Official site",
         email: "Email",
         review: "Reviews",
-        notVisible:"This experience is not currently visible",
-        noReviews:"This experience has no reviews yet. Be the first to write one!"
+        notVisible: "This experience is not currently visible",
+        noReviews: "This experience has no reviews yet. Be the first to write one!"
     },
+
+    User: {
+        profile: {
+            description: "My profile",
+            name: "{{name}}",
+            surname: "{{surname}}",
+            email: "{{email}}",
+            editBtn: "Edit profile",
+            verifyAccountBtn: "Verify your account",
+        },
+    },
+
     EmptyResult: "It seems there are no experiences matching your search",
 
     Button: {

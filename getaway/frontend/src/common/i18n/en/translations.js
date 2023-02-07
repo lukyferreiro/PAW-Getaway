@@ -4,43 +4,43 @@ export const TRANSLATIONS_EN = {
 
     Categories: {
         Aventura: "Aventura",
-        Gastronomia: "Gastronomia",
-        Hoteleria: "Hoteleria",
+        Gastronomia: "Gastronom\u00EDa",
+        Hoteleria: "Hoteler\u00EDa",
         Relax: "Relax",
         Vida_nocturna: "Vida nocturna",
         Historico: "Historico",
     },
 
     Navbar: {
-        createAccount:"Crea una cuenta",
+        createAccount: "Crea una cuenta",
         createExperience: "Crear experiencia",
         email: "Email",
         search: "Buscar",
         forgotPassword: "¿Olvidaste tu contraseña?",
-        login: "Iniciar sesion",
-        loginTitle: "Iniciar sesion en Getaway",
-        loginDescription:"Experiencias nuevas todos los d\u00EDas",
-        newUser:"¿Eres nuevo en Getaway?",
-        password:"Contraseña",
-        confirmPassword:"Confirmar contraseña",
+        login: "Iniciar sesi\u00F3n",
+        loginTitle: "Iniciar sesi\u00F3n en Getaway",
+        loginDescription: "Experiencias nuevas todos los d\u00EDas",
+        newUser: "¿Eres nuevo en Getaway?",
+        password: "Contraseña",
+        confirmPassword: "Confirmar contraseña",
         profile: "Mi perfil",
         experiences: "Mis experiencias",
         favourites: "Mis favoritos",
         reviews: "Mis reseñas",
         rememberMe: "Recuerdame",
-        logout: "Cerrar sesion",
-        resetPasswordTitle:"Ingresa tu email y recibe un enlace de recuperaci\u00F3n",
-        resetPasswordButton:"Enviar",
+        logout: "Cerrar sesi\u00F3n",
+        resetPasswordTitle: "Ingresa tu email y recibe un enlace de recuperaci\u00F3n",
+        resetPasswordButton: "Enviar",
         createAccountPopUp: "Crea tu cuenta",
         createAccountDescription: "Ingresa tus datos para comenzar a ofrecer tus experiencias y hacer reseñas",
         max: "(M\u00E1ximo {{num}})",
         name: "Nombre",
         surname: "Apellido",
         createButton: "Crear cuenta",
-        emailPlaceholder:"juan@ejemplo.com",
-        namePlaceholder:"Juan",
-        surnamePlaceholder:"Martinez",
-        passwordPlaceholder:"Entre 8 y 25 caracteres"
+        emailPlaceholder: "juan@ejemplo.com",
+        namePlaceholder: "Juan",
+        surnamePlaceholder: "Martinez",
+        passwordPlaceholder: "Entre 8 y 25 caracteres"
     },
 
     Filters: {
@@ -62,9 +62,9 @@ export const TRANSLATIONS_EN = {
 
     Experience: {
         name: "Nombre",
-        category: "Categoria",
+        category: "Categor\u00EDa",
         price: "Precio",
-        information: "Descripcion",
+        information: "Descripci\u00F3n",
         mail: {
             field: "Email",
             placeholder: "juanmartinez@ejemplo.com",
@@ -75,20 +75,31 @@ export const TRANSLATIONS_EN = {
         },
         country: "Pais",
         city: "Ciudad",
-        address: "Direccion",
+        address: "Direcci\u00F3n",
         image: "Imagen",
     },
 
-    ExperienceDetail:{
-        imageDefault:"Esta imagen no se corresponde con la experiencia",
+    ExperienceDetail: {
+        imageDefault: "Esta imagen no se corresponde con la experiencia",
         priceFree: "Gratis",
-        description:"Descripci\u00F3n",
-        noData:"Informaci\u00F3n no brindada",
-        url:"Sitio oficial",
+        description: "Descripci\u00F3n",
+        noData: "Informaci\u00F3n no brindada",
+        url: "Sitio oficial",
         email: "Email",
         review: "Reseñas",
-        notVisible:"La experiencia est\u00E1 oculta en este momento",
-        noReviews:"Esta experiencia no tiene rese\u00F1as a\u00FAn. S\u00E9 el primero en realizar una!"
+        notVisible: "La experiencia est\u00E1 oculta en este momento",
+        noReviews: "Esta experiencia no tiene rese\u00F1as a\u00FAn. S\u00E9 el primero en realizar una!"
+    },
+
+    User: {
+        profile: {
+            description: "Mi perfil",
+            name: "{{name}}",
+            surname: "{{surname}}",
+            email: "{{email}}",
+            editBtn: "Editar perfil",
+            verifyAccountBtn: "Verifica tu cuenta",
+        },
     },
 
     EmptyResult: "Parece que no hay ninguna experiencia que coincida con tu búsqueda",
@@ -100,7 +111,7 @@ export const TRANSLATIONS_EN = {
 
     Input: {
         optional: "(Opcional)",
-        maxValue: "(Maximo {{value}})",
+        maxValue: "(M\u00E1ximo {{value}})",
     },
 
     CreateExperience: {

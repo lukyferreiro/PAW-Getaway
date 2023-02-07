@@ -15,15 +15,16 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const {t} = useTranslation();
     const isEditing = true;
     const hasImage = false;
+
     return (
         <div>
             <div className="d-flex flex-wrap justify-content-center align-content-center">
                 <div className="d-flex flex-column">
                     <div className="p-2" style={{width: "600px"}}>
-                        {hasImage &&
+                        {hasImage ?
                             <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "550px"}}
-                                 src={`/experiences/${experience.experienceId}/image.svg`} alt="Imagen"/>}
-                        {!hasImage &&
+                                 src={`/experiences/${experience.experienceId}/image.svg`} alt="Imagen"/>
+                            :
                             <div>
                                 <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "450px"}}
                                      src={`./images/${categoryModel.name}.svg`} alt={`${categoryModel.name}`}/>

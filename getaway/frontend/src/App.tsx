@@ -17,7 +17,6 @@ import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
-import RequireAuth from "./components/RequireAuth";
 import {AuthProvider} from "./context/AuthContext";
 import Login from "./pages/Login";
 
@@ -32,7 +31,7 @@ function App() {
                 <Routes>
                     <Route path='/' element={<Landing/>}>
                         <Route index element={<Home/>}/>
-                        <Route path='/user' element={<RequireAuth> <UserPage/> </RequireAuth>}>
+                        <Route path='/user' element={<UserPage/>}>
                             <Route index element={<UserProfile/>}/>
                             <Route path='profile' element={<UserProfile/>}/>
                             <Route path='experiences' element={<UserExperiences/>}/>
