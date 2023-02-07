@@ -24,6 +24,7 @@ public class ExperienceDto implements Serializable {
     private String selfUrl;
     private String imageUrl;
     private String reviewsUrl;
+    private Long reviewsCount;
     private CountryDto countryUrl;
     private CityDto city;
     private UserDto user;
@@ -67,6 +68,7 @@ public class ExperienceDto implements Serializable {
         this.selfUrl = uriBuilder.build().toString();
         this.imageUrl = uriBuilder.clone().path("image").build().toString();    // /experience/{id}/image
         this.reviewsUrl = uriBuilder.clone().path("reviews").build().toString();    // /experience/{id}/reviews
+        this.reviewsCount = experience.getReviewCount();
         this.countryUrl = new CountryDto(experience.getCity().getCountry(), uriInfo);
         this.city = new CityDto(experience.getCity());
         this.user = new UserDto(experience.getUser(), uriInfo);
@@ -139,6 +141,12 @@ public class ExperienceDto implements Serializable {
     }
     public void setReviewsUrl(String reviewsUrl) {
         this.reviewsUrl = reviewsUrl;
+    }
+    public Long getReviewsCount() {
+        return reviewsCount;
+    }
+    public void setReviewsCount(Long reviewsCount) {
+        this.reviewsCount = reviewsCount;
     }
     public CountryDto getCountryUrl() {
         return countryUrl;
