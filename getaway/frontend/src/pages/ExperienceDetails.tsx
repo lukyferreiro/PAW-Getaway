@@ -1,9 +1,6 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import CountryModel from "../types/CountryModel";
-import CityModel from "../types/CityModel";
-import {CategoryModel, ExperienceModel, ReviewModel} from "../types";
-import UserModel from "../types/UserModel";
+import {ExperienceModel, ReviewModel} from "../types";
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import CardExperienceDetails from "../components/CardExperienceDetails";
