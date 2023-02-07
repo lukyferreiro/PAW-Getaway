@@ -16,24 +16,24 @@ export default function CardReview() {
 
     const countryModel: CountryModel =
         {
-            countryId: 2,
+            id: 2,
             name: "Pais campeon del mundo"
         }
 
     const cityModel: CityModel =
         {
-            cityId: 1,
+            id: 1,
             name: "avellaneda city",
             country: countryModel
         }
 
 
     const categoryModel: CategoryModel =
-        {categoryId: 1, name: 'Aventura'}
+        {id: 1, name: 'Aventura'}
 
 
     const userModel: UserModel = {
-        userId: 1,
+        id: 1,
         name: "LUCAS FERREIRO PA",
         surname: "LUCAS FERREIRO PA",
         email: "lferreiro@itba.edu.ar PA",
@@ -44,7 +44,7 @@ export default function CardReview() {
 
     const experience: ExperienceModel =
         {
-            experienceId: 1,
+            id: 1,
             name: "hola soy una prueba",
             price: 10,
             address: "SAN PEDRO 47",

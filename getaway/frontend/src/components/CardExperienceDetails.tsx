@@ -23,7 +23,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     <div className="p-2" style={{width: "600px"}}>
                         {hasImage ?
                             <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "550px"}}
-                                 src={`/experiences/${experience.experienceId}/image.svg`} alt="Imagen"/>
+                                 src={`/experiences/${experience.id}/image.svg`} alt="Imagen"/>
                             :
                             <div>
                                 <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "450px"}}
