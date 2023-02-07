@@ -5,7 +5,8 @@ import {categoryService, experienceService, locationService} from "../services";
 import {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {set, useForm} from "react-hook-form";
-import {useNavigate} from "react-router-dom";
+import {Location, Navigate, To, useLocation, useNavigate} from "react-router-dom";
+import {useAuth} from "../hooks/useAuth";
 
 type FormDataExperience = {
     name: string,
@@ -71,6 +72,21 @@ export default function CreateExperience() {
                 .catch(() => {});
         }
     );
+
+    const {user} = useAuth();
+    const location = useLocation();
+    const readUser = localStorage.getItem("user");
+    const isVerified = localStorage.getItem("isVerified") === "true";
+    const isProvider = localStorage.getItem("isProvider") === "true";
+    const rememberMe = localStorage.getItem("rememberMe") === "true";
+
+    if (!user && !readUser) {
+        return <Navigate to="/login" state={{from: "/createExperience"}} replace/>;
+    }
+    if (!isVerified) {
+        return <Navigate to="/user/profile" replace/>;
+    }
+
 
     return (
         <div className="d-flex flex-column justify-content-center mx-5 my-2 p-0">

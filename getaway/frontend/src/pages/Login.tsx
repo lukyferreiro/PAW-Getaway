@@ -42,7 +42,7 @@ export default function Login() {
                             navigate(from, {replace: true});
                         })
                 )
-                .catch(() => navigate("/error?code=500"));
+                .catch(() => navigate("/error?code=500&description=Server error"));
         }
     );
 
