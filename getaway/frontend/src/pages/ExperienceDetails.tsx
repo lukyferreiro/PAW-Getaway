@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import CountryModel from "../types/CountryModel";
 import CityModel from "../types/CityModel";
-import {CategoryModel, ExperienceModel} from "../types";
+import {CategoryModel, ExperienceModel, ReviewModel} from "../types";
 import UserModel from "../types/UserModel";
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
@@ -16,19 +16,26 @@ export default function ExperienceDetails() {
     const navigate = useNavigate()
 
     const [experience, setExperience] = useState<ExperienceModel | undefined>(undefined);
+    const [reviews, setReviews] = useState<ReviewModel[]>(new Array(0))
     const {experienceId} = useParams();
-    useEffect(() => {
-        console.log(experienceId);
-        console.log("Hola");
 
+
+    useEffect(() => {
         serviceHandler(
             experienceService.getExperienceById(parseInt(experienceId ? experienceId : '-1')),
             navigate, (fetchedExperience) => {
                 setExperience(fetchedExperience)
-                console.log('experience setted: ' + fetchedExperience.name);
             },
             () => {}
         ) ;
+        //Esto me da error 500 vaya uno a saber por que
+        // serviceHandler(
+        //     experienceService.getExperienceReviews(parseInt(experienceId ? experienceId : '-1')),
+        //     navigate, (fetchedExperienceReviews) => {
+        //         setReviews(fetchedExperienceReviews.getContent())
+        //     },
+        //     () => {}
+        // ) ;
     }, []);
 
 
@@ -41,22 +48,22 @@ export default function ExperienceDetails() {
                     </h1>
                 </div>
 
-                <CardExperienceDetails experience={experience!}
-                                categoryModel={experience?.category!}/>
+                {/*<CardExperienceDetails experience={experience!}*/}
+                {/*                       categoryModel={experience!.category}/>*/}
             </div>
 
-            {/*REVIEWS*/}
+            {/*/!*REVIEWS*!/*/}
             <div className="d-flex mb-3 flex-column">
                 <div className="mx-5 my-2 d-flex flex-wrap">
-                    {experience!.reviewsCount == 0 ?
+                    {reviews.length == 0 ?
                         <div className="d-flex justify-content-center mb-2" style={{fontSize: "x-large"}}>
                             {t('ExperienceDetail.noReviews')}
                         </div> :
                         <div className="pl-5 pr-2 w-50"
                              style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
-                            <CardReview/>
-                            <CardReview/>
-                            <CardReview/>
+                            {reviews.map((review) => (
+                                <CardReview reviewModel={review} isEditing={false}/>
+                            ))}
                         </div>
                     }
 

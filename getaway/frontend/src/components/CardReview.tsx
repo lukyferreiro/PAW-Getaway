@@ -1,76 +1,16 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import CountryModel from "../types/CountryModel";
-import CityModel from "../types/CityModel";
-import {CategoryModel, ExperienceModel, ReviewModel} from "../types";
-import UserModel from "../types/UserModel";
-import {Link} from "react-router-dom";
+import {ReviewModel} from "../types";
 import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function CardReview() {
+export default function CardReview(props: {reviewModel: ReviewModel; isEditing: boolean;}) {
 
     const {t} = useTranslation();
 
-    const countryModel: CountryModel =
-        {
-            id: 2,
-            name: "Pais campeon del mundo"
-        }
-
-    const cityModel: CityModel =
-        {
-            id: 1,
-            name: "avellaneda city",
-            country: countryModel
-        }
-
-
-    const categoryModel: CategoryModel =
-        {id: 1, name: 'Aventura'}
-
-
-    const userModel: UserModel = {
-        id: 1,
-        name: "LUCAS FERREIRO PA",
-        surname: "LUCAS FERREIRO PA",
-        email: "lferreiro@itba.edu.ar PA",
-        favsCount: 0,
-        verified: true,
-        provider: true
-    }
-
-    const experience: ExperienceModel =
-        {
-            id: 1,
-            name: "hola soy una prueba",
-            price: 10,
-            address: "SAN PEDRO 47",
-            email: "LFERREIRO@ITBA.EDU.AR",
-            description: "HOLA SOY LUQUITAS",
-            siteUrl: "HOLA.COM",
-            city: cityModel,
-            category: categoryModel,
-            user: userModel,
-            observable: true,
-            views: 200,
-            score: 5,
-            reviewsCount: 0
-        }
-
-    const reviewModel: ReviewModel = {
-        reviewId: 1,
-        title: "Holaaaaa",
-        description: "HOLAAAAAAAAAAA",
-        score: 2,
-        date: "19/09/1999",
-        experience: experience,
-        user: userModel
-    }
-
-    const isEditing = true;
+    const {reviewModel, isEditing} = props
     const hasImage = false;
 
     return (
@@ -86,7 +26,7 @@ export default function CardReview() {
                             wordBreak: "break-all",
                             color: "black"
                         }}>
-                        {experience.name}
+                        {reviewModel.experience.name}
                     </h4>
                     {/*</a>*/}
 
@@ -107,7 +47,7 @@ export default function CardReview() {
 
                     <div className="d-flex flex-column justify-content-center align-content-center">
                         <h5 className="my-1">
-                            {userModel.name} , {userModel.surname}
+                            {reviewModel.user.name} , {reviewModel.user.surname}
                         </h5>
                         <h6 className="my-1" style={{fontSize: "small"}}>
                             {reviewModel.date}
@@ -130,7 +70,7 @@ export default function CardReview() {
                         {reviewModel.description}
                     </h6>
                     {/* No me acuerdo si era chquear que la experience o la review sea observable*/}
-                    {!experience.observable && isEditing &&
+                    {!reviewModel.experience.observable && isEditing &&
                         <p className="obs-info">
                             {t('ExperienceDetail.notVisible')}
                         </p>

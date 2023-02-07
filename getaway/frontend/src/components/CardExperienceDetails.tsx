@@ -75,15 +75,15 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                     {t('ExperienceDetail.description')}
                                 </h5>
                                 <p className="information-text" id="experienceDescription">
-                                    {experience.description == '' &&
+                                    {experience.description == '' ?
                                         <div>
                                             {t('ExperienceDetail.noData')}
                                         </div>
-                                    }
-                                    {experience.description != '' &&
+                                    :
                                         <div>
                                             {experience.description}
-                                        </div>}
+                                        </div>
+                                    }
                                 </p>
                             </div>
 
@@ -91,12 +91,11 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                 <h5 className="information-title">
                                     {t('ExperienceDetail.url')}
                                 </h5>
-                                {experience.siteUrl == '' &&
+                                {experience.siteUrl == '' ?
                                     <p className="information-text">
                                         {t('ExperienceDetail.noData')}
                                     </p>
-                                }
-                                {experience.siteUrl != '' &&
+                                :
                                     <Link to={experience.siteUrl}>
                                         <p className="information-text">
                                             {experience.siteUrl}
@@ -138,7 +137,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
 
             {isEditing &&
                 <div className="btn-group my-2 d-flex justify-content-center align-content-center" role="group">
-                    {experience.observable &&
+                    {experience.observable ?
                         <div>
                             {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
                             {/*   ${false}"/> </c:url>">*/}
@@ -147,9 +146,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                             </IconButton>
                             {/*</a>*/}
                         </div>
-
-                    }
-                    {!experience.observable &&
+                        :
                         <div>
                             {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
                             {/*   ${true}"/> </c:url>">*/}
