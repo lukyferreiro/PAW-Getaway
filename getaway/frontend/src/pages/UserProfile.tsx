@@ -18,8 +18,6 @@ export default function UserProfile() {
     useEffect(() => {
         setIsLoadingImg(true)
         if (user) {
-            console.log(user?.id)
-            console.log(user?.email)
             serviceHandler(
                 userService.getUserProfileImage(user?.id),
                 navigate, (userImg) => {

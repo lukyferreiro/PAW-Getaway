@@ -13,7 +13,7 @@ public class NewExperienceDto {
     private String name;
 
     @NotNull(message = "NotNull")
-    private Long category;
+    private long category;
 
     @NotEmpty(message = "NotEmpty")
     private String country;
@@ -56,18 +56,12 @@ public class NewExperienceDto {
         this.name = name;
     }
 
-    public Long getCategory() {
+    public long getCategory() {
         return category;
     }
 
-    public void setCategory(Long category) {
+    public void setCategory(long category) {
         this.category = category;
-    }
-
-    public void increaseExperienceCategory(){
-        if(this.category != null){
-            this.category++;
-        }
     }
 
     public String getCountry() {

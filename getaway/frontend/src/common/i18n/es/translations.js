@@ -9,7 +9,7 @@ export const TRANSLATIONS_ES = {
         Hoteleria: "Hoteler\u00EDa",
         Relax: "Relax",
         Vida_nocturna: "Vida nocturna",
-        Historico: "Historico",
+        Historico: "Hist\u00F3rico",
     },
 
     Navbar: {

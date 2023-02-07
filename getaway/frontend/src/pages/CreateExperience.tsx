@@ -1,33 +1,77 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {CategoryModel, CityModel, CountryModel} from "../types";
+import {categoryService, experienceService, locationService, loginService, userService} from "../services";
+import {useEffect, useState} from "react";
+import {serviceHandler} from "../scripts/serviceHandler";
+import {set, useForm} from "react-hook-form";
+import {useNavigate} from "react-router-dom";
+import UserModel from "../types/UserModel";
+
+type FormExperienceData = {
+    name: string,
+    category: number,
+    country: string,
+    city: string,
+    address: string,
+    price: string,
+    url: string,
+    mail: string,
+    description: string
+};
 
 export default function CreateExperience() {
 
     const {t} = useTranslation();
+    const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(false)
 
-    //TODO obtenerlas de un llamado a la API ??
-    const categories: CategoryModel[] = [
-        {categoryId: 1, name: 'Aventura'},
-        {categoryId: 2, name: 'Gastronomia'},
-        {categoryId: 3, name: 'Hoteleria'},
-        {categoryId: 4, name: 'Relax'},
-        {categoryId: 5, name: 'Vida_nocturna'},
-        {categoryId: 6, name: 'Historico'},
-    ]
+    const [categories, setCategories] = useState<CategoryModel[]>(new Array(1))
+    const [countries, setCountries] = useState<CountryModel[]>(new Array(1))
+    const [cities, setCities] = useState<CityModel[]>(new Array(1))
 
-    //TODO obtenerlas de un llamado a la API ??
-    const country: CountryModel = {
-        countryId: 1,
-        name: "Argentina",
-    }
+    const [selectedCountry, setSelectedCountry] = useState(null) ;
 
-    //TODO obtenerlas de un llamado a la API ??
-    const cities: CityModel[] = [
-        {cityId: 1, name: "Lucas", country: country,},
-        {cityId: 2, name: "Pedro", country: country,},
-        {cityId: 3, name: "Carlos", country: country,},
-    ]
+    useEffect(() => {
+        serviceHandler(
+            categoryService.getCategories(),
+            navigate, (category) => {
+                setCategories(category)
+            },
+            () => {}
+        ) ;
+        serviceHandler(
+            locationService.getCountries(),
+            navigate, (country) => {
+                setCountries(country)
+            },
+            () => {}
+        ) ;
+        //TODO: only call after country is selected
+        // serviceHandler(
+        //     locationService.getCitiesByCountry(selectedCountry),
+        //     navigate, (city) => {
+        //         setCities(city)
+        //     },
+        //     () => {}
+        // ) ;
+    }, [])
+
+    const { handleSubmit, reset, setError, setValue, formState: {errors}} = useForm<FormExperienceData>({
+        criteriaMode: "all",
+    });
+
+    const [invalidCredentials, setInvalidCredendtials] = useState(false);
+
+    const onSubmit = handleSubmit(({name, category, country, city, address, price, url, mail, description}: FormExperienceData) => {
+            setInvalidCredendtials(false);
+            experienceService.createExperience(name, category, country, city, address, price, url, mail, description)
+                .then((result) =>
+                    navigate(result.getData().url.toString(), {replace: true})
+                )
+                .catch(() => {});
+        }
+    );
 
     return (
         <div className="d-flex flex-column justify-content-center mx-5 my-2 p-0">

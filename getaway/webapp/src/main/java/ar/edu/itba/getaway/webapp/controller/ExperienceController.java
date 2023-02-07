@@ -58,8 +58,6 @@ public class ExperienceController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
     private static final String ACCEPTED_MIME_TYPES = "image/";
 
-    //TODO: hacer andar
-    // Endpoint para carousel de landing page
     @GET
     @Path("/landingPage")
     @Produces(value = {MediaType.APPLICATION_JSON})
