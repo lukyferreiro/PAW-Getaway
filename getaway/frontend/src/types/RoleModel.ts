@@ -1,4 +1,4 @@
 export default interface RoleModel {
-    roleId: number;
+    id: number;
     roleName: string;
 }

@@ -1,7 +1,7 @@
 import CountryModel from "./CountryModel";
 
 export default interface CityModel {
-    cityId: number;
+    id: number;
     name: string;
     country: CountryModel;
 }

@@ -3,7 +3,7 @@ import UserModel from "./UserModel";
 import CategoryModel from "./CategoryModel";
 
 export default interface ExperienceModel {
-    experienceId: number;
+    id: number;
     name: string;
     price: number;
     address: string;

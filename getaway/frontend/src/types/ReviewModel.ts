@@ -9,5 +9,4 @@ export default interface ReviewModel {
     date: string;
     experience: ExperienceModel;
     user: UserModel;
-
 }

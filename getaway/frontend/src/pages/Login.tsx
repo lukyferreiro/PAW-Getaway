@@ -40,27 +40,27 @@ export default function Login() {
         }
     );
 
-    let eyeBtn = document.getElementById("passwordEye") ;
-    let passwordInput = document.getElementById("password");
-    let eye = document.getElementById("eye");
-    let visible = false;
+    // let eyeBtn = document.getElementById("passwordEye") ;
+    // let passwordInput = document.getElementById("password");
+    // let eye = document.getElementById("eye");
+    // let visible = false;
 
     // @ts-ignore
-    eyeBtn.addEventListener("click", () => {
-        if (visible) {
-            visible = false;
-            // @ts-ignore
-            passwordInput.setAttribute("type", "password");
-        } else {
-            visible = true;
-            // @ts-ignore
-            passwordInput.setAttribute("type", "text");
-        }
-        // @ts-ignore
-        eye.classList.toggle("fa-eye-slash");
-        // @ts-ignore
-        eye.classList.toggle("fa-eye");
-    });
+    // eyeBtn.addEventListener("click", () => {
+    //     if (visible) {
+    //         visible = false;
+    //         // @ts-ignore
+    //         passwordInput.setAttribute("type", "password");
+    //     } else {
+    //         visible = true;
+    //         // @ts-ignore
+    //         passwordInput.setAttribute("type", "text");
+    //     }
+    //     // @ts-ignore
+    //     eye.classList.toggle("fa-eye-slash");
+    //     // @ts-ignore
+    //     eye.classList.toggle("fa-eye");
+    // });
 
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">

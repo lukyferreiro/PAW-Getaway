@@ -1,5 +1,5 @@
 export default interface UserModel {
-    userId: number;
+    id: number;
     name: string;
     surname: string;
     email: string;

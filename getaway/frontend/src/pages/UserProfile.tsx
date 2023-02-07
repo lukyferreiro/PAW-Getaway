@@ -18,8 +18,10 @@ export default function UserProfile() {
     useEffect(() => {
         setIsLoadingImg(true)
         if (user) {
+            console.log(user?.id)
+            console.log(user?.email)
             serviceHandler(
-                userService.getUserProfileImage(user?.userId),
+                userService.getUserProfileImage(user?.id),
                 navigate, (userImg) => {
                     setUserImg(userImg.size > 0 ? URL.createObjectURL(userImg) : undefined)
                 },

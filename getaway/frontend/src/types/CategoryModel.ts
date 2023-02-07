@@ -1,4 +1,4 @@
 export default interface CategoryModel {
-    categoryId: number;
+    id: number;
     name: string;
 }
