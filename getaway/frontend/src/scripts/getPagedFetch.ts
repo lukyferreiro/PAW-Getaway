@@ -17,7 +17,7 @@ export async function getPagedFetch<RetType>(
             new PagedContent(parsedResponse, maxPage ? parseInt(maxPage) : 1)
         );
     } catch (err: any) {
-        return Result.failed(new ErrorResponse(parseInt(err.message), err.message));
+        return Result.failed(new ErrorResponse(parseInt(err.message), err.title, err.message));
     }
 }
 

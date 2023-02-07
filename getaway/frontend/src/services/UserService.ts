@@ -29,7 +29,7 @@ export class UserService {
 
         if (confirmPassword !== password) {
             return Result.failed(
-                new ErrorResponse(409, "Confirm password must match with password")
+                new ErrorResponse(409, "Conflict","Confirm password must match with password")
             );
         }
 

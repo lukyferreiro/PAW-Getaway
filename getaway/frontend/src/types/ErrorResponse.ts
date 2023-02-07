@@ -1,17 +1,23 @@
 export default class ErrorResponse {
-    private readonly code: number;
-    private readonly description: string;
+    private readonly status: number;
+    private readonly title: string;
+    private readonly message: string;
 
-    public constructor(code: number, description: string) {
-        this.code = code;
-        this.description = description;
+    public constructor(status: number, title: string, message: string) {
+        this.status = status;
+        this.title = title;
+        this.message = message;
     }
 
-    public getCode(): number {
-        return this.code;
+    public getStatus(): number {
+        return this.status;
     }
 
-    public getDescription(): string {
-        return this.description;
+    public getTitle(): string {
+        return this.title;
+    }
+
+    public getMessage(): string {
+        return this.message;
     }
 }

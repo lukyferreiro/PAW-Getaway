@@ -42,11 +42,11 @@ export default function Login() {
                             navigate(from, {replace: true});
                         })
                 )
-                .catch(() => navigate("/error?code=500"));
+                .catch(() => navigate("/error?code=500&message=Server error"));
         }
     );
 
-    // const {resetPassword, handleSubmit} = useForm<FormDataPassReset>({
+    // const {register, handleSubmit} = useForm<FormDataPassReset>({
     //     criteriaMode: "all",
     // });
     //

@@ -21,9 +21,9 @@ export class LoginService {
             const parsedResponse = await checkError<UserModel>(response);
             parsedResponse.token = response.headers.get("Authorization")?.toString().split(" ")[1];
             return Result.ok(parsedResponse as UserModel);
-        } catch (error: any) {
+        } catch (err: any) {
             return Result.failed(
-                new ErrorResponse(parseInt(error.message), error.message)
+                new ErrorResponse(parseInt(err.message), err.title, err.message)
             );
         }
     }

@@ -155,4 +155,15 @@ export const TRANSLATIONS_EN = {
     },
 
     Copyright: "Getaway Copyright © {{year}} - All rights reserved",
+
+    404: {
+        title: "Error 404",
+        description: "It seems the page you're looking for doesn't exist.",
+    },
+
+    Error: {
+        whoops: "Whoops!",
+        backBtn: "Home",
+        title: "Error {{errorCode}}",
+    },
 };
