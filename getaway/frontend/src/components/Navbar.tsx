@@ -33,12 +33,12 @@ export default function Navbar() {
 
     //TODO obtenerlas de un llamado a la API ??
     const categories: CategoryModel[] = [
-        {categoryId: 1, name: 'Aventura'},
-        {categoryId: 2, name: 'Gastronomia'},
-        {categoryId: 3, name: 'Hoteleria'},
-        {categoryId: 4, name: 'Relax'},
-        {categoryId: 5, name: 'Vida_nocturna'},
-        {categoryId: 6, name: 'Historico'},
+        {id: 1, name: 'Aventura'},
+        {id: 2, name: 'Gastronomia'},
+        {id: 3, name: 'Hoteleria'},
+        {id: 4, name: 'Relax'},
+        {id: 5, name: 'Vida_nocturna'},
+        {id: 6, name: 'Historico'},
     ]
 
     return (
