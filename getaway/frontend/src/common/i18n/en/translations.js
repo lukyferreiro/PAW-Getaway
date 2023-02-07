@@ -91,6 +91,45 @@ export const TRANSLATIONS_EN = {
         noReviews: "This experience has no reviews yet. Be the first to write one!"
     },
 
+    CreateExperience: {
+        title: "Create your experience",
+        error: {
+            name: {
+                pattern: "aaaa",
+                isRequired: "aaa",
+                max: "aaaa",
+            },
+            category: {
+                isRequired: "aaaa",
+            },
+            description: {
+                pattern: "aaaa",
+                isRequired: "aaaa",
+                max: "aaaa",
+            },
+            mail: {
+                pattern: "aaaa",
+                isRequired: "aaaa",
+                max: "aaaa",
+            },
+            url: {
+                pattern: "aaaa",
+                max: "aaaa",
+            },
+            country: {
+                isRequired: "aaaa",
+            },
+            city: {
+                isRequired: "aaaa",
+            },
+            address: {
+                pattern: "aaaa",
+                isRequired: "aaaa",
+                max: "aaaa",
+            },
+        }
+    },
+
     User: {
         profile: {
             description: "My profile",
@@ -112,10 +151,6 @@ export const TRANSLATIONS_EN = {
     Input: {
         optional: "(Optional)",
         maxValue: "(Max {{value}})",
-    },
-
-    CreateExperience: {
-        title: "Create your experience",
     },
 
     Copyright: "Getaway Copyright © {{year}} - All rights reserved",

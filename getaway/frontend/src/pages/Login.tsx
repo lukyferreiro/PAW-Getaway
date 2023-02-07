@@ -5,12 +5,17 @@ import {useForm} from "react-hook-form";
 import React, {useState} from "react";
 import {loginService} from "../services";
 import {useAuth} from "../hooks/useAuth";
+import Modal from "react-modal";
 
 
-type FormData = {
+type FormDataLogin = {
     email: string;
     password: string;
     rememberMe: boolean;
+};
+
+type FormDataPassReset = {
+    email: string;
 };
 
 export default function Login() {
@@ -21,18 +26,19 @@ export default function Login() {
     let auth = useAuth();
     // @ts-ignore
     let from = location.state?.from?.pathname || "/";
+    const [isOpenPassword, setIsOpenPassword] = useState(false);
     const [invalidCredentials, setInvalidCredendtials] = useState(false);
 
-    const {register, handleSubmit} = useForm<FormData>({
+    const {register, handleSubmit} = useForm<FormDataLogin>({
         criteriaMode: "all",
     });
 
-    const onSubmit = handleSubmit(({email, password, rememberMe}: FormData) => {
+    const onSubmitLogin = handleSubmit((data: FormDataLogin) => {
             setInvalidCredendtials(false);
-            loginService.login(email, password)
+            loginService.login(data.email, data.password)
                 .then((user) =>
                     user.hasFailed() ? setInvalidCredendtials(true) :
-                        auth.signIn(user.getData(), rememberMe, () => {
+                        auth.signIn(user.getData(), data.rememberMe, () => {
                             navigate(from, {replace: true});
                         })
                 )
@@ -40,27 +46,14 @@ export default function Login() {
         }
     );
 
-    // let eyeBtn = document.getElementById("passwordEye") ;
-    // let passwordInput = document.getElementById("password");
-    // let eye = document.getElementById("eye");
-    // let visible = false;
-
-    // @ts-ignore
-    // eyeBtn.addEventListener("click", () => {
-    //     if (visible) {
-    //         visible = false;
-    //         // @ts-ignore
-    //         passwordInput.setAttribute("type", "password");
-    //     } else {
-    //         visible = true;
-    //         // @ts-ignore
-    //         passwordInput.setAttribute("type", "text");
-    //     }
-    //     // @ts-ignore
-    //     eye.classList.toggle("fa-eye-slash");
-    //     // @ts-ignore
-    //     eye.classList.toggle("fa-eye");
+    // const {resetPassword, handleSubmit} = useForm<FormDataPassReset>({
+    //     criteriaMode: "all",
     // });
+    //
+    // const onSubmitPassReset = handleSubmit((data: FormData) => {
+    //
+    //     }
+    // );
 
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
@@ -76,7 +69,7 @@ export default function Login() {
                     </div>
                     <div className="col-12">
                         <div className="container-fluid px-0">
-                            <form id="loginForm" onSubmit={onSubmit}>
+                            <form id="loginForm" onSubmit={onSubmitLogin}>
                                 <div className="row">
                                     <div className="col-12">  {/*  Email */}
                                         <label className="form-label d-flex align-items-center"
@@ -105,7 +98,10 @@ export default function Login() {
                                                 </label>
                                             </div>
                                             <div className="col-6 px-0 d-flex justify-content-end form-label">
-                                                <div className="link-primary" tabIndex={-1}>
+                                                <div className="link-primary" tabIndex={-1}
+                                                     onClick={() => {
+                                                         setIsOpenPassword(true)
+                                                     }}>
                                                    <span className="text-right" style={{fontSize: "medium"}}>
                                                        {t('Navbar.forgotPassword')}
                                                    </span>
@@ -118,7 +114,7 @@ export default function Login() {
                                                            {...register("password", {})}/>
                                                     <div className="input-group-append">
                                                         <button className="btn btn-lg form-control btn-eye input-group-text"
-                                                                id="passwordEye" type="button" tabIndex={-1} >
+                                                                id="passwordEye" type="button" tabIndex={-1}>
                                                             <i id="eye" className="far fa-eye-slash"></i>
                                                         </button>
                                                     </div>
@@ -140,9 +136,9 @@ export default function Login() {
                     </div>
 
                     <div className="col-12 d-flex align-items-center justify-content-center">
-                        {invalidCredentials && (
+                        {invalidCredentials &&
                             <p>Todo mal</p>
-                        )}
+                        }
                     </div>
 
 
@@ -154,14 +150,58 @@ export default function Login() {
                     <div className="col-12 mt-4">
                         <p className="mb-0 text-center">
                             {t('Navbar.newUser')}
-                            <div className="link-primary form-label"
-                                 tabIndex={-1}>
+                            <div className="link-primary form-label" tabIndex={-1}>
                                 {t('Navbar.createAccount')}
                             </div>
                         </p>
                     </div>
                 </div>
             </div>
+
+
+            <Modal style={{overlay: {zIndex: 100}}}
+                   className="modal-pop-up"
+                   isOpen={isOpenPassword}
+                   contentLabel="PopUpPassword"
+                   onRequestClose={() => setIsOpenPassword(false)}>
+                <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
+                    <div className="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">
+                        <div className="col-12">
+                            <h1 className="text-center title">
+                                {t('Navbar.resetPasswordTitle')}
+                            </h1>
+                        </div>
+                        <div className="col-12">
+                            <div className="container-fluid">
+                                <div className="row">
+                                    {/*TODO Add on submit*/}
+                                    <form id="passwordReset">
+                                        <label className="form-label d-flex align-items-center"
+                                               htmlFor="email">
+                                            <img src={"./images/ic_user.svg"} alt="Imagen perfil"
+                                                 style={{marginRight: "5px"}}/>
+                                            {t('Navbar.email')}
+                                            <span className="required-field">*</span>
+                                        </label>
+                                        <input type="text" id="email" name="email"
+                                               className="form-control mb-2"
+                                               placeholder="juan@ejemplo.com"
+                                               aria-describedby="email input"/>
+                                        {/*<form:errors path="email" cssClass="form-error-label"*/}
+                                        {/*             element="p"/>*/}
+                                        <div className="col-12 mt-3 d-flex align-items-center justify-content-center">
+                                            <button form="passwordReset" type="submit" className='btn button-primary'>
+                                                {t('Navbar.resetPasswordButton')}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
+
         </div>
     );
 

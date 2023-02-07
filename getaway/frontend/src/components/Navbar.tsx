@@ -97,125 +97,125 @@ export default function Navbar() {
                     {/*    contentLabel="PopUpSignIn"*/}
                     {/*    onRequestClose={() => setIsOpenSignIn(false)}*/}
                     {/*>*/}
-                        {/*<div*/}
-                        {/*    className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">*/}
-                        {/*    <div className="container-lg w-100 p-2">*/}
-                        {/*        <div className="row w-100 m-0 p-5 align-items-center justify-content-center">*/}
-                        {/*            <div className="col-12">*/}
-                        {/*                <h1 className="text-center title">*/}
-                        {/*                    {t('Navbar.loginTitle')}*/}
-                        {/*                </h1>*/}
-                        {/*                <p className="subtitle text-center">*/}
-                        {/*                    {t('Navbar.loginDescription')}*/}
-                        {/*                </p>*/}
-                        {/*            </div>*/}
-                        {/*            <div className="col-12">*/}
-                        {/*                <div className="container-fluid px-0">*/}
-                        {/*                    /!*     <c:url value="/login" var="postPath"/>*!/*/}
-                        {/*                    /!*     <form id="loginForm" action="${postPath}" accept-charset="UTF-8"*!/*/}
-                        {/*                    /!*           method="POST"*!/*/}
-                        {/*                    /!*           encType="application/x-www-form-urlencoded">*!/*/}
-                        {/*                    <div className="row">*/}
-                        {/*                        <div className="col-12">  /!*  Email *!/*/}
-                        {/*                            <label className="form-label d-flex align-items-center"*/}
-                        {/*                                   htmlFor="email">*/}
-                        {/*                                <img*/}
-                        {/*                                    src={"./images/ic_user.svg"}*/}
-                        {/*                                    alt="Imagen perfil"*/}
-                        {/*                                    style={{marginRight: "5px"}}/>*/}
-                        {/*                                {t('Navbar.email')}*/}
-                        {/*                            </label>*/}
-                        {/*                            <input type="text" id="email" name="email"*/}
-                        {/*                                   className="form-control mb-2"*/}
-                        {/*                                   aria-describedby="email input"/>*/}
-                        {/*                        </div>*/}
-                        {/*                    </div>*/}
+                    {/*    <div*/}
+                    {/*        className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">*/}
+                    {/*        <div className="container-lg w-100 p-2">*/}
+                    {/*            <div className="row w-100 m-0 p-5 align-items-center justify-content-center">*/}
+                    {/*                <div className="col-12">*/}
+                    {/*                    <h1 className="text-center title">*/}
+                    {/*                        {t('Navbar.loginTitle')}*/}
+                    {/*                    </h1>*/}
+                    {/*                    <p className="subtitle text-center">*/}
+                    {/*                        {t('Navbar.loginDescription')}*/}
+                    {/*                    </p>*/}
+                    {/*                </div>*/}
+                    {/*                <div className="col-12">*/}
+                    {/*                    <div className="container-fluid px-0">*/}
+                    {/*                        /!*     <c:url value="/login" var="postPath"/>*!/*/}
+                    {/*                        /!*     <form id="loginForm" action="${postPath}" accept-charset="UTF-8"*!/*/}
+                    {/*                        /!*           method="POST"*!/*/}
+                    {/*                        /!*           encType="application/x-www-form-urlencoded">*!/*/}
+                    {/*                        <div className="row">*/}
+                    {/*                            <div className="col-12">  /!*  Email *!/*/}
+                    {/*                                <label className="form-label d-flex align-items-center"*/}
+                    {/*                                       htmlFor="email">*/}
+                    {/*                                    <img*/}
+                    {/*                                        src={"./images/ic_user.svg"}*/}
+                    {/*                                        alt="Imagen perfil"*/}
+                    {/*                                        style={{marginRight: "5px"}}/>*/}
+                    {/*                                    {t('Navbar.email')}*/}
+                    {/*                                </label>*/}
+                    {/*                                <input type="text" id="email" name="email"*/}
+                    {/*                                       className="form-control mb-2"*/}
+                    {/*                                       aria-describedby="email input"/>*/}
+                    {/*                            </div>*/}
+                    {/*                        </div>*/}
 
-                        {/*                    <div className="col-12 mt-2">*/}
-                        {/*                        <div className="container-fluid">*/}
-                        {/*                            <div className="row">*/}
-                        {/*                                <div className="col-6 px-0">*/}
-                        {/*                                    <label*/}
-                        {/*                                        className="form-label d-flex align-items-center"*/}
-                        {/*                                        htmlFor="password">*/}
-                        {/*                                        <img*/}
-                        {/*                                            src={"./images/ic_password.svg"}*/}
-                        {/*                                            alt="Imagen perfil"*/}
-                        {/*                                            style={{marginRight: "5px"}}/>*/}
-                        {/*                                        {t('Navbar.password')}*/}
-                        {/*                                    </label>*/}
-                        {/*                                </div>*/}
-                        {/*                                <div*/}
-                        {/*                                    className="col-6 px-0 d-flex justify-content-end form-label">*/}
-                        {/*                                    <div className="link-primary" onClick={() => {*/}
-                        {/*                                        setIsOpenSignIn(false)*/}
-                        {/*                                        setIsOpenPassword(true)*/}
-                        {/*                                    }}*/}
-                        {/*                                         tabIndex={-1}>*/}
-                        {/*                   <span className="text-right" style={{fontSize: "medium"}} onClick={() => setIsOpenSignIn(false)}>*/}
-                        {/*                       {t('Navbar.forgotPassword')}*/}
-                        {/*                   </span>*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                                <div*/}
-                        {/*                                    className="col-12 px-0 d-flex justify-content-start align-items-center">*/}
-                        {/*                                    <div*/}
-                        {/*                                        className="input-group d-flex justify-content-start align-items-center">*/}
-                        {/*                                        <input type="password" className="form-control"*/}
-                        {/*                                               id="password" name="password"*/}
-                        {/*                                               aria-describedby="password input"/>*/}
-                        {/*                                        /!*<div className="input-group-append">*!/*/}
-                        {/*                                        /!*    <button id="passwordEye" type="button"*!/*/}
-                        {/*                                        /!*            tabIndex={-1}*!/*/}
-                        {/*                                        /!*            className="btn btn-lg form-control btn-eye input-group-text">*!/*/}
-                        {/*                                        /!*        <i id="eye"*!/*/}
-                        {/*                                        /!*           className="far fa-eye-slash"></i>*!/*/}
-                        {/*                                        /!*    </button>*!/*/}
-                        {/*                                        /!*</div>*!/*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                                /!*                     <c:if test="${error==true}">*!/*/}
-                        {/*                                /!*                         <div*!/*/}
-                        {/*                                /!*                             className="col-12 mt-2 px-0 d-flex justify-content-start align-items-center">*!/*/}
-                        {/*                                /!*                             <p className="mb-0 form-error-label">*!/*/}
-                        {/*                                /!*                                 <spring:message code="loginForm.error"/>*!/*/}
-                        {/*                                /!*                             </p>*!/*/}
-                        {/*                                /!*                         </div>*!/*/}
-                        {/*                                /!*                     </c:if>*!/*/}
-                        {/*                            </div>*/}
-                        {/*                        </div>*/}
-                        {/*                    </div>*/}
+                    {/*                        <div className="col-12 mt-2">*/}
+                    {/*                            <div className="container-fluid">*/}
+                    {/*                                <div className="row">*/}
+                    {/*                                    <div className="col-6 px-0">*/}
+                    {/*                                        <label*/}
+                    {/*                                            className="form-label d-flex align-items-center"*/}
+                    {/*                                            htmlFor="password">*/}
+                    {/*                                            <img*/}
+                    {/*                                                src={"./images/ic_password.svg"}*/}
+                    {/*                                                alt="Imagen perfil"*/}
+                    {/*                                                style={{marginRight: "5px"}}/>*/}
+                    {/*                                            {t('Navbar.password')}*/}
+                    {/*                                        </label>*/}
+                    {/*                                    </div>*/}
+                    {/*                                    <div*/}
+                    {/*                                        className="col-6 px-0 d-flex justify-content-end form-label">*/}
+                    {/*                                        <div className="link-primary" onClick={() => {*/}
+                    {/*                                            setIsOpenSignIn(false)*/}
+                    {/*                                            setIsOpenPassword(true)*/}
+                    {/*                                        }}*/}
+                    {/*                                             tabIndex={-1}>*/}
+                    {/*                       <span className="text-right" style={{fontSize: "medium"}} onClick={() => setIsOpenSignIn(false)}>*/}
+                    {/*                           {t('Navbar.forgotPassword')}*/}
+                    {/*                       </span>*/}
+                    {/*                                        </div>*/}
+                    {/*                                    </div>*/}
+                    {/*                                    <div*/}
+                    {/*                                        className="col-12 px-0 d-flex justify-content-start align-items-center">*/}
+                    {/*                                        <div*/}
+                    {/*                                            className="input-group d-flex justify-content-start align-items-center">*/}
+                    {/*                                            <input type="password" className="form-control"*/}
+                    {/*                                                   id="password" name="password"*/}
+                    {/*                                                   aria-describedby="password input"/>*/}
+                    {/*                                            /!*<div className="input-group-append">*!/*/}
+                    {/*                                            /!*    <button id="passwordEye" type="button"*!/*/}
+                    {/*                                            /!*            tabIndex={-1}*!/*/}
+                    {/*                                            /!*            className="btn btn-lg form-control btn-eye input-group-text">*!/*/}
+                    {/*                                            /!*        <i id="eye"*!/*/}
+                    {/*                                            /!*           className="far fa-eye-slash"></i>*!/*/}
+                    {/*                                            /!*    </button>*!/*/}
+                    {/*                                            /!*</div>*!/*/}
+                    {/*                                        </div>*/}
+                    {/*                                    </div>*/}
+                    {/*                                    /!*                     <c:if test="${error==true}">*!/*/}
+                    {/*                                    /!*                         <div*!/*/}
+                    {/*                                    /!*                             className="col-12 mt-2 px-0 d-flex justify-content-start align-items-center">*!/*/}
+                    {/*                                    /!*                             <p className="mb-0 form-error-label">*!/*/}
+                    {/*                                    /!*                                 <spring:message code="loginForm.error"/>*!/*/}
+                    {/*                                    /!*                             </p>*!/*/}
+                    {/*                                    /!*                         </div>*!/*/}
+                    {/*                                    /!*                     </c:if>*!/*/}
+                    {/*                                </div>*/}
+                    {/*                            </div>*/}
+                    {/*                        </div>*/}
 
-                        {/*                    <div*/}
-                        {/*                        className="col-12 mt-3 d-flex justify-content-start align-items-center">*/}
-                        {/*                        <input type="checkbox" id="rememberMe" name="rememberMe"/>*/}
-                        {/*                        <label className="mb-0 mx-2" htmlFor="rememberMe">*/}
-                        {/*                            {t('Navbar.rememberMe')}*/}
-                        {/*                        </label>*/}
-                        {/*                    </div>*/}
-                        {/*                    /!*</form>*!/*/}
-                        {/*                </div>*/}
-                        {/*            </div>*/}
-                        {/*            <div className="col-12 d-flex align-items-center justify-content-center">*/}
-                        {/*                <button form="loginForm" type="submit" className="w-100 btn-login my-2">*/}
-                        {/*                    {t('Navbar.login')}*/}
-                        {/*                </button>*/}
-                        {/*            </div>*/}
-                        {/*            <div className="col-12 mt-4">*/}
-                        {/*                <p className="mb-0 text-center">*/}
-                        {/*                    {t('Navbar.newUser')}*/}
-                        {/*                    <div className="link-primary form-label" onClick={() => {*/}
-                        {/*                        setIsOpenSignIn(false)*/}
-                        {/*                        setIsOpenCreate(true)*/}
-                        {/*                    }}*/}
-                        {/*                         tabIndex={-1}>*/}
-                        {/*                        {t('Navbar.createAccount')}*/}
-                        {/*                    </div>*/}
-                        {/*                </p>*/}
-                        {/*            </div>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
+                    {/*                        <div*/}
+                    {/*                            className="col-12 mt-3 d-flex justify-content-start align-items-center">*/}
+                    {/*                            <input type="checkbox" id="rememberMe" name="rememberMe"/>*/}
+                    {/*                            <label className="mb-0 mx-2" htmlFor="rememberMe">*/}
+                    {/*                                {t('Navbar.rememberMe')}*/}
+                    {/*                            </label>*/}
+                    {/*                        </div>*/}
+                    {/*                        /!*</form>*!/*/}
+                    {/*                    </div>*/}
+                    {/*                </div>*/}
+                    {/*                <div className="col-12 d-flex align-items-center justify-content-center">*/}
+                    {/*                    <button form="loginForm" type="submit" className="w-100 btn-login my-2">*/}
+                    {/*                        {t('Navbar.login')}*/}
+                    {/*                    </button>*/}
+                    {/*                </div>*/}
+                    {/*                <div className="col-12 mt-4">*/}
+                    {/*                    <p className="mb-0 text-center">*/}
+                    {/*                        {t('Navbar.newUser')}*/}
+                    {/*                        <div className="link-primary form-label" onClick={() => {*/}
+                    {/*                            setIsOpenSignIn(false)*/}
+                    {/*                            setIsOpenCreate(true)*/}
+                    {/*                        }}*/}
+                    {/*                             tabIndex={-1}>*/}
+                    {/*                            {t('Navbar.createAccount')}*/}
+                    {/*                        </div>*/}
+                    {/*                    </p>*/}
+                    {/*                </div>*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
                     {/*</Modal>*/}
 
                     {/*<Modal*/}

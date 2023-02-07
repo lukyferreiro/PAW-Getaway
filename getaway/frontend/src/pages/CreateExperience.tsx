@@ -1,14 +1,13 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {CategoryModel, CityModel, CountryModel} from "../types";
-import {categoryService, experienceService, locationService, loginService, userService} from "../services";
+import {categoryService, experienceService, locationService} from "../services";
 import {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {set, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
-import UserModel from "../types/UserModel";
 
-type FormExperienceData = {
+type FormDataExperience = {
     name: string,
     category: number,
     country: string,
@@ -24,7 +23,6 @@ export default function CreateExperience() {
 
     const {t} = useTranslation();
     const navigate = useNavigate()
-    const [isLoading, setIsLoading] = useState(false)
 
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(1))
     const [countries, setCountries] = useState<CountryModel[]>(new Array(1))
@@ -47,27 +45,28 @@ export default function CreateExperience() {
             },
             () => {}
         ) ;
-        //TODO: only call after country is selected
-        // serviceHandler(
-        //     locationService.getCitiesByCountry(selectedCountry),
-        //     navigate, (city) => {
-        //         setCities(city)
-        //     },
-        //     () => {}
-        // ) ;
+        // TODO: only call after country is selected
+        serviceHandler(
+            locationService.getCitiesByCountry(14),
+            navigate, (city) => {
+                setCities(city)
+            },
+            () => {}
+        ) ;
     }, [])
 
-    const { handleSubmit, reset, setError, setValue, formState: {errors}} = useForm<FormExperienceData>({
-        criteriaMode: "all",
-    });
+    const {register, handleSubmit, formState: { errors },}
+        = useForm<FormDataExperience>({ criteriaMode: "all" });
 
-    const [invalidCredentials, setInvalidCredendtials] = useState(false);
 
-    const onSubmit = handleSubmit(({name, category, country, city, address, price, url, mail, description}: FormExperienceData) => {
-            setInvalidCredendtials(false);
-            experienceService.createExperience(name, category, country, city, address, price, url, mail, description)
-                .then((result) =>
-                    navigate(result.getData().url.toString(), {replace: true})
+    const onSubmit = handleSubmit((data: FormDataExperience) => {
+            experienceService.createExperience(data.name, data.category, data.country, data.city,
+                data.address, data.price.toString(), data.url, data.mail, data.description)
+                .then((result) => {
+                    if (!result.hasFailed()) {
+                        navigate(result.getData().url.toString(), {replace: true})
+                    }
+                    }
                 )
                 .catch(() => {});
         }
@@ -79,12 +78,13 @@ export default function CreateExperience() {
                 {t('CreateExperience.title')}
             </h2>
 
-            {/*<c:url value="${endpoint}" var="postPath"/>*/}
-            <form id="createExperienceForm">
+            <form id="createExperienceForm" acceptCharset="utf-8"
+                  onSubmit={onSubmit} method="post">
                 <div className="container-inputs">
                     <div className="p-0 m-0 d-flex">
                         <div className="col m-2">
-                            <label className="form-label d-flex justify-content-between">
+                            <label className="form-label d-flex justify-content-between"
+                                   htmlFor="experienceName">
                                 <div>
                                     {t('Experience.name')}
                                     <span className="required-field">*</span>
@@ -95,36 +95,54 @@ export default function CreateExperience() {
                                     </h6>
                                 </div>
                             </label>
-                            <input max="50" type="text" className="form-control"/>
-                            {/*TODO ver como poner esto del css de error*/}
-                            {/*cssErrorClass="form-control is-invalid"*/}
-                            {/*<form:errors path="experienceName" element="p" cssClass="form-error-label"/>*/}
+                            <input max="50" type="text" className="form-control"
+                                   {...register("name", {
+                                       required: true,
+                                       max: 50,
+                                       pattern: {
+                                           value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
+                                           message: t("CreateExperience.error.name.pattern"),
+                                       },
+                                   })}
+                            />
+                            {errors.name?.type === "required" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("CreateExperience.error.name.isRequired")}
+                                </p>
+                            )}
+                            {errors.name?.type === "max" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("CreateExperience.error.name.max")}
+                                </p>
+                            )}
                         </div>
                         <div className="col m-2">
-                            <label className="form-label">
+                            <label className="form-label" htmlFor="experienceCategory">
                                 {t('Experience.category')}
                                 <span className="required-field">*</span>
                             </label>
-                            {/*TODO ver como poner esto del css de error*/}
-                            {/*cssErrorClass="form-control is-invalid"*/}
-                            <select className="form-select">
+                            <select className="form-select" required
+                                    {...register("category", {required: true})}>
                                 {/*<c:if test="${formCategory == null}">*/}
                                 {/*    <option value="" disabled selected hidden>*/}
                                 {/*        <c:out value="${placeholder}"/>*/}
                                 {/*    </option>*/}
                                 {/*</c:if>*/}
-
                                 {categories.map((category) => (
-                                    <option selected>
-                                        {t('Categories.' + category.name)}
+                                    <option key={category.id} value={category.id}>
+                                        {category.name}
                                     </option>
                                 ))}
                             </select>
-                            {/*TODO ver como poner esto del css de error*/}
-                            {/*<form:errors path="experienceCategory" element="p" cssClass="form-error-label"/>*/}
+                            {errors.category?.type === "required" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("CreateExperience.error.category.isRequired")}
+                                </p>
+                            )}
                         </div>
                         <div className="col m-2">
-                            <label className="form-label d-flex justify-content-between">
+                            <label className="form-label d-flex justify-content-between"
+                                   htmlFor="price">
                                 <div>
                                     {t('Experience.price')}
                                     <span className="optional-text">
@@ -137,15 +155,15 @@ export default function CreateExperience() {
                                     </h6>
                                 </div>
                             </label>
-                            <input type="text" className="form-control" id="experienceFormPriceInput" placeholder="0"/>
-                            {/*TODO ver como usar los errores*/}
-                            {/*cssErrorClass="form-control is-invalid"*/}
-                            {/*<form:errors path="experiencePrice" element="p" cssClass="form-error-label"/>*/}
+                            <input type="number" max="9999999" className="form-control" id="experienceFormPriceInput" placeholder="0"
+                                   {...register("price", {})}
+                            />
                         </div>
                     </div>
 
                     <div className="p-0 m-2 d-flex flex-column">
-                        <label className="form-label d-flex justify-content-between">
+                        <label className="form-label d-flex justify-content-between"
+                                htmlFor="description">
                             <div>
                                 {t('Experience.information')}
                                 <span className="optional-text">
@@ -158,15 +176,32 @@ export default function CreateExperience() {
                                 </h6>
                             </div>
                         </label>
-                        <textarea maxLength={500} className="form-control" style={{maxHeight: "300px"}}/>
-                        {/*TODO ver como usar los errores*/}
-                        {/*cssErrorClass="form-control is-invalid"*/}
-                        {/*<form:errors path="experienceInfo" element="p" cssClass="form-error-label"/>*/}
+                        <textarea maxLength={500} className="form-control" style={{maxHeight: "300px"}}
+                                  {...register("description", {
+                                      required: true,
+                                      maxLength: 500,
+                                      pattern: {
+                                          value: /^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°";$%#&=:¿?!¡\n\s\t/.-])*$/,
+                                          message: t("CreateExperience.error.description.pattern"),
+                                      },
+                                  })}
+                        />
+                        {errors.description?.type === "required" && (
+                            <p className="form-control is-invalid form-error-label">
+                                {t("CreateExperience.error.description.isRequired")}
+                            </p>
+                        )}
+                        {errors.description?.type === "maxLength" && (
+                            <p className="form-control is-invalid form-error-label">
+                                {t("CreateExperience.error.description.max")}
+                            </p>
+                        )}
                     </div>
 
                     <div className="p-0 m-0 d-flex">
                         <div className="col m-2">
-                            <label className="form-label d-flex justify-content-between">
+                            <label className="form-label d-flex justify-content-between"
+                                    htmlFor="mail">
                                 <div>
                                     {t('Experience.mail.field')}
                                     <span className="required-field">*</span>
@@ -178,13 +213,30 @@ export default function CreateExperience() {
                                 </div>
                             </label>
                             <input max="255" type="email" className="form-control"
-                                   placeholder={t('Experience.mail.placeholder')}/>
-                            {/*TODO ver como usar los errores*/}
-                            {/*cssErrorClass="form-control is-invalid"*/}
-                            {/*<form:errors path="experienceMail" element="p" cssClass="form-error-label"/>*/}
+                                   placeholder={t('Experience.mail.placeholder')}
+                                   {...register("mail", {
+                                       required: true,
+                                       max: 250,
+                                       pattern: {
+                                           value: /^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$/,
+                                           message: t("CreateExperience.error.mail.pattern"),
+                                       },
+                                   })}
+                            />
+                            {errors.mail?.type === "required" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("CreateExperience.error.mail.isRequired")}
+                                </p>
+                            )}
+                            {errors.mail?.type === "max" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("CreateExperience.error.mail.max")}
+                                </p>
+                            )}
                         </div>
                         <div className="col m-2">
-                            <label className="form-label d-flex justify-content-between">
+                            <label className="form-label d-flex justify-content-between"
+                                    htmlFor="url">
                                 <div>
                                     {t('Experience.url.field')}
                                     <span className="optional-text">
@@ -198,48 +250,72 @@ export default function CreateExperience() {
                                 </div>
                             </label>
                             <input max="500" id="experienceFormUrlInput" type="text"
-                                   className="form-control" placeholder={t('Experience.url.placeholder')}/>
-                            {/*TODO ver como usar los errores*/}
-                            {/*cssErrorClass="form-control is-invalid"*/}
-                            {/*<form:errors path="experienceUrl" element="p" cssClass="form-error-label"/>*/}
+                                   className="form-control" placeholder={t('Experience.url.placeholder')}
+                                   {...register("url", {
+                                       max: 500,
+                                       pattern: {
+                                           value: /^([(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*))?$/,
+                                           message: t("CreateExperience.error.url.pattern"),
+                                       },
+                                   })}
+                            />
+                            {errors.mail?.type === "max" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("CreateExperience.error.url.max")}
+                                </p>
+                            )}
                         </div>
                     </div>
 
                     <div className="p-0 m-0 d-flex">
                         <div className="col m-2">
-                            <label className="form-label">
+                            <label className="form-label" htmlFor="country">
                                 {t('Experience.country')}
                                 <span className="required-field">*</span>
                             </label>
-                            {/*TODO*/}
-                            {/*cssErrorClass="form-control is-invalid"*/}
-                            <select id="experienceFormCountryInput" className="form-select">
-                                {/*<option disabled selected value>*/}
-                                {/*    <c:out value="${placeholder}"/>*/}
-                                {/*</option>*/}
-                                <option selected>
-                                    Argentina
-                                </option>
+                            <select id="experienceFormCountryInput" className="form-select" required
+                                    {...register("country", {required: true})}
+                            >
+                                {/*<c:if test="${formCategory == null}">*/}
+                                {/*    <option value="" disabled selected hidden>*/}
+                                {/*        <c:out value="${placeholder}"/>*/}
+                                {/*    </option>*/}
+                                {/*</c:if>*/}
+                                {countries.map((country) => (
+                                    <option key={country.id} value={country.id}>
+                                        {country.name}
+                                    </option>
+                                ))}
                             </select>
-                            {/*<form:errors path="experienceCountry" element="p" cssClass="form-error-label"/>*/}
+                            {errors.country?.type === "required" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("CreateExperience.error.country.isRequired")}
+                                </p>
+                            )}
                         </div>
                         <div className="col m-2">
-                            <label className="form-label">
+                            <label className="form-label" htmlFor="city">
                                 {t('Experience.city')}
                                 <span className="required-field">*</span>
                             </label>
-                            <select id="experienceFormCityInput" className="form-select">
+                            <select id="experienceFormCityInput" className="form-select" required
+                                    {...register("city", {required: true})}
+                            >
                                 {cities.map((city) => (
-                                    <option selected>
+                                    <option key={city.id} value={city.id}>
                                         {city.name}
                                     </option>
                                 ))}
                             </select>
-                            {/*cssErrorClass="form-control is-invalid"*/}
-                            {/*<form:errors path="experienceCity" element="p" cssClass="form-error-label"/>*/}
+                            {errors.city?.type === "required" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("CreateExperience.error.city.isRequired")}
+                                </p>
+                            )}
                         </div>
                         <div className="col m-2">
-                            <label className="form-label d-flex justify-content-between">
+                            <label className="form-label d-flex justify-content-between"
+                                    htmlFor="address">
                                 <div>
                                     {t('Experience.address')}
                                     <span className="required-field">*</span>
@@ -250,33 +326,38 @@ export default function CreateExperience() {
                                     </h6>
                                 </div>
                             </label>
-                            <input max="100" type="text" className="form-control"/>
-                            {/*TODO*/}
-                            {/*cssErrorClass="form-control is-invalid"*/}
-                            {/*<form:errors path="experienceAddress" element="p" cssClass="form-error-label"/>*/}
+                            <input max="100" type="text" className="form-control"
+                                   {...register("address", {
+                                       required: true,
+                                       max: 100,
+                                       pattern: {
+                                           value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
+                                           message: t("CreateExperience.error.address.pattern"),
+                                       },
+                                   })}
+                            />
+                            {errors.address?.type === "required" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("CreateExperience.error.address.isRequired")}
+                                </p>
+                            )}
+                            {errors.address?.type === "max" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("CreateExperience.error.address.isRequired")}
+                                </p>
+                            )}
                         </div>
                     </div>
 
-                    <div className="p-0 m-2 d-flex flex-column">
-                        <label className="form-label">
-                            {t('Experience.image')}
-                            <span className="optional-text">
-                                 {t('Input.optional')}
-                            </span>
-                        </label>
-                        <input type="file" className="form-control"/>
-                        {/*TODO*/}
-                        {/*cssErrorClass="form-control is-invalid"*/}
-                        {/*<form:errors path="experienceImg" element="p" cssClass="form-error-label"/>*/}
-                    </div>
                 </div>
 
                 <div className="p-0 mt-3 mb-0 d-flex justify-content-around">
+                    {/*TODO hacer que vuelva para donde estaba antes*/}
                     <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton">
                         {t('Button.cancel')}
                     </button>
-                    <button type="submit" className="btn btn-submit-form px-3 py-2" id="createExperienceFormButton"
-                            form="createExperienceForm">
+                    <button className="btn btn-submit-form px-3 py-2" id="createExperienceFormButton"
+                            form="createExperienceForm" type="submit">
                         {t('Button.createExperience')}
                     </button>
                 </div>
