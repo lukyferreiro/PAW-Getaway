@@ -45,13 +45,6 @@ export default function CreateExperience() {
             },
             () => {}
         ) ;
-        // serviceHandler(
-        //     locationService.getCitiesByCountry(14),
-        //     navigate, (city) => {
-        //         setCities(city)
-        //     },
-        //     () => {}
-        // ) ;
     }, [])
 
     function loadCities(countryName: string){
