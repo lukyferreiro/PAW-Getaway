@@ -24,11 +24,11 @@ public class ExperienceDto implements Serializable {
     private String selfUrl;
     private String imageUrl;
     private String reviewsUrl;
-    private Long reviewsCount;
+    private Long reviewCount;
     private CountryDto countryUrl;
     private CityDto city;
     private UserDto user;
-    private CategoryModel category;
+    private CategoryDto category;
     private boolean isFav;
 
     public static Collection<Collection<ExperienceDto>> mapExperienceListToDto (List<List<ExperienceModel>> experiences, UriInfo uriInfo) {
@@ -65,11 +65,11 @@ public class ExperienceDto implements Serializable {
         this.selfUrl = uriBuilder.build().toString();
         this.imageUrl = uriBuilder.clone().path("image").build().toString();    // /experience/{id}/image
         this.reviewsUrl = uriBuilder.clone().path("reviews").build().toString();    // /experience/{id}/reviews
-        this.reviewsCount = experience.getReviewCount();
+        this.reviewCount = experience.getReviewCount();
         this.countryUrl = new CountryDto(experience.getCity().getCountry(), uriInfo);
         this.city = new CityDto(experience.getCity());
         this.user = new UserDto(experience.getUser(), uriInfo);
-        this.category = experience.getCategory();
+        this.category = new CategoryDto(experience.getCategory());
         this.isFav = experience.getIsFav();
     }
 
@@ -139,11 +139,11 @@ public class ExperienceDto implements Serializable {
     public void setReviewsUrl(String reviewsUrl) {
         this.reviewsUrl = reviewsUrl;
     }
-    public Long getReviewsCount() {
-        return reviewsCount;
+    public Long getReviewCount() {
+        return reviewCount;
     }
-    public void setReviewsCount(Long reviewsCount) {
-        this.reviewsCount = reviewsCount;
+    public void setReviewCount(Long reviewCount) {
+        this.reviewCount = reviewCount;
     }
     public CountryDto getCountryUrl() {
         return countryUrl;
@@ -163,10 +163,10 @@ public class ExperienceDto implements Serializable {
     public void setUser(UserDto user) {
         this.user= user;
     }
-    public CategoryModel getCategory() {
+    public CategoryDto getCategory() {
         return category;
     }
-    public void setCategory(CategoryModel category) {
+    public void setCategory(CategoryDto category) {
         this.category = category;
     }
     public boolean isFav() {

@@ -70,7 +70,7 @@ export default function CardReview(props: {reviewModel: ReviewModel; isEditing: 
                         {reviewModel.description}
                     </h6>
                     {/* No me acuerdo si era chquear que la experience o la review sea observable*/}
-                    {!reviewModel.experience.observable && isEditing &&
+                    {!reviewModel.experience?.observable && isEditing &&
                         <p className="obs-info">
                             {t('ExperienceDetail.notVisible')}
                         </p>

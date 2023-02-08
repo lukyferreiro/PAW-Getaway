@@ -2,7 +2,7 @@ import ExperienceModel from "./ExperienceModel";
 import UserModel from "./UserModel";
 
 export default interface ReviewModel {
-    reviewId: number;
+    id: number;
     title: string;
     description: string;
     score: number;

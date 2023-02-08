@@ -128,10 +128,10 @@ export default function Navbar() {
                 </div>
             </div>
 
-            <div className="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0">
+            <div className="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0" >
 
                 {categories.map((category) => (
-                    <Link to={{pathname: "/experiences", search: `?category=${category.name}`}}>
+                    <Link to={{pathname: "/experiences", search: `?category=${category.name}`}} key={category.id}>
                         <button type="button" className={`btn btn-category ${categoryQuery?.includes(`category=${category.name}`) ? 'isActive' : ''}`}>
                             <img src={`./images/${category.name}.svg`} alt={`${category.name}`}/>
                             {t('Categories.' + category.name)}

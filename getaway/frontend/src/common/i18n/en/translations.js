@@ -88,6 +88,7 @@ export const TRANSLATIONS_EN = {
         url: "Official site",
         email: "Email",
         review: "Reviews",
+        writeReview: "Write review",
         notVisible: "This experience is not currently visible",
         noReviews: "This experience has no reviews yet. Be the first to write one!"
     },

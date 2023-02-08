@@ -57,7 +57,8 @@ export default function CardExperience() {
             observable: true,
             views: 200,
             score: 5,
-            reviewsCount: 0,
+            reviewCount: 0,
+            fav: false
         };
 
 
@@ -129,7 +130,7 @@ export default function CardExperience() {
 
                 <div className="card-body container-fluid d-flex p-2 mb-1 align-items-end">
                     <h5 className="mb-1">
-                        {t('experience.reviews', {reviewCount: experience.reviewsCount})}
+                        {t('experience.reviews', {reviewCount: experience.reviewCount})}
                     </h5>
                     {/*<jsp:include page="/WEB-INF/components/starAvg.jsp">*/}
                     {/*    <jsp:param name="avgReview" value="${param.avgReviews}"/>*/}

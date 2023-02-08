@@ -23,7 +23,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     <div className="p-2" style={{width: "600px"}}>
                         {hasImage ?
                             <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "550px"}}
-                                 src={`/experiences/${experience.id}/image.svg`} alt="Imagen"/>
+                                 src={`/experiences/${experience.id}/experienceImage`} alt="Imagen"/>
                             :
                             <div>
                                 <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "450px"}}
@@ -53,7 +53,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                 <h5 className="information-title">
                                     {t('Experience.price')}
                                 </h5>
-                                <p className="information-text">
+                                <div className="information-text">
                                     {/*<c:when test="${param.price == ''}">*/}
                                     {/*    <spring:message code="experienceDetail.price.noPrice"/>*/}
                                     {/*</c:when>*/}
@@ -67,24 +67,24 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                             $ {experience.price}
                                         </h5>
                                     }
-                                </p>
+                                </div>
                             </div>
 
                             <div> {/* Descripcion */}
                                 <h5 className="information-title">
                                     {t('ExperienceDetail.description')}
                                 </h5>
-                                <p className="information-text" id="experienceDescription">
+                                <div className="information-text" id="experienceDescription">
                                     {experience.description == '' ?
-                                        <div>
+                                        <p>
                                             {t('ExperienceDetail.noData')}
-                                        </div>
+                                        </p>
                                     :
-                                        <div>
+                                        <p>
                                             {experience.description}
-                                        </div>
+                                        </p>
                                     }
-                                </p>
+                                </div>
                             </div>
 
                             <div> {/* URL */}
@@ -96,11 +96,12 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                         {t('ExperienceDetail.noData')}
                                     </p>
                                 :
-                                    <Link to={experience.siteUrl}>
+                                    //TODO: make this link to redirect
+                                    <div >
                                         <p className="information-text">
                                             {experience.siteUrl}
                                         </p>
-                                    </Link>
+                                    </div>
                                 }
                             </div>
 
@@ -115,7 +116,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
 
                             <div className="d-flex"> {/* Ranking */}
                                 <h6 className="information-title">
-                                    {t('ExperienceDetails.review')}: {experience.reviewsCount}
+                                    {t('ExperienceDetails.review')}: {experience.reviewCount}
                                 </h6>
                                 {/*<jsp:include page="/WEB-INF/components/starAvg.jsp">*/}
                                 {/*    <jsp:param name="avgReview" value="${param.reviewAvg}"/>*/}

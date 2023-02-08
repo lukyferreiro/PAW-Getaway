@@ -16,5 +16,6 @@ export default interface ExperienceModel {
     observable: boolean;
     views: number;
     score: number;
-    reviewsCount: number;
+    reviewCount: number;
+    fav: boolean;
 }
