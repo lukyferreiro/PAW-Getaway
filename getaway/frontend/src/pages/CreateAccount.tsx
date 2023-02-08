@@ -232,7 +232,6 @@ export default function CreateAccount() {
                                             </button>
                                         </div>
                                     </div>
-                                    {/*TODO: chequear que confirmPassword == password*/}
                                     {errors.confirmPassword?.type === "required" && (
                                         <p className="form-control is-invalid form-error-label">
                                             {t("CreateAccount.error.isRequired")}
