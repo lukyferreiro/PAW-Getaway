@@ -166,4 +166,12 @@ export const TRANSLATIONS_EN = {
         backBtn: "Home",
         title: "Error {{errorCode}}",
     },
+
+    CreateAccount: {
+        error:{
+            isRequired: "This field is required",
+            pattern:"Error",
+            password:"Confirm password should match password",
+        }
+    }
 };

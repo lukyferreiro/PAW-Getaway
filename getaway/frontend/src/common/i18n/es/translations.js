@@ -168,4 +168,11 @@ export const TRANSLATIONS_ES = {
         title: "Error {{errorCode}}",
     },
 
+    CreateAccount: {
+        error:{
+            isRequired: "Este campo es requerido",
+            pattern:"Error",
+            password:"Confirmar contraseña debe coincidir con la contraseña",
+        }
+    }
 };

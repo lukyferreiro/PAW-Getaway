@@ -3,12 +3,31 @@ import React, {useState} from "react";
 import {IconButton} from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import {loginService, userService} from "../services";
+import {useAuth} from "../hooks/useAuth";
+import {useLocation, useNavigate} from "react-router-dom";
+import {useForm} from "react-hook-form";
+
+type FormDataCreate = {
+    name: string;
+    surname: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+};
 
 export default function CreateAccount() {
     const {t} = useTranslation();
+    let auth = useAuth();
+    let navigate = useNavigate();
+    let location = useLocation();
+
+    // @ts-ignore
+    let from = location.state?.from?.pathname || "/";
+
     const [seePassword, setSeePassword] = useState(false);
     const [seeRepeatPassword, setSeeRepeatPassword] = useState(false);
-
+    const [invalidCredentials, setInvalidCredendtials] = useState(false);
     function showPassword(){
         setSeePassword(!seePassword);
     }
@@ -16,6 +35,27 @@ export default function CreateAccount() {
     function showRepeatPassword(){
         setSeeRepeatPassword(!seeRepeatPassword);
     }
+
+    const {register, watch, handleSubmit, formState: { errors },}
+        = useForm<FormDataCreate>({ criteriaMode: "all" });
+
+    const onSubmitCreate = handleSubmit((data: FormDataCreate) => {
+            setInvalidCredendtials(false);
+            userService.createUser(data.name, data.surname, data.email, data.password, data.confirmPassword)
+                .then((user) =>
+                    user.hasFailed() ? setInvalidCredendtials(true) :
+                        loginService.login(data.email, data.password)
+                            .then((user) =>
+                                user.hasFailed() ? setInvalidCredendtials(true) :
+                                    auth.signIn(user.getData(), false, () => {
+                                        navigate(from, {replace: true});
+                                    })
+                            )
+                            .catch(() => navigate("/error?code=500&message=Server error"))
+                )
+                .catch(() => navigate("/error?code=500&message=Server error"));
+        }
+    );
     return (
             <div
                 className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
@@ -31,10 +71,7 @@ export default function CreateAccount() {
                     <div className="col-12">
                         <div className="container-lg">
                             <div className="row">
-                                {/*<c:url value="/register" var="postPath"/>*/}
-                                {/*<form modelAttribute="registerForm" action="${postPath}"*/}
-                                {/*           id="registerForm"*/}
-                                {/*           method="post" acceptCharset="UTF-8">*/}
+                                <form id="createAccountForm" onSubmit={onSubmitCreate}>
                                 <div className="form-group">
                                     <label className="form-label d-flex justify-content-between"
                                            htmlFor="email">
@@ -48,13 +85,24 @@ export default function CreateAccount() {
                                             </h6>
                                         </div>
                                     </label>
-                                    <input type="text" id="email" name="email"
+                                    <input type="text" id="email"
                                            className="form-control mb-2"
                                            placeholder={t('Navbar.emailPlaceholder')}
                                            aria-describedby="email input"
-                                           maxLength={255}/>
-                                    {/*<form:errors path="email" cssClass="form-error-label"*/}
-                                    {/*             element="p"/>*/}
+                                           maxLength={255}
+                                           {...register("email", {
+                                               required: true,
+                                               max: 255,
+                                               pattern: {
+                                                   value: /^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$/,
+                                                   message: t("CreateAccount.error.pattern"),
+                                               },
+                                           })}/>
+                                    {errors.email?.type === "required" && (
+                                        <p className="form-control is-invalid form-error-label">
+                                            {t("CreateAccount.error.isRequired")}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="form-group">
@@ -71,11 +119,22 @@ export default function CreateAccount() {
                                         </div>
                                     </label>
 
-                                    <input maxLength={50} type="text" name="name" id="name"
+                                    <input maxLength={50} type="text" id="name"
                                            className="form-control"
-                                           placeholder={t('Navbar.namePlaceholder')}/>
-                                    {/*<form:errors path="name" cssClass="form-error-label"*/}
-                                    {/*             element="p"/>*/}
+                                           placeholder={t('Navbar.namePlaceholder')}
+                                           {...register("name", {
+                                               required: true,
+                                               max: 50,
+                                               pattern: {
+                                                   value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
+                                                   message: t("CreateAccount.error.pattern"),
+                                               },
+                                           })}/>
+                                    {errors.name?.type === "required" && (
+                                        <p className="form-control is-invalid form-error-label">
+                                            {t("CreateAccount.error.isRequired")}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="form-group">
@@ -91,12 +150,23 @@ export default function CreateAccount() {
                                             </h6>
                                         </div>
                                     </label>
-                                    <input maxLength={50} type="text" name="surname" id="surname"
+                                    <input maxLength={50} type="text" id="surname"
                                            className="form-control"
                                            placeholder={t('Navbar.surnamePlaceholder')}
+                                           {...register("surname", {
+                                               required: true,
+                                               max: 50,
+                                               pattern: {
+                                                   value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
+                                                   message: t("CreateAccount.error.pattern"),
+                                               },
+                                           })}
                                     />
-                                    {/*<form:errors path="surname" cssClass="form-error-label"*/}
-                                    {/*             element="p"/>*/}
+                                    {errors.surname?.type === "required" && (
+                                        <p className="form-control is-invalid form-error-label">
+                                            {t("CreateAccount.error.isRequired")}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="form-group">
@@ -116,9 +186,12 @@ export default function CreateAccount() {
                                         className="input-group d-flex justify-content-start align-items-center">
                                         <input type={seePassword ? "text":"password"}
                                                className="form-control"
-                                               id="password1" name="password"
+                                               id="password"
                                                aria-describedby="password input"
                                                placeholder={t('Navbar.passwordPlaceholder')}
+                                               {...register("password", {
+                                                   required: true,
+                                               })}
                                         />
                                         <div className="input-group-append">
                                             <button className="btn btn-eye input-group-text"
@@ -129,8 +202,11 @@ export default function CreateAccount() {
                                             </button>
                                         </div>
                                     </div>
-                                    {/*<form:errors path="password" cssClass="form-error-label"*/}
-                                    {/*             element="p"/>*/}
+                                    {errors.password?.type === "required" && (
+                                        <p className="form-control is-invalid form-error-label">
+                                            {t("CreateAccount.error.isRequired")}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="form-group">
@@ -142,8 +218,11 @@ export default function CreateAccount() {
                                         className="input-group d-flex justify-content-start align-items-center">
                                         <input type={seeRepeatPassword ? "text":"password"}
                                                className="form-control"
-                                               id="password2" name="confirmPassword"
-                                               aria-describedby="password input"/>
+                                               id="confirmPassword"
+                                               aria-describedby="password input"
+                                               {...register("confirmPassword", {
+                                                   required: true
+                                               })}/>
                                         <div className="input-group-append">
                                             <button className="btn btn-eye input-group-text"
                                                     id="passwordEye2" type="button" tabIndex={-1} onClick={() => showRepeatPassword()}>
@@ -153,29 +232,28 @@ export default function CreateAccount() {
                                             </button>
                                         </div>
                                     </div>
-                                    {/*<form:errors path="confirmPassword" cssClass="form-error-label"*/}
-                                    {/*             element="p"/>*/}
+                                    {/*TODO: chequear que confirmPassword == password*/}
+                                    {errors.confirmPassword?.type === "required" && (
+                                        <p className="form-control is-invalid form-error-label">
+                                            {t("CreateAccount.error.isRequired")}
+                                        </p>
+                                    )}
+                                    {watch('password') !== watch('confirmPassword') && (
+                                        <p className="form-control is-invalid form-error-label">
+                                            {t("CreateAccount.error.password")}
+                                        </p>
+                                    )}
                                 </div>
-
-                                <div className="form-group">
-                                    {/*<spring:hasBindErrors name="registerForm">*/}
-                                    {/*    <c:if test="${errors.globalErrorCount > 0}">*/}
-                                    {/*        <div className="alert alert-danger">*/}
-                                    {/*            <form:errors/>*/}
-                                    {/*        </div>*/}
-                                    {/*    </c:if>*/}
-                                    {/*</spring:hasBindErrors>*/}
-                                </div>
+                                </form>
 
                                 <div
                                     className="col-12 px-0 d-flex align-items-center justify-content-center">
-                                    <button type="button" id="registerFormButton"
-                                            form="registerForm"
+                                    <button form="createAccountForm" type="submit"
                                             className="w-100 btn-create-account my-2 ">
                                         {t('Navbar.createAccount')}
                                     </button>
                                 </div>
-                                {/*</form>*/}
+
                             </div>
                         </div>
                     </div>
