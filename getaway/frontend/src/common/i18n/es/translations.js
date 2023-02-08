@@ -93,6 +93,12 @@ export const TRANSLATIONS_ES = {
         noReviews: "Esta experiencia no tiene rese\u00F1as a\u00FAn. S\u00E9 el primero en realizar una!"
     },
 
+    Review: {
+        title: "Título",
+        description: "Descripci\u00F3n",
+        score: "Puntaje",
+    },
+
     CreateExperience: {
         title: "Create your experience",
         error: {
@@ -147,7 +153,7 @@ export const TRANSLATIONS_ES = {
 
     Button: {
         cancel: "Cancelar",
-        createExperience: "Guardar",
+        create: "Guardar",
     },
 
     Input: {
@@ -155,6 +161,25 @@ export const TRANSLATIONS_ES = {
         maxValue: "(M\u00E1ximo {{value}})",
     },
 
+    CreateReview: {
+        title: "Escribe una reseña para {{experienceName}}",
+        error: {
+            title: {
+                pattern: "aaaa",
+                isRequired: "aaa",
+                max: "aaaa",
+            },
+            description: {
+                pattern: "aaaa",
+                isRequired: "aaaa",
+                max: "aaaa",
+            },
+            score: {
+                pattern: "aaaa",
+                isRequired: "aaaa",
+            },
+        }
+    },
     Copyright: "Getaway Copyright © {{year}} - Todos los derechos reservados",
 
     404: {

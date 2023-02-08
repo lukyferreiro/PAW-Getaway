@@ -10,6 +10,7 @@ import UserReviews from "./pages/UserReviews";
 import Experiences from "./pages/Experiences";
 import ExperienceDetails from "./pages/ExperienceDetails";
 import CreateExperience from "./pages/CreateExperience";
+import CreateReview from "./pages/CreateReview";
 import Error from "./pages/Error";
 import Custom404 from "./pages/Custom404";
 import Register from "./pages/Register";
@@ -41,6 +42,7 @@ function App() {
                         </Route>
                         <Route path='experiences' element={<Experiences/>}/>
                         <Route path='experiences/:experienceId' element={<ExperienceDetails/>}/>
+                        <Route path='experiences/:experienceId/createReview' element={<CreateReview/>} />
                         <Route path='createExperience' element={<CreateExperience/>}/>
                         <Route path='createAccount' element={<CreateAccount/>}/>
                         <Route path='error' element={<Error/>}/>

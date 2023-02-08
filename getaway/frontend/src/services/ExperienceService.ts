@@ -166,7 +166,7 @@ export class ExperienceService {
             score:score
         });
         return resultFetch(this.basePath + "/experience/" + experienceId + "/reviews", {
-            method: "PUT",
+            method: "POST",
             headers: {
                 "Content-Type": APPLICATION_JSON_TYPE,
             },

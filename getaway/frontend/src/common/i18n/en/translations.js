@@ -92,6 +92,12 @@ export const TRANSLATIONS_EN = {
         noReviews: "This experience has no reviews yet. Be the first to write one!"
     },
 
+    Review: {
+        title: "Title",
+        description: "Description",
+        score: "Score",
+    },
+
     CreateExperience: {
         title: "Create your experience",
         error: {
@@ -146,12 +152,32 @@ export const TRANSLATIONS_EN = {
 
     Button: {
         cancel: "Cancel",
-        createExperience: "Save",
+        create: "Save",
     },
 
     Input: {
         optional: "(Optional)",
         maxValue: "(Max {{value}})",
+    },
+
+    CreateReview: {
+        title: "Create review for {{experienceName}}",
+        error: {
+            title: {
+                pattern: "aaaa",
+                isRequired: "aaa",
+                max: "aaaa",
+            },
+            description: {
+                pattern: "aaaa",
+                isRequired: "aaaa",
+                max: "aaaa",
+            },
+            score: {
+                pattern: "aaaa",
+                isRequired: "aaaa",
+            },
+        }
     },
 
     Copyright: "Getaway Copyright © {{year}} - All rights reserved",

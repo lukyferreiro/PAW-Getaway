@@ -375,14 +375,13 @@ export default function CreateExperience() {
                 </div>
 
                 <div className="p-0 mt-3 mb-0 d-flex justify-content-around">
-                    {/*TODO hacer que vuelva para donde estaba antes*/}
                     <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
                             onClick={() => navigate(-1)}>
                         {t('Button.cancel')}
                     </button>
                     <button className="btn btn-submit-form px-3 py-2" id="createExperienceFormButton"
                             form="createExperienceForm" type="submit">
-                        {t('Button.createExperience')}
+                        {t('Button.create')}
                     </button>
                 </div>
             </form>
