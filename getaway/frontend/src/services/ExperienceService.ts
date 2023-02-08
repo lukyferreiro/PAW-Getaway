@@ -94,6 +94,12 @@ export class ExperienceService {
         });
     }
 
+    public async getExperienceNameById(experienceId: number): Promise<Result<ExperienceModel>> {
+        return resultFetch<ExperienceModel>(this.basePath + "/experience/" + experienceId + "/name", {
+            method: "GET",
+        });
+    }
+
     public async updateExperienceById(
         experienceId: number,
         name: string,

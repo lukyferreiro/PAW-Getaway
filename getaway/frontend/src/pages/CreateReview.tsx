@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {Location, Navigate, To, useLocation, useNavigate, useParams, useSearchParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService} from "../services";
 import {useForm} from "react-hook-form";
@@ -9,6 +9,7 @@ import {getQueryOrDefault} from "../hooks/useQuery";
 import { paths } from "../common";
 import StarForm from "../components/StarForm";
 import {useAuth} from "../hooks/useAuth";
+import {ExperienceModel, ExperienceNameModel, ReviewModel} from "../types";
 
 
 type FormDataReview = {
@@ -39,29 +40,38 @@ export default function CreateReview() {
     const rememberMe = localStorage.getItem("rememberMe") === "true";
     const correctRoute = getCorrectPrivilegeRoute(location);
 
-    const {experienceId} = useParams();
-
     useEffect(() => {
         if (readUser && readUser !== "")
             signIn(JSON.parse(readUser), rememberMe, () => navigate(correctRoute));
     }, []);
 
+    const [experience, setExperience] = useState<ExperienceNameModel | undefined>(undefined);
+    const {experienceId} = useParams();
 
+
+    useEffect(() => {
+        serviceHandler(
+            experienceService.getExperienceNameById(parseInt(experienceId ? experienceId : '-1')),
+            navigate, (fetchedExperience) => {
+                setExperience(fetchedExperience)
+            },
+            () => {}
+        );
+        if (readUser && readUser !== "") {
+            signIn(JSON.parse(readUser), rememberMe, () => navigate(correctRoute));
+        }
+
+        ;
+    }, []);
 
     const {register, handleSubmit, formState: {errors},}
         = useForm<FormDataReview>({criteriaMode: "all"});
 
-
-    //TODO: add use effect to fecth experiecnce. Use dto id and experienceName
-
-
     const onSubmit = handleSubmit((data: FormDataReview) => {
-            console.log("Sending post request")
-            experienceService.postNewReview(parseInt(experienceId ? experienceId : "-1" ), data.title, data.description, "3")
+            experienceService.postNewReview(parseInt(experienceId ? experienceId : "-1" ), data.title, data.description, data.score)
                 .then((result) => {
-                    console.log("READY");
                     if (!result.hasFailed()) {
-                            navigate( paths.BASE_URL + paths.EXPERIENCES + "/experience" + experienceId, {replace: true})
+                            navigate(  paths.EXPERIENCES + "/" + experienceId, {replace: true})
                         }
                     }
                 )
@@ -84,7 +94,7 @@ export default function CreateReview() {
                     <div className="p-4 mx-4 mt-4 m-1">
                         <div className="col m-2">
                             <h3 className="text-center" style={{wordBreak: "break-all"}}>
-                                {t('CreateReview.title', {experienceName:"experience"})}
+                                {t('CreateReview.title', { experienceName : experience?.name })}
                             </h3>
                         </div>
                         <div className="col m-2">
@@ -164,11 +174,11 @@ export default function CreateReview() {
 
                             {/*TODO: star form*/}
                             <div className="w-100 d-flex justify-content-center">
-                                <div className="w-50">
-                                    <StarForm/>
-                                </div>
+                                {/*<div className="w-50">*/}
+                                {/*    <StarForm/>*/}
+                                {/*</div>*/}
                             </div>
-                            <input type="hidden" className="form-control" id="scoreInput"
+                            <input type="text" className="form-control" id="scoreInput"
                                    {...register("score", {
                                        required: true,
                                        pattern: {

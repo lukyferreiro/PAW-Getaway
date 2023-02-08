@@ -32,13 +32,10 @@ public class ExperienceDto implements Serializable {
     private boolean isFav;
 
     public static Collection<Collection<ExperienceDto>> mapExperienceListToDto (List<List<ExperienceModel>> experiences, UriInfo uriInfo) {
-        System.out.println("Entrando a metodo map...");
         Collection<Collection<ExperienceDto>> toReturnList = new ArrayList<>();
         for (Collection<ExperienceModel> subList: experiences) {
-            System.out.println("Mapeada una de las sublist");
             toReturnList.add(mapExperienceToDto(subList, uriInfo));
         }
-        System.out.println("Ready freddy");
         return toReturnList;
     }
 

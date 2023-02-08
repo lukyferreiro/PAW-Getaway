@@ -7,10 +7,7 @@ import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
-import ar.edu.itba.getaway.webapp.dto.response.AnonymousLandingPageDto;
-import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
-import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
-import ar.edu.itba.getaway.webapp.dto.response.UserLandingPageDto;
+import ar.edu.itba.getaway.webapp.dto.response.*;
 import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -191,6 +188,8 @@ public class ExperienceController {
         return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
     }
 
+    //TODO: limit when views is increased somehow
+
     // Endpoint para obtener una experiencia a partir de su ID
     @GET
     @Path("/experience/{experienceId}")
@@ -209,6 +208,22 @@ public class ExperienceController {
         }
 
         final ExperienceDto experienceDto = new ExperienceDto(experience, uriInfo);
+        return Response.ok(experienceDto).build();
+    }
+
+    // Endpoint para obtener una experiencia a partir de su ID
+    @GET
+    @Path("/experience/{experienceId}/name")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getExperienceNameById(
+            @PathParam("experienceId") final long id
+    ) {
+        LOGGER.info("Called /experiences/{} GET", id);
+
+        final UserModel user = authFacade.getCurrentUser();
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
+
+        final ExperienceNameDto experienceDto = new ExperienceNameDto(experience, uriInfo);
         return Response.ok(experienceDto).build();
     }
 
