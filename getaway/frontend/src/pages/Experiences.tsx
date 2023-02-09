@@ -73,7 +73,9 @@ export default function Experiences() {
 
     //TODO: on submit filter
     const onSubmit = handleSubmit((data: FormFilterData) => {
-
+            data.score = -rating;
+            data.maxPrice = String(value);
+        //    RELOAD PAGE WITH FILTERS
         }
     );
     const {t} = useTranslation();
