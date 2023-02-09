@@ -1,15 +1,15 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {Location, Navigate, To, useLocation, useNavigate, useParams, useSearchParams} from "react-router-dom";
+import {Location, Navigate, To, useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService} from "../services";
 import {useForm} from "react-hook-form";
-import {getQueryOrDefault} from "../hooks/useQuery";
 import { paths } from "../common";
-import StarForm from "../components/StarForm";
+import StarRating from "../components/StarRating";
 import {useAuth} from "../hooks/useAuth";
-import {ExperienceModel, ExperienceNameModel, ReviewModel} from "../types";
+import {ExperienceNameModel} from "../types";
+import "../styles/star_rating.css";
 
 
 type FormDataReview = {
@@ -31,6 +31,8 @@ export default function CreateReview() {
     const {t} = useTranslation();
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(false)
+    const [rating, setRating] = useState(0);
+    const [hover, setHover] = useState(0);
 
     const {user, signIn} = useAuth();
     const location = useLocation();
@@ -68,6 +70,7 @@ export default function CreateReview() {
         = useForm<FormDataReview>({criteriaMode: "all"});
 
     const onSubmit = handleSubmit((data: FormDataReview) => {
+        data.score = String(-rating);
             experienceService.postNewReview(parseInt(experienceId ? experienceId : "-1" ), data.title, data.description, data.score)
                 .then((result) => {
                     if (!result.hasFailed()) {
@@ -172,21 +175,39 @@ export default function CreateReview() {
                                 <span className="required-field">*</span>
                             </label>
 
-                            {/*TODO: star form*/}
                             <div className="w-100 d-flex justify-content-center">
-                                {/*<div className="w-50">*/}
-                                {/*    <StarForm/>*/}
-                                {/*</div>*/}
+                                <div className="w-50">
+                                    {/*<StarRating/>*/}
+                                    <div className="star-rating">
+                                        {[...Array(5)].map((star, index) => {
+                                            index -=5;
+                                            return (
+                                                <button
+                                                    type="button"
+                                                    key={index}
+                                                    className={index >= ((rating && hover) || hover) ? "on" : "off"}
+                                                    onClick={() => setRating(index)}
+                                                    onMouseEnter={() => setHover(index)}
+                                                    onMouseLeave={() => setHover(rating)}
+                                                >
+                                                    <span className="star">&#9733;</span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
                             </div>
-                            <input type="text" className="form-control" id="scoreInput"
-                                   {...register("score", {
-                                       required: true,
-                                       pattern: {
-                                           value: /^([1-5])$/,
-                                           message: t("CreateReview.error.score.pattern"),
-                                       },
-                                   })}
-                            />
+                            <input name="score" type="hidden" className="form-control" id="score"/>
+                            {/*<form:errors path="score" element="p" cssClass="form-error-label mt-2"/>*/}
+                            {/*<input type="text" className="form-control" id="scoreInput"*/}
+                            {/*       {...register("score", {*/}
+                            {/*           required: true,*/}
+                            {/*           pattern: {*/}
+                            {/*               value: /^([1-5])$/,*/}
+                            {/*               message: t("CreateReview.error.score.pattern"),*/}
+                            {/*           },*/}
+                            {/*       })}*/}
+                            {/*/>*/}
 
                         </div>
                     </div>

@@ -116,7 +116,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
 
                             <div className="d-flex"> {/* Ranking */}
                                 <h6 className="information-title">
-                                    {t('ExperienceDetails.review')}: {experience.reviewCount}
+                                    {t('ExperienceDetail.review')}: {experience.reviewCount}
                                 </h6>
                                 {/*<jsp:include page="/WEB-INF/components/starAvg.jsp">*/}
                                 {/*    <jsp:param name="avgReview" value="${param.reviewAvg}"/>*/}

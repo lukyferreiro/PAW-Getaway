@@ -5,6 +5,7 @@ import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
+import {useAuth} from "../hooks/useAuth";
 
 export default function CardReview(props: {reviewModel: ReviewModel; isEditing: boolean;}) {
 
@@ -12,6 +13,10 @@ export default function CardReview(props: {reviewModel: ReviewModel; isEditing: 
 
     const {reviewModel, isEditing} = props
     const hasImage = false;
+    const {user} = useAuth();
+
+    let isLogged = user !== null;
+
 
     return (
         <div className="card m-2">
@@ -55,9 +60,19 @@ export default function CardReview(props: {reviewModel: ReviewModel; isEditing: 
                     </div>
                 </div>
                 <div className="my-2 d-flex">
-                    {/*<jsp:include page="/WEB-INF/components/starAvg.jsp">*/}
-                    {/*<jsp:param name="avgReview" value="${param.score}"/>*/}
-                    {/*</jsp:include>*/}
+                    <div className="star-rating">
+                        {[...Array(5)].map((star, index) => {
+                            index -=5;
+                            return (
+                                <div
+                                    key={index}
+                                    className={index >= -reviewModel.score ? "on" : "off"}
+                                >
+                                    <span className="star">&#9733;</span>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
 

@@ -3,7 +3,8 @@ import "../common/i18n/index";
 import OrderDropdown from "../components/OrderDropdown";
 import CardExperience from "../components/CardExperience";
 import {Slider, Typography} from '@mui/material';
-import { useState } from "react";
+import React, { useState } from "react";
+import "../styles/star_rating.css";
 
 export default function Experiences() {
 
@@ -12,6 +13,8 @@ export default function Experiences() {
     const maxPrice = 100;
 
     const [value, setValue] = useState<number>(maxPrice);
+    const [rating, setRating] = useState(0);
+    const [hover, setHover] = useState(0);
 
     const handleChange = (event: Event, newValue: number | number[]) => {
         if (typeof newValue === 'number') {
@@ -20,15 +23,15 @@ export default function Experiences() {
     };
     const {t} = useTranslation();
     //Podemos hacer que nos pasen como props esta lista de experiencias, por ahora la creo forzada aca
-    const experiences: string | any[] =
-        [
-            <CardExperience/>,
-            <CardExperience/>,
-            <CardExperience/>,
-            <CardExperience/>,
-            <CardExperience/>,
-            <CardExperience/>,
-        ]
+    // const experiences: string | any[] =
+    //     [
+    //         <CardExperience/>,
+    //         <CardExperience/>,
+    //         <CardExperience/>,
+    //         <CardExperience/>,
+    //         <CardExperience/>,
+    //         <CardExperience/>,
+    //     ]
     return (
         <div className="container-fluid p-0 mt-3 d-flex">
             <div className="container-filters container-fluid px-2 py-0 mx-2 my-0 d-flex flex-column justify-content-start align-items-center border-end">
@@ -86,7 +89,23 @@ export default function Experiences() {
                             {t('Filters.scoreAssign')}
                         </label>
                         {/*TODO poner las estrellas*/}
-                        {/*<jsp:include page="/WEB-INF/components/starForm.jsp"/>*/}
+                        <div className="star-rating">
+                            {[...Array(5)].map((star, index) => {
+                                index -=5;
+                                return (
+                                    <button
+                                        type="button"
+                                        key={index}
+                                        className={index >= ((rating && hover) || hover) ? "on" : "off"}
+                                        onClick={() => setRating(index)}
+                                        onMouseEnter={() => setHover(index)}
+                                        onMouseLeave={() => setHover(rating)}
+                                    >
+                                        <span className="star">&#9733;</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
                         {/*TODO ver como poner esto cuando el input falla*/}
                         {/*cssErrorClass="form-control is-invalid"*/}
                         <input value="TODO" type="hidden" className="form-control" id="scoreInput"/>
@@ -126,22 +145,22 @@ export default function Experiences() {
                 {/*TODO*/}
                 {/*<c:choose>*/}
                 {/*    <c:when test="${experiences.size() == 0}">*/}
-                { experiences.length == 0 && <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
-                    <div className="d-flex justify-content-center align-content-center">
-                        <img src={'./images/ic_no_search.jpeg'} alt="Imagen lupa"
-                             style={{width: "150px", height: "150px", minWidth: "150px", minHeight: "150px", marginRight: "5px"}}/>
-                        <h1 className="d-flex align-self-center">
-                            {t('EmptyResult')}
-                        </h1>
+                {/*{ experiences.length == 0 && <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">*/}
+                {/*    <div className="d-flex justify-content-center align-content-center">*/}
+                {/*        <img src={'./images/ic_no_search.jpeg'} alt="Imagen lupa"*/}
+                {/*             style={{width: "150px", height: "150px", minWidth: "150px", minHeight: "150px", marginRight: "5px"}}/>*/}
+                {/*        <h1 className="d-flex align-self-center">*/}
+                {/*            {t('EmptyResult')}*/}
+                {/*        </h1>*/}
 
-                    </div>
-                </div>}
-                {
-                    experiences.length > 0  &&
-                    <div className="d-flex flex-wrap justify-content-center ">
-                        {experiences}
-                    </div>
-                }
+                {/*    </div>*/}
+                {/*</div>}*/}
+                {/*{*/}
+                {/*    experiences.length > 0  &&*/}
+                {/*    <div className="d-flex flex-wrap justify-content-center ">*/}
+                {/*        {experiences}*/}
+                {/*    </div>*/}
+                {/*}*/}
 
                 {/*TODO*/}
                 {/*                    </c:when>*/}
