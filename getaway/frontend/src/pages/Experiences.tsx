@@ -3,35 +3,81 @@ import "../common/i18n/index";
 import OrderDropdown from "../components/OrderDropdown";
 import CardExperience from "../components/CardExperience";
 import {Slider, Typography} from '@mui/material';
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import "../styles/star_rating.css";
+import {CityModel, CountryModel} from "../types";
+import {serviceHandler} from "../scripts/serviceHandler";
+import {categoryService, experienceService, locationService} from "../services";
+import {useNavigate} from "react-router-dom";
+import {useForm} from "react-hook-form";
+
+type FormFilterData = {
+    country: string,
+    city: string,
+    maxPrice: string,
+    score: number,
+};
+
 
 export default function Experiences() {
 
+    const navigate = useNavigate();
+
     //Por ahora lo hago fijo
-    {/*    /!*TODO obtener el max price de todas las experiencias*!/*/}
     const maxPrice = 100;
 
     const [value, setValue] = useState<number>(maxPrice);
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
+    const [countries, setCountries] = useState<CountryModel[]>(new Array(1))
+    const [cities, setCities] = useState<CityModel[]>(new Array(0))
 
+
+    useEffect(() => {
+        //TODO: getMaxPrice function in experience service
+
+        // serviceHandler(
+        //     experienceService.getMaxPrice(categoryId),
+        //     navigate, (price) => {
+        //         setValue(price)
+        //     },
+        //     () => {}
+        // ) ;
+        //
+        serviceHandler(
+            locationService.getCountries(),
+            navigate, (country) => {
+                setCountries(country)
+            },
+            () => {}
+        ) ;
+    }, [])
+
+    function loadCities(countryName: string){
+        serviceHandler(
+            locationService.getCitiesByCountry(parseInt(countryName)),
+            navigate, (city) => {
+                setCities(city)
+            },
+            () => {}
+        ) ;
+    }
     const handleChange = (event: Event, newValue: number | number[]) => {
         if (typeof newValue === 'number') {
             setValue(newValue);
         }
     };
+
+    const {register, handleSubmit, formState: { errors },}
+        = useForm<FormFilterData>({ criteriaMode: "all" });
+
+    //TODO: on submit filter
+    const onSubmit = handleSubmit((data: FormFilterData) => {
+
+        }
+    );
     const {t} = useTranslation();
-    //Podemos hacer que nos pasen como props esta lista de experiencias, por ahora la creo forzada aca
-    // const experiences: string | any[] =
-    //     [
-    //         <CardExperience/>,
-    //         <CardExperience/>,
-    //         <CardExperience/>,
-    //         <CardExperience/>,
-    //         <CardExperience/>,
-    //         <CardExperience/>,
-    //     ]
+
     return (
         <div className="container-fluid p-0 mt-3 d-flex">
             <div className="container-filters container-fluid px-2 py-0 mx-2 my-0 d-flex flex-column justify-content-start align-items-center border-end">
@@ -42,21 +88,38 @@ export default function Experiences() {
 
                 <form id="submitForm" className="filter-form">
                     <div>
-                        <label key="cityId" className="form-label">
-                            {t('Filters.city.field')}
+                        <label className="form-label" htmlFor="country">
+                            {t('Experience.country')}
+                            <span className="required-field">*</span>
                         </label>
-                        <select name="cityId" className="form-select" style={{boxShadow: "none"}}>
-                            <option disabled selected>
-                                {t('Filters.city.placeholder')}
-                            </option>
-                            {/*TODO cities traer api*/}
-                            {/*<c:forEach var="city" items="${cities}">*/}
-                            {/*    <option<c:if test="${city.cityId == cityId}"> selected</c:if> value="${city.cityId}">*/}
-                            {/* <c:out value="${city.cityName}"/></option>*/}
-                            {/*</c:forEach>*/}
+                        <select id="experienceFormCountryInput" className="form-select" required
+                                {...register("country", {required: true})}
+                                onChange={e => loadCities(e.target.value)}
+                        >
+                            <option hidden value="">{t('Experience.placeholder')}</option>
+
+                            {countries.map((country) => (
+                                <option key={country.id} value={country.id} >
+                                    {country.name}
+                                </option>
+                            ))}
                         </select>
-                        {/*TODO ver como agregar esto*/}
-                        {/*<form:errors path="cityId" element="p" cssClass="form-error-label"/>*/}
+                    </div>
+                    <div className="mt-2">
+                        <label className="form-label" htmlFor="city">
+                            {t('Filters.city.field')}
+                            <span className="required-field">*</span>
+                        </label>
+                        <select id="experienceFormCityInput" className="form-select" required
+                                {...register("city", {required: true})}
+                                disabled={cities.length <= 0}
+                        >
+                            {cities.map((city) => (
+                                <option key={city.id} value={city.name}>
+                                    {city.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="container-slider-price">
