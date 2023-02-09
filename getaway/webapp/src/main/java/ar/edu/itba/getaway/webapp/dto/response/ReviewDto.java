@@ -17,6 +17,7 @@ public class ReviewDto implements Serializable {
     private long score;
     private LocalDate reviewDate;
     private UserDto user;
+    private ExperienceNameDto experience;
     private String selfUrl;
     private String experienceUrl;
 
@@ -39,6 +40,7 @@ public class ReviewDto implements Serializable {
         this.score = review.getScore();
         this.reviewDate = review.getReviewDate();
         this.user = new UserDto(review.getUser(), uriInfo);
+        this.experience = new ExperienceNameDto(review.getExperience(), uriInfo);
         this.selfUrl = getReviewUriBuilder(review, uriInfo).build().toString();
         this.experienceUrl = uriInfo.getBaseUriBuilder().path("experiences").path("experience")
                 .path(review.getExperience().getExperienceId().toString())
@@ -90,4 +92,14 @@ public class ReviewDto implements Serializable {
     public void setExperienceUrl(String experienceUrl) {
         this.experienceUrl = experienceUrl;
     }
+
+    public ExperienceNameDto getExperience() {
+        return experience;
+    }
+
+    public void setExperience(ExperienceNameDto experience) {
+        this.experience = experience;
+    }
+
+
 }

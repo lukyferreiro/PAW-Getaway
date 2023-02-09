@@ -1,6 +1,7 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {ReviewModel} from "../types";
+import {Link} from 'react-router-dom'
 import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import React from "react";
@@ -18,23 +19,22 @@ export default function CardReview(props: {reviewModel: ReviewModel; isEditing: 
     let isLogged = user !== null;
 
 
+    // @ts-ignore
     return (
         <div className="card m-2">
             {isEditing &&
                 <div className="card-title m-2 d-flex justify-content-center align-content-center">
-                    {/*            <a href="<c:url value="/experiences/${param.experienceCategory}/${param.experienceId}">*/}
-                    {/*<c:param name=" view" value=" ${true}"/> </c:url>">*/}
-                    <h4 className="text-center"
-                        style={{
-                            fontWeight: "bold",
-                            textDecoration: "underline",
-                            wordBreak: "break-all",
-                            color: "black"
-                        }}>
-                        {reviewModel.experience.name}
-                    </h4>
-                    {/*</a>*/}
-
+                    <Link to={"/experiences/" + reviewModel.experience.id}>
+                        <h4 className="text-center"
+                            style={{
+                                fontWeight: "bold",
+                                textDecoration: "underline",
+                                wordBreak: "break-all",
+                                color: "black"
+                            }}>
+                            {reviewModel.experience.name}
+                        </h4>
+                    </Link>
                 </div>
             }
 
@@ -84,12 +84,6 @@ export default function CardReview(props: {reviewModel: ReviewModel; isEditing: 
                     <h6 className="m-0" style={{fontSize: "medium"}} id="reviewDescription">
                         {reviewModel.description}
                     </h6>
-                    {/* No me acuerdo si era chquear que la experience o la review sea observable*/}
-                    {!reviewModel.experience?.observable && isEditing &&
-                        <p className="obs-info">
-                            {t('ExperienceDetail.notVisible')}
-                        </p>
-                    }
                 </div>
             </div>
 

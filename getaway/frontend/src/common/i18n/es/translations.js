@@ -100,7 +100,7 @@ export const TRANSLATIONS_ES = {
         score: "Puntaje",
     },
 
-    CreateExperience: {
+    ExperienceForm: {
         title: "Create your experience",
         error: {
             name: {
@@ -149,7 +149,9 @@ export const TRANSLATIONS_ES = {
             verifyAccountBtn: "Verifica tu cuenta",
         },
         noFavs: "Aún no has agregado experiencias a favoritos",
-        favsTitle: "Mis favoritos"
+        favsTitle: "Mis favoritos",
+        noReviews: "Aún no has escrito ninguna reseña",
+        reviewsTitle: "Mis reseñas",
     },
 
     EmptyResult: "Parece que no hay ninguna experiencia que coincida con tu búsqueda",

@@ -4,12 +4,15 @@ import OrderDropdown from "../components/OrderDropdown";
 import CardExperience from "../components/CardExperience";
 import {Slider, Typography} from '@mui/material';
 import React, {useEffect, useState} from "react";
+import {ExperienceModel} from "../types";
+import {useAuth} from "../hooks/useAuth";
+import {useLocation, useNavigate} from "react-router-dom";
+import {getQueryOrDefault, getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
 import "../styles/star_rating.css";
 import {CityModel, CountryModel} from "../types";
-import {serviceHandler} from "../scripts/serviceHandler";
 import {categoryService, experienceService, locationService} from "../services";
-import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
+import {serviceHandler} from "../scripts/serviceHandler";
 
 type FormFilterData = {
     country: string,
@@ -20,30 +23,40 @@ type FormFilterData = {
 
 
 export default function Experiences() {
+    const {user} = useAuth();
+    const {t} = useTranslation();
+    const navigate = useNavigate()
+    const location = useLocation();
+    const query = useQuery()
 
-    const navigate = useNavigate();
+    const category = getQueryOrDefault(query, "category", "");
 
-    //Por ahora lo hago fijo
-    const maxPrice = 100;
-
-    const [value, setValue] = useState<number>(maxPrice);
-    const [rating, setRating] = useState(0);
-    const [hover, setHover] = useState(0);
+    //FILTERS
+    //Location
     const [countries, setCountries] = useState<CountryModel[]>(new Array(1))
     const [cities, setCities] = useState<CityModel[]>(new Array(0))
+    const [city, setCity] = useState(-1);
 
+    //Price
+    const maxPrice = -1;
+    const [price, setPrice] = useState<number>(maxPrice);
+    //Por ahora lo hago fijo
+    {/*    /!*TODO obtener el max price de todas las experiencias*!/*/}
+
+    //Score
+    const [rating, setRating] = useState(0);
+    const [hover, setHover] = useState(0);
+    const [score, setScore] = useState(0);
+
+    //Order
+    const [order, setOrder] = useState("OrderByAZ");
+
+    const [page, setPage] = useState(1);
+
+    const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
 
     useEffect(() => {
         //TODO: getMaxPrice function in experience service
-
-        // serviceHandler(
-        //     experienceService.getMaxPrice(categoryId),
-        //     navigate, (price) => {
-        //         setValue(price)
-        //     },
-        //     () => {}
-        // ) ;
-        //
         serviceHandler(
             locationService.getCountries(),
             navigate, (country) => {
@@ -51,7 +64,14 @@ export default function Experiences() {
             },
             () => {}
         ) ;
-    }, [])
+        serviceHandler(
+            experienceService.getExperiencesByCategory(category!, order, price, score, city, page),
+            navigate, (experiences) => {
+                setExperiences(experiences.getContent())
+            },
+            () => {}
+        );
+    }, [category])
 
     function loadCities(countryName: string){
         serviceHandler(
@@ -64,7 +84,7 @@ export default function Experiences() {
     }
     const handleChange = (event: Event, newValue: number | number[]) => {
         if (typeof newValue === 'number') {
-            setValue(newValue);
+            setPrice(newValue);
         }
     };
 
@@ -74,11 +94,10 @@ export default function Experiences() {
     //TODO: on submit filter
     const onSubmit = handleSubmit((data: FormFilterData) => {
             data.score = -rating;
-            data.maxPrice = String(value);
-        //    RELOAD PAGE WITH FILTERS
+            data.maxPrice = String(price);
+            //    RELOAD PAGE WITH FILTERS
         }
     );
-    const {t} = useTranslation();
 
     return (
         <div className="container-fluid p-0 mt-3 d-flex">
@@ -127,7 +146,7 @@ export default function Experiences() {
                     <div className="container-slider-price">
 
                         <Typography id="non-linear-slider" gutterBottom className="form-label">
-                            {t('Filters.price.title')}: {value}
+                            {t('Filters.price.title')}: {price}
                         </Typography>
                         <div className="slider-price">
                             <div className="value left">
@@ -136,7 +155,7 @@ export default function Experiences() {
                             <div className="slider">
                             </div>
                             <Slider
-                                value={value}
+                                value={price}
                                 min={5}
                                 step={1}
                                 max={maxPrice}
@@ -210,22 +229,31 @@ export default function Experiences() {
                 {/*TODO*/}
                 {/*<c:choose>*/}
                 {/*    <c:when test="${experiences.size() == 0}">*/}
-                {/*{ experiences.length == 0 && <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">*/}
-                {/*    <div className="d-flex justify-content-center align-content-center">*/}
-                {/*        <img src={'./images/ic_no_search.jpeg'} alt="Imagen lupa"*/}
-                {/*             style={{width: "150px", height: "150px", minWidth: "150px", minHeight: "150px", marginRight: "5px"}}/>*/}
-                {/*        <h1 className="d-flex align-self-center">*/}
-                {/*            {t('EmptyResult')}*/}
-                {/*        </h1>*/}
+                { experiences === undefined ?
+                    <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
+                        <div className="d-flex justify-content-center align-content-center">
+                            <img src={'./images/ic_no_search.jpeg'} alt="Imagen lupa"
+                                 style={{width: "150px", height: "150px", minWidth: "150px", minHeight: "150px", marginRight: "5px"}}/>
+                            <h1 className="d-flex align-self-center">
+                                {t('EmptyResult')}
+                            </h1>
 
-                {/*    </div>*/}
-                {/*</div>}*/}
-                {/*{*/}
-                {/*    experiences.length > 0  &&*/}
-                {/*    <div className="d-flex flex-wrap justify-content-center ">*/}
-                {/*        {experiences}*/}
-                {/*    </div>*/}
-                {/*}*/}
+                        </div>
+                    </div>
+                    :
+                    <div>
+                        <div className="container-fluid my-3 d-flex flex-wrap justify-content-center">
+
+                            <div className="pl-5 pr-2 w-50"
+                                 style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
+                                {experiences.map((experience) => (
+                                    <CardExperience experience={experience} key={experience.id}/>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                }
+
 
                 {/*TODO*/}
                 {/*                    </c:when>*/}

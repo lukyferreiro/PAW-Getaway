@@ -111,7 +111,7 @@ export class ExperienceService {
         url: string,
         mail: string,
         description: string
-    ) {
+    ): Promise<Result<PutResponse>> {
         const experienceToUpdate = JSON.stringify({
             name: name,
             category: category,

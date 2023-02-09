@@ -64,7 +64,7 @@ export default function Navbar() {
                     </div>
 
 
-                    <Link to="/createExperience" style={{marginRight: '40px'}}>
+                    <Link to="/experienceForm" style={{marginRight: '40px'}}>
                         <button type="button" onClick={ () => {
                             if (user === null) {
                                 navigate("/login")

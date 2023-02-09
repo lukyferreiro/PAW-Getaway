@@ -27,10 +27,11 @@ export default function UserFavourites() {
             () => {}
         )
     }, [])
+    //TODO: add page and order to deps
 
     return (
         <div>
-            {favExperiences.length == 0 ?
+            { favExperiences.length == 0 ?
                 <div className="my-auto d-flex justify-content-center align-content-center">
                     <h2>{t('User.noFavs')}</h2>
                 </div> :
@@ -54,7 +55,6 @@ export default function UserFavourites() {
                             ))}
                         </div>
                     </div>
-
                 </div>
             }
         </div>

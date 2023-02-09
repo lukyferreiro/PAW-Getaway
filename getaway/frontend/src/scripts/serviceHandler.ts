@@ -12,6 +12,7 @@ export function serviceHandler<T>(
             if (response.getError().getStatus() === 204) {
                 // @ts-ignore
                 setterFunction(undefined);
+                console.log("Devuelvo 204");
             } else if (isNaN(response.getError().getStatus())) {
                 return;
             } else {

@@ -99,7 +99,7 @@ export const TRANSLATIONS_EN = {
         score: "Score",
     },
 
-    CreateExperience: {
+    ExperienceForm: {
         title: "Create your experience",
         error: {
             name: {
@@ -148,7 +148,9 @@ export const TRANSLATIONS_EN = {
             verifyAccountBtn: "Verify your account",
         },
         noFavs: "You haven't added any favourite experiences yet",
-        favsTitle: "My favourites"
+        favsTitle: "My favourites",
+        noReviews: "You haven't written any reviews yet",
+        reviewsTitle: "My reviews",
     },
 
     EmptyResult: "It seems there are no experiences matching your search",

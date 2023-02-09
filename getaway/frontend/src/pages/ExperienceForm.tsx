@@ -1,12 +1,13 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {CategoryModel, CityModel, CountryModel} from "../types";
+import {CategoryModel, CityModel, CountryModel, ExperienceModel} from "../types";
 import {categoryService, experienceService, locationService} from "../services";
 import {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {useForm} from "react-hook-form";
 import {Navigate, useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 
 type FormDataExperience = {
     name: string,
@@ -20,17 +21,34 @@ type FormDataExperience = {
     description: string
 };
 
-export default function CreateExperience() {
+export default function ExperienceForm() {
 
     const {t} = useTranslation();
     const navigate = useNavigate();
+    const {user} = useAuth();
 
-
+    const [experience, setExperience] = useState<ExperienceModel | undefined>(undefined)
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(1))
     const [countries, setCountries] = useState<CountryModel[]>(new Array(1))
     const [cities, setCities] = useState<CityModel[]>(new Array(0))
 
+    const query = useQuery();
+    const currentId = getQueryOrDefault(query, "id", "-1");
+
     useEffect(() => {
+        if (parseInt(currentId) != -1){
+            serviceHandler(
+                experienceService.getExperienceById(parseInt(currentId)),
+                navigate, (experience) => {
+                    setExperience(experience)
+                },
+                () => {}
+            )
+            if (experience?.user.id != user?.id) {
+                //TODO: add foribdden error
+                navigate("/", {replace: true});
+            }
+        }
         serviceHandler(
             categoryService.getCategories(),
             navigate, (category) => {
@@ -59,21 +77,31 @@ export default function CreateExperience() {
     const {register, handleSubmit, formState: { errors },}
         = useForm<FormDataExperience>({ criteriaMode: "all" });
 
-
     const onSubmit = handleSubmit((data: FormDataExperience) => {
-            experienceService.createExperience(data.name, data.category, data.country, data.city,
-                data.address, data.price.toString(), data.url, data.mail, data.description)
-                .then((result) => {
-                    if (!result.hasFailed()) {
-                        navigate(result.getData().url.toString(), {replace: true})
-                    }
-                    }
-                )
-                .catch(() => {});
+            if (experience!==undefined){
+                experienceService.updateExperienceById(parseInt(currentId),data.name, data.category, data.country, data.city,
+                    data.address, data.price.toString(), data.url, data.mail, data.description)
+                    .then((result) => {
+                            if (!result.hasFailed()) {
+                                navigate("/experiences/" + currentId, {replace: true})
+                            }
+                        }
+                    )
+                    .catch(() => {});
+            }else {
+                experienceService.createExperience(data.name, data.category, data.country, data.city,
+                    data.address, data.price.toString(), data.url, data.mail, data.description)
+                    .then((result) => {
+                            if (!result.hasFailed()) {
+                                navigate(result.getData().url.toString(), {replace: true})
+                            }
+                        }
+                    )
+                    .catch(() => {});
+            }
         }
     );
 
-    const {user} = useAuth();
     const location = useLocation();
     const readUser = localStorage.getItem("user");
     const isVerified = localStorage.getItem("isVerified") === "true";
@@ -81,7 +109,7 @@ export default function CreateExperience() {
     const rememberMe = localStorage.getItem("rememberMe") === "true";
 
     if (!user && !readUser) {
-        return <Navigate to="/login" state={{from: "/createExperience"}} replace/>;
+        return <Navigate to="/login" state={{from: "/experienceForm"}} replace/>;
     }
     if (!isVerified) {
         return <Navigate to="/user/profile" replace/>;
@@ -91,7 +119,7 @@ export default function CreateExperience() {
     return (
         <div className="d-flex flex-column justify-content-center mx-5 my-2 p-0">
             <h2 className="text-center font-weight-bold">
-                {t('CreateExperience.title')}
+                {t('ExperienceForm.title')}
             </h2>
 
             <form id="createExperienceForm" acceptCharset="utf-8"
@@ -117,18 +145,18 @@ export default function CreateExperience() {
                                        max: 50,
                                        pattern: {
                                            value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
-                                           message: t("CreateExperience.error.name.pattern"),
+                                           message: t("ExperienceForm.error.name.pattern"),
                                        },
                                    })}
                             />
                             {errors.name?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("CreateExperience.error.name.isRequired")}
+                                    {t("ExperienceForm.error.name.isRequired")}
                                 </p>
                             )}
                             {errors.name?.type === "max" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("CreateExperience.error.name.max")}
+                                    {t("ExperienceForm.error.name.max")}
                                 </p>
                             )}
                         </div>
@@ -155,7 +183,7 @@ export default function CreateExperience() {
                             </select>
                             {errors.category?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("CreateExperience.error.category.isRequired")}
+                                    {t("ExperienceForm.error.category.isRequired")}
                                 </p>
                             )}
                         </div>
@@ -201,18 +229,18 @@ export default function CreateExperience() {
                                       maxLength: 500,
                                       pattern: {
                                           value: /^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°";$%#&=:¿?!¡\n\s\t/.-])*$/,
-                                          message: t("CreateExperience.error.description.pattern"),
+                                          message: t("ExperienceForm.error.description.pattern"),
                                       },
                                   })}
                         />
                         {errors.description?.type === "required" && (
                             <p className="form-control is-invalid form-error-label">
-                                {t("CreateExperience.error.description.isRequired")}
+                                {t("ExperienceForm.error.description.isRequired")}
                             </p>
                         )}
                         {errors.description?.type === "maxLength" && (
                             <p className="form-control is-invalid form-error-label">
-                                {t("CreateExperience.error.description.max")}
+                                {t("ExperienceForm.error.description.max")}
                             </p>
                         )}
                     </div>
@@ -238,18 +266,18 @@ export default function CreateExperience() {
                                        max: 250,
                                        pattern: {
                                            value: /^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$/,
-                                           message: t("CreateExperience.error.mail.pattern"),
+                                           message: t("ExperienceForm.error.mail.pattern"),
                                        },
                                    })}
                             />
                             {errors.mail?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("CreateExperience.error.mail.isRequired")}
+                                    {t("ExperienceForm.error.mail.isRequired")}
                                 </p>
                             )}
                             {errors.mail?.type === "max" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("CreateExperience.error.mail.max")}
+                                    {t("ExperienceForm.error.mail.max")}
                                 </p>
                             )}
                         </div>
@@ -274,13 +302,13 @@ export default function CreateExperience() {
                                        max: 500,
                                        pattern: {
                                            value: /^([(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*))?$/,
-                                           message: t("CreateExperience.error.url.pattern"),
+                                           message: t("ExperienceForm.error.url.pattern"),
                                        },
                                    })}
                             />
-                            {errors.mail?.type === "max" && (
+                            {errors.url?.type === "max" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("CreateExperience.error.url.max")}
+                                    {t("ExperienceForm.error.url.max")}
                                 </p>
                             )}
                         </div>
@@ -311,7 +339,7 @@ export default function CreateExperience() {
                             </select>
                             {errors.country?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("CreateExperience.error.country.isRequired")}
+                                    {t("ExperienceForm.error.country.isRequired")}
                                 </p>
                             )}
                         </div>
@@ -332,7 +360,7 @@ export default function CreateExperience() {
                             </select>
                             {errors.city?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("CreateExperience.error.city.isRequired")}
+                                    {t("ExperienceForm.error.city.isRequired")}
                                 </p>
                             )}
                         </div>
@@ -355,18 +383,18 @@ export default function CreateExperience() {
                                        max: 100,
                                        pattern: {
                                            value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
-                                           message: t("CreateExperience.error.address.pattern"),
+                                           message: t("ExperienceForm.error.address.pattern"),
                                        },
                                    })}
                             />
                             {errors.address?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("CreateExperience.error.address.isRequired")}
+                                    {t("ExperienceForm.error.address.isRequired")}
                                 </p>
                             )}
                             {errors.address?.type === "max" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("CreateExperience.error.address.isRequired")}
+                                    {t("ExperienceForm.error.address.isRequired")}
                                 </p>
                             )}
                         </div>

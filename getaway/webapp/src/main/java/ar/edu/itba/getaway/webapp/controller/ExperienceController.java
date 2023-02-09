@@ -206,9 +206,9 @@ public class ExperienceController {
         final UserModel user = authFacade.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
 
-        if (!experience.getUser().equals(user)) {
-            experienceService.increaseViews(experience);
-        }
+//        if (!experience.getUser().equals(user)) {
+//            experienceService.increaseViews(experience);
+//        }
 
         final ExperienceDto experienceDto = new ExperienceDto(experience, uriInfo);
         return Response.ok(experienceDto).build();

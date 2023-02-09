@@ -30,6 +30,7 @@ public class ExperienceDto implements Serializable {
     private UserDto user;
     private CategoryDto category;
     private boolean isFav;
+    private boolean observable;
 
     public static Collection<Collection<ExperienceDto>> mapExperienceListToDto (List<List<ExperienceModel>> experiences, UriInfo uriInfo) {
         Collection<Collection<ExperienceDto>> toReturnList = new ArrayList<>();
@@ -71,6 +72,7 @@ public class ExperienceDto implements Serializable {
         this.user = new UserDto(experience.getUser(), uriInfo);
         this.category = new CategoryDto(experience.getCategory());
         this.isFav = experience.getIsFav();
+        this.observable = experience.getObservable();
     }
 
     public Long getId() {
@@ -174,5 +176,13 @@ public class ExperienceDto implements Serializable {
     }
     public void setFav(boolean fav) {
         isFav = fav;
+    }
+
+    public boolean isObservable() {
+        return observable;
+    }
+
+    public void setObservable(boolean observable) {
+        this.observable = observable;
     }
 }

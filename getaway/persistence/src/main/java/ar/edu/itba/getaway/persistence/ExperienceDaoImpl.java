@@ -6,10 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -133,7 +130,11 @@ public class ExperienceDaoImpl implements ExperienceDao {
         query.setParameter("max", max);
         query.setParameter("score", score);
 
-        return ((BigInteger) query.getSingleResult()).intValue();
+        try {
+            return ((BigInteger) query.getSingleResult()).intValue();
+        } catch(NoResultException e){
+            return 0;
+        }
     }
 
     @Override
@@ -187,7 +188,12 @@ public class ExperienceDaoImpl implements ExperienceDao {
                         "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(cityName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(countryName) LIKE LOWER(CONCAT('%', :name,'%'))) AND observable = true"
         );
         query.setParameter("name", name);
-        return ((BigInteger) query.getSingleResult()).intValue();
+
+        try {
+            return ((BigInteger) query.getSingleResult()).intValue();
+        } catch(NoResultException e){
+            return 0;
+        }
     }
 
     @Override
@@ -231,7 +237,12 @@ public class ExperienceDaoImpl implements ExperienceDao {
         );
         query.setParameter("name", name);
         query.setParameter("userId", user.getUserId());
-        return ((BigInteger) query.getSingleResult()).intValue();
+
+        try {
+            return ((BigInteger) query.getSingleResult()).intValue();
+        } catch(NoResultException e){
+            return 0;
+        }
     }
 
     private String getOrderQuery(Optional<OrderByModel> order) {
@@ -280,7 +291,11 @@ public class ExperienceDaoImpl implements ExperienceDao {
         );
 
         query.setParameter("userId", user.getUserId());
-        return ((BigInteger) query.getSingleResult()).intValue();
+        try {
+            return ((BigInteger) query.getSingleResult()).intValue();
+        } catch(NoResultException e){
+            return 0;
+        }
     }
 
     @Override

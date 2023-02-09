@@ -9,11 +9,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import {CategoryModel, ExperienceModel} from "../types";
 
-export default function CardExperienceDetails(props: { experience: ExperienceModel; categoryModel: CategoryModel; }) {
+export default function CardExperienceDetails(props: { experience: ExperienceModel; categoryModel: CategoryModel; isEditing: boolean;}) {
 
-    const {experience, categoryModel} = props
+    const {experience, categoryModel, isEditing} = props
     const {t} = useTranslation();
-    const isEditing = true;
     const hasImage = false;
 
     return (
@@ -160,9 +159,12 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     }
 
                     {/*<a href="<c:url value="/user/experiences/edit/${param.id}"/>">*/}
-                    <IconButton aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
-                        <EditIcon/>
-                    </IconButton>
+                    <Link to={"/experiences?id=" + experience.id}>
+                        <IconButton aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
+                            <EditIcon/>
+                        </IconButton>
+                    </Link>
+
                     {/*</a>*/}
                     {/*<a href="<c:url value="/user/experiences/delete/${param.id}"/>">*/}
                     <IconButton aria-label="trash" component="span" style={{fontSize: "xx-large"}}>
