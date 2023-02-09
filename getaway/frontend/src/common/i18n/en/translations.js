@@ -147,6 +147,8 @@ export const TRANSLATIONS_EN = {
             editBtn: "Edit profile",
             verifyAccountBtn: "Verify your account",
         },
+        noFavs: "You haven't added any favourite experiences yet",
+        favsTitle: "My favourites"
     },
 
     EmptyResult: "It seems there are no experiences matching your search",

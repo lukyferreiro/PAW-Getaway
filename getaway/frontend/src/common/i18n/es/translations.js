@@ -148,6 +148,8 @@ export const TRANSLATIONS_ES = {
             editBtn: "Editar perfil",
             verifyAccountBtn: "Verifica tu cuenta",
         },
+        noFavs: "Aún no has agregado experiencias a favoritos",
+        favsTitle: "Mis favoritos"
     },
 
     EmptyResult: "Parece que no hay ninguna experiencia que coincida con tu búsqueda",

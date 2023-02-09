@@ -32,7 +32,6 @@ export default function ExperienceDetails() {
             },
             () => {}
         ) ;
-        //Esto me da error 500 vaya uno a saber por que
         serviceHandler(
             experienceService.getExperienceReviews(parseInt(experienceId ? experienceId : '-1')),
             navigate, (fetchedExperienceReviews) => {

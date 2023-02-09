@@ -6,61 +6,9 @@ import CityModel from "../types/CityModel";
 import UserModel from "../types/UserModel";
 import CountryModel from "../types/CountryModel";
 
-export default function CardExperience() {
-
-
+export default function CardExperience(props: { experience: ExperienceModel; }) {
     const {t} = useTranslation()
-
-    const countryModel: CountryModel =
-        {
-            id: 2,
-            name: "Pais campeon del mundo",
-        };
-
-    const cityModel: CityModel =
-        {
-            id: 1,
-            name: "avellaneda city",
-            country: countryModel,
-        };
-
-
-    const categoryModel: CategoryModel =
-        {
-            id: 1,
-            name: 'Aventura',
-        };
-
-
-    const userModel: UserModel = {
-        id: 1,
-        name: "LUCAS FERREIRO PA",
-        surname: "LUCAS FERREIRO PA",
-        email: "lferreiro@itba.edu.ar PA",
-        favsCount: 2,
-        verified: true,
-        provider: true,
-    };
-
-    const experience: ExperienceModel =
-        {
-            id: 1,
-            name: "hola soy una prueba",
-            price: 10,
-            address: "SAN PEDRO 47",
-            email: "LFERREIRO@ITBA.EDU.AR",
-            description: "HOLA SOY LUQUITAS",
-            siteUrl: "HOLA.COM",
-            city: cityModel,
-            category: categoryModel,
-            user: userModel,
-            observable: true,
-            views: 200,
-            score: 5,
-            reviewCount: 0,
-            fav: false
-        };
-
+    const {experience} = props
 
     return (
 
@@ -148,7 +96,6 @@ export default function CardExperience() {
                 {/*</c:if>*/}
             </div>
 
-            <script src='/resources/js/snackbar.js"/>'></script>
         </div>
     )
 }
