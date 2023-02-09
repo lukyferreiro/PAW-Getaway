@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
-//import ar.edu.itba.getaway.interfaces.persistence.SessionRefreshTokenDao;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
 import ar.edu.itba.getaway.interfaces.persistence.UserDao;
@@ -26,8 +25,6 @@ public class UserServiceImpl implements UserService {
     private VerificationTokenDao verificationTokenDao;
     @Autowired
     private PasswordResetTokenDao passwordResetTokenDao;
-//    @Autowired
-//    private SessionRefreshTokenDao sessionRefreshTokenDao;
     @Autowired
     private ImageService imageService;
     @Autowired
@@ -61,13 +58,6 @@ public class UserServiceImpl implements UserService {
         LOGGER.debug("Retrieving user who created review with id {}", reviewId);
         return userDao.getUserByReviewId(reviewId);
     }
-
-//    @Transactional
-//    @Override
-//    public Optional<UserModel> getUserBySessionRefreshToken(String token) {
-//        LOGGER.debug("Retrieving user for token with value {}", token);
-//        return sessionRefreshTokenDao.getTokenByValue(token).filter(SessionRefreshToken::isValid).map(SessionRefreshToken::getUser);
-//    }
 
     @Transactional
     @Override

@@ -4,6 +4,8 @@ import ar.edu.itba.getaway.interfaces.exceptions.*;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
+import ar.edu.itba.getaway.webapp.constraints.DtoConstraintValidator;
+import ar.edu.itba.getaway.webapp.constraints.exceptions.DtoValidationException;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
@@ -40,8 +42,6 @@ public class ExperienceController {
     @Autowired
     private LocationService locationService;
     @Autowired
-    private UserService userService;
-    @Autowired
     private ImageService imageService;
     @Autowired
     private ReviewService reviewService;
@@ -49,6 +49,8 @@ public class ExperienceController {
     private int maxRequestSize;
     @Autowired
     private AuthFacade authFacade;
+    @Autowired
+    private DtoConstraintValidator dtoValidator;
     @Context
     private UriInfo uriInfo;
 
@@ -128,8 +130,8 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperiencesBySearch(
             @PathParam("name") final String name,
-            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
-            @QueryParam("page") @DefaultValue("1") int page
+            @QueryParam("order") @DefaultValue("OrderByAZ") final OrderByModel order,
+            @QueryParam("page") @DefaultValue("1") final int page
     ) {
         LOGGER.info("Called /experiences/{} GET", name);
 
@@ -160,13 +162,14 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response registerExperience(
             @Valid final NewExperienceDto experienceDto
-    ) throws DuplicateExperienceException {
+    ) throws DuplicateExperienceException, DtoValidationException {
 
         LOGGER.info("Called /experiences/ POST");
 
         if (experienceDto == null) {
             throw new ContentExpectedException();
         }
+        dtoValidator.validate(experienceDto, "Invalid Body Request");
 
         final UserModel user = authFacade.getCurrentUser();
         final CityModel city = locationService.getCityByName(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
@@ -234,7 +237,7 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response updateExperience(
             @Context final HttpServletRequest request,
-            @Valid NewExperienceDto experienceDto,
+            @Valid final NewExperienceDto experienceDto,
             @PathParam("experienceId") final long id
     ) {
 
@@ -247,6 +250,7 @@ public class ExperienceController {
         if (experienceDto == null) {
             throw new ContentExpectedException();
         }
+        dtoValidator.validate(experienceDto, "Invalid Body Request");
 
         final UserModel user = authFacade.getCurrentUser();
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
@@ -295,7 +299,7 @@ public class ExperienceController {
     @Produces({"image/*", MediaType.APPLICATION_JSON})
     public Response getExperienceImage(
             @PathParam("experienceId") final long id,
-            @Context Request request
+            @Context final Request request
     ) {
 
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(UserNotFoundException::new);
@@ -322,7 +326,7 @@ public class ExperienceController {
     @Path("/experience/{experienceId}/experienceImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON})
     public Response updateExperienceImage(
-            @PathParam("experienceId") long id,
+            @PathParam("experienceId") final long id,
             @FormDataParam("experienceImage") final FormDataBodyPart experienceImageBody,
             @Size(max = 1024 * 1024) @FormDataParam("experienceImage") byte[] experienceImageBytes
     ) {
@@ -350,7 +354,7 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperienceReviews(
             @PathParam("experienceId") final long id,
-            @QueryParam("page") @DefaultValue("1") int page
+            @QueryParam("page") @DefaultValue("1") final int page
     ) {
 
         LOGGER.info("Called /experiences/{}/reviews GET", id);
@@ -373,8 +377,13 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response createExperienceReview(
             @PathParam("experienceId") final long id,
-            @Valid NewReviewDto newReviewDto
-    ) {
+            @Valid final NewReviewDto newReviewDto
+    ) throws DtoValidationException {
+
+        if (newReviewDto == null) {
+            throw new ContentExpectedException();
+        }
+        dtoValidator.validate(newReviewDto, "Invalid Body Request");
 
         LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
         //TODO: check usage of localdate.now()

@@ -44,9 +44,6 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         String message = messageSource.getMessage("error.invalidEmail2", new Object[]{}, locale);
         final UserModel userModel = userService.getUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(message + email));
-//        final Collection<Roles> userRoles = userService.getRolesByUser(userModel);
-//        Collection<? extends GrantedAuthority> authorities = getAuthorities(userRoles);
-//        return new MyUserDetails(email, userModel.getPassword(), authorities);
         final Collection<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("USER"));
         if(userModel.isVerified()){
@@ -71,7 +68,4 @@ public class MyUserDetailsService implements UserDetailsService {
 
     }
 
-//    public static Collection<? extends GrantedAuthority> getAuthorities(Collection<Roles> roles) {
-//        return roles.stream().map((role) -> new SimpleGrantedAuthority("ROLE_" + role.name())).collect(Collectors.toList());
-//    }
 }

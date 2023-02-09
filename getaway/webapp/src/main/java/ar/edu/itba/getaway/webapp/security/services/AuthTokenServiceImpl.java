@@ -6,7 +6,6 @@ import ar.edu.itba.getaway.webapp.security.exceptions.InvalidAuthTokenException;
 import ar.edu.itba.getaway.webapp.security.models.AuthToken;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
@@ -21,10 +20,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class AuthTokenServiceImpl implements AuthTokenService {
-
-//    @Value("${authentication.jwt.validFor}")
-//    private Long validFor;
-
     @Autowired
     Settings settings;
 

@@ -2,12 +2,7 @@ package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.interfaces.services.CategoryService;
 import ar.edu.itba.getaway.models.CategoryModel;
-import ar.edu.itba.getaway.models.ExperienceModel;
-import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.getaway.webapp.dto.response.AnonymousLandingPageDto;
 import ar.edu.itba.getaway.webapp.dto.response.CategoryDto;
-import ar.edu.itba.getaway.webapp.dto.response.CityDto;
-import ar.edu.itba.getaway.webapp.dto.response.UserLandingPageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,14 +19,14 @@ import java.util.List;
 @Component
 public class CategoryController {
     @Autowired
-    CategoryService categoryService;
+    private CategoryService categoryService;
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCategories(){
-        List<CategoryModel> categories = categoryService.listAllCategories();
+        final List<CategoryModel> categories = categoryService.listAllCategories();
 
-        Collection<CategoryDto> categoriesDtos = CategoryDto.mapCategoriesToDto(categories);
+        final Collection<CategoryDto> categoriesDtos = CategoryDto.mapCategoriesToDto(categories);
 
         return Response.ok(new GenericEntity<Collection<CategoryDto>>(categoriesDtos) {}).build();
     }

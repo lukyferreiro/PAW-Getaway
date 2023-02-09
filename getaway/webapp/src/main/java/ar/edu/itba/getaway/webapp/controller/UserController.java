@@ -7,6 +7,8 @@ import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
+import ar.edu.itba.getaway.webapp.constraints.DtoConstraintValidator;
+import ar.edu.itba.getaway.webapp.constraints.exceptions.DtoValidationException;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.*;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
@@ -39,16 +41,13 @@ public class UserController {
     @Autowired
     private ImageService imageService;
     @Autowired
-    private TokensService tokensService;
-    @Autowired
     private ExperienceService experienceService;
     @Autowired
     private ReviewService reviewService;
     @Autowired
     private AuthFacade authFacade;
     @Autowired
-    private int maxRequestSize;
-
+    private DtoConstraintValidator dtoValidator;
     @Context
     private UriInfo uriInfo;
 
@@ -60,12 +59,14 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response registerUser(
             @Valid final RegisterDto registerDto
-    ) throws DuplicateUserException {
+    ) throws DuplicateUserException, DtoValidationException {
 
         LOGGER.info("Called /users/ POST");
         if (registerDto == null) {
             throw new ContentExpectedException();
         }
+        dtoValidator.validate(registerDto, "Invalid Body Request");
+
         UserModel user;
         try {
             user = userService.createUser(registerDto.getPassword(), registerDto.getName(), registerDto.getSurname(), registerDto.getEmail());
@@ -112,15 +113,16 @@ public class UserController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response updateUser(
-            @Valid UserInfoDto userInfoDto,
+            @Valid final UserInfoDto userInfoDto,
             @PathParam("userId") final long id
-    ) {
+    ) throws DtoValidationException {
 
         LOGGER.info("Called /users/ PUT");
 
         if (userInfoDto == null) {
             throw new ContentExpectedException();
         }
+        dtoValidator.validate(userInfoDto, "Invalid Body Request");
 
         final UserModel user = authFacade.getCurrentUser();
 
@@ -140,7 +142,7 @@ public class UserController {
 
         LOGGER.info("Called /users/emailVerification PUT");
 
-        final UserModel user = userService.verifyAccount(token).orElseThrow(UserNotFoundException::new);
+        userService.verifyAccount(token).orElseThrow(UserNotFoundException::new);
 
         return Response.noContent().build();
     }
@@ -174,6 +176,7 @@ public class UserController {
         if (passwordResetDto == null) {
             throw new ContentExpectedException();
         }
+        dtoValidator.validate(passwordResetDto, "Invalid Body Request");
 
         userService.updatePassword(token, passwordResetDto.getPassword()).orElseThrow(UserNotFoundException::new);
 
@@ -194,6 +197,7 @@ public class UserController {
         if (passwordResetEmailDto == null) {
             throw new ContentExpectedException();
         }
+        dtoValidator.validate(passwordResetEmailDto, "Invalid Body Request");
 
         //TODO: check
         LOGGER.info(passwordResetEmailDto.getEmail());
@@ -209,7 +213,7 @@ public class UserController {
     @Produces({"image/*", MediaType.APPLICATION_JSON})
     public Response getUserProfileImage(
             @PathParam("userId") final long id,
-            @Context Request request
+            @Context final Request request
     ) {
 
         LOGGER.info("Called /users/{}/profileImage GET", id);
@@ -238,8 +242,8 @@ public class UserController {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{userId}/profileImage")
-    public Response putUserProfileImage(
-            @PathParam("userId") long id,
+    public Response updateUserProfileImage(
+            @PathParam("userId") final long id,
             @FormDataParam("profileImage") final FormDataBodyPart profileImageBody,
             @Size(max = 1024 * 1024) @FormDataParam("profileImage") byte[] profileImageBytes
     ) {
@@ -267,8 +271,8 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserExperiences(
             @PathParam("userId") final long id,
-            @QueryParam("name") @DefaultValue("") String name,
-            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
+            @QueryParam("name") @DefaultValue("") final String name,
+            @QueryParam("order") @DefaultValue("OrderByAZ") final OrderByModel order,
             @QueryParam("page") @DefaultValue("1") int page
     ) {
 
@@ -304,7 +308,7 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserReviews(
             @PathParam("userId") final long id,
-            @QueryParam("page") @DefaultValue("1") int page
+            @QueryParam("page") @DefaultValue("1") final int page
     ) {
 
         LOGGER.info("Called /users/{}/experiences GET", id);
@@ -335,8 +339,8 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserFavExperiences(
             @PathParam("userId") final long id,
-            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
-            @QueryParam("page") @DefaultValue("1") int page
+            @QueryParam("order") @DefaultValue("OrderByAZ") final OrderByModel order,
+            @QueryParam("page") @DefaultValue("1") final int page
     ) {
 
         LOGGER.info("Called /users/{}/favExperiences GET", id);

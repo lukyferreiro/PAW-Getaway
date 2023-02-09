@@ -1,8 +1,6 @@
 package ar.edu.itba.getaway.services;
 
-//import ar.edu.itba.getaway.interfaces.persistence.SessionRefreshTokenDao;
 import ar.edu.itba.getaway.models.PasswordResetToken;
-//import ar.edu.itba.getaway.models.SessionRefreshToken;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.VerificationToken;
 import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
@@ -15,10 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
@@ -29,8 +25,6 @@ public class TokensServiceImpl implements TokensService {
     private VerificationTokenDao verificationTokenDao;
     @Autowired
     private PasswordResetTokenDao passwordResetTokenDao;
-//    @Autowired
-//    private SessionRefreshTokenDao sessionRefreshTokenDao;
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -55,17 +49,10 @@ public class TokensServiceImpl implements TokensService {
         return passwordResetTokenDao.createToken(user, token, PasswordResetToken.generateTokenExpirationDate());
     }
 
-//    @Override
-//    public SessionRefreshToken generateSessionRefreshToken(UserModel user) {
-//        return sessionRefreshTokenDao.createToken(user,
-//                SessionRefreshToken.generateSessionToken(),
-//                SessionRefreshToken.generateTokenExpirationDate()
-//        );
-//    }
-
     @Override
     public void sendVerificationToken(UserModel userModel, VerificationToken token) {
         try {
+            //TODO ver a donde se manda esto
 //            final String url = new URL("http", appBaseUrl, 8080, "/webapp_war/user/verifyAccount/" + token.getValue()).toString();
 //            final String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount/" + token.getValue()).toString();
             final String url = appBaseUrl.toString() + "/user/verifyAccount/" + token.getValue();
@@ -81,6 +68,7 @@ public class TokensServiceImpl implements TokensService {
     @Override
     public void sendPasswordResetToken(UserModel userModel, PasswordResetToken token) {
         try {
+            //TODO ver a donde se manda esto
 //           final String url = new URL("http", appBaseUrl, 8080, "/webapp_war/user/resetPassword/" + token.getValue()).toString();
 //            final String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/resetPassword/" + token.getValue()).toString();
             final String url = appBaseUrl.toString() + "/user/resetPassword/" + token.getValue();
@@ -93,18 +81,5 @@ public class TokensServiceImpl implements TokensService {
         }
     }
 
-//    @Override
-//    public SessionRefreshToken getSessionRefreshToken(UserModel user) {
-//        LOGGER.debug("Retrieving session refresh token for user");
-//        final Optional<SessionRefreshToken> tokenOpt = sessionRefreshTokenDao.getTokenByUser(user);
-//        if (tokenOpt.isPresent()) {
-//            final SessionRefreshToken sessionRefreshToken = tokenOpt.get();
-//            if (!sessionRefreshToken.isValid()) {
-//                sessionRefreshToken.refresh();
-//            }
-//            return sessionRefreshToken;
-//        }
-//        return generateSessionRefreshToken(user);
-//    }
 
 }

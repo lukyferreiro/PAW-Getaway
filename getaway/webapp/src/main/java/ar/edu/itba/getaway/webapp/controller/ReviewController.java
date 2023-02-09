@@ -1,8 +1,11 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.interfaces.exceptions.ContentExpectedException;
 import ar.edu.itba.getaway.interfaces.exceptions.ReviewNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.ReviewService;
 import ar.edu.itba.getaway.models.ReviewModel;
+import ar.edu.itba.getaway.webapp.constraints.DtoConstraintValidator;
+import ar.edu.itba.getaway.webapp.constraints.exceptions.DtoValidationException;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
@@ -23,7 +26,7 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
     @Autowired
-    private AuthFacade authFacade;
+    private DtoConstraintValidator dtoValidator;
     @Context
     private UriInfo uriInfo;
 
@@ -50,10 +53,15 @@ public class ReviewController {
     public Response editReview(
             @PathParam("reviewId") final Long id,
             @Context final HttpServletRequest request,
-            @Valid NewReviewDto reviewDto
-    ) {
+            @Valid final NewReviewDto reviewDto
+    ) throws DtoValidationException {
 
         LOGGER.info("Called /reviews/{} PUT", id);
+
+        if (reviewDto == null) {
+            throw new ContentExpectedException();
+        }
+        dtoValidator.validate(reviewDto, "Invalid Body Request");
 
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
 
@@ -68,7 +76,7 @@ public class ReviewController {
     @DELETE
     @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response deleteReview(@PathParam("reviewId") final long id) {
+    public Response deleteReview(@PathParam("reviewId") final Long id) {
         LOGGER.info("Called /reviews/{} DELETE", id);
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
         reviewService.deleteReview(reviewModel);

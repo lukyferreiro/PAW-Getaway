@@ -13,9 +13,7 @@ public class PaginationResponse {
         // Avoid instantiation of util class
     }
 
-    public static <T, K> Response createPaginationResponse(Page<T> results,
-                                                     GenericEntity<K> resultsDto,
-                                                     UriBuilder uriBuilder) {
+    public static <T, K> Response createPaginationResponse(Page<T> results, GenericEntity<K> resultsDto, UriBuilder uriBuilder) {
         if (results.getContent().isEmpty()) {
             if (results.getCurrentPage() == 1) {
                 return Response.noContent().build();
@@ -25,15 +23,11 @@ public class PaginationResponse {
         }
 
         final Response.ResponseBuilder response = Response.ok(resultsDto);
-
         addPaginationLinks(response, results, uriBuilder);
-
         return response.build();
     }
 
-    private static <T> void addPaginationLinks(Response.ResponseBuilder responseBuilder,
-                                        Page<T> results,
-                                        UriBuilder uriBuilder) {
+    private static <T> void addPaginationLinks(Response.ResponseBuilder responseBuilder, Page<T> results, UriBuilder uriBuilder) {
 
         final int page = results.getCurrentPage();
 
@@ -53,5 +47,6 @@ public class PaginationResponse {
         if (page != last) {
             responseBuilder.link(uriBuilder.clone().replaceQueryParam("page", next).build(), "next");
         }
+        responseBuilder.header("X-Total-Pages", results.getTotalPages());
     }
 }

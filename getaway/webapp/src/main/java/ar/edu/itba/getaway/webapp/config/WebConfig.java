@@ -25,7 +25,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -121,7 +120,7 @@ public class WebConfig {
     @Bean(name = "appBaseUrl")
     public URL appBaseUrl() throws MalformedURLException {
         if (isOnDevBuild()) {
-            return new URL("http", "localhost", 4200, "/webapp_war");
+            return new URL("http", "localhost", 3000, "/");
         } else {
             return new URL("http", "pawserver.it.itba.edu.ar", 8080, "/paw-2022b-1");
         }

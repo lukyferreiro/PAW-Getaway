@@ -15,10 +15,6 @@ public class PasswordResetEmailDto {
     public PasswordResetEmailDto() {
     }
 
-    public PasswordResetEmailDto(String email) {
-        this.email = email;
-    }
-
     public String getEmail() {
         return email;
     }

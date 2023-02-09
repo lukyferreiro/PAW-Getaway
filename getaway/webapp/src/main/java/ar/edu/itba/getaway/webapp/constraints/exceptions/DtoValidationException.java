@@ -3,6 +3,7 @@ package ar.edu.itba.getaway.webapp.constraints.exceptions;
 import javax.validation.ConstraintViolation;
 import java.util.Set;
 
+@SuppressWarnings("serial")
 public class DtoValidationException extends RuntimeException {
 
     private final Set<? extends ConstraintViolation<?>> constraintViolations;

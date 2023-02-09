@@ -17,8 +17,6 @@ public interface UserService {
 
     Optional<UserModel> getUserByReviewId(long reviewId);
 
-//    Optional<UserModel> getUserBySessionRefreshToken(String token);
-
     Optional<UserModel> verifyAccount(String token);
 
     void resendVerificationToken(UserModel userModel);
