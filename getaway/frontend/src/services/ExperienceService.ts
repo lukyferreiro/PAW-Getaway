@@ -216,4 +216,10 @@ export class  ExperienceService {
             body: {}
         });
     }
+
+    public async getCategoryMaxPrice(category: string): Promise<Result<number>> {
+        return resultFetch<number>(this.basePath + "/experience/" + category + "/maxPrice", {
+            method: "GET",
+        });
+    }
 }

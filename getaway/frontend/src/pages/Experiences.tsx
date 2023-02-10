@@ -10,7 +10,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {getQueryOrDefault, getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
 import "../styles/star_rating.css";
 import {CityModel, CountryModel} from "../types";
-import {experienceService, locationService} from "../services";
+import {categoryService, experienceService, locationService} from "../services";
 import {useForm} from "react-hook-form";
 import {serviceHandler} from "../scripts/serviceHandler";
 
@@ -54,13 +54,13 @@ export default function Experiences() {
     useEffect(() => {
         //TODO: getMaxPrice function in experience service
 
-        // serviceHandler(
-        //     experienceService.getCategoryMaxPrice(category),
-        //     navigate, (price) => {
-        //         setMaxPrice(price)
-        //     },
-        //     () => {}
-        // ) ;
+        serviceHandler(
+            experienceService.getCategoryMaxPrice(category),
+            navigate, (price) => {
+                setMaxPrice(price)
+            },
+            () => {}
+        ) ;
 
         serviceHandler(
             locationService.getCountries(),
@@ -100,7 +100,6 @@ export default function Experiences() {
     function cleanForm() {
         window.location.reload();
     }
-        //TODO: on submit filter
     const onSubmit = handleSubmit((data: FormFilterData) => {
         experienceService.getExperiencesByCategory(category!, order, price, -rating, city, page)
             .then((result) => {
