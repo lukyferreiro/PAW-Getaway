@@ -204,7 +204,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         Query queryForIds = em.createNativeQuery(
                 "SELECT experienceId \n" +
                         "FROM experiences \n" +
-                        "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%'))) AND observable = true AND userid = :userId"
+                        "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%'))) AND userid = :userId"
         );
 
         queryForIds.setParameter("name", name);
@@ -233,7 +233,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         Query query = em.createNativeQuery(
                 "SELECT count(experienceId) \n" +
                         "FROM experiences \n" +
-                        "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) ) AND observable = true AND userid = :userId"
+                        "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) ) AND userid = :userId"
         );
         query.setParameter("name", name);
         query.setParameter("userId", user.getUserId());

@@ -428,5 +428,15 @@ public class ExperienceController {
 
         return Response.noContent().build();
     }
+
+    @GET
+    @Path("/experience/{category}/maxPrice")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getCategoryMaxPrice(@PathParam("category") final String category
+    ){
+        final CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
+        final Double maxPrice = experienceService.getMaxPriceByCategory(categoryModel).orElse(0.0);
+        return Response.ok(maxPrice).build();
+    }
 }
 
