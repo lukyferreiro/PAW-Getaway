@@ -50,7 +50,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
 
                             <div> {/*Precio*/}
                                 <h5 className="information-title">
-                                    {t('Experience.price')}
+                                    {t('ExperienceDetail.price')}
                                 </h5>
                                 <div className="information-text">
                                     {/*<c:when test="${param.price == ''}">*/}

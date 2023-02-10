@@ -64,7 +64,11 @@ export const TRANSLATIONS_ES = {
     Experience: {
         name: "Nombre",
         category: "Categor\u00EDa",
-        price: "Precio",
+        price: {
+            null: "Precio no listado",
+            free: "Gratis",
+            exist: "${{price}}",
+        },
         information: "Descripci\u00F3n",
         mail: {
             field: "Email",
@@ -78,11 +82,18 @@ export const TRANSLATIONS_ES = {
         city: "Ciudad",
         address: "Direcci\u00F3n",
         image: "Imagen",
-        placeholder: "Escribe para buscar"
+        placeholder: "Escribe para buscar",
+        reviews: "Reseñas {{reviewCount}}",
+        notVisible: "La experiencia est\u00E1 oculta en este momento",
     },
 
     ExperienceDetail: {
         imageDefault: "Esta imagen no se corresponde con la experiencia",
+        price: {
+            null: "Precio no listado",
+            free: "Gratis",
+            exist: "${{price}}",
+        },
         priceFree: "Gratis",
         description: "Descripci\u00F3n",
         noData: "Informaci\u00F3n no brindada",
@@ -148,6 +159,17 @@ export const TRANSLATIONS_ES = {
             editBtn: "Editar perfil",
             verifyAccountBtn: "Verifica tu cuenta",
         },
+        experiences: {
+            title: "Mis experiencias",
+            category: "Categor\u00EDa",
+            score: "Puntaje",
+            price: "Precio",
+            views: "Vistas",
+            actions: "Acciones",
+            reviewsCount: "Reseñas {{count}}"
+        },
+        noExperiences: "Aun no has creado ninguna experiencia",
+        experiencesTitle: "Mis experiencias",
         noFavs: "Aún no has agregado experiencias a favoritos",
         favsTitle: "Mis favoritos",
         noReviews: "Aún no has escrito ninguna reseña",

@@ -62,8 +62,6 @@ export default function CreateReview() {
         if (readUser && readUser !== "") {
             signIn(JSON.parse(readUser), rememberMe, () => navigate(correctRoute));
         }
-
-        ;
     }, []);
 
     const {register, handleSubmit, formState: {errors},}
