@@ -64,6 +64,8 @@ export const TRANSLATIONS_EN = {
         name: "Name",
         category: "Category",
         price: "Price",
+        priceFree: "Free",
+        noPrice: "Not listed price",
         information: "Description",
         mail: {
             field: "Email",
@@ -77,7 +79,9 @@ export const TRANSLATIONS_EN = {
         city: "City",
         address: "Address",
         image: "Image",
-        placeholder: "Write in order to search"
+        placeholder: "Write in order to search",
+        reviews:"Reviews",
+        notVisible:"La experiencia est\u00E1 oculta en este momento"
     },
 
     ExperienceDetail: {

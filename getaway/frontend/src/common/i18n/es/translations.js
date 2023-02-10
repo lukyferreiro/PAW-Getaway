@@ -65,6 +65,8 @@ export const TRANSLATIONS_ES = {
         name: "Nombre",
         category: "Categor\u00EDa",
         price: "Precio",
+        priceFree: "Gratis",
+        noPrice: "Precio no listado",
         information: "Descripci\u00F3n",
         mail: {
             field: "Email",
@@ -78,7 +80,9 @@ export const TRANSLATIONS_ES = {
         city: "Ciudad",
         address: "Direcci\u00F3n",
         image: "Imagen",
-        placeholder: "Escribe para buscar"
+        placeholder: "Escribe para buscar",
+        reviews:"Reseñas",
+        notVisible:"This experience is not currently visible"
     },
 
     ExperienceDetail: {

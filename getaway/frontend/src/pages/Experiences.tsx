@@ -10,14 +10,14 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {getQueryOrDefault, getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
 import "../styles/star_rating.css";
 import {CityModel, CountryModel} from "../types";
-import {categoryService, experienceService, locationService} from "../services";
+import {experienceService, locationService} from "../services";
 import {useForm} from "react-hook-form";
 import {serviceHandler} from "../scripts/serviceHandler";
 
 type FormFilterData = {
     country: string,
-    city: string,
-    maxPrice: string,
+    city: number,
+    maxPrice: number,
     score: number,
 };
 
@@ -38,25 +38,29 @@ export default function Experiences() {
     const [city, setCity] = useState(-1);
 
     //Price
-    const maxPrice = -1;
+    const [maxPrice, setMaxPrice] = useState<number>(-1);
     const [price, setPrice] = useState<number>(maxPrice);
-    //Por ahora lo hago fijo
-    {/*    /!*TODO obtener el max price de todas las experiencias*!/*/}
 
     //Score
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
-    const [score, setScore] = useState(0);
 
     //Order
     const [order, setOrder] = useState("OrderByAZ");
-
     const [page, setPage] = useState(1);
 
     const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
 
     useEffect(() => {
         //TODO: getMaxPrice function in experience service
+
+        // serviceHandler(
+        //     experienceService.getCategoryMaxPrice(category),
+        //     navigate, (price) => {
+        //         setMaxPrice(price)
+        //     },
+        //     () => {}
+        // ) ;
         serviceHandler(
             locationService.getCountries(),
             navigate, (country) => {
@@ -65,7 +69,7 @@ export default function Experiences() {
             () => {}
         ) ;
         serviceHandler(
-            experienceService.getExperiencesByCategory(category!, order, price, score, city, page),
+            experienceService.getExperiencesByCategory(category!, order, price, rating, city, page),
             navigate, (experiences) => {
                 setExperiences(experiences.getContent())
             },
@@ -76,8 +80,9 @@ export default function Experiences() {
     function loadCities(countryName: string){
         serviceHandler(
             locationService.getCitiesByCountry(parseInt(countryName)),
-            navigate, (city) => {
-                setCities(city)
+            navigate, (cities) => {
+                setCities(cities)
+                setCity(cities[0].id)
             },
             () => {}
         ) ;
@@ -91,11 +96,21 @@ export default function Experiences() {
     const {register, handleSubmit, formState: { errors },}
         = useForm<FormFilterData>({ criteriaMode: "all" });
 
-    //TODO: on submit filter
+    function cleanForm() {
+        window.location.reload();
+    }
+        //TODO: on submit filter
     const onSubmit = handleSubmit((data: FormFilterData) => {
-            data.score = -rating;
-            data.maxPrice = String(price);
-            //    RELOAD PAGE WITH FILTERS
+        experienceService.getExperiencesByCategory(category!, order, price, -rating, city, page)
+            .then((result) => {
+                    if (!result.hasFailed()) {
+                        setExperiences(result.getData().getContent())
+                    }else{
+                        setExperiences(Array(0));
+                    }
+                }
+            )
+            .catch(() => {});
         }
     );
 
@@ -107,14 +122,13 @@ export default function Experiences() {
                     {t('Filters.title')}
                 </p>
 
-                <form id="submitForm" className="filter-form">
+                <form id="submitForm" className="filter-form" onSubmit={onSubmit}>
                     <div>
                         <label className="form-label" htmlFor="country">
                             {t('Experience.country')}
-                            <span className="required-field">*</span>
                         </label>
-                        <select id="experienceFormCountryInput" className="form-select" required
-                                {...register("country", {required: true})}
+                        <select id="experienceFormCountryInput" className="form-select"
+                                {...register("country", {required: false})}
                                 onChange={e => loadCities(e.target.value)}
                         >
                             <option hidden value="">{t('Experience.placeholder')}</option>
@@ -129,14 +143,13 @@ export default function Experiences() {
                     <div className="mt-2">
                         <label className="form-label" htmlFor="city">
                             {t('Filters.city.field')}
-                            <span className="required-field">*</span>
                         </label>
-                        <select id="experienceFormCityInput" className="form-select" required
-                                {...register("city", {required: true})}
+                        <select id="experienceFormCityInput" className="form-select"
+                                {...register("city", {required: false})}
                                 disabled={cities.length <= 0}
                         >
                             {cities.map((city) => (
-                                <option key={city.id} value={city.name}>
+                                <option key={city.id} value={city.id} onChange={e => setCity(city.id)}>
                                     {city.name}
                                 </option>
                             ))}
@@ -172,7 +185,6 @@ export default function Experiences() {
                         <label className="form-label">
                             {t('Filters.scoreAssign')}
                         </label>
-                        {/*TODO poner las estrellas*/}
                         <div className="star-rating">
                             {[...Array(5)].map((star, index) => {
                                 index -=5;
@@ -204,9 +216,8 @@ export default function Experiences() {
                 </button>
 
 
-                {/*TODO ver como se borran todos los filtros*/}
                 <button className="btn btn-clean-filter px-3 py-2 my-2" type="button" id="cleanFilterFormButton"
-                        form="submitForm">
+                        onClick={cleanForm}>
                     {t('Filters.btn.clear')}
                 </button>
             </div>
@@ -216,20 +227,9 @@ export default function Experiences() {
                  style={{minHeight: "650px"}}>
                 <div className="d-flex justify-content-start">
                     <OrderDropdown/>
-                    {/*<jsp:include page="/WEB-INF/components/orderDropdown.jsp">*/}
-                    {/*    <jsp:param name="orderByModels" value="${orderByModels}"/>*/}
-                    {/*    <jsp:param name="path" value="${path}"/>*/}
-                    {/*    <jsp:param name="score" value="${score}"/>*/}
-                    {/*    <jsp:param name="cityId" value="${cityId}"/>*/}
-                    {/*    <jsp:param name="maxPrice" value="${maxPrice}"/>*/}
-                    {/*    <jsp:param name="orderPrev" value="${orderBy}"/>*/}
-                    {/*</jsp:include>*/}
                 </div>
 
-                {/*TODO*/}
-                {/*<c:choose>*/}
-                {/*    <c:when test="${experiences.size() == 0}">*/}
-                { experiences === undefined ?
+                { experiences.length === 0 ?
                     <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
                         <div className="d-flex justify-content-center align-content-center">
                             <img src={'./images/ic_no_search.jpeg'} alt="Imagen lupa"
@@ -243,7 +243,6 @@ export default function Experiences() {
                     :
                     <div>
                         <div className="container-fluid my-3 d-flex flex-wrap justify-content-center">
-
                             <div className="pl-5 pr-2 w-50"
                                  style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
                                 {experiences.map((experience) => (
@@ -255,34 +254,7 @@ export default function Experiences() {
                 }
 
 
-                {/*TODO*/}
-                {/*                    </c:when>*/}
-                {/*                    <c:otherwise>*/}
-                {/*                        <div class="d-flex flex-wrap justify-content-center">*/}
-                {/*                            <c:forEach var="experience" varStatus="myIndex" items="${experiences}">*/}
-                {/*                                <jsp:include page="/WEB-INF/components/cardExperience.jsp">*/}
-                {/*                                    <jsp:param name="hasImage" value="${experience.image != null}"/>*/}
-                {/*                                    <jsp:param name="categoryName" value="${experience.category.categoryName}"/>*/}
-                {/*                                    <jsp:param name="id" value="${experience.experienceId}"/>*/}
-                {/*                                    <jsp:param name="name" value="${experience.experienceName}"/>*/}
-                {/*                                    <jsp:param name="isFav" value="${experience.isFav}"/>*/}
-                {/*                                    <jsp:param name="description" value="${experience.description}"/>*/}
-                {/*                                    <jsp:param name="address" value="${experience.getLocationName()}"/>*/}
-                {/*                                    <jsp:param name="price" value="${experience.price}"/>*/}
-                {/*                                    <jsp:param name="path" value="/experiences/${categoryName}"/>*/}
-                {/*                                    <jsp:param name="score" value="${score}"/>*/}
-                {/*                                    <jsp:param name="cityId" value="${cityId}"/>*/}
-                {/*                                    <jsp:param name="maxPrice" value="${maxPrice}"/>*/}
-                {/*                                    <jsp:param name="filter" value="true"/>*/}
-                {/*                                    <jsp:param name="pageNum" value="${currentPage}"/>*/}
-                {/*                                    <jsp:param name="orderBy" value="${orderBy}"/>*/}
-                {/*                                    <jsp:param name="avgReviews" value="${experience.averageScore}"/>*/}
-                {/*                                    <jsp:param name="reviewCount" value="${experience.reviewCount}"/>*/}
-                {/*                                    <jsp:param name="observable" value="${experience.observable}"/>*/}
-                {/*                                </jsp:include>*/}
-                {/*                            </c:forEach>*/}
-                {/*                        </div>*/}
-
+                {/*TODO: pagination*/}
                 {/*                        <div class="mt-auto d-flex justify-content-center align-items-center">*/}
                 {/*                            <ul class="pagination m-0">*/}
                 {/*                                <li class="page-item">*/}

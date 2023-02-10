@@ -5,7 +5,7 @@ import {getPagedFetch} from "../scripts/getPagedFetch";
 import {authedFetch} from "../scripts/authedFetch";
 import {getImageFetch} from "../scripts/getImageFetch";
 
-export class ExperienceService {
+export class  ExperienceService {
     private readonly basePath = paths.BASE_URL + paths.EXPERIENCES;
 
     public async createExperience(
@@ -99,6 +99,10 @@ export class ExperienceService {
             method: "GET",
         });
     }
+
+    // public async getCategoryMaxPrice(categoryId:number):Promise<Result<number>>{
+    //
+    // }
 
     public async updateExperienceById(
         experienceId: number,

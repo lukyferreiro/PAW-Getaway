@@ -1,28 +1,23 @@
 import "../styles/star_rating.css";
-import {useState} from "react";
-export default function StarRating() {
+import React from "react";
+export default function StarRating(props: { score : number}) {
 
-    const [rating, setRating] = useState(0);
-    const [hover, setHover] = useState(0);
+    const {score} = props
 
-    return (
-        <div className="star-rating">
-            {[...Array(5)].map((star, index) => {
-                index -=5;
-                return (
-                    <button
-                        type="button"
-                        key={index}
-                        className={index >= ((rating && hover) || hover) ? "on" : "off"}
-                        onClick={() => setRating(index)}
-                        onMouseEnter={() => setHover(index)}
-                        onMouseLeave={() => setHover(rating)}
-                    >
-                        <span className="star">&#9733;</span>
-                    </button>
-                );
-            })}
-        </div>
+        return (
+            <div className="star-rating">
+                {[...Array(5)].map((star, index) => {
+                    index -=5;
+                    return (
+                        <div
+                            key={index}
+                            className={index >= -score ? "on" : "off"}
+                        >
+                            <span className="star">&#9733;</span>
+                        </div>
+                    );
+                })}
+            </div>
     );
 
 }

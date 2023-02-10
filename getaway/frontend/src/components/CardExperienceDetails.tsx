@@ -8,6 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import {CategoryModel, ExperienceModel} from "../types";
+import StarRating from "./StarRating";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel; categoryModel: CategoryModel; isEditing: boolean;}) {
 
@@ -117,6 +118,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                 <h6 className="information-title">
                                     {t('ExperienceDetail.review')}: {experience.reviewCount}
                                 </h6>
+                                <StarRating score={experience.score}/>
                                 {/*<jsp:include page="/WEB-INF/components/starAvg.jsp">*/}
                                 {/*    <jsp:param name="avgReview" value="${param.reviewAvg}"/>*/}
                                 {/*</jsp:include>*/}

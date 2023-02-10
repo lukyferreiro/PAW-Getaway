@@ -7,6 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {useAuth} from "../hooks/useAuth";
+import StarRating from "./StarRating";
 
 export default function CardReview(props: {reviewModel: ReviewModel; isEditing: boolean;}) {
 
@@ -60,19 +61,7 @@ export default function CardReview(props: {reviewModel: ReviewModel; isEditing: 
                     </div>
                 </div>
                 <div className="my-2 d-flex">
-                    <div className="star-rating">
-                        {[...Array(5)].map((star, index) => {
-                            index -=5;
-                            return (
-                                <div
-                                    key={index}
-                                    className={index >= -reviewModel.score ? "on" : "off"}
-                                >
-                                    <span className="star">&#9733;</span>
-                                </div>
-                            );
-                        })}
-                    </div>
+                    <StarRating score={reviewModel.score}/>
                 </div>
             </div>
 

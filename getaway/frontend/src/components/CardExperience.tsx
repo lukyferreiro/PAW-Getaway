@@ -1,10 +1,8 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index"
-import {Link, useLocation, useNavigate} from 'react-router-dom'
-import {CategoryModel, ExperienceModel} from "../types";
-import CityModel from "../types/CityModel";
-import UserModel from "../types/UserModel";
-import CountryModel from "../types/CountryModel";
+import {Link} from 'react-router-dom'
+import {ExperienceModel} from "../types";
+import StarRating from "./StarRating";
 
 export default function CardExperience(props: { experience: ExperienceModel; }) {
     const {t} = useTranslation()
@@ -44,33 +42,28 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
 
                     <div className="card-body container-fluid p-2">
                         <div className="title-link">
-                            <Link to="experiences/${param.categoryName}/${param.id}">
-                                <param name=" view" value=" ${true}"/>
+                            <Link to={"/experiences/" + experience.id}>
+                                <h2 className="experience card-title container-fluid p-0 text-truncate">
+                                    {experience.name}
+                                </h2>
                             </Link>
-                            <h2 className="experience card-title container-fluid p-0 text-truncate">
-                                {experience.name}
-                            </h2>
+
                         </div>
                         <div className="card-text container-fluid p-0">
                             <p className="text-truncate">
                                 {experience.description}
                             </p>
                             <h5 className="text-truncate">
-                                ${experience.address}
+                                {experience.address}
                             </h5>
-                            {/*<h6>*/}
-                            {/*    <c:choose>*/}
-                            {/*        <c:when test="${param.price == ''}">*/}
-                            {/*            <spring:message code="experience.noPrice"/>*/}
-                            {/*        </c:when>*/}
-                            {/*        <c:when test="${param.price == '0.0'}">*/}
-                            {/*            <spring:message code="experience.price.free"/>*/}
-                            {/*        </c:when>*/}
-                            {/*        <c:otherwise>*/}
-                            {/*            <spring:message code="experience.price.value" arguments="${param.price}"/>*/}
-                            {/*        </c:otherwise>*/}
-                            {/*    </c:choose>*/}
-                            {/*</h6>*/}
+                            <h6>
+                                {
+                                    experience.price == null ?  <div>{t('Experience.noPrice')}</div>
+                                        :
+                                        experience.price == 0 ? <div>{t('Experience.priceFree')}</div>
+                                            : <div>${experience.price}</div>
+                                }
+                            </h6>
                         </div>
 
                     </div>
@@ -78,22 +71,16 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
 
                 <div className="card-body container-fluid d-flex p-2 mb-1 align-items-end">
                     <h5 className="mb-1">
-                        {t('experience.reviews', {reviewCount: experience.reviewCount})}
+                        {t('Experience.reviews', {reviewCount: experience.reviewCount})}
                     </h5>
-                    {/*<jsp:include page="/WEB-INF/components/starAvg.jsp">*/}
-                    {/*    <jsp:param name="avgReview" value="${param.avgReviews}"/>*/}
-                    {/*</jsp:include>*/}
+                    <StarRating score={experience.score}/>
                 </div>
-                //TODO este if y los otros y completar con los componentes que faltan
-                {/*<c:if test="${!param.observable}">*/}
-                {/*    <div className="card-body p-0 d-flex justify-content-center">*/}
-                {/*        <h5 className="obs-info align-self-center" style="font-size: small">*/}
-                {/*            <spring:message code="experience.notVisible"/>*/}
-                {/*            {t('experience.notVisible')}*/}
-                {/*            */}
-                {/*        </h5>*/}
-                {/*    </div>*/}
-                {/*</c:if>*/}
+                {/*//TODO este if y los otros y completar con los componentes que faltan*/}
+                {!experience.observable &&  <div className="card-body p-0 d-flex justify-content-center">
+                    <h5 className="obs-info align-self-center" style={{fontSize: "small"}}>
+                        {t('Experience.notVisible')}
+                    </h5>
+                </div>}
             </div>
 
         </div>
