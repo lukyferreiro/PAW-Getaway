@@ -91,9 +91,10 @@ export default function ExperienceForm() {
                     .catch(() => {});
             }else {
                 experienceService.createExperience(data.name, data.category, data.country, data.city,
-                    data.address, data.price.toString(), data.url, data.mail, data.description)
+                    data.address, data.mail, data.price.toString(), data.url, data.description)
                     .then((result) => {
                             if (!result.hasFailed()) {
+                                console.log(result.getData().url.toString())
                                 navigate(result.getData().url.toString(), {replace: true})
                             }
                         }
@@ -149,7 +150,7 @@ export default function ExperienceForm() {
                                            message: t("ExperienceForm.error.name.pattern"),
                                        },
                                    })}
-                                defaultValue={experience?.name}
+                                defaultValue={experience ? experience.name : ""}
                             />
                             {errors.name?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">
@@ -175,7 +176,7 @@ export default function ExperienceForm() {
                                 }
 
                                 {categories.map((category) => (
-                                    <option selected={experience?.category.id === category.id} key={category.id} value={category.id}>
+                                    <option defaultValue={experience ? experience.category.id : ""} key={category.id} value={category.id}>
                                         {t('Categories.' + category.name)}
                                     </option>
                                 ))}
@@ -190,7 +191,7 @@ export default function ExperienceForm() {
                             <label className="form-label d-flex justify-content-between"
                                    htmlFor="price">
                                 <div>
-                                    {t('Experience.price')}
+                                    {t('Experience.price.name')}
                                     <span className="optional-text">
                                         {t('Input.optional')}
                                     </span>
@@ -203,7 +204,7 @@ export default function ExperienceForm() {
                             </label>
                             <input type="number" max="9999999" className="form-control" id="experienceFormPriceInput" placeholder="0"
                                    {...register("price", {})}
-                                   defaultValue={experience?.price}
+                                   defaultValue={experience ? experience.price : ""}
                             />
                         </div>
                     </div>
@@ -232,7 +233,7 @@ export default function ExperienceForm() {
                                           message: t("ExperienceForm.error.description.pattern"),
                                       },
                                   })}
-                            defaultValue={experience?.description}
+                            defaultValue={experience ? experience.description : ""}
                         />
                         {errors.description?.type === "required" && (
                             <p className="form-control is-invalid form-error-label">
@@ -270,7 +271,7 @@ export default function ExperienceForm() {
                                            message: t("ExperienceForm.error.mail.pattern"),
                                        },
                                    })}
-                                   defaultValue={experience?.email}
+                                   defaultValue={experience ? experience.email : ""}
                             />
                             {errors.mail?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">
@@ -307,7 +308,7 @@ export default function ExperienceForm() {
                                            message: t("ExperienceForm.error.url.pattern"),
                                        },
                                    })}
-                                   defaultValue={experience?.siteUrl}
+                                   defaultValue={experience ? experience.siteUrl : ""}
                             />
                             {errors.url?.type === "max" && (
                                 <p className="form-control is-invalid form-error-label">
@@ -328,11 +329,11 @@ export default function ExperienceForm() {
                                     onChange={e => loadCities(parseInt(e.target.value))}
                             >
                                 {experience === undefined &&
-                                <option hidden value="">{t('Experience.placeholder')}</option>
+                                    <option hidden value="">{t('Experience.placeholder')}</option>
                                 }
 
                                 {countries.map((country) => (
-                                    <option selected={experience?.country.id === country.id} key={country.id} value={country.id}>
+                                    <option defaultValue={experience ? experience.country.id : ""} key={country.id} value={country.id}>
                                         {country.name}
                                     </option>
                                 ))}
@@ -357,7 +358,7 @@ export default function ExperienceForm() {
                                 }
 
                                 {cities.map((city) => (
-                                    <option selected={experience?.city.id === city.id} key={city.id} value={city.name}>
+                                    <option defaultValue={experience ? experience.city.id : ""} key={city.id} value={city.name}>
                                         {city.name}
                                     </option>
                                 ))}
@@ -390,7 +391,7 @@ export default function ExperienceForm() {
                                            message: t("ExperienceForm.error.address.pattern"),
                                        },
                                    })}
-                                defaultValue={experience?.address}
+                                defaultValue={experience ? experience.address : ""}
                             />
                             {errors.address?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">

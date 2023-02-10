@@ -14,10 +14,10 @@ export class  ExperienceService {
         country: string,
         city: string,
         address: string,
-        price: string,
-        url: string,
         mail: string,
-        description: string
+        price?: string,
+        url?: string,
+        description?: string
     ): Promise<Result<PostResponse>> {
         const newExperience = JSON.stringify({
             name: name,
@@ -25,12 +25,13 @@ export class  ExperienceService {
             country: country,
             city: city,
             address: address,
-            price: price,
-            url: url,
             mail: mail,
-            description: description
+            price: price ? price : "",
+            url: url ? url : "",
+            description: description ? description : ""
         });
 
+        console.log(newExperience)
         return resultFetch<PostResponse>(this.basePath, {
             method: "POST",
             headers: {
@@ -114,7 +115,7 @@ export class  ExperienceService {
         price: string,
         url: string,
         mail: string,
-        description: string
+        description: string,
     ): Promise<Result<PutResponse>> {
         const experienceToUpdate = JSON.stringify({
             name: name,
@@ -125,7 +126,7 @@ export class  ExperienceService {
             price: price,
             url: url,
             mail: mail,
-            description: description
+            description: description,
         });
         return resultFetch(this.basePath + "/experience/" + experienceId, {
             method: "PUT",

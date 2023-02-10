@@ -5,8 +5,13 @@ import React, {useEffect, useState} from "react";
 import {ExperienceModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
-import {userService} from "../services";
+import {experienceService, userService} from "../services";
 import StarRating from "../components/StarRating";
+import {IconButton} from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 export default function UserExperiences() {
 
@@ -29,13 +34,28 @@ export default function UserExperiences() {
             },
             () => {}
         )
-    }, [])
+    }, [userExperiences])
 
     if (!isProvider) {
         return <Navigate to="/" replace/>;
     }
 
-    return (
+    function setVisibility(experienceId:number , visibility: boolean) {
+        experienceService.setExperienceObservable(experienceId, visibility).then()
+            .catch(() => {});
+    }
+
+    function deleteExperience(experienceId:number ) {
+        experienceService.deleteExperienceById(experienceId).then()
+            .catch(() => {});
+    }
+
+    function editExperience(experienceId:number ) {
+        // experienceService.deleteExperienceById(experienceId).then()
+        //     .catch(() => {});
+    }
+
+        return (
         <div className="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
             {userExperiences.length == 0 ?
                 <div className="my-auto d-flex justify-content-center align-content-center">
@@ -141,18 +161,26 @@ export default function UserExperiences() {
                                                 <h5 className="mb-1">
                                                     {
                                                         (experience.price === undefined ?
-                                                            <h6>
-                                                                {t('Experience.price.null')}
-                                                            </h6>
+                                                            <div>
+                                                                <h6>
+                                                                    {t('Experience.price.null')}
+                                                                </h6>
+                                                            </div>
+
                                                             :
                                                             (experience.price == 0 ?
-                                                                <h6>
-                                                                    {t('Experience.price.free')}
-                                                                </h6>
+                                                                <div>
+                                                                    <h6>
+                                                                        {t('Experience.price.free')}
+                                                                    </h6>
+                                                                </div>
                                                                 :
-                                                                <h6>
-                                                                    {t('Experience.price.exist', {price: experience.price})}
-                                                                </h6>))
+                                                                <div>
+                                                                    <h6>
+                                                                        {t('Experience.price.exist', {price: experience.price})}
+                                                                    </h6>
+                                                                </div>
+                                                                ))
                                                     }
                                                 </h5>
                                             </div>
@@ -167,25 +195,21 @@ export default function UserExperiences() {
                                         <td>
                                             <div className="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
                                                 {experience.observable ?
-                                                    <button type="button" className="btn btn-observable"
-                                                            style={{fontSize: "x-large"}} >
-                                                        <i className="bi bi-eye"/>
-                                                    </button>
+                                                    <IconButton onClick={() => setVisibility(experience.id, false)} aria-label="visibilityOn" component="span" style={{fontSize: "x-large"}} id="setFalse">
+                                                        <VisibilityIcon/>
+                                                    </IconButton>
                                                     :
-                                                    <button type="button" className="btn btn-observable"
-                                                            style={{fontSize: "x-large"}} >
-                                                            <i className="bi bi-eye-slash"/>
-                                                    </button>
+                                                    <IconButton onClick={() => setVisibility(experience.id, true)} aria-label="visibilityOff" component="span" style={{fontSize: "xx-large"}} id="setTrue">
+                                                        <VisibilityOffIcon/>
+                                                    </IconButton>
                                                 }
 
-                                                <button type="button" className="btn btn-pencil"
-                                                        style={{fontSize: "x-large"}} >
-                                                    <i className="bi bi-pencil"/>
-                                                </button>
-                                                <button type="button" className="btn btn-trash"
-                                                        style={{fontSize: "x-large"}} >
-                                                    <i className="bi bi-trash"/>
-                                                </button>
+                                                <IconButton onClick={() => editExperience(experience.id)} aria-label="edit" component="span" style={{fontSize: "x-large"}}>
+                                                    <EditIcon/>
+                                                </IconButton>
+                                                <IconButton onClick={() => deleteExperience(experience.id)} aria-label="trash" component="span" style={{fontSize: "x-large"}}>
+                                                    <DeleteIcon/>
+                                                </IconButton>
                                             </div>
                                         </td>
                                     </tr>

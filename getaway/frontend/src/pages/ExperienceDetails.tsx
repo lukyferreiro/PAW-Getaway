@@ -39,7 +39,7 @@ export default function ExperienceDetails() {
             },
             () => {}
         ) ;
-    }, [] );
+    }, [experience] );
 
     return (
         <div>

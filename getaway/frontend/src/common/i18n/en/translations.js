@@ -64,6 +64,7 @@ export const TRANSLATIONS_EN = {
         name: "Name",
         category: "Category",
         price: {
+            name: "Price",
             null: "Price not listed",
             free: "Free",
             exist: "${{price}}",
@@ -93,7 +94,6 @@ export const TRANSLATIONS_EN = {
             free: "Free",
             exist: "${{price}}",
         },
-        priceFree: "Free",
         description: "Description",
         noData: "Information not provided",
         url: "Official site",

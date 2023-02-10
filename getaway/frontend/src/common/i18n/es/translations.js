@@ -65,6 +65,7 @@ export const TRANSLATIONS_ES = {
         name: "Nombre",
         category: "Categor\u00EDa",
         price: {
+            name: "Precio",
             null: "Precio no listado",
             free: "Gratis",
             exist: "${{price}}",
@@ -94,7 +95,6 @@ export const TRANSLATIONS_ES = {
             free: "Gratis",
             exist: "${{price}}",
         },
-        priceFree: "Gratis",
         description: "Descripci\u00F3n",
         noData: "Informaci\u00F3n no brindada",
         url: "Sitio oficial",

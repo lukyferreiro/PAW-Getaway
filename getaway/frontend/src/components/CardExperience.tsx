@@ -67,18 +67,26 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                             </h5>
                             {
                                 (experience.price === undefined ?
-                                    <h6>
-                                        {t('Experience.price.null')}
-                                    </h6>
-                                :
-                                (experience.price == 0 ?
-                                    <h6>
-                                        {t('Experience.price.free')}
-                                    </h6>
-                                :
-                                    <h6>
-                                        {t('Experience.price.exist', {price: experience.price})}
-                                    </h6>))
+                                    <div>
+                                        <h6>
+                                            {t('Experience.price.null')}
+                                        </h6>
+                                    </div>
+
+                                    :
+                                    (experience.price == 0 ?
+                                            <div>
+                                                <h6>
+                                                    {t('Experience.price.free')}
+                                                </h6>
+                                            </div>
+                                            :
+                                            <div>
+                                                <h6>
+                                                    {t('Experience.price.exist', {price: experience.price})}
+                                                </h6>
+                                            </div>
+                                    ))
                             }
                         </div>
                     </div>

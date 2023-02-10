@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {IconButton} from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -9,12 +9,25 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import {CategoryModel, ExperienceModel} from "../types";
 import StarRating from "./StarRating";
+import {experienceService} from "../services";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel; categoryModel: CategoryModel; isEditing: boolean;}) {
 
     const {experience, categoryModel, isEditing} = props
     const {t} = useTranslation();
     const hasImage = false;
+    const navigate = useNavigate()
+
+    function setVisibility(experienceId:number , visibility: boolean) {
+        experienceService.setExperienceObservable(experienceId, visibility).then()
+            .catch(() => {});
+    }
+
+    function deleteExperience(experienceId:number ) {
+        experienceService.deleteExperienceById(experienceId).then()
+            .catch(() => {});
+        // navigate(-1)
+    }
 
     return (
         <div>
@@ -51,23 +64,31 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
 
                             <div> {/*Precio*/}
                                 <h5 className="information-title">
-                                    {t('ExperienceDetail.price')}
+                                    {t('Experience.price.name')}
                                 </h5>
                                 <div className="information-text">
                                     {
                                         (experience.price === undefined ?
-                                            <h6>
-                                                {t('Experience.price.null')}
-                                            </h6>
+                                            <div>
+                                                <h6>
+                                                    {t('Experience.price.null')}
+                                                </h6>
+                                            </div>
+
                                             :
                                             (experience.price == 0 ?
-                                                <h6>
-                                                    {t('Experience.price.free')}
-                                                </h6>
-                                                :
-                                                <h6>
-                                                    {t('Experience.price.exist', {price: experience.price})}
-                                                </h6>))
+                                                    <div>
+                                                        <h6>
+                                                            {t('Experience.price.free')}
+                                                        </h6>
+                                                    </div>
+                                                    :
+                                                    <div>
+                                                        <h6>
+                                                            {t('Experience.price.exist', {price: experience.price})}
+                                                        </h6>
+                                                    </div>
+                                            ))
                                     }
                                 </div>
                             </div>
@@ -145,7 +166,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                         <div>
                             {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
                             {/*   ${false}"/> </c:url>">*/}
-                            <IconButton aria-label="visibilityOn" component="span" style={{fontSize: "xxx-large"}} id="setFalse">
+                            <IconButton onClick={() => setVisibility(experience.id, false)}  aria-label="visibilityOn" component="span" style={{fontSize: "xxx-large"}} id="setFalse">
                                 <VisibilityIcon/>
                             </IconButton>
                             {/*</a>*/}
@@ -154,7 +175,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                         <div>
                             {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
                             {/*   ${true}"/> </c:url>">*/}
-                            <IconButton aria-label="visibilityOff" component="span" style={{fontSize: "xx-large"}} id="setTrue">
+                            <IconButton onClick={() => setVisibility(experience.id, true)}  aria-label="visibilityOff" component="span" style={{fontSize: "xx-large"}} id="setTrue">
                                 <VisibilityOffIcon/>
                             </IconButton>
                             {/*</a>  */}
@@ -164,7 +185,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
 
                     {/*<a href="<c:url value="/user/experiences/edit/${param.id}"/>">*/}
                     <Link to={"/experiences?id=" + experience.id}>
-                        <IconButton aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
+                        <IconButton onClick={() => deleteExperience(experience.id)}  aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
                             <EditIcon/>
                         </IconButton>
                     </Link>
