@@ -16,7 +16,7 @@ import {serviceHandler} from "../scripts/serviceHandler";
 
 type FormFilterData = {
     country: string,
-    city: string,
+    city: number,
     maxPrice: string,
     score: number,
 };
@@ -56,7 +56,8 @@ export default function Experiences() {
     const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
 
     useEffect(() => {
-        //TODO: getMaxPrice function in experience service
+        //TODO: getMaxPrice function in experience service. check esta linea
+        setExperiences(new Array (0))
         serviceHandler(
             locationService.getCountries(),
             navigate, (country) => {
@@ -66,8 +67,8 @@ export default function Experiences() {
         ) ;
         serviceHandler(
             experienceService.getExperiencesByCategory(category!, order, price, score, city, page),
-            navigate, (experiences) => {
-                setExperiences(experiences.getContent())
+            navigate, (pagedExperiences) => {
+                setExperiences(pagedExperiences.getContent())
             },
             () => {}
         );
@@ -136,7 +137,7 @@ export default function Experiences() {
                                 disabled={cities.length <= 0}
                         >
                             {cities.map((city) => (
-                                <option key={city.id} value={city.name}>
+                                <option key={city.id} value={city.id}>
                                     {city.name}
                                 </option>
                             ))}
@@ -229,7 +230,7 @@ export default function Experiences() {
                 {/*TODO*/}
                 {/*<c:choose>*/}
                 {/*    <c:when test="${experiences.size() == 0}">*/}
-                { experiences === undefined ?
+                { experiences.length === 0 ?
                     <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
                         <div className="d-flex justify-content-center align-content-center">
                             <img src={'./images/ic_no_search.jpeg'} alt="Imagen lupa"

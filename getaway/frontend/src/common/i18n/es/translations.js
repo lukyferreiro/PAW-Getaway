@@ -74,7 +74,7 @@ export const TRANSLATIONS_ES = {
             field: "Url",
             placeholder: "https://google.com",
         },
-        country: "Pais",
+        country: "País",
         city: "Ciudad",
         address: "Direcci\u00F3n",
         image: "Imagen",
@@ -101,7 +101,7 @@ export const TRANSLATIONS_ES = {
     },
 
     ExperienceForm: {
-        title: "Create your experience",
+        title: "Crea tu experiencia",
         error: {
             name: {
                 pattern: "aaaa",

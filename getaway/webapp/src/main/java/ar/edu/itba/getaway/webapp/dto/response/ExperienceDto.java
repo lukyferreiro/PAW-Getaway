@@ -17,28 +17,21 @@ public class ExperienceDto implements Serializable {
     private String name;
     private String description;
     private String address;
-    private String contactEmail;
+    private String email;
     private Double price;
-    private Long avgScore;
+    private Long score;
     private Integer views;
     private String selfUrl;
+    private String siteUrl;
     private String imageUrl;
     private String reviewsUrl;
     private Long reviewCount;
-    private CountryDto countryUrl;
+    private CountryDto country;
     private CityDto city;
     private UserDto user;
     private CategoryDto category;
     private boolean isFav;
     private boolean observable;
-
-    public static Collection<Collection<ExperienceDto>> mapExperienceListToDto (List<List<ExperienceModel>> experiences, UriInfo uriInfo) {
-        Collection<Collection<ExperienceDto>> toReturnList = new ArrayList<>();
-        for (Collection<ExperienceModel> subList: experiences) {
-            toReturnList.add(mapExperienceToDto(subList, uriInfo));
-        }
-        return toReturnList;
-    }
 
     public static Collection<ExperienceDto> mapExperienceToDto(Collection<ExperienceModel> experiences, UriInfo uriInfo) {
         return experiences.stream().map(exp -> new ExperienceDto(exp, uriInfo)).collect(Collectors.toList());
@@ -59,15 +52,16 @@ public class ExperienceDto implements Serializable {
         this.name = experience.getExperienceName();
         this.description = experience.getDescription();
         this.address = experience.getAddress();
-        this.contactEmail = experience.getEmail();
+        this.email = experience.getEmail();
         this.price = experience.getPrice();
-        this.avgScore = experience.getAverageScore();
+        this.score = experience.getAverageScore();
+        this.siteUrl = experience.getSiteUrl();
         this.views = experience.getViews();
         this.selfUrl = uriBuilder.build().toString();
         this.imageUrl = uriBuilder.clone().path("image").build().toString();    // /experience/{id}/image
         this.reviewsUrl = uriBuilder.clone().path("reviews").build().toString();    // /experience/{id}/reviews
         this.reviewCount = experience.getReviewCount();
-        this.countryUrl = new CountryDto(experience.getCity().getCountry(), uriInfo);
+        this.country = new CountryDto(experience.getCity().getCountry(), uriInfo);
         this.city = new CityDto(experience.getCity());
         this.user = new UserDto(experience.getUser(), uriInfo);
         this.category = new CategoryDto(experience.getCategory());
@@ -99,11 +93,11 @@ public class ExperienceDto implements Serializable {
     public void setAddress(String address) {
         this.address = address;
     }
-    public String getContactEmail() {
-        return contactEmail;
+    public String getEmail() {
+        return email;
     }
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
     public Double getPrice() {
         return price;
@@ -111,11 +105,11 @@ public class ExperienceDto implements Serializable {
     public void setPrice(Double price) {
         this.price = price;
     }
-    public Long getAvgScore() {
-        return avgScore;
+    public Long getScore() {
+        return score;
     }
-    public void setAvgScore(Long avgScore) {
-        this.avgScore = avgScore;
+    public void setScore(Long score) {
+        this.score = score;
     }
     public Integer getViews() {
         return views;
@@ -147,11 +141,11 @@ public class ExperienceDto implements Serializable {
     public void setReviewCount(Long reviewCount) {
         this.reviewCount = reviewCount;
     }
-    public CountryDto getCountryUrl() {
-        return countryUrl;
+    public CountryDto getCountry() {
+        return country;
     }
-    public void setCountryUrl(CountryDto countryUrl) {
-        this.countryUrl = countryUrl;
+    public void setCountry(CountryDto country) {
+        this.country = country;
     }
     public CityDto getCity() {
         return city;
@@ -177,12 +171,18 @@ public class ExperienceDto implements Serializable {
     public void setFav(boolean fav) {
         isFav = fav;
     }
-
     public boolean isObservable() {
         return observable;
     }
-
     public void setObservable(boolean observable) {
         this.observable = observable;
+    }
+
+    public String getSiteUrl() {
+        return siteUrl;
+    }
+
+    public void setSiteUrl(String siteUrl) {
+        this.siteUrl = siteUrl;
     }
 }
