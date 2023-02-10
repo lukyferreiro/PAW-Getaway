@@ -10,9 +10,6 @@ export function serviceHandler<T>(
     promise.then((response: Result<T>) => {
         if (response.hasFailed()) {
             if (response.getError().getStatus() === 204) {
-                // @ts-ignore
-                setterFunction(undefined);
-                console.log("Devuelvo 204");
             } else if (isNaN(response.getError().getStatus())) {
                 return;
             } else {

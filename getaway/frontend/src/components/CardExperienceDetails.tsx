@@ -51,21 +51,23 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
 
                             <div> {/*Precio*/}
                                 <h5 className="information-title">
-                                    {t('Experience.price')}
+                                    {t('ExperienceDetail.price')}
                                 </h5>
                                 <div className="information-text">
-                                    {/*<c:when test="${param.price == ''}">*/}
-                                    {/*    <spring:message code="experienceDetail.price.noPrice"/>*/}
-                                    {/*</c:when>*/}
-                                    {experience.price == 0 &&
-                                        <h5>
-                                            {t('ExperienceDetail.priceFree')}
-                                        </h5>
-                                    }
-                                    {experience.price > 0 &&
-                                        <h5>
-                                            $ {experience.price}
-                                        </h5>
+                                    {
+                                        (experience.price === undefined ?
+                                            <h6>
+                                                {t('Experience.price.null')}
+                                            </h6>
+                                            :
+                                            (experience.price == 0 ?
+                                                <h6>
+                                                    {t('Experience.price.free')}
+                                                </h6>
+                                                :
+                                                <h6>
+                                                    {t('Experience.price.exist', {price: experience.price})}
+                                                </h6>))
                                     }
                                 </div>
                             </div>

@@ -143,14 +143,14 @@ export class  ExperienceService {
     }
 
     public async getExperienceImage(experienceId: number): Promise<Result<Blob>> {
-        return getImageFetch(this.basePath + "/experience" + experienceId + "/experienceImage");
+        return getImageFetch(this.basePath + "/experience/" + experienceId + "/experienceImage");
     }
 
     public async updateExperienceImage(
         experienceId: number
     ): Promise<Result<PutResponse>> {
         const formData = new FormData();
-        return resultFetch<PutResponse>(this.basePath + "/experience" + experienceId + "/experienceImage", {
+        return resultFetch<PutResponse>(this.basePath + "/experience/" + experienceId + "/experienceImage", {
             method: "PUT",
             headers: {},
             body: formData,

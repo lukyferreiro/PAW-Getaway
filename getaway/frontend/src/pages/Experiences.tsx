@@ -61,6 +61,7 @@ export default function Experiences() {
         //     },
         //     () => {}
         // ) ;
+
         serviceHandler(
             locationService.getCountries(),
             navigate, (country) => {
@@ -298,8 +299,6 @@ export default function Experiences() {
                 {/*                        </li>*/}
                 {/*                    </ul>*/}
                 {/*            </div>*/}
-                {/*        </c:otherwise>*/}
-                {/*</c:choose>*/}
             </div>
         </div>
     )

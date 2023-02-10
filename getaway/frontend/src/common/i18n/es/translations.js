@@ -64,9 +64,11 @@ export const TRANSLATIONS_ES = {
     Experience: {
         name: "Nombre",
         category: "Categor\u00EDa",
-        price: "Precio",
-        priceFree: "Gratis",
-        noPrice: "Precio no listado",
+        price: {
+            null: "Precio no listado",
+            free: "Gratis",
+            exist: "${{price}}",
+        },
         information: "Descripci\u00F3n",
         mail: {
             field: "Email",
@@ -76,17 +78,22 @@ export const TRANSLATIONS_ES = {
             field: "Url",
             placeholder: "https://google.com",
         },
-        country: "Pais",
+        country: "País",
         city: "Ciudad",
         address: "Direcci\u00F3n",
         image: "Imagen",
         placeholder: "Escribe para buscar",
-        reviews:"Reseñas",
-        notVisible:"This experience is not currently visible"
+        reviews: "Reseñas {{reviewCount}}",
+        notVisible: "La experiencia est\u00E1 oculta en este momento",
     },
 
     ExperienceDetail: {
         imageDefault: "Esta imagen no se corresponde con la experiencia",
+        price: {
+            null: "Precio no listado",
+            free: "Gratis",
+            exist: "${{price}}",
+        },
         priceFree: "Gratis",
         description: "Descripci\u00F3n",
         noData: "Informaci\u00F3n no brindada",
@@ -105,7 +112,7 @@ export const TRANSLATIONS_ES = {
     },
 
     ExperienceForm: {
-        title: "Create your experience",
+        title: "Crea tu experiencia",
         error: {
             name: {
                 pattern: "aaaa",
@@ -152,6 +159,17 @@ export const TRANSLATIONS_ES = {
             editBtn: "Editar perfil",
             verifyAccountBtn: "Verifica tu cuenta",
         },
+        experiences: {
+            title: "Mis experiencias",
+            category: "Categor\u00EDa",
+            score: "Puntaje",
+            price: "Precio",
+            views: "Vistas",
+            actions: "Acciones",
+            reviewsCount: "Reseñas {{count}}"
+        },
+        noExperiences: "Aun no has creado ninguna experiencia",
+        experiencesTitle: "Mis experiencias",
         noFavs: "Aún no has agregado experiencias a favoritos",
         favsTitle: "Mis favoritos",
         noReviews: "Aún no has escrito ninguna reseña",

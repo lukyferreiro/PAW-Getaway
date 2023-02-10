@@ -3,10 +3,12 @@ import "../common/i18n/index"
 import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {CategoryModel} from "../types";
 import {getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Modal from 'react-modal';
 import '../styles/navbar.css'
 import {useAuth} from "../hooks/useAuth";
+import {serviceHandler} from "../scripts/serviceHandler";
+import {categoryService} from "../services";
 
 
 export default function Navbar() {
@@ -20,22 +22,25 @@ export default function Navbar() {
     const categoryQuery = getQueryOrDefaultMultiple(query, "category");
 
     //Esto lo vamos a tener q obtener de alguna manera, por ahora lo fuerzo para ver que funcione
-    const {user, signOut} = useAuth();
-
+    const { signOut} = useAuth();
+    const user = localStorage.getItem("user");
 
     let isLogged = user !== null;
-    let isProvider = user?.provider;
-    let isVerified = user?.verified;
+    let isProvider = localStorage.getItem("isProvider") === 'true';
+    let isVerified = localStorage.getItem("isVerified") === 'true';
 
     //TODO obtenerlas de un llamado a la API ??
-    const categories: CategoryModel[] = [
-        {id: 1, name: 'Aventura'},
-        {id: 2, name: 'Gastronomia'},
-        {id: 3, name: 'Hoteleria'},
-        {id: 4, name: 'Relax'},
-        {id: 5, name: 'Vida_nocturna'},
-        {id: 6, name: 'Historico'},
-    ]
+    const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
+
+    useEffect(() => {
+        serviceHandler(
+            categoryService.getCategories(),
+            navigate, (category) => {
+                setCategories(category)
+            },
+            () => {}
+        ) ;
+    }, [])
 
     return (
         <div className="navbar container-fluid p-0 d-flex flex-column">
