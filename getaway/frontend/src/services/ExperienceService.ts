@@ -1,5 +1,16 @@
 import { paths, APPLICATION_JSON_TYPE } from "../common";
-import {ErrorResponse, ExperienceModel, PagedContent, PostResponse, PutResponse, Result, ReviewModel, AnonymousLandingPageModel, UserLandingPageModel} from "../types";
+import {
+    ErrorResponse,
+    ExperienceModel,
+    PagedContent,
+    PostResponse,
+    PutResponse,
+    Result,
+    ReviewModel,
+    AnonymousLandingPageModel,
+    UserLandingPageModel,
+    MaxPriceModel
+} from "../types";
 import {resultFetch} from "../scripts/resultFetch";
 import {getPagedFetch} from "../scripts/getPagedFetch";
 import {authedFetch} from "../scripts/authedFetch";
@@ -54,14 +65,17 @@ export class  ExperienceService {
     }
 
     public async getExperiencesByCategory(
-        category: string,
+        category?: string,
         order?: string,
         price?: number,
         score?: number,
         city?: number,
         page?: number
     ): Promise<Result<PagedContent<ExperienceModel[]>>> {
-        const url = new URL(this.basePath + "/category/" + category);
+        const url = new URL(this.basePath + "/category");
+        if (typeof category === "string") {
+            url.searchParams.append("category", category);
+        }
         if (typeof order === "string") {
             url.searchParams.append("order", order);
         }
@@ -78,13 +92,28 @@ export class  ExperienceService {
     }
 
     public async getExperiencesByName(
-        name: string,
+        name?: string,
         order?: string,
+        price?: number,
+        score?: number,
+        city?: number,
         page?: number
     ): Promise<Result<PagedContent<ExperienceModel[]>>> {
-        const url = new URL(this.basePath + "/name/" + name);
+        const url = new URL(this.basePath + "/name");
+        if (typeof name === "string") {
+            url.searchParams.append("name", name);
+        }
         if (typeof order === "string") {
             url.searchParams.append("order", order);
+        }
+        if (price) {
+            url.searchParams.append("price", price.toString());
+        }
+        if (score) {
+            url.searchParams.append("score", score.toString());
+        }
+        if (city) {
+            url.searchParams.append("city", city.toString());
         }
         return getPagedFetch<ExperienceModel[]>(url.toString(), page);
     }
@@ -100,10 +129,6 @@ export class  ExperienceService {
             method: "GET",
         });
     }
-
-    // public async getCategoryMaxPrice(categoryId:number):Promise<Result<number>>{
-    //
-    // }
 
     public async updateExperienceById(
         experienceId: number,
@@ -217,8 +242,24 @@ export class  ExperienceService {
         });
     }
 
-    public async getCategoryMaxPrice(category: string): Promise<Result<number>> {
-        return resultFetch<number>(this.basePath + "/experience/" + category + "/maxPrice", {
+    public async getCategoryMaxPrice(category: string): Promise<Result<MaxPriceModel>> {
+        const url = new URL(this.basePath + "/category");
+        if (typeof category === "string") {
+            url.searchParams.append("category", category);
+        }
+
+        return resultFetch<MaxPriceModel>(url.toString(), {
+            method: "GET",
+        });
+    }
+
+    public async getSearchMaxPrice(name: string): Promise<Result<MaxPriceModel>> {
+        const url = new URL(this.basePath + "/name");
+        if (typeof name === "string") {
+            url.searchParams.append("name", name);
+        }
+
+        return resultFetch<MaxPriceModel>(url.toString(), {
             method: "GET",
         });
     }

@@ -78,10 +78,10 @@ public class ExperienceController {
 
     // Endpoint para obtener las experiencias de una categoria
     @GET
-    @Path("/category/{category}")
+    @Path("/category")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperiencesFromCategory(
-            @PathParam("category") final String category,
+            @QueryParam("category") @DefaultValue("") String category,
             @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
             @QueryParam("price") @DefaultValue("-1") Double maxPrice,
             @QueryParam("score") @DefaultValue("0") Long maxScore,
@@ -94,7 +94,10 @@ public class ExperienceController {
         if (maxPrice == -1) {
             maxPrice = experienceService.getMaxPriceByCategory(categoryModel).orElse(0.0);
         }
-        final CityModel cityModel = locationService.getCityById(cityId).orElse(null);
+        CityModel cityModel = null;
+        if (cityId != -1) {
+            cityModel = locationService.getCityById(cityId).orElseThrow(CityNotFoundException::new);
+        }
 
         final UserModel user = authFacade.getCurrentUser();
         final Page<ExperienceModel> experiences = experienceService.listExperiencesByFilter(categoryModel, maxPrice, maxScore, cityModel, Optional.of(order), page, user);
@@ -111,7 +114,6 @@ public class ExperienceController {
 
         final UriBuilder uriBuilder = uriInfo
                 .getAbsolutePathBuilder()
-                .queryParam("category", category)
                 .queryParam("order", order)
                 .queryParam("price", maxPrice)
                 .queryParam("score", maxScore)
@@ -126,18 +128,29 @@ public class ExperienceController {
     }
 
     @GET
-    @Path("/name/{name}")
+    @Path("/name")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperiencesBySearch(
-            @PathParam("name") final String name,
-            @QueryParam("order") @DefaultValue("OrderByAZ") final OrderByModel order,
-            @QueryParam("page") @DefaultValue("1") final int page
+            @QueryParam("name") @DefaultValue("") String name,
+            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
+            @QueryParam("price") @DefaultValue("-1") Double maxPrice,
+            @QueryParam("score") @DefaultValue("0") Long maxScore,
+            @QueryParam("city") @DefaultValue("-1") Long cityId,
+            @QueryParam("page") @DefaultValue("1") int page
     ) {
         LOGGER.info("Called /experiences/{} GET", name);
 
         final UserModel user = authFacade.getCurrentUser();
 
-        final Page<ExperienceModel> experiences = experienceService.listExperiencesSearch(name, Optional.of(order), page, user);
+        if (maxPrice == -1) {
+            maxPrice = experienceService.getMaxPriceByName(name).orElse(0.0);
+        }
+        CityModel cityModel = null;
+        if (cityId != -1) {
+            cityModel = locationService.getCityById(cityId).orElseThrow(CityNotFoundException::new);
+        }
+
+        final Page<ExperienceModel> experiences = experienceService.listExperiencesSearch(name, maxPrice, maxScore, cityModel ,Optional.of(order), page, user);
 
         if (experiences == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -146,12 +159,19 @@ public class ExperienceController {
         if (experiences.getContent().isEmpty()) {
             return Response.noContent().build();
         }
+
         final Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);
 
         final UriBuilder uriBuilder = uriInfo
                 .getAbsolutePathBuilder()
                 .queryParam("order", order)
+                .queryParam("price", maxPrice)
+                .queryParam("score", maxScore)
                 .queryParam("page", page);
+
+        if (cityModel != null) {
+            uriBuilder.queryParam("city", cityId);
+        }
 
         return PaginationResponse.createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
         }, uriBuilder);
@@ -430,13 +450,22 @@ public class ExperienceController {
     }
 
     @GET
-    @Path("/experience/{category}/maxPrice")
+    @Path("/category/maxPrice")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getCategoryMaxPrice(@PathParam("category") final String category
+    public Response getCategoryMaxPrice(@QueryParam("category") @DefaultValue("") final String category
     ){
         final CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
         final Double maxPrice = experienceService.getMaxPriceByCategory(categoryModel).orElse(0.0);
-        return Response.ok(maxPrice).build();
+        return Response.ok(new MaxPriceDto(maxPrice)).build();
+    }
+
+    @GET
+    @Path("/name/maxPrice")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getNameMaxPrice(@QueryParam("name") @DefaultValue("") final String name
+    ){
+        final Double maxPrice = experienceService.getMaxPriceByName(name).orElse(0.0);
+        return Response.ok(new MaxPriceDto(maxPrice)).build();
     }
 }
 

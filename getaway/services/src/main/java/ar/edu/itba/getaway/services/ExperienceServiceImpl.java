@@ -175,12 +175,13 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> listExperiencesSearch(String name, Optional<OrderByModel> order, int page, UserModel user) {
+    public Page<ExperienceModel> listExperiencesSearch(String name, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, UserModel user) {
         LOGGER.debug("Requested page {}", page);
 
         int totalPages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
-        final long total = experienceDao.getCountByName(name);
+        final long total = experienceDao.getCountByName(name, max, score, city);
+        LOGGER.debug("LLEGO");
 
         if (total > 0) {
             LOGGER.debug("Total pages found: {}", total);
@@ -194,8 +195,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             } else if (page < 0) {
                 page = 1;
             }
-            experienceModelList = experienceDao.listExperiencesSearch(name, order, page, RESULT_PAGE_SIZE);
-
+            experienceModelList = experienceDao.listExperiencesSearch(name, max, score, city, order, page, RESULT_PAGE_SIZE);
         } else {
             totalPages = 1;
         }
@@ -206,6 +206,12 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         LOGGER.debug("Max page value service: {}", totalPages);
         return new Page<>(experienceModelList, page, totalPages, total);
+    }
+
+    @Override
+    public Optional<Double> getMaxPriceByName(String name) {
+        LOGGER.debug("Retrieving max price of namesearch with search {}", name);
+        return experienceDao.getMaxPriceByName(name);
     }
 
     @Override

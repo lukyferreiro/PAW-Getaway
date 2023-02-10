@@ -146,7 +146,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesSearch(String name, Optional<OrderByModel> order, int page, int pageSize) {
+    public List<ExperienceModel> listExperiencesSearch(String name, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, int pageSize) {
         LOGGER.debug("List experiences that contains {}", name);
         String orderQuery = getOrderQuery(order);
         if (name.equals("%") || name.equals("_")) {
@@ -154,14 +154,34 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
 
         Query queryForIds = em.createNativeQuery(
-                "SELECT experienceId \n" +
-                        "FROM experiences NATURAL JOIN (cities NATURAL JOIN countries) \n" +
-                        "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(description) LIKE LOWER(CONCAT('%', :name,'%'))" +
-                        " OR LOWER(address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(cityName) LIKE LOWER(CONCAT('%', :name,'%')) " +
-                        "OR LOWER(countryName) LIKE LOWER(CONCAT('%', :name,'%'))) AND observable = true"
+                "SELECT experiences.experienceid \n" +
+                        "FROM (experiences NATURAL JOIN (cities NATURAL JOIN countries)) LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" +
+                        "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(experiences.description) LIKE LOWER(CONCAT('%', :name,'%')) \n" +
+                        "OR LOWER(address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(cityName) LIKE LOWER(CONCAT('%', :name,'%')) \n" +
+                        "OR LOWER(countryName) LIKE LOWER(CONCAT('%', :name,'%'))) \n" +
+                        "AND COALESCE(price,0) <= :max \n" +
+                        "AND observable = true \n" +
+                        "GROUP BY experiences.experienceId HAVING AVG(COALESCE(score,0))>= :score\n"
         );
 
+        if (city != null) {
+            queryForIds = em.createNativeQuery(
+                    "SELECT experiences.experienceid \n" +
+                            "FROM (experiences NATURAL JOIN (cities NATURAL JOIN countries)) LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" +
+                            "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(experiences.description) LIKE LOWER(CONCAT('%', :name,'%')) \n" +
+                            "OR LOWER(address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(cityName) LIKE LOWER(CONCAT('%', :name,'%')) \n" +
+                            "OR LOWER(countryName) LIKE LOWER(CONCAT('%', :name,'%'))) \n" +
+                            "AND COALESCE(price,0) <= :max AND cityid = :cityId \n" +
+                            "AND observable = true \n" +
+                            "GROUP BY experiences.experienceId HAVING AVG(COALESCE(score,0))>= :score\n"
+            );
+            queryForIds.setParameter("cityId", city.getCityId());
+        }
+
         queryForIds.setParameter("name", name);
+        queryForIds.setParameter("max", max);
+        queryForIds.setParameter("score", score);
+
 
         List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
 
@@ -181,19 +201,53 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public long getCountByName(String name) {
+    public long getCountByName(String name, Double max, Long score, CityModel city) {
+        if (name.equals("%") || name.equals("_")) {
+            name = '/' + name;
+        }
+
         Query query = em.createNativeQuery(
-                "SELECT count(experienceId) \n" +
-                        "FROM experiences NATURAL JOIN (cities NATURAL JOIN countries) \n" +
-                        "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(cityName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(countryName) LIKE LOWER(CONCAT('%', :name,'%'))) AND observable = true"
+                "SELECT COALESCE(COUNT(experiences.experienceid), 0) \n" +
+                    "FROM (experiences NATURAL JOIN (cities NATURAL JOIN countries)) LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" +
+                    "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(experiences.description) LIKE LOWER(CONCAT('%', :name,'%')) \n" +
+                    "OR LOWER(address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(cityName) LIKE LOWER(CONCAT('%', :name,'%')) \n" +
+                    "OR LOWER(countryName) LIKE LOWER(CONCAT('%', :name,'%'))) \n" +
+                    "AND COALESCE(price,0) <= :max \n" +
+                    "AND observable = true \n" +
+                    "HAVING AVG(COALESCE(score,0))>=:score\n"
         );
+
+        if (city != null) {
+            query = em.createNativeQuery(
+                    "SELECT COALESCE(COUNT(experiences.experienceid), 0) \n" +
+                        "FROM (experiences NATURAL JOIN (cities NATURAL JOIN countries)) LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" +
+                        "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(experiences.description) LIKE LOWER(CONCAT('%', :name,'%')) \n" +
+                        "OR LOWER(address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(cityName) LIKE LOWER(CONCAT('%', :name,'%')) \n" +
+                        "OR LOWER(countryName) LIKE LOWER(CONCAT('%', :name,'%'))) \n" +
+                        "AND COALESCE(price,0) <= :max AND cityid = :cityId \n" +
+                        "AND observable = true \n" +
+                        "HAVING AVG(COALESCE(score,0))>=:score\n"
+            );
+            query.setParameter("cityId", city.getCityId());
+        }
+
         query.setParameter("name", name);
+        query.setParameter("max", max);
+        query.setParameter("score", score);
 
         try {
             return ((BigInteger) query.getSingleResult()).intValue();
         } catch(NoResultException e){
             return 0;
         }
+    }
+
+    @Override
+    public Optional<Double> getMaxPriceByName(String name) {
+        LOGGER.debug("Get maxprice of name search {}", name);
+        final TypedQuery<Double> query = em.createQuery("SELECT Max(exp.price) FROM ExperienceModel exp WHERE (LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.cityName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.country.countryName) LIKE LOWER(CONCAT('%', :name,'%'))) AND exp.observable=true ", Double.class);
+        query.setParameter("name", name);
+        return Optional.ofNullable(query.getSingleResult());
     }
 
     @Override

@@ -39,7 +39,7 @@ export default function Experiences() {
 
     //Price
     const [maxPrice, setMaxPrice] = useState<number>(-1);
-    const [price, setPrice] = useState<number>(maxPrice);
+    const [price, setPrice] = useState<number>(-1);
 
     //Score
     const [rating, setRating] = useState(0);
@@ -57,7 +57,8 @@ export default function Experiences() {
         serviceHandler(
             experienceService.getCategoryMaxPrice(category),
             navigate, (price) => {
-                setMaxPrice(price)
+                setMaxPrice(price.maxPrice)
+                setPrice(price.maxPrice)
             },
             () => {}
         ) ;

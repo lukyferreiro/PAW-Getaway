@@ -25,9 +25,11 @@ public interface ExperienceDao {
 
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, int size);
 
-    List<ExperienceModel> listExperiencesSearch(String name, Optional<OrderByModel> order, int page, int pageSize);
+    List<ExperienceModel> listExperiencesSearch(String name, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, int pageSize);
 
-    long getCountByName(String name);
+    long getCountByName(String name, Double max, Long score, CityModel city);
+
+    Optional<Double> getMaxPriceByName(String name);
 
     List<ExperienceModel> listExperiencesSearchByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize);
 
@@ -36,7 +38,6 @@ public interface ExperienceDao {
     List<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page, int pageSize);
 
     long getCountListExperiencesFavsByUser(UserModel user);
-
 
     //Recommendation methods
     List<ExperienceModel> getRecommendedByFavs(UserModel user, int maxResults);

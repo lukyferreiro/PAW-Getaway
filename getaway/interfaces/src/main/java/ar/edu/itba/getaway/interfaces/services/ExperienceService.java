@@ -26,7 +26,9 @@ public interface ExperienceService {
 
     Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page);
 
-    Page<ExperienceModel> listExperiencesSearch(String name, Optional<OrderByModel> order, int page, UserModel user);
+    Page<ExperienceModel> listExperiencesSearch(String name, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, UserModel user);
+
+    Optional <Double> getMaxPriceByName(String name);
 
     List<List<ExperienceModel>> getExperiencesListByCategories(UserModel user);
 
