@@ -16,15 +16,9 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-@Singleton
-@Component
 @Provider
 public class UserNotFoundExceptionMapper implements ExceptionMapper<UserNotFoundException> {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(UserNotFoundExceptionMapper.class);
-
-    @Autowired
-    private MessageSource messageSource;
 
     @Context
     private UriInfo uriInfo;
@@ -32,8 +26,6 @@ public class UserNotFoundExceptionMapper implements ExceptionMapper<UserNotFound
     @Override
     public Response toResponse(UserNotFoundException e) {
         LOGGER.error("User not found exception mapper");
-        final String message = messageSource.getMessage(e.getMessage(), null, LocaleContextHolder.getLocale());
-        return ExceptionMapperUtil.toResponse(Response.Status.NOT_FOUND, message, uriInfo);
+        return ExceptionMapperUtil.toResponse(Response.Status.NOT_FOUND, e.getMessage(), uriInfo);
     }
-
 }

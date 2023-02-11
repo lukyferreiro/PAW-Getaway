@@ -13,7 +13,6 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 public class MultipartExceptionMapper implements ExceptionMapper<MultipartException> {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(MultipartExceptionMapper.class);
 
     @Context

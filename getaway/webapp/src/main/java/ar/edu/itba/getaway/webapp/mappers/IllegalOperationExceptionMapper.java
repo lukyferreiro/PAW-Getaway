@@ -16,8 +16,6 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-@Singleton
-@Component
 @Provider
 public class IllegalOperationExceptionMapper implements ExceptionMapper<IllegalOperationException> {
 
@@ -32,7 +30,6 @@ public class IllegalOperationExceptionMapper implements ExceptionMapper<IllegalO
     @Override
     public Response toResponse(IllegalOperationException e) {
         LOGGER.error("Illegal operation exception mapper");
-        final String message = messageSource.getMessage(e.getMessage(), null, LocaleContextHolder.getLocale());
-        return ExceptionMapperUtil.toResponse(Response.Status.UNAUTHORIZED, message, uriInfo);
+        return ExceptionMapperUtil.toResponse(Response.Status.UNAUTHORIZED, e.getMessage(), uriInfo);
     }
 }

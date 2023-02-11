@@ -16,6 +16,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,9 +25,7 @@ import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
@@ -145,6 +144,30 @@ public class ExperienceController {
         }
         final Double maxPrice = experienceService.getMaxPriceByCategoryAndName(categoryModel, name).orElse(0.0);
         return Response.ok(new MaxPriceDto(maxPrice)).build();
+    }
+
+    @GET
+    @Path("/filter/orderByModels")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getOrderByModels(
+            @QueryParam("user") @DefaultValue("false") boolean user,
+            @QueryParam("provider") @DefaultValue("false") boolean owner
+    ){
+        OrderByModel[] orderByModels = null;
+
+        if ((owner && user) || (!owner && !user)) {
+            throw new BadRequestException();
+        }
+
+        if (owner){
+            orderByModels = OrderByModel.getProviderOrderByModel();
+        }
+        else if (user) {
+            orderByModels = OrderByModel.getUserOrderByModel();
+        }
+
+        Collection<OrderByDto> orderByDtos = OrderByDto.mapOrderByToDto(Arrays.asList(orderByModels));
+        return Response.ok(new GenericEntity<Collection<OrderByDto>>(orderByDtos) {}).build();
     }
 
     // Endpoint para crear una experiencia

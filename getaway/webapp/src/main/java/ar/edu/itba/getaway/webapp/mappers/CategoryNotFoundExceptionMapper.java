@@ -17,13 +17,8 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-@Component
-@Singleton
 public class CategoryNotFoundExceptionMapper implements ExceptionMapper<CategoryNotFoundException> {
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryNotFoundExceptionMapper.class);
-
-    @Autowired
-    private MessageSource messageSource;
 
     @Context
     private UriInfo uriInfo;
@@ -31,7 +26,6 @@ public class CategoryNotFoundExceptionMapper implements ExceptionMapper<Category
     @Override
     public Response toResponse(CategoryNotFoundException e) {
         LOGGER.error("Category not found exception mapper");
-        final String message = messageSource.getMessage(e.getMessage(), null, LocaleContextHolder.getLocale());
-        return ExceptionMapperUtil.toResponse(Response.Status.NOT_FOUND, message, uriInfo);
+        return ExceptionMapperUtil.toResponse(Response.Status.NOT_FOUND, e.getMessage(), uriInfo);
     }
 }

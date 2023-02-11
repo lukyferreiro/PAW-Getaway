@@ -11,7 +11,6 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 public class DtoValidationExceptionMapper implements ExceptionMapper<DtoValidationException> {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(DtoValidationExceptionMapper.class);
 
     @Override
@@ -20,5 +19,4 @@ public class DtoValidationExceptionMapper implements ExceptionMapper<DtoValidati
         Response.Status status = Response.Status.CONFLICT;
         return Response.status(status).entity(new ExceptionDto(exception.getMessage(), exception.getConstraintViolations(), status.getReasonPhrase(), status.getStatusCode())).build();
     }
-
 }

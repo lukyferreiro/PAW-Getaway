@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {ExperienceModel} from "../types";
+import {ExperienceModel, OrderByModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, userService} from "../services";
@@ -24,17 +24,26 @@ export default function UserExperiences() {
     const navigate = useNavigate()
 
     const [userExperiences, setUserExperiences] = useState<ExperienceModel[]>(new Array(0))
+    const [orderByModels, setOrderByModels] = useState<OrderByModel[]>(new Array(0))
     const {user} = useAuth();
     const [name, setName] = useState(undefined);
     const [page, setPage] = useState(1);
     const [order, setOrder] = useState("OrderByAZ");
 
     const isProvider = localStorage.getItem("isProvider") === "true";
+    const provider = isProvider;
 
     const {register, handleSubmit, formState: { errors },}
         = useForm<FormUserExperiencesSearch>({ criteriaMode: "all" });
 
     useEffect(() => {
+        serviceHandler(
+            experienceService.getProviderOrderByModels(),
+            navigate, (orderByModels) => {
+                setOrderByModels(orderByModels)
+            },
+            () => {}
+        )
         serviceHandler(
             userService.getUserExperiences(user ? user.id : -1, name, order, page),
             navigate, (experiences) => {
@@ -42,14 +51,15 @@ export default function UserExperiences() {
             },
             () => {}
         )
-    }, [userExperiences, name])
+    }, [])
 
     if (!isProvider) {
         return <Navigate to="/" replace/>;
     }
 
     const onSubmit = handleSubmit((data:FormUserExperiencesSearch) => {
-        setName(data.name);
+        //TODO: check
+        // setName(data.name);
     });
 
     function setVisibility(experienceId:number , visibility: boolean) {
@@ -79,7 +89,7 @@ export default function UserExperiences() {
                 <>
                     {/*SEARCH and ORDER*/}
                     <div className="d-flex justify-content-center align-content-center">
-                        <div style={{margin: "0 auto 0 20px", flex: "1"}}>
+                        <div style={{margin: "0 auto 0 20px", flex: "1"}} >
                                 {/*<jsp:include page="/WEB-INF/components/orderDropdown.jsp">*/}
                                 {/*    <jsp:param name="orderByModels" value="${orderByModels}"/>*/}
                                 {/*    <jsp:param name="path" value="${path}"/>*/}
@@ -153,9 +163,9 @@ export default function UserExperiences() {
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody >
                                 {userExperiences.map((experience) => (
-                                    <tr>
+                                    <tr key={experience.id}>
                                         <th scope="row">
                                             <div className="title-link" style={{width: "350px"}}>
                                                 <Link to={"/experiences/" + experience.id}>

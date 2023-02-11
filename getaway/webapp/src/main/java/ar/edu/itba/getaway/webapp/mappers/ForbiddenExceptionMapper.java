@@ -12,7 +12,6 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-
 public class ForbiddenExceptionMapper implements ExceptionMapper<ForbiddenException> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ForbiddenExceptionMapper.class);
 

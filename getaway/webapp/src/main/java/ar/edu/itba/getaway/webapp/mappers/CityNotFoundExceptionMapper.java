@@ -16,14 +16,9 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-@Singleton
-@Component
 @Provider
 public class CityNotFoundExceptionMapper implements ExceptionMapper<CityNotFoundException> {
     private static final Logger LOGGER = LoggerFactory.getLogger(CityNotFoundExceptionMapper.class);
-
-    @Autowired
-    private MessageSource messageSource;
 
     @Context
     private UriInfo uriInfo;
@@ -31,7 +26,6 @@ public class CityNotFoundExceptionMapper implements ExceptionMapper<CityNotFound
     @Override
     public Response toResponse(CityNotFoundException e) {
         LOGGER.error("City not found exception mapper");
-        final String message = messageSource.getMessage(e.getMessage(), null, LocaleContextHolder.getLocale());
-        return ExceptionMapperUtil.toResponse(Response.Status.NOT_FOUND, message, uriInfo);
+        return ExceptionMapperUtil.toResponse(Response.Status.NOT_FOUND, e.getMessage(), uriInfo);
     }
 }

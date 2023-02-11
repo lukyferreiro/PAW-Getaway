@@ -13,7 +13,6 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 public class FormDataParamExceptionMapper implements ExceptionMapper<FormDataParamException> {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(FormDataParamExceptionMapper.class);
 
     @Context

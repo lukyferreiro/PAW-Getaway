@@ -16,15 +16,9 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-@Singleton
-@Component
 @Provider
 public class DuplicateUserExceptionMapper implements ExceptionMapper<DuplicateUserException> {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(DuplicateUserExceptionMapper.class);
-
-    @Autowired
-    private MessageSource messageSource;
 
     @Context
     private UriInfo uriInfo;
@@ -32,8 +26,6 @@ public class DuplicateUserExceptionMapper implements ExceptionMapper<DuplicateUs
     @Override
     public Response toResponse(DuplicateUserException e) {
         LOGGER.error("Duplicate user exception mapper");
-        final String message = messageSource.getMessage(e.getMessage(), null, LocaleContextHolder.getLocale());
-        return ExceptionMapperUtil.toResponse(Response.Status.CONFLICT, message, uriInfo);
+        return ExceptionMapperUtil.toResponse(Response.Status.CONFLICT, e.getMessage(), uriInfo);
     }
-
 }

@@ -16,15 +16,10 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-@Singleton
-@Component
 @Provider
 public class IllegalContentTypeExceptionMapper implements ExceptionMapper<IllegalContentTypeException> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IllegalContentTypeExceptionMapper.class);
-
-    @Autowired
-    private MessageSource messageSource;
 
     @Context
     private UriInfo uriInfo;
@@ -32,7 +27,6 @@ public class IllegalContentTypeExceptionMapper implements ExceptionMapper<Illega
     @Override
     public Response toResponse(IllegalContentTypeException e) {
         LOGGER.error("Illegal content type exception mapper");
-        final String message = messageSource.getMessage(e.getMessage(), null, LocaleContextHolder.getLocale());
-        return ExceptionMapperUtil.toResponse(Response.Status.BAD_REQUEST, message, uriInfo);
+        return ExceptionMapperUtil.toResponse(Response.Status.BAD_REQUEST, e.getMessage(), uriInfo);
     }
 }

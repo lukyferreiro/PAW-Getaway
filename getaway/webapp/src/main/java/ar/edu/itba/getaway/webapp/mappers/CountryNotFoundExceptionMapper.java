@@ -16,23 +16,17 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-@Singleton
-@Component
 @Provider
 public class CountryNotFoundExceptionMapper implements ExceptionMapper<CountryNotFoundException> {
     private static final Logger LOGGER = LoggerFactory.getLogger(CountryNotFoundExceptionMapper.class);
-
-    @Autowired
-    private MessageSource messageSource;
 
     @Context
     private UriInfo uriInfo;
 
     @Override
     public Response toResponse(CountryNotFoundException e) {
-        LOGGER.error("Country expected exception mapper");
-        final String message = messageSource.getMessage(e.getMessage(), null, LocaleContextHolder.getLocale());
-        return ExceptionMapperUtil.toResponse(Response.Status.NOT_FOUND, message, uriInfo);
+        LOGGER.error("Country not found exception mapper");
+        return ExceptionMapperUtil.toResponse(Response.Status.NOT_FOUND, e.getMessage(), uriInfo);
     }
 
 }

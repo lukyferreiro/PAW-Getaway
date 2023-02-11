@@ -16,15 +16,9 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-@Provider
-@Component
 @Singleton
 public class MaxUploadSizeExceptionMapper implements ExceptionMapper<MaxUploadSizeRequestException> {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(MaxUploadSizeExceptionMapper.class);
-
-    @Autowired
-    private MessageSource messageSource;
 
     @Context
     private UriInfo uriInfo;
@@ -32,7 +26,6 @@ public class MaxUploadSizeExceptionMapper implements ExceptionMapper<MaxUploadSi
     @Override
     public Response toResponse(MaxUploadSizeRequestException e) {
         LOGGER.error("Max upload size exception mapper)");
-        final String message = messageSource.getMessage(e.getMessage(), null, LocaleContextHolder.getLocale());
-        return ExceptionMapperUtil.toResponse(Response.Status.BAD_REQUEST, message, uriInfo);
+        return ExceptionMapperUtil.toResponse(Response.Status.BAD_REQUEST, e.getMessage(), uriInfo);
     }
 }

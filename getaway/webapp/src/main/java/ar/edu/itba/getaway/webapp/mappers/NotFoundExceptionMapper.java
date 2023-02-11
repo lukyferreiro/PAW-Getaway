@@ -18,7 +18,6 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundException> {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(NotFoundExceptionMapper.class);
 
     @Context

@@ -167,7 +167,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/experiences/landingPage").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/filter").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/filter/maxPrice").permitAll()
-                    //logueado y VERIFIED (rol PROVIDER) se asigna en el momento
+                    .antMatchers(HttpMethod.GET, "/api/experiences/filter/orderByModels").permitAll()
+                //logueado y VERIFIED (rol PROVIDER) se asigna en el momento
                     .antMatchers(HttpMethod.POST, "/api/experiences").hasAuthority("VERIFIED")    //TODO check si es hasRole
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/experience/{experienceId}").permitAll()

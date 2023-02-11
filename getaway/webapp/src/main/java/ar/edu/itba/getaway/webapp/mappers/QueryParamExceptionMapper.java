@@ -13,7 +13,6 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 public class QueryParamExceptionMapper implements ExceptionMapper<ParamException.QueryParamException> {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(QueryParamExceptionMapper.class);
 
     @Context

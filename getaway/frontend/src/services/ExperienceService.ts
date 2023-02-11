@@ -9,7 +9,7 @@ import {
     ReviewModel,
     AnonymousLandingPageModel,
     UserLandingPageModel,
-    MaxPriceModel
+    MaxPriceModel, OrderByModel
 } from "../types";
 import {resultFetch} from "../scripts/resultFetch";
 import {getPagedFetch} from "../scripts/getPagedFetch";
@@ -109,6 +109,24 @@ export class  ExperienceService {
         }
 
         return resultFetch<MaxPriceModel>(url.toString(), {
+            method: "GET",
+        });
+    }
+
+    public async getUserOrderByModels(
+    ): Promise<Result<OrderByModel[]>> {
+        const url = new URL(this.basePath + "/filter/orderByModels?user=true");
+
+        return resultFetch<OrderByModel[]>(url.toString(), {
+            method: "GET",
+        });
+    }
+
+    public async getProviderOrderByModels(
+    ): Promise<Result<OrderByModel[]>> {
+        const url = new URL(this.basePath + "/filter/orderByModels?provider=true");
+
+        return resultFetch<OrderByModel[]>(url.toString(), {
             method: "GET",
         });
     }
