@@ -11,49 +11,49 @@ import {CategoryModel, ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import {experienceService} from "../services";
 
-export default function CardExperienceDetails(props: { experience: ExperienceModel; categoryModel: CategoryModel; isEditing: boolean;}) {
+export default function CardExperienceDetails(props: { experience: ExperienceModel; categoryModel: CategoryModel; isEditing: boolean; }) {
 
     const {experience, categoryModel, isEditing} = props
     const {t} = useTranslation();
     const hasImage = false;
     const navigate = useNavigate()
 
-    function setVisibility(experienceId:number , visibility: boolean) {
+    function setVisibility(experienceId: number, visibility: boolean) {
         experienceService.setExperienceObservable(experienceId, visibility).then()
-            .catch(() => {});
+            .catch(() => {
+            });
     }
 
-    function deleteExperience(experienceId:number ) {
+    function deleteExperience(experienceId: number) {
         experienceService.deleteExperienceById(experienceId).then()
-            .catch(() => {});
+            .catch(() => {
+            });
         // navigate(-1)
     }
 
     return (
-        <div>
+        <>
             <div className="d-flex flex-wrap justify-content-center align-content-center">
                 <div className="d-flex flex-column">
                     <div className="p-2" style={{width: "600px"}}>
                         {hasImage ?
                             <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "550px"}}
-                                 src={`/experiences/${experience.id}/experienceImage`} alt="Imagen"/>
+                                 src={`/experiences/${experience.id}/experienceImage`} alt={`Imagen ${experience.name}`}/>
                             :
-                            <div>
-                                <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "450px"}}
-                                     src={`./images/${categoryModel.name}.svg`} alt={`${categoryModel.name}`}/>
-                                <h5 className="mt-3 text-center">
-                                    {t('ExperienceDetail.imageDefault')}
-                                </h5>
-                            </div>
+                            <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "450px"}}
+                                 src={`./images/${categoryModel.name}.svg`} alt={`${categoryModel.name}`}/>
                         }
-
+                        {!hasImage &&
+                            <h5 className="mt-3 text-center">
+                                {t('ExperienceDetail.imageDefault')}
+                            </h5>}
                     </div>
                 </div>
                 <div style={{flex: "5", minWidth: "350px"}}>
                     <div className="row">
-                        <div className="col-3 p-0"></div>
+                        <div className="col-3 p-0"/>
                         <div className="card-body col-7 h-100">
-                            <div>{/*  Direccion y ciudad */}
+                            <div> {/*  Direccion y ciudad */}
                                 <h5 className="information-title">
                                     {t('Experience.address')}
                                 </h5>
@@ -67,28 +67,26 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                     {t('Experience.price.name')}
                                 </h5>
                                 <div className="information-text">
-                                    {
-                                        (experience.price === undefined ?
-                                            <div>
-                                                <h6>
-                                                    {t('Experience.price.null')}
-                                                </h6>
-                                            </div>
-
-                                            :
-                                            (experience.price == 0 ?
-                                                    <div>
-                                                        <h6>
-                                                            {t('Experience.price.free')}
-                                                        </h6>
-                                                    </div>
-                                                    :
-                                                    <div>
-                                                        <h6>
-                                                            {t('Experience.price.exist', {price: experience.price})}
-                                                        </h6>
-                                                    </div>
-                                            ))
+                                    {(experience.price === undefined ?
+                                        <div>
+                                            <h6>
+                                                {t('Experience.price.null')}
+                                            </h6>
+                                        </div>
+                                        :
+                                        (experience.price == 0 ?
+                                                <div>
+                                                    <h6>
+                                                        {t('Experience.price.free')}
+                                                    </h6>
+                                                </div>
+                                                :
+                                                <div>
+                                                    <h6>
+                                                        {t('Experience.price.exist', {price: experience.price})}
+                                                    </h6>
+                                                </div>
+                                        ))
                                     }
                                 </div>
                             </div>
@@ -102,7 +100,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                         <p>
                                             {t('ExperienceDetail.noData')}
                                         </p>
-                                    :
+                                        :
                                         <p>
                                             {experience.description}
                                         </p>
@@ -118,13 +116,13 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                     <p className="information-text">
                                         {t('ExperienceDetail.noData')}
                                     </p>
-                                :
+                                    :
                                     //TODO: make this link to redirect
-                                    <div >
+                                    <a href={experience.siteUrl}>
                                         <p className="information-text">
                                             {experience.siteUrl}
                                         </p>
-                                    </div>
+                                    </a>
                                 }
                             </div>
 
@@ -142,9 +140,6 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                     {t('ExperienceDetail.review')}: {experience.reviewCount}
                                 </h6>
                                 <StarRating score={experience.score}/>
-                                {/*<jsp:include page="/WEB-INF/components/starAvg.jsp">*/}
-                                {/*    <jsp:param name="avgReview" value="${param.reviewAvg}"/>*/}
-                                {/*</jsp:include>*/}
                             </div>
                         </div>
                         <div className="col-2 p-0"></div>
@@ -166,7 +161,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                         <div>
                             {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
                             {/*   ${false}"/> </c:url>">*/}
-                            <IconButton onClick={() => setVisibility(experience.id, false)}  aria-label="visibilityOn" component="span" style={{fontSize: "xxx-large"}} id="setFalse">
+                            <IconButton onClick={() => setVisibility(experience.id, false)} aria-label="visibilityOn" component="span" style={{fontSize: "xxx-large"}} id="setFalse">
                                 <VisibilityIcon/>
                             </IconButton>
                             {/*</a>*/}
@@ -175,7 +170,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                         <div>
                             {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
                             {/*   ${true}"/> </c:url>">*/}
-                            <IconButton onClick={() => setVisibility(experience.id, true)}  aria-label="visibilityOff" component="span" style={{fontSize: "xx-large"}} id="setTrue">
+                            <IconButton onClick={() => setVisibility(experience.id, true)} aria-label="visibilityOff" component="span" style={{fontSize: "xx-large"}} id="setTrue">
                                 <VisibilityOffIcon/>
                             </IconButton>
                             {/*</a>  */}
@@ -184,8 +179,8 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     }
 
                     {/*<a href="<c:url value="/user/experiences/edit/${param.id}"/>">*/}
-                    <Link to={"/experiences?id=" + experience.id}>
-                        <IconButton onClick={() => deleteExperience(experience.id)}  aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
+                    <Link to={`/experiences?id=${experience.id}`}>
+                        <IconButton onClick={() => deleteExperience(experience.id)} aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
                             <EditIcon/>
                         </IconButton>
                     </Link>
@@ -198,7 +193,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     {/*</a>*/}
                 </div>
             }
-        </div>
+        </>
     );
 
 }

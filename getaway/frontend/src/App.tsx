@@ -13,7 +13,6 @@ import ExperienceForm from "./pages/ExperienceForm";
 import CreateReview from "./pages/CreateReview";
 import Error from "./pages/Error";
 import Custom404 from "./pages/Custom404";
-import Register from "./pages/Register";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -44,12 +43,11 @@ function App() {
                         <Route path='experiences/:experienceId' element={<ExperienceDetails/>}/>
                         <Route path='experiences/:experienceId/createReview' element={<CreateReview/>} />
                         <Route path='experienceForm' element={<ExperienceForm/>}/>
-                        <Route path='createAccount' element={<CreateAccount/>}/>
                         <Route path='error' element={<Error/>}/>
                         <Route path='*' element={<Custom404/>}/>
                     </Route>
                     <Route path='/login' element={<Login/>}/>
-                    <Route path='/register' element={<Register/>}/>
+                    <Route path='/createAccount' element={<CreateAccount/>}/>
                 </Routes>
 
                 <Footer/>

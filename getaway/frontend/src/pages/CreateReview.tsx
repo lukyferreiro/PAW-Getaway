@@ -90,7 +90,6 @@ export default function CreateReview() {
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
             <div className="container-lg w-100 modalContainer d-flex flex-column justify-content-center align-items-center">
-
                 <form id="createReviewForm" acceptCharset="utf-8" onSubmit={onSubmit} method="post" style={{width: "100%"}}>
                     <div className="p-4 mx-4 mt-4 m-1">
                         <div className="col m-2">

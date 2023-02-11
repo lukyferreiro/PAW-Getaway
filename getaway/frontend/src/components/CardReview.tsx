@@ -1,28 +1,39 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {ReviewModel} from "../types";
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {useAuth} from "../hooks/useAuth";
 import StarRating from "./StarRating";
+import {serviceHandler} from "../scripts/serviceHandler";
+import {userService} from "../services";
 
-export default function CardReview(props: {reviewModel: ReviewModel; isEditing: boolean;}) {
+export default function CardReview(props: { reviewModel: ReviewModel; isEditing: boolean; }) {
 
     const {t} = useTranslation();
-
+    const navigate = useNavigate()
     const {reviewModel, isEditing} = props
-    const hasImage = false;
-    const {user} = useAuth();
 
-    let isLogged = user !== null;
+    const [userImg, setUserImg] = useState<string | undefined>(undefined)
+    const [isLoadingImg, setIsLoadingImg] = useState(false)
 
+    useEffect(() => {
+        setIsLoadingImg(true)
+        serviceHandler(
+            userService.getUserProfileImage(reviewModel.user.id),
+            navigate, (userImg) => {
+                setUserImg(userImg.size > 0 ? URL.createObjectURL(userImg) : undefined)
+            },
+            () => setIsLoadingImg(false)
+        )
+    }, [])
 
     // @ts-ignore
     return (
-        <div className="card m-2">
+        <div className="card m-2" style={{height: isEditing ? "310px" : ""}}>
             {isEditing &&
                 <div className="card-title m-2 d-flex justify-content-center align-content-center">
                     <Link to={"/experiences/" + reviewModel.experience.id}>
@@ -41,15 +52,9 @@ export default function CardReview(props: {reviewModel: ReviewModel; isEditing: 
 
             <div className="card-title m-2 d-flex justify-content-between">
                 <div className="d-flex">
-                    {hasImage &&
-                        <img className="user-img" src="<c:url value='/user/profileImage/${param.profileImageId}'/>"
-                             alt="Imagen"
-                             style={{marginRight: "8px"}}/>
-                    }
-                    {!hasImage &&
-                        <img className="user-img"
-                             src="./images/user_default.png" alt="Imagen"/>
-                    }
+                    <img className="user-img" src={userImg ? userImg : './images/user_default.png'}
+                         alt="Imagen"
+                         style={{marginRight: userImg ? "8px" : ""}}/>
 
                     <div className="d-flex flex-column justify-content-center align-content-center">
                         <h5 className="my-1">

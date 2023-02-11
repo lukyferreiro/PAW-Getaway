@@ -1,6 +1,5 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {UserModel} from "../types";
 import {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {userService} from "../services";
@@ -10,7 +9,7 @@ import {useAuth} from "../hooks/useAuth";
 export default function UserProfile() {
 
     const {t} = useTranslation();
-    const {user, setUser} = useAuth()
+    const {user} = useAuth()
     const navigate = useNavigate()
     const [userImg, setUserImg] = useState<string | undefined>(undefined)
     const [isLoadingImg, setIsLoadingImg] = useState(false)

@@ -48,9 +48,11 @@ export default function Login() {
                 .catch(() => navigate("/error?code=500&message=Server error"));
         }
     );
-    function showPassword(){
+
+    function showPassword() {
         setSeePassword(!seePassword);
     }
+
     // const {register, handleSubmit} = useForm<FormDataPassReset>({
     //     criteriaMode: "all",
     // });
@@ -62,7 +64,7 @@ export default function Login() {
 
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
-            <div className="container-lg w-100 p-2">
+            <div className="container-lg w-100 p-2 modalContainer">
                 <div className="row w-100 m-0 p-5 align-items-center justify-content-center">
                     <div className="col-12">
                         <h1 className="text-center title">
@@ -94,9 +96,8 @@ export default function Login() {
                                     <div className="container-fluid">
                                         <div className="row">
                                             <div className="col-6 px-0">
-                                                <label
-                                                    className="form-label d-flex align-items-center"
-                                                    htmlFor="password">
+                                                <label className="form-label d-flex align-items-center"
+                                                       htmlFor="password">
                                                     <img src={"./images/ic_password.svg"} alt="Imagen perfil"
                                                          style={{marginRight: "5px"}}/>
                                                     {t('Navbar.password')}
@@ -114,7 +115,7 @@ export default function Login() {
                                             </div>
                                             <div className="col-12 px-0 d-flex justify-content-start align-items-center">
                                                 <div className="input-group d-flex justify-content-start align-items-center">
-                                                    <input type={seePassword ? "text":"password"} className="form-control"
+                                                    <input type={seePassword ? "text" : "password"} className="form-control"
                                                            id="password" aria-describedby="password input"
                                                            {...register("password", {})}/>
                                                     <div className="input-group-append">
@@ -134,7 +135,7 @@ export default function Login() {
                                 <div className="col-12 mt-3 d-flex justify-content-start align-items-center">
                                     <input type="checkbox" id="rememberMe"
                                            {...register("rememberMe", {})}/>
-                                    <label className="mb-0 mx-2" htmlFor="rememberMe">
+                                    <label className="mb-0 mx-2" htmlFor="rememberMe" style={{fontSize: "medium"}}>
                                         {t('Navbar.rememberMe')}
                                     </label>
                                 </div>

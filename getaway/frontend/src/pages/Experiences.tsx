@@ -7,10 +7,10 @@ import React, {useEffect, useState} from "react";
 import {ExperienceModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
 import {useLocation, useNavigate} from "react-router-dom";
-import {getQueryOrDefault, getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import "../styles/star_rating.css";
 import {CityModel, CountryModel} from "../types";
-import {categoryService, experienceService, locationService} from "../services";
+import {experienceService, locationService} from "../services";
 import {useForm} from "react-hook-form";
 import {serviceHandler} from "../scripts/serviceHandler";
 

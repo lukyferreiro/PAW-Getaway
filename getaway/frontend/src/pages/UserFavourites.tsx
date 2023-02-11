@@ -39,7 +39,7 @@ export default function UserFavourites() {
                     </h2>
                 </div>
                 :
-                <div>
+                <>
                     <div className="d-flex justify-content-center align-content-center">
                         <div style={{margin: "0 auto 0 20px;", flex: "1"}}>
                             {/*TODO add orderDropdown*/}
@@ -65,7 +65,7 @@ export default function UserFavourites() {
                         {/*TODO add pagination*/}
                     </div>
 
-                </div>
+                </>
             }
         </div>
     );

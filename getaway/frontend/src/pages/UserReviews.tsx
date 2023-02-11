@@ -2,11 +2,10 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {ExperienceModel, ReviewModel} from "../types";
+import {ReviewModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {userService} from "../services";
-import CardExperience from "../components/CardExperience";
 import CardReview from "../components/CardReview";
 
 export default function UserReviews() {
@@ -19,40 +18,43 @@ export default function UserReviews() {
 
     useEffect(() => {
         serviceHandler(
-            userService.getUserReviews(user? user.id : -1 , page ),
+            userService.getUserReviews(user ? user.id : -1, page),
             navigate, (reviews) => {
                 setReviews(reviews.getContent())
             },
-            () => {}
+            () => {
+            }
         )
     }, [])
 
     return (
-        <div>
-            <div className="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
+        <div className="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
 
-                { reviews.length == 0 ?
+            {reviews.length == 0 ?
+                <div className="d-flex justify-content-around align-content-center">
+                    <h2>{t('User.noReviews')}</h2>
+                </div>
+                :
+                <>
                     <div className="d-flex justify-content-around align-content-center">
-                        <h2>{t('User.noReviews')}</h2>
-                    </div> :
-                    <div>
-                        <div className="d-flex justify-content-around align-content-center">
-                            <h3 className="title">
-                                {t('User.reviewsTitle')}
-                            </h3>
-                        </div>
+                        <h3 className="title">
+                            {t('User.reviewsTitle')}
+                        </h3>
+                    </div>
 
-                        <div className="mx-5 my-2 d-flex flex-wrap justify-content-center align-content-center">
-                            <div className="pl-5 pr-2 w-50"
-                                 style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
-                                {reviews.map((review) => (
-                                    <CardReview reviewModel={review} isEditing={true} key={review.id}/>
-                                ))}
-                            </div>
+                    <div className="mx-5 my-2 d-flex flex-wrap justify-content-center align-content-center">
+                        <div style={{minWidth: "700px", maxWidth: "700px", height: "auto"}}>
+                            {reviews.map((review) => (
+                                <CardReview reviewModel={review} isEditing={true} key={review.id}/>
+                            ))}
                         </div>
                     </div>
-                }
-            </div>
+
+                    <div className="mt-auto d-flex justify-content-center align-items-center">
+                        {/*TODO add pagination*/}
+                    </div>
+                </>
+            }
         </div>
     );
 

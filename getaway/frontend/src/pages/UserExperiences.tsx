@@ -64,7 +64,7 @@ export default function UserExperiences() {
                     </h2>
                 </div>
                 :
-                <div>
+                <>
                     {/*SEARCH and ORDER*/}
                     <div className="d-flex justify-content-center align-content-center">
                         <div style={{margin: "0 auto 0 20px", flex: "1"}}>
@@ -221,7 +221,7 @@ export default function UserExperiences() {
                             {/*TODO add pagination*/}
                         </div>
                     </div>
-                </div>
+                </>
             }
         </div>
     );

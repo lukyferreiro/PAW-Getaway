@@ -42,7 +42,8 @@ export default function ExperienceDetails() {
     }, [experience] );
 
     return (
-        <div>
+        <div className="container-fluid px-5 d-flex justify-content-center align-content-center flex-column">
+
             <div className="card mx-5 my-3 px-5 pt-4">
                 <div className="d-flex justify-content-center align-content-center">
                     <h1 className="text-center" style={{wordBreak: "break-all"}}>
@@ -55,13 +56,14 @@ export default function ExperienceDetails() {
                 }
             </div>
 
+            {/*/!*REVIEWS*!/*/}
             <div className="mx-5 my-3">
                 <div className="d-flex justify-content-between align-content-center">
                     <h2 className="align-self-center">
                         {t('ExperienceDetail.review')}
                     </h2>
 
-                    <Link to={"/experiences/" + experienceId + "/createReview"} style={{marginRight: '40px'}}>
+                    <Link to={`/experiences/${experienceId}/createReview`} >
                         <button type="button" onClick={ () => {
                             if (user === null) {
                                 navigate("/login")
@@ -77,14 +79,13 @@ export default function ExperienceDetails() {
                 </div>
             </div>
 
-
-            {/*/!*REVIEWS*!/*/}
             <div className="d-flex mb-3 flex-column">
                 <div className="mx-5 my-2 d-flex flex-wrap">
                     {reviews.length == 0 ?
                         <div className="d-flex justify-content-center mb-2" style={{fontSize: "x-large"}}>
                             {t('ExperienceDetail.noReviews')}
-                        </div> :
+                        </div>
+                        :
                         <div className="pl-5 pr-2 w-50"
                              style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
                             {reviews.map((review) => (

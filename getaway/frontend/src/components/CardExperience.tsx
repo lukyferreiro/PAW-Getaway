@@ -30,18 +30,18 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
         <div className="card card-experience mx-3 my-2 p-0">
 
             <div className="btn-fav">
-            {/*    <jsp:include page="/WEB-INF/components/fav.jsp">*/}
-            {/*        <jsp:param name="isFav" value="${param.isFav}"/>*/}
-            {/*        <jsp:param name="experienceId" value="${param.id}"/>*/}
-            {/*        <jsp:param name="path" value="${param.path}"/>*/}
-            {/*        <jsp:param name="query" value="${param.query}"/>*/}
-            {/*        <jsp:param name="score" value="${param.score}"/>*/}
-            {/*        <jsp:param name="cityId" value="${param.cityId}"/>*/}
-            {/*        <jsp:param name="maxPrice" value="${param.maxPrice}"/>*/}
-            {/*        <jsp:param name="orderBy" value="${param.orderBy}"/>*/}
-            {/*        <jsp:param name="filter" value="${param.filter}"/>*/}
-            {/*        <jsp:param name="search" value="${param.search}"/>*/}
-            {/*    </jsp:include>*/}
+                {/*    <jsp:include page="/WEB-INF/components/fav.jsp">*/}
+                {/*        <jsp:param name="isFav" value="${param.isFav}"/>*/}
+                {/*        <jsp:param name="experienceId" value="${param.id}"/>*/}
+                {/*        <jsp:param name="path" value="${param.path}"/>*/}
+                {/*        <jsp:param name="query" value="${param.query}"/>*/}
+                {/*        <jsp:param name="score" value="${param.score}"/>*/}
+                {/*        <jsp:param name="cityId" value="${param.cityId}"/>*/}
+                {/*        <jsp:param name="maxPrice" value="${param.maxPrice}"/>*/}
+                {/*        <jsp:param name="orderBy" value="${param.orderBy}"/>*/}
+                {/*        <jsp:param name="filter" value="${param.filter}"/>*/}
+                {/*        <jsp:param name="search" value="${param.search}"/>*/}
+                {/*    </jsp:include>*/}
             </div>
 
             <div className="card-link h-100 d-flex flex-column">
@@ -98,12 +98,12 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                     </h5>
                     <StarRating score={experience.score}/>
                 </div>
-                {!experience.observable &&  <div className="card-body p-0 d-flex justify-content-center">
+                {!experience.observable && <div className="card-body p-0 d-flex justify-content-center">
                     <h5 className="obs-info align-self-center" style={{fontSize: "small"}}>
                         {t('Experience.notVisible')}
                     </h5>
                 </div>}
-                </div>
+            </div>
         </div>
     )
 }

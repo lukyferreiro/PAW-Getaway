@@ -4,7 +4,6 @@ import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {CategoryModel} from "../types";
 import {getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
 import React, {useEffect, useState} from "react";
-import Modal from 'react-modal';
 import '../styles/navbar.css'
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
@@ -22,14 +21,13 @@ export default function Navbar() {
     const categoryQuery = getQueryOrDefaultMultiple(query, "category");
 
     //Esto lo vamos a tener q obtener de alguna manera, por ahora lo fuerzo para ver que funcione
-    const { signOut} = useAuth();
+    const {signOut} = useAuth();
     const user = localStorage.getItem("user");
 
     let isLogged = user !== null;
     let isProvider = localStorage.getItem("isProvider") === 'true';
     let isVerified = localStorage.getItem("isVerified") === 'true';
 
-    //TODO obtenerlas de un llamado a la API ??
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
 
     useEffect(() => {
@@ -38,8 +36,9 @@ export default function Navbar() {
             navigate, (category) => {
                 setCategories(category)
             },
-            () => {}
-        ) ;
+            () => {
+            }
+        );
     }, [])
 
     return (
@@ -70,7 +69,7 @@ export default function Navbar() {
 
 
                     <Link to="/experienceForm" style={{marginRight: '40px'}}>
-                        <button type="button" onClick={ () => {
+                        <button type="button" onClick={() => {
                             if (user === null) {
                                 navigate("/login")
                             }
@@ -78,7 +77,7 @@ export default function Navbar() {
                                 navigate("/user/profile")
                             }
                         }} className='btn button-primary'
-                         >
+                        >
                             {t('Navbar.createExperience')}
                         </button>
                     </Link>
@@ -91,7 +90,6 @@ export default function Navbar() {
                             </button>
                         </Link>
                     }
-
 
 
                     {isLogged &&
@@ -122,9 +120,9 @@ export default function Navbar() {
                                     <img src={'./images/ic_review.svg'} alt="Icono reseñas"/>
                                     {t('Navbar.reviews')}
                                 </Link>}
-                                <button className="dropdown-item" onClick={ () => {
-                                    signOut( () => navigate("/") )
-                                } }>
+                                <button className="dropdown-item" onClick={() => {
+                                    signOut(() => navigate("/"))
+                                }}>
                                     <img src={'./images/ic_logout.svg'} alt="Icono cerrar sesion"/>
                                     {t('Navbar.logout')}
                                 </button>
@@ -133,8 +131,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            <div className="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0" >
-
+            <div className="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0">
                 {categories.map((category) => (
                     <Link to={{pathname: "/experiences", search: `?category=${category.name}`}} key={category.id}>
                         <button type="button" className={`btn btn-category ${categoryQuery?.includes(`category=${category.name}`) ? 'isActive' : ''}`}>
