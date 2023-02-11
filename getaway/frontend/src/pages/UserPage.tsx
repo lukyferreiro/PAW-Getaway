@@ -16,8 +16,6 @@ export default function UserPage() {
     const location = useLocation();
     const navigate = useNavigate();
     const readUser = localStorage.getItem("user");
-    const isVerified = localStorage.getItem("isVerified") === "true";
-    const isProvider = localStorage.getItem("isProvider") === "true";
     const rememberMe = localStorage.getItem("rememberMe") === "true";
     const correctRoute = getCorrectPrivilegeRoute(location);
 

@@ -27,7 +27,6 @@ export default function Navbar() {
     //Esto lo vamos a tener q obtener de alguna manera, por ahora lo fuerzo para ver que funcione
     const {signOut} = useAuth();
     const user = localStorage.getItem("user");
-
     let isLogged = user !== null;
     let isProvider = localStorage.getItem("isProvider") === 'true';
     let isVerified = localStorage.getItem("isVerified") === 'true';
@@ -36,8 +35,8 @@ export default function Navbar() {
     const [name, setName] = useState<string>("")
     const [category, setCategory] = useState<string>("")
 
-    const {register, handleSubmit, formState: { errors },}
-        = useForm<FormDataSearch>({ criteriaMode: "all" });
+    const {register, handleSubmit, formState: {errors},}
+        = useForm<FormDataSearch>({criteriaMode: "all"});
 
     useEffect(() => {
         serviceHandler(
@@ -50,9 +49,9 @@ export default function Navbar() {
         );
     }, [])
 
-    const onSubmit = handleSubmit((data:FormDataSearch) => {
+    const onSubmit = handleSubmit((data: FormDataSearch) => {
         setName(data.name);
-        navigate({pathname: "/experiences", search: `?category=${category}&name=${name}`}, {replace:true});
+        navigate({pathname: "/experiences", search: `?category=${category}&name=${name}`}, {replace: true});
     });
 
     return (
@@ -67,22 +66,22 @@ export default function Navbar() {
                 <div className="container-navbar-buttons d-flex justify-content-between align-items-center">
                     <div className="d-flex justify-items-center align-items-center"
                          style={{marginRight: '40px'}}>
-                        <button className="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm" >
+                        <button className="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm">
                             <img src={'./images/ic_lupa.svg'} alt="Lupa"/>
                         </button>
 
                         <form id="searchExperienceForm" acceptCharset="utf-8" className="my-auto" onSubmit={onSubmit}>
                             <input type="text" className="form-control" placeholder={t('Navbar.search')}
-                                {...register("name", {
+                                   {...register("name", {
                                        max: 255,
                                        pattern: {
                                            value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
                                            message: t("ExperienceForm.error.name.pattern"),
                                        }
                                    })}
-                                defaultValue={""}
+                                   defaultValue={""}
                             />
-                             {errors.name?.type === "max" && (
+                            {errors.name?.type === "max" && (
                                 <p className="form-control is-invalid form-error-label">
                                     {t("ExperienceForm.error.name.max")}
                                 </p>
@@ -156,7 +155,10 @@ export default function Navbar() {
 
             <div className="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0">
                 {categories.map((category) => (
-                    <Link to={{pathname: "/experiences", search: `?category=${category.name}&name=${name}`}} key={category.id}>
+                    <Link to={{
+                        pathname: "/experiences",
+                        search: `?category=${category.name}&name=${name}`
+                    }} key={category.id}>
                         <button type="button" className={`btn btn-category ${categoryQuery?.includes(`category=${category.name}`) ? 'isActive' : ''}`}
                         >
                             <img src={`./images/${category.name}.svg`} alt={`${category.name}`}/>

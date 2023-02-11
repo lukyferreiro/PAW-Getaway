@@ -24,7 +24,7 @@ export default function Pagination({currentPage, maxPage, baseURL,}:
     `;
 
     return (
-        <div className="d-flex justify-content-center align-content-center">
+        <>
             {currentPage > 1 && (
                 <Link to={`${baseURL}?page=${currentPage - 1}`}
                       style={{alignItems: "center", display: "flex"}}>
@@ -47,6 +47,6 @@ export default function Pagination({currentPage, maxPage, baseURL,}:
                     />
                 </Link>
             )}
-        </div>
+        </>
     );
 }

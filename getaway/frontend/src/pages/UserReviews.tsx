@@ -1,31 +1,39 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {ReviewModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {userService} from "../services";
 import CardReview from "../components/CardReview";
+import {usePagination} from "../hooks/usePagination";
+import Pagination from "../components/Pagination";
 
 export default function UserReviews() {
+
     const {t} = useTranslation();
     const navigate = useNavigate()
+    const location = useLocation()
+
+    const {user} = useAuth();
 
     const [reviews, setReviews] = useState<ReviewModel[]>(new Array(0))
-    const {user} = useAuth();
-    const [page, setPage] = useState(1);
+
+    const [maxPage, setMaxPage] = useState(1)
+    const [currentPage] = usePagination()
 
     useEffect(() => {
         serviceHandler(
-            userService.getUserReviews(user ? user.id : -1, page),
+            userService.getUserReviews(user ? user.id : -1, currentPage),
             navigate, (reviews) => {
                 setReviews(reviews.getContent())
+                setMaxPage(reviews ? reviews.getMaxPage() : 1)
             },
             () => {
             }
         )
-    }, [])
+    }, [currentPage])
 
     return (
         <div className="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
@@ -50,8 +58,16 @@ export default function UserReviews() {
                         </div>
                     </div>
 
+                    {/*TODO add pagination*/}
                     <div className="mt-auto d-flex justify-content-center align-items-center">
-                        {/*TODO add pagination*/}
+                        {maxPage > 1 && (
+                            <Pagination
+                                currentPage={currentPage}
+                                maxPage={maxPage}
+                                baseURL={location.pathname}
+                                // TODO check baseUrl
+                            />
+                        )}
                     </div>
                 </>
             }

@@ -6,7 +6,6 @@ import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import React, {useEffect, useState} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {useAuth} from "../hooks/useAuth";
 import StarRating from "./StarRating";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {userService} from "../services";

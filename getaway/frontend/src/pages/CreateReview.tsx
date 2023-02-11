@@ -5,8 +5,7 @@ import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService} from "../services";
 import {useForm} from "react-hook-form";
-import { paths } from "../common";
-import StarRating from "../components/StarRating";
+import {paths} from "../common";
 import {useAuth} from "../hooks/useAuth";
 import {ExperienceNameModel} from "../types";
 import "../styles/star_rating.css";
@@ -57,7 +56,8 @@ export default function CreateReview() {
             navigate, (fetchedExperience) => {
                 setExperience(fetchedExperience)
             },
-            () => {}
+            () => {
+            }
         );
         if (readUser && readUser !== "") {
             signIn(JSON.parse(readUser), rememberMe, () => navigate(correctRoute));
@@ -68,15 +68,16 @@ export default function CreateReview() {
         = useForm<FormDataReview>({criteriaMode: "all"});
 
     const onSubmit = handleSubmit((data: FormDataReview) => {
-        data.score = String(-rating);
-            experienceService.postNewReview(parseInt(experienceId ? experienceId : "-1" ), data.title, data.description, data.score)
+            data.score = String(-rating);
+            experienceService.postNewReview(parseInt(experienceId ? experienceId : "-1"), data.title, data.description, data.score)
                 .then((result) => {
-                    if (!result.hasFailed()) {
-                            navigate(  paths.EXPERIENCES + "/" + experienceId, {replace: true})
+                        if (!result.hasFailed()) {
+                            navigate(paths.EXPERIENCES + "/" + experienceId, {replace: true})
                         }
                     }
                 )
-                .catch(() => {});
+                .catch(() => {
+                });
         }
     );
 
@@ -94,7 +95,7 @@ export default function CreateReview() {
                     <div className="p-4 mx-4 mt-4 m-1">
                         <div className="col m-2">
                             <h3 className="text-center" style={{wordBreak: "break-all"}}>
-                                {t('CreateReview.title', { experienceName : experience?.name })}
+                                {t('CreateReview.title', {experienceName: experience?.name})}
                             </h3>
                         </div>
                         <div className="col m-2">
@@ -144,15 +145,15 @@ export default function CreateReview() {
                                     </h6>
                                 </div>
                             </label>
-                            <textarea maxLength={255} className="form-control" style= {{maxHeight: "200px"}}
-                                  {...register("description", {
-                                      required: true,
-                                      maxLength: 255,
-                                      pattern: {
-                                          value: /^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°";$%#&=:¿?!¡\n\s\t/.-])*$/,
-                                          message: t("CreateReview.error.description.pattern"),
-                                      },
-                                  })}
+                            <textarea maxLength={255} className="form-control" style={{maxHeight: "200px"}}
+                                      {...register("description", {
+                                          required: true,
+                                          maxLength: 255,
+                                          pattern: {
+                                              value: /^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°";$%#&=:¿?!¡\n\s\t/.-])*$/,
+                                              message: t("CreateReview.error.description.pattern"),
+                                          },
+                                      })}
                             />
 
                             {errors.description?.type === "required" && (
@@ -177,7 +178,7 @@ export default function CreateReview() {
                                     {/*<StarRating/>*/}
                                     <div className="star-rating">
                                         {[...Array(5)].map((star, index) => {
-                                            index -=5;
+                                            index -= 5;
                                             return (
                                                 <button
                                                     type="button"

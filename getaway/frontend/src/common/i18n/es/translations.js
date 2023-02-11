@@ -228,6 +228,18 @@ export const TRANSLATIONS_ES = {
         },
     },
 
+    Order: {
+        title: "Ordenar por:",
+        OrderByRankAsc: "Puntaje ascendente",
+        OrderByRankDesc: "Puntaje descendente",
+        OrderByAZ: "A-Z",
+        OrderByZA: "Z-A",
+        OrderByLowPrice: "Menor precio",
+        OrderByHighPrice: "Mayor precio",
+        OrderByViewAsc: "Menos vistas",
+        OrderByViewDesc: "M\u00E1s vistas",
+    },
+
     CreateAccount: {
         error:{
             isRequired: "Este campo es requerido",

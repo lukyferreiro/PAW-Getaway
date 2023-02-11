@@ -5,14 +5,15 @@ import CardExperience from "../components/CardExperience";
 import {Slider, Typography} from '@mui/material';
 import React, {useEffect, useState} from "react";
 import {ExperienceModel} from "../types";
-import {useAuth} from "../hooks/useAuth";
-import {Navigate, useLocation, useNavigate} from "react-router-dom";
-import {getQueryOrDefault, getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
+import {useLocation, useNavigate} from "react-router-dom";
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import "../styles/star_rating.css";
 import {CityModel, CountryModel} from "../types";
 import {experienceService, locationService} from "../services";
 import {useForm} from "react-hook-form";
 import {serviceHandler} from "../scripts/serviceHandler";
+import Pagination from "../components/Pagination";
+import {usePagination} from "../hooks/usePagination";
 
 type FormFilterData = {
     country: string,
@@ -23,42 +24,46 @@ type FormFilterData = {
 
 
 export default function Experiences() {
-    const {user} = useAuth();
-    const {t} = useTranslation();
+
+    const {t} = useTranslation()
     const navigate = useNavigate()
-    const location = useLocation();
+    const location = useLocation()
     const query = useQuery()
 
-    const category = getQueryOrDefault(query, "category", "");
-    const name = getQueryOrDefault(query, "name", "");
+    const category = getQueryOrDefault(query, "category", "")
+    const name = getQueryOrDefault(query, "name", "")
 
     //FILTERS
     //Location
     const [countries, setCountries] = useState<CountryModel[]>(new Array(1))
     const [cities, setCities] = useState<CityModel[]>(new Array(0))
-    const [city, setCity] = useState(-1);
+    const [city, setCity] = useState(-1)
 
     //Price
-    const [maxPrice, setMaxPrice] = useState<number>(-1);
-    const [price, setPrice] = useState<number>(-1);
+    const [maxPrice, setMaxPrice] = useState<number>(-1)
+    const [price, setPrice] = useState<number>(-1)
 
     //Score
-    const [rating, setRating] = useState(0);
-    const [hover, setHover] = useState(0);
+    const [rating, setRating] = useState(0)
+    const [hover, setHover] = useState(0)
 
     //Order
-    const [order, setOrder] = useState("OrderByAZ");
-    const [page, setPage] = useState(1);
+    const [order, setOrder] = useState("OrderByAZ")
+
+    const [maxPage, setMaxPage] = useState(1)
+    const [currentPage] = usePagination()
 
     const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
 
     useEffect(() => {
         serviceHandler(
-            experienceService.getExperiencesByFilter(category, name, order, price, rating, city, page),
+            experienceService.getExperiencesByFilter(category, name, order, price, rating, city, currentPage),
             navigate, (experiences) => {
                 setExperiences(experiences.getContent())
+                setMaxPage(experiences ? experiences.getMaxPage() : 1)
             },
-            () => {}
+            () => {
+            }
         );
         serviceHandler(
             experienceService.getFilterMaxPrice(category, name),
@@ -66,50 +71,57 @@ export default function Experiences() {
                 setMaxPrice(price.maxPrice)
                 setPrice(price.maxPrice)
             },
-            () => {}
-        ) ;
+            () => {
+            }
+        );
         serviceHandler(
             locationService.getCountries(),
             navigate, (country) => {
                 setCountries(country)
             },
-            () => {}
-        ) ;
-    }, [category, name])
+            () => {
+            }
+        );
+    }, [category, name, currentPage])
 
-    function loadCities(countryName: string){
+    function loadCities(countryName: string) {
         serviceHandler(
             locationService.getCitiesByCountry(parseInt(countryName)),
             navigate, (cities) => {
                 setCities(cities)
                 setCity(cities[0].id)
             },
-            () => {}
-        ) ;
+            () => {
+            }
+        );
     }
+
     const handleChange = (event: Event, newValue: number | number[]) => {
         if (typeof newValue === 'number') {
             setPrice(newValue);
         }
     };
 
-    const {register, handleSubmit, formState: { errors },}
-        = useForm<FormFilterData>({ criteriaMode: "all" });
+    const {register, handleSubmit, formState: {errors},}
+        = useForm<FormFilterData>({criteriaMode: "all"});
 
     function cleanForm() {
         window.location.reload();
     }
+
     const onSubmit = handleSubmit((data: FormFilterData) => {
-        experienceService.getExperiencesByFilter(category, name, order, price, -rating, city, page)
-            .then((result) => {
-                    if (!result.hasFailed()) {
-                        setExperiences(result.getData().getContent())
-                    }else{
-                        setExperiences(Array(0));
+            experienceService.getExperiencesByFilter(category, name, order, price, -rating, city, currentPage)
+                .then((result) => {
+                        if (!result.hasFailed()) {
+                            setExperiences(result.getData().getContent())
+                        } else {
+                            setExperiences(Array(0));
+                        }
                     }
-                }
-            )
-            .catch(() => {});
+                )
+                .catch(() => {
+                    }
+                );
         }
     );
 
@@ -133,7 +145,7 @@ export default function Experiences() {
                             <option hidden value="">{t('Experience.placeholder')}</option>
 
                             {countries.map((country) => (
-                                <option key={country.id} value={country.id} >
+                                <option key={country.id} value={country.id}>
                                     {country.name}
                                 </option>
                             ))}
@@ -186,7 +198,7 @@ export default function Experiences() {
                         </label>
                         <div className="star-rating">
                             {[...Array(5)].map((star, index) => {
-                                index -=5;
+                                index -= 5;
                                 return (
                                     <button
                                         type="button"
@@ -225,14 +237,20 @@ export default function Experiences() {
                             flex-column justify-content-center align-content-center"
                  style={{minHeight: "650px"}}>
                 <div className="d-flex justify-content-start">
-                    <OrderDropdown/>
+                    <OrderDropdown isProvider={false}/>
                 </div>
 
-                { experiences.length === 0 ?
+                {experiences.length === 0 ?
                     <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
                         <div className="d-flex justify-content-center align-content-center">
                             <img src={'./images/ic_no_search.jpeg'} alt="Imagen lupa"
-                                 style={{width: "150px", height: "150px", minWidth: "150px", minHeight: "150px", marginRight: "5px"}}/>
+                                 style={{
+                                     width: "150px",
+                                     height: "150px",
+                                     minWidth: "150px",
+                                     minHeight: "150px",
+                                     marginRight: "5px"
+                                 }}/>
                             <h1 className="d-flex align-self-center">
                                 {t('EmptyResult')}
                             </h1>
@@ -252,51 +270,17 @@ export default function Experiences() {
                     </div>
                 }
 
-
                 {/*TODO: pagination*/}
-                {/*                        <div class="mt-auto d-flex justify-content-center align-items-center">*/}
-                {/*                            <ul class="pagination m-0">*/}
-                {/*                                <li class="page-item">*/}
-                {/*                                    <a class="page-link "*/}
-                {/*                                       href="<c:url value = "/experiences/${categoryName}">*/}
-                {/*                                          <c:param name = " pageNum" value = "1"/>*/}
-                {/*                                    <c:param name="score" value="${score}"/>*/}
-                {/*                                    <c:param name="cityId" value="${cityId}"/>*/}
-                {/*                                    <c:param name="maxPrice" value="${maxPrice}"/>*/}
-                {/*                                    <c:param name="orderBy" value="${orderBy}"/>*/}
-                {/*                                </c:url>*/}
-                {/*                                ">*/}
-                {/*                                <spring:message code="pagination.start"/>*/}
-                {/*                            </a>*/}
-                {/*                        </li>*/}
-                {/*                        <c:forEach var="i" begin="${minPage}" end="${maxPage}">*/}
-                {/*                            <li class="page-item">*/}
-                {/*                                <a class="page-link ${i == currentPage ? 'current-page-link' : ''}"*/}
-                {/*                                   href="<c:url value = "/experiences/${categoryName}">*/}
-                {/*                                          <c:param name = " pageNum" value = " ${i}"/>*/}
-                {/*                                          <c:param name = " score" value = " ${score}"/>*/}
-                {/*                                          <c:param name = " cityId" value = " ${cityId}"/>*/}
-                {/*                                          <c:param name = " maxPrice" value = " ${maxPrice}"/>*/}
-                {/*                                          <c:param name = " orderBy" value = " ${orderBy}" />*/}
-                {/*                                          </c:url>">*/}
-                {/*                                    <c:out value="${i}"/>*/}
-                {/*                                </a>*/}
-                {/*                            </li>*/}
-                {/*                        </c:forEach>*/}
-                {/*                        <li class="page-item">*/}
-                {/*                            <a class="page-link "*/}
-                {/*                               href="<c:url value = "/experiences/${categoryName}">*/}
-                {/*                                          <c:param name = " pageNum" value = " ${totalPages}"/>*/}
-                {/*                                          <c:param name = " score" value = " ${score}"/>*/}
-                {/*                                          <c:param name = " cityId" value = " ${cityId}"/>*/}
-                {/*                                          <c:param name = " maxPrice" value = " ${maxPrice}"/>*/}
-                {/*                                          <c:param name = " orderBy" value = " ${orderBy}" />*/}
-                {/*                                    </c:url>">*/}
-                {/*                                <spring:message code="pagination.end"/>*/}
-                {/*                            </a>*/}
-                {/*                        </li>*/}
-                {/*                    </ul>*/}
-                {/*            </div>*/}
+                <div className="mt-auto d-flex justify-content-center align-items-center">
+                    {maxPage > 1 && (
+                        <Pagination
+                            currentPage={currentPage}
+                            maxPage={maxPage}
+                            baseURL={location.pathname}
+                            // TODO check baseUrl
+                        />
+                    )}
+                </div>
             </div>
         </div>
     )

@@ -36,14 +36,15 @@ export default function ExperienceForm() {
     const currentId = getQueryOrDefault(query, "id", "-1");
 
     useEffect(() => {
-        if (parseInt(currentId) != -1){
+        if (parseInt(currentId) != -1) {
             serviceHandler(
                 experienceService.getExperienceById(parseInt(currentId)),
                 navigate, (fetchedExperience) => {
                     setExperience(fetchedExperience)
                     loadCities(fetchedExperience.country.id)
                 },
-                () => {}
+                () => {
+                }
             )
             if (experience?.user.id !== user?.id) {
                 //TODO: add foribdden error
@@ -55,32 +56,36 @@ export default function ExperienceForm() {
             navigate, (category) => {
                 setCategories(category)
             },
-            () => {}
-        ) ;
+            () => {
+            }
+        );
         serviceHandler(
             locationService.getCountries(),
             navigate, (country) => {
                 setCountries(country)
             },
-            () => {}
-        ) ;
+            () => {
+            }
+        );
     }, [])
 
-    function loadCities(countryId: number){
+    function loadCities(countryId: number) {
         serviceHandler(
             locationService.getCitiesByCountry(countryId),
             navigate, (city) => {
                 setCities(city)
             },
-            () => {}
-        ) ;
+            () => {
+            }
+        );
     }
-    const {register, handleSubmit, formState: { errors },}
-        = useForm<FormDataExperience>({ criteriaMode: "all" });
+
+    const {register, handleSubmit, formState: {errors},}
+        = useForm<FormDataExperience>({criteriaMode: "all"});
 
     const onSubmit = handleSubmit((data: FormDataExperience) => {
-            if (experience!==undefined){
-                experienceService.updateExperienceById(parseInt(currentId),data.name, data.category, data.country, data.city,
+            if (experience !== undefined) {
+                experienceService.updateExperienceById(parseInt(currentId), data.name, data.category, data.country, data.city,
                     data.address, data.price.toString(), data.url, data.mail, data.description)
                     .then((result) => {
                             if (!result.hasFailed()) {
@@ -88,8 +93,9 @@ export default function ExperienceForm() {
                             }
                         }
                     )
-                    .catch(() => {});
-            }else {
+                    .catch(() => {
+                    });
+            } else {
                 experienceService.createExperience(data.name, data.category, data.country, data.city,
                     data.address, data.mail, data.price.toString(), data.url, data.description)
                     .then((result) => {
@@ -99,7 +105,8 @@ export default function ExperienceForm() {
                             }
                         }
                     )
-                    .catch(() => {});
+                    .catch(() => {
+                    });
             }
         }
     );
@@ -150,7 +157,7 @@ export default function ExperienceForm() {
                                            message: t("ExperienceForm.error.name.pattern"),
                                        },
                                    })}
-                                defaultValue={experience ? experience.name : ""}
+                                   defaultValue={experience ? experience.name : ""}
                             />
                             {errors.name?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">
@@ -211,7 +218,7 @@ export default function ExperienceForm() {
 
                     <div className="p-0 m-2 d-flex flex-column">
                         <label className="form-label d-flex justify-content-between"
-                                htmlFor="description">
+                               htmlFor="description">
                             <div>
                                 {t('Experience.information')}
                                 <span className="optional-text">
@@ -233,7 +240,7 @@ export default function ExperienceForm() {
                                           message: t("ExperienceForm.error.description.pattern"),
                                       },
                                   })}
-                            defaultValue={experience ? experience.description : ""}
+                                  defaultValue={experience ? experience.description : ""}
                         />
                         {errors.description?.type === "required" && (
                             <p className="form-control is-invalid form-error-label">
@@ -250,7 +257,7 @@ export default function ExperienceForm() {
                     <div className="p-0 m-0 d-flex">
                         <div className="col m-2">
                             <label className="form-label d-flex justify-content-between"
-                                    htmlFor="mail">
+                                   htmlFor="mail">
                                 <div>
                                     {t('Experience.mail.field')}
                                     <span className="required-field">*</span>
@@ -286,7 +293,7 @@ export default function ExperienceForm() {
                         </div>
                         <div className="col m-2">
                             <label className="form-label d-flex justify-content-between"
-                                    htmlFor="url">
+                                   htmlFor="url">
                                 <div>
                                     {t('Experience.url.field')}
                                     <span className="optional-text">
@@ -351,10 +358,10 @@ export default function ExperienceForm() {
                             </label>
                             <select id="experienceFormCityInput" className="form-select" required
                                     {...register("city", {required: true})}
-                                disabled={cities.length <= 0 && experience === undefined }
+                                    disabled={cities.length <= 0 && experience === undefined}
                             >
                                 {experience === undefined &&
-                                <option hidden value="">{t('Experience.placeholder')}</option>
+                                    <option hidden value="">{t('Experience.placeholder')}</option>
                                 }
 
                                 {cities.map((city) => (
@@ -371,7 +378,7 @@ export default function ExperienceForm() {
                         </div>
                         <div className="col m-2">
                             <label className="form-label d-flex justify-content-between"
-                                    htmlFor="address">
+                                   htmlFor="address">
                                 <div>
                                     {t('Experience.address')}
                                     <span className="required-field">*</span>
@@ -391,7 +398,7 @@ export default function ExperienceForm() {
                                            message: t("ExperienceForm.error.address.pattern"),
                                        },
                                    })}
-                                defaultValue={experience ? experience.address : ""}
+                                   defaultValue={experience ? experience.address : ""}
                             />
                             {errors.address?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">

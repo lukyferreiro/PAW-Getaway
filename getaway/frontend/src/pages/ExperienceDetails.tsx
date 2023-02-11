@@ -2,27 +2,30 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {ExperienceModel, ReviewModel} from "../types";
 import React, {useEffect, useState} from "react";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import CardExperienceDetails from "../components/CardExperienceDetails";
 import CardReview from "../components/CardReview";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService} from "../services";
 import {useAuth} from "../hooks/useAuth";
+import Pagination from "../components/Pagination";
+import {usePagination} from "../hooks/usePagination";
+
 export default function ExperienceDetails() {
 
-    const {t} = useTranslation();
+    const {t} = useTranslation()
     const navigate = useNavigate()
+    const location = useLocation();
 
-    const [experience, setExperience] = useState<ExperienceModel | undefined>(undefined);
+    const [experience, setExperience] = useState<ExperienceModel | undefined>(undefined)
     const [reviews, setReviews] = useState<ReviewModel[]>(new Array(0))
-    const {experienceId} = useParams();
+    const {experienceId} = useParams()
 
-    const {user} = useAuth();
+    const {user} = useAuth()
+    let isVerified = localStorage.getItem("isVerified") === 'true'
 
-    let isLogged = user !== null;
-    let isVerified = user?.verified;
-
-
+    const [maxPage, setMaxPage] = useState(1)
+    const [currentPage] = usePagination()
 
     useEffect(() => {
         serviceHandler(
@@ -30,16 +33,19 @@ export default function ExperienceDetails() {
             navigate, (experience) => {
                 setExperience(experience)
             },
-            () => {}
-        ) ;
+            () => {
+            }
+        );
         serviceHandler(
-            experienceService.getExperienceReviews(parseInt(experienceId ? experienceId : '-1')),
+            experienceService.getExperienceReviews(parseInt(experienceId ? experienceId : '-1'), currentPage),
             navigate, (fetchedExperienceReviews) => {
                 setReviews(fetchedExperienceReviews.getContent())
+                setMaxPage(fetchedExperienceReviews ? fetchedExperienceReviews.getMaxPage() : 1)
             },
-            () => {}
-        ) ;
-    }, [experience] );
+            () => {
+            }
+        );
+    }, [experience, currentPage]);
 
     return (
         <div className="container-fluid px-5 d-flex justify-content-center align-content-center flex-column">
@@ -50,8 +56,7 @@ export default function ExperienceDetails() {
                         {experience?.name}
                     </h1>
                 </div>
-                {
-                    experience !== undefined &&
+                {experience !== undefined &&
                     <CardExperienceDetails experience={experience} categoryModel={experience.category} isEditing={experience.user.id === user?.id}/>
                 }
             </div>
@@ -63,8 +68,8 @@ export default function ExperienceDetails() {
                         {t('ExperienceDetail.review')}
                     </h2>
 
-                    <Link to={`/experiences/${experienceId}/createReview`} >
-                        <button type="button" onClick={ () => {
+                    <Link to={`/experiences/${experienceId}/createReview`}>
+                        <button type="button" onClick={() => {
                             if (user === null) {
                                 navigate("/login")
                             }
@@ -97,8 +102,16 @@ export default function ExperienceDetails() {
                 </div>
             </div>
 
-        {/*    TODO: add pagination*/}
-
+            {reviews.length != 0 && maxPage > 1 &&
+                <div className="d-flex justify-content-center align-content-center">
+                    <Pagination
+                        currentPage={currentPage}
+                        maxPage={maxPage}
+                        baseURL={location.pathname}
+                        // TODO check baseUrl
+                    />
+                </div>
+            }
         </div>
 
     );

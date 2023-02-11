@@ -10,10 +10,7 @@ export default function StarRating(props: { score: number }) {
             {[...Array(5)].map((star, index) => {
                 index -= 5;
                 return (
-                    <div
-                        key={index}
-                        className={index >= -score ? "on" : "off"}
-                    >
+                    <div key={index} className={index >= -score ? "on" : "off"}>
                         <span className="star">&#9733;</span>
                     </div>
                 );

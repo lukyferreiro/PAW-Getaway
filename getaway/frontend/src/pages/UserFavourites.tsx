@@ -5,30 +5,37 @@ import {ExperienceModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {userService} from "../services";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import CardExperience from "../components/CardExperience";
+import {usePagination} from "../hooks/usePagination";
+import Pagination from "../components/Pagination";
+import OrderDropdown from "../components/OrderDropdown";
 
 export default function UserFavourites() {
 
     const {t} = useTranslation();
     const navigate = useNavigate()
+    const location = useLocation()
+
+    const {user} = useAuth();
 
     const [favExperiences, setFavExperiences] = useState<ExperienceModel[]>(new Array(0))
-    const {user} = useAuth();
-    const [page, setPage] = useState(1);
     const [order, setOrder] = useState("OrderByAZ");
+
+    const [maxPage, setMaxPage] = useState(1)
+    const [currentPage] = usePagination()
 
     useEffect(() => {
         serviceHandler(
-            userService.getUserFavExperiences(user ? user.id : -1, order, page),
+            userService.getUserFavExperiences(user ? user.id : -1, order, currentPage),
             navigate, (experiences) => {
                 setFavExperiences(experiences.getContent())
+                setMaxPage(experiences ? experiences.getMaxPage() : 1)
             },
             () => {
             }
         )
-    }, [])
-    //TODO: add page and order to deps
+    }, [currentPage])
 
     return (
         <div className="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
@@ -42,12 +49,7 @@ export default function UserFavourites() {
                 <>
                     <div className="d-flex justify-content-center align-content-center">
                         <div style={{margin: "0 auto 0 20px;", flex: "1"}}>
-                            {/*TODO add orderDropdown*/}
-                            {/*<jsp:include page="/WEB-INF/components/orderDropdown.jsp">*/}
-                            {/*    <jsp:param name="orderByModels" value="${orderByModels}"/>*/}
-                            {/*    <jsp:param name="path" value="/user/favourites"/>*/}
-                            {/*    <jsp:param name="orderPrev" value="${orderBy}"/>*/}
-                            {/*</jsp:include>*/}
+                            <OrderDropdown isProvider={false}/>
                         </div>
                         <h3 className="title m-0">
                             {t('User.favsTitle')}
@@ -62,7 +64,14 @@ export default function UserFavourites() {
                     </div>
 
                     <div className="mt-auto d-flex justify-content-center align-items-center">
-                        {/*TODO add pagination*/}
+                        {maxPage > 1 && (
+                            <Pagination
+                                currentPage={currentPage}
+                                maxPage={maxPage}
+                                baseURL={location.pathname}
+                                // TODO check baseUrl
+                            />
+                        )}
                     </div>
 
                 </>
