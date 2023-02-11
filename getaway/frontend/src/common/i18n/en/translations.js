@@ -220,6 +220,14 @@ export const TRANSLATIONS_EN = {
         title: "Error {{errorCode}}",
     },
 
+    Pagination: {
+        message: "Page {{currentPage}} of {{maxPage}}",
+        alt: {
+            nextPage: "Next page",
+            beforePage: "Before page",
+        },
+    },
+
     CreateAccount: {
         error:{
             isRequired: "This field is required",
