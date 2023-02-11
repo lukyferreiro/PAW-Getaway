@@ -48,13 +48,11 @@ public class TestConfig {
     @Bean
     public DataSource dataSource() {
         final SingleConnectionDataSource ds = new SingleConnectionDataSource();
-
         ds.setSuppressClose(true);
         ds.setDriverClassName(JDBCDriver.class.getName());
         ds.setUrl("jdbc:hsqldb:mem:getaway");
         ds.setUsername("ha");
         ds.setPassword("");
-
         return ds;
     }
 
@@ -68,6 +66,8 @@ public class TestConfig {
         final Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
+        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("format_sql", "true");
         factoryBean.setJpaProperties(properties);
         return factoryBean;
     }

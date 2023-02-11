@@ -6,25 +6,20 @@ export async function getPagedFetch<RetType>(
     url: string,
     page?: number,
 ): Promise<Result<PagedContent<RetType>>> {
-    let urlPaged = pageUrlMaker(url, page);
+    let urlPaged = new URL(url);
+    if (page) {
+        urlPaged.searchParams.append("page", page.toString());
+    }
     try {
         const response = await authedFetch(urlPaged.toString(), {
             method: "GET",
         });
         const parsedResponse = await checkError<RetType>(response);
-        const maxPage = response.headers.get("x-total-pages");
+        const maxPage = response.headers.get("X-Total-Pages");
         return Result.ok(
             new PagedContent(parsedResponse, maxPage ? parseInt(maxPage) : 1)
         );
     } catch (err: any) {
         return Result.failed(new ErrorResponse(parseInt(err.message), err.title, err.message));
     }
-}
-
-function pageUrlMaker(path: string, page?: number): URL {
-    let url = new URL(path);
-    if (page) {
-        url.searchParams.append("page", page.toString());
-    }
-    return url;
 }

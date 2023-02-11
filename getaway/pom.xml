@@ -40,7 +40,6 @@
 <!--        TODO check -->
         <jackson.version>2.9.4</jackson.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
-        <org.springframework.hateoas.version>0.25.1.RELEASE</org.springframework.hateoas.version>
     </properties>
 
     <repositories>
@@ -123,23 +122,6 @@
                 <version>${hsqldb.version}</version>
                 <scope>test</scope>
             </dependency>
-            <!--API-->
-<!--            <dependency>-->
-<!--                <groupId>javax.validation</groupId>-->
-<!--                <artifactId>validation-api</artifactId>-->
-<!--                <version>${javax.validation-api.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>org.hibernate</groupId>-->
-<!--                <artifactId>hibernate-validator</artifactId>-->
-<!--                <version>${org.hibernate.validator}</version>-->
-<!--                <exclusions>-->
-<!--                    <exclusion>-->
-<!--                        <groupId>org.jboss.logging</groupId>-->
-<!--                        <artifactId>jboss-logging</artifactId>-->
-<!--                    </exclusion>-->
-<!--                </exclusions>-->
-<!--            </dependency>-->
             <!--Javax XML bind-->
             <dependency>
                 <groupId>javax.xml.bind</groupId>
@@ -337,11 +319,6 @@
                 <version>${org.mapstruct.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.springframework.hateoas</groupId>
-                <artifactId>spring-hateoas</artifactId>
-                <version>${org.springframework.hateoas.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-parameter-names</artifactId>
                 <version>${jackson.version}</version>
@@ -370,7 +347,6 @@
         <module>models</module>
         <module>persistence</module>
         <module>services</module>
-<!--        <module>frontend</module>-->
     </modules>
 
     <build>
