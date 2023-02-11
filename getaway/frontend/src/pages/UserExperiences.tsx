@@ -12,6 +12,11 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import {useForm} from "react-hook-form";
+
+type FormUserExperiencesSearch = {
+    name: string
+};
 
 export default function UserExperiences() {
 
@@ -26,6 +31,9 @@ export default function UserExperiences() {
 
     const isProvider = localStorage.getItem("isProvider") === "true";
 
+    const {register, handleSubmit, formState: { errors },}
+        = useForm<FormUserExperiencesSearch>({ criteriaMode: "all" });
+
     useEffect(() => {
         serviceHandler(
             userService.getUserExperiences(user ? user.id : -1, name, order, page),
@@ -34,11 +42,15 @@ export default function UserExperiences() {
             },
             () => {}
         )
-    }, [userExperiences])
+    }, [userExperiences, name])
 
     if (!isProvider) {
         return <Navigate to="/" replace/>;
     }
+
+    const onSubmit = handleSubmit((data:FormUserExperiencesSearch) => {
+        setName(data.name);
+    });
 
     function setVisibility(experienceId:number , visibility: boolean) {
         experienceService.setExperienceObservable(experienceId, visibility).then()
@@ -87,9 +99,22 @@ export default function UserExperiences() {
                             </button>
                             {/*<spring:message code="navbar.search" var="placeholder"/>*/}
                             {/*<c:url value="/user/experiences" var="searchPrivateGetPath"/>*/}
-                            <form className="my-auto" id="searchExperiencePrivateForm">
-                                <input type="text" className="form-control" placeholder={t('Navbar.search')}/>
-                                {/*<form:errors path="userQuery" element="p" cssClass="form-error-label"/>*/}
+                            <form className="my-auto" id="searchExperiencePrivateForm" onSubmit={onSubmit}>
+                                <input type="text" className="form-control" placeholder={t('Navbar.search')}
+                                       {...register("name", {
+                                           max: 255,
+                                           pattern: {
+                                               value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
+                                               message: t("ExperienceForm.error.name.pattern"),
+                                           }
+                                       })}
+                                       defaultValue={""}
+                                />
+                                {errors.name?.type === "max" && (
+                                    <p className="form-control is-invalid form-error-label">
+                                        {t("ExperienceForm.error.name.max")}
+                                    </p>
+                                )}
                             </form>
                         </div>
                     </div>

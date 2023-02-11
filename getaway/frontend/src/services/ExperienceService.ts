@@ -64,34 +64,8 @@ export class  ExperienceService {
         })
     }
 
-    public async getExperiencesByCategory(
+    public async getExperiencesByFilter(
         category?: string,
-        order?: string,
-        price?: number,
-        score?: number,
-        city?: number,
-        page?: number
-    ): Promise<Result<PagedContent<ExperienceModel[]>>> {
-        const url = new URL(this.basePath + "/category");
-        if (typeof category === "string") {
-            url.searchParams.append("category", category);
-        }
-        if (typeof order === "string") {
-            url.searchParams.append("order", order);
-        }
-        if (price) {
-            url.searchParams.append("price", price.toString());
-        }
-        if (score) {
-            url.searchParams.append("score", score.toString());
-        }
-        if (city) {
-            url.searchParams.append("city", city.toString());
-        }
-        return getPagedFetch<ExperienceModel[]>(url.toString(), page);
-    }
-
-    public async getExperiencesByName(
         name?: string,
         order?: string,
         price?: number,
@@ -99,7 +73,10 @@ export class  ExperienceService {
         city?: number,
         page?: number
     ): Promise<Result<PagedContent<ExperienceModel[]>>> {
-        const url = new URL(this.basePath + "/name");
+        const url = new URL(this.basePath + "/filter");
+        if (typeof category === "string") {
+            url.searchParams.append("category", category);
+        }
         if (typeof name === "string") {
             url.searchParams.append("name", name);
         }
@@ -116,6 +93,24 @@ export class  ExperienceService {
             url.searchParams.append("city", city.toString());
         }
         return getPagedFetch<ExperienceModel[]>(url.toString(), page);
+    }
+
+    public async getFilterMaxPrice(
+        category?: string,
+        name?: string,
+    ): Promise<Result<MaxPriceModel>> {
+        const url = new URL(this.basePath + "/filter/maxPrice");
+
+        if (typeof name === "string") {
+            url.searchParams.append("name", name);
+        }
+        if (typeof category === "string") {
+            url.searchParams.append("category", category);
+        }
+
+        return resultFetch<MaxPriceModel>(url.toString(), {
+            method: "GET",
+        });
     }
 
     public async getExperienceById(experienceId: number): Promise<Result<ExperienceModel>> {
@@ -239,28 +234,6 @@ export class  ExperienceService {
             method: "PUT",
             headers: {},
             body: {}
-        });
-    }
-
-    public async getCategoryMaxPrice(category: string): Promise<Result<MaxPriceModel>> {
-        const url = new URL(this.basePath + "/category");
-        if (typeof category === "string") {
-            url.searchParams.append("category", category);
-        }
-
-        return resultFetch<MaxPriceModel>(url.toString(), {
-            method: "GET",
-        });
-    }
-
-    public async getSearchMaxPrice(name: string): Promise<Result<MaxPriceModel>> {
-        const url = new URL(this.basePath + "/name");
-        if (typeof name === "string") {
-            url.searchParams.append("name", name);
-        }
-
-        return resultFetch<MaxPriceModel>(url.toString(), {
-            method: "GET",
         });
     }
 }

@@ -18,17 +18,13 @@ public interface ExperienceService {
 
     Optional<ExperienceModel> getVisibleExperienceById(long experienceId, UserModel user);
 
-    Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, UserModel user);
+    Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, String name, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, UserModel user);
+
+    Optional<Double> getMaxPriceByCategoryAndName(CategoryModel category, String name);
 
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, UserModel user);
 
-    Optional<Double> getMaxPriceByCategory(CategoryModel category);
-
     Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page);
-
-    Page<ExperienceModel> listExperiencesSearch(String name, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, UserModel user);
-
-    Optional <Double> getMaxPriceByName(String name);
 
     List<List<ExperienceModel>> getExperiencesListByCategories(UserModel user);
 

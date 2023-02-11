@@ -6,8 +6,8 @@ import {Slider, Typography} from '@mui/material';
 import React, {useEffect, useState} from "react";
 import {ExperienceModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
-import {useLocation, useNavigate} from "react-router-dom";
-import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import {Navigate, useLocation, useNavigate} from "react-router-dom";
+import {getQueryOrDefault, getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
 import "../styles/star_rating.css";
 import {CityModel, CountryModel} from "../types";
 import {experienceService, locationService} from "../services";
@@ -30,6 +30,7 @@ export default function Experiences() {
     const query = useQuery()
 
     const category = getQueryOrDefault(query, "category", "");
+    const name = getQueryOrDefault(query, "name", "");
 
     //FILTERS
     //Location
@@ -52,17 +53,21 @@ export default function Experiences() {
     const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
 
     useEffect(() => {
-        //TODO: getMaxPrice function in experience service
-
         serviceHandler(
-            experienceService.getCategoryMaxPrice(category),
+            experienceService.getExperiencesByFilter(category, name, order, price, rating, city, page),
+            navigate, (experiences) => {
+                setExperiences(experiences.getContent())
+            },
+            () => {}
+        );
+        serviceHandler(
+            experienceService.getFilterMaxPrice(category, name),
             navigate, (price) => {
                 setMaxPrice(price.maxPrice)
                 setPrice(price.maxPrice)
             },
             () => {}
         ) ;
-
         serviceHandler(
             locationService.getCountries(),
             navigate, (country) => {
@@ -70,14 +75,7 @@ export default function Experiences() {
             },
             () => {}
         ) ;
-        serviceHandler(
-            experienceService.getExperiencesByCategory(category!, order, price, rating, city, page),
-            navigate, (experiences) => {
-                setExperiences(experiences.getContent())
-            },
-            () => {}
-        );
-    }, [category])
+    }, [category, name])
 
     function loadCities(countryName: string){
         serviceHandler(
@@ -102,7 +100,7 @@ export default function Experiences() {
         window.location.reload();
     }
     const onSubmit = handleSubmit((data: FormFilterData) => {
-        experienceService.getExperiencesByCategory(category!, order, price, -rating, city, page)
+        experienceService.getExperiencesByFilter(category, name, order, price, -rating, city, page)
             .then((result) => {
                     if (!result.hasFailed()) {
                         setExperiences(result.getData().getContent())

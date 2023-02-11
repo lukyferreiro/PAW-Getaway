@@ -8,7 +8,11 @@ import '../styles/navbar.css'
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {categoryService} from "../services";
+import {useForm} from "react-hook-form";
 
+type FormDataSearch = {
+    name: string
+};
 
 export default function Navbar() {
 
@@ -29,6 +33,11 @@ export default function Navbar() {
     let isVerified = localStorage.getItem("isVerified") === 'true';
 
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
+    const [name, setName] = useState<string>("")
+    const [category, setCategory] = useState<string>("")
+
+    const {register, handleSubmit, formState: { errors },}
+        = useForm<FormDataSearch>({ criteriaMode: "all" });
 
     useEffect(() => {
         serviceHandler(
@@ -40,6 +49,11 @@ export default function Navbar() {
             }
         );
     }, [])
+
+    const onSubmit = handleSubmit((data:FormDataSearch) => {
+        setName(data.name);
+        navigate({pathname: "/experiences", search: `?category=${category}&name=${name}`}, {replace:true});
+    });
 
     return (
         <div className="navbar container-fluid p-0 d-flex flex-column">
@@ -53,17 +67,26 @@ export default function Navbar() {
                 <div className="container-navbar-buttons d-flex justify-content-between align-items-center">
                     <div className="d-flex justify-items-center align-items-center"
                          style={{marginRight: '40px'}}>
-                        <button className="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm">
+                        <button className="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm" >
                             <img src={'./images/ic_lupa.svg'} alt="Lupa"/>
                         </button>
-                        {/*<c:url value="/search_result" var="searchGetPath"/>*/}
-                        {/*TODO agregar onSubmit*/}
-                        <form className="my-auto">
-                            {/*TODO cuando falle agregar cssErrorClass="form-control is-invalid*/}
-                            <input type="text" className="form-control" placeholder={t('Navbar.search')}/>
-                            {/*<form:input path="query" type="text" className="form-control" cssErrorClass="form-control is-invalid"*/}
-                            {/*            placeholder="${placeholder}"/>*/}
-                            {/*<form:errors path="query" element="p" cssClass="form-error-label"/>*/}
+
+                        <form id="searchExperienceForm" acceptCharset="utf-8" className="my-auto" onSubmit={onSubmit}>
+                            <input type="text" className="form-control" placeholder={t('Navbar.search')}
+                                {...register("name", {
+                                       max: 255,
+                                       pattern: {
+                                           value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
+                                           message: t("ExperienceForm.error.name.pattern"),
+                                       }
+                                   })}
+                                defaultValue={""}
+                            />
+                             {errors.name?.type === "max" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("ExperienceForm.error.name.max")}
+                                </p>
+                            )}
                         </form>
                     </div>
 
@@ -133,8 +156,9 @@ export default function Navbar() {
 
             <div className="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0">
                 {categories.map((category) => (
-                    <Link to={{pathname: "/experiences", search: `?category=${category.name}`}} key={category.id}>
-                        <button type="button" className={`btn btn-category ${categoryQuery?.includes(`category=${category.name}`) ? 'isActive' : ''}`}>
+                    <Link to={{pathname: "/experiences", search: `?category=${category.name}&name=${name}`}} key={category.id}>
+                        <button type="button" className={`btn btn-category ${categoryQuery?.includes(`category=${category.name}`) ? 'isActive' : ''}`}
+                        >
                             <img src={`./images/${category.name}.svg`} alt={`${category.name}`}/>
                             {t('Categories.' + category.name)}
                         </button>

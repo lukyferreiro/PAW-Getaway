@@ -90,12 +90,12 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, UserModel user) {
+    public Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, String name, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, UserModel user) {
         int totalPages;
         List<ExperienceModel> experienceModelList = new ArrayList<>();
 
         LOGGER.debug("Requested page {} ", page);
-        final long total = experienceDao.countListByFilter(category, max, score, city);
+        final long total = experienceDao.countListByFilter(category, name, max, score, city);
 
         if (total > 0) {
             LOGGER.debug("Total experiences found: {}", total);
@@ -110,7 +110,7 @@ public class ExperienceServiceImpl implements ExperienceService {
                 page = 1;
             }
 
-            experienceModelList = experienceDao.listExperiencesByFilter(category, max, score, city, order, page, PAGE_SIZE);
+            experienceModelList = experienceDao.listExperiencesByFilter(category, name, max, score, city, order, page, PAGE_SIZE);
         } else {
             totalPages = 1;
         }
@@ -124,6 +124,11 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
+    public Optional<Double> getMaxPriceByCategoryAndName(CategoryModel categoryModel, String name) {
+        return experienceDao.getMaxPriceByCategoryAndName(categoryModel, name);
+    }
+
+    @Override
     public List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, UserModel user) {
         LOGGER.debug("Retrieving all experiences by best ranked of category with id {}", category.getCategoryId());
 
@@ -134,12 +139,6 @@ public class ExperienceServiceImpl implements ExperienceService {
         }
 
         return experienceModelList;
-    }
-
-    @Override
-    public Optional<Double> getMaxPriceByCategory(CategoryModel category) {
-        LOGGER.debug("Retrieving max price of category with id {}", category.getCategoryId());
-        return experienceDao.getMaxPriceByCategory(category);
     }
 
     @Override
@@ -174,45 +173,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         return new Page<>(experienceModelList, page, totalPages, total);
     }
 
-    @Override
-    public Page<ExperienceModel> listExperiencesSearch(String name, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, UserModel user) {
-        LOGGER.debug("Requested page {}", page);
 
-        int totalPages;
-        List<ExperienceModel> experienceModelList = new ArrayList<>();
-        final long total = experienceDao.getCountByName(name, max, score, city);
-        LOGGER.debug("LLEGO");
-
-        if (total > 0) {
-            LOGGER.debug("Total pages found: {}", total);
-
-            totalPages = (int) Math.ceil((double) total / RESULT_PAGE_SIZE);
-
-            LOGGER.debug("Max page calculated: {}", totalPages);
-
-            if (page > totalPages) {
-                page = totalPages;
-            } else if (page < 0) {
-                page = 1;
-            }
-            experienceModelList = experienceDao.listExperiencesSearch(name, max, score, city, order, page, RESULT_PAGE_SIZE);
-        } else {
-            totalPages = 1;
-        }
-
-        for (ExperienceModel experience : experienceModelList) {
-            experience.setIsFav(user != null && user.isFav(experience));
-        }
-
-        LOGGER.debug("Max page value service: {}", totalPages);
-        return new Page<>(experienceModelList, page, totalPages, total);
-    }
-
-    @Override
-    public Optional<Double> getMaxPriceByName(String name) {
-        LOGGER.debug("Retrieving max price of namesearch with search {}", name);
-        return experienceDao.getMaxPriceByName(name);
-    }
 
     @Override
     public List<List<ExperienceModel>> getExperiencesListByCategories(UserModel user) {

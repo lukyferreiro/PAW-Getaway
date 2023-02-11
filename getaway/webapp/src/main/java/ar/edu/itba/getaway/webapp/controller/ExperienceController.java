@@ -78,10 +78,11 @@ public class ExperienceController {
 
     // Endpoint para obtener las experiencias de una categoria
     @GET
-    @Path("/category")
+    @Path("/filter")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperiencesFromCategory(
             @QueryParam("category") @DefaultValue("") String category,
+            @QueryParam("name") @DefaultValue("") String name,
             @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
             @QueryParam("price") @DefaultValue("-1") Double maxPrice,
             @QueryParam("score") @DefaultValue("0") Long maxScore,
@@ -90,9 +91,13 @@ public class ExperienceController {
     ) {
         LOGGER.info("Called /experiences/{} GET", category);
 
-        final CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
+        CategoryModel categoryModel = null;
+        if (!category.equals("")){
+            categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
+        }
+
         if (maxPrice == -1) {
-            maxPrice = experienceService.getMaxPriceByCategory(categoryModel).orElse(0.0);
+            maxPrice = experienceService.getMaxPriceByCategoryAndName(categoryModel, name).orElse(0.0);
         }
         CityModel cityModel = null;
         if (cityId != -1) {
@@ -100,7 +105,7 @@ public class ExperienceController {
         }
 
         final UserModel user = authFacade.getCurrentUser();
-        final Page<ExperienceModel> experiences = experienceService.listExperiencesByFilter(categoryModel, maxPrice, maxScore, cityModel, Optional.of(order), page, user);
+        final Page<ExperienceModel> experiences = experienceService.listExperiencesByFilter(categoryModel, name, maxPrice, maxScore, cityModel, Optional.of(order), page, user);
 
         if (experiences == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -128,53 +133,18 @@ public class ExperienceController {
     }
 
     @GET
-    @Path("/name")
+    @Path("/filter/maxPrice")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getExperiencesBySearch(
-            @QueryParam("name") @DefaultValue("") String name,
-            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
-            @QueryParam("price") @DefaultValue("-1") Double maxPrice,
-            @QueryParam("score") @DefaultValue("0") Long maxScore,
-            @QueryParam("city") @DefaultValue("-1") Long cityId,
-            @QueryParam("page") @DefaultValue("1") int page
-    ) {
-        LOGGER.info("Called /experiences/{} GET", name);
-
-        final UserModel user = authFacade.getCurrentUser();
-
-        if (maxPrice == -1) {
-            maxPrice = experienceService.getMaxPriceByName(name).orElse(0.0);
+    public Response getCategoryMaxPrice(
+            @QueryParam("category") @DefaultValue("") final String category,
+            @QueryParam("name") @DefaultValue("") String name
+        ){
+        CategoryModel categoryModel = null;
+        if (!category.equals("")){
+            categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
         }
-        CityModel cityModel = null;
-        if (cityId != -1) {
-            cityModel = locationService.getCityById(cityId).orElseThrow(CityNotFoundException::new);
-        }
-
-        final Page<ExperienceModel> experiences = experienceService.listExperiencesSearch(name, maxPrice, maxScore, cityModel ,Optional.of(order), page, user);
-
-        if (experiences == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        if (experiences.getContent().isEmpty()) {
-            return Response.noContent().build();
-        }
-
-        final Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);
-
-        final UriBuilder uriBuilder = uriInfo
-                .getAbsolutePathBuilder()
-                .queryParam("order", order)
-                .queryParam("price", maxPrice)
-                .queryParam("score", maxScore)
-                .queryParam("page", page);
-
-        if (cityModel != null) {
-            uriBuilder.queryParam("city", cityId);
-        }
-
-        return PaginationResponse.createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
-        }, uriBuilder);
+        final Double maxPrice = experienceService.getMaxPriceByCategoryAndName(categoryModel, name).orElse(0.0);
+        return Response.ok(new MaxPriceDto(maxPrice)).build();
     }
 
     // Endpoint para crear una experiencia
@@ -449,23 +419,7 @@ public class ExperienceController {
         return Response.noContent().build();
     }
 
-    @GET
-    @Path("/category/maxPrice")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getCategoryMaxPrice(@QueryParam("category") @DefaultValue("") final String category
-    ){
-        final CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
-        final Double maxPrice = experienceService.getMaxPriceByCategory(categoryModel).orElse(0.0);
-        return Response.ok(new MaxPriceDto(maxPrice)).build();
-    }
 
-    @GET
-    @Path("/name/maxPrice")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getNameMaxPrice(@QueryParam("name") @DefaultValue("") final String name
-    ){
-        final Double maxPrice = experienceService.getMaxPriceByName(name).orElse(0.0);
-        return Response.ok(new MaxPriceDto(maxPrice)).build();
-    }
+
 }
 
