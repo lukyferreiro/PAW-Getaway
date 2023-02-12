@@ -4,7 +4,7 @@ import OrderDropdown from "../components/OrderDropdown";
 import CardExperience from "../components/CardExperience";
 import {Slider, Typography} from '@mui/material';
 import React, {useEffect, useState} from "react";
-import {ExperienceModel} from "../types";
+import {ExperienceModel, OrderByModel} from "../types";
 import {useLocation, useNavigate} from "react-router-dom";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import "../styles/star_rating.css";
@@ -49,18 +49,17 @@ export default function Experiences() {
 
     //Order
     const [order, setOrder] = useState("OrderByAZ")
+    const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
 
     const [maxPage, setMaxPage] = useState(1)
-    const [currentPage] = usePagination()
 
     const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
 
     useEffect(() => {
         serviceHandler(
-            experienceService.getExperiencesByFilter(category, name, order, price, rating, city, currentPage),
+            experienceService.getExperiencesByFilter(category, name, order, price, rating, city, 1),
             navigate, (experiences) => {
                 setExperiences(experiences.getContent())
-                setMaxPage(experiences ? experiences.getMaxPage() : 1)
             },
             () => {
             }
@@ -75,6 +74,14 @@ export default function Experiences() {
             }
         );
         serviceHandler(
+            experienceService.getUserOrderByModels(),
+            navigate, (orders) => {
+                setOrders(orders)
+            },
+            () => {
+            }
+        );
+        serviceHandler(
             locationService.getCountries(),
             navigate, (country) => {
                 setCountries(country)
@@ -82,7 +89,7 @@ export default function Experiences() {
             () => {
             }
         );
-    }, [category, name, currentPage])
+    }, [category, name])
 
     function loadCities(countryName: string) {
         serviceHandler(
@@ -110,7 +117,7 @@ export default function Experiences() {
     }
 
     const onSubmit = handleSubmit((data: FormFilterData) => {
-            experienceService.getExperiencesByFilter(category, name, order, price, -rating, city, currentPage)
+            experienceService.getExperiencesByFilter(category, name, order, price, -rating, city, 1)
                 .then((result) => {
                         if (!result.hasFailed()) {
                             setExperiences(result.getData().getContent())
@@ -235,9 +242,9 @@ export default function Experiences() {
             <div className="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex
                             flex-column justify-content-center align-content-center"
                  style={{minHeight: "650px"}}>
-                <div className="d-flex justify-content-start">
-                    <OrderDropdown isProvider={false}/>
-                </div>
+                {/*<div className="d-flex justify-content-start">*/}
+                {/*    <OrderDropdown orders={orders}/>*/}
+                {/*</div>*/}
 
                 {experiences.length === 0 ?
                     <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
@@ -269,17 +276,17 @@ export default function Experiences() {
                     </div>
                 }
 
-                {/*TODO: pagination*/}
-                <div className="mt-auto d-flex justify-content-center align-items-center">
-                    {maxPage > 1 && (
-                        <Pagination
-                            currentPage={currentPage}
-                            maxPage={maxPage}
-                            baseURL={location.pathname}
-                            // TODO check baseUrl
-                        />
-                    )}
-                </div>
+                {/*/!*TODO: pagination*!/*/}
+                {/*<div className="mt-auto d-flex justify-content-center align-items-center">*/}
+                {/*    {maxPage > 1 && (*/}
+                {/*        <Pagination*/}
+                {/*            currentPage={currentPage}*/}
+                {/*            maxPage={maxPage}*/}
+                {/*            baseURL={location.pathname}*/}
+                {/*            // TODO check baseUrl*/}
+                {/*        />*/}
+                {/*    )}*/}
+                {/*</div>*/}
             </div>
         </div>
     )

@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {Link, Navigate, useLocation, useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {ExperienceModel} from "../types";
+import {ExperienceModel, OrderByModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, userService} from "../services";
@@ -28,10 +28,9 @@ export default function UserExperiences() {
     const location = useLocation()
 
     const [userExperiences, setUserExperiences] = useState<ExperienceModel[]>(new Array(0))
-
     const [name, setName] = useState(undefined);
+    const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
     const [order, setOrder] = useState("OrderByAZ");
-
     const [maxPage, setMaxPage] = useState(1)
     const [currentPage] = usePagination()
 
@@ -42,6 +41,14 @@ export default function UserExperiences() {
         = useForm<FormUserExperiencesSearch>({criteriaMode: "all"});
 
     useEffect(() => {
+        serviceHandler(
+            experienceService.getProviderOrderByModels(),
+            navigate, (orders) => {
+                setOrders(orders)
+            },
+            () => {
+            }
+        );
         serviceHandler(
             userService.getUserExperiences(user ? user.id : -1, name, order, currentPage),
             navigate, (experiences) => {
@@ -92,7 +99,7 @@ export default function UserExperiences() {
                     {/*SEARCH and ORDER*/}
                     <div className="d-flex justify-content-center align-content-center">
                         <div style={{margin: "0 auto 0 20px", flex: "1"}}>
-                            <OrderDropdown isProvider={isProvider}/>
+                            <OrderDropdown orders={orders}/>
                         </div>
 
                         <h3 className="title m-0">

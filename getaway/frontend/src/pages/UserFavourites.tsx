@@ -1,10 +1,10 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import React, {useEffect, useState} from "react";
-import {ExperienceModel} from "../types";
+import {ExperienceModel, OrderByModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
-import {userService} from "../services";
+import {experienceService, userService} from "../services";
 import {useLocation, useNavigate} from "react-router-dom";
 import CardExperience from "../components/CardExperience";
 import {usePagination} from "../hooks/usePagination";
@@ -20,12 +20,21 @@ export default function UserFavourites() {
     const {user} = useAuth();
 
     const [favExperiences, setFavExperiences] = useState<ExperienceModel[]>(new Array(0))
+    const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
     const [order, setOrder] = useState("OrderByAZ");
 
     const [maxPage, setMaxPage] = useState(1)
     const [currentPage] = usePagination()
 
     useEffect(() => {
+        serviceHandler(
+            experienceService.getUserOrderByModels(),
+            navigate, (orders) => {
+                setOrders(orders)
+            },
+            () => {
+            }
+        )
         serviceHandler(
             userService.getUserFavExperiences(user ? user.id : -1, order, currentPage),
             navigate, (experiences) => {
@@ -49,7 +58,7 @@ export default function UserFavourites() {
                 <>
                     <div className="d-flex justify-content-center align-content-center">
                         <div style={{margin: "0 auto 0 20px;", flex: "1"}}>
-                            <OrderDropdown isProvider={false}/>
+                            <OrderDropdown orders={orders}/>
                         </div>
                         <h3 className="title m-0">
                             {t('User.favsTitle')}
