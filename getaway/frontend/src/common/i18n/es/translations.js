@@ -265,5 +265,13 @@ export const TRANSLATIONS_ES = {
             pattern:"Error",
             password:"Confirmar contraseña debe coincidir con la contraseña",
         }
+    },
+
+    Experiences: {
+        search: {
+            search:"Buscando ",
+            category: "en ",
+            name: ": \" {{name}} \""
+        }
     }
 };

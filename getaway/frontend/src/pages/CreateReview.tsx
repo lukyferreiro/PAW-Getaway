@@ -57,6 +57,9 @@ export default function CreateReview() {
                 setExperience(fetchedExperience)
             },
             () => {
+            },
+            () => {
+                setExperience(undefined)
             }
         );
         if (readUser && readUser !== "") {

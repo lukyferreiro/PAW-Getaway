@@ -34,7 +34,8 @@ export default function ExperienceDetails() {
                 setExperience(experience)
             },
             () => {
-            }
+            },
+            () => {setExperience(undefined)}
         );
         serviceHandler(
             experienceService.getExperienceReviews(parseInt(experienceId ? experienceId : '-1'), currentPage),
@@ -43,6 +44,10 @@ export default function ExperienceDetails() {
                 setMaxPage(fetchedExperienceReviews ? fetchedExperienceReviews.getMaxPage() : 1)
             },
             () => {
+            },
+            () => {
+                setReviews(new Array(0))
+                setMaxPage(0)
             }
         );
     }, [experience, currentPage]);

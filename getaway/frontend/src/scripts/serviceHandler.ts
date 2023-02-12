@@ -5,11 +5,13 @@ export function serviceHandler<T>(
     promise: Promise<Result<T>>,
     navigate: NavigateFunction,
     setterFunction: (data: T) => void,
-    cleanerFunction: () => void
+    cleanerFunction: () => void,
+    errorFunction: () => void
 ): void {
     promise.then((response: Result<T>) => {
         if (response.hasFailed()) {
             if (response.getError().getStatus() === 204) {
+                errorFunction();
             } else if (isNaN(response.getError().getStatus())) {
                 return;
             } else {

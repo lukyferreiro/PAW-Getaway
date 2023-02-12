@@ -22,6 +22,7 @@ export default function UserProfile() {
                 navigate, (userImg) => {
                     setUserImg(userImg.size > 0 ? URL.createObjectURL(userImg) : undefined)
                 },
+                () => setIsLoadingImg(false),
                 () => setIsLoadingImg(false)
             )
         }

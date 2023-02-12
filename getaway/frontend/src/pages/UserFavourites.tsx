@@ -33,6 +33,8 @@ export default function UserFavourites() {
                 setOrders(orders)
             },
             () => {
+            }, () => {
+                setOrders(new Array(0))
             }
         )
         serviceHandler(
@@ -42,6 +44,9 @@ export default function UserFavourites() {
                 setMaxPage(experiences ? experiences.getMaxPage() : 1)
             },
             () => {
+            }, () => {
+                setFavExperiences(new Array(0))
+                setMaxPage(1)
             }
         )
     }, [currentPage, favExperiences])
@@ -58,7 +63,7 @@ export default function UserFavourites() {
                 <>
                     <div className="d-flex justify-content-center align-content-center">
                         <div style={{margin: "0 auto 0 20px", flex: "1"}}>
-                            <OrderDropdown orders={orders} key={1}/>
+                            <OrderDropdown orders={orders}/>
                         </div>
                         <h3 className="title m-0">
                             {t('User.favsTitle')}

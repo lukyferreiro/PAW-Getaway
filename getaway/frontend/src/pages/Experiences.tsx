@@ -2,11 +2,11 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import OrderDropdown from "../components/OrderDropdown";
 import CardExperience from "../components/CardExperience";
-import {Slider, Typography} from '@mui/material';
+import {IconButton, Slider, Typography} from '@mui/material';
 import React, {useEffect, useState} from "react";
 import {ExperienceModel, OrderByModel} from "../types";
-import {useLocation, useNavigate} from "react-router-dom";
-import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
+import {getQueryOrDefault, setQuery, useQuery} from "../hooks/useQuery";
 import "../styles/star_rating.css";
 import {CityModel, CountryModel} from "../types";
 import {experienceService, locationService} from "../services";
@@ -14,6 +14,7 @@ import {useForm} from "react-hook-form";
 import {serviceHandler} from "../scripts/serviceHandler";
 import Pagination from "../components/Pagination";
 import {usePagination} from "../hooks/usePagination";
+import {Close} from "@mui/icons-material";
 
 type FormFilterData = {
     country: string,
@@ -32,6 +33,8 @@ export default function Experiences() {
 
     const category = getQueryOrDefault(query, "category", "")
     const name = getQueryOrDefault(query, "name", "")
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     //FILTERS
     //Location
@@ -57,21 +60,26 @@ export default function Experiences() {
 
     useEffect(() => {
         serviceHandler(
-            experienceService.getExperiencesByFilter(category, name, order, price, rating, city, 1),
+        experienceService.getExperiencesByFilter(category, name, order, price, rating, city, 1),
             navigate, (experiences) => {
                 setExperiences(experiences.getContent())
             },
             () => {
-            }
+            },
+            () => { setExperiences(new Array(0))}
         );
         serviceHandler(
             experienceService.getFilterMaxPrice(category, name),
-            navigate, (price) => {
-                setMaxPrice(price.maxPrice)
-                setPrice(price.maxPrice)
+            navigate, (priceModel) => {
+                setMaxPrice(priceModel.maxPrice)
+                if(price===-1){
+                    setPrice(priceModel.maxPrice)
+                }
             },
             () => {
-            }
+            },
+            () => { setPrice(-1)}
+
         );
         serviceHandler(
             experienceService.getUserOrderByModels(),
@@ -79,6 +87,9 @@ export default function Experiences() {
                 setOrders(orders)
             },
             () => {
+            },
+            () => {
+                setOrders(new Array(0))
             }
         );
         serviceHandler(
@@ -87,9 +98,11 @@ export default function Experiences() {
                 setCountries(country)
             },
             () => {
+            },() => {
+                setCountries(new Array(0))
             }
         );
-    }, [category, name, experiences])
+    }, [category, name, rating, query])
 
     function loadCities(countryName: string) {
         serviceHandler(
@@ -99,6 +112,10 @@ export default function Experiences() {
                 setCity(cities[0].id)
             },
             () => {
+            },
+            () => {
+                setCities(new Array(0))
+                setCity(-1);
             }
         );
     }
@@ -109,11 +126,21 @@ export default function Experiences() {
         }
     };
 
-    const {register, handleSubmit, formState: {errors},}
+    const {register, handleSubmit, formState: {errors}, reset}
         = useForm<FormFilterData>({criteriaMode: "all"});
 
     function cleanForm() {
-        window.location.reload();
+        reset();
+        setCities(new Array(0));
+        setCity(-1);
+        setRating(0);
+        setHover(0);
+        setPrice(maxPrice);
+    }
+
+    function cleanQuery(){
+        setQuery(query, "name", "");
+        setSearchParams({category:category, name: ""})
     }
 
     const onSubmit = handleSubmit((data: FormFilterData) => {
@@ -132,6 +159,7 @@ export default function Experiences() {
         }
     );
 
+
     return (
         <div className="container-fluid p-0 mt-3 d-flex">
             <div className="container-filters container-fluid px-2 py-0 mx-2 my-0 d-flex flex-column justify-content-start align-items-center border-end">
@@ -140,7 +168,7 @@ export default function Experiences() {
                     {t('Filters.title')}
                 </p>
 
-                <form id="submitForm" className="filter-form" onSubmit={onSubmit}>
+                <form id="submitForm" className="filter-form" onSubmit={onSubmit} >
                     <div>
                         <label className="form-label" htmlFor="country">
                             {t('Experience.country')}
@@ -220,11 +248,7 @@ export default function Experiences() {
                                 );
                             })}
                         </div>
-                        {/*TODO ver como poner esto cuando el input falla*/}
-                        {/*cssErrorClass="form-control is-invalid"*/}
                         <input value="TODO" type="hidden" className="form-control" id="scoreInput"/>
-                        {/*TODO ver como poner esto*/}
-                        {/*<form:errors path="score" element="p" cssClass="form-error-label"/>*/}
                     </div>
                 </form>
 
@@ -233,7 +257,7 @@ export default function Experiences() {
                 </button>
 
 
-                <button className="btn btn-clean-filter px-3 py-2 my-2" type="button" id="cleanFilterFormButton"
+                <button className="btn btn-clean-filter px-3 py-2 my-2" type="reset" id="cleanFilterFormButton"
                         onClick={cleanForm}>
                     {t('Filters.btn.clear')}
                 </button>
@@ -242,7 +266,25 @@ export default function Experiences() {
             <div className="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex
                             flex-column justify-content-center align-content-center"
                  style={{minHeight: "650px"}}>
-                <div className="d-flex justify-content-start">
+                <div className="d-flex justify-content-start " style={{fontSize: "x-large"}}>
+                    <p>
+                        {t('Experiences.search.search')}
+                    </p>
+                    {
+                        category.length>0 &&
+                        <p>
+                            {t('Experiences.search.category')}{t('Categories.' + category)}
+                        </p>
+                    }
+                    {
+                        name.length > 0 &&
+                        <div>
+                            {t('Experiences.search.name', {name: name})}
+                                <IconButton className="justify-content-center" onClick={cleanQuery}>
+                                    <Close/>
+                                </IconButton>
+                        </div>
+                    }
                     {/*<OrderDropdown isProvider={false}/>*/}
                 </div>
 

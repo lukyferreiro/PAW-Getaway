@@ -254,5 +254,13 @@ export const TRANSLATIONS_EN = {
             pattern:"Error",
             password:"Confirm password should match password",
         }
+    },
+
+    Experiences: {
+        search: {
+            search:"Searching ",
+            category: "in ",
+            name: ": \" {{name}} \""
+        }
     }
 };

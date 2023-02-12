@@ -44,6 +44,9 @@ export default function ExperienceForm() {
                     loadCities(fetchedExperience.country.id)
                 },
                 () => {
+                },
+                () => {
+                    setExperience(undefined)
                 }
             )
             if (experience?.user.id !== user?.id) {
@@ -57,6 +60,9 @@ export default function ExperienceForm() {
                 setCategories(category)
             },
             () => {
+            },
+            () => {
+                setCategories(new Array(0))
             }
         );
         serviceHandler(
@@ -65,6 +71,9 @@ export default function ExperienceForm() {
                 setCountries(country)
             },
             () => {
+            },
+            () => {
+                setCountries(new Array(0))
             }
         );
     }, [])
@@ -76,6 +85,9 @@ export default function ExperienceForm() {
                 setCities(city)
             },
             () => {
+            },
+            () => {
+                setCities(new Array(0))
             }
         );
     }

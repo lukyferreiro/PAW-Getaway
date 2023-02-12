@@ -26,7 +26,8 @@ export default function Home() {
                     setUserLandingPage(userLandingPage)
                 },
                 () => {
-                }
+                },
+                () => setUserLandingPage(undefined)
             );
         } else {
             serviceHandler(
@@ -35,7 +36,9 @@ export default function Home() {
                     setAnonymousLandingPage(anonymousLandingPage)
                 },
                 () => {
-                }
+                },
+                () => setAnonymousLandingPage(undefined)
+
             );
         }
     }, []);

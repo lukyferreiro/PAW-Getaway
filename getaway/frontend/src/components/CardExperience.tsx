@@ -26,6 +26,7 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
             navigate, (experienceImg) => {
                 setexperienceImg(experienceImg.size > 0 ? URL.createObjectURL(experienceImg) : undefined)
             },
+            () => setIsLoadingImg(false),
             () => setIsLoadingImg(false)
         );
         {
@@ -35,7 +36,8 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                 navigate, (experiencesList) => {
                     setFav(experiencesList.getContent().some(exp => exp.id === experience.id))
                 },
-                () => setIsLoadingImg(false)
+                () => {},
+                () => {setFav(false)}
             );
 
         }

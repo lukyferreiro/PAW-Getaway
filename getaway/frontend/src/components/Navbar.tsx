@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next"
 import "../common/i18n/index"
 import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {CategoryModel} from "../types";
-import {getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
+import {getQueryOrDefault, getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
 import React, {useEffect, useState} from "react";
 import '../styles/navbar.css'
 import {useAuth} from "../hooks/useAuth";
@@ -35,7 +35,7 @@ export default function Navbar() {
     const [name, setName] = useState<string>("")
     const [category, setCategory] = useState<string>("")
 
-    const {register, handleSubmit, formState: {errors},}
+    const {register, handleSubmit, formState: {errors}, reset}
         = useForm<FormDataSearch>({criteriaMode: "all"});
 
     useEffect(() => {
@@ -45,13 +45,19 @@ export default function Navbar() {
                 setCategories(category)
             },
             () => {
-            }
+            },
+            () => {setCategories(new Array(0))}
         );
-    }, [])
+        const queryName = getQueryOrDefault(query, "name", "")
+        if(queryName !== name){
+            setName("")
+            reset()
+        }
+    }, [query])
 
     const onSubmit = handleSubmit((data: FormDataSearch) => {
         setName(data.name);
-        navigate({pathname: "/experiences", search: `?category=${category}&name=${name}`}, {replace: true});
+        navigate({pathname: "/experiences", search: `?category=${category}&name=${data.name}`}, {replace: true});
     });
 
     return (
@@ -79,7 +85,7 @@ export default function Navbar() {
                                            message: t("ExperienceForm.error.name.pattern"),
                                        }
                                    })}
-                                   defaultValue={""}
+                                   defaultValue={name}
                             />
                             {errors.name?.type === "max" && (
                                 <p className="form-control is-invalid form-error-label">

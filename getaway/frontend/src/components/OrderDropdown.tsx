@@ -1,10 +1,7 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {useEffect, useState} from "react";
 import {OrderByModel} from "../types";
 import {useNavigate} from "react-router-dom";
-import {serviceHandler} from "../scripts/serviceHandler";
-import {experienceService} from "../services";
 
 export default function OrderDropdown(props: { orders: OrderByModel[] }) {
 
@@ -23,7 +20,7 @@ export default function OrderDropdown(props: { orders: OrderByModel[] }) {
                 </button>
                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     {orders.map((order) => (
-                        <p className="dropdown-item">
+                        <p className="dropdown-item" key={order.order}>
                             {t(`Order.${order.toString()}`)}
                         </p>
                     ))}

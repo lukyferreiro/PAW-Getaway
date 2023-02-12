@@ -47,7 +47,8 @@ export default function UserExperiences() {
                 setOrders(orders)
             },
             () => {
-            }
+            },
+            () => {setOrders(new Array(0))}
         );
         serviceHandler(
             userService.getUserExperiences(user ? user.id : -1, name, order, currentPage),
@@ -56,6 +57,9 @@ export default function UserExperiences() {
                 setMaxPage(experiences ? experiences.getMaxPage() : 1)
             },
             () => {
+            }, () => {
+                setUserExperiences(new Array(0))
+                setMaxPage(1)
             }
         )
     }, [currentPage])
