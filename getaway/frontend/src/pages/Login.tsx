@@ -119,12 +119,10 @@ export default function Login() {
                                                            id="password" aria-describedby="password input"
                                                            {...register("password", {})}/>
                                                     <div className="input-group-append">
-                                                        <button className="btn btn-eye input-group-text"
-                                                                id="passwordEye" type="button" tabIndex={-1} onClick={() => showPassword()}>
-                                                            <IconButton aria-label="eye">
+                                                            <IconButton className="btn btn-eye input-group-text"
+                                                                        id="passwordEye" type="button" tabIndex={-1} onClick={() => showPassword()} aria-label="eye">
                                                                 {seePassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
                                                             </IconButton>
-                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -158,13 +156,12 @@ export default function Login() {
                     <div className="col-12 mt-4">
                         <p className="mb-0 text-center">
                             {t('Navbar.newUser')}
-                            <Link to="/createAccount">
-                                <div className="form-label" tabIndex={-1}>
-                                    {t('Navbar.createAccount')}
-                                </div>
-                            </Link>
-
                         </p>
+                        <Link to="/createAccount">
+                            <div className="form-label mb-0 text-center" tabIndex={-1}>
+                                {t('Navbar.createAccount')}
+                            </div>
+                        </Link>
                     </div>
                 </div>
             </div>

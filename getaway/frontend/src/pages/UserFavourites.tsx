@@ -57,7 +57,7 @@ export default function UserFavourites() {
                 :
                 <>
                     <div className="d-flex justify-content-center align-content-center">
-                        <div style={{margin: "0 auto 0 20px;", flex: "1"}}>
+                        <div style={{margin: "0 auto 0 20px", flex: "1"}}>
                             <OrderDropdown orders={orders}/>
                         </div>
                         <h3 className="title m-0">

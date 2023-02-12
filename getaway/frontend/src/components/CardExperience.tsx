@@ -39,7 +39,7 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
             );
 
         }
-    }, [])
+    }, [experience])
 
     //TODO: reload page
     function setFavExperience(fav: boolean) {
@@ -109,13 +109,18 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
 
                 <div className="btn-fav">
                     {user &&
-                    <IconButton>
-                        {fav ?
-                            <Favorite onClick={() => setFavExperience(false)} className="fa-heart heart-color"/>
+                        <div>
+                            {fav ?
+                                <IconButton onClick={() => setFavExperience(false)}>
+                                    <Favorite className="fa-heart heart-color"/>
+                                </IconButton>
                                 :
-                            <FavoriteBorder onClick={() => setFavExperience(true)} className="fa-heart"/>
-                        }
-                    </IconButton>}
+                                <IconButton onClick={() => setFavExperience(true)}>
+                                    <FavoriteBorder className="fa-heart"/>
+                                </IconButton>
+                            }
+                        </div>
+                    }
                 </div>
                 {!experience.observable && <div className="card-body p-0 d-flex justify-content-center">
                     <h5 className="obs-info align-self-center" style={{fontSize: "small"}}>

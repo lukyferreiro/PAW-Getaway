@@ -62,7 +62,7 @@ export default function Carousel(props: { title: any, experiences: ExperienceMod
                             <div className={`carousel-content show-${show}`}
                                  style={{transform: `translateX(-${currentIndex * (100 / show)}%)`}}>
                                 {experiences.map((exp) => (
-                                    <CardExperience experience={exp}/>
+                                    <CardExperience experience={exp} key={exp.id}/>
                                 ))}
                             </div>
                         </div>
