@@ -22,6 +22,10 @@ export function getQueryOrDefaultMultiple(query: URLSearchParams, queryParam: st
     return fetcher
 }
 
-export function setQuery(query: URLSearchParams, queryParam: string, set: string) {
-    query.set(queryParam, set);
+export function queryHasParam(query: URLSearchParams, queryParam: string) {
+    const fetcher = query.has(queryParam);
+    if (fetcher === null) {
+        return false
+    }
+    return fetcher
 }

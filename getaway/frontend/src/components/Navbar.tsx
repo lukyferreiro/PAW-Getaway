@@ -1,14 +1,16 @@
 import {useTranslation} from "react-i18next"
 import "../common/i18n/index"
-import {Link, useLocation, useNavigate} from 'react-router-dom'
+import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
 import {CategoryModel} from "../types";
-import {getQueryOrDefault, getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
+import {getQueryOrDefault, getQueryOrDefaultMultiple, queryHasParam, useQuery} from "../hooks/useQuery";
 import React, {useEffect, useState} from "react";
 import '../styles/navbar.css'
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {categoryService} from "../services";
 import {useForm} from "react-hook-form";
+import {Close} from "@mui/icons-material";
+import {IconButton} from "@mui/material";
 
 type FormDataSearch = {
     name: string
@@ -24,7 +26,8 @@ export default function Navbar() {
     const pathname = location?.pathname
     const categoryQuery = getQueryOrDefaultMultiple(query, "category");
 
-    //Esto lo vamos a tener q obtener de alguna manera, por ahora lo fuerzo para ver que funcione
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const {signOut} = useAuth();
     const user = localStorage.getItem("user");
     let isLogged = user !== null;
@@ -60,6 +63,14 @@ export default function Navbar() {
         navigate({pathname: "/experiences", search: `?category=${category}&name=${data.name}`}, {replace: true});
     });
 
+    function resetForm(){
+        if(queryHasParam(query, "category")){
+            const queryCategory = getQueryOrDefault(query, "category", "")
+            setSearchParams({category:queryCategory, name: ""})
+        }
+        reset()
+    }
+
     return (
         <div className="navbar container-fluid p-0 d-flex flex-column">
             <div className="container-fluid px-2 pt-2 d-flex">
@@ -75,7 +86,6 @@ export default function Navbar() {
                         <button className="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm">
                             <img src={'./images/ic_lupa.svg'} alt="Lupa"/>
                         </button>
-
                         <form id="searchExperienceForm" acceptCharset="utf-8" className="my-auto" onSubmit={onSubmit}>
                             <input type="text" className="form-control" placeholder={t('Navbar.search')}
                                    {...register("name", {
@@ -93,6 +103,9 @@ export default function Navbar() {
                                 </p>
                             )}
                         </form>
+                        <IconButton onClick={resetForm}>
+                            <Close/>
+                        </IconButton>
                     </div>
 
 

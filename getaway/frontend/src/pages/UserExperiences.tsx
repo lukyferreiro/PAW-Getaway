@@ -16,6 +16,7 @@ import {useForm} from "react-hook-form";
 import {usePagination} from "../hooks/usePagination";
 import Pagination from "../components/Pagination";
 import OrderDropdown from "../components/OrderDropdown";
+import {Close} from "@mui/icons-material";
 
 type FormUserExperiencesSearch = {
     name: string
@@ -28,7 +29,7 @@ export default function UserExperiences() {
     const location = useLocation()
 
     const [userExperiences, setUserExperiences] = useState<ExperienceModel[]>(new Array(0))
-    const [name, setName] = useState(undefined);
+    const [userName, setUserName] = useState("");
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
     const [order, setOrder] = useState("OrderByAZ");
     const [maxPage, setMaxPage] = useState(1)
@@ -37,7 +38,7 @@ export default function UserExperiences() {
     const {user} = useAuth();
     const isProvider = localStorage.getItem("isProvider") === "true";
 
-    const {register, handleSubmit, formState: {errors},}
+    const {register, handleSubmit, formState: {errors}, reset}
         = useForm<FormUserExperiencesSearch>({criteriaMode: "all"});
 
     useEffect(() => {
@@ -51,7 +52,7 @@ export default function UserExperiences() {
             () => {setOrders(new Array(0))}
         );
         serviceHandler(
-            userService.getUserExperiences(user ? user.id : -1, name, order, currentPage),
+            userService.getUserExperiences(user ? user.id : -1, userName, order, currentPage),
             navigate, (experiences) => {
                 setUserExperiences(experiences.getContent())
                 setMaxPage(experiences ? experiences.getMaxPage() : 1)
@@ -62,11 +63,10 @@ export default function UserExperiences() {
                 setMaxPage(1)
             }
         )
-    }, [currentPage])
+    }, [currentPage, userName])
 
     const onSubmit = handleSubmit((data: FormUserExperiencesSearch) => {
-        //TODO: check
-        // setName(data.name);
+        setUserName(data.name);
     });
 
     function setVisibility(experienceId: number, visibility: boolean) {
@@ -82,14 +82,17 @@ export default function UserExperiences() {
     }
 
     function editExperience(experienceId: number) {
-        // experienceService.deleteExperienceById(experienceId).then()
-        //     .catch(() => {});
+        navigate({pathname: "/experiences/" + experienceId}, {replace: true});
     }
 
     if (!isProvider) {
         return <Navigate to="/" replace/>;
     }
 
+    function resetForm(){
+        setUserName("")
+        reset()
+    }
     return (
         <div className="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
             {userExperiences.length == 0 ?
@@ -115,8 +118,6 @@ export default function UserExperiences() {
                             <button className="btn btn-search-navbar p-0" type="submit" form="searchExperiencePrivateForm">
                                 <img src={'./images/ic_lupa.svg'} alt="Icono lupa"/>
                             </button>
-                            {/*<spring:message code="navbar.search" var="placeholder"/>*/}
-                            {/*<c:url value="/user/experiences" var="searchPrivateGetPath"/>*/}
                             <form className="my-auto" id="searchExperiencePrivateForm" onSubmit={onSubmit}>
                                 <input type="text" className="form-control" placeholder={t('Navbar.search')}
                                        {...register("name", {
@@ -134,6 +135,9 @@ export default function UserExperiences() {
                                     </p>
                                 )}
                             </form>
+                            <IconButton onClick={resetForm}>
+                                <Close/>
+                            </IconButton>
                         </div>
                     </div>
 

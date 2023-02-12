@@ -6,7 +6,7 @@ import {IconButton, Slider, Typography} from '@mui/material';
 import React, {useEffect, useState} from "react";
 import {ExperienceModel, OrderByModel} from "../types";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
-import {getQueryOrDefault, setQuery, useQuery} from "../hooks/useQuery";
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import "../styles/star_rating.css";
 import {CityModel, CountryModel} from "../types";
 import {experienceService, locationService} from "../services";
@@ -139,7 +139,6 @@ export default function Experiences() {
     }
 
     function cleanQuery(){
-        setQuery(query, "name", "");
         setSearchParams({category:category, name: ""})
     }
 
