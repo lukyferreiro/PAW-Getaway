@@ -37,17 +37,18 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                     setFav(experiencesList.getContent().some(exp => exp.id === experience.id))
                 },
                 () => {},
-                () => {setFav(false)}
+                () => {
+                    setFav(false)}
             );
 
         }
     }, [fav])
 
-    //TODO: reload page
     function setFavExperience(fav: boolean) {
         experienceService.setExperienceFav(experience.id, fav).then()
             .catch(() => {
             });
+        setFav(fav)
     }
 
     return (
