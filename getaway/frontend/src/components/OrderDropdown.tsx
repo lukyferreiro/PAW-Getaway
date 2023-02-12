@@ -1,13 +1,23 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {OrderByModel} from "../types";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 
 export default function OrderDropdown(props: { orders: OrderByModel[] }) {
 
     const {t} = useTranslation();
     const navigate = useNavigate()
     const {orders} = props
+    const [searchParams, setSearchParams] = useSearchParams();
+    const query = useQuery()
+
+    const orderQuery = getQueryOrDefault(query, "order", orders[0].order.toString())
+
+
+    function changeOrder(queryOrder:string){
+        setSearchParams({order: queryOrder});
+    }
 
     return (
         <div className="d-flex justify-content-center align-content-center">
@@ -15,13 +25,13 @@ export default function OrderDropdown(props: { orders: OrderByModel[] }) {
                 <button className="btn btn-search my-2 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                     {t('Order.title')}
                     <b>
-                        {t(`Order.${orders[0].order.toString()}`)}
+                        {t(`Order.${orderQuery}`)}
                     </b>
                 </button>
                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     {orders.map((order) => (
-                        <p className="dropdown-item" key={order.order}>
-                            {t(`Order.${order.toString()}`)}
+                        <p className="dropdown-item" key={order.order} onClick={() => changeOrder(order.order.toString())}>
+                            {t(`Order.${order.order.toString()}`)}
                         </p>
                     ))}
                 </ul>

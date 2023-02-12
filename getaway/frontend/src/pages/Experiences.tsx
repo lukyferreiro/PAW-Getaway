@@ -51,8 +51,8 @@ export default function Experiences() {
     const [hover, setHover] = useState(0)
 
     //Order
-    const [order, setOrder] = useState("OrderByAZ")
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
+    const [order, setOrder] = useState("OrderByAZ");
 
     const [maxPage, setMaxPage] = useState(1)
 
@@ -101,6 +101,15 @@ export default function Experiences() {
             },() => {
                 setCountries(new Array(0))
             }
+        );
+        serviceHandler(
+            experienceService.getProviderOrderByModels(),
+            navigate, (orders) => {
+                setOrders(orders)
+            },
+            () => {
+            },
+            () => {setOrders(new Array(0))}
         );
     }, [category, name, rating, query])
 
@@ -284,7 +293,9 @@ export default function Experiences() {
                                 </IconButton>
                         </div>
                     }
-                    {/*<OrderDropdown isProvider={false}/>*/}
+                    {/*<div style={{margin: "0 auto 0 20px", flex: "1"}}>*/}
+                    {/*    <OrderDropdown orders={orders}/>*/}
+                    {/*</div>*/}
                 </div>
 
                 {experiences.length === 0 ?

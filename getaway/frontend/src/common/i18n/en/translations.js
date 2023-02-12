@@ -262,5 +262,17 @@ export const TRANSLATIONS_EN = {
             category: "in ",
             name: ": \" {{name}} \""
         }
-    }
+    },
+
+    Order: {
+        title: "Order by:",
+        OrderByRankAsc: "Ascendant score",
+        OrderByRankDesc: "Descendant score",
+        OrderByAZ: "A-Z",
+        OrderByZA: "Z-A",
+        OrderByLowPrice: "Lower price",
+        OrderByHighPrice: "Higher price",
+        OrderByViewAsc: "Less views",
+        OrderByViewDesc: "More views",
+    },
 };
