@@ -1,10 +1,12 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import '../styles/carousel.css'
-import {useEffect, useState} from "react"; //will be added later
+import React, {useEffect, useState} from "react";
+import CardExperience from "./CardExperience";
+import {ExperienceModel} from "../types";
 
 
-export default function Carousel(props: { title: any, experiences: any; show: any; }) {
+export default function Carousel(props: { title: any, experiences: ExperienceModel[]; show: any; }) {
 
     const {t} = useTranslation();
 
@@ -35,22 +37,22 @@ export default function Carousel(props: { title: any, experiences: any; show: an
                 <h2>{title}</h2>
             </div>
             <div className="carousel-wrapper">
-                {
-                    currentIndex > 0 &&
+                {currentIndex > 0 &&
                     <button onClick={prev} className="left-arrow">
                         &lt;
                     </button>
                 }
+
                 <div className="carousel-content-wrapper">
-                    <div
-                        className={`carousel-content show-${show}`}
-                        style={{transform: `translateX(-${currentIndex * (100 / show)}%)`}}
-                    >
-                        {experiences}
+                    <div className={`carousel-content show-${show}`}
+                         style={{transform: `translateX(-${currentIndex * (100 / show)}%)`}}>
+                        {experiences.map((exp) => (
+                            <CardExperience experience={exp}/>
+                        ))}
                     </div>
                 </div>
-                {
-                    currentIndex < (length - show) &&
+
+                {currentIndex < (length - show) &&
                     <button onClick={next} className="right-arrow">
                         &gt;
                     </button>

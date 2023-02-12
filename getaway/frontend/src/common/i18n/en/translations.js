@@ -228,6 +228,22 @@ export const TRANSLATIONS_EN = {
         },
     },
 
+    Landing: {
+        user: {
+            viewed: "Last viewed",
+            recommendedByFavs: "Based on your favourites",
+            recommendedByReviews: "Based on your reviews",
+        },
+        anonymous: {
+            aventura: "Top ranked of adventur",
+            gastronomia: "Top ranked of gastronomy",
+            hoteleria: "Top ranked of hotels",
+            relax: "Top ranked of relax",
+            vida_nocturna: "Top ranked of nightlife",
+            historico: "Top ranked of historic",
+        },
+    },
+
     CreateAccount: {
         error:{
             isRequired: "This field is required",

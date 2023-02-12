@@ -240,6 +240,22 @@ export const TRANSLATIONS_ES = {
         OrderByViewDesc: "M\u00E1s vistas",
     },
 
+    Landing: {
+        user: {
+            viewed: "\u00DAltimas visitadas",
+            recommendedByFavs: "Basado en tus favoritos",
+            recommendedByReviews: "Basado en tus rese\u00F1as",
+        },
+        anonymous: {
+            aventura: "Mejores valoradas de aventura",
+            gastronomia: "Mejores valoradas de gastronom\u00EDa",
+            hoteleria: "Mejores valoradas de hoteler\u00EDa",
+            relax: "Mejores valoradas de relax",
+            vida_nocturna: "Mejores valoradas de vida nocturna",
+            historico: "Mejores valoradas de hist\u00F3rico",
+        },
+    },
+
     CreateAccount: {
         error:{
             isRequired: "Este campo es requerido",
