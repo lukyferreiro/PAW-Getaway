@@ -6,36 +6,11 @@ import {useNavigate} from "react-router-dom";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService} from "../services";
 
-export default function OrderDropdown(props: { isProvider: boolean }) {
+export default function OrderDropdown(props: { orders: OrderByModel[] }) {
 
     const {t} = useTranslation();
     const navigate = useNavigate()
-    const {isProvider} = props
-
-    const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const [currentOrder, setCurrentOrder] = useState(null);
-
-    useEffect(() => {
-        if (isProvider) {
-            serviceHandler(
-                experienceService.getProviderOrderByModels(),
-                navigate, (orderByModels) => {
-                    setOrders(orderByModels)
-                },
-                () => {
-                }
-            )
-        } else {
-            serviceHandler(
-                experienceService.getUserOrderByModels(),
-                navigate, (orders) => {
-                    setOrders(orders)
-                },
-                () => {
-                }
-            )
-        }
-    }, [])
+    const {orders} = props
 
     return (
         <div className="d-flex justify-content-center align-content-center">

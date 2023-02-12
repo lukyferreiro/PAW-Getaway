@@ -26,23 +26,12 @@
     color: gold !important;
 }
 
-.fas.fa-star.star-color {
-    color: gold !important;
-}
 
-.fas.fa-star {
-    color: lightgrey !important;
-}
-
-.fas.fa-heart.heart-color, .fa.fa-heart-o:hover {
+.fa-heart.heart-color, .fa-heart:hover {
     color: red !important;
     font-size: xx-large !important;
 }
 
-.fa.fa-heart-o {
-    color: grey !important;
-    font-size: xx-large !important;
-}
 
 .btn-observable:hover, .btn-observable:focus,
 .btn-fav:hover, .btn-fav:focus,

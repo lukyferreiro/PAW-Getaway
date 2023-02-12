@@ -8,6 +8,7 @@ import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, userService} from "../services";
 import {IconButton} from "@mui/material";
 import {useAuth} from "../hooks/useAuth";
+import {Favorite, FavoriteBorder} from "@mui/icons-material";
 
 export default function CardExperience(props: { experience: ExperienceModel; }) {
     const {t} = useTranslation()
@@ -15,6 +16,7 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
     const navigate = useNavigate()
     const [experienceImg, setexperienceImg] = useState<string | undefined>(undefined)
     const [isLoadingImg, setIsLoadingImg] = useState(false)
+    const [fav, setFav] = useState(false)
     const {user} = useAuth()
 
     useEffect(() => {
@@ -26,30 +28,29 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
             },
             () => setIsLoadingImg(false)
         );
-        userService.
+        {
+            user &&
+            serviceHandler(
+                userService.getUserFavExperiences(user.id),
+                navigate, (experiencesList) => {
+                    setFav(experiencesList.getContent().some(exp => exp.id === experience.id))
+                },
+                () => setIsLoadingImg(false)
+            );
+
+        }
     }, [])
+
+    //TODO: reload page
+    function setFavExperience(fav: boolean) {
+        experienceService.setExperienceFav(experience.id, fav).then()
+            .catch(() => {
+            });
+    }
 
     return (
 
         <div className="card card-experience mx-3 my-2 p-0">
-
-            <div className="btn-fav">
-                <IconButton>
-
-                </IconButton>
-                {/*    <jsp:include page="/WEB-INF/components/fav.jsp">*/}
-                {/*        <jsp:param name="isFav" value="${param.isFav}"/>*/}
-                {/*        <jsp:param name="experienceId" value="${param.id}"/>*/}
-                {/*        <jsp:param name="path" value="${param.path}"/>*/}
-                {/*        <jsp:param name="query" value="${param.query}"/>*/}
-                {/*        <jsp:param name="score" value="${param.score}"/>*/}
-                {/*        <jsp:param name="cityId" value="${param.cityId}"/>*/}
-                {/*        <jsp:param name="maxPrice" value="${param.maxPrice}"/>*/}
-                {/*        <jsp:param name="orderBy" value="${param.orderBy}"/>*/}
-                {/*        <jsp:param name="filter" value="${param.filter}"/>*/}
-                {/*        <jsp:param name="search" value="${param.search}"/>*/}
-                {/*    </jsp:include>*/}
-            </div>
 
             <div className="card-link h-100 d-flex flex-column">
                 <div>
@@ -104,6 +105,17 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                         {t('Experience.reviews', {reviewCount: experience.reviewCount})}
                     </h5>
                     <StarRating score={experience.score}/>
+                </div>
+
+                <div className="btn-fav">
+                    {user &&
+                    <IconButton>
+                        {fav ?
+                            <Favorite onClick={() => setFavExperience(false)} className="fa-heart heart-color"/>
+                                :
+                            <FavoriteBorder onClick={() => setFavExperience(true)} className="fa-heart"/>
+                        }
+                    </IconButton>}
                 </div>
                 {!experience.observable && <div className="card-body p-0 d-flex justify-content-center">
                     <h5 className="obs-info align-self-center" style={{fontSize: "small"}}>
