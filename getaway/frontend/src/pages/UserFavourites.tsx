@@ -44,7 +44,7 @@ export default function UserFavourites() {
             () => {
             }
         )
-    }, [currentPage])
+    }, [currentPage, favExperiences])
 
     return (
         <div className="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
@@ -58,7 +58,7 @@ export default function UserFavourites() {
                 <>
                     <div className="d-flex justify-content-center align-content-center">
                         <div style={{margin: "0 auto 0 20px", flex: "1"}}>
-                            <OrderDropdown orders={orders}/>
+                            <OrderDropdown orders={orders} key={1}/>
                         </div>
                         <h3 className="title m-0">
                             {t('User.favsTitle')}
