@@ -5,7 +5,9 @@ import {ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
-import {experienceService} from "../services";
+import {experienceService, userService} from "../services";
+import {IconButton} from "@mui/material";
+import {useAuth} from "../hooks/useAuth";
 
 export default function CardExperience(props: { experience: ExperienceModel; }) {
     const {t} = useTranslation()
@@ -13,6 +15,7 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
     const navigate = useNavigate()
     const [experienceImg, setexperienceImg] = useState<string | undefined>(undefined)
     const [isLoadingImg, setIsLoadingImg] = useState(false)
+    const {user} = useAuth()
 
     useEffect(() => {
         setIsLoadingImg(true)
@@ -22,7 +25,8 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                 setexperienceImg(experienceImg.size > 0 ? URL.createObjectURL(experienceImg) : undefined)
             },
             () => setIsLoadingImg(false)
-        )
+        );
+        userService.
     }, [])
 
     return (
@@ -30,6 +34,9 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
         <div className="card card-experience mx-3 my-2 p-0">
 
             <div className="btn-fav">
+                <IconButton>
+
+                </IconButton>
                 {/*    <jsp:include page="/WEB-INF/components/fav.jsp">*/}
                 {/*        <jsp:param name="isFav" value="${param.isFav}"/>*/}
                 {/*        <jsp:param name="experienceId" value="${param.id}"/>*/}

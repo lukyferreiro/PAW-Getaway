@@ -236,7 +236,7 @@ export default function Experiences() {
                             flex-column justify-content-center align-content-center"
                  style={{minHeight: "650px"}}>
                 <div className="d-flex justify-content-start">
-                    <OrderDropdown isProvider={false}/>
+                    {/*<OrderDropdown isProvider={false}/>*/}
                 </div>
 
                 {experiences.length === 0 ?
