@@ -1,11 +1,10 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import Carousel from "../components/Carousel";
-import CardExperience from "../components/CardExperience";
 import {useEffect, useState} from "react";
 import {AnonymousLandingPageModel, UserLandingPageModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService} from "../services";
 

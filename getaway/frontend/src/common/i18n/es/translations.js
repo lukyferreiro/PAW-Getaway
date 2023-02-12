@@ -12,6 +12,9 @@ export const TRANSLATIONS_ES = {
         Historico: "Hist\u00F3rico",
     },
 
+    Carousel: {
+        experienceEmpty: "Esta categor\u00EDa aun no tiene suficientes experiencias cargadas"
+    },
     Navbar: {
         createAccount: "Crea una cuenta",
         createExperience: "Crear experiencia",

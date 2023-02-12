@@ -221,7 +221,6 @@ export default function Experiences() {
                     </div>
                 </form>
 
-                {/*TODO ver como se aplican todos los filtros*/}
                 <button className="btn btn-search px-3 py-2 my-2" type="submit" id="submitFormButton" form="submitForm">
                     {t('Filters.btn.submit')}
                 </button>

@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import "../../common/i18n/index";
+import "../common/i18n/index"
 import React from "react";
 import PropTypes, {InferType} from "prop-types";
 import {Link} from "react-router-dom";

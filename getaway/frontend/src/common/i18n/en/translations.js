@@ -10,6 +10,10 @@ export const TRANSLATIONS_EN = {
         Historico: "Historic",
     },
 
+    Carousel: {
+        experienceEmpty: "This category doesn't have enough experiences yet"
+    },
+
     Navbar: {
         createAccount: "Sign up",
         createExperience: "Create experience",
