@@ -274,15 +274,16 @@ export default function Experiences() {
                 </button>
             </div>
 
-            {/*<div style={{margin: "0 auto 0 20px", flex: "1"}}>*/}
-            {/*    <OrderDropdown orders={orders}/>*/}
-            {/*</div>*/}
-
             <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
                 <div className="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex
                             flex-column justify-content-center align-content-center"
                      style={{minHeight: "650px"}}>
-                    <div className="d-flex justify-content-start " style={{fontSize: "x-large"}}>
+
+                    <div className="d-flex justify-content-start">
+                        <OrderDropdown orders={orders}/>
+                    </div>
+
+                    <div className="d-flex justify-content-center" style={{fontSize: "x-large"}}>
                         <p>
                             {t('Experiences.search.search')}
                         </p>
@@ -320,28 +321,25 @@ export default function Experiences() {
                         </div>
                         :
                         <div>
-                            <div className="container-fluid my-3 d-flex flex-wrap justify-content-center">
-                                <div className="pl-5 pr-2 w-50"
-                                     style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
-                                    {experiences.map((experience) => (
-                                        <CardExperience experience={experience} key={experience.id}/>
-                                    ))}
-                                </div>
+                            <div className="d-flex flex-wrap justify-content-center">
+                                {experiences.map((experience) => (
+                                    <CardExperience experience={experience} key={experience.id}/>
+                                ))}
                             </div>
                         </div>
                     }
 
-                    {/*/!*TODO: pagination*!/*/}
-                    {/*<div className="mt-auto d-flex justify-content-center align-items-center">*/}
-                    {/*    {maxPage > 1 && (*/}
-                    {/*        <Pagination*/}
-                    {/*            currentPage={currentPage}*/}
-                    {/*            maxPage={maxPage}*/}
-                    {/*            baseURL={location.pathname}*/}
-                    {/*            // TODO check baseUrl*/}
-                    {/*        />*/}
-                    {/*    )}*/}
-                    {/*</div>*/}
+                    {/*TODO: pagination*/}
+                    <div className="mt-auto d-flex justify-content-center align-items-center">
+                        {maxPage > 1 && (
+                            <Pagination
+                                currentPage={currentPage}
+                                maxPage={maxPage}
+                                baseURL={location.pathname}
+                                // TODO check baseUrl
+                            />
+                        )}
+                    </div>
                 </div>
             </DataLoader>
         </div>
