@@ -35,14 +35,10 @@ export default function UserFavourites() {
     useEffect(() => {
         setIsLoading(true);
         serviceHandler(
-            experienceService.getProviderOrderByModels(),
+            experienceService.getUserOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
-                let queryOrder = orders[0].order.toString();
-                if (queryHasParam(query, "order")) {
-                    queryOrder = getQueryOrDefault(query, "order", "OrderByAZ")
-                }
-                setOrder(queryOrder)
+                setOrder(getQueryOrDefault(query, "order", "OrderByAZ"))
             },
             () => {
             },
@@ -66,7 +62,7 @@ export default function UserFavourites() {
                 setMaxPage(1)
             }
         )
-    }, [currentPage, favExperiences])
+    }, [currentPage, order])
 
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
@@ -81,7 +77,7 @@ export default function UserFavourites() {
                     <>
                         <div className="d-flex justify-content-center align-content-center">
                             <div style={{margin: "0 auto 0 20px", flex: "1"}}>
-                                <OrderDropdown orders={orders}/>
+                                <OrderDropdown orders={orders} />
                             </div>
                             <h3 className="title m-0">
                                 {t('User.favsTitle')}

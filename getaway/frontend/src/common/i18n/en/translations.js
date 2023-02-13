@@ -44,7 +44,6 @@ export const TRANSLATIONS_EN = {
         namePlaceholder: "Jhon",
         surnamePlaceholder: "Doe",
         passwordPlaceholder: "Between 8 and 25 characters"
-
     },
 
     Filters: {
@@ -167,7 +166,7 @@ export const TRANSLATIONS_EN = {
             category: "Category",
             score: "Score",
             price: "Price",
-            views: "Viewss",
+            views: "Views",
             actions: "Actions",
             reviewsCount: "Reseñas {{count}}"
         },
@@ -232,6 +231,18 @@ export const TRANSLATIONS_EN = {
         },
     },
 
+    Order: {
+        title: "Order by: ",
+        OrderByRankAsc: "Ascendant score",
+        OrderByRankDesc: "Descendant score",
+        OrderByAZ: "A-Z",
+        OrderByZA: "Z-A",
+        OrderByLowPrice: "Lower price",
+        OrderByHighPrice: "Higher price",
+        OrderByViewAsc: "Less views",
+        OrderByViewDesc: "More views",
+    },
+
     Landing: {
         user: {
             viewed: "Last viewed",
@@ -262,17 +273,5 @@ export const TRANSLATIONS_EN = {
             category: "in ",
             name: ": \" {{name}} \""
         }
-    },
-
-    Order: {
-        title: "Order by:",
-        OrderByRankAsc: "Ascendant score",
-        OrderByRankDesc: "Descendant score",
-        OrderByAZ: "A-Z",
-        OrderByZA: "Z-A",
-        OrderByLowPrice: "Lower price",
-        OrderByHighPrice: "Higher price",
-        OrderByViewAsc: "Less views",
-        OrderByViewDesc: "More views",
     },
 };

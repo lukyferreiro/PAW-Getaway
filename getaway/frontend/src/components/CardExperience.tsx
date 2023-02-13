@@ -17,8 +17,12 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
     const navigate = useNavigate()
     const [experienceImg, setExperienceImg] = useState<string | undefined>(undefined)
     const [isLoadingImg, setIsLoadingImg] = useState(false)
-    const [fav, setFav] = useState(false)
+    const [fav, setFav] = useState(experience.fav)
     const {user} = useAuth()
+
+    console.log("FAV ON LOAD")
+    console.log(experience.name)
+    console.log(fav)
 
     useEffect(() => {
         setIsLoadingImg(true)
@@ -34,26 +38,15 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                 setIsLoadingImg(false)
             }
         );
-        if (user) {
-            serviceHandler(
-                userService.getUserFavExperiences(user.id),
-                navigate, (experiencesList) => {
-                    setFav(experiencesList.getContent().some(exp => exp.id === experience.id))
-                },
-                () => {
-                },
-                () => {
-                    setFav(false)
-                }
-            );
-        }
-
     }, [fav])
 
     function setFavExperience(fav: boolean) {
         experienceService.setExperienceFav(experience.id, fav).then()
             .catch(() => {
             });
+        console.log("ON SET")
+        console.log(experience.name)
+        console.log(fav)
         setFav(fav)
     }
 

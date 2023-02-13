@@ -19,5 +19,5 @@ export default interface ExperienceModel {
     views: number;
     score: number;
     reviewCount: number;
-    fav?: boolean;
+    fav: boolean;
 }

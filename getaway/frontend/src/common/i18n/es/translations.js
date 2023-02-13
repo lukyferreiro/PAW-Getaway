@@ -1,6 +1,4 @@
 export const TRANSLATIONS_ES = {
-
-
     PageName: "Getaway",
 
     Categories: {
@@ -15,6 +13,7 @@ export const TRANSLATIONS_ES = {
     Carousel: {
         experienceEmpty: "Esta categor\u00EDa aun no tiene suficientes experiencias cargadas"
     },
+
     Navbar: {
         createAccount: "Crea una cuenta",
         createExperience: "Crear experiencia",
@@ -43,7 +42,7 @@ export const TRANSLATIONS_ES = {
         createButton: "Crear cuenta",
         emailPlaceholder: "juan@ejemplo.com",
         namePlaceholder: "Juan",
-        surnamePlaceholder: "Martinez",
+        surnamePlaceholder: "Martínez",
         passwordPlaceholder: "Entre 8 y 25 caracteres"
     },
 
@@ -51,7 +50,7 @@ export const TRANSLATIONS_ES = {
         title: "Filtros",
         city: {
             field: "Ciudad",
-            placeholder: "¿A donde?",
+            placeholder: "¿A dónde?",
         },
         price: {
             title: "Precio",
@@ -171,7 +170,7 @@ export const TRANSLATIONS_ES = {
             actions: "Acciones",
             reviewsCount: "Reseñas {{count}}"
         },
-        noExperiences: "Aun no has creado ninguna experiencia",
+        noExperiences: "Aún no has creado ninguna experiencia",
         experiencesTitle: "Mis experiencias",
         noFavs: "Aún no has agregado experiencias a favoritos",
         favsTitle: "Mis favoritos",
@@ -210,6 +209,7 @@ export const TRANSLATIONS_ES = {
             },
         }
     },
+
     Copyright: "Getaway Copyright © {{year}} - Todos los derechos reservados",
 
     404: {
@@ -232,7 +232,7 @@ export const TRANSLATIONS_ES = {
     },
 
     Order: {
-        title: "Ordenar por:",
+        title: "Ordenar por: ",
         OrderByRankAsc: "Puntaje ascendente",
         OrderByRankDesc: "Puntaje descendente",
         OrderByAZ: "A-Z",
@@ -261,7 +261,7 @@ export const TRANSLATIONS_ES = {
 
     CreateAccount: {
         error:{
-            isRequired: "Este campo es requerido",
+            isRequired: "Este campo es obligatorio",
             pattern:"Error",
             password:"Confirmar contraseña debe coincidir con la contraseña",
         }

@@ -150,10 +150,10 @@ export class  ExperienceService {
         country: string,
         city: string,
         address: string,
-        price: string,
-        url: string,
         mail: string,
-        description: string,
+        price?: string,
+        url?: string,
+        description?: string
     ): Promise<Result<PutResponse>> {
         const experienceToUpdate = JSON.stringify({
             name: name,
@@ -161,10 +161,10 @@ export class  ExperienceService {
             country: country,
             city: city,
             address: address,
-            price: price,
-            url: url,
             mail: mail,
-            description: description,
+            price: price ? price : "",
+            url: url ? url : "",
+            description: description ? description : ""
         });
         return resultFetch(this.basePath + "/experience/" + experienceId, {
             method: "PUT",

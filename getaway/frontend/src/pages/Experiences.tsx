@@ -56,11 +56,12 @@ export default function Experiences() {
     const [order, setOrder] = useState<string>("OrderByAZ");
     //Page
     const [maxPage, setMaxPage] = useState(1)
+    const [currentPage] = usePagination()
 
     useEffect(() => {
         setIsLoading(true);
         serviceHandler(
-            experienceService.getProviderOrderByModels(),
+            experienceService.getUserOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
                 let queryOrder = orders[0].order.toString();
@@ -103,9 +104,10 @@ export default function Experiences() {
             }
         );
         serviceHandler(
-            experienceService.getExperiencesByFilter(category, name, order, price, rating, city, 1),
+            experienceService.getExperiencesByFilter(category, name, order, price, rating, city, currentPage),
             navigate, (experiences) => {
                 setExperiences(experiences.getContent())
+                setMaxPage(experiences.getMaxPage())
             },
             () => {
                 setIsLoading(false)
@@ -115,7 +117,7 @@ export default function Experiences() {
                 setIsLoading(false)
             }
         );
-    }, [category, name, rating, query, order])
+    }, [category, name, rating, query, order, currentPage])
 
     function loadCities(countryName: string) {
         serviceHandler(
@@ -274,32 +276,36 @@ export default function Experiences() {
                 </button>
             </div>
 
+
             <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
                 <div className="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex
                             flex-column justify-content-center align-content-center"
                      style={{minHeight: "650px"}}>
 
-                    <div className="d-flex justify-content-start">
-                        <OrderDropdown orders={orders}/>
-                    </div>
 
-                    <div className="d-flex justify-content-center" style={{fontSize: "x-large"}}>
-                        <p>
-                            {t('Experiences.search.search')}
-                        </p>
-                        {category.length > 0 &&
+                    <div className="d-flex justify-content-center align-content-center">
+                        <div style={{margin: "0 auto 0 20px", flex: "1"}}>
+                            <OrderDropdown orders={orders}/>
+                        </div>
+                        <div className="d-flex justify-content-center" style={{fontSize: "x-large"}}>
+                            <p>
+                                {t('Experiences.search.search')}
+                            </p>
+                            {category.length > 0 &&
                             <p>
                                 {t('Experiences.search.category')}{t('Categories.' + category)}
                             </p>
-                        }
-                        {name.length > 0 &&
+                            }
+                            {name.length > 0 &&
                             <div>
                                 {t('Experiences.search.name', {name: name})}
                                 <IconButton className="justify-content-center" onClick={cleanQuery}>
                                     <Close/>
                                 </IconButton>
                             </div>
-                        }
+                            }
+                        </div>
+                        <div style={{margin: "0 20px 0 auto", flex: "1"}}/>
                     </div>
 
                     {experiences.length === 0 ?

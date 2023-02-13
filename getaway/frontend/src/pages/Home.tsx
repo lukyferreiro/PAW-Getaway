@@ -54,12 +54,12 @@ export default function Home() {
                 </>
                 :
                 <>
-                    <Carousel title={t('Landing.anonymous.aventura')} experiences={anonymousLandingPage?.Aventura} show={3}/>
-                    <Carousel title={t('Landing.anonymous.gastronomia')} experiences={anonymousLandingPage?.Gastronomia} show={3}/>
-                    <Carousel title={t('Landing.anonymous.hoteleria')} experiences={anonymousLandingPage?.Hoteleria} show={3}/>
-                    <Carousel title={t('Landing.anonymous.relax')} experiences={anonymousLandingPage?.Relax} show={3}/>
-                    <Carousel title={t('Landing.anonymous.vida_nocturna')} experiences={anonymousLandingPage?.Vida_nocturna} show={3}/>
-                    <Carousel title={t('Landing.anonymous.historico')} experiences={anonymousLandingPage?.Historico} show={3}/>
+                    <Carousel title={t('Landing.anonymous.aventura')} experiences={anonymousLandingPage?.aventura} show={3}/>
+                    <Carousel title={t('Landing.anonymous.gastronomia')} experiences={anonymousLandingPage?.gastronomia} show={3}/>
+                    <Carousel title={t('Landing.anonymous.hoteleria')} experiences={anonymousLandingPage?.hoteleria} show={3}/>
+                    <Carousel title={t('Landing.anonymous.relax')} experiences={anonymousLandingPage?.relax} show={3}/>
+                    <Carousel title={t('Landing.anonymous.vida_nocturna')} experiences={anonymousLandingPage?.vida_nocturna} show={3}/>
+                    <Carousel title={t('Landing.anonymous.historico')} experiences={anonymousLandingPage?.historico} show={3}/>
                 </>
             }
         </div>
