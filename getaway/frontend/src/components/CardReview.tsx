@@ -35,7 +35,6 @@ export default function CardReview(props: { reviewModel: ReviewModel; isEditing:
         )
     }, [])
 
-    // @ts-ignore
     return (
         <div className="card m-2" style={{height: isEditing ? "310px" : ""}}>
             {isEditing &&

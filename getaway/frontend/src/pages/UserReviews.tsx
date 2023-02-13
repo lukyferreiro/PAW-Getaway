@@ -44,7 +44,7 @@ export default function UserReviews() {
 
             {reviews.length === 0 ?
                 <div className="d-flex justify-content-around align-content-center">
-                    <h2>{t('User.noReviews')}</h2>
+                    <h2 className="title">{t('User.noReviews')}</h2>
                 </div>
                 :
                 <>
@@ -62,7 +62,6 @@ export default function UserReviews() {
                         </div>
                     </div>
 
-                    {/*TODO add pagination*/}
                     <div className="mt-auto d-flex justify-content-center align-items-center">
                         {maxPage > 1 && (
                             <Pagination

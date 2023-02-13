@@ -35,7 +35,9 @@ export default function ExperienceDetails() {
             },
             () => {
             },
-            () => {setExperience(undefined)}
+            () => {
+                setExperience(undefined)
+            }
         );
         serviceHandler(
             experienceService.getExperienceReviews(parseInt(experienceId ? experienceId : '-1'), currentPage),
@@ -74,14 +76,15 @@ export default function ExperienceDetails() {
                     </h2>
 
                     <Link to={`/experiences/${experienceId}/createReview`}>
-                        <button type="button" onClick={() => {
-                            if (user === null) {
-                                navigate("/login")
-                            }
-                            if (!isVerified) {
-                                navigate("/user/profile")
-                            }
-                        }} className='btn button-primary'
+                        <button type="button" className='btn button-primary'
+                                onClick={() => {
+                                    if (user === null) {
+                                        navigate("/login")
+                                    }
+                                    if (!isVerified) {
+                                        navigate("/user/profile")
+                                    }
+                                }}
                         >
                             {t('ExperienceDetail.writeReview')}
                         </button>

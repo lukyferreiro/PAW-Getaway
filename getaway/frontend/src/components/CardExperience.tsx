@@ -63,7 +63,7 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
 
             <div className="card-link h-100 d-flex flex-column">
                 <div>
-                    <img className="card-img-top container-fluid p-4 mw-100" alt={`Imagen ${experience.category.name}`}
+                    <img className={`card-img-top container-fluid ${experienceImg ? "p-0" : "p-4" } mw-100`} alt={`Imagen ${experience.category.name}`}
                          src={experienceImg ? experienceImg : `./images/${experience.category.name}.svg`}/>
 
                     <div className="card-body container-fluid p-2">
