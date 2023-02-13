@@ -37,8 +37,9 @@ export default function Home() {
                 },
                 () => {
                 },
-                () => setAnonymousLandingPage(undefined)
-
+                () => {
+                    setAnonymousLandingPage(undefined)
+                }
             );
         }
     }, []);

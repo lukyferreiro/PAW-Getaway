@@ -55,7 +55,8 @@ export default function UserFavourites() {
                 setMaxPage(experiences ? experiences.getMaxPage() : 1)
             },
             () => {
-            }, () => {
+            },
+            () => {
                 setFavExperiences(new Array(0))
                 setMaxPage(1)
             }

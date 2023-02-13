@@ -26,8 +26,12 @@ export default function CardReview(props: { reviewModel: ReviewModel; isEditing:
             navigate, (userImg) => {
                 setUserImg(userImg.size > 0 ? URL.createObjectURL(userImg) : undefined)
             },
-            () => setIsLoadingImg(false),
-            () => setIsLoadingImg(false),
+            () => {
+                setIsLoadingImg(false)
+            },
+            () => {
+                setIsLoadingImg(false)
+            },
         )
     }, [])
 

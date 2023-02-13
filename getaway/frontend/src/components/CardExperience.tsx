@@ -11,10 +11,11 @@ import {useAuth} from "../hooks/useAuth";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
 
 export default function CardExperience(props: { experience: ExperienceModel; }) {
+
     const {t} = useTranslation()
     const {experience} = props
     const navigate = useNavigate()
-    const [experienceImg, setexperienceImg] = useState<string | undefined>(undefined)
+    const [experienceImg, setExperienceImg] = useState<string | undefined>(undefined)
     const [isLoadingImg, setIsLoadingImg] = useState(false)
     const [fav, setFav] = useState(false)
     const {user} = useAuth()
@@ -24,24 +25,29 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
         serviceHandler(
             experienceService.getExperienceImage(experience?.id),
             navigate, (experienceImg) => {
-                setexperienceImg(experienceImg.size > 0 ? URL.createObjectURL(experienceImg) : undefined)
+                setExperienceImg(experienceImg.size > 0 ? URL.createObjectURL(experienceImg) : undefined)
             },
-            () => setIsLoadingImg(false),
-            () => setIsLoadingImg(false)
+            () => {
+                setIsLoadingImg(false)
+            },
+            () => {
+                setIsLoadingImg(false)
+            }
         );
-        {
-            user &&
+        if (user) {
             serviceHandler(
                 userService.getUserFavExperiences(user.id),
                 navigate, (experiencesList) => {
                     setFav(experiencesList.getContent().some(exp => exp.id === experience.id))
                 },
-                () => {},
                 () => {
-                    setFav(false)}
+                },
+                () => {
+                    setFav(false)
+                }
             );
-
         }
+
     }, [fav])
 
     function setFavExperience(fav: boolean) {
@@ -122,7 +128,8 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                                     <FavoriteBorder className="fa-heart"/>
                                 </IconButton>
                             }
-                        </div> :
+                        </div>
+                        :
                         <div>
                             <IconButton onClick={() => navigate("/login")}>
                                 <FavoriteBorder className="fa-heart"/>
@@ -130,11 +137,13 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                         </div>
                     }
                 </div>
-                {!experience.observable && <div className="card-body p-0 d-flex justify-content-center">
-                    <h5 className="obs-info align-self-center" style={{fontSize: "small"}}>
-                        {t('Experience.notVisible')}
-                    </h5>
-                </div>}
+                {!experience.observable &&
+                    <div className="card-body p-0 d-flex justify-content-center">
+                        <h5 className="obs-info align-self-center" style={{fontSize: "small"}}>
+                            {t('Experience.notVisible')}
+                        </h5>
+                    </div>
+                }
             </div>
         </div>
     )

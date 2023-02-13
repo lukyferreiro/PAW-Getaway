@@ -15,6 +15,7 @@ import {serviceHandler} from "../scripts/serviceHandler";
 import Pagination from "../components/Pagination";
 import {usePagination} from "../hooks/usePagination";
 import {Close} from "@mui/icons-material";
+import DataLoader from "../components/DataLoader";
 
 type FormFilterData = {
     country: string,
@@ -36,36 +37,34 @@ export default function Experiences() {
     const orderQuery = getQueryOrDefault(query, "order", "")
 
     const [searchParams, setSearchParams] = useSearchParams();
+    const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
+    const [isLoading, setIsLoading] = useState(false);
 
-    //FILTERS
+    //------------FILTERS----------
     //Location
     const [countries, setCountries] = useState<CountryModel[]>(new Array(1))
     const [cities, setCities] = useState<CityModel[]>(new Array(0))
     const [city, setCity] = useState(-1)
-
     //Price
     const [maxPrice, setMaxPrice] = useState<number>(-1)
     const [price, setPrice] = useState<number>(-1)
-
     //Score
     const [rating, setRating] = useState(0)
     const [hover, setHover] = useState(0)
-
     //Order
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
     const [order, setOrder] = useState<string>("OrderByAZ");
-
+    //Page
     const [maxPage, setMaxPage] = useState(1)
 
-    const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
-
     useEffect(() => {
+        setIsLoading(true);
         serviceHandler(
             experienceService.getProviderOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
                 let queryOrder = orders[0].order.toString();
-                if(queryHasParam(query, "order")) {
+                if (queryHasParam(query, "order")) {
                     queryOrder = getQueryOrDefault(query, "order", "OrderByAZ")
                 }
                 setOrder(queryOrder)
@@ -75,20 +74,22 @@ export default function Experiences() {
             () => {
                 setOrders(new Array(0))
                 setOrder("OrderByAZ")
-                setSearchParams({category:category, name:name, order: "OrderByAZ"})}
+                setSearchParams({category: category, name: name, order: "OrderByAZ"})
+            }
         );
         serviceHandler(
             experienceService.getFilterMaxPrice(category, name),
             navigate, (priceModel) => {
                 setMaxPrice(priceModel.maxPrice)
-                if(price===-1){
+                if (price === -1) {
                     setPrice(priceModel.maxPrice)
                 }
             },
             () => {
             },
-            () => { setPrice(-1)}
-
+            () => {
+                setPrice(-1)
+            }
         );
         serviceHandler(
             locationService.getCountries(),
@@ -96,7 +97,8 @@ export default function Experiences() {
                 setCountries(country)
             },
             () => {
-            },() => {
+            },
+            () => {
                 setCountries(new Array(0))
             }
         );
@@ -106,8 +108,12 @@ export default function Experiences() {
                 setExperiences(experiences.getContent())
             },
             () => {
+                setIsLoading(false)
             },
-            () => { setExperiences(new Array(0))}
+            () => {
+                setExperiences(new Array(0))
+                setIsLoading(false)
+            }
         );
     }, [category, name, rating, query, order])
 
@@ -145,8 +151,8 @@ export default function Experiences() {
         setPrice(maxPrice);
     }
 
-    function cleanQuery(){
-        setSearchParams({category:category, name: "", order: orderQuery})
+    function cleanQuery() {
+        setSearchParams({category: category, name: "", order: orderQuery})
     }
 
     const onSubmit = handleSubmit((data: FormFilterData) => {
@@ -174,7 +180,7 @@ export default function Experiences() {
                     {t('Filters.title')}
                 </p>
 
-                <form id="submitForm" className="filter-form" onSubmit={onSubmit} >
+                <form id="submitForm" className="filter-form" onSubmit={onSubmit}>
                     <div>
                         <label className="form-label" htmlFor="country">
                             {t('Experience.country')}
@@ -209,16 +215,15 @@ export default function Experiences() {
                     </div>
 
                     <div className="container-slider-price">
-
                         <Typography id="non-linear-slider" gutterBottom className="form-label">
                             {t('Filters.price.title')}: {price}
                         </Typography>
+
                         <div className="slider-price">
                             <div className="value left">
                                 {t('Filters.price.min')}
                             </div>
-                            <div className="slider">
-                            </div>
+                            <div className="slider"/>
                             <Slider
                                 value={price}
                                 min={5}
@@ -273,72 +278,72 @@ export default function Experiences() {
             {/*    <OrderDropdown orders={orders}/>*/}
             {/*</div>*/}
 
-            <div className="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex
+            <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
+                <div className="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex
                             flex-column justify-content-center align-content-center"
-                 style={{minHeight: "650px"}}>
-                <div className="d-flex justify-content-start " style={{fontSize: "x-large"}}>
-                    <p>
-                        {t('Experiences.search.search')}
-                    </p>
-                    {
-                        category.length>0 &&
+                     style={{minHeight: "650px"}}>
+                    <div className="d-flex justify-content-start " style={{fontSize: "x-large"}}>
                         <p>
-                            {t('Experiences.search.category')}{t('Categories.' + category)}
+                            {t('Experiences.search.search')}
                         </p>
-                    }
-                    {
-                        name.length > 0 &&
-                        <div>
-                            {t('Experiences.search.name', {name: name})}
+                        {category.length > 0 &&
+                            <p>
+                                {t('Experiences.search.category')}{t('Categories.' + category)}
+                            </p>
+                        }
+                        {name.length > 0 &&
+                            <div>
+                                {t('Experiences.search.name', {name: name})}
                                 <IconButton className="justify-content-center" onClick={cleanQuery}>
                                     <Close/>
                                 </IconButton>
-                        </div>
-                    }
-                </div>
-
-                {experiences.length === 0 ?
-                    <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
-                        <div className="d-flex justify-content-center align-content-center">
-                            <img src={'./images/ic_no_search.jpeg'} alt="Imagen lupa"
-                                 style={{
-                                     width: "150px",
-                                     height: "150px",
-                                     minWidth: "150px",
-                                     minHeight: "150px",
-                                     marginRight: "5px"
-                                 }}/>
-                            <h1 className="d-flex align-self-center">
-                                {t('EmptyResult')}
-                            </h1>
-
-                        </div>
+                            </div>
+                        }
                     </div>
-                    :
-                    <div>
-                        <div className="container-fluid my-3 d-flex flex-wrap justify-content-center">
-                            <div className="pl-5 pr-2 w-50"
-                                 style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
-                                {experiences.map((experience) => (
-                                    <CardExperience experience={experience} key={experience.id}/>
-                                ))}
+
+                    {experiences.length === 0 ?
+                        <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
+                            <div className="d-flex justify-content-center align-content-center">
+                                <img src={'./images/ic_no_search.jpeg'} alt="Imagen lupa"
+                                     style={{
+                                         width: "150px",
+                                         height: "150px",
+                                         minWidth: "150px",
+                                         minHeight: "150px",
+                                         marginRight: "5px"
+                                     }}/>
+                                <h1 className="d-flex align-self-center">
+                                    {t('EmptyResult')}
+                                </h1>
+
                             </div>
                         </div>
-                    </div>
-                }
+                        :
+                        <div>
+                            <div className="container-fluid my-3 d-flex flex-wrap justify-content-center">
+                                <div className="pl-5 pr-2 w-50"
+                                     style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
+                                    {experiences.map((experience) => (
+                                        <CardExperience experience={experience} key={experience.id}/>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    }
 
-                {/*/!*TODO: pagination*!/*/}
-                {/*<div className="mt-auto d-flex justify-content-center align-items-center">*/}
-                {/*    {maxPage > 1 && (*/}
-                {/*        <Pagination*/}
-                {/*            currentPage={currentPage}*/}
-                {/*            maxPage={maxPage}*/}
-                {/*            baseURL={location.pathname}*/}
-                {/*            // TODO check baseUrl*/}
-                {/*        />*/}
-                {/*    )}*/}
-                {/*</div>*/}
-            </div>
+                    {/*/!*TODO: pagination*!/*/}
+                    {/*<div className="mt-auto d-flex justify-content-center align-items-center">*/}
+                    {/*    {maxPage > 1 && (*/}
+                    {/*        <Pagination*/}
+                    {/*            currentPage={currentPage}*/}
+                    {/*            maxPage={maxPage}*/}
+                    {/*            baseURL={location.pathname}*/}
+                    {/*            // TODO check baseUrl*/}
+                    {/*        />*/}
+                    {/*    )}*/}
+                    {/*</div>*/}
+                </div>
+            </DataLoader>
         </div>
     )
 }

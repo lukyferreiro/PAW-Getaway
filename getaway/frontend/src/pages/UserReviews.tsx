@@ -31,7 +31,8 @@ export default function UserReviews() {
                 setMaxPage(reviews ? reviews.getMaxPage() : 1)
             },
             () => {
-            }, () => {
+            },
+            () => {
                 setReviews(new Array(0))
                 setMaxPage(1)
             }
