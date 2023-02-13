@@ -6,7 +6,7 @@ import {IconButton, Slider, Typography} from '@mui/material';
 import React, {useEffect, useState} from "react";
 import {ExperienceModel, OrderByModel} from "../types";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
-import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import {getQueryOrDefault, queryHasParam, useQuery} from "../hooks/useQuery";
 import "../styles/star_rating.css";
 import {CityModel, CountryModel} from "../types";
 import {experienceService, locationService} from "../services";
@@ -33,6 +33,7 @@ export default function Experiences() {
 
     const category = getQueryOrDefault(query, "category", "")
     const name = getQueryOrDefault(query, "name", "")
+    const orderQuery = getQueryOrDefault(query, "order", "")
 
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -52,7 +53,7 @@ export default function Experiences() {
 
     //Order
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const [order, setOrder] = useState("OrderByAZ");
+    const [order, setOrder] = useState<string>("OrderByAZ");
 
     const [maxPage, setMaxPage] = useState(1)
 
@@ -60,13 +61,21 @@ export default function Experiences() {
 
     useEffect(() => {
         serviceHandler(
-        experienceService.getExperiencesByFilter(category, name, order, price, rating, city, 1),
-            navigate, (experiences) => {
-                setExperiences(experiences.getContent())
+            experienceService.getProviderOrderByModels(),
+            navigate, (orders) => {
+                setOrders(orders)
+                let queryOrder = orders[0].order.toString();
+                if(queryHasParam(query, "order")) {
+                    queryOrder = getQueryOrDefault(query, "order", "OrderByAZ")
+                }
+                setOrder(queryOrder)
             },
             () => {
             },
-            () => { setExperiences(new Array(0))}
+            () => {
+                setOrders(new Array(0))
+                setOrder("OrderByAZ")
+                setSearchParams({category:category, name:name, order: "OrderByAZ"})}
         );
         serviceHandler(
             experienceService.getFilterMaxPrice(category, name),
@@ -82,17 +91,6 @@ export default function Experiences() {
 
         );
         serviceHandler(
-            experienceService.getUserOrderByModels(),
-            navigate, (orders) => {
-                setOrders(orders)
-            },
-            () => {
-            },
-            () => {
-                setOrders(new Array(0))
-            }
-        );
-        serviceHandler(
             locationService.getCountries(),
             navigate, (country) => {
                 setCountries(country)
@@ -103,15 +101,15 @@ export default function Experiences() {
             }
         );
         serviceHandler(
-            experienceService.getProviderOrderByModels(),
-            navigate, (orders) => {
-                setOrders(orders)
+            experienceService.getExperiencesByFilter(category, name, order, price, rating, city, 1),
+            navigate, (experiences) => {
+                setExperiences(experiences.getContent())
             },
             () => {
             },
-            () => {setOrders(new Array(0))}
+            () => { setExperiences(new Array(0))}
         );
-    }, [category, name, rating, query])
+    }, [category, name, rating, query, order])
 
     function loadCities(countryName: string) {
         serviceHandler(
@@ -148,7 +146,7 @@ export default function Experiences() {
     }
 
     function cleanQuery(){
-        setSearchParams({category:category, name: ""})
+        setSearchParams({category:category, name: "", order: orderQuery})
     }
 
     const onSubmit = handleSubmit((data: FormFilterData) => {
@@ -271,6 +269,10 @@ export default function Experiences() {
                 </button>
             </div>
 
+            {/*<div style={{margin: "0 auto 0 20px", flex: "1"}}>*/}
+            {/*    <OrderDropdown orders={orders}/>*/}
+            {/*</div>*/}
+
             <div className="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex
                             flex-column justify-content-center align-content-center"
                  style={{minHeight: "650px"}}>
@@ -293,9 +295,6 @@ export default function Experiences() {
                                 </IconButton>
                         </div>
                     }
-                    {/*<div style={{margin: "0 auto 0 20px", flex: "1"}}>*/}
-                    {/*    <OrderDropdown orders={orders}/>*/}
-                    {/*</div>*/}
                 </div>
 
                 {experiences.length === 0 ?

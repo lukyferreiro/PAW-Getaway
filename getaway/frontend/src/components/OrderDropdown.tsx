@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {OrderByModel} from "../types";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import {getQueryOrDefault, queryHasParam, useQuery} from "../hooks/useQuery";
 
 export default function OrderDropdown(props: { orders: OrderByModel[] }) {
 
@@ -16,7 +16,13 @@ export default function OrderDropdown(props: { orders: OrderByModel[] }) {
 
 
     function changeOrder(queryOrder:string){
-        setSearchParams({order: queryOrder});
+        if(queryHasParam(query, "category")){
+            const category = getQueryOrDefault(query, "category", "")
+            const name = getQueryOrDefault(query, "name", "")
+            setSearchParams({category:category, name:name, order: "OrderByAZ"})}
+        else{
+         setSearchParams({order: queryOrder});
+        }
     }
 
     return (

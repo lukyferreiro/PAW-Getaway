@@ -5,17 +5,21 @@ import {ExperienceModel, OrderByModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, userService} from "../services";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import CardExperience from "../components/CardExperience";
 import {usePagination} from "../hooks/usePagination";
 import Pagination from "../components/Pagination";
 import OrderDropdown from "../components/OrderDropdown";
+import {getQueryOrDefault, queryHasParam, useQuery} from "../hooks/useQuery";
 
 export default function UserFavourites() {
 
     const {t} = useTranslation();
     const navigate = useNavigate()
     const location = useLocation()
+    const query = useQuery()
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const {user} = useAuth();
 
@@ -28,15 +32,22 @@ export default function UserFavourites() {
 
     useEffect(() => {
         serviceHandler(
-            experienceService.getUserOrderByModels(),
+            experienceService.getProviderOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
+                let queryOrder = orders[0].order.toString();
+                if(queryHasParam(query, "order")) {
+                    queryOrder = getQueryOrDefault(query, "order", "OrderByAZ")
+                }
+                setOrder(queryOrder)
             },
             () => {
-            }, () => {
+            },
+            () => {
                 setOrders(new Array(0))
-            }
-        )
+                setOrder("OrderByAZ")
+                setSearchParams({order: "OrderByAZ"})}
+        );
         serviceHandler(
             userService.getUserFavExperiences(user ? user.id : -1, order, currentPage),
             navigate, (experiences) => {
@@ -53,7 +64,7 @@ export default function UserFavourites() {
 
     return (
         <div className="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
-            {favExperiences.length == 0 ?
+            {favExperiences.length === 0 ?
                 <div className="my-auto d-flex justify-content-center align-content-center">
                     <h2 className="title">
                         {t('User.noFavs')}

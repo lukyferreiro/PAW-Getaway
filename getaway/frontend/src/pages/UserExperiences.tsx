@@ -50,10 +50,8 @@ export default function UserExperiences() {
             experienceService.getProviderOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
-                let queryOrder ;
-                if(!queryHasParam(query, "order")) {
-                    queryOrder = orders[0].order.toString()
-                }else{
+                let queryOrder = orders[0].order.toString();
+                if(queryHasParam(query, "order")) {
                     queryOrder = getQueryOrDefault(query, "order", "OrderByAZ")
                 }
                 setOrder(queryOrder)
@@ -64,7 +62,6 @@ export default function UserExperiences() {
                 setOrders(new Array(0))
                 setOrder("OrderByAZ")
                 setSearchParams({order: "OrderByAZ"})}
-
     );
 
         serviceHandler(

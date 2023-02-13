@@ -41,7 +41,7 @@ export default function UserReviews() {
     return (
         <div className="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
 
-            {reviews.length == 0 ?
+            {reviews.length === 0 ?
                 <div className="d-flex justify-content-around align-content-center">
                     <h2>{t('User.noReviews')}</h2>
                 </div>
