@@ -78,9 +78,11 @@ export class UserService {
     }
 
     public async updateUserProfileImage(
-        userId: number
+        userId: number,
+        file: File
     ): Promise<Result<PutResponse>> {
         const formData = new FormData();
+        formData.append("file", file, file.name);
         return resultFetch<PutResponse>(this.basePath + "/" + userId + "/profileImage", {
             method: "PUT",
             headers: {},

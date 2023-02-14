@@ -7,4 +7,5 @@ export default interface UserModel {
     verified: boolean;
     provider: boolean;
     token?: string;
+    url?: string;
 }

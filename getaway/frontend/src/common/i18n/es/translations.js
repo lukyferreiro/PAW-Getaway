@@ -180,6 +180,13 @@ export const TRANSLATIONS_ES = {
         favsTitle: "Mis favoritos",
         noReviews: "Aún no has escrito ninguna reseña",
         reviewsTitle: "Mis reseñas",
+        error:{
+            image: {
+                isRequired: "Este campo no puede estar vac\u00EDo",
+                size: "La imagen es muy grande",
+            },
+        },
+        imgTitle: "Selecciona una imagen de perfil",
     },
 
     EmptyResult: "Parece que no hay ninguna experiencia que coincida con tu búsqueda",

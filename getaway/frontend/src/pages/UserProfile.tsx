@@ -1,12 +1,17 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {userService} from "../services";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import {useForm} from "react-hook-form";
+
+type FormDataImg = {
+    image?: FileList
+}
 
 export default function UserProfile() {
 
@@ -18,10 +23,11 @@ export default function UserProfile() {
     const verificationToken = getQueryOrDefault(query, "verificationToken", "")
     const passwordToken = getQueryOrDefault(query, "passwordToken", "")
 
-    const {user} = useAuth()
+    const {user, setUser} = useAuth()
 
     const [userImg, setUserImg] = useState<string | undefined>(undefined)
     const [isLoadingImg, setIsLoadingImg] = useState(false)
+    const [reload, setReload] = useState(true)
 
     useEffect(() => {
         setIsLoadingImg(true)
@@ -39,7 +45,24 @@ export default function UserProfile() {
                 }
             )
         }
-    }, [user])
+    }, [user, reload])
+
+    const {register, handleSubmit, reset, formState: { errors },} =
+        useForm<FormDataImg>({ criteriaMode: 'all' })
+
+    const onSubmit = handleSubmit((data: FormDataImg) => {
+        userService
+            .updateUserProfileImage(user ? user.id : -1, data.image![0])
+            .then((result) => {
+                if (!result.hasFailed()) {
+                    const imgAsUrl = URL.createObjectURL(data.image![0])
+                    setUser({ ...user!, url: imgAsUrl })
+                    setReload(!reload)
+                    reset()
+                }
+            })
+            .catch(() => {})
+    })
 
 
     return (
@@ -55,6 +78,7 @@ export default function UserProfile() {
                         <img className="container-fluid p-0" style={{height: "fit-content"}} alt="Imagen usuario"
                              src={userImg ? userImg : './images/user_default.png'}/>
                     </div>
+
                     <div className="m-1 justify-self-center align-self-center">
                         <h3>
                             {t('User.profile.name', {userName: user?.name})}
@@ -70,6 +94,45 @@ export default function UserProfile() {
                             {t('User.profile.email', {userEmail: user?.email})}
                         </h3>
                     </div>
+
+                    <div className="m-1 justify-self-center align-self-center">
+                        <form encType='multipart/form-data' acceptCharset='utf-8'
+                              id="imageForm" onSubmit={onSubmit}>
+                            <label className="form-label d-flex justify-content-between">
+                                {t("User.imgTitle")}
+                            </label>
+
+                            <input type='file'
+                                   accept='image/png, image/jpeg, image/jpg' className="form-control"
+                                   {...register("image", {
+                                       validate: {
+                                           required: (image) =>
+                                               image !== undefined && image[0] !== undefined,
+
+                                           size: (image) =>
+                                               image && image[0] && image[0].size / (1024 * 1024) < 5,
+                                       },
+                                   })}
+                            />
+                            {errors.image?.type === 'required' && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("User.error.image.isRequired")}
+                                </p>
+                            )}
+                            {errors.image?.type === 'size' && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("User.error.image.size")}
+                                </p>
+                            )}
+                        </form>
+                    </div>
+                    <div className="m-1 justify-self-center align-self-center">
+                        <button className="btn btn-submit-form px-3 py-2" id="imageFormButton"
+                                form="imageForm" type="submit">
+                            {t('Button.create')}
+                        </button>
+                    </div>
+
 
                     <div className="mb-2">
                         {user?.verified ?

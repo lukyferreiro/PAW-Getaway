@@ -181,6 +181,13 @@ export const TRANSLATIONS_EN = {
         favsTitle: "My favourites",
         noReviews: "You haven't written any reviews yet",
         reviewsTitle: "My reviews",
+        error:{
+            image: {
+                isRequired: "This field can not be empty",
+                size: "Image is too big",
+            },
+        },
+        imgTitle: "Select a profile image",
     },
 
     EmptyResult: "It seems there are no experiences matching your search",
