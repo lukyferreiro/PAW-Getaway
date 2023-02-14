@@ -193,7 +193,7 @@ public class ExperienceController {
             experience = experienceService.createExperience(
                 experienceDto.getName(), experienceDto.getAddress(),
                 experienceDto.getDescription(), experienceDto.getMail(),
-                experienceDto.getUrl(), Double.parseDouble(experienceDto.getPrice()),
+                experienceDto.getUrl(), experienceDto.getPrice(),
                 city, category, user);
         } catch (DuplicateExperienceException e) {
             LOGGER.warn("Error in experienceDto ExperienceForm, there is already an experience with this id");
@@ -278,7 +278,7 @@ public class ExperienceController {
         final CategoryModel categoryModel = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
         final ExperienceModel toUpdateExperience = new ExperienceModel(id, experienceDto.getName(), experienceDto.getAddress(), experienceDto.getDescription(),
-        experienceDto.getMail(), experienceDto.getUrl(),  Double.parseDouble(experienceDto.getPrice()), cityModel, categoryModel, user, experience.getExperienceImage(), experience.getObservable(), experience.getViews());
+        experienceDto.getMail(), experienceDto.getUrl(), experienceDto.getPrice(), cityModel, categoryModel, user, experience.getExperienceImage(), experience.getObservable(), experience.getViews());
 
         experienceService.updateExperience(toUpdateExperience);
         LOGGER.info("The experience with id {} has been updated successfully", id);
@@ -441,8 +441,5 @@ public class ExperienceController {
 
         return Response.noContent().build();
     }
-
-
-
 }
 

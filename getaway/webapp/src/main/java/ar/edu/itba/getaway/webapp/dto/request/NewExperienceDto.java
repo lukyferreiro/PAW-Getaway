@@ -1,6 +1,8 @@
 package ar.edu.itba.getaway.webapp.dto.request;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -28,9 +30,8 @@ public class NewExperienceDto {
             message = "Pattern.experienceForm.experienceAddress")
     private String address;
 
-    @Size(max = 7, message = "Size.experienceForm.experiencePrice")
-    @Pattern(regexp = "^((0|([1-9][0-9]*))(\\.[0-9]{1,2})?)?$", message = "Pattern.experienceForm.experiencePrice")
-    private String price;
+    @Range(max = 9999999, message = "Size.experienceForm.experiencePrice")
+    private Double price;
 
     // https://regexr.com/39nr7
     @Size(max = 500, message = "Size.experienceForm.experienceUrl")
@@ -91,11 +92,11 @@ public class NewExperienceDto {
         this.address = address;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

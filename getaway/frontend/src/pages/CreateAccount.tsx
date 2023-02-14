@@ -1,7 +1,9 @@
 import {useTranslation} from "react-i18next";
 import React, {useState} from "react";
 import {IconButton} from "@mui/material";
+// @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
+// @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {loginService, userService} from "../services";
 import {useAuth} from "../hooks/useAuth";

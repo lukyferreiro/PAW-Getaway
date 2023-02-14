@@ -102,7 +102,7 @@ export const TRANSLATIONS_ES = {
         url: "Sitio oficial",
         email: "Email",
         review: "Reseñas",
-        writeReview: "Excribir Reseña",
+        writeReview: "Escribir Reseña",
         notVisible: "La experiencia est\u00E1 oculta en este momento",
         noReviews: "Esta experiencia no tiene rese\u00F1as a\u00FAn. S\u00E9 el primero en realizar una!"
     },

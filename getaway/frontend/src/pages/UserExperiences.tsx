@@ -8,9 +8,11 @@ import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, userService} from "../services";
 import StarRating from "../components/StarRating";
 import {IconButton} from "@mui/material";
+// @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+// @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {useForm} from "react-hook-form";
 import {usePagination} from "../hooks/usePagination";
@@ -41,6 +43,7 @@ export default function UserExperiences() {
     const [order, setOrder] = useState<string>("OrderByAZ")
     const [maxPage, setMaxPage] = useState(1)
     const [currentPage] = usePagination()
+    const [onEdit, setOnEdit] = useState(false)
 
     const {user} = useAuth()
     const isProvider = localStorage.getItem("isProvider") === "true"
@@ -49,16 +52,13 @@ export default function UserExperiences() {
         = useForm<FormUserExperiencesSearch>({criteriaMode: "all"})
 
     useEffect(() => {
+        setOnEdit(false)
         setIsLoading(true);
         serviceHandler(
             experienceService.getProviderOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
-                let queryOrder = orders[0].order.toString();
-                if (queryHasParam(query, "order")) {
-                    queryOrder = getQueryOrDefault(query, "order", "OrderByAZ")
-                }
-                setOrder(queryOrder)
+                setOrder(getQueryOrDefault(query, "order", "OrderByAZ"))
             },
             () => {
             },
@@ -82,7 +82,7 @@ export default function UserExperiences() {
                 setMaxPage(1)
             }
         )
-    }, [currentPage, userName, query, order])
+    }, [currentPage, userName, query, order, onEdit])
 
     const onSubmit = handleSubmit((data: FormUserExperiencesSearch) => {
         setUserName(data.name);
@@ -92,16 +92,18 @@ export default function UserExperiences() {
         experienceService.setExperienceObservable(experienceId, visibility).then()
             .catch(() => {
             });
+        setOnEdit(true)
     }
 
     function deleteExperience(experienceId: number) {
         experienceService.deleteExperienceById(experienceId).then()
             .catch(() => {
             });
+        setOnEdit(true)
     }
 
     function editExperience(experienceId: number) {
-        navigate({pathname: "/experiences/" + experienceId}, {replace: true});
+        navigate({pathname: "/experienceForm", search: `?id=${experienceId}`}, {replace: true});
     }
 
     if (!isProvider) {

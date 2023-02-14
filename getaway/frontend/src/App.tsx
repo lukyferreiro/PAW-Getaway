@@ -10,7 +10,7 @@ import UserReviews from "./pages/UserReviews";
 import Experiences from "./pages/Experiences";
 import ExperienceDetails from "./pages/ExperienceDetails";
 import ExperienceForm from "./pages/ExperienceForm";
-import CreateReview from "./pages/CreateReview";
+import ReviewForm from "./pages/ReviewForm";
 import Error from "./pages/Error";
 import Custom404 from "./pages/Custom404";
 
@@ -41,7 +41,7 @@ function App() {
                         </Route>
                         <Route path='experiences' element={<Experiences/>}/>
                         <Route path='experiences/:experienceId' element={<ExperienceDetails/>}/>
-                        <Route path='experiences/:experienceId/createReview' element={<CreateReview/>} />
+                        <Route path='experiences/:experienceId/reviewForm' element={<ReviewForm/>} />
                         <Route path='experienceForm' element={<ExperienceForm/>}/>
                         <Route path='error' element={<Error/>}/>
                         <Route path='*' element={<Custom404/>}/>

@@ -15,10 +15,10 @@ type FormDataExperience = {
     country: string,
     city: string,
     address: string,
-    price: string,
-    url: string,
     mail: string,
-    description: string
+    price?: number,
+    url?: string,
+    description?: string
 };
 
 export default function ExperienceForm() {
@@ -40,6 +40,9 @@ export default function ExperienceForm() {
             serviceHandler(
                 experienceService.getExperienceById(parseInt(currentId)),
                 navigate, (fetchedExperience) => {
+                    if (fetchedExperience.user.id !== user?.id) {
+                        navigate("/", {replace: true});
+                    }
                     setExperience(fetchedExperience)
                     loadCities(fetchedExperience.country.id)
                 },
@@ -49,10 +52,6 @@ export default function ExperienceForm() {
                     setExperience(undefined)
                 }
             )
-            if (experience?.user.id !== user?.id) {
-                //TODO: add foribdden error
-                navigate("/", {replace: true});
-            }
         }
         serviceHandler(
             categoryService.getCategories(),
@@ -98,7 +97,7 @@ export default function ExperienceForm() {
     const onSubmit = handleSubmit((data: FormDataExperience) => {
             if (experience !== undefined) {
                 experienceService.updateExperienceById(parseInt(currentId), data.name, data.category, data.country, data.city,
-                    data.address, data.price.toString(), data.url, data.mail, data.description)
+                    data.address, data.mail, data.price, data.url, data.description)
                     .then((result) => {
                             if (!result.hasFailed()) {
                                 navigate("/experiences/" + currentId, {replace: true})
@@ -109,7 +108,7 @@ export default function ExperienceForm() {
                     });
             } else {
                 experienceService.createExperience(data.name, data.category, data.country, data.city,
-                    data.address, data.mail, data.price.toString(), data.url, data.description)
+                    data.address, data.mail, data.price, data.url, data.description)
                     .then((result) => {
                             if (!result.hasFailed()) {
                                 console.log(result.getData().url.toString())

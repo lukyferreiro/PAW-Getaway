@@ -26,7 +26,7 @@ export class  ExperienceService {
         city: string,
         address: string,
         mail: string,
-        price?: string,
+        price?: number,
         url?: string,
         description?: string
     ): Promise<Result<PostResponse>> {
@@ -37,7 +37,7 @@ export class  ExperienceService {
             city: city,
             address: address,
             mail: mail,
-            price: price ? price : "",
+            price: price ? price : null,
             url: url ? url : "",
             description: description ? description : ""
         });
@@ -151,7 +151,7 @@ export class  ExperienceService {
         city: string,
         address: string,
         mail: string,
-        price?: string,
+        price?: number,
         url?: string,
         description?: string
     ): Promise<Result<PutResponse>> {
@@ -162,7 +162,7 @@ export class  ExperienceService {
             city: city,
             address: address,
             mail: mail,
-            price: price ? price : "",
+            price: price ? price : null,
             url: url ? url : "",
             description: description ? description : ""
         });
@@ -205,9 +205,9 @@ export class  ExperienceService {
 
     public async postNewReview(
         experienceId: number,
-        title?: string,
-        description?: string,
-        score?: string
+        title: string,
+        description: string,
+        score: string
     ) {
         const reviewToUpdate = JSON.stringify({
             title:title,

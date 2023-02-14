@@ -2,7 +2,9 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {Link, useNavigate} from "react-router-dom";
 import {IconButton} from "@mui/material";
+// @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
+// @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -30,6 +32,11 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
             });
         // navigate(-1)
     }
+
+    function editExperience(experienceId: number) {
+        navigate({pathname: "/experienceForm", search: `?id=${experienceId}`}, {replace: true});
+    }
+
 
     return (
         <>
@@ -179,15 +186,13 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     }
 
                     {/*<a href="<c:url value="/user/experiences/edit/${param.id}"/>">*/}
-                    <Link to={`/experiences?id=${experience.id}`}>
-                        <IconButton onClick={() => deleteExperience(experience.id)} aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
-                            <EditIcon/>
-                        </IconButton>
-                    </Link>
+                    <IconButton onClick={() => editExperience(experience.id)} aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
+                        <EditIcon/>
+                    </IconButton>
 
                     {/*</a>*/}
                     {/*<a href="<c:url value="/user/experiences/delete/${param.id}"/>">*/}
-                    <IconButton aria-label="trash" component="span" style={{fontSize: "xx-large"}}>
+                    <IconButton onClick={() => deleteExperience(experience.id)} aria-label="trash" component="span" style={{fontSize: "xx-large"}}>
                         <DeleteIcon/>
                     </IconButton>
                     {/*</a>*/}

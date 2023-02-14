@@ -64,11 +64,7 @@ export default function Experiences() {
             experienceService.getUserOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
-                let queryOrder = orders[0].order.toString();
-                if (queryHasParam(query, "order")) {
-                    queryOrder = getQueryOrDefault(query, "order", "OrderByAZ")
-                }
-                setOrder(queryOrder)
+                setOrder(getQueryOrDefault(query, "order", "OrderByAZ"))
             },
             () => {
             },
@@ -277,10 +273,10 @@ export default function Experiences() {
             </div>
 
 
-            <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
-                <div className="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex
+            <div className="container-experiences container-fluid p-0 mx-2 mt-0 mb-3 d-flex
                             flex-column justify-content-center align-content-center"
-                     style={{minHeight: "650px"}}>
+                 style={{minHeight: "650px"}}>
+                <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
 
 
                     <div className="d-flex justify-content-center align-content-center">
@@ -346,8 +342,9 @@ export default function Experiences() {
                             />
                         )}
                     </div>
-                </div>
-            </DataLoader>
+                </DataLoader>
+
+            </div>
         </div>
     )
 }

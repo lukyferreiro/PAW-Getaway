@@ -7,7 +7,9 @@ import {useAuth} from "../hooks/useAuth";
 import Modal from "react-modal";
 import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {IconButton} from "@mui/material";
+// @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
+// @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 type FormDataLogin = {

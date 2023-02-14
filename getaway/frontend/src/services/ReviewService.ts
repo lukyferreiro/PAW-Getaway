@@ -14,9 +14,9 @@ export class ReviewService {
 
     public async updateReviewById(
         reviewId: number,
-        title?: string,
-        description?: string,
-        score?: string
+        title: string,
+        description: string,
+        score: string
     ) {
         const reviewToUpdate = JSON.stringify({
             title:title,

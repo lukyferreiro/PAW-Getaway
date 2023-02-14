@@ -31,6 +31,10 @@ export default function CardReview(props: { reviewModel: ReviewModel; isEditing:
         )
     }, [])
 
+    function editReview(reviewId: number) {
+        navigate({pathname: "/experiences/" + reviewModel.experience.id + "/reviewForm", search: `?id=${reviewId}`}, {replace: true});
+    }
+
     return (
         <div className="card m-2" style={{height: isEditing ? "310px" : ""}}>
             {isEditing &&
@@ -84,7 +88,7 @@ export default function CardReview(props: { reviewModel: ReviewModel; isEditing:
                 <div className="btn-group card-body container-fluid p-1 d-flex justify-content-center align-items-end"
                      role="group">
                     {/*<a href="<c:url value="/user/reviews/edit/${param.reviewId}"/>">*/}
-                    <IconButton aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
+                    <IconButton onClick={() => editReview(reviewModel.id)} aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
                         <EditIcon/>
                     </IconButton>
                     {/*</a>*/}

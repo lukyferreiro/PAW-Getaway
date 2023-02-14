@@ -56,7 +56,7 @@ export default function ExperienceDetails() {
                 setMaxPage(0)
             }
         );
-    }, [experience, currentPage]);
+    }, [currentPage]);
 
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
@@ -80,7 +80,7 @@ export default function ExperienceDetails() {
                             {t('ExperienceDetail.review')}
                         </h2>
 
-                        <Link to={`/experiences/${experienceId}/createReview`}>
+                        <Link to={`/experiences/${experienceId}/reviewForm`}>
                             <button type="button" className='btn button-primary'
                                     onClick={() => {
                                         if (user === null) {
