@@ -36,9 +36,9 @@ export default function Experiences() {
     const name = getQueryOrDefault(query, "name", "")
     const orderQuery = getQueryOrDefault(query, "order", "")
 
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams()
     const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
 
     //------------FILTERS----------
     //Location
@@ -53,13 +53,13 @@ export default function Experiences() {
     const [hover, setHover] = useState(0)
     //Order
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const [order, setOrder] = useState<string>("OrderByAZ");
+    const [order, setOrder] = useState<string>("OrderByAZ")
     //Page
     const [maxPage, setMaxPage] = useState(1)
     const [currentPage] = usePagination()
 
     useEffect(() => {
-        setIsLoading(true);
+        setIsLoading(true)
         serviceHandler(
             experienceService.getUserOrderByModels(),
             navigate, (orders) => {

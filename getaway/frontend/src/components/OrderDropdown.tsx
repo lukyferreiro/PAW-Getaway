@@ -6,10 +6,10 @@ import {getQueryOrDefault, queryHasParam, useQuery} from "../hooks/useQuery";
 
 export default function OrderDropdown(props: { orders: OrderByModel[] }) {
 
-    const {t} = useTranslation();
+    const {t} = useTranslation()
     const navigate = useNavigate()
     const {orders} = props
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams()
     const query = useQuery()
 
     const orderQuery = getQueryOrDefault(query, "order", "OrderByAZ")
@@ -21,7 +21,7 @@ export default function OrderDropdown(props: { orders: OrderByModel[] }) {
             const name = getQueryOrDefault(query, "name", "")
             setSearchParams({category: category, name: name, order: "OrderByAZ"})
         } else {
-            setSearchParams({order: queryOrder});
+            setSearchParams({order: queryOrder})
         }
     }
 

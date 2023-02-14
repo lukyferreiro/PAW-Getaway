@@ -10,16 +10,18 @@ import {experienceService} from "../services";
 import {useAuth} from "../hooks/useAuth";
 import Pagination from "../components/Pagination";
 import {usePagination} from "../hooks/usePagination";
+import DataLoader from "../components/DataLoader";
 
 export default function ExperienceDetails() {
 
     const {t} = useTranslation()
     const navigate = useNavigate()
-    const location = useLocation();
+    const location = useLocation()
 
     const [experience, setExperience] = useState<ExperienceModel | undefined>(undefined)
     const [reviews, setReviews] = useState<ReviewModel[]>(new Array(0))
     const {experienceId} = useParams()
+    const [isLoading, setIsLoading] = useState(false)
 
     const {user} = useAuth()
     let isVerified = localStorage.getItem("isVerified") === 'true'
@@ -28,6 +30,7 @@ export default function ExperienceDetails() {
     const [currentPage] = usePagination()
 
     useEffect(() => {
+        setIsLoading(true)
         serviceHandler(
             experienceService.getExperienceById(parseInt(experienceId ? experienceId : '-1')),
             navigate, (experience) => {
@@ -46,6 +49,7 @@ export default function ExperienceDetails() {
                 setMaxPage(fetchedExperienceReviews ? fetchedExperienceReviews.getMaxPage() : 1)
             },
             () => {
+                setIsLoading(false)
             },
             () => {
                 setReviews(new Array(0))
@@ -55,72 +59,74 @@ export default function ExperienceDetails() {
     }, [experience, currentPage]);
 
     return (
-        <div className="container-fluid px-5 d-flex justify-content-center align-content-center flex-column">
+        <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
+            <div className="container-fluid px-5 d-flex justify-content-center align-content-center flex-column">
 
-            <div className="card mx-5 my-3 px-5 pt-4">
-                <div className="d-flex justify-content-center align-content-center">
-                    <h1 className="text-center" style={{wordBreak: "break-all"}}>
-                        {experience?.name}
-                    </h1>
+                <div className="card mx-5 my-3 px-5 pt-4">
+                    <div className="d-flex justify-content-center align-content-center">
+                        <h1 className="text-center" style={{wordBreak: "break-all"}}>
+                            {experience?.name}
+                        </h1>
+                    </div>
+                    {experience !== undefined &&
+                        <CardExperienceDetails experience={experience} categoryModel={experience.category} isEditing={experience.user.id === user?.id}/>
+                    }
                 </div>
-                {experience !== undefined &&
-                    <CardExperienceDetails experience={experience} categoryModel={experience.category} isEditing={experience.user.id === user?.id}/>
+
+                {/*/!*REVIEWS*!/*/}
+                <div className="mx-5 my-3">
+                    <div className="d-flex justify-content-between align-content-center">
+                        <h2 className="align-self-center">
+                            {t('ExperienceDetail.review')}
+                        </h2>
+
+                        <Link to={`/experiences/${experienceId}/createReview`}>
+                            <button type="button" className='btn button-primary'
+                                    onClick={() => {
+                                        if (user === null) {
+                                            navigate("/login")
+                                        }
+                                        if (!isVerified) {
+                                            navigate("/user/profile")
+                                        }
+                                    }}
+                            >
+                                {t('ExperienceDetail.writeReview')}
+                            </button>
+                        </Link>
+                    </div>
+                </div>
+
+                <div className="d-flex mb-3 flex-column">
+                    <div className="mx-5 my-2 d-flex flex-wrap">
+                        {reviews.length == 0 ?
+                            <div className="d-flex justify-content-center mb-2" style={{fontSize: "x-large"}}>
+                                {t('ExperienceDetail.noReviews')}
+                            </div>
+                            :
+                            <div className="pl-5 pr-2 w-50"
+                                 style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
+                                {reviews.map((review) => (
+                                    <CardReview reviewModel={review} isEditing={false} key={review.id}/>
+                                ))}
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+                {reviews.length != 0 && maxPage > 1 &&
+                    <div className="d-flex justify-content-center align-content-center">
+                        <Pagination
+                            currentPage={currentPage}
+                            maxPage={maxPage}
+                            baseURL={location.pathname}
+                            // TODO check baseUrl
+                        />
+                    </div>
                 }
             </div>
-
-            {/*/!*REVIEWS*!/*/}
-            <div className="mx-5 my-3">
-                <div className="d-flex justify-content-between align-content-center">
-                    <h2 className="align-self-center">
-                        {t('ExperienceDetail.review')}
-                    </h2>
-
-                    <Link to={`/experiences/${experienceId}/createReview`}>
-                        <button type="button" className='btn button-primary'
-                                onClick={() => {
-                                    if (user === null) {
-                                        navigate("/login")
-                                    }
-                                    if (!isVerified) {
-                                        navigate("/user/profile")
-                                    }
-                                }}
-                        >
-                            {t('ExperienceDetail.writeReview')}
-                        </button>
-                    </Link>
-                </div>
-            </div>
-
-            <div className="d-flex mb-3 flex-column">
-                <div className="mx-5 my-2 d-flex flex-wrap">
-                    {reviews.length == 0 ?
-                        <div className="d-flex justify-content-center mb-2" style={{fontSize: "x-large"}}>
-                            {t('ExperienceDetail.noReviews')}
-                        </div>
-                        :
-                        <div className="pl-5 pr-2 w-50"
-                             style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
-                            {reviews.map((review) => (
-                                <CardReview reviewModel={review} isEditing={false} key={review.id}/>
-                            ))}
-                        </div>
-                    }
-
-                </div>
-            </div>
-
-            {reviews.length != 0 && maxPage > 1 &&
-                <div className="d-flex justify-content-center align-content-center">
-                    <Pagination
-                        currentPage={currentPage}
-                        maxPage={maxPage}
-                        baseURL={location.pathname}
-                        // TODO check baseUrl
-                    />
-                </div>
-            }
-        </div>
+        </DataLoader>
 
     );
 }

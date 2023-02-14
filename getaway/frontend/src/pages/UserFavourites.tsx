@@ -15,20 +15,20 @@ import DataLoader from "../components/DataLoader";
 
 export default function UserFavourites() {
 
-    const {t} = useTranslation();
+    const {t} = useTranslation()
     const navigate = useNavigate()
     const location = useLocation()
     const query = useQuery()
 
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams()
 
-    const {user} = useAuth();
+    const {user} = useAuth()
 
     const [favExperiences, setFavExperiences] = useState<ExperienceModel[]>(new Array(0))
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
 
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const [order, setOrder] = useState("OrderByAZ");
+    const [order, setOrder] = useState("OrderByAZ")
     const [maxPage, setMaxPage] = useState(1)
     const [currentPage] = usePagination()
 

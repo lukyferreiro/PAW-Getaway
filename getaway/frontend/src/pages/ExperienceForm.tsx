@@ -23,17 +23,17 @@ type FormDataExperience = {
 
 export default function ExperienceForm() {
 
-    const {t} = useTranslation();
-    const navigate = useNavigate();
-    const {user} = useAuth();
+    const {t} = useTranslation()
+    const navigate = useNavigate()
+    const {user} = useAuth()
 
     const [experience, setExperience] = useState<ExperienceModel | undefined>(undefined)
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
     const [countries, setCountries] = useState<CountryModel[]>(new Array(0))
     const [cities, setCities] = useState<CityModel[]>(new Array(0))
 
-    const query = useQuery();
-    const currentId = getQueryOrDefault(query, "id", "-1");
+    const query = useQuery()
+    const currentId = getQueryOrDefault(query, "id", "-1")
 
     useEffect(() => {
         if (parseInt(currentId) != -1) {

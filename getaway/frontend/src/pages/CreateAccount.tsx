@@ -17,28 +17,28 @@ type FormDataCreate = {
 };
 
 export default function CreateAccount() {
-    const {t} = useTranslation();
-    let auth = useAuth();
-    let navigate = useNavigate();
-    let location = useLocation();
+    const {t} = useTranslation()
+    let auth = useAuth()
+    let navigate = useNavigate()
+    let location = useLocation()
 
     // @ts-ignore
-    let from = location.state?.from?.pathname || "/";
+    let from = location.state?.from?.pathname || "/"
 
-    const [seePassword, setSeePassword] = useState(false);
-    const [seeRepeatPassword, setSeeRepeatPassword] = useState(false);
-    const [invalidCredentials, setInvalidCredendtials] = useState(false);
+    const [seePassword, setSeePassword] = useState(false)
+    const [seeRepeatPassword, setSeeRepeatPassword] = useState(false)
+    const [invalidCredentials, setInvalidCredendtials] = useState(false)
 
     function showPassword() {
-        setSeePassword(!seePassword);
+        setSeePassword(!seePassword)
     }
 
     function showRepeatPassword() {
-        setSeeRepeatPassword(!seeRepeatPassword);
+        setSeeRepeatPassword(!seeRepeatPassword)
     }
 
     const {register, watch, handleSubmit, formState: {errors},}
-        = useForm<FormDataCreate>({criteriaMode: "all"});
+        = useForm<FormDataCreate>({criteriaMode: "all"})
 
     const onSubmitCreate = handleSubmit((data: FormDataCreate) => {
             setInvalidCredendtials(false);

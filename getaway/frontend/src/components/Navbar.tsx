@@ -24,22 +24,22 @@ export default function Navbar() {
 
     const query = useQuery()
     const pathname = location?.pathname
-    const categoryQuery = getQueryOrDefaultMultiple(query, "category");
+    const categoryQuery = getQueryOrDefaultMultiple(query, "category")
 
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const {signOut} = useAuth();
-    const user = localStorage.getItem("user");
-    let isLogged = user !== null;
-    let isProvider = localStorage.getItem("isProvider") === 'true';
-    let isVerified = localStorage.getItem("isVerified") === 'true';
+    const {signOut} = useAuth()
+    const user = localStorage.getItem("user")
+    let isLogged = user !== null
+    let isProvider = localStorage.getItem("isProvider") === 'true'
+    let isVerified = localStorage.getItem("isVerified") === 'true'
 
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
     const [name, setName] = useState<string>("")
     const [category, setCategory] = useState<string>("")
 
     const {register, handleSubmit, formState: {errors}, reset}
-        = useForm<FormDataSearch>({criteriaMode: "all"});
+        = useForm<FormDataSearch>({criteriaMode: "all"})
 
     useEffect(() => {
         serviceHandler(
@@ -59,8 +59,8 @@ export default function Navbar() {
     }, [query])
 
     const onSubmit = handleSubmit((data: FormDataSearch) => {
-        setName(data.name);
-        navigate({pathname: "/experiences", search: `?category=${category}&name=${data.name}`}, {replace: true});
+        setName(data.name)
+        navigate({pathname: "/experiences", search: `?category=${category}&name=${data.name}`}, {replace: true})
     });
 
     function resetForm(){

@@ -6,17 +6,17 @@ import {useAuth} from "../hooks/useAuth";
 
 export default function Error() {
 
-    const {t} = useTranslation();
-    const query = useQuery();
-    const navigate = useNavigate();
-    let auth = useAuth();
+    const {t} = useTranslation()
+    const query = useQuery()
+    const navigate = useNavigate()
+    let auth = useAuth()
 
-    let error = getQueryOrDefault(query, "code", "404");
+    let error = getQueryOrDefault(query, "code", "404")
     if (error === "401") {
-        auth.signOut(() => navigate("/"));
+        auth.signOut(() => navigate("/"))
     }
     if (error === "NaN") {
-        error = "404";
+        error = "404"
     }
 
     let description = getQueryOrDefaultMultiple(query, "description")

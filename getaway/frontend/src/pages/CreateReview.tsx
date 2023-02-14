@@ -27,28 +27,21 @@ function getCorrectPrivilegeRoute(location: Location): To {
 
 export default function CreateReview() {
 
-    const {t} = useTranslation();
+    const {t} = useTranslation()
     const navigate = useNavigate()
-    const [isLoading, setIsLoading] = useState(false)
-    const [rating, setRating] = useState(1);
-    const [hover, setHover] = useState(0);
+    const location = useLocation()
 
-    const {user, signIn} = useAuth();
-    const location = useLocation();
-    const readUser = localStorage.getItem("user");
-    const isVerified = localStorage.getItem("isVerified") === "true";
-    const isProvider = localStorage.getItem("isProvider") === "true";
-    const rememberMe = localStorage.getItem("rememberMe") === "true";
-    const correctRoute = getCorrectPrivilegeRoute(location);
+    const [experience, setExperience] = useState<ExperienceNameModel | undefined>(undefined)
+    const {experienceId} = useParams()
 
-    useEffect(() => {
-        if (readUser && readUser !== "")
-            signIn(JSON.parse(readUser), rememberMe, () => navigate(correctRoute));
-    }, []);
+    const [rating, setRating] = useState(1)
+    const [hover, setHover] = useState(0)
 
-    const [experience, setExperience] = useState<ExperienceNameModel | undefined>(undefined);
-    const {experienceId} = useParams();
-
+    const {user, signIn} = useAuth()
+    const readUser = localStorage.getItem("user")
+    const isVerified = localStorage.getItem("isVerified") === "true"
+    const rememberMe = localStorage.getItem("rememberMe") === "true"
+    const correctRoute = getCorrectPrivilegeRoute(location)
 
     useEffect(() => {
         serviceHandler(

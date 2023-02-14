@@ -12,25 +12,21 @@ import {userService} from "../services";
 
 export default function CardReview(props: { reviewModel: ReviewModel; isEditing: boolean; }) {
 
-    const {t} = useTranslation();
+    const {t} = useTranslation()
     const navigate = useNavigate()
     const {reviewModel, isEditing} = props
 
     const [userImg, setUserImg] = useState<string | undefined>(undefined)
-    const [isLoadingImg, setIsLoadingImg] = useState(false)
 
     useEffect(() => {
-        setIsLoadingImg(true)
         serviceHandler(
             userService.getUserProfileImage(reviewModel.user.id),
             navigate, (userImg) => {
                 setUserImg(userImg.size > 0 ? URL.createObjectURL(userImg) : undefined)
             },
             () => {
-                setIsLoadingImg(false)
             },
             () => {
-                setIsLoadingImg(false)
             },
         )
     }, [])

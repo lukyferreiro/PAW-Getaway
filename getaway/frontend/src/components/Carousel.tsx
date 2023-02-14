@@ -8,7 +8,7 @@ import {ExperienceModel} from "../types";
 
 export default function Carousel(props: { title: any, experiences: ExperienceModel[] | undefined; show: any; }) {
 
-    const {t} = useTranslation();
+    const {t} = useTranslation()
 
     const {title, experiences, show} = props
     const [currentIndex, setCurrentIndex] = useState(0)

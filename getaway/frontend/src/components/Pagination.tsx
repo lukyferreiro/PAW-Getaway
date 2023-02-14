@@ -14,7 +14,7 @@ Pagination.propTypes = {
 export default function Pagination({currentPage, maxPage, baseURL,}:
                                        InferType<typeof Pagination.propTypes>) {
 
-    const {t} = useTranslation();
+    const {t} = useTranslation()
 
     const PageArrow = styled.img<{ xRotated?: boolean }>`
           transform: ${(props) => (props.xRotated ? "rotate(180deg);" : "")};

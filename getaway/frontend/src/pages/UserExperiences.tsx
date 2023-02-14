@@ -31,22 +31,22 @@ export default function UserExperiences() {
     const location = useLocation()
     const query = useQuery()
 
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams()
 
     const [userExperiences, setUserExperiences] = useState<ExperienceModel[]>(new Array(0))
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
 
-    const [userName, setUserName] = useState("");
+    const [userName, setUserName] = useState("")
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const [order, setOrder] = useState<string>("OrderByAZ");
+    const [order, setOrder] = useState<string>("OrderByAZ")
     const [maxPage, setMaxPage] = useState(1)
     const [currentPage] = usePagination()
 
-    const {user} = useAuth();
-    const isProvider = localStorage.getItem("isProvider") === "true";
+    const {user} = useAuth()
+    const isProvider = localStorage.getItem("isProvider") === "true"
 
     const {register, handleSubmit, formState: {errors}, reset}
-        = useForm<FormUserExperiencesSearch>({criteriaMode: "all"});
+        = useForm<FormUserExperiencesSearch>({criteriaMode: "all"})
 
     useEffect(() => {
         setIsLoading(true);
@@ -305,8 +305,6 @@ export default function UserExperiences() {
                                     </div>
                                 </div>
                             }
-
-
                         </div>
                     </>
                 }

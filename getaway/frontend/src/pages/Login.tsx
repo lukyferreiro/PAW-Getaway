@@ -22,10 +22,12 @@ type FormDataPassReset = {
 
 export default function Login() {
 
-    const {t} = useTranslation();
-    let navigate = useNavigate();
-    let location = useLocation();
-    let auth = useAuth();
+    const {t} = useTranslation()
+    let navigate = useNavigate()
+    let location = useLocation()
+
+    let {signIn} = useAuth()
+
     // @ts-ignore
     let from = location.state?.from?.pathname || "/";
     const [seePassword, setSeePassword] = useState(false);
@@ -41,7 +43,7 @@ export default function Login() {
             loginService.login(data.email, data.password)
                 .then((user) =>
                     user.hasFailed() ? setInvalidCredendtials(true) :
-                        auth.signIn(user.getData(), data.rememberMe, () => {
+                        signIn(user.getData(), data.rememberMe, () => {
                             navigate(from, {replace: true});
                         })
                 )
@@ -50,7 +52,7 @@ export default function Login() {
     );
 
     function showPassword() {
-        setSeePassword(!seePassword);
+        setSeePassword(!seePassword)
     }
 
     // const {register, handleSubmit} = useForm<FormDataPassReset>({

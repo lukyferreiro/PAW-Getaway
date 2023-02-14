@@ -15,27 +15,21 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
     const {t} = useTranslation()
     const {experience} = props
     const navigate = useNavigate()
-    const [experienceImg, setExperienceImg] = useState<string | undefined>(undefined)
-    const [isLoadingImg, setIsLoadingImg] = useState(false)
-    const [fav, setFav] = useState(experience.fav)
+
     const {user} = useAuth()
 
-    console.log("FAV ON LOAD")
-    console.log(experience.name)
-    console.log(fav)
+    const [experienceImg, setExperienceImg] = useState<string | undefined>(undefined)
+    const [fav, setFav] = useState(experience.fav)
 
     useEffect(() => {
-        setIsLoadingImg(true)
         serviceHandler(
             experienceService.getExperienceImage(experience?.id),
             navigate, (experienceImg) => {
                 setExperienceImg(experienceImg.size > 0 ? URL.createObjectURL(experienceImg) : undefined)
             },
             () => {
-                setIsLoadingImg(false)
             },
             () => {
-                setIsLoadingImg(false)
             }
         );
     }, [fav])
@@ -44,9 +38,6 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
         experienceService.setExperienceFav(experience.id, fav).then()
             .catch(() => {
             });
-        console.log("ON SET")
-        console.log(experience.name)
-        console.log(fav)
         setFav(fav)
     }
 

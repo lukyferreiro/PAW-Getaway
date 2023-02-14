@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 
 export default function Custom404() {
 
-    const {t} = useTranslation();
+    const {t} = useTranslation()
 
     return (
         <div className="container-fluid p-0 h-100 d-flex justify-content-center align-items-center">
