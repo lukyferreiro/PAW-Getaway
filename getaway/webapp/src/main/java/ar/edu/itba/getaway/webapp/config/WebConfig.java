@@ -122,7 +122,7 @@ public class WebConfig {
         if (isOnDevBuild()) {
             return new URL("http", "localhost", 3000, "/");
         } else {
-            return new URL("http", "pawserver.it.itba.edu.ar", 8080, "/paw-2022b-1");
+            return new URL("http", "pawserver.it.itba.edu.ar", "/paw-2022b-1");
         }
     }
 

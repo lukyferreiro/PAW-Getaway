@@ -6,12 +6,20 @@ import {userService} from "../services";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
 import DataLoader from "../components/DataLoader";
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 
 export default function UserProfile() {
 
     const {t} = useTranslation()
-    const {user} = useAuth()
     const navigate = useNavigate()
+
+    //TODO manejar estos token que recibe el usuario tras entrar al link por el mail
+    const query = useQuery()
+    const verificationToken = getQueryOrDefault(query, "verificationToken", "")
+    const passwordToken = getQueryOrDefault(query, "passwordToken", "")
+
+    const {user} = useAuth()
+
     const [userImg, setUserImg] = useState<string | undefined>(undefined)
     const [isLoadingImg, setIsLoadingImg] = useState(false)
 
