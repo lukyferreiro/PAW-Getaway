@@ -1,6 +1,13 @@
 import {ErrorResponse, Result} from "../types";
 import {authedFetch} from "./authedFetch";
-import {checkImageError} from "./checkError";
+
+function checkImageError(response: Response): Promise<Blob> {
+    if (response.status >= 200 && response.status <= 299) {
+        return response.blob() as Promise<Blob>;
+    } else {
+        throw Error(response.status.toString());
+    }
+}
 
 export async function getImageFetch(url: string): Promise<Result<Blob>> {
     try {
