@@ -60,11 +60,11 @@ export default function UserReviews() {
                         </div>
 
                         <div className="mx-5 my-2 d-flex flex-wrap justify-content-center align-content-center">
-                            <div style={{minWidth: "700px", maxWidth: "700px", height: "auto"}}>
-                                {reviews.map((review) => (
+                            {reviews.map((review) => (
+                                <div style={{minWidth: "700px", maxWidth: "700px", height: "auto"}}>
                                     <CardReview reviewModel={review} isEditing={true} key={review.id}/>
-                                ))}
-                            </div>
+                                </div>
+                            ))}
                         </div>
 
                         <div className="mt-auto d-flex justify-content-center align-items-center">

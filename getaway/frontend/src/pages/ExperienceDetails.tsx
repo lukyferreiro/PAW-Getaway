@@ -104,12 +104,14 @@ export default function ExperienceDetails() {
                                 {t('ExperienceDetail.noReviews')}
                             </div>
                             :
-                            <div className="pl-5 pr-2 w-50"
-                                 style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
+                            <>
                                 {reviews.map((review) => (
-                                    <CardReview reviewModel={review} isEditing={false} key={review.id}/>
+                                    <div className="pl-5 pr-2 w-50"
+                                         style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
+                                        <CardReview reviewModel={review} isEditing={false} key={review.id}/>
+                                    </div>
                                 ))}
-                            </div>
+                            </>
                         }
 
                     </div>
