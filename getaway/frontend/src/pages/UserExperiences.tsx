@@ -300,8 +300,6 @@ export default function UserExperiences() {
                                             <Pagination
                                                 currentPage={currentPage}
                                                 maxPage={maxPage}
-                                                baseURL={location.pathname}
-                                                // TODO check baseUrl
                                             />
                                         )}
                                     </div>

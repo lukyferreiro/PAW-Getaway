@@ -112,7 +112,7 @@ export default function ExperienceForm() {
                     .then((result) => {
                             if (!result.hasFailed()) {
                                 console.log(result.getData().url.toString())
-                                navigate(result.getData().url.toString(), {replace: true})
+                                navigate("/user/experiences", {replace: true})
                             }
                         }
                     )

@@ -11,18 +11,11 @@ export default function OrderDropdown(props: { orders: OrderByModel[] }) {
     const {orders} = props
     const [searchParams, setSearchParams] = useSearchParams()
     const query = useQuery()
-
     const orderQuery = getQueryOrDefault(query, "order", "OrderByAZ")
 
-    //TODO: change to an emit
     function changeOrder(queryOrder: string) {
-        if (queryHasParam(query, "category")) {
-            const category = getQueryOrDefault(query, "category", "")
-            const name = getQueryOrDefault(query, "name", "")
-            setSearchParams({category: category, name: name, order: "OrderByAZ"})
-        } else {
-            setSearchParams({order: queryOrder})
-        }
+        searchParams.set("order", queryOrder)
+        setSearchParams(searchParams)
     }
 
     return (

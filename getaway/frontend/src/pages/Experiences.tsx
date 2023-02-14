@@ -61,6 +61,20 @@ export default function Experiences() {
     useEffect(() => {
         setIsLoading(true)
         serviceHandler(
+            experienceService.getExperiencesByFilter(category, name, order, price, rating, city, currentPage),
+            navigate, (experiences) => {
+                setExperiences(experiences.getContent())
+                setMaxPage(experiences.getMaxPage())
+            },
+            () => {
+                setIsLoading(false)
+            },
+            () => {
+                setExperiences(new Array(0))
+                setIsLoading(false)
+            }
+        );
+        serviceHandler(
             experienceService.getUserOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
@@ -97,20 +111,6 @@ export default function Experiences() {
             },
             () => {
                 setCountries(new Array(0))
-            }
-        );
-        serviceHandler(
-            experienceService.getExperiencesByFilter(category, name, order, price, rating, city, currentPage),
-            navigate, (experiences) => {
-                setExperiences(experiences.getContent())
-                setMaxPage(experiences.getMaxPage())
-            },
-            () => {
-                setIsLoading(false)
-            },
-            () => {
-                setExperiences(new Array(0))
-                setIsLoading(false)
             }
         );
     }, [category, name, rating, query, order, currentPage])
@@ -331,14 +331,11 @@ export default function Experiences() {
                         </div>
                     }
 
-                    {/*TODO: pagination*/}
                     <div className="mt-auto d-flex justify-content-center align-items-center">
                         {maxPage > 1 && (
                             <Pagination
                                 currentPage={currentPage}
                                 maxPage={maxPage}
-                                baseURL={location.pathname}
-                                // TODO check baseUrl
                             />
                         )}
                     </div>

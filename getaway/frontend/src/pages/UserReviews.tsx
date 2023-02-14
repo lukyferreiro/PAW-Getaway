@@ -72,8 +72,6 @@ export default function UserReviews() {
                                 <Pagination
                                     currentPage={currentPage}
                                     maxPage={maxPage}
-                                    baseURL={location.pathname}
-                                    // TODO check baseUrl
                                 />
                             )}
                         </div>
