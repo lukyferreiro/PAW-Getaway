@@ -30,7 +30,7 @@ export default function CreateReview() {
     const {t} = useTranslation();
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(false)
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(1);
     const [hover, setHover] = useState(0);
 
     const {user, signIn} = useAuth();
@@ -114,10 +114,11 @@ export default function CreateReview() {
                                 </div>
                             </label>
 
-                            <input max="50" type="text" className="form-control"
+                            <input min="3" max="50" type="text" className="form-control"
                                    {...register("title", {
                                        required: true,
                                        max: 50,
+                                       min: 3,
                                        pattern: {
                                            value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
                                            message: t("CreateReview.error.title.pattern"),
@@ -134,6 +135,11 @@ export default function CreateReview() {
                                     {t("CreateReview.error.title.max")}
                                 </p>
                             )}
+                            {errors.title?.type === "min" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("CreateReview.error.title.min")}
+                                </p>
+                            )}
                         </div>
 
                         <div className="col m-2">
@@ -148,10 +154,11 @@ export default function CreateReview() {
                                     </h6>
                                 </div>
                             </label>
-                            <textarea maxLength={255} className="form-control" style={{maxHeight: "200px"}}
+                            <textarea minLength={3} maxLength={255} className="form-control" style={{maxHeight: "200px"}}
                                       {...register("description", {
                                           required: true,
                                           maxLength: 255,
+                                          minLength: 3,
                                           pattern: {
                                               value: /^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°";$%#&=:¿?!¡\n\s\t/.-])*$/,
                                               message: t("CreateReview.error.description.pattern"),
@@ -169,6 +176,11 @@ export default function CreateReview() {
                                     {t("CreateReview.error.description.max")}
                                 </p>
                             )}
+                            {errors.description?.type === "minLength" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("CreateReview.error.description.min")}
+                                </p>
+                            )}
                         </div>
                         <div className="col m-2">
                             <label htmlFor="score" className="form-label">
@@ -176,9 +188,10 @@ export default function CreateReview() {
                                 <span className="required-field">*</span>
                             </label>
 
+
+                            {/*TODO hay que hacer el register de score*/}
                             <div className="w-100 d-flex justify-content-center">
                                 <div className="w-50">
-                                    {/*<StarRating/>*/}
                                     <div className="star-rating">
                                         {[...Array(5)].map((star, index) => {
                                             index -= 5;

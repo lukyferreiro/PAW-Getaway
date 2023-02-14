@@ -117,37 +117,41 @@ export const TRANSLATIONS_ES = {
         title: "Crea tu experiencia",
         error: {
             name: {
-                pattern: "aaaa",
-                isRequired: "aaa",
-                max: "aaaa",
+                pattern: "El nombre ingresado no posee un formato v\u00E1lido00EDo",
+                max: "El nombre de la experiencia debe tener entre 3-50 caracteres",
+                min: "El nombre de la experiencia debe tener entre 3-50 caracteres",
             },
             category: {
-                isRequired: "aaaa",
+                isRequired: "Este campo no puede estar vac\u00EDo",
+            },
+            price: {
+                max: "El precio debe ser menor a $9999999",
             },
             description: {
-                pattern: "aaaa",
-                isRequired: "aaaa",
-                max: "aaaa",
+                pattern: "La descripci\u00F3n ingresada no posee un formato v\u00E1lido",
+                isRequired: "Este campo no puede estar vac\u00EDo",
+                max: "La descripci\u00F3n debe tener un m\u00E1ximo de 500 caracteres",
             },
             mail: {
-                pattern: "aaaa",
-                isRequired: "aaaa",
-                max: "aaaa",
+                pattern: "El email ingresado no es v\u00E1lido",
+                isRequired: "Este campo no puede estar vac\u00EDo",
+                max: "El mail debe tener un m\u00E1ximo de 255 caracteres",
             },
             url: {
-                pattern: "aaaa",
-                max: "aaaa",
+                pattern: "La URL ingresada no es v\u00E1lido",
+                max: "La URL debe tener un m\u00E1ximo de 500 caracteres",
             },
             country: {
-                isRequired: "aaaa",
+                isRequired: "Este campo no puede estar vac\u00EDo",
             },
             city: {
-                isRequired: "aaaa",
+                isRequired: "Este campo no puede estar vac\u00EDo",
             },
             address: {
-                pattern: "aaaa",
-                isRequired: "aaaa",
-                max: "aaaa",
+                pattern: "La direcci\u00F3n ingresada no es v\u00E1lido",
+                isRequired: "Este campo no puede estar vac\u00EDo",
+                max: "La direcci\u00F3n debe tener entre 5-100 caracteres",
+                min: "La direcci\u00F3n debe tener entre 5-100 caracteres",
             },
         }
     },
@@ -194,18 +198,20 @@ export const TRANSLATIONS_ES = {
         title: "Escribe una reseña para {{experienceName}}",
         error: {
             title: {
-                pattern: "aaaa",
-                isRequired: "aaa",
-                max: "aaaa",
+                pattern: "El titulo ingresado no posee un formato v\u00E1lido",
+                isRequired: "Este campo no puede estar vac\u00EDo",
+                max: "El titulo debe tener entre 3-50 caracteres",
+                min: "El titulo debe tener entre 3-50 caracteres",
             },
             description: {
-                pattern: "aaaa",
-                isRequired: "aaaa",
-                max: "aaaa",
+                pattern: "La descripci\u00F3n ingresada no posee un formato v\u00E1lido",
+                isRequired: "Este campo no puede estar vac\u00EDo",
+                max: "La descripci\u00F3n debe tener entre 3-255 caracteres",
+                min: "La descripci\u00F3n debe tener entre 3-255 caracteres",
             },
             score: {
                 pattern: "aaaa",
-                isRequired: "aaaa",
+                isRequired: "Este campo no puede estar vac\u00EDo",
             },
         }
     },

@@ -117,37 +117,42 @@ export const TRANSLATIONS_EN = {
         title: "Create your experience",
         error: {
             name: {
-                pattern: "aaaa",
-                isRequired: "aaa",
-                max: "aaaa",
+                pattern: "Submitted name format is not valid",
+                isRequired: "This field can not be empty",
+                max: "Experience name must be 3-50 characters long",
+                min: "Experience name must be 3-50 characters long",
             },
             category: {
-                isRequired: "aaaa",
+                isRequired: "This field can not be empty",
+            },
+            price: {
+                max: "Price must be under $9999999",
             },
             description: {
-                pattern: "aaaa",
-                isRequired: "aaaa",
-                max: "aaaa",
+                pattern: "Submitted description format is not valid",
+                isRequired: "This field can not be empty",
+                max: "Description must be under 500 characters long",
             },
             mail: {
-                pattern: "aaaa",
-                isRequired: "aaaa",
-                max: "aaaa",
+                pattern: "Submitted mail format is not valid",
+                isRequired: "This field can not be empty",
+                max: "The email must be under 255 characters long",
             },
             url: {
-                pattern: "aaaa",
-                max: "aaaa",
+                pattern: "Submitted url format is not valid",
+                max: "The URL must be under 500 characters long",
             },
             country: {
-                isRequired: "aaaa",
+                isRequired: "This field can not be empty",
             },
             city: {
-                isRequired: "aaaa",
+                isRequired: "This field can not be empty",
             },
             address: {
-                pattern: "aaaa",
-                isRequired: "aaaa",
-                max: "aaaa",
+                pattern: "Submitted address format is not valid",
+                isRequired: "This field can not be empty",
+                max: "Address must be 5-100 characters long",
+                min: "Address must be 5-100 characters long",
             },
         }
     },
@@ -194,18 +199,20 @@ export const TRANSLATIONS_EN = {
         title: "Create review for {{experienceName}}",
         error: {
             title: {
-                pattern: "aaaa",
-                isRequired: "aaa",
-                max: "aaaa",
+                pattern: "Submitted title format is not valid",
+                isRequired: "This field can not be empty",
+                max: "Title must be 3-50 characters long",
+                min: "Title must be 3-50 characters long",
             },
             description: {
-                pattern: "aaaa",
-                isRequired: "aaaa",
-                max: "aaaa",
+                pattern: "Submitted description format is not valid",
+                isRequired: "This field can not be empty",
+                max: "Description must be 3-255 characters long",
+                min: "Description must be 3-255 characters long",
             },
             score: {
                 pattern: "aaaa",
-                isRequired: "aaaa",
+                isRequired: "This field can not be empty",
             },
         }
     },

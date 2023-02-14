@@ -123,11 +123,8 @@ export default function ExperienceForm() {
         }
     );
 
-    const location = useLocation();
     const readUser = localStorage.getItem("user");
     const isVerified = localStorage.getItem("isVerified") === "true";
-    const isProvider = localStorage.getItem("isProvider") === "true";
-    const rememberMe = localStorage.getItem("rememberMe") === "true";
 
     if (!user && !readUser) {
         return <Navigate to="/login" state={{from: "/experienceForm"}} replace/>;
@@ -160,10 +157,11 @@ export default function ExperienceForm() {
                                     </h6>
                                 </div>
                             </label>
-                            <input max="50" type="text" className="form-control"
+                            <input min="3" max="50" type="text" className="form-control"
                                    {...register("name", {
                                        required: true,
                                        max: 50,
+                                       min: 3,
                                        pattern: {
                                            value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
                                            message: t("ExperienceForm.error.name.pattern"),
@@ -179,6 +177,11 @@ export default function ExperienceForm() {
                             {errors.name?.type === "max" && (
                                 <p className="form-control is-invalid form-error-label">
                                     {t("ExperienceForm.error.name.max")}
+                                </p>
+                            )}
+                            {errors.name?.type === "min" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("ExperienceForm.error.name.min")}
                                 </p>
                             )}
                         </div>
@@ -222,9 +225,16 @@ export default function ExperienceForm() {
                                 </div>
                             </label>
                             <input type="number" max="9999999" className="form-control" id="experienceFormPriceInput" placeholder="0"
-                                   {...register("price", {})}
+                                   {...register("price", {
+                                       max: 9999999,
+                                   })}
                                    defaultValue={experience ? experience.price : ""}
                             />
+                            {errors.category?.type === "max" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("ExperienceForm.error.price.max")}
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -401,10 +411,11 @@ export default function ExperienceForm() {
                                     </h6>
                                 </div>
                             </label>
-                            <input max="100" type="text" className="form-control"
+                            <input min="5" max="100" type="text" className="form-control"
                                    {...register("address", {
                                        required: true,
                                        max: 100,
+                                       min: 5,
                                        pattern: {
                                            value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
                                            message: t("ExperienceForm.error.address.pattern"),
@@ -419,7 +430,12 @@ export default function ExperienceForm() {
                             )}
                             {errors.address?.type === "max" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("ExperienceForm.error.address.isRequired")}
+                                    {t("ExperienceForm.error.address.max")}
+                                </p>
+                            )}
+                            {errors.address?.type === "min" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("ExperienceForm.error.address.min")}
                                 </p>
                             )}
                         </div>

@@ -10,8 +10,11 @@ interface LoadableDataProps {
 export default function DataLoader({spinnerMultiplier = 1, isLoading, children,}: LoadableDataProps) {
     return (
         <>
-            {isLoading && <Spinner multiplier={spinnerMultiplier}/>}
-            {!isLoading && <>{children}</>}
+            {isLoading ?
+                <Spinner multiplier={spinnerMultiplier}/>
+                :
+                <>{children}</>
+            }
         </>
     );
 }
