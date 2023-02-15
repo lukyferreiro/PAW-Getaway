@@ -33,11 +33,6 @@ export const countryModel: CountryModel = {
     name: "Argentina",
 };
 
-export const roleModel: RoleModel = {
-    id: 1,
-    roleName: "Provider",
-};
-
 export const userModel: UserModel = {
     id: 1,
     name: "Lucas",
@@ -53,18 +48,37 @@ export const orderByModel: OrderByModel = {
 };
 
 export const maxPriceModel: MaxPriceModel = {
-    maxPrice: 100,
+    maxPrice: 1000,
 };
 
 export const experienceNameModel: ExperienceNameModel = {
     id: 1,
-    name: "Experiencia",
+    name: "Experiencia comun",
 };
 
-export const experienceModel: ExperienceModel = {
+export const experienceModelNoFav: ExperienceModel = {
     id: 1,
-    name: "Experiencia",
+    name: "Experiencia comun",
     price: 100,
+    address: "Av 9 de Julio",
+    email: "example@example.com",
+    description: "Esto es una descripcion",
+    siteUrl: "https://google.com",
+    city: cityModel,
+    country: countryModel,
+    category: categoryModel1,
+    user: userModel,
+    observable: true,
+    views: 100,
+    score: 4,
+    reviewCount: 8,
+    fav: false,
+};
+
+export const experienceModelFav: ExperienceModel = {
+    id: 2,
+    name: "Experiencia fav",
+    price: 1000,
     address: "Av 9 de Julio",
     email: "example@example.com",
     description: "Esto es una descripcion",
@@ -80,11 +94,40 @@ export const experienceModel: ExperienceModel = {
     fav: true,
 };
 
-export const reviewModel: ReviewModel = {
+export const experienceModelCategory: ExperienceModel = {
+    id: 3,
+    name: "Experiencia de categoria 2",
+    price: 500,
+    address: "Av 9 de Julio",
+    email: "example@example.com",
+    description: "Esto es una descripcion",
+    siteUrl: "https://google.com",
+    city: cityModel,
+    country: countryModel,
+    category: categoryModel2,
+    user: userModel,
+    observable: true,
+    views: 100,
+    score: 4,
+    reviewCount: 8,
+    fav: true,
+};
+
+export const reviewModel1: ReviewModel = {
     id: 1,
     title: "Titulo de reseña",
     description: "Esta es mi descripcion de reseña",
     score: 4,
+    date: "2023-02-02",
+    experience: experienceNameModel,
+    user: userModel,
+};
+
+export const reviewModel2: ReviewModel = {
+    id: 2,
+    title: "Titulo de reseña 2",
+    description: "Esta es mi descripcion de reseña",
+    score: 2,
     date: "2023-02-02",
     experience: experienceNameModel,
     user: userModel,

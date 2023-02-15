@@ -42,7 +42,6 @@ export class  ExperienceService {
             description: description ? description : ""
         });
 
-        console.log(newExperience)
         return resultFetch<PostResponse>(this.basePath, {
             method: "POST",
             headers: {
@@ -186,9 +185,11 @@ export class  ExperienceService {
     }
 
     public async updateExperienceImage(
-        experienceId: number
+        experienceId: number,
+        file: File
     ): Promise<Result<PutResponse>> {
         const formData = new FormData();
+        formData.append("file", file, file.name);
         return resultFetch<PutResponse>(this.basePath + "/experience/" + experienceId + "/experienceImage", {
             method: "PUT",
             headers: {},
