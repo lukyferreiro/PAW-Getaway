@@ -45,6 +45,7 @@ public class WebConfig {
     private static final Integer MAX_REQUEST_SIZE = 3500000;
 
     private static final boolean DEV_BUILD = true;
+
     private static boolean isOnDevBuild() {
         return DEV_BUILD;
     }
@@ -70,14 +71,14 @@ public class WebConfig {
 //        ds.setPassword("580c8ba69151e9ba288d107d1b28f9dfc3706838eccbfb4d4d9ca1cde2f6f86e");
 
         if (isOnDevBuild()) {
-            ds.setUrl("jdbc:postgresql://localhost/postgres");
+            ds.setUrl("jdbc:postgresql://localhost:5435/postgres");
             ds.setUsername("postgres");
             ds.setPassword("getawaydb");
         } else {
             ds.setUrl("jdbc:postgresql://10.16.1.110/paw-2022b-1");
             ds.setUsername("paw-2022b-1");
             ds.setPassword("qo16kZtyI");
-        }
+       }
 
         return ds;
     }
@@ -99,8 +100,8 @@ public class WebConfig {
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
         if (isOnDevBuild()) {
             properties.setProperty("hibernate.show_sql", "true");
-            properties.setProperty("format_sql", "true");
         }
+        properties.setProperty("format_sql", "true");
         factoryBean.setJpaProperties(properties);
         return factoryBean;
     }
