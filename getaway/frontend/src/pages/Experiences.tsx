@@ -92,7 +92,7 @@ export default function Experiences() {
             experienceService.getFilterMaxPrice(category, name),
             navigate, (priceModel) => {
                 setMaxPrice(priceModel.maxPrice)
-                if (price === -1) {
+                if (maxPrice != priceModel.maxPrice ||price>priceModel.maxPrice || price === -1) {
                     setPrice(priceModel.maxPrice)
                 }
             },
@@ -113,7 +113,7 @@ export default function Experiences() {
                 setCountries(new Array(0))
             }
         );
-    }, [category, name, rating, query, order, currentPage])
+    }, [category, name, rating, query, order, currentPage, maxPrice])
 
     function loadCities(countryName: string) {
         serviceHandler(
