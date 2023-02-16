@@ -288,4 +288,23 @@ export const TRANSLATIONS_EN = {
             name: "\" {{name}} \""
         }
     },
+
+    ReviewForm:{
+        title: "Write a review",
+        editTitle:"Edit the review",
+        error: {
+            title: {
+                isRequired: "A title is required",
+                pattern:"",
+                max:"The title must have a maximum of 50 characters",
+                min:"The title must have at least 3 characters"
+            },
+            description: {
+                isRequired: "A description is required",
+                pattern:"",
+                max:"The title must have a maximum of 255 characters",
+                min:"The title must have at least 3 characters"
+            }
+        }
+    }
 };

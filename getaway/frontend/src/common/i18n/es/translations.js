@@ -117,6 +117,7 @@ export const TRANSLATIONS_ES = {
         title: "Crea tu experiencia",
         error: {
             name: {
+                isRequired: "Este campo no puede estar vac\u00EDo",
                 pattern: "El nombre ingresado no posee un formato v\u00E1lido00EDo",
                 max: "El nombre de la experiencia debe tener entre 3-50 caracteres",
                 min: "El nombre de la experiencia debe tener entre 3-50 caracteres",
@@ -285,6 +286,25 @@ export const TRANSLATIONS_ES = {
             search:"Buscando ",
             category: "en ",
             name: " \" {{name}} \""
+        }
+    },
+
+    ReviewForm:{
+        title: "Escribe una reseña",
+        editTitle:"Edita la reseña",
+        error: {
+            title: {
+                isRequired: "Un titulo es requerido",
+                pattern:"",
+                max:"El titulo debe tener como máximo 50 caracteres",
+                min:"El titulo debe tener como minimo 3 caracteres"
+            },
+            description: {
+                isRequired: "Una descripcion es requerida",
+                pattern:"",
+                max:"El titulo debe tener como máximo 255 caracteres",
+                min:"El titulo debe tener como minimo 3 caracteres"
+            }
         }
     }
 };

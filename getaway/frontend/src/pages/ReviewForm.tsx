@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {Location, Navigate, To, useLocation, useNavigate, useParams} from "react-router-dom";
+import {Navigate, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, reviewService} from "../services";
@@ -22,7 +22,6 @@ export default function ReviewForm() {
 
     const {t} = useTranslation()
     const navigate = useNavigate()
-    const location = useLocation()
 
     const [experience, setExperience] = useState<ExperienceNameModel | undefined>(undefined)
     const [review, setReview] = useState<ReviewModel | undefined>(undefined)
@@ -30,6 +29,8 @@ export default function ReviewForm() {
 
     const [rating, setRating] = useState(1)
     const [hover, setHover] = useState(0)
+    const [title, setTitle] = useState("")
+    const [description, setDescription] = useState("")
 
     const {user, signIn} = useAuth()
     const readUser = localStorage.getItem("user")
@@ -47,10 +48,18 @@ export default function ReviewForm() {
                         navigate("/", {replace: true});
                     }
                     setReview(review)
+                    setRating(-review.score)
+                    setHover(-review.score)
+                    setTitle(review.title)
+                    setDescription(review.description)
                 },
                 () => {},
                 () => {
                     setReview(undefined)
+                    setRating(0)
+                    setHover(0)
+                    setTitle("")
+                    setDescription("")
                 }
             )
         }
@@ -72,6 +81,12 @@ export default function ReviewForm() {
 
     const onSubmit = handleSubmit((data: FormDataReview) => {
             data.score = String(-rating);
+            if(data.title.length == 0){
+                data.title = title
+            }
+            if(data.description.length == 0){
+                data.description = description
+            }
             if (review !== undefined) {
                 reviewService.updateReviewById(parseInt(currentId), data.title, data.description, data.score)
                     .then((result) => {
@@ -108,7 +123,15 @@ export default function ReviewForm() {
                     <div className="p-4 mx-4 mt-4 m-1">
                         <div className="col m-2">
                             <h3 className="text-center" style={{wordBreak: "break-all"}}>
-                                {t('ReviewForm.title', {experienceName: experience?.name})}
+                                {!review ?
+                                    <div>
+                                        {t('ReviewForm.title', {experienceName: experience?.name})}
+                                    </div>
+                                    :
+                                    <div>
+                                        {t('ReviewForm.editTitle')}
+                                    </div>
+                                }
                             </h3>
                         </div>
                         <div className="col m-2">
@@ -134,7 +157,7 @@ export default function ReviewForm() {
                                            message: t("ReviewForm.error.title.pattern"),
                                        },
                                    })}
-                                   defaultValue={review ? review.title : ""}
+                                   defaultValue={review ? title : ""}
                             />
                             {errors.title?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">
@@ -175,12 +198,12 @@ export default function ReviewForm() {
                                               message: t("ReviewForm.error.description.pattern"),
                                           },
                                       })}
-                                  defaultValue={review ? review.description : ""}
+                                  defaultValue={review ? description : ""}
                             />
 
                             {errors.description?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("ReviewForm.error.description.required")}
+                                    {t("ReviewForm.error.description.isRequired")}
                                 </p>
                             )}
                             {errors.description?.type === "maxLength" && (
@@ -203,7 +226,6 @@ export default function ReviewForm() {
                             <div className="w-100 d-flex justify-content-center">
                                 <div className="w-50">
                                     <div className="star-rating">
-                                        {/*TODO: add default value for edit*/}
                                         {[...Array(5)].map((star, index) => {
                                             index -= 5;
                                             return (

@@ -1,5 +1,5 @@
 import {APPLICATION_JSON_TYPE, paths} from "../common";
-import { Result, ReviewModel} from "../types";
+import {PutResponse, Result, ReviewModel} from "../types";
 import {resultFetch} from "../scripts/resultFetch";
 import {authedFetch} from "../scripts/authedFetch";
 
@@ -17,7 +17,7 @@ export class ReviewService {
         title: string,
         description: string,
         score: string
-    ) {
+    ) :Promise<Result<PutResponse>> {
         const reviewToUpdate = JSON.stringify({
             title:title,
             description:description,
