@@ -29,8 +29,6 @@ export default function ReviewForm() {
 
     const [rating, setRating] = useState(1)
     const [hover, setHover] = useState(0)
-    const [title, setTitle] = useState("")
-    const [description, setDescription] = useState("")
 
     const {user, signIn} = useAuth()
     const readUser = localStorage.getItem("user")
@@ -50,16 +48,14 @@ export default function ReviewForm() {
                     setReview(review)
                     setRating(-review.score)
                     setHover(-review.score)
-                    setTitle(review.title)
-                    setDescription(review.description)
+                    setValue('title', review.title);
+                    setValue('description', review.description);
                 },
                 () => {},
                 () => {
                     setReview(undefined)
                     setRating(0)
                     setHover(0)
-                    setTitle("")
-                    setDescription("")
                 }
             )
         }
@@ -76,18 +72,13 @@ export default function ReviewForm() {
         );
     }, []);
 
-    const {register, handleSubmit, formState: {errors},}
+    const {register, handleSubmit, setValue, formState: {errors},}
         = useForm<FormDataReview>({criteriaMode: "all"});
 
     const onSubmit = handleSubmit((data: FormDataReview) => {
             data.score = String(-rating);
-            if(data.title.length == 0){
-                data.title = title
-            }
-            if(data.description.length == 0){
-                data.description = description
-            }
-            if (review !== undefined) {
+            console.log(data)
+            if (review) {
                 reviewService.updateReviewById(parseInt(currentId), data.title, data.description, data.score)
                     .then((result) => {
                         if (!result.hasFailed()) {
@@ -157,7 +148,7 @@ export default function ReviewForm() {
                                            message: t("ReviewForm.error.title.pattern"),
                                        },
                                    })}
-                                   defaultValue={review ? title : ""}
+                                   defaultValue={review ? review.title : ""}
                             />
                             {errors.title?.type === "required" && (
                                 <p className="form-control is-invalid form-error-label">
@@ -198,7 +189,7 @@ export default function ReviewForm() {
                                               message: t("ReviewForm.error.description.pattern"),
                                           },
                                       })}
-                                  defaultValue={review ? description : ""}
+                                  defaultValue={review ? review.description : ""}
                             />
 
                             {errors.description?.type === "required" && (

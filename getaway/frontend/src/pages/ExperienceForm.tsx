@@ -45,6 +45,16 @@ export default function ExperienceForm() {
                     }
                     setExperience(fetchedExperience)
                     loadCities(fetchedExperience.country.id)
+
+                    setValue('name', fetchedExperience.name);
+                    setValue('category', fetchedExperience.category.id);
+                    setValue('country', fetchedExperience.country.id.toString());
+                    setValue('city', fetchedExperience.city.name);
+                    setValue('address', fetchedExperience.address);
+                    setValue('mail', fetchedExperience.email);
+                    setValue('price', fetchedExperience.price);
+                    setValue('url', fetchedExperience.siteUrl);
+                    setValue('description', fetchedExperience.description);
                 },
                 () => {
                 },
@@ -91,7 +101,7 @@ export default function ExperienceForm() {
         );
     }
 
-    const {register, handleSubmit, formState: {errors},}
+    const {register, handleSubmit, setValue, formState: {errors},}
         = useForm<FormDataExperience>({criteriaMode: "all"});
 
     const onSubmit = handleSubmit((data: FormDataExperience) => {
