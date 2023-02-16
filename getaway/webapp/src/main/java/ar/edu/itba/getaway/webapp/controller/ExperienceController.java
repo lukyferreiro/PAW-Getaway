@@ -118,6 +118,8 @@ public class ExperienceController {
 
         final UriBuilder uriBuilder = uriInfo
                 .getAbsolutePathBuilder()
+                .queryParam("category", category)
+                .queryParam("name", name)
                 .queryParam("order", order)
                 .queryParam("price", maxPrice)
                 .queryParam("score", maxScore)

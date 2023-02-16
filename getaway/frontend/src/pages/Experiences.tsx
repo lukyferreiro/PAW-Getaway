@@ -24,7 +24,6 @@ type FormFilterData = {
     score: number,
 };
 
-
 export default function Experiences() {
 
     const {t} = useTranslation()
@@ -58,22 +57,8 @@ export default function Experiences() {
     const [maxPage, setMaxPage] = useState(1)
     const [currentPage] = usePagination()
 
-    useEffect(() => {
-        setIsLoading(true)
-        serviceHandler(
-            experienceService.getExperiencesByFilter(category, name, order, price, rating, city, currentPage),
-            navigate, (experiences) => {
-                setExperiences(experiences.getContent())
-                setMaxPage(experiences.getMaxPage())
-            },
-            () => {
-                setIsLoading(false)
-            },
-            () => {
-                setExperiences(new Array(0))
-                setIsLoading(false)
-            }
-        );
+    //TODO: city not refreshing
+    useEffect(()=>{
         serviceHandler(
             experienceService.getUserOrderByModels(),
             navigate, (orders) => {
@@ -86,6 +71,35 @@ export default function Experiences() {
                 setOrders(new Array(0))
                 setOrder("OrderByAZ")
                 setSearchParams({category: category, name: name, order: "OrderByAZ"})
+            }
+        );
+        serviceHandler(
+            locationService.getCountries(),
+            navigate, (country) => {
+                setCountries(country)
+            },
+            () => {
+            },
+            () => {
+                setCountries(new Array(0))
+            }
+        );
+    }, [])
+
+    useEffect(() => {
+        setIsLoading(true)
+        serviceHandler(
+            experienceService.getExperiencesByFilter(category, name, order, price, -rating, city, currentPage),
+            navigate, (experiences) => {
+                setExperiences(experiences.getContent())
+                setMaxPage(experiences.getMaxPage())
+            },
+            () => {
+                setIsLoading(false)
+            },
+            () => {
+                setExperiences(new Array(0))
+                setIsLoading(false)
             }
         );
         serviceHandler(
@@ -102,18 +116,7 @@ export default function Experiences() {
                 setPrice(-1)
             }
         );
-        serviceHandler(
-            locationService.getCountries(),
-            navigate, (country) => {
-                setCountries(country)
-            },
-            () => {
-            },
-            () => {
-                setCountries(new Array(0))
-            }
-        );
-    }, [category, name, rating, query, order, currentPage, maxPrice])
+    }, [category, name, rating, city, query, order, currentPage, price])
 
     function loadCities(countryName: string) {
         serviceHandler(
@@ -154,18 +157,7 @@ export default function Experiences() {
     }
 
     const onSubmit = handleSubmit((data: FormFilterData) => {
-            experienceService.getExperiencesByFilter(category, name, order, price, -rating, city, 1)
-                .then((result) => {
-                        if (!result.hasFailed()) {
-                            setExperiences(result.getData().getContent())
-                        } else {
-                            setExperiences(Array(0));
-                        }
-                    }
-                )
-                .catch(() => {
-                    }
-                );
+
         }
     );
 

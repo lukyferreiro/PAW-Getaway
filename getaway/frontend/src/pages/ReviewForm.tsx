@@ -82,6 +82,7 @@ export default function ReviewForm() {
                 reviewService.updateReviewById(parseInt(currentId), data.title, data.description, data.score)
                     .then((result) => {
                         if (!result.hasFailed()) {
+                            console.log("REDIRECTING")
                             navigate(paths.EXPERIENCES + "/" + experienceId, {replace: true})
                         }
                     })

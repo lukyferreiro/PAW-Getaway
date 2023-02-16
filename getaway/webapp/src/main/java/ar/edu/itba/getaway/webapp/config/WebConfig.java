@@ -97,8 +97,10 @@ public class WebConfig {
         final Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
-        if (isOnDevBuild()) properties.setProperty("hibernate.show_sql", "true");
-        properties.setProperty("format_sql", "true");
+        if (isOnDevBuild()) {
+            properties.setProperty("hibernate.show_sql", "true");
+            properties.setProperty("format_sql", "true");
+        }
         factoryBean.setJpaProperties(properties);
         return factoryBean;
     }

@@ -28,12 +28,11 @@ export default function UserFavourites() {
     const [isLoading, setIsLoading] = useState(false)
 
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const [order, setOrder] = useState("OrderByAZ")
+    const [order, setOrder] = useState(getQueryOrDefault(query, "order", "OrderByAZ"))
     const [maxPage, setMaxPage] = useState(1)
     const [currentPage] = usePagination()
 
     useEffect(() => {
-        setIsLoading(true);
         serviceHandler(
             experienceService.getUserOrderByModels(),
             navigate, (orders) => {
@@ -48,6 +47,10 @@ export default function UserFavourites() {
                 setSearchParams({order: "OrderByAZ"})
             }
         );
+    }, [])
+
+    useEffect(() => {
+        setIsLoading(true);
         serviceHandler(
             userService.getUserFavExperiences(user ? user.id : -1, order, currentPage),
             navigate, (experiences) => {
@@ -62,7 +65,7 @@ export default function UserFavourites() {
                 setMaxPage(1)
             }
         )
-    }, [currentPage, order])
+    }, [currentPage, query, order])
 
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>

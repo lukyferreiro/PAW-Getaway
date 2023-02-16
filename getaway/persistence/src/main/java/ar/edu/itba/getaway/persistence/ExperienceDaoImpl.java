@@ -68,9 +68,13 @@ public class ExperienceDaoImpl implements ExperienceDao {
         String finalQuery = "";
         String baseQuery = "SELECT experiences.experienceid \n" +
                 "FROM (experiences NATURAL JOIN (cities NATURAL JOIN countries)) LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" +
-                "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(experiences.description) LIKE LOWER(CONCAT('%', :name,'%')) \n" +
-                "OR LOWER(address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(cityName) LIKE LOWER(CONCAT('%', :name,'%')) \n" +
-                "OR LOWER(countryName) LIKE LOWER(CONCAT('%', :name,'%'))) \n" +
+                "WHERE (\n" +
+                "(LOWER(experienceName) LIKE LOWER(CONCAT('%', '' ,'%')))\n" +
+                "OR (LOWER(experiences.description) LIKE LOWER(CONCAT('%',  '','%')))\n" +
+                "OR (LOWER(address) LIKE LOWER(CONCAT('%',  '','%')) )\n" +
+                "OR (LOWER(cityName) LIKE LOWER(CONCAT('%',  '','%')) )\n" +
+                "OR (LOWER(countryName) LIKE LOWER(CONCAT('%',  '','%')))\n" +
+                ") \n" +
                 "AND COALESCE(price,0) <= :max \n" +
                 "AND observable = true \n";
 
@@ -129,7 +133,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
 
         String finalQuery = "";
-        String baseQuery = "SELECT COALESCE(COUNT (experiences.experienceid), 0)\n \n" +
+        String baseQuery = "SELECT experiences.experienceid \n" +
                 "FROM (experiences NATURAL JOIN (cities NATURAL JOIN countries)) LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" +
                 "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(experiences.description) LIKE LOWER(CONCAT('%', :name,'%')) \n" +
                 "OR LOWER(address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(cityName) LIKE LOWER(CONCAT('%', :name,'%')) \n" +
@@ -137,7 +141,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
                 "AND COALESCE(price,0) <= :max \n" +
                 "AND observable = true \n";
 
-        String havingClause = "HAVING AVG(COALESCE(score,0))>= :score\n";
+        String havingClause = "GROUP BY experiences.experienceId HAVING AVG(COALESCE(score,0))>= :score\n";
         String categorySearch =  "AND categoryId = :categoryId ";
         String citySearch = "AND cityid = :cityId ";
 
@@ -167,7 +171,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         query.setParameter("name", name);
 
         try {
-            return ((BigInteger) query.getSingleResult()).intValue();
+            return query.getResultList().size();
         } catch(NoResultException e){
             return 0;
         }

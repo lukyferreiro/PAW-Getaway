@@ -209,13 +209,13 @@ export class  ExperienceService {
         title: string,
         description: string,
         score: string
-    ) {
+    ): Promise<Result<PostResponse>> {
         const reviewToUpdate = JSON.stringify({
             title:title,
             description:description,
             score:score
         });
-        return resultFetch(this.basePath + "/experience/" + experienceId + "/reviews", {
+        return resultFetch<PostResponse>(this.basePath + "/experience/" + experienceId + "/reviews", {
             method: "POST",
             headers: {
                 "Content-Type": APPLICATION_JSON_TYPE,

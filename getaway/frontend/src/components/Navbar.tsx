@@ -51,6 +51,9 @@ export default function Navbar() {
             },
             () => {setCategories(new Array(0))}
         );
+    }, [])
+
+    useEffect(() => {
         const queryName = getQueryOrDefault(query, "name", "")
         if(queryName !== name){
             setName("")

@@ -65,7 +65,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                     {t('Experience.address')}
                                 </h5>
                                 <p className="information-text">
-                                    {experience.address}
+                                    {experience.address}, {experience.city.name}, {experience.country.name}
                                 </p>
                             </div>
 

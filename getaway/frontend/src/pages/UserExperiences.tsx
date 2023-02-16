@@ -40,7 +40,7 @@ export default function UserExperiences() {
 
     const [userName, setUserName] = useState("")
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const [order, setOrder] = useState<string>("OrderByAZ")
+    const [order, setOrder] = useState<string>(getQueryOrDefault(query, "order", "OrderByAZ"))
     const [maxPage, setMaxPage] = useState(1)
     const [currentPage] = usePagination()
     const [onEdit, setOnEdit] = useState(false)
@@ -51,14 +51,11 @@ export default function UserExperiences() {
     const {register, handleSubmit, formState: {errors}, reset}
         = useForm<FormUserExperiencesSearch>({criteriaMode: "all"})
 
-    useEffect(() => {
-        setOnEdit(false)
-        setIsLoading(true);
+    useEffect(()=> {
         serviceHandler(
             experienceService.getProviderOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
-                setOrder(getQueryOrDefault(query, "order", "OrderByAZ"))
             },
             () => {
             },
@@ -68,7 +65,11 @@ export default function UserExperiences() {
                 setSearchParams({order: "OrderByAZ"})
             }
         );
+    }, [])
 
+    useEffect(() => {
+        setOnEdit(false)
+        setIsLoading(true);
         serviceHandler(
             userService.getUserExperiences(user ? user.id : -1, userName, order, currentPage),
             navigate, (experiences) => {
@@ -92,7 +93,6 @@ export default function UserExperiences() {
         experienceService.setExperienceObservable(experienceId, visibility).then()
             .catch(() => {
             });
-        setOnEdit(true)
     }
 
     function deleteExperience(experienceId: number) {

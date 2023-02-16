@@ -9,6 +9,7 @@ import {experienceService, userService} from "../services";
 import {IconButton} from "@mui/material";
 import {useAuth} from "../hooks/useAuth";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
+import exp from "constants";
 
 export default function CardExperience(props: { experience: ExperienceModel; }) {
 
@@ -32,7 +33,7 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
             () => {
             }
         );
-    }, [fav])
+    }, [])
 
     function setFavExperience(fav: boolean) {
         experienceService.setExperienceFav(experience.id, fav).then()
@@ -64,7 +65,7 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                                 {experience.description}
                             </p>
                             <h5 className="text-truncate">
-                                {experience.address}
+                                {experience.address}, {experience.city.name}, {experience.country.name}
                             </h5>
                             {
                                 (experience.price === undefined ?
