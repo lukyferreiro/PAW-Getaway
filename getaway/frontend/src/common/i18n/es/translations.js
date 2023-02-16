@@ -284,7 +284,7 @@ export const TRANSLATIONS_ES = {
         search: {
             search:"Buscando ",
             category: "en ",
-            name: ": \" {{name}} \""
+            name: " \" {{name}} \""
         }
     }
 };

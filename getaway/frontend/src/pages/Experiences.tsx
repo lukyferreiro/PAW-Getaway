@@ -284,21 +284,37 @@ export default function Experiences() {
                             <OrderDropdown orders={orders}/>
                         </div>
                         <div className="d-flex justify-content-center" style={{fontSize: "x-large"}}>
-                            <p>
-                                {t('Experiences.search.search')}
-                            </p>
-                            {category.length > 0 &&
-                            <p>
-                                {t('Experiences.search.category')}{t('Categories.' + category)}
-                            </p>
-                            }
-                            {name.length > 0 &&
+
+                            {category.length > 0 ?
                             <div>
-                                {t('Experiences.search.name', {name: name})}
-                                <IconButton className="justify-content-center" onClick={cleanQuery}>
-                                    <Close/>
-                                </IconButton>
+                                    {t('Experiences.search.search')}
+                                    {t('Experiences.search.category')}
+                                    {t('Categories.' + category)}
+                                <div className="d-flex justify-content-center">
+                                    {
+                                        name.length > 0 &&
+                                        <div>
+                                            {t('Experiences.search.name', {name: name})}
+                                            <IconButton className="justify-content-center" onClick={cleanQuery}>
+                                                <Close/>
+                                            </IconButton>
+                                        </div>
+                                    }
+                                </div>
+
                             </div>
+                            :
+                                <div>
+                                    {name.length > 0 &&
+                                    <div>
+                                        {t('Experiences.search.search')}
+                                        {t('Experiences.search.name', {name: name})}
+                                        <IconButton className="justify-content-center" onClick={cleanQuery}>
+                                            <Close/>
+                                        </IconButton>
+                                    </div>
+                                    }
+                                </div>
                             }
                         </div>
                         <div style={{margin: "0 20px 0 auto", flex: "1"}}/>

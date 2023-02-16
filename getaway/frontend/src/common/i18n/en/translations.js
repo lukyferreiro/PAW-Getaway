@@ -285,7 +285,7 @@ export const TRANSLATIONS_EN = {
         search: {
             search:"Searching ",
             category: "in ",
-            name: ": \" {{name}} \""
+            name: "\" {{name}} \""
         }
     },
 };
