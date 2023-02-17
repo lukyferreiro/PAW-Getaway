@@ -8,8 +8,8 @@ import {
     Button,
     Box,
     IconButton
-} from "@mui/material"
-import  create from "zustand"
+} from "@mui/material";
+import  create from "zustand";
 import {Close} from "@mui/icons-material";
 import React from "react";
 
