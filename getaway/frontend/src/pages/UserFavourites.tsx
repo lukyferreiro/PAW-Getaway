@@ -20,15 +20,13 @@ export default function UserFavourites() {
     const location = useLocation()
     const query = useQuery()
 
-    const [searchParams, setSearchParams] = useSearchParams()
-
     const {user} = useAuth()
 
     const [favExperiences, setFavExperiences] = useState<ExperienceModel[]>(new Array(0))
     const [isLoading, setIsLoading] = useState(false)
 
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const [order, setOrder] = useState(getQueryOrDefault(query, "order", "OrderByAZ"))
+    const order = useState<string>();
     const [maxPage, setMaxPage] = useState(1)
     const [currentPage] = usePagination()
 
@@ -37,14 +35,13 @@ export default function UserFavourites() {
             experienceService.getUserOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
-                setOrder(getQueryOrDefault(query, "order", "OrderByAZ"))
+                order[1](getQueryOrDefault(query, "order", "OrderByAZ"))
             },
             () => {
             },
             () => {
                 setOrders(new Array(0))
-                setOrder("OrderByAZ")
-                setSearchParams({order: "OrderByAZ"})
+                order[1]("OrderByAZ")
             }
         );
     }, [])
@@ -52,7 +49,7 @@ export default function UserFavourites() {
     useEffect(() => {
         setIsLoading(true);
         serviceHandler(
-            userService.getUserFavExperiences(user ? user.id : -1, order, currentPage),
+            userService.getUserFavExperiences(user ? user.id : -1, order[0], currentPage),
             navigate, (experiences) => {
                 setFavExperiences(experiences.getContent())
                 setMaxPage(experiences ? experiences.getMaxPage() : 1)
@@ -65,7 +62,7 @@ export default function UserFavourites() {
                 setMaxPage(1)
             }
         )
-    }, [currentPage, query, order])
+    }, [currentPage, order[0]])
 
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
@@ -80,7 +77,7 @@ export default function UserFavourites() {
                     <>
                         <div className="d-flex justify-content-center align-content-center">
                             <div style={{margin: "0 auto 0 20px", flex: "1"}}>
-                                <OrderDropdown orders={orders} />
+                                <OrderDropdown orders={orders} order={order}/>
                             </div>
                             <h3 className="title m-0">
                                 {t('User.favsTitle')}

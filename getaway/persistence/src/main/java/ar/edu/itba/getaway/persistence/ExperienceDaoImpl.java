@@ -69,11 +69,11 @@ public class ExperienceDaoImpl implements ExperienceDao {
         String baseQuery = "SELECT experiences.experienceid \n" +
                 "FROM (experiences NATURAL JOIN (cities NATURAL JOIN countries)) LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" +
                 "WHERE (\n" +
-                "(LOWER(experienceName) LIKE LOWER(CONCAT('%', '' ,'%')))\n" +
-                "OR (LOWER(experiences.description) LIKE LOWER(CONCAT('%',  '','%')))\n" +
-                "OR (LOWER(address) LIKE LOWER(CONCAT('%',  '','%')) )\n" +
-                "OR (LOWER(cityName) LIKE LOWER(CONCAT('%',  '','%')) )\n" +
-                "OR (LOWER(countryName) LIKE LOWER(CONCAT('%',  '','%')))\n" +
+                "(LOWER(experienceName) LIKE LOWER(CONCAT('%', :name ,'%')))\n" +
+                "OR (LOWER(experiences.description) LIKE LOWER(CONCAT('%',  :name,'%')))\n" +
+                "OR (LOWER(address) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" +
+                "OR (LOWER(cityName) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" +
+                "OR (LOWER(countryName) LIKE LOWER(CONCAT('%',  :name,'%')))\n" +
                 ") \n" +
                 "AND COALESCE(price,0) <= :max \n" +
                 "AND observable = true \n";
