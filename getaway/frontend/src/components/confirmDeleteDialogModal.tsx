@@ -11,6 +11,7 @@ import {
 } from "@mui/material"
 import  create from "zustand"
 import {Close} from "@mui/icons-material";
+import React from "react";
 
 type ConfirmDialogStore = {
     message: string;
@@ -18,14 +19,17 @@ type ConfirmDialogStore = {
     close: () => void;
 }
 
-const UseConfirmDialogStore = create<ConfirmDialogStore>((set) => ({
-    message: "",
-    onSubmit: undefined,
-    close: () =>
-        set({
-            onSubmit: undefined,
-        }),
-}));
+const UseConfirmDialogStore = create<ConfirmDialogStore>((set) => {
+    return ({
+        message: "",
+        onSubmit: undefined,
+        close: () => {
+            return set({
+                onSubmit: undefined,
+            });
+        },
+    });
+});
 
 export const ConfirmDialog = (message: string, onSubmit: () => void) => {
     UseConfirmDialogStore.setState({
