@@ -12,13 +12,13 @@ export class LocationService {
     }
 
     public async getCitiesByCountry(countryId: number): Promise<Result<CityModel[]>> {
-        return resultFetch<CityModel[]>(this.basePath + "/countries/" + countryId + "/cities", {
+        return resultFetch<CityModel[]>(this.basePath + `/countries/${countryId}/cities`, {
             method: "GET",
         });
     }
 
     public async getCityById(cityId: number): Promise<Result<CityModel>> {
-        return resultFetch<CityModel>(this.basePath + "/cities" + cityId, {
+        return resultFetch<CityModel>(this.basePath + `/cities/${cityId}`, {
             method: "GET",
         });
     }

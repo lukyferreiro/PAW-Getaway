@@ -1,4 +1,3 @@
-
 import {
     Dialog,
     DialogTitle,
@@ -9,7 +8,7 @@ import {
     Box,
     IconButton
 } from "@mui/material";
-import  create from "zustand";
+import create from "zustand";
 import {Close} from "@mui/icons-material";
 import React from "react";
 
@@ -58,7 +57,7 @@ const ConfirmDialogModal: React.FC = () => {
                     }
                     close();
                 }
-                    } >
+                }>
                     Confirmar
                 </Button>
             </DialogActions>

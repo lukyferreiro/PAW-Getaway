@@ -32,7 +32,7 @@ export default function CardReview(props: { reviewModel: ReviewModel; isEditing:
     }, [])
 
     function editReview(reviewId: number) {
-        navigate({pathname: "/experiences/" + reviewModel.experience.id + "/reviewForm", search: `?id=${reviewId}`}, {replace: true});
+        navigate({pathname: `/experiences/${reviewModel.experience.id}/reviewForm`, search: `?id=${reviewId}`}, {replace: true});
     }
 
     return (

@@ -83,7 +83,7 @@ export default function ReviewForm() {
                     .then((result) => {
                         if (!result.hasFailed()) {
                             console.log("REDIRECTING")
-                            navigate(paths.EXPERIENCES + "/" + experienceId, {replace: true})
+                            navigate(`/experiences/${experienceId}`, {replace: true})
                         }
                     })
                     .catch(() => {
@@ -92,7 +92,7 @@ export default function ReviewForm() {
                 experienceService.postNewReview(parseInt(experienceId ? experienceId : "-1"), data.title, data.description, data.score)
                     .then((result) => {
                             if (!result.hasFailed()) {
-                                navigate(paths.EXPERIENCES + "/" + experienceId, {replace: true})
+                                navigate(`/experiences/${experienceId}`, {replace: true})
                             }
                         })
                     .catch(() => {
@@ -102,7 +102,7 @@ export default function ReviewForm() {
     );
 
     if (!user && !readUser) {
-        return <Navigate to="/login" state={{from: "/experiences/" + experienceId + "/createReview"}} replace/>;
+        return <Navigate to="/login" state={{from: `/experiences/${experienceId}/createReview`}} replace/>;
     }
     if (!isVerified) {
         return <Navigate to="/user/profile" replace/>;

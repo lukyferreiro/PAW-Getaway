@@ -134,7 +134,7 @@ export class  ExperienceService {
         experienceId: number,
         view?: boolean
     ): Promise<Result<ExperienceModel>> {
-        const url = new URL(this.basePath + "/experience/" + experienceId);
+        const url = new URL(this.basePath + `/experience/${experienceId}`);
         if (typeof view === "boolean") {
             url.searchParams.append("view", view.toString());
         }
@@ -145,7 +145,7 @@ export class  ExperienceService {
     }
 
     public async getExperienceNameById(experienceId: number): Promise<Result<ExperienceModel>> {
-        return resultFetch<ExperienceModel>(this.basePath + "/experience/" + experienceId + "/name", {
+        return resultFetch<ExperienceModel>(this.basePath + `/experience/${experienceId}/name`, {
             method: "GET",
         });
     }
@@ -173,7 +173,7 @@ export class  ExperienceService {
             url: url ? url : "",
             description: description ? description : ""
         });
-        return resultFetch(this.basePath + "/experience/" + experienceId, {
+        return resultFetch(this.basePath + `/experience/${experienceId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": APPLICATION_JSON_TYPE,
@@ -183,13 +183,13 @@ export class  ExperienceService {
     }
 
     public async deleteExperienceById(experienceId: number)  {
-        return authedFetch(this.basePath + "/experience/" + experienceId, {
+        return authedFetch(this.basePath + `/experience/${experienceId}`, {
             method: "DELETE",
         });
     }
 
     public async getExperienceImage(experienceId: number): Promise<Result<Blob>> {
-        return getImageFetch(this.basePath + "/experience/" + experienceId + "/experienceImage");
+        return getImageFetch(this.basePath + `/experience/${experienceId}/experienceImage`);
     }
 
     public async updateExperienceImage(
@@ -198,7 +198,7 @@ export class  ExperienceService {
     ): Promise<Result<PutResponse>> {
         const formData = new FormData();
         formData.append("file", file, file.name);
-        return resultFetch<PutResponse>(this.basePath + "/experience/" + experienceId + "/experienceImage", {
+        return resultFetch<PutResponse>(this.basePath + `/experience/${experienceId}/experienceImage`, {
             method: "PUT",
             headers: {},
             body: formData,
@@ -209,7 +209,7 @@ export class  ExperienceService {
         experienceId: number,
         page?: number
     ): Promise<Result<PagedContent<ReviewModel[]>>> {
-        return getPagedFetch<ReviewModel[]>(this.basePath + "/experience/" + experienceId + "/reviews", page);
+        return getPagedFetch<ReviewModel[]>(this.basePath + `/experience/${experienceId}/reviews`, page);
     }
 
     public async postNewReview(
@@ -223,7 +223,7 @@ export class  ExperienceService {
             description:description,
             score:score
         });
-        return resultFetch<PostResponse>(this.basePath + "/experience/" + experienceId + "/reviews", {
+        return resultFetch<PostResponse>(this.basePath + `/experience/${experienceId}/reviews`, {
             method: "POST",
             headers: {
                 "Content-Type": APPLICATION_JSON_TYPE,
@@ -236,7 +236,7 @@ export class  ExperienceService {
         experienceId: number,
         set?: boolean
     ) {
-        const url = new URL(this.basePath + "/experience/" + experienceId + "/fav");
+        const url = new URL(this.basePath + `/experience/${experienceId}/fav`);
         if (typeof set === "boolean") {
             url.searchParams.append("set", set.toString());
         }
@@ -252,7 +252,7 @@ export class  ExperienceService {
         experienceId: number,
         set?: boolean
     ) {
-        const url = new URL(this.basePath + "/experience/" + experienceId + "/observable");
+        const url = new URL(this.basePath + `/experience/${experienceId}/observable`);
         if (typeof set === "boolean") {
             url.searchParams.append("set", set.toString());
         }
