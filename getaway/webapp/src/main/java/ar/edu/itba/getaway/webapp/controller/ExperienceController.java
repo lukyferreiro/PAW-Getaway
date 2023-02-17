@@ -213,7 +213,8 @@ public class ExperienceController {
     @Path("/experience/{experienceId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperienceId(
-            @PathParam("experienceId") final long id
+            @PathParam("experienceId") final long id,
+            @QueryParam("view") @DefaultValue("false") final boolean view
     ) {
 
         LOGGER.info("Called /experiences/{} GET", id);
@@ -221,9 +222,12 @@ public class ExperienceController {
         final UserModel user = authFacade.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
 
-//        if (!experience.getUser().equals(user)) {
-//            experienceService.increaseViews(experience);
-//        }
+        if(view) {
+            if (user!=null && !experience.getUser().equals(user)) {
+                favAndViewExperienceService.setViewed(user, experience);
+                experienceService.increaseViews(experience);
+            }
+        }
 
         final ExperienceDto experienceDto = new ExperienceDto(experience, uriInfo);
         return Response.ok(experienceDto).build();

@@ -22,12 +22,6 @@ public class LocationDaoImpl implements LocationDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(LocationDaoImpl.class);
 
     @Override
-    public List<CityModel> listAllCities() {
-        LOGGER.debug("List all cities");
-        return em.createQuery("FROM CityModel ORDER BY cityname ASC", CityModel.class).getResultList();
-    }
-
-    @Override
     public Optional<CityModel> getCityById(long cityId) {
         LOGGER.debug("Get city with id {}", cityId);
         return Optional.ofNullable(em.find(CityModel.class, cityId));

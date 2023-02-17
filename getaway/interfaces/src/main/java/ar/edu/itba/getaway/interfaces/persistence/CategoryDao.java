@@ -11,6 +11,4 @@ public interface CategoryDao {
     Optional<CategoryModel> getCategoryById(long categoryId);
 
     Optional<CategoryModel> getCategoryByName(String categoryName);
-
-//    int getCategoriesCount();
 }

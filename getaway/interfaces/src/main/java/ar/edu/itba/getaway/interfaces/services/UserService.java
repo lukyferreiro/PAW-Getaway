@@ -31,8 +31,6 @@ public interface UserService {
 
     void updateUserInfo(UserModel userModel, UserInfo userInfo);
 
-    void updateUserImage(UserModel userModel, ImageModel imageModel);
-
     void addRole(UserModel user, Roles newRole);
 
     Collection<Roles> getRolesByUser(UserModel user);

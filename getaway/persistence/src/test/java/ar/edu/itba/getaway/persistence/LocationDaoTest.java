@@ -57,13 +57,6 @@ public class LocationDaoTest {
     }
 
     @Test
-    public void testListAllCities() {
-        List<CityModel> cityModels = locationDao.listAllCities();
-        assertEquals(CITY_LIST.size(), cityModels.size());
-        assertTrue(cityModels.containsAll(CITY_LIST));
-    }
-
-    @Test
     public void testGetCityById() {
         Optional<CityModel> cityModel = locationDao.getCityById(2L);
         assertTrue(cityModel.isPresent());

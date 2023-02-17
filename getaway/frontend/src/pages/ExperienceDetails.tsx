@@ -31,7 +31,7 @@ export default function ExperienceDetails() {
     useEffect(() => {
         setIsLoading(true)
         serviceHandler(
-            experienceService.getExperienceById(parseInt(experienceId ? experienceId : '-1')),
+            experienceService.getExperienceById(parseInt(experienceId ? experienceId : '-1'), true),
             navigate, (experience) => {
                 setExperience(experience)
             },

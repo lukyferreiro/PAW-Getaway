@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LocationService {
-    List<CityModel> listAllCities();
-
     List<CountryModel> listAllCountries();
 
     Optional<CityModel> getCityById(long cityId);

@@ -38,7 +38,7 @@ export default function ExperienceForm() {
     useEffect(() => {
         if (parseInt(currentId) != -1) {
             serviceHandler(
-                experienceService.getExperienceById(parseInt(currentId)),
+                experienceService.getExperienceById(parseInt(currentId), false),
                 navigate, (fetchedExperience) => {
                     if (fetchedExperience.user.id !== user?.id) {
                         navigate("/", {replace: true});

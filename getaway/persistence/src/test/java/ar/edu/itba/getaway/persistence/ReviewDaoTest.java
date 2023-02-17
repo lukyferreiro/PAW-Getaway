@@ -131,4 +131,18 @@ public class ReviewDaoTest {
         assertEquals("DescUpdate", reviewModel.getDescription());
         assertEquals(5L, reviewModel.getScore());
     }
+
+    @Test
+    @Rollback
+    public void testGetReviewByUserCount() {
+        final long count = reviewDao.getReviewByUserCount(USER_1);
+        assertEquals(2, count);
+    }
+
+    @Test
+    @Rollback
+    public void testGetReviewByExperienceCount() {
+        final long count = reviewDao.getReviewByExperienceCount(DEFAULT_ADV);
+        assertEquals(3, count);
+    }
 }

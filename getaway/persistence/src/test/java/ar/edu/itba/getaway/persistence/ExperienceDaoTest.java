@@ -77,6 +77,7 @@
 //    private final Long DEFAULT_SCORE = 0L;
 //    private final Double DEFAULT_MAX_PRICE = 100000D;
 //    private final Optional<OrderByModel> NO_ORDER = Optional.empty();
+//    private final String EMPTY_STRING = "";
 //    private final Integer PAGE_SIZE = 3;
 //
 //    private final ImageModel IMAGE = new ImageModel(5, DEFAULT_IMG_OBJECT, DEFAULT_TYPE);
@@ -155,8 +156,34 @@
 //    }
 //
 //    @Test
+//    public void testGetVisibleExperienceById() {
+//        Optional<ExperienceModel> experienceModel = experienceDao.getExperienceById(1L);
+//        assertTrue(experienceModel.isPresent());
+//        assertEquals(DEFAULT_ADV, experienceModel.get());
+//        //testing averageScore formula
+//        assertEquals(2, experienceModel.get().getAverageScore());
+//    }
+//
+//    //MODUFY
+//    @Test
+//    public void testGetNotVisibleOwnedExperienceById() {
+//        Optional<ExperienceModel> experienceModel = experienceDao.getExperienceById(1L);
+//        assertTrue(experienceModel.isPresent());
+//        assertEquals(DEFAULT_ADV, experienceModel.get());
+//        //testing averageScore formula
+//        assertEquals(2, experienceModel.get().getAverageScore());
+//    }
+//
+//    //MODIFY
+//    @Test
+//    public void testGetNotVisibleNotOwnedExperienceById() {
+//        Optional<ExperienceModel> experienceModel = experienceDao.getExperienceById(1L);
+//        assertFalse(experienceModel.isPresent());
+//    }
+//
+//    @Test
 //    public void testListByCategory() {
-//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, DEFAULT_MAX_PRICE, DEFAULT_SCORE, null, NO_ORDER, 1, PAGE_SIZE);
+//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, EMPTY_STRING, DEFAULT_MAX_PRICE, DEFAULT_SCORE, null, NO_ORDER, 1, PAGE_SIZE);
 //        assertFalse(experienceModelList.isEmpty());
 //        assertTrue(experienceModelList.contains(DEFAULT_ADV));
 //        assertTrue(experienceModelList.contains(DEFAULT_ADV2));
@@ -165,7 +192,7 @@
 //
 //    @Test
 //    public void testListByCategoryAndCity() {
-//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, DEFAULT_MAX_PRICE, DEFAULT_SCORE, CITY_1, NO_ORDER, 1, PAGE_SIZE);
+//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, EMPTY_STRING, DEFAULT_MAX_PRICE, DEFAULT_SCORE, CITY_1, NO_ORDER, 1, PAGE_SIZE);
 //        assertFalse(experienceModelList.isEmpty());
 //        assertTrue(experienceModelList.contains(DEFAULT_ADV));
 //        assertTrue(experienceModelList.contains(DEFAULT_ADV2));
@@ -174,7 +201,7 @@
 //
 //    @Test
 //    public void testListByCategoryAndPrice() {
-//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, 1750.0, DEFAULT_SCORE, null, NO_ORDER, 1, PAGE_SIZE);
+//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, EMPTY_STRING,1750.0, DEFAULT_SCORE, null, NO_ORDER, 1, PAGE_SIZE);
 //        assertFalse(experienceModelList.isEmpty());
 //        assertTrue(experienceModelList.contains(DEFAULT_ADV));
 //        assertTrue(experienceModelList.contains(DEFAULT_ADV2));
@@ -183,7 +210,7 @@
 //
 //    @Test
 //    public void testListByCategoryPriceAndCity() {
-//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, 1250.0, DEFAULT_SCORE, CITY_1, NO_ORDER, 1, PAGE_SIZE);
+//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, EMPTY_STRING,1250.0, DEFAULT_SCORE, CITY_1, NO_ORDER, 1, PAGE_SIZE);
 //        assertFalse(experienceModelList.isEmpty());
 //        assertTrue(experienceModelList.contains(DEFAULT_ADV));
 //        assertFalse(experienceModelList.contains(DEFAULT_ADV2));
@@ -192,7 +219,7 @@
 //
 //    @Test
 //    public void testListByCategoryAndScore() {
-//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, DEFAULT_MAX_PRICE, 3L, null, NO_ORDER, 1, PAGE_SIZE);
+//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, EMPTY_STRING, DEFAULT_MAX_PRICE, 3L, null, NO_ORDER, 1, PAGE_SIZE);
 //
 //        assertFalse(experienceModelList.isEmpty());
 //        assertFalse(experienceModelList.contains(DEFAULT_ADV));
@@ -202,7 +229,7 @@
 //
 //    @Test
 //    public void testListByCategoryCityAndScore() {
-//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, DEFAULT_MAX_PRICE, 3L, CITY_1, NO_ORDER, 1, PAGE_SIZE);
+//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, EMPTY_STRING, DEFAULT_MAX_PRICE, 3L, CITY_1, NO_ORDER, 1, PAGE_SIZE);
 //
 //        assertFalse(experienceModelList.isEmpty());
 //        assertFalse(experienceModelList.contains(DEFAULT_ADV));
@@ -212,7 +239,7 @@
 //
 //    @Test
 //    public void testListByCategoryPriceAndScore() {
-//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, 1750.0, 3L, null, NO_ORDER, 1, PAGE_SIZE);
+//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, EMPTY_STRING, 1750.0, 3L, null, NO_ORDER, 1, PAGE_SIZE);
 //
 //        assertFalse(experienceModelList.isEmpty());
 //        assertFalse(experienceModelList.contains(DEFAULT_ADV));
@@ -222,7 +249,7 @@
 //
 //    @Test
 //    public void testListByCategoryPriceCityAndScoreOne() {
-//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, 1750.0, 3L, CITY_1, NO_ORDER, 1, PAGE_SIZE);
+//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, EMPTY_STRING, 1750.0, 3L, CITY_1, NO_ORDER, 1, PAGE_SIZE);
 //
 //        assertFalse(experienceModelList.isEmpty());
 //        assertFalse(experienceModelList.contains(DEFAULT_ADV));
@@ -232,7 +259,7 @@
 //
 //    @Test
 //    public void testListByCategoryPriceCityAndScoreTwo() {
-//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, 1750.0, 3L, CITY_2, NO_ORDER, 1, PAGE_SIZE);
+//        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByFilter(CATEGORY_1, EMPTY_STRING, 1750.0, 3L, CITY_2, NO_ORDER, 1, PAGE_SIZE);
 //        assertTrue(experienceModelList.isEmpty());
 //    }
 //
@@ -257,7 +284,7 @@
 //
 //    @Test
 //    public void testGetCountByName() {
-////        assertEquals(1, experienceDao.getCountByName("aventura2"));
+//        assertEquals(1, experienceDao.countListByFilter(null, "aventura2", 10000D, 0L, null));
 //    }
 //
 //    @Test

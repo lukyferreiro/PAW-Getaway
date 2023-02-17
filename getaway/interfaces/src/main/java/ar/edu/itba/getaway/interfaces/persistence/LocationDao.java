@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LocationDao {
-    List<CityModel> listAllCities();
-
     Optional<CityModel> getCityById(long cityId);
 
     List<CityModel> getCitiesByCountry(CountryModel country);

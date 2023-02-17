@@ -93,10 +93,11 @@ public class UserDaoTest {
     @Test
     @Rollback
     public void testCreateUser() {
-        //TODO: fix detached entity passed to persist: ar.edu.itba.getaway.models.ImageModel
         UserModel user = null;
+        ImageModel imageToCreate = em.find(ImageModel.class, 18L);
+
         try {
-            user = userDao.createUser(PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES, IMAGE_CREATE);
+            user = userDao.createUser(PASSWORD, NAME, SURNAME, EMAIL, DEFAULT_ROLES, imageToCreate);
             assertNotNull(user);
         } catch (DuplicateUserException e) {
             e.printStackTrace();
@@ -145,7 +146,7 @@ public class UserDaoTest {
         assertEquals("uno@mail.com", user.get().getEmail());
         assertEquals(IMAGE, user.get().getProfileImage());
         assertTrue(user.get().hasExperiences());
-        assertFalse(user.get().hasReviews());
+        assertTrue(user.get().hasReviews());
 
         ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.get().getRoles());
 
@@ -308,5 +309,65 @@ public class UserDaoTest {
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + USER_TO_ADD_ROLE.getUserId()) + " AND roleId = " + USER_MODEL.getRoleId()));
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + USER_TO_ADD_ROLE.getUserId()) + " AND roleId = " + NOT_VERIFIED_MODEL.getRoleId()));
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "userroles", String.format("userId = " + USER_TO_ADD_ROLE.getUserId() + " AND roleId = " + PROVIDER_MODEL.getRoleId())));
+    }
+
+    @Test
+    public void testGetUserByExperienceId() {
+        final Optional<UserModel> user = userDao.getUserByExperienceId(1L);
+
+        assertNotNull(user);
+        assertTrue(user.isPresent());
+        assertEquals("contra1", user.get().getPassword());
+        assertEquals("usuario", user.get().getName());
+        assertEquals("uno", user.get().getSurname());
+        assertEquals("uno@mail.com", user.get().getEmail());
+        assertEquals(IMAGE, user.get().getProfileImage());
+        assertTrue(user.get().hasExperiences());
+        assertTrue(user.get().hasReviews());
+
+        ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.get().getRoles());
+
+        assertTrue(arrayRoles.contains(USER_MODEL));
+        assertTrue(arrayRoles.contains(NOT_VERIFIED_MODEL));
+
+        List<ExperienceModel> favs = user.get().getFavExperiences();
+
+        assertTrue(favs.contains(DEFAULT_ADV));
+        assertTrue(favs.contains(DEFAULT_GAS));
+
+        List<ExperienceModel> viewed = user.get().getViewedExperiences();
+
+        assertTrue(viewed.contains(DEFAULT_ADV));
+        assertTrue(viewed.contains(DEFAULT_GAS));
+    }
+
+    @Test
+    public void testGetUserByReviewId() {
+        final Optional<UserModel> user = userDao.getUserByReviewId(1L);
+
+        assertNotNull(user);
+        assertTrue(user.isPresent());
+        assertEquals("contra1", user.get().getPassword());
+        assertEquals("usuario", user.get().getName());
+        assertEquals("uno", user.get().getSurname());
+        assertEquals("uno@mail.com", user.get().getEmail());
+        assertEquals(IMAGE, user.get().getProfileImage());
+        assertTrue(user.get().hasExperiences());
+        assertTrue(user.get().hasReviews());
+
+        ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.get().getRoles());
+
+        assertTrue(arrayRoles.contains(USER_MODEL));
+        assertTrue(arrayRoles.contains(NOT_VERIFIED_MODEL));
+
+        List<ExperienceModel> favs = user.get().getFavExperiences();
+
+        assertTrue(favs.contains(DEFAULT_ADV));
+        assertTrue(favs.contains(DEFAULT_GAS));
+
+        List<ExperienceModel> viewed = user.get().getViewedExperiences();
+
+        assertTrue(viewed.contains(DEFAULT_ADV));
+        assertTrue(viewed.contains(DEFAULT_GAS));
     }
 }

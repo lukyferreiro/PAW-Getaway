@@ -114,11 +114,7 @@ export default function UserExperiences() {
         reset()
     }
 
-    // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
+
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
             <div className="container-fluid p-0 my-3 d-flex flex-column justify-content-center">

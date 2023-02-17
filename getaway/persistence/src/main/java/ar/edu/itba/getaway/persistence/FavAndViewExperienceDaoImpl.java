@@ -36,5 +36,4 @@ public class FavAndViewExperienceDaoImpl implements FavAndViewExperienceDao {
         user.addViewed(experience);
         em.merge(user);
     }
-
 }

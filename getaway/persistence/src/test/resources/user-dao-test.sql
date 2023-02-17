@@ -2,6 +2,10 @@ TRUNCATE TABLE users RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE roles RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE images RESTART IDENTITY AND COMMIT NO CHECK;
 TRUNCATE TABLE userRoles RESTART IDENTITY AND COMMIT NO CHECK;
+TRUNCATE TABLE experiences RESTART IDENTITY AND COMMIT NO CHECK;
+TRUNCATE TABLE reviews RESTART IDENTITY AND COMMIT NO CHECK;
+TRUNCATE TABLE favuserexperience RESTART IDENTITY AND COMMIT NO CHECK;
+TRUNCATE TABLE viewed RESTART IDENTITY AND COMMIT NO CHECK;
 
 INSERT INTO roles(roleId, roleName) VALUES (1, 'PROVIDER');
 INSERT INTO roles(roleId, roleName) VALUES (2, 'USER');
@@ -57,6 +61,9 @@ INSERT INTO experiences(experienceid, experiencename, price, address, descriptio
 VALUES (1, 'testaventura', 0, 'diraventura', null, null, 1, 1, 10, 'owner@mail.com', 1, true, 0);
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
 VALUES (2, 'testgastro', 0, 'dirgastro', null, null, 1, 2, 10, 'owner@mail.com', 2, true, 0);
+
+INSERT INTO reviews(reviewid, title, description, score, experienceid, reviewdate, userid)
+VALUES (1, 'Title1', 'Desc1', 1, 1, '2022-01-01', 10);
 
 -- User 1 favs
 INSERT INTO favuserexperience(userid, experienceid) VALUES (10, 1);

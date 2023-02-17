@@ -130,9 +130,17 @@ export class  ExperienceService {
         });
     }
 
-    public async getExperienceById(experienceId: number): Promise<Result<ExperienceModel>> {
-        return resultFetch<ExperienceModel>(this.basePath + "/experience/" + experienceId, {
-            method: "GET",
+    public async getExperienceById(
+        experienceId: number,
+        view?: boolean
+    ): Promise<Result<ExperienceModel>> {
+        const url = new URL(this.basePath + "/experience/" + experienceId);
+        if (typeof view === "boolean") {
+            url.searchParams.append("view", view.toString());
+        }
+
+        return resultFetch(url.toString(), {
+            method: "GET"
         });
     }
 

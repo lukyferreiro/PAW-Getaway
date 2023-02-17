@@ -22,12 +22,6 @@ public class LocationServiceImpl implements LocationService {
     private final String ARGENTINA = "Argentina";
 
     @Override
-    public List<CityModel> listAllCities() {
-        LOGGER.debug("Retrieving all cities");
-        return locationDao.listAllCities();
-    }
-
-    @Override
     public List<CountryModel> listAllCountries() {
         LOGGER.debug("Retrieving all countries");
         return locationDao.listAllCountries();

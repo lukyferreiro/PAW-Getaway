@@ -97,12 +97,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<UserModel> updateUserImage(UserModel user, ImageModel imageModel) {
-        user.setProfileImageId(imageModel);
-        return Optional.ofNullable(em.merge(user));
-    }
-
-    @Override
     public Optional<UserModel> addRole(UserModel user, Roles newRole) {
         final RoleModel roleModel = getRoleByName(newRole).get();
         user.addRole(roleModel);
