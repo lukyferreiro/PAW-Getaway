@@ -9,7 +9,7 @@ import {
     Box,
     IconButton
 } from "@mui/material"
-import create from "zustand"
+import  create from "zustand"
 import {Close} from "@mui/icons-material";
 
 type ConfirmDialogStore = {
@@ -18,7 +18,7 @@ type ConfirmDialogStore = {
     close: () => void;
 }
 
-const useConfirmDialogStore = create<ConfirmDialogStore>((set) => ({
+const UseConfirmDialogStore = create<ConfirmDialogStore>((set) => ({
     message: "",
     onSubmit: undefined,
     close: () =>
@@ -27,15 +27,15 @@ const useConfirmDialogStore = create<ConfirmDialogStore>((set) => ({
         }),
 }));
 
-export const confirmDialog = (message: string, onSubmit: () => void) => {
-    useConfirmDialogStore.setState({
+export const ConfirmDialog = (message: string, onSubmit: () => void) => {
+    UseConfirmDialogStore.setState({
         message,
         onSubmit,
     })
 }
 
 const confirmDeleteDialogModal: React.FC = () => {
-    const {message, onSubmit, close} = useConfirmDialogStore();
+    const {message, onSubmit, close} = UseConfirmDialogStore();
     return (
         <Dialog open={/*Boolean(onSubmit)*/true} onClose={close} maxWidth={"sm"} fullWidth>
             <DialogTitle>Eliminar</DialogTitle>
