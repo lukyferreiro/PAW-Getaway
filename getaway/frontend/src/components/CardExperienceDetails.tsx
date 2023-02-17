@@ -12,7 +12,7 @@ import React from "react";
 import {CategoryModel, ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import {experienceService} from "../services";
-import confirmDialogModal from "./ConfirmDialogModal";
+import ConfirmDialogModal, { confirmDialogModal } from "../components/ConfirmDialogModal";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel; categoryModel: CategoryModel; isEditing: boolean; }) {
 
@@ -20,7 +20,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const {t} = useTranslation();
     const hasImage = false;
     const navigate = useNavigate()
-    const handleSubmit = () => console.log("ok")
+
     function setVisibility(experienceId: number, visibility: boolean) {
         experienceService.setExperienceObservable(experienceId, visibility).then()
             .catch(() => {
@@ -39,6 +39,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     }
 
 
+    // @ts-ignore
     return (
         <>
             <div className="d-flex flex-wrap justify-content-center align-content-center">
@@ -46,7 +47,8 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     <div className="p-2" style={{width: "600px"}}>
                         {hasImage ?
                             <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "550px"}}
-                                 src={`/experiences/${experience.id}/experienceImage`} alt={`Imagen ${experience.name}`}/>
+                                 src={`/experiences/${experience.id}/experienceImage`}
+                                 alt={`Imagen ${experience.name}`}/>
                             :
                             <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "450px"}}
                                  src={`./images/${categoryModel.name}.svg`} alt={`${categoryModel.name}`}/>
@@ -169,7 +171,8 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                         <div>
                             {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
                             {/*   ${false}"/> </c:url>">*/}
-                            <IconButton onClick={() => setVisibility(experience.id, false)} aria-label="visibilityOn" component="span" style={{fontSize: "xxx-large"}} id="setFalse">
+                            <IconButton onClick={() => setVisibility(experience.id, false)} aria-label="visibilityOn"
+                                        component="span" style={{fontSize: "xxx-large"}} id="setFalse">
                                 <VisibilityIcon/>
                             </IconButton>
                             {/*</a>*/}
@@ -178,7 +181,8 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                         <div>
                             {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
                             {/*   ${true}"/> </c:url>">*/}
-                            <IconButton onClick={() => setVisibility(experience.id, true)} aria-label="visibilityOff" component="span" style={{fontSize: "xx-large"}} id="setTrue">
+                            <IconButton onClick={() => setVisibility(experience.id, true)} aria-label="visibilityOff"
+                                        component="span" style={{fontSize: "xx-large"}} id="setTrue">
                                 <VisibilityOffIcon/>
                             </IconButton>
                             {/*</a>  */}
@@ -187,16 +191,22 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     }
 
                     {/*<a href="<c:url value="/user/experiences/edit/${param.id}"/>">*/}
-                    <IconButton onClick={() => editExperience(experience.id)} aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
+                    <IconButton onClick={() => editExperience(experience.id)} aria-label="edit" component="span"
+                                style={{fontSize: "xx-large"}}>
                         <EditIcon/>
                     </IconButton>
 
                     {/*</a>*/}
                     {/*<a href="<c:url value="/user/experiences/delete/${param.id}"/>">*/}
-                    <IconButton onClick={() => deleteExperience(experience.id)} aria-label="trash" component="span" style={{fontSize: "xx-large"}}>
+                    <IconButton
+                        onClick={() => confirmDialogModal(t('User.experiences.confirmDelete',{experienceName: experience.name}), () => deleteExperience(experience.id))}
+                        aria-label="trash"
+                        component="span"
+                        style={{fontSize: "xx-large"}}>
                         <DeleteIcon/>
                     </IconButton>
                     {/*</a>*/}
+                    <ConfirmDialogModal/>
                 </div>
             }
         </>

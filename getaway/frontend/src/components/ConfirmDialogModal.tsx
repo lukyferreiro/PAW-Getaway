@@ -42,7 +42,7 @@ const ConfirmDialogModal: React.FC = () => {
     const {message, onSubmit, close} = UseConfirmDialogStore();
     return (
         <Dialog open={Boolean(onSubmit)} onClose={close} maxWidth="sm" fullWidth>
-            <DialogTitle>Eliminar</DialogTitle>
+            <DialogTitle>Eliminar experiencia</DialogTitle>
             <Box position="absolute" top={0} right={0}>
                 <IconButton onClick={close}>
                     <Close/>

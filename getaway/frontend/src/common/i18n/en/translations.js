@@ -173,7 +173,8 @@ export const TRANSLATIONS_EN = {
             price: "Price",
             views: "Views",
             actions: "Actions",
-            reviewsCount: "Reseñas {{count}}"
+            reviewsCount: "Reviews {{count}}",
+            confirmDelete: "Are you sure you want to delete this experience: {{experienceName}}?"
         },
         noExperiences: "You haven't created any experience yet",
         experiencesTitle: "My experiences",

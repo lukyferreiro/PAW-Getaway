@@ -306,7 +306,7 @@ export default function UserExperiences() {
                                                                     style={{fontSize: "x-large"}}>
                                                             <EditIcon/>
                                                         </IconButton>
-                                                        <IconButton onClick={() => confirmDialogModal("Esta seguro que desea eliminar la experiencia?",() => deleteExperience(experience.id))}
+                                                        <IconButton onClick={() => confirmDialogModal(t('User.experiences.confirmDelete',{experienceName: experience.name}),() => deleteExperience(experience.id))}
                                                                     aria-label="trash" component="span"
                                                                     style={{fontSize: "x-large"}}>
                                                             <DeleteIcon/>
