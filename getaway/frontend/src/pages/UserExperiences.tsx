@@ -21,9 +21,6 @@ import {Close} from "@mui/icons-material";
 import DataLoader from "../components/DataLoader";
 import ConfirmDialogModal, { confirmDialogModal } from "../components/ConfirmDialogModal";
 
-
-
-
 type FormUserExperiencesSearch = {
     name: string
 };
@@ -297,7 +294,7 @@ export default function UserExperiences() {
                                                                     style={{fontSize: "x-large"}}>
                                                             <EditIcon/>
                                                         </IconButton>
-                                                        <IconButton onClick={() => confirmDialogModal(t('User.experiences.confirmDelete',{experienceName: experience.name}),() => deleteExperience(experience.id))}
+                                                        <IconButton onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'), t('User.experiences.confirmDelete',{experienceName: experience.name}),() => deleteExperience(experience.id))}
                                                                     aria-label="trash" component="span"
                                                                     style={{fontSize: "x-large"}}>
                                                             <DeleteIcon/>

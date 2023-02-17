@@ -13,6 +13,7 @@ import {Close} from "@mui/icons-material";
 import React from "react";
 
 type ConfirmDialogStore = {
+    title: string;
     message: string;
     onSubmit?: () => void;
     close: () => void;
@@ -20,6 +21,7 @@ type ConfirmDialogStore = {
 
 const UseConfirmDialogStore = create<ConfirmDialogStore>((set) => {
     return ({
+        title: "",
         message: "",
         onSubmit: undefined,
         close: () => {
@@ -30,18 +32,19 @@ const UseConfirmDialogStore = create<ConfirmDialogStore>((set) => {
     });
 });
 
-export const confirmDialogModal = (message: string, onSubmit: () => void) => {
+export const confirmDialogModal = (title:string, message: string, onSubmit: () => void) => {
     UseConfirmDialogStore.setState({
+        title,
         message,
         onSubmit,
     })
 }
 
 const ConfirmDialogModal: React.FC = () => {
-    const {message, onSubmit, close} = UseConfirmDialogStore();
+    const {title, message, onSubmit, close} = UseConfirmDialogStore();
     return (
         <Dialog open={Boolean(onSubmit)} onClose={close} maxWidth="sm" fullWidth>
-            <DialogTitle>Eliminar experiencia</DialogTitle>
+            <DialogTitle>{title}</DialogTitle>
             <Box position="absolute" top={0} right={0}>
                 <IconButton onClick={close}>
                     <Close/>

@@ -174,7 +174,8 @@ export const TRANSLATIONS_ES = {
             views: "Vistas",
             actions: "Acciones",
             reviewsCount: "Reseñas {{count}}",
-            confirmDelete: "Est\u00E1 seguro que desea eliminar la experiencia: {{experienceName}}?"
+            deleteTitle: "Eliminar experiencia",
+            confirmDelete: "¿Est\u00E1 seguro que desea eliminar la experiencia: {{experienceName}}?"
         },
         noExperiences: "Aún no has creado ninguna experiencia",
         experiencesTitle: "Mis experiencias",

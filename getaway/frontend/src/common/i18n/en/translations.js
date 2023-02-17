@@ -174,6 +174,7 @@ export const TRANSLATIONS_EN = {
             views: "Views",
             actions: "Actions",
             reviewsCount: "Reviews {{count}}",
+            deleteTitle: "Delete experience",
             confirmDelete: "Are you sure you want to delete this experience: {{experienceName}}?"
         },
         noExperiences: "You haven't created any experience yet",

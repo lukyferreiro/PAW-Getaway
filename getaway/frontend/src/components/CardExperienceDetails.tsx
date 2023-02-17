@@ -38,8 +38,6 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
         navigate({pathname: "/experienceForm", search: `?id=${experienceId}`}, {replace: true});
     }
 
-
-    // @ts-ignore
     return (
         <>
             <div className="d-flex flex-wrap justify-content-center align-content-center">
@@ -169,43 +167,32 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 <div className="btn-group my-2 d-flex justify-content-center align-content-center" role="group">
                     {experience.observable ?
                         <div>
-                            {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
-                            {/*   ${false}"/> </c:url>">*/}
                             <IconButton onClick={() => setVisibility(experience.id, false)} aria-label="visibilityOn"
                                         component="span" style={{fontSize: "xxx-large"}} id="setFalse">
                                 <VisibilityIcon/>
                             </IconButton>
-                            {/*</a>*/}
                         </div>
                         :
                         <div>
-                            {/*<a href="<c:url value=" ${param.path}"> <c:param name=" setObs" value="*/}
-                            {/*   ${true}"/> </c:url>">*/}
                             <IconButton onClick={() => setVisibility(experience.id, true)} aria-label="visibilityOff"
                                         component="span" style={{fontSize: "xx-large"}} id="setTrue">
                                 <VisibilityOffIcon/>
                             </IconButton>
-                            {/*</a>  */}
                         </div>
 
                     }
-
-                    {/*<a href="<c:url value="/user/experiences/edit/${param.id}"/>">*/}
                     <IconButton onClick={() => editExperience(experience.id)} aria-label="edit" component="span"
                                 style={{fontSize: "xx-large"}}>
                         <EditIcon/>
                     </IconButton>
 
-                    {/*</a>*/}
-                    {/*<a href="<c:url value="/user/experiences/delete/${param.id}"/>">*/}
                     <IconButton
-                        onClick={() => confirmDialogModal(t('User.experiences.confirmDelete',{experienceName: experience.name}), () => deleteExperience(experience.id))}
+                        onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'),t('User.experiences.confirmDelete',{experienceName: experience.name}), () => deleteExperience(experience.id))}
                         aria-label="trash"
                         component="span"
                         style={{fontSize: "xx-large"}}>
                         <DeleteIcon/>
                     </IconButton>
-                    {/*</a>*/}
                     <ConfirmDialogModal/>
                 </div>
             }
