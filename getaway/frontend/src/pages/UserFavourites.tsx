@@ -1,16 +1,14 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, Dispatch, SetStateAction} from "react";
 import {ExperienceModel, OrderByModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, userService} from "../services";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import CardExperience from "../components/CardExperience";
-import {usePagination} from "../hooks/usePagination";
 import Pagination from "../components/Pagination";
 import OrderDropdown from "../components/OrderDropdown";
-import {getQueryOrDefault, queryHasParam, useQuery} from "../hooks/useQuery";
 import DataLoader from "../components/DataLoader";
 
 export default function UserFavourites() {
@@ -18,7 +16,6 @@ export default function UserFavourites() {
     const {t} = useTranslation()
     const navigate = useNavigate()
     const location = useLocation()
-    const query = useQuery()
 
     const {user} = useAuth()
 
@@ -26,22 +23,20 @@ export default function UserFavourites() {
     const [isLoading, setIsLoading] = useState(false)
 
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const order = useState<string>();
+    const order = useState<string>("OrderByAZ");
     const [maxPage, setMaxPage] = useState(1)
-    const [currentPage] = usePagination()
+    const currentPage = useState<number>(1)
 
     useEffect(() => {
         serviceHandler(
             experienceService.getUserOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
-                order[1](getQueryOrDefault(query, "order", "OrderByAZ"))
             },
             () => {
             },
             () => {
                 setOrders(new Array(0))
-                order[1]("OrderByAZ")
             }
         );
     }, [])
@@ -49,7 +44,7 @@ export default function UserFavourites() {
     useEffect(() => {
         setIsLoading(true);
         serviceHandler(
-            userService.getUserFavExperiences(user ? user.id : -1, order[0], currentPage),
+            userService.getUserFavExperiences(user ? user.id : -1, order[0], currentPage[0]),
             navigate, (experiences) => {
                 setFavExperiences(experiences.getContent())
                 setMaxPage(experiences ? experiences.getMaxPage() : 1)
@@ -62,7 +57,7 @@ export default function UserFavourites() {
                 setMaxPage(1)
             }
         )
-    }, [currentPage, order[0]])
+    }, [currentPage[0], order[0]])
 
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
@@ -94,8 +89,8 @@ export default function UserFavourites() {
                         <div className="mt-auto d-flex justify-content-center align-items-center">
                             {maxPage > 1 && (
                                 <Pagination
-                                    currentPage={currentPage}
                                     maxPage={maxPage}
+                                    currentPage={currentPage}
                                 />
                             )}
                         </div>

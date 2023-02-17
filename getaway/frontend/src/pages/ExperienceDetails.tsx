@@ -9,7 +9,6 @@ import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService} from "../services";
 import {useAuth} from "../hooks/useAuth";
 import Pagination from "../components/Pagination";
-import {usePagination} from "../hooks/usePagination";
 import DataLoader from "../components/DataLoader";
 
 export default function ExperienceDetails() {
@@ -27,7 +26,7 @@ export default function ExperienceDetails() {
     let isVerified = localStorage.getItem("isVerified") === 'true'
 
     const [maxPage, setMaxPage] = useState(1)
-    const [currentPage] = usePagination()
+    const currentPage = useState<number>(1)
 
     useEffect(() => {
         setIsLoading(true)
@@ -37,26 +36,30 @@ export default function ExperienceDetails() {
                 setExperience(experience)
             },
             () => {
+                setIsLoading(false)
             },
             () => {
                 setExperience(undefined)
             }
         );
+    }, []);
+
+    //TODO: Add different dataloader
+    useEffect(()=> {
         serviceHandler(
-            experienceService.getExperienceReviews(parseInt(experienceId ? experienceId : '-1'), currentPage),
+            experienceService.getExperienceReviews(parseInt(experienceId ? experienceId : '-1'), currentPage[0]),
             navigate, (fetchedExperienceReviews) => {
                 setReviews(fetchedExperienceReviews.getContent())
                 setMaxPage(fetchedExperienceReviews ? fetchedExperienceReviews.getMaxPage() : 1)
             },
             () => {
-                setIsLoading(false)
             },
             () => {
                 setReviews(new Array(0))
                 setMaxPage(0)
             }
         );
-    }, [currentPage]);
+    }, [currentPage[0]])
 
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
@@ -107,8 +110,8 @@ export default function ExperienceDetails() {
                             <>
                                 {reviews.map((review) => (
                                     <div className="pl-5 pr-2 w-50"
-                                         style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}}>
-                                        <CardReview reviewModel={review} isEditing={false} key={review.id}/>
+                                         style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}} key={review.id}>
+                                        <CardReview reviewModel={review} isEditing={false}/>
                                     </div>
                                 ))}
                             </>
@@ -120,8 +123,8 @@ export default function ExperienceDetails() {
                 {reviews.length != 0 && maxPage > 1 &&
                     <div className="d-flex justify-content-center align-content-center">
                         <Pagination
-                            currentPage={currentPage}
                             maxPage={maxPage}
+                            currentPage={currentPage}
                         />
                     </div>
                 }

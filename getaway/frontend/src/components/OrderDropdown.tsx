@@ -1,11 +1,9 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {OrderByModel} from "../types";
-import {useNavigate, useSearchParams} from "react-router-dom";
-import {getQueryOrDefault, queryHasParam, useQuery} from "../hooks/useQuery";
 import {Dispatch, SetStateAction} from "react";
 
-export default function OrderDropdown(props: { orders: OrderByModel[], order: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
+export default function OrderDropdown(props: { orders: OrderByModel[], order: [string, Dispatch<SetStateAction<string>>] }) {
 
     const {t} = useTranslation()
     const {orders, order} = props

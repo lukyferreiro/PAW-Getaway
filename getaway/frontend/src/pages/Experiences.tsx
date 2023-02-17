@@ -13,7 +13,6 @@ import {experienceService, locationService} from "../services";
 import {useForm} from "react-hook-form";
 import {serviceHandler} from "../scripts/serviceHandler";
 import Pagination from "../components/Pagination";
-import {usePagination} from "../hooks/usePagination";
 import {Close} from "@mui/icons-material";
 import DataLoader from "../components/DataLoader";
 
@@ -51,10 +50,10 @@ export default function Experiences() {
     const [hover, setHover] = useState(0)
     //Order
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const order = useState<string>()
+    const order = useState<string>("OrderByAZ")
     //Page
     const [maxPage, setMaxPage] = useState(1)
-    const [currentPage] = usePagination()
+    const currentPage = useState<number>(1)
 
     //TODO: city not refreshing
     useEffect(()=>{
@@ -62,7 +61,6 @@ export default function Experiences() {
             experienceService.getUserOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
-                order[1](getQueryOrDefault(query, "order", "OrderByAZ"))
             },
             () => {
             },
@@ -88,7 +86,7 @@ export default function Experiences() {
     useEffect(() => {
         setIsLoading(true)
         serviceHandler(
-            experienceService.getExperiencesByFilter(category, name, order[0], price, -rating, city, currentPage),
+            experienceService.getExperiencesByFilter(category, name, order[0], price, -rating, city, currentPage[0]),
             navigate, (experiences) => {
                 setExperiences(experiences.getContent())
                 setMaxPage(experiences.getMaxPage())
@@ -115,7 +113,7 @@ export default function Experiences() {
                 setPrice(-1)
             }
         );
-    }, [category, name, rating, city, query, order[0], currentPage, price])
+    }, [category, name, rating, city, query, order[0], currentPage[0], price])
 
     function loadCities(countryName: string) {
         serviceHandler(
@@ -149,6 +147,8 @@ export default function Experiences() {
         setRating(0);
         setHover(0);
         setPrice(maxPrice);
+        order[1]("OrderByAZ")
+        currentPage[1](1)
     }
 
     function cleanQuery() {
@@ -196,7 +196,7 @@ export default function Experiences() {
                                 disabled={cities.length <= 0}
                         >
                             {cities.map((city) => (
-                                <option key={city.id} value={city.id} onChange={e => setCity(city.id)}>
+                                <option key={city.id} value={city.id} onClick={e => setCity(city.id)}>
                                     {city.name}
                                 </option>
                             ))}
@@ -341,8 +341,8 @@ export default function Experiences() {
                     <div className="mt-auto d-flex justify-content-center align-items-center">
                         {maxPage > 1 && (
                             <Pagination
-                                currentPage={currentPage}
                                 maxPage={maxPage}
+                                currentPage={currentPage}
                             />
                         )}
                     </div>

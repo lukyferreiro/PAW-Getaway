@@ -229,7 +229,7 @@ export const TRANSLATIONS_ES = {
 
     404: {
         title: "Error 404",
-        description: "Parece que la pagina que estas buscando no existe",
+        description: "Parece que la página que estas buscando no existe",
     },
 
     Error: {
@@ -239,10 +239,10 @@ export const TRANSLATIONS_ES = {
     },
 
     Pagination: {
-        message: "Pagina {{currentPage}} de {{maxPage}}",
+        message: "Página {{currentPage}} de {{maxPage}}",
         alt: {
-            nextPage: "Pagina siguiente",
-            beforePage: "Pagina anterior",
+            nextPage: "Siguiente",
+            beforePage: "Anterior",
         },
     },
 

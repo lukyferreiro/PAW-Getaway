@@ -15,11 +15,9 @@ import EditIcon from "@mui/icons-material/Edit";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {useForm} from "react-hook-form";
-import {usePagination} from "../hooks/usePagination";
 import Pagination from "../components/Pagination";
 import OrderDropdown from "../components/OrderDropdown";
 import {Close} from "@mui/icons-material";
-import {getQueryOrDefault, queryHasParam, useQuery} from "../hooks/useQuery";
 import DataLoader from "../components/DataLoader";
 import ConfirmDialogModal, { confirmDialogModal } from "../components/ConfirmDialogModal";
 
@@ -35,7 +33,6 @@ export default function UserExperiences() {
     const {t} = useTranslation()
     const navigate = useNavigate()
     const location = useLocation()
-    const query = useQuery()
 
     const [userExperiences, setUserExperiences] = useState<ExperienceModel[]>(new Array(0))
     const [isLoading, setIsLoading] = useState(false)
@@ -43,9 +40,9 @@ export default function UserExperiences() {
 
     const [userName, setUserName] = useState("")
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const order = useState<string>()
+    const order = useState<string>("OrderByAZ")
     const [maxPage, setMaxPage] = useState(1)
-    const [currentPage] = usePagination()
+    const currentPage = useState<number>(1)
     const [onEdit, setOnEdit] = useState(false)
 
     const {user} = useAuth()
@@ -60,13 +57,11 @@ export default function UserExperiences() {
             experienceService.getProviderOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
-                order[1](getQueryOrDefault(query, "order", "OrderByAZ"))
             },
             () => {
             },
             () => {
                 setOrders(new Array(0))
-                order[1]("OrderByAZ")
             }
         );
     }, [])
@@ -75,7 +70,7 @@ export default function UserExperiences() {
         setOnEdit(false)
         setIsLoading(true);
         serviceHandler(
-            userService.getUserExperiences(user ? user.id : -1, userName, order[0], currentPage),
+            userService.getUserExperiences(user ? user.id : -1, userName, order[0], currentPage[0]),
             navigate, (experiences) => {
                 setUserExperiences(experiences.getContent())
                 setMaxPage(experiences ? experiences.getMaxPage() : 1)
@@ -87,7 +82,7 @@ export default function UserExperiences() {
                 setMaxPage(1)
             }
         )
-    }, [currentPage, userName, order[0], onEdit])
+    }, [currentPage[0], userName, order[0], onEdit])
 
     const onSubmit = handleSubmit((data: FormUserExperiencesSearch) => {
         setUserName(data.name);

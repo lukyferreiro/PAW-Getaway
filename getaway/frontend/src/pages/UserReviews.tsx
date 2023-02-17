@@ -7,7 +7,6 @@ import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {userService} from "../services";
 import CardReview from "../components/CardReview";
-import {usePagination} from "../hooks/usePagination";
 import Pagination from "../components/Pagination";
 import DataLoader from "../components/DataLoader";
 
@@ -23,12 +22,12 @@ export default function UserReviews() {
     const [isLoading, setIsLoading] = useState(false)
 
     const [maxPage, setMaxPage] = useState(1)
-    const [currentPage] = usePagination()
+    const currentPage = useState<number>(1)
 
     useEffect(() => {
         setIsLoading(true)
         serviceHandler(
-            userService.getUserReviews(user ? user.id : -1, currentPage),
+            userService.getUserReviews(user ? user.id : -1, currentPage[0]),
             navigate, (reviews) => {
                 setReviews(reviews.getContent())
                 setMaxPage(reviews ? reviews.getMaxPage() : 1)
@@ -41,7 +40,7 @@ export default function UserReviews() {
                 setMaxPage(1)
             }
         )
-    }, [currentPage])
+    }, [currentPage[0]])
 
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
@@ -70,8 +69,8 @@ export default function UserReviews() {
                         <div className="mt-auto d-flex justify-content-center align-items-center">
                             {maxPage > 1 && (
                                 <Pagination
-                                    currentPage={currentPage}
                                     maxPage={maxPage}
+                                    currentPage={currentPage}
                                 />
                             )}
                         </div>
