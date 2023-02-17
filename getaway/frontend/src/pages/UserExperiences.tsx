@@ -37,15 +37,13 @@ export default function UserExperiences() {
     const location = useLocation()
     const query = useQuery()
 
-    const [searchParams, setSearchParams] = useSearchParams()
-
     const [userExperiences, setUserExperiences] = useState<ExperienceModel[]>(new Array(0))
     const [isLoading, setIsLoading] = useState(false)
     const [showModal, setShowModal] = useState(false)
 
     const [userName, setUserName] = useState("")
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const [order, setOrder] = useState<string>(getQueryOrDefault(query, "order", "OrderByAZ"))
+    const order = useState<string>()
     const [maxPage, setMaxPage] = useState(1)
     const [currentPage] = usePagination()
     const [onEdit, setOnEdit] = useState(false)
@@ -62,13 +60,13 @@ export default function UserExperiences() {
             experienceService.getProviderOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
+                order[1](getQueryOrDefault(query, "order", "OrderByAZ"))
             },
             () => {
             },
             () => {
                 setOrders(new Array(0))
-                setOrder("OrderByAZ")
-                setSearchParams({order: "OrderByAZ"})
+                order[1]("OrderByAZ")
             }
         );
     }, [])
@@ -77,7 +75,7 @@ export default function UserExperiences() {
         setOnEdit(false)
         setIsLoading(true);
         serviceHandler(
-            userService.getUserExperiences(user ? user.id : -1, userName, order, currentPage),
+            userService.getUserExperiences(user ? user.id : -1, userName, order[0], currentPage),
             navigate, (experiences) => {
                 setUserExperiences(experiences.getContent())
                 setMaxPage(experiences ? experiences.getMaxPage() : 1)
@@ -89,7 +87,7 @@ export default function UserExperiences() {
                 setMaxPage(1)
             }
         )
-    }, [currentPage, userName, query, order, onEdit])
+    }, [currentPage, userName, order[0], onEdit])
 
     const onSubmit = handleSubmit((data: FormUserExperiencesSearch) => {
         setUserName(data.name);
@@ -140,7 +138,7 @@ export default function UserExperiences() {
                         {/*SEARCH and ORDER*/}
                         <div className="d-flex justify-content-center align-content-center">
                             <div style={{margin: "0 auto 0 20px", flex: "1"}}>
-                                <OrderDropdown orders={orders}/>
+                                <OrderDropdown orders={orders} order={order}/>
                             </div>
 
                             <h3 className="title m-0">

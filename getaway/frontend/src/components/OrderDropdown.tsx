@@ -3,19 +3,15 @@ import "../common/i18n/index";
 import {OrderByModel} from "../types";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {getQueryOrDefault, queryHasParam, useQuery} from "../hooks/useQuery";
+import {Dispatch, SetStateAction} from "react";
 
-export default function OrderDropdown(props: { orders: OrderByModel[] }) {
+export default function OrderDropdown(props: { orders: OrderByModel[], order: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
 
     const {t} = useTranslation()
-    const navigate = useNavigate()
-    const {orders} = props
-    const [searchParams, setSearchParams] = useSearchParams()
-    const query = useQuery()
-    const orderQuery = getQueryOrDefault(query, "order", "OrderByAZ")
+    const {orders, order} = props
 
     function changeOrder(queryOrder: string) {
-        searchParams.set("order", queryOrder)
-        setSearchParams(searchParams)
+        order[1](queryOrder)
     }
 
     return (
@@ -25,7 +21,7 @@ export default function OrderDropdown(props: { orders: OrderByModel[] }) {
                         id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                     {t('Order.title')}
                     <b>
-                        {t(`Order.${orderQuery}`)}
+                        {t(`Order.${order[0]}`)}
                     </b>
                 </button>
                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">

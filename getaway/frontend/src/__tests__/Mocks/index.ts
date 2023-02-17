@@ -7,7 +7,6 @@ import {
     MaxPriceModel,
     OrderByModel,
     ReviewModel,
-    RoleModel,
     UserModel,
 } from "../../types"
 

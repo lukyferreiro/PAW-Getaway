@@ -32,39 +32,44 @@ export default function Carousel(props: { title: any, experiences: ExperienceMod
     }
 
     return (
-        <div className="carousel-container">
-
+        <>
             {experiences !== undefined &&
-                <div>
+                <>
                     <div className="d-flex justify-content-center align-content-center">
-                        <h2>{title}</h2>
+                        <h2 style={{fontWeight: "600", textDecoration: "underline"}}>
+                            {title}
+                        </h2>
                     </div>
-                    <div className="carousel-wrapper">
-                        {currentIndex > 0 &&
-                        <button onClick={prev} className="left-arrow">
-                            &lt;
-                        </button>
-                        }
 
-                        <div className="carousel-content-wrapper">
-                            <div className={`carousel-content show-${show}`}
-                                 style={{transform: `translateX(-${currentIndex * (100 / show)}%)`}}>
-                                {experiences.map((exp) => (
-                                    <CardExperience experience={exp} key={exp.id}/>
-                                ))}
+                    <div className="carousel-container">
+                        <div className="carousel-wrapper">
+                            {currentIndex > 0 &&
+                                <button onClick={prev} className="left-arrow">
+                                    &lt;
+                                </button>
+                            }
+
+                            <div className="carousel-content-wrapper">
+                                <div className={`carousel-content show-${show}`}
+                                     style={{transform: `translateX(-${currentIndex * (100 / show)}%)`}}>
+                                    {experiences.map((exp) => (
+                                        <div className="d-flex justify-content-center align-content-center">
+                                            <CardExperience experience={exp} key={exp.id}/>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
+
+                            {currentIndex < (length - show) &&
+                                <button onClick={next} className="right-arrow">
+                                    &gt;
+                                </button>
+                            }
                         </div>
-
-                        {currentIndex < (length - show) &&
-                        <button onClick={next} className="right-arrow">
-                            &gt;
-                        </button>
-                        }
                     </div>
-                </div>
+                </>
             }
-
-        </div>
+        </>
     );
 
 }

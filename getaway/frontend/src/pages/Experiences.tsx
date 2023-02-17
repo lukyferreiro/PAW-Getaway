@@ -33,7 +33,6 @@ export default function Experiences() {
 
     const category = getQueryOrDefault(query, "category", "")
     const name = getQueryOrDefault(query, "name", "")
-    const orderQuery = getQueryOrDefault(query, "order", "")
 
     const [searchParams, setSearchParams] = useSearchParams()
     const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
@@ -52,7 +51,7 @@ export default function Experiences() {
     const [hover, setHover] = useState(0)
     //Order
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const [order, setOrder] = useState<string>("OrderByAZ")
+    const order = useState<string>()
     //Page
     const [maxPage, setMaxPage] = useState(1)
     const [currentPage] = usePagination()
@@ -63,14 +62,14 @@ export default function Experiences() {
             experienceService.getUserOrderByModels(),
             navigate, (orders) => {
                 setOrders(orders)
-                setOrder(getQueryOrDefault(query, "order", "OrderByAZ"))
+                order[1](getQueryOrDefault(query, "order", "OrderByAZ"))
             },
             () => {
             },
             () => {
                 setOrders(new Array(0))
-                setOrder("OrderByAZ")
-                setSearchParams({category: category, name: name, order: "OrderByAZ"})
+                order[1]("OrderByAZ")
+                setSearchParams({category: category, name: name})
             }
         );
         serviceHandler(
@@ -89,7 +88,7 @@ export default function Experiences() {
     useEffect(() => {
         setIsLoading(true)
         serviceHandler(
-            experienceService.getExperiencesByFilter(category, name, order, price, -rating, city, currentPage),
+            experienceService.getExperiencesByFilter(category, name, order[0], price, -rating, city, currentPage),
             navigate, (experiences) => {
                 setExperiences(experiences.getContent())
                 setMaxPage(experiences.getMaxPage())
@@ -116,7 +115,7 @@ export default function Experiences() {
                 setPrice(-1)
             }
         );
-    }, [category, name, rating, city, query, order, currentPage, price])
+    }, [category, name, rating, city, query, order[0], currentPage, price])
 
     function loadCities(countryName: string) {
         serviceHandler(
@@ -153,7 +152,7 @@ export default function Experiences() {
     }
 
     function cleanQuery() {
-        setSearchParams({category: category, name: "", order: orderQuery})
+        setSearchParams({category: category, name: ""})
     }
 
     const onSubmit = handleSubmit((data: FormFilterData) => {
@@ -273,7 +272,7 @@ export default function Experiences() {
 
                     <div className="d-flex justify-content-center align-content-center">
                         <div style={{margin: "0 auto 0 20px", flex: "1"}}>
-                            <OrderDropdown orders={orders}/>
+                            <OrderDropdown orders={orders} order={order}/>
                         </div>
                         <div className="d-flex justify-content-center" style={{fontSize: "x-large"}}>
 
