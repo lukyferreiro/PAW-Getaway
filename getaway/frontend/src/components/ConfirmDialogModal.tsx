@@ -31,17 +31,17 @@ const UseConfirmDialogStore = create<ConfirmDialogStore>((set) => {
     });
 });
 
-export const ConfirmDialog = (message: string, onSubmit: () => void) => {
+export const confirmDialogModal = (message: string, onSubmit: () => void) => {
     UseConfirmDialogStore.setState({
         message,
         onSubmit,
     })
 }
 
-const confirmDeleteDialogModal: React.FC = () => {
+const ConfirmDialogModal: React.FC = () => {
     const {message, onSubmit, close} = UseConfirmDialogStore();
     return (
-        <Dialog open={/*Boolean(onSubmit)*/true} onClose={close} maxWidth={"sm"} fullWidth>
+        <Dialog open={Boolean(onSubmit)} onClose={close} maxWidth="sm" fullWidth>
             <DialogTitle>Eliminar</DialogTitle>
             <Box position="absolute" top={0} right={0}>
                 <IconButton onClick={close}>
@@ -54,7 +54,7 @@ const confirmDeleteDialogModal: React.FC = () => {
             <DialogActions>
                 <Button color="primary" variant="contained" onClick={() => {
                     if (onSubmit) {
-                        onSubmit();
+                        onSubmit()
                     }
                     close();
                 }
@@ -66,4 +66,4 @@ const confirmDeleteDialogModal: React.FC = () => {
     );
 };
 
-export default confirmDeleteDialogModal
+export default ConfirmDialogModal

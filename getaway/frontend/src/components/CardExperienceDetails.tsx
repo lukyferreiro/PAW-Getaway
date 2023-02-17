@@ -12,6 +12,7 @@ import React from "react";
 import {CategoryModel, ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import {experienceService} from "../services";
+import confirmDialogModal from "./ConfirmDialogModal";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel; categoryModel: CategoryModel; isEditing: boolean; }) {
 
@@ -19,7 +20,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const {t} = useTranslation();
     const hasImage = false;
     const navigate = useNavigate()
-
+    const handleSubmit = () => console.log("ok")
     function setVisibility(experienceId: number, visibility: boolean) {
         experienceService.setExperienceObservable(experienceId, visibility).then()
             .catch(() => {

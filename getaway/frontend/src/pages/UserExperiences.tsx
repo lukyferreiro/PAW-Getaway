@@ -21,6 +21,10 @@ import OrderDropdown from "../components/OrderDropdown";
 import {Close} from "@mui/icons-material";
 import {getQueryOrDefault, queryHasParam, useQuery} from "../hooks/useQuery";
 import DataLoader from "../components/DataLoader";
+import ConfirmDialogModal, { confirmDialogModal } from "../components/ConfirmDialogModal";
+
+
+
 
 type FormUserExperiencesSearch = {
     name: string
@@ -37,6 +41,7 @@ export default function UserExperiences() {
 
     const [userExperiences, setUserExperiences] = useState<ExperienceModel[]>(new Array(0))
     const [isLoading, setIsLoading] = useState(false)
+    const [showModal, setShowModal] = useState(false)
 
     const [userName, setUserName] = useState("")
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
@@ -48,10 +53,11 @@ export default function UserExperiences() {
     const {user} = useAuth()
     const isProvider = localStorage.getItem("isProvider") === "true"
 
+
     const {register, handleSubmit, formState: {errors}, reset}
         = useForm<FormUserExperiencesSearch>({criteriaMode: "all"})
 
-    useEffect(()=> {
+    useEffect(() => {
         serviceHandler(
             experienceService.getProviderOrderByModels(),
             navigate, (orders) => {
@@ -95,7 +101,7 @@ export default function UserExperiences() {
             });
     }
 
-    function deleteExperience(experienceId: number) {
+    const deleteExperience = (experienceId: number) => {
         experienceService.deleteExperienceById(experienceId).then()
             .catch(() => {
             });
@@ -115,6 +121,11 @@ export default function UserExperiences() {
         reset()
     }
 
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
             <div className="container-fluid p-0 my-3 d-flex flex-column justify-content-center">
@@ -138,7 +149,8 @@ export default function UserExperiences() {
 
                             <div className="d-flex justify-content-center align-content-center"
                                  style={{margin: "0 20px 0 auto", flex: "1"}}>
-                                <button className="btn btn-search-navbar p-0" type="submit" form="searchExperiencePrivateForm">
+                                <button className="btn btn-search-navbar p-0" type="submit"
+                                        form="searchExperiencePrivateForm">
                                     <img src={'./images/ic_lupa.svg'} alt="Icono lupa"/>
                                 </button>
                                 <form className="my-auto" id="searchExperiencePrivateForm" onSubmit={onSubmit}>
@@ -272,21 +284,33 @@ export default function UserExperiences() {
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div className="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
+                                                    <div
+                                                        className="btn-group w-auto container-fluid p-2 d-flex align-items-end"
+                                                        role="group">
                                                         {experience.observable ?
-                                                            <IconButton onClick={() => setVisibility(experience.id, false)} aria-label="visibilityOn" component="span" style={{fontSize: "x-large"}} id="setFalse">
+                                                            <IconButton
+                                                                onClick={() => setVisibility(experience.id, false)}
+                                                                aria-label="visibilityOn" component="span"
+                                                                style={{fontSize: "x-large"}} id="setFalse">
                                                                 <VisibilityIcon/>
                                                             </IconButton>
                                                             :
-                                                            <IconButton onClick={() => setVisibility(experience.id, true)} aria-label="visibilityOff" component="span" style={{fontSize: "xx-large"}} id="setTrue">
+                                                            <IconButton
+                                                                onClick={() => setVisibility(experience.id, true)}
+                                                                aria-label="visibilityOff" component="span"
+                                                                style={{fontSize: "xx-large"}} id="setTrue">
                                                                 <VisibilityOffIcon/>
                                                             </IconButton>
                                                         }
 
-                                                        <IconButton onClick={() => editExperience(experience.id)} aria-label="edit" component="span" style={{fontSize: "x-large"}}>
+                                                        <IconButton onClick={() => editExperience(experience.id)}
+                                                                    aria-label="edit" component="span"
+                                                                    style={{fontSize: "x-large"}}>
                                                             <EditIcon/>
                                                         </IconButton>
-                                                        <IconButton onClick={() => deleteExperience(experience.id)} aria-label="trash" component="span" style={{fontSize: "x-large"}}>
+                                                        <IconButton onClick={() => confirmDialogModal("Esta seguro que desea eliminar la experiencia?",() => deleteExperience(experience.id))}
+                                                                    aria-label="trash" component="span"
+                                                                    style={{fontSize: "x-large"}}>
                                                             <DeleteIcon/>
                                                         </IconButton>
                                                     </div>
@@ -295,6 +319,7 @@ export default function UserExperiences() {
                                         ))}
                                         </tbody>
                                     </table>
+
                                     <div className="mt-auto d-flex justify-content-center align-items-center">
                                         {maxPage > 1 && (
                                             <Pagination
@@ -309,6 +334,7 @@ export default function UserExperiences() {
                     </>
                 }
             </div>
+            <ConfirmDialogModal/>
         </DataLoader>
     );
 
