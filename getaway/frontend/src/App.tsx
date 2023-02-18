@@ -20,6 +20,7 @@ import Home from "./pages/Home";
 import {AuthProvider} from "./context/AuthContext";
 import Login from "./pages/Login";
 import CreateAccount from "./pages/CreateAccount";
+import EditAccount from "./pages/EditAccount";
 
 function App() {
     return (
@@ -48,6 +49,7 @@ function App() {
                     </Route>
                     <Route path='/login' element={<Login/>}/>
                     <Route path='/createAccount' element={<CreateAccount/>}/>
+                    <Route path='/editAccount' element={<EditAccount/>}/>
                 </Routes>
 
                 <Footer/>

@@ -67,7 +67,7 @@ export default function UserProfile() {
     })
 
     function editUserInfo(user: UserModel) {
-        navigate({pathname: "/editProfile"})
+        navigate({pathname: "/editAccount"})
     }
 
     return (
