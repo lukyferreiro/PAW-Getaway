@@ -56,7 +56,7 @@ export class UserService {
     }
 
     public async updateUserInfoById(
-        userId: number,
+        userId?: number,
         name?: string,
         surname?: string
     ) : Promise<Result<PutResponse>>{
