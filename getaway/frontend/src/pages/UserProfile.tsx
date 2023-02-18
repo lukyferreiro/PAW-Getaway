@@ -2,12 +2,14 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
-import {userService} from "../services";
+import {experienceService, userService} from "../services";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {useForm} from "react-hook-form";
+import {UserModel} from "../types";
+
 
 type FormDataImg = {
     image?: FileList
@@ -64,6 +66,9 @@ export default function UserProfile() {
             .catch(() => {})
     })
 
+    function editUserInfo(user: UserModel) {
+        navigate({pathname: "/editProfile"})
+    }
 
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoadingImg}>
@@ -136,7 +141,7 @@ export default function UserProfile() {
 
                     <div className="mb-2">
                         {user?.verified ?
-                            <button type="button" className="btn btn-error">
+                            <button onClick={() => editUserInfo(user)} type="button" className="btn btn-error">
                                 {t('User.profile.editBtn')}
                             </button>
                             :

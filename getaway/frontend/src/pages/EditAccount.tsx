@@ -18,7 +18,7 @@ type FormDataCreate = {
     confirmPassword: string;
 };
 
-export default function CreateAccount() {
+export default function EditAccount() {
     const {t} = useTranslation()
     let auth = useAuth()
     let navigate = useNavigate()
@@ -65,16 +65,13 @@ export default function CreateAccount() {
                 <div className="row w-100 m-0 p-4 align-items-center justify-content-center">
                     <div className="col-12">
                         <h1 className="text-center title">
-                            {t('Navbar.createAccountPopUp')}
+                            {t('Navbar.editAccountPopUp')}
                         </h1>
-                        <p className="subtitle text-center">
-                            {t('Navbar.createAccountDescription')}
-                        </p>
                     </div>
                     <div className="col-12">
                         <div className="container-lg">
                             <div className="row">
-                                <form id="createAccountForm" onSubmit={onSubmitCreate}>
+                                <form id="editAccountForm" onSubmit={onSubmitCreate}>
                                     <div className="form-group">
                                         <label className="form-label d-flex justify-content-between"
                                                htmlFor="email">
@@ -176,7 +173,7 @@ export default function CreateAccount() {
                                         <label htmlFor="password"
                                                className="form-label d-flex justify-content-between">
                                             <div>
-                                                {t('Navbar.password')}
+                                                {t('Navbar.editPassword')}
                                                 <span className="required-field">*</span>
                                             </div>
                                             <div className="align-self-center">
@@ -213,7 +210,7 @@ export default function CreateAccount() {
 
                                     <div className="form-group">
                                         <label htmlFor="confirmPassword" className="form-label">
-                                            {t('Navbar.confirmPassword')}
+                                            {t('Navbar.confirmEditPassword')}
                                             <span className="required-field">*</span>
                                         </label>
                                         <div className="input-group d-flex justify-content-start align-items-center">

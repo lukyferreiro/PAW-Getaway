@@ -43,7 +43,10 @@ export const TRANSLATIONS_ES = {
         emailPlaceholder: "juan@ejemplo.com",
         namePlaceholder: "Juan",
         surnamePlaceholder: "Martínez",
-        passwordPlaceholder: "Entre 8 y 25 caracteres"
+        passwordPlaceholder: "Entre 8 y 25 caracteres",
+        editAccountPopUp: "Edit\u00E1 tu cuenta",
+        editPassword: "Nueva contraseña",
+        confirmEditPassword: "Confirmar nueva contraseña",
     },
 
     Filters: {

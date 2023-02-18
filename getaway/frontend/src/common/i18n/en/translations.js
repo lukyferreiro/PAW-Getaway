@@ -40,10 +40,14 @@ export const TRANSLATIONS_EN = {
         name: "Name",
         surname: "Surname",
         createButton: "Create account",
-        emailPlaceholder: "jhondoe@example.com",
-        namePlaceholder: "Jhon",
+        emailPlaceholder: "johndoe@example.com",
+        namePlaceholder: "John",
         surnamePlaceholder: "Doe",
-        passwordPlaceholder: "Between 8 and 25 characters"
+        passwordPlaceholder: "Between 8 and 25 characters",
+        editAccountPopUp: "Edit your account",
+        editPassword: "New password",
+        confirmEditPassword: "Confirm new password",
+
     },
 
     Filters: {
