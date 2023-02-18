@@ -47,6 +47,7 @@ export const TRANSLATIONS_EN = {
         editAccountPopUp: "Edit your account",
         editPassword: "New password",
         confirmEditPassword: "Confirm new password",
+        editAccount:"Edit account"
 
     },
 

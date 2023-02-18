@@ -246,7 +246,7 @@ export default function EditAccount() {
                                 <div className="col-12 px-0 d-flex align-items-center justify-content-center">
                                     <button form="createAccountForm" type="submit" id="registerFormButton"
                                             className="w-100 btn-create-account my-2 ">
-                                        {t('Navbar.createAccount')}
+                                        {t('Navbar.editAccount')}
                                     </button>
                                 </div>
                             </div>
