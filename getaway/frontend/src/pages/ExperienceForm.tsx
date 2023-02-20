@@ -234,7 +234,7 @@ export default function ExperienceForm() {
                                    {...register("price", {
                                        validate: {
                                            isNotBigger: (price) => {
-                                               return (!price) || price >= 9999999
+                                               return (!price) || price <= 9999999
                                            },
                                        }
                                    })}
