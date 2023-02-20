@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 
 import Landing from "./pages/Landing";
@@ -23,11 +23,14 @@ import CreateAccount from "./pages/CreateAccount";
 import EditAccount from "./pages/EditAccount";
 
 function App() {
+    const categoryProp = useState<string>("")
+    const nameProp = useState<string>("")
+
     return (
         <AuthProvider>
             <BrowserRouter basename={process.env.REACT_APP_CONTEXT}>
 
-                <Navbar/>
+                <Navbar categoryProp={categoryProp} nameProp={nameProp}/>
                 <hr className="separator"/>
 
                 <Routes>
@@ -40,7 +43,7 @@ function App() {
                             <Route path='favourites' element={<UserFavourites/>}/>
                             <Route path='reviews' element={<UserReviews/>}/>
                         </Route>
-                        <Route path='experiences' element={<Experiences/>}/>
+                        <Route path='experiences' element={<Experiences categoryProp={categoryProp} nameProp={nameProp}/>}/>
                         <Route path='experiences/:experienceId' element={<ExperienceDetails/>}/>
                         <Route path='experiences/:experienceId/reviewForm' element={<ReviewForm/>} />
                         <Route path='experienceForm' element={<ExperienceForm/>}/>

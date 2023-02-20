@@ -55,7 +55,7 @@ public class TokensServiceImpl implements TokensService {
             //TODO ver a donde se manda esto
 //            final String url = new URL("http", appBaseUrl, 8080, "/webapp_war/user/verifyAccount/" + token.getValue()).toString();
 //            final String url = new URL("http", appBaseUrl, "/paw-2022b-1/user/verifyAccount/" + token.getValue()).toString();
-            final String url = appBaseUrl.toString() + "/user/profile?verificationToken=" + token.getValue();
+            final String url = "http://localhost:3000/user/profile?verificationToken=" + token.getValue();
             final Map<String, Object> variables = new HashMap<>();
             variables.put("confirmationURL", url);
             variables.put("to", userModel.getEmail());

@@ -2,8 +2,7 @@ import {useTranslation} from "react-i18next"
 import "../common/i18n/index"
 import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
 import {CategoryModel} from "../types";
-import {getQueryOrDefault, getQueryOrDefaultMultiple, queryHasParam, useQuery} from "../hooks/useQuery";
-import React, {useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import '../styles/navbar.css'
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
@@ -16,17 +15,13 @@ type FormDataSearch = {
     name: string
 };
 
-export default function Navbar() {
+export default function Navbar(props: {nameProp: [string, Dispatch<SetStateAction<string>>], categoryProp: [string, Dispatch<SetStateAction<string>>]}) {
 
     const {t} = useTranslation()
     let navigate = useNavigate()
     let location = useLocation()
 
-    const query = useQuery()
-    const pathname = location?.pathname
-    const categoryQuery = getQueryOrDefaultMultiple(query, "category")
-
-    const [searchParams, setSearchParams] = useSearchParams();
+    const {nameProp, categoryProp} = props
 
     const {signOut} = useAuth()
     const user = localStorage.getItem("user")
@@ -35,8 +30,6 @@ export default function Navbar() {
     let isVerified = localStorage.getItem("isVerified") === 'true'
 
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
-    const [name, setName] = useState<string>("")
-    const [category, setCategory] = useState<string>("")
 
     const {register, handleSubmit, formState: {errors}, reset}
         = useForm<FormDataSearch>({criteriaMode: "all"})
@@ -53,31 +46,19 @@ export default function Navbar() {
         );
     }, [])
 
-    useEffect(() => {
-        const queryName = getQueryOrDefault(query, "name", "")
-        if(queryName !== name){
-            setName("")
-            reset()
-        }
-    }, [query])
-
     const onSubmit = handleSubmit((data: FormDataSearch) => {
-        setName(data.name)
-        navigate({pathname: "/experiences", search: `?category=${category}&name=${data.name}`}, {replace: true})
+        nameProp[1](data.name)
     });
 
     function resetForm(){
-        if(queryHasParam(query, "category")){
-            const queryCategory = getQueryOrDefault(query, "category", "")
-            setSearchParams({category:queryCategory, name: ""})
-        }
+        nameProp[1]("")
         reset()
     }
 
     return (
         <div className="navbar container-fluid p-0 d-flex flex-column">
             <div className="container-fluid px-2 pt-2 d-flex">
-                <Link to="/" className="logo d-flex">
+                <Link to="/" className="logo d-flex" onClick={()=>{nameProp[1](""); categoryProp[1]("")}}>
                     <img className="logo-img" src={'./images/getaway-icon.png'} alt="Logo"/>
                     <span className="logo-text align-self-center text-uppercase font-weight-bold">
                         {t('PageName')}
@@ -98,7 +79,7 @@ export default function Navbar() {
                                            message: t("ExperienceForm.error.name.pattern"),
                                        }
                                    })}
-                                   defaultValue={name}
+                                   defaultValue={nameProp[0]}
                             />
                             {errors.name?.type === "max" && (
                                 <p className="form-control is-invalid form-error-label">
@@ -128,60 +109,58 @@ export default function Navbar() {
 
 
                     {!isLogged &&
-                        <Link to="/login">
-                            <button type="button" className="btn button-primary">
-                                {t('Navbar.login')}
-                            </button>
-                        </Link>
+                    <Link to="/login">
+                        <button type="button" className="btn button-primary">
+                            {t('Navbar.login')}
+                        </button>
+                    </Link>
                     }
 
 
                     {isLogged &&
-                        <div className="dropdown">
-                            <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
-                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src={'./images/ic_user_white.svg'} alt="Icono usuario" style={{
-                                    width: "35px",
-                                    height: "35px"
-                                }}/>
+                    <div className="dropdown">
+                        <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src={'./images/ic_user_white.svg'} alt="Icono usuario" style={{
+                                width: "35px",
+                                height: "35px"
+                            }}/>
+                        </button>
+
+                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{left: "-50px"}}>
+                            <Link to="/user/profile" className="dropdown-item">
+                                <img src={'./images/ic_user.svg'} alt="Icono perfil"/>
+                                {t('Navbar.profile')}
+                            </Link>
+
+                            {isProvider && <Link to="/user/experiences" className="dropdown-item">
+                                <img src={'./images/ic_experiences.svg'} alt="Icono experiencias"/>
+                                {t('Navbar.experiences')}
+                            </Link>}
+                            <Link to="/user/favourites" className="dropdown-item">
+                                <img src={'./images/ic_fav.svg'} alt="Icono favoritos"/>
+                                {t('Navbar.favourites')}
+                            </Link>
+                            {isVerified && <Link to="/user/reviews" className="dropdown-item">
+                                <img src={'./images/ic_review.svg'} alt="Icono reseñas"/>
+                                {t('Navbar.reviews')}
+                            </Link>}
+                            <button className="dropdown-item" onClick={() => {
+                                signOut(() => navigate("/"))
+                            }}>
+                                <img src={'./images/ic_logout.svg'} alt="Icono cerrar sesion"/>
+                                {t('Navbar.logout')}
                             </button>
-
-                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{left: "-50px"}}>
-                                <Link to="/user/profile" className="dropdown-item">
-                                    <img src={'./images/ic_user.svg'} alt="Icono perfil"/>
-                                    {t('Navbar.profile')}
-                                </Link>
-
-                                {isProvider && <Link to="/user/experiences" className="dropdown-item">
-                                    <img src={'./images/ic_experiences.svg'} alt="Icono experiencias"/>
-                                    {t('Navbar.experiences')}
-                                </Link>}
-                                <Link to="/user/favourites" className="dropdown-item">
-                                    <img src={'./images/ic_fav.svg'} alt="Icono favoritos"/>
-                                    {t('Navbar.favourites')}
-                                </Link>
-                                {isVerified && <Link to="/user/reviews" className="dropdown-item">
-                                    <img src={'./images/ic_review.svg'} alt="Icono reseñas"/>
-                                    {t('Navbar.reviews')}
-                                </Link>}
-                                <button className="dropdown-item" onClick={() => {
-                                    signOut(() => navigate("/"))
-                                }}>
-                                    <img src={'./images/ic_logout.svg'} alt="Icono cerrar sesion"/>
-                                    {t('Navbar.logout')}
-                                </button>
-                            </ul>
-                        </div>}
+                        </ul>
+                    </div>}
                 </div>
             </div>
 
             <div className="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0">
                 {categories.map((category) => (
-                    <Link to={{
-                        pathname: "/experiences",
-                        search: `?category=${category.name}&name=${name}`
-                    }} key={category.id}>
-                        <button type="button" className={`btn btn-category ${categoryQuery?.includes(`category=${category.name}`) ? 'isActive' : ''}`}
+                    <Link to={{pathname: "/experiences"}}>
+                        <button type="button" className={`btn btn-category ${(categoryProp[0]===category.name) ? 'isActive' : ''}`} key={category.id}
+                                onClick={()=>categoryProp[1](category.name)}
                         >
                             <img src={`./images/${category.name}.svg`} alt={`${category.name}`}/>
                             {t('Categories.' + category.name)}

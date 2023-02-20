@@ -8,7 +8,7 @@ import {useAuth} from "../hooks/useAuth";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {useForm} from "react-hook-form";
-import {UserModel} from "../types";
+import {PutResponse, UserModel} from "../types";
 
 
 type FormDataImg = {
@@ -24,6 +24,15 @@ export default function UserProfile() {
     const query = useQuery()
     const verificationToken = getQueryOrDefault(query, "verificationToken", "")
     const passwordToken = getQueryOrDefault(query, "passwordToken", "")
+
+    // if (verificationToken !== "") {
+    //     userService.verifyUser(verificationToken)
+    //         .then((result) => {
+    //             if (!result.hasFailed()) {
+    //                 //SHOW SNACKBAR
+    //             }
+    //         })
+    // }
 
     const {user, setUser} = useAuth()
 
@@ -145,7 +154,8 @@ export default function UserProfile() {
                                 {t('User.profile.editBtn')}
                             </button>
                             :
-                            <button type="button" className="btn btn-error">
+                            <button onClick={() => userService.sendNewVerifyUserEmail()} type="button" className="btn btn-error">
+                                {/*TODO: add a snackbar to confirm*/}
                                 {t('User.profile.verifyAccountBtn')}
                             </button>
                         }

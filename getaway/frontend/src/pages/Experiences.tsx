@@ -3,10 +3,10 @@ import "../common/i18n/index";
 import OrderDropdown from "../components/OrderDropdown";
 import CardExperience from "../components/CardExperience";
 import {IconButton, Slider, Typography} from '@mui/material';
-import React, {useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {ExperienceModel, OrderByModel} from "../types";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
-import {getQueryOrDefault, queryHasParam, useQuery} from "../hooks/useQuery";
+import { useQuery} from "../hooks/useQuery";
 import "../styles/star_rating.css";
 import {CityModel, CountryModel} from "../types";
 import {experienceService, locationService} from "../services";
@@ -23,15 +23,13 @@ type FormFilterData = {
     score: number,
 };
 
-export default function Experiences() {
+export default function Experiences(props: {nameProp: [string, Dispatch<SetStateAction<string>>], categoryProp: [string, Dispatch<SetStateAction<string>>]}) {
 
     const {t} = useTranslation()
     const navigate = useNavigate()
     const location = useLocation()
-    const query = useQuery()
 
-    const category = getQueryOrDefault(query, "category", "")
-    const name = getQueryOrDefault(query, "name", "")
+    const {nameProp, categoryProp} = props
 
     const [searchParams, setSearchParams] = useSearchParams()
     const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
@@ -67,7 +65,6 @@ export default function Experiences() {
             () => {
                 setOrders(new Array(0))
                 order[1]("OrderByAZ")
-                setSearchParams({category: category, name: name})
             }
         );
         serviceHandler(
@@ -86,7 +83,7 @@ export default function Experiences() {
     useEffect(() => {
         setIsLoading(true)
         serviceHandler(
-            experienceService.getExperiencesByFilter(category, name, order[0], price, -rating, city, currentPage[0]),
+            experienceService.getExperiencesByFilter(categoryProp[0], nameProp[0], order[0], price, -rating, city, currentPage[0]),
             navigate, (experiences) => {
                 setExperiences(experiences.getContent())
                 setMaxPage(experiences.getMaxPage())
@@ -100,7 +97,7 @@ export default function Experiences() {
             }
         );
         serviceHandler(
-            experienceService.getFilterMaxPrice(category, name),
+            experienceService.getFilterMaxPrice(categoryProp[0], nameProp[0]),
             navigate, (priceModel) => {
                 setMaxPrice(priceModel.maxPrice)
                 if (maxPrice != priceModel.maxPrice ||price>priceModel.maxPrice || price === -1) {
@@ -113,7 +110,7 @@ export default function Experiences() {
                 setPrice(-1)
             }
         );
-    }, [category, name, rating, city, query, order[0], currentPage[0], price])
+    }, [categoryProp[0], nameProp[0], rating, city, order[0], currentPage[0], price])
 
     function loadCities(countryName: string) {
         serviceHandler(
@@ -152,7 +149,9 @@ export default function Experiences() {
     }
 
     function cleanQuery() {
-        setSearchParams({category: category, name: ""})
+        //TODO: make subcases
+        categoryProp[1]("")
+        nameProp[1]("")
     }
 
     const onSubmit = handleSubmit((data: FormFilterData) => {
@@ -272,34 +271,34 @@ export default function Experiences() {
 
                     <div className="d-flex justify-content-center align-content-center">
                         <div style={{margin: "0 auto 0 20px", flex: "1"}}>
-                            <OrderDropdown orders={orders} order={order}/>
+                            <OrderDropdown orders={orders} order={order} currentPage={currentPage}/>
                         </div>
                         <div className="d-flex justify-content-center" style={{fontSize: "x-large"}}>
 
-                            {category.length > 0 ?
-                            <div>
+                            {categoryProp[0].length > 0 ?
+                                <div>
                                     {t('Experiences.search.search')}
                                     {t('Experiences.search.category')}
-                                    {t('Categories.' + category)}
-                                <div className="d-flex justify-content-center">
-                                    {
-                                        name.length > 0 &&
-                                        <div>
-                                            {t('Experiences.search.name', {name: name})}
-                                            <IconButton className="justify-content-center" onClick={cleanQuery}>
-                                                <Close/>
-                                            </IconButton>
-                                        </div>
-                                    }
-                                </div>
+                                    {t('Categories.' + categoryProp[0])}
+                                    <div className="d-flex justify-content-center">
+                                        {
+                                            nameProp[0].length > 0 &&
+                                            <div>
+                                                {t('Experiences.search.name', {name: nameProp[0]})}
+                                                <IconButton className="justify-content-center" onClick={cleanQuery}>
+                                                    <Close/>
+                                                </IconButton>
+                                            </div>
+                                        }
+                                    </div>
 
-                            </div>
-                            :
+                                </div>
+                                :
                                 <div>
-                                    {name.length > 0 &&
+                                    {nameProp[0].length > 0 &&
                                     <div>
                                         {t('Experiences.search.search')}
-                                        {t('Experiences.search.name', {name: name})}
+                                        {t('Experiences.search.name', {name: nameProp[0]})}
                                         <IconButton className="justify-content-center" onClick={cleanQuery}>
                                             <Close/>
                                         </IconButton>

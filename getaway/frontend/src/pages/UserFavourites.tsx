@@ -72,21 +72,21 @@ export default function UserFavourites() {
                     <>
                         <div className="d-flex justify-content-center align-content-center">
                             <div style={{margin: "0 auto 0 20px", flex: "1"}}>
-                                <OrderDropdown orders={orders} order={order}/>
+                                <OrderDropdown orders={orders} order={order} currentPage={currentPage}/>
                             </div>
                             <h3 className="title m-0">
                                 {t('User.favsTitle')}
                             </h3>
                             <div style={{margin: "0 20px 0 auto", flex: "1"}}/>
-                        </div>
+                    </div>
 
-                        <div className="container-fluid my-3 d-flex flex-wrap justify-content-center">
-                            {favExperiences.map((experience) => (
-                                <CardExperience experience={experience} key={experience.id}/>
-                            ))}
-                        </div>
+                    <div className="container-fluid my-3 d-flex flex-wrap justify-content-center">
+                {favExperiences.map((experience) => (
+                    <CardExperience experience={experience} key={experience.id}/>
+                    ))}
+                    </div>
 
-                        <div className="mt-auto d-flex justify-content-center align-items-center">
+                    <div className="mt-auto d-flex justify-content-center align-items-center">
                             {maxPage > 1 && (
                                 <Pagination
                                     maxPage={maxPage}

@@ -3,12 +3,13 @@ import "../common/i18n/index";
 import {OrderByModel} from "../types";
 import {Dispatch, SetStateAction} from "react";
 
-export default function OrderDropdown(props: { orders: OrderByModel[], order: [string, Dispatch<SetStateAction<string>>] }) {
+export default function OrderDropdown(props: { orders: OrderByModel[], order: [string, Dispatch<SetStateAction<string>>], currentPage: [number , Dispatch<SetStateAction<number>>] }) {
 
     const {t} = useTranslation()
-    const {orders, order} = props
+    const {orders, order, currentPage} = props
 
     function changeOrder(queryOrder: string) {
+        currentPage[1](1)
         order[1](queryOrder)
     }
 
