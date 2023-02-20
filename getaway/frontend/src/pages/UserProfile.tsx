@@ -75,10 +75,6 @@ export default function UserProfile() {
             .catch(() => {})
     })
 
-    function editUserInfo(user: UserModel) {
-        navigate({pathname: "/editAccount"})
-    }
-
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoadingImg}>
             <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
@@ -150,7 +146,7 @@ export default function UserProfile() {
 
                     <div className="mb-2">
                         {user?.verified ?
-                            <button onClick={() => editUserInfo(user)} type="button" className="btn btn-error">
+                            <button onClick={() => navigate({pathname: "/user/editAccount"})} type="button" className="btn btn-error">
                                 {t('User.profile.editBtn')}
                             </button>
                             :

@@ -13,7 +13,6 @@ import ExperienceForm from "./pages/ExperienceForm";
 import ReviewForm from "./pages/ReviewForm";
 import Error from "./pages/Error";
 import Custom404 from "./pages/Custom404";
-
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -39,6 +38,7 @@ function App() {
                         <Route path='/user' element={<UserPage/>}>
                             <Route index element={<UserProfile/>}/>
                             <Route path='profile' element={<UserProfile/>}/>
+                            <Route path='editAccount' element={<EditAccount/>}/>
                             <Route path='experiences' element={<UserExperiences/>}/>
                             <Route path='favourites' element={<UserFavourites/>}/>
                             <Route path='reviews' element={<UserReviews/>}/>
@@ -50,9 +50,8 @@ function App() {
                         <Route path='error' element={<Error/>}/>
                         <Route path='*' element={<Custom404/>}/>
                     </Route>
-                    <Route path='/login' element={<Login/>}/>
+                    <Route path='/login' element={<Login categoryProp={categoryProp} nameProp={nameProp}/>}/>
                     <Route path='/createAccount' element={<CreateAccount/>}/>
-                    <Route path='/editAccount' element={<EditAccount/>}/>
                 </Routes>
 
                 <Footer/>

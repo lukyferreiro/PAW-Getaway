@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next"
 import "../common/i18n/index"
-import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
+import {Link, useNavigate, useSearchParams} from 'react-router-dom'
 import {CategoryModel} from "../types";
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import '../styles/navbar.css'
@@ -10,19 +10,25 @@ import {categoryService} from "../services";
 import {useForm} from "react-hook-form";
 import {Close} from "@mui/icons-material";
 import {IconButton} from "@mui/material";
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 
 type FormDataSearch = {
     name: string
 };
 
 export default function Navbar(props: {nameProp: [string, Dispatch<SetStateAction<string>>], categoryProp: [string, Dispatch<SetStateAction<string>>]}) {
-
     const {t} = useTranslation()
-    let navigate = useNavigate()
-    let location = useLocation()
+    const navigate = useNavigate()
 
     const {nameProp, categoryProp} = props
 
+    const query = useQuery()
+
+    // const [searchParams, setSearchParams] = useSearchParams();
+    //
+    // nameProp[1](getQueryOrDefault(query, "name", ""))
+    // categoryProp[1](getQueryOrDefault(query, "category", ""))
+    //
     const {signOut} = useAuth()
     const user = localStorage.getItem("user")
     let isLogged = user !== null
@@ -35,6 +41,7 @@ export default function Navbar(props: {nameProp: [string, Dispatch<SetStateActio
         = useForm<FormDataSearch>({criteriaMode: "all"})
 
     useEffect(() => {
+
         serviceHandler(
             categoryService.getCategories(),
             navigate, (category) => {
@@ -46,18 +53,31 @@ export default function Navbar(props: {nameProp: [string, Dispatch<SetStateActio
         );
     }, [])
 
+    // useEffect(() => {
+    //     if(nameProp[0]==="") {
+    //         reset()
+    //     }
+    // }, [nameProp[1]])
+
     const onSubmit = handleSubmit((data: FormDataSearch) => {
         nameProp[1](data.name)
+        // searchParams.set("name", data.name)
+        // setSearchParams(searchParams)
         navigate("/experiences")
     });
 
     function clearNavBar() {
+        // searchParams.delete("category")
+        // searchParams.delete("name")
+        // setSearchParams(searchParams)
         nameProp[1]("")
         categoryProp[1]("")
         reset()
     }
 
     function resetForm(){
+        // searchParams.delete("name")
+        // setSearchParams(searchParams)
         nameProp[1]("")
         reset()
     }
@@ -171,7 +191,7 @@ export default function Navbar(props: {nameProp: [string, Dispatch<SetStateActio
                 {categories.map((category) => (
                     <Link to={{pathname: "/experiences"}}>
                         <button type="button" className={`btn btn-category ${(categoryProp[0]===category.name) ? 'isActive' : ''}`} key={category.id}
-                                onClick={()=>categoryProp[1](category.name)}
+                                onClick={()=>{categoryProp[1](category.name)}}
                         >
                             <img src={`./images/${category.name}.svg`} alt={`${category.name}`}/>
                             {t('Categories.' + category.name)}

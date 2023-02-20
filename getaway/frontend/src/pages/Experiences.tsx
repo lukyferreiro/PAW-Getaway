@@ -13,6 +13,7 @@ import {serviceHandler} from "../scripts/serviceHandler";
 import Pagination from "../components/Pagination";
 import {Close} from "@mui/icons-material";
 import DataLoader from "../components/DataLoader";
+import {useQuery} from "../hooks/useQuery";
 
 export default function Experiences(props: {nameProp: [string, Dispatch<SetStateAction<string>>], categoryProp: [string, Dispatch<SetStateAction<string>>]}) {
 
