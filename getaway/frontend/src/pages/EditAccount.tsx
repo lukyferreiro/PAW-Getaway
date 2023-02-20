@@ -19,9 +19,9 @@ type FormDataEditAccount = {
 };
 
 export default function EditAccount() {
+
     const {t} = useTranslation()
     const navigate = useNavigate()
-    const location = useLocation()
 
     const {user} = useAuth()
 

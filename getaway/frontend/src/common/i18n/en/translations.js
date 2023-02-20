@@ -194,6 +194,7 @@ export const TRANSLATIONS_EN = {
     Button: {
         cancel: "Cancel",
         create: "Save",
+        confirm: "Confirm"
     },
 
     Input: {
