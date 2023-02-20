@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {useForm} from "react-hook-form";
-import React, {useState} from "react";
+import React, {Dispatch, SetStateAction, useState} from "react";
 import {loginService} from "../services";
 import {useAuth} from "../hooks/useAuth";
 import Modal from "react-modal";
@@ -22,13 +22,17 @@ type FormDataPassReset = {
     email: string;
 };
 
-export default function Login() {
+export default function Login(props: {nameProp: [string, Dispatch<SetStateAction<string>>], categoryProp: [string, Dispatch<SetStateAction<string>>]}) {
 
     const {t} = useTranslation()
     let navigate = useNavigate()
     let location = useLocation()
 
     let {signIn} = useAuth()
+    const {nameProp, categoryProp} = props
+
+    nameProp[1]("")
+    categoryProp[1]("")
 
     // @ts-ignore
     let from = location.state?.from?.pathname || "/";

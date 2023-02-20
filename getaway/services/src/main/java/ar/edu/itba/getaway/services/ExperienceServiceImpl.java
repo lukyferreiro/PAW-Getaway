@@ -296,6 +296,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             List<ExperienceModel> recommendedByReviewsProvider;
             List<ExperienceModel> recommendedByReviewsCategory;
             recommendedByReviewsFullList = experienceDao.getRecommendedByReviewsCity(user, CAROUSEL_LENGTH, alreadyRecommended, userReviewedIds);
+            alreadyRecommended.addAll(recommendedByReviewsFullList.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
 
             if (recommendedByReviewsFullList.size() < CAROUSEL_LENGTH) {
                 recommendedByReviewsProvider = experienceDao.getRecommendedByReviewsProvider(user, CAROUSEL_LENGTH - recommendedByReviewsFullList.size(), alreadyRecommended, userReviewedIds);
