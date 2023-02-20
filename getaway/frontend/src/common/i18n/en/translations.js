@@ -1,4 +1,5 @@
 export const TRANSLATIONS_EN = {
+
     PageName: "Getaway",
 
     Categories: {
@@ -48,7 +49,6 @@ export const TRANSLATIONS_EN = {
         editPassword: "New password",
         confirmEditPassword: "Confirm new password",
         editAccount:"Edit account"
-
     },
 
     Filters: {
@@ -112,20 +112,13 @@ export const TRANSLATIONS_EN = {
         noReviews: "This experience has no reviews yet. Be the first to write one!"
     },
 
-    Review: {
-        title: "Title",
-        description: "Description",
-        score: "Score",
-    },
-
     ExperienceForm: {
         title: "Create your experience",
         error: {
             name: {
                 pattern: "Submitted name format is not valid",
                 isRequired: "This field can not be empty",
-                max: "Experience name must be 3-50 characters long",
-                min: "Experience name must be 3-50 characters long",
+                length: "Experience name must be 3-50 characters long",
             },
             category: {
                 isRequired: "This field can not be empty",
@@ -136,16 +129,16 @@ export const TRANSLATIONS_EN = {
             description: {
                 pattern: "Submitted description format is not valid",
                 isRequired: "This field can not be empty",
-                max: "Description must be under 500 characters long",
+                length: "Description must be under 500 characters long",
             },
             mail: {
                 pattern: "Submitted mail format is not valid",
                 isRequired: "This field can not be empty",
-                max: "The email must be under 255 characters long",
+                length: "The email must be under 255 characters long",
             },
             url: {
                 pattern: "Submitted url format is not valid",
-                max: "The URL must be under 500 characters long",
+                length: "The URL must be under 500 characters long",
             },
             country: {
                 isRequired: "This field can not be empty",
@@ -156,8 +149,7 @@ export const TRANSLATIONS_EN = {
             address: {
                 pattern: "Submitted address format is not valid",
                 isRequired: "This field can not be empty",
-                max: "Address must be 5-100 characters long",
-                min: "Address must be 5-100 characters long",
+                length: "Address must be 5-100 characters long",
             },
         }
     },
@@ -207,28 +199,6 @@ export const TRANSLATIONS_EN = {
     Input: {
         optional: "(Optional)",
         maxValue: "(Max {{value}})",
-    },
-
-    CreateReview: {
-        title: "Create review for {{experienceName}}",
-        error: {
-            title: {
-                pattern: "Submitted title format is not valid",
-                isRequired: "This field can not be empty",
-                max: "Title must be 3-50 characters long",
-                min: "Title must be 3-50 characters long",
-            },
-            description: {
-                pattern: "Submitted description format is not valid",
-                isRequired: "This field can not be empty",
-                max: "Description must be 3-255 characters long",
-                min: "Description must be 3-255 characters long",
-            },
-            score: {
-                pattern: "aaaa",
-                isRequired: "This field can not be empty",
-            },
-        }
     },
 
     Copyright: "Getaway Copyright © {{year}} - All rights reserved",
@@ -282,9 +252,27 @@ export const TRANSLATIONS_EN = {
 
     CreateAccount: {
         error:{
-            isRequired: "This field is required",
-            pattern:"Error",
-            password:"Confirm password should match password",
+            email: {
+                isRequired: "This field is required",
+                length: "The email must be under 255 characters long",
+                pattern: "Submitted email format is not valid",
+            },
+            name: {
+                isRequired: "This field is required",
+                length: "Name must be under 50 characters long",
+                pattern: "Submitted name format is not valid",
+            },
+            surname: {
+                isRequired: "This field is required",
+                length: "Surname must be under 50 characters long",
+                pattern: "Submitted surname format is not valid",
+            },
+            password: {
+                isRequired: "This field is required",
+                length: "Password must be 8-25 characters long",
+                pattern: "Submitted password format is not valid",
+            },
+            passwordsMustMatch:"Confirm password must match password",
         }
     },
 
@@ -296,22 +284,30 @@ export const TRANSLATIONS_EN = {
         }
     },
 
+    Review: {
+        title: "Title",
+        description: "Description",
+        score: "Score",
+    },
+
     ReviewForm:{
-        title: "Write a review",
-        editTitle:"Edit the review",
+        title: "Write a review for {{experienceName}}",
+        editTitle:"Edit the review for {{experienceName}}",
         error: {
             title: {
-                isRequired: "A title is required",
-                pattern:"",
-                max:"The title must have a maximum of 50 characters",
-                min:"The title must have at least 3 characters"
+                pattern: "Submitted title format is not valid",
+                isRequired: "This field can not be empty",
+                length: "Title must be 3-50 characters long",
             },
             description: {
-                isRequired: "A description is required",
-                pattern:"",
-                max:"The title must have a maximum of 255 characters",
-                min:"The title must have at least 3 characters"
-            }
+                pattern: "Submitted description format is not valid",
+                isRequired: "This field can not be empty",
+                length: "Description must be 3-255 characters long",
+            },
+            score: {
+                pattern: "aaaa",
+                isRequired: "This field can not be empty",
+            },
         }
-    }
+    },
 };

@@ -1,12 +1,12 @@
 import {useTranslation} from "react-i18next";
-import React, {useEffect, useState} from "react";
+import React from "react";
 // @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import {loginService, reviewService, userService} from "../services";
+import {userService} from "../services";
 import {useAuth} from "../hooks/useAuth";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 
 
@@ -23,29 +23,15 @@ export default function EditAccount() {
     const navigate = useNavigate()
     const location = useLocation()
 
-    // @ts-ignore
-    let from = location.state?.from?.pathname || "/"
-
-    const [seePassword, setSeePassword] = useState(false)
-    const [seeRepeatPassword, setSeeRepeatPassword] = useState(false)
-    const [invalidCredentials, setInvalidCredentials] = useState(false)
     const {user} = useAuth()
 
-    function showPassword() {
-        setSeePassword(!seePassword)
-    }
-
-    function showRepeatPassword() {
-        setSeeRepeatPassword(!seeRepeatPassword)
-    }
-
-    const {register, watch, handleSubmit, formState: {errors},}
+    const {register, handleSubmit, formState: {errors},}
         = useForm<FormDataEditAccount>({criteriaMode: "all"})
 
     const onSubmitEdit = handleSubmit((data: FormDataEditAccount) => {
-            setInvalidCredentials(false);
-            userService.updateUserInfoById(user?.id, data.name, data.surname).then(r => navigate("/user/profile"))
-
+            userService.updateUserInfoById(user?.id, data.name, data.surname)
+                .then(() => {navigate("/user/profile")})
+                .catch(() => {})
         }
     );
     return (
@@ -78,20 +64,7 @@ export default function EditAccount() {
                                                className="form-control mb-2"
                                                placeholder={t('Navbar.emailPlaceholder')}
                                                aria-describedby="email input"
-                                               maxLength={255}
-                                               {...register("email", {
-                                                   required: false,
-                                                   max: 255,
-                                                   pattern: {
-                                                       value: /^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$/,
-                                                       message: t("CreateAccount.error.pattern"),
-                                                   },
-                                               })}/>
-                                        {errors.email?.type === "required" && (
-                                            <p className="form-control is-invalid form-error-label">
-                                                {t("CreateAccount.error.isRequired")}
-                                            </p>
-                                        )}
+                                               />
                                     </div>
 
                                     <div className="form-group">
@@ -108,20 +81,28 @@ export default function EditAccount() {
                                             </div>
                                         </label>
 
-                                        <input maxLength={50} type="text" id="name"
+                                        <input max="50" type="text" id="name"
                                                className="form-control"
                                                placeholder={t('Navbar.namePlaceholder')}
                                                {...register("name", {
                                                    required: true,
-                                                   max: 50,
+                                                   validate: {
+                                                       length: (name) =>
+                                                           name.length >= 0 && name.length <= 50,
+                                                   },
                                                    pattern: {
                                                        value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
-                                                       message: t("CreateAccount.error.pattern"),
+                                                       message: t("CreateAccount.error.namepattern"),
                                                    },
                                                })}/>
                                         {errors.name?.type === "required" && (
                                             <p className="form-control is-invalid form-error-label">
-                                                {t("CreateAccount.error.isRequired")}
+                                                {t("CreateAccount.error.name.isRequired")}
+                                            </p>
+                                        )}
+                                        {errors.email?.type === "length" && (
+                                            <p className="form-control is-invalid form-error-label">
+                                                {t("CreateAccount.error.name.length")}
                                             </p>
                                         )}
                                     </div>
@@ -139,109 +120,42 @@ export default function EditAccount() {
                                                 </h6>
                                             </div>
                                         </label>
-                                        <input maxLength={50} type="text" id="surname"
+                                        <input max="50" type="text" id="surname"
                                                className="form-control"
                                                placeholder={t('Navbar.surnamePlaceholder')}
                                                {...register("surname", {
                                                    required: true,
-                                                   max: 50,
+                                                   validate: {
+                                                       length: (surname) =>
+                                                           surname.length >= 0 && surname.length <= 50,
+                                                   },
                                                    pattern: {
                                                        value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
-                                                       message: t("CreateAccount.error.pattern"),
+                                                       message: t("CreateAccount.error.surname.pattern"),
                                                    },
                                                })}
                                         />
                                         {errors.surname?.type === "required" && (
                                             <p className="form-control is-invalid form-error-label">
-                                                {t("CreateAccount.error.isRequired")}
+                                                {t("CreateAccount.error.surname.isRequired")}
+                                            </p>
+                                        )}
+                                        {errors.email?.type === "length" && (
+                                            <p className="form-control is-invalid form-error-label">
+                                                {t("CreateAccount.error.surname.length")}
                                             </p>
                                         )}
                                     </div>
-
-                                    {/*<div className="form-group">*/}
-                                    {/*    <label htmlFor="password"*/}
-                                    {/*           className="form-label d-flex justify-content-between">*/}
-                                    {/*        <div>*/}
-                                    {/*            {t('Navbar.editPassword')}*/}
-                                    {/*            <span className="required-field">*</span>*/}
-                                    {/*        </div>*/}
-                                    {/*        <div className="align-self-center">*/}
-                                    {/*            <h6 className="max-input-text">*/}
-                                    {/*                {t('Navbar.max', {num: 25})}*/}
-                                    {/*            </h6>*/}
-                                    {/*        </div>*/}
-                                    {/*    </label>*/}
-                                    {/*    <div*/}
-                                    {/*        className="input-group d-flex justify-content-start align-items-center">*/}
-                                    {/*        <input type={seePassword ? "text" : "password"}*/}
-                                    {/*               className="form-control"*/}
-                                    {/*               id="password"*/}
-                                    {/*               aria-describedby="password input"*/}
-                                    {/*               placeholder={t('Navbar.passwordPlaceholder')}*/}
-                                    {/*               {...register("password", {*/}
-                                    {/*                   required: true,*/}
-                                    {/*               })}*/}
-                                    {/*        />*/}
-                                    {/*        <div className="input-group-append">*/}
-                                    {/*            <button className="btn btn-eye input-group-text"*/}
-                                    {/*                    id="passwordEye" type="button" tabIndex={-1}*/}
-                                    {/*                    onClick={() => showPassword()}>*/}
-                                    {/*                <IconButton aria-label="eye">*/}
-                                    {/*                    {seePassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}*/}
-                                    {/*                </IconButton>*/}
-                                    {/*            </button>*/}
-                                    {/*        </div>*/}
-                                    {/*    </div>*/}
-                                    {/*    {errors.password?.type === "required" && (*/}
-                                    {/*        <p className="form-control is-invalid form-error-label">*/}
-                                    {/*            {t("CreateAccount.error.isRequired")}*/}
-                                    {/*        </p>*/}
-                                    {/*    )}*/}
-                                    {/*</div>*/}
-
-                                    {/*<div className="form-group">*/}
-                                    {/*    <label htmlFor="confirmPassword" className="form-label">*/}
-                                    {/*        {t('Navbar.confirmEditPassword')}*/}
-                                    {/*        <span className="required-field">*</span>*/}
-                                    {/*    </label>*/}
-                                    {/*    <div*/}
-                                    {/*        className="input-group d-flex justify-content-start align-items-center">*/}
-                                    {/*        <input type={seeRepeatPassword ? "text" : "password"}*/}
-                                    {/*               className="form-control"*/}
-                                    {/*               id="confirmPassword"*/}
-                                    {/*               aria-describedby="password input"*/}
-                                    {/*               {...register("confirmPassword", {*/}
-                                    {/*                   required: true*/}
-                                    {/*               })}/>*/}
-                                    {/*        <div className="input-group-append">*/}
-                                    {/*            <button className="btn btn-eye input-group-text"*/}
-                                    {/*                    id="passwordEye2" type="button" tabIndex={-1}*/}
-                                    {/*                    onClick={() => showRepeatPassword()}>*/}
-                                    {/*                <IconButton aria-label="eye2">*/}
-                                    {/*                    {seeRepeatPassword ? <VisibilityIcon/> :*/}
-                                    {/*                        <VisibilityOffIcon/>}*/}
-                                    {/*                </IconButton>*/}
-                                    {/*            </button>*/}
-                                    {/*        </div>*/}
-                                    {/*    </div>*/}
-                                    {/*    {errors.confirmPassword?.type === "required" && (*/}
-                                    {/*        <p className="form-control is-invalid form-error-label">*/}
-                                    {/*            {t("CreateAccount.error.isRequired")}*/}
-                                    {/*        </p>*/}
-                                    {/*    )}*/}
-                                    {/*    {watch('password') !== watch('confirmPassword') && (*/}
-                                    {/*        <p className="form-control is-invalid form-error-label">*/}
-                                    {/*            {t("CreateAccount.error.password")}*/}
-                                    {/*        </p>*/}
-                                    {/*    )}*/}
-                                    {/*</div>*/}
                                 </form>
 
-                                <div className="col-12 px-0 d-flex align-items-center justify-content-center">
-                                    <button onClick={() => onSubmitEdit()} form="createAccountForm" type="submit"
-                                            id="registerFormButton"
-                                            className="w-100 btn-create-account my-2 ">
-                                        {t('Navbar.editAccount')}
+                                <div className="col-12 px-0 d-flex align-items-center justify-content-around">
+                                    <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
+                                            onClick={() => navigate(-1)}>
+                                        {t('Button.cancel')}
+                                    </button>
+                                    <button form="editAccountForm" type="submit" id="editAccountFormButton"
+                                            className="btn btn-submit-form px-3 py-2">
+                                        {t('Button.create')}
                                     </button>
                                 </div>
                             </div>

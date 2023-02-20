@@ -169,8 +169,10 @@ export default function ExperienceForm() {
                             <input min="3" max="50" type="text" className="form-control"
                                    {...register("name", {
                                        required: true,
-                                       max: 50,
-                                       min: 3,
+                                       validate: {
+                                           length: (email) =>
+                                               email.length >= 3 && email.length <= 50,
+                                       },
                                        pattern: {
                                            value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
                                            message: t("ExperienceForm.error.name.pattern"),
@@ -183,14 +185,9 @@ export default function ExperienceForm() {
                                     {t("ExperienceForm.error.name.isRequired")}
                                 </p>
                             )}
-                            {errors.name?.type === "max" && (
+                            {errors.name?.type === "length" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("ExperienceForm.error.name.max")}
-                                </p>
-                            )}
-                            {errors.name?.type === "min" && (
-                                <p className="form-control is-invalid form-error-label">
-                                    {t("ExperienceForm.error.name.min")}
+                                    {t("ExperienceForm.error.name.length")}
                                 </p>
                             )}
                         </div>
@@ -235,11 +232,15 @@ export default function ExperienceForm() {
                             </label>
                             <input type="number" max="9999999" className="form-control" id="experienceFormPriceInput" placeholder="0"
                                    {...register("price", {
-                                       max: 9999999,
+                                       validate: {
+                                           isNotBigger: (price) => {
+                                               return (!price) || price >= 9999999
+                                           },
+                                       }
                                    })}
                                    defaultValue={experience ? experience.price : ""}
                             />
-                            {errors.category?.type === "max" && (
+                            {errors.price && (
                                 <p className="form-control is-invalid form-error-label">
                                     {t("ExperienceForm.error.price.max")}
                                 </p>
@@ -265,7 +266,10 @@ export default function ExperienceForm() {
                         <textarea maxLength={500} className="form-control" style={{maxHeight: "300px"}}
                                   {...register("description", {
                                       required: false,
-                                      maxLength: 500,
+                                      validate: {
+                                          length: (description) =>
+                                              (!description) || description.length >= 0 && description.length <= 500,
+                                      },
                                       pattern: {
                                           value: /^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°";$%#&=:¿?!¡\n\s\t/.-])*$/,
                                           message: t("ExperienceForm.error.description.pattern"),
@@ -273,14 +277,9 @@ export default function ExperienceForm() {
                                   })}
                                   defaultValue={experience ? experience.description : ""}
                         />
-                        {errors.description?.type === "required" && (
+                        {errors.description?.type === "length" && (
                             <p className="form-control is-invalid form-error-label">
-                                {t("ExperienceForm.error.description.isRequired")}
-                            </p>
-                        )}
-                        {errors.description?.type === "maxLength" && (
-                            <p className="form-control is-invalid form-error-label">
-                                {t("ExperienceForm.error.description.max")}
+                                {t("ExperienceForm.error.description.length")}
                             </p>
                         )}
                     </div>
@@ -303,7 +302,10 @@ export default function ExperienceForm() {
                                    placeholder={t('Experience.mail.placeholder')}
                                    {...register("mail", {
                                        required: true,
-                                       max: 250,
+                                       validate: {
+                                           length: (mail) =>
+                                               mail.length >= 0 && mail.length <= 250,
+                                       },
                                        pattern: {
                                            value: /^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$/,
                                            message: t("ExperienceForm.error.mail.pattern"),
@@ -316,9 +318,9 @@ export default function ExperienceForm() {
                                     {t("ExperienceForm.error.mail.isRequired")}
                                 </p>
                             )}
-                            {errors.mail?.type === "max" && (
+                            {errors.mail?.type === "length" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("ExperienceForm.error.mail.max")}
+                                    {t("ExperienceForm.error.mail.length")}
                                 </p>
                             )}
                         </div>
@@ -340,7 +342,11 @@ export default function ExperienceForm() {
                             <input max="500" id="experienceFormUrlInput" type="text"
                                    className="form-control" placeholder={t('Experience.url.placeholder')}
                                    {...register("url", {
-                                       max: 500,
+                                       required: false,
+                                       validate: {
+                                           length: (url) =>
+                                               (!url) || url.length >= 0 && url.length <= 500,
+                                       },
                                        pattern: {
                                            value: /^([(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*))?$/,
                                            message: t("ExperienceForm.error.url.pattern"),
@@ -348,9 +354,9 @@ export default function ExperienceForm() {
                                    })}
                                    defaultValue={experience ? experience.siteUrl : ""}
                             />
-                            {errors.url?.type === "max" && (
+                            {errors.url?.type === "length" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("ExperienceForm.error.url.max")}
+                                    {t("ExperienceForm.error.url.length")}
                                 </p>
                             )}
                         </div>
@@ -423,8 +429,10 @@ export default function ExperienceForm() {
                             <input min="5" max="100" type="text" className="form-control"
                                    {...register("address", {
                                        required: true,
-                                       max: 100,
-                                       min: 5,
+                                       validate: {
+                                           length: (address) =>
+                                               address.length >= 5 && address.length <= 100,
+                                       },
                                        pattern: {
                                            value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
                                            message: t("ExperienceForm.error.address.pattern"),
@@ -437,14 +445,9 @@ export default function ExperienceForm() {
                                     {t("ExperienceForm.error.address.isRequired")}
                                 </p>
                             )}
-                            {errors.address?.type === "max" && (
+                            {errors.address?.type === "address" && (
                                 <p className="form-control is-invalid form-error-label">
                                     {t("ExperienceForm.error.address.max")}
-                                </p>
-                            )}
-                            {errors.address?.type === "min" && (
-                                <p className="form-control is-invalid form-error-label">
-                                    {t("ExperienceForm.error.address.min")}
                                 </p>
                             )}
                         </div>
