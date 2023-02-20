@@ -8,8 +8,6 @@ import {useAuth} from "../hooks/useAuth";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {useForm} from "react-hook-form";
-import {PutResponse, UserModel} from "../types";
-
 
 type FormDataImg = {
     image?: FileList
@@ -25,20 +23,29 @@ export default function UserProfile() {
     const verificationToken = getQueryOrDefault(query, "verificationToken", "")
     const passwordToken = getQueryOrDefault(query, "passwordToken", "")
 
-    // if (verificationToken !== "") {
-    //     userService.verifyUser(verificationToken)
-    //         .then((result) => {
-    //             if (!result.hasFailed()) {
-    //                 //SHOW SNACKBAR
-    //             }
-    //         })
-    // }
-
     const {user, setUser} = useAuth()
 
     const [userImg, setUserImg] = useState<string | undefined>(undefined)
     const [isLoadingImg, setIsLoadingImg] = useState(false)
     const [reload, setReload] = useState(true)
+
+    useEffect(() => {
+        if (verificationToken !== "") {
+            serviceHandler(
+                userService.verifyUser(verificationToken),
+                navigate, () => {
+                    setUser({ ...user!, verified: true })
+                    setReload(!reload)
+                },
+                () => {
+                    //TODO
+                    //SHOW SNACKBAR
+                },
+                () => {
+                }
+            )
+        }
+    }, [user, reload])
 
     useEffect(() => {
         setIsLoadingImg(true)

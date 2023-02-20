@@ -121,7 +121,7 @@ export default function ReviewForm() {
                                     </div>
                                     :
                                     <div>
-                                        {t('ReviewForm.editTitle')}
+                                        {t('ReviewForm.editTitle', {experienceName: experience?.name})}
                                     </div>
                                 }
                             </h3>
@@ -142,8 +142,10 @@ export default function ReviewForm() {
                             <input min="3" max="50" type="text" className="form-control"
                                    {...register("title", {
                                        required: true,
-                                       max: 50,
-                                       min: 3,
+                                       validate: {
+                                           length: (title) =>
+                                               title.length >= 3 && title.length <= 50,
+                                       },
                                        pattern: {
                                            value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
                                            message: t("ReviewForm.error.title.pattern"),
@@ -156,14 +158,9 @@ export default function ReviewForm() {
                                     {t("ReviewForm.error.title.isRequired")}
                                 </p>
                             )}
-                            {errors.title?.type === "max" && (
+                            {errors.title?.type === "length" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("ReviewForm.error.title.max")}
-                                </p>
-                            )}
-                            {errors.title?.type === "min" && (
-                                <p className="form-control is-invalid form-error-label">
-                                    {t("ReviewForm.error.title.min")}
+                                    {t("ReviewForm.error.title.length")}
                                 </p>
                             )}
                         </div>
@@ -183,8 +180,10 @@ export default function ReviewForm() {
                             <textarea minLength={3} maxLength={255} className="form-control" style={{maxHeight: "200px"}}
                                       {...register("description", {
                                           required: true,
-                                          maxLength: 255,
-                                          minLength: 3,
+                                          validate: {
+                                              length: (description) =>
+                                                  description.length >= 3 && description.length <= 255,
+                                          },
                                           pattern: {
                                               value: /^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°";$%#&=:¿?!¡\n\s\t/.-])*$/,
                                               message: t("ReviewForm.error.description.pattern"),
@@ -198,14 +197,9 @@ export default function ReviewForm() {
                                     {t("ReviewForm.error.description.isRequired")}
                                 </p>
                             )}
-                            {errors.description?.type === "maxLength" && (
+                            {errors.description?.type === "length" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("ReviewForm.error.description.max")}
-                                </p>
-                            )}
-                            {errors.description?.type === "minLength" && (
-                                <p className="form-control is-invalid form-error-label">
-                                    {t("ReviewForm.error.description.min")}
+                                    {t("ReviewForm.error.description.length")}
                                 </p>
                             )}
                         </div>

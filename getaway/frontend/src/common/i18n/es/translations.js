@@ -1,4 +1,5 @@
 export const TRANSLATIONS_ES = {
+
     PageName: "Getaway",
 
     Categories: {
@@ -111,20 +112,13 @@ export const TRANSLATIONS_ES = {
         noReviews: "Esta experiencia no tiene rese\u00F1as a\u00FAn. S\u00E9 el primero en realizar una!"
     },
 
-    Review: {
-        title: "Título",
-        description: "Descripci\u00F3n",
-        score: "Puntaje",
-    },
-
     ExperienceForm: {
         title: "Crea tu experiencia",
         error: {
             name: {
                 isRequired: "Este campo no puede estar vac\u00EDo",
                 pattern: "El nombre ingresado no posee un formato v\u00E1lido00EDo",
-                max: "El nombre de la experiencia debe tener entre 3-50 caracteres",
-                min: "El nombre de la experiencia debe tener entre 3-50 caracteres",
+                length: "El nombre de la experiencia debe tener entre 3-50 caracteres",
             },
             category: {
                 isRequired: "Este campo no puede estar vac\u00EDo",
@@ -135,16 +129,16 @@ export const TRANSLATIONS_ES = {
             description: {
                 pattern: "La descripci\u00F3n ingresada no posee un formato v\u00E1lido",
                 isRequired: "Este campo no puede estar vac\u00EDo",
-                max: "La descripci\u00F3n debe tener un m\u00E1ximo de 500 caracteres",
+                length: "La descripci\u00F3n debe tener un m\u00E1ximo de 500 caracteres",
             },
             mail: {
                 pattern: "El email ingresado no es v\u00E1lido",
                 isRequired: "Este campo no puede estar vac\u00EDo",
-                max: "El mail debe tener un m\u00E1ximo de 255 caracteres",
+                length: "El mail debe tener un m\u00E1ximo de 255 caracteres",
             },
             url: {
                 pattern: "La URL ingresada no es v\u00E1lido",
-                max: "La URL debe tener un m\u00E1ximo de 500 caracteres",
+                length: "La URL debe tener un m\u00E1ximo de 500 caracteres",
             },
             country: {
                 isRequired: "Este campo no puede estar vac\u00EDo",
@@ -155,8 +149,7 @@ export const TRANSLATIONS_ES = {
             address: {
                 pattern: "La direcci\u00F3n ingresada no es v\u00E1lido",
                 isRequired: "Este campo no puede estar vac\u00EDo",
-                max: "La direcci\u00F3n debe tener entre 5-100 caracteres",
-                min: "La direcci\u00F3n debe tener entre 5-100 caracteres",
+                length: "La direcci\u00F3n debe tener entre 5-100 caracteres",
             },
         }
     },
@@ -201,33 +194,12 @@ export const TRANSLATIONS_ES = {
     Button: {
         cancel: "Cancelar",
         create: "Guardar",
+        confirm: "Confirmar",
     },
 
     Input: {
         optional: "(Opcional)",
         maxValue: "(M\u00E1ximo {{value}})",
-    },
-
-    CreateReview: {
-        title: "Escribe una reseña para {{experienceName}}",
-        error: {
-            title: {
-                pattern: "El titulo ingresado no posee un formato v\u00E1lido",
-                isRequired: "Este campo no puede estar vac\u00EDo",
-                max: "El titulo debe tener entre 3-50 caracteres",
-                min: "El titulo debe tener entre 3-50 caracteres",
-            },
-            description: {
-                pattern: "La descripci\u00F3n ingresada no posee un formato v\u00E1lido",
-                isRequired: "Este campo no puede estar vac\u00EDo",
-                max: "La descripci\u00F3n debe tener entre 3-255 caracteres",
-                min: "La descripci\u00F3n debe tener entre 3-255 caracteres",
-            },
-            score: {
-                pattern: "aaaa",
-                isRequired: "Este campo no puede estar vac\u00EDo",
-            },
-        }
     },
 
     Copyright: "Getaway Copyright © {{year}} - Todos los derechos reservados",
@@ -281,9 +253,27 @@ export const TRANSLATIONS_ES = {
 
     CreateAccount: {
         error:{
-            isRequired: "Este campo es obligatorio",
-            pattern:"Error",
-            password:"Confirmar contraseña debe coincidir con la contraseña",
+            email: {
+                isRequired: "Este campo es obligatorio",
+                length: "El mail debe tener un m\u00E1ximo de 255 caracteres",
+                pattern: "El email ingresado no es v\u00E1lido",
+            },
+            name: {
+                isRequired: "Este campo es obligatorio",
+                length: "El nombre debe tener un m\u00E1ximo de 50 caracteres",
+                pattern: "El nombre ingresado no es v\u00E1lido",
+            },
+            surname: {
+                isRequired: "Este campo es obligatorio",
+                length: "El apellido debe tener un m\u00E1ximo de 50 caracteres",
+                pattern: "El apellido ingresado no es v\u00E1lido",
+            },
+            password: {
+                isRequired: "Este campo es obligatorio",
+                length: "La contraseña debe tener entre 8-25 caracteres",
+                pattern: "La contraseña ingresado no es v\u00E1lido",
+            },
+            passwordsMustMatch:"Las contraseñas no coinciden",
         }
     },
 
@@ -295,22 +285,30 @@ export const TRANSLATIONS_ES = {
         }
     },
 
+    Review: {
+        title: "Título",
+        description: "Descripci\u00F3n",
+        score: "Puntaje",
+    },
+
     ReviewForm:{
-        title: "Escribe una reseña",
-        editTitle:"Edita la reseña",
+        title: "Escribe una reseña para {{experienceName}}",
+        editTitle:"Edita la reseña para {{experienceName}}",
         error: {
             title: {
-                isRequired: "Un titulo es requerido",
-                pattern:"",
-                max:"El titulo debe tener como máximo 50 caracteres",
-                min:"El titulo debe tener como minimo 3 caracteres"
+                pattern: "El titulo ingresado no posee un formato v\u00E1lido",
+                isRequired: "Este campo no puede estar vac\u00EDo",
+                length: "El titulo debe tener entre 3-50 caracteres",
             },
             description: {
-                isRequired: "Una descripcion es requerida",
-                pattern:"",
-                max:"El titulo debe tener como máximo 255 caracteres",
-                min:"El titulo debe tener como minimo 3 caracteres"
-            }
+                pattern: "La descripci\u00F3n ingresada no posee un formato v\u00E1lido",
+                isRequired: "Este campo no puede estar vac\u00EDo",
+                length: "La descripci\u00F3n debe tener entre 3-255 caracteres",
+            },
+            score: {
+                pattern: "aaaa",
+                isRequired: "Este campo no puede estar vac\u00EDo",
+            },
         }
     }
 };

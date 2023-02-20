@@ -29,7 +29,6 @@ export default function CreateAccount() {
 
     const [seePassword, setSeePassword] = useState(false)
     const [seeRepeatPassword, setSeeRepeatPassword] = useState(false)
-    const [invalidCredentials, setInvalidCredentials] = useState(false)
 
     function showPassword() {
         setSeePassword(!seePassword)
@@ -43,20 +42,20 @@ export default function CreateAccount() {
         = useForm<FormDataCreate>({criteriaMode: "all"})
 
     const onSubmitCreate = handleSubmit((data: FormDataCreate) => {
-            setInvalidCredentials(false);
             userService.createUser(data.name, data.surname, data.email, data.password, data.confirmPassword)
-                .then((user) =>
-                    user.hasFailed() ? setInvalidCredentials(true) :
+                .then((user) => {
+                    if (!user.hasFailed())
                         loginService.login(data.email, data.password)
-                            .then((user) =>
-                                user.hasFailed() ? setInvalidCredentials(true) :
+                            .then((user) => {
+                                if (!user.hasFailed()) {
                                     auth.signIn(user.getData(), false, () => {
                                         navigate(from, {replace: true});
                                     })
-                            )
-                            .catch(() => navigate("/error?code=500&message=Server error"))
-                )
-                .catch(() => navigate("/error?code=500&message=Server error"));
+                                }
+                            })
+                            .catch(() => {/*TODO mostrar toast*/})
+                })
+                .catch(() => {/*TODO mostrar toast*/})
         }
     );
     return (
@@ -92,18 +91,26 @@ export default function CreateAccount() {
                                                className="form-control mb-2"
                                                placeholder={t('Navbar.emailPlaceholder')}
                                                aria-describedby="email input"
-                                               maxLength={255}
+                                               max="255"
                                                {...register("email", {
                                                    required: true,
-                                                   max: 255,
+                                                   validate: {
+                                                       length: (email) =>
+                                                           email.length >= 0 && email.length <= 255,
+                                                   },
                                                    pattern: {
                                                        value: /^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$/,
-                                                       message: t("CreateAccount.error.pattern"),
+                                                       message: t("CreateAccount.error.email.pattern"),
                                                    },
                                                })}/>
                                         {errors.email?.type === "required" && (
                                             <p className="form-control is-invalid form-error-label">
-                                                {t("CreateAccount.error.isRequired")}
+                                                {t("CreateAccount.error.email.isRequired")}
+                                            </p>
+                                        )}
+                                        {errors.email?.type === "length" && (
+                                            <p className="form-control is-invalid form-error-label">
+                                                {t("CreateAccount.error.email.length")}
                                             </p>
                                         )}
                                     </div>
@@ -122,20 +129,28 @@ export default function CreateAccount() {
                                             </div>
                                         </label>
 
-                                        <input maxLength={50} type="text" id="name"
+                                        <input max="50" type="text" id="name"
                                                className="form-control"
                                                placeholder={t('Navbar.namePlaceholder')}
                                                {...register("name", {
                                                    required: true,
-                                                   max: 50,
+                                                   validate: {
+                                                       length: (name) =>
+                                                           name.length >= 0 && name.length <= 50,
+                                                   },
                                                    pattern: {
                                                        value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
-                                                       message: t("CreateAccount.error.pattern"),
+                                                       message: t("CreateAccount.error.name.pattern"),
                                                    },
                                                })}/>
                                         {errors.name?.type === "required" && (
                                             <p className="form-control is-invalid form-error-label">
-                                                {t("CreateAccount.error.isRequired")}
+                                                {t("CreateAccount.error.name.isRequired")}
+                                            </p>
+                                        )}
+                                        {errors.email?.type === "length" && (
+                                            <p className="form-control is-invalid form-error-label">
+                                                {t("CreateAccount.error.name.length")}
                                             </p>
                                         )}
                                     </div>
@@ -153,21 +168,29 @@ export default function CreateAccount() {
                                                 </h6>
                                             </div>
                                         </label>
-                                        <input maxLength={50} type="text" id="surname"
+                                        <input max="50" type="text" id="surname"
                                                className="form-control"
                                                placeholder={t('Navbar.surnamePlaceholder')}
                                                {...register("surname", {
                                                    required: true,
-                                                   max: 50,
+                                                   validate: {
+                                                       length: (surname) =>
+                                                           surname.length >= 0 && surname.length <= 50,
+                                                   },
                                                    pattern: {
                                                        value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
-                                                       message: t("CreateAccount.error.pattern"),
+                                                       message: t("CreateAccount.error.surname.pattern"),
                                                    },
                                                })}
                                         />
                                         {errors.surname?.type === "required" && (
                                             <p className="form-control is-invalid form-error-label">
-                                                {t("CreateAccount.error.isRequired")}
+                                                {t("CreateAccount.error.surname.isRequired")}
+                                            </p>
+                                        )}
+                                        {errors.email?.type === "length" && (
+                                            <p className="form-control is-invalid form-error-label">
+                                                {t("CreateAccount.error.surname.length")}
                                             </p>
                                         )}
                                     </div>
@@ -191,8 +214,17 @@ export default function CreateAccount() {
                                                    id="password"
                                                    aria-describedby="password input"
                                                    placeholder={t('Navbar.passwordPlaceholder')}
+                                                   min="8" max="25"
                                                    {...register("password", {
                                                        required: true,
+                                                       validate: {
+                                                           length: (password) =>
+                                                               password.length >= 8 && password.length <= 25,
+                                                       },
+                                                       pattern: {
+                                                           value: /^[A-Za-z0-9@$!%*#?&_]*$/,
+                                                           message: t("CreateAccount.error.password.pattern"),
+                                                       },
                                                    })}
                                             />
                                             <div className="input-group-append">
@@ -206,7 +238,12 @@ export default function CreateAccount() {
                                         </div>
                                         {errors.password?.type === "required" && (
                                             <p className="form-control is-invalid form-error-label">
-                                                {t("CreateAccount.error.isRequired")}
+                                                {t("CreateAccount.error.password.isRequired")}
+                                            </p>
+                                        )}
+                                        {errors.password?.type === "length" && (
+                                            <p className="form-control is-invalid form-error-label">
+                                                {t("CreateAccount.error.password.length")}
                                             </p>
                                         )}
                                     </div>
@@ -222,7 +259,15 @@ export default function CreateAccount() {
                                                    id="confirmPassword"
                                                    aria-describedby="password input"
                                                    {...register("confirmPassword", {
-                                                       required: true
+                                                       required: true,
+                                                       validate: {
+                                                           length: (confirmPassword) =>
+                                                               confirmPassword.length >= 8 && confirmPassword.length <= 25,
+                                                       },
+                                                       pattern: {
+                                                           value: /^[A-Za-z0-9@$!%*#?&_]*$/,
+                                                           message: t("CreateAccount.error.password.pattern"),
+                                                       },
                                                    })}/>
                                             <div className="input-group-append">
                                                 <button className="btn btn-eye input-group-text"
@@ -240,7 +285,7 @@ export default function CreateAccount() {
                                         )}
                                         {watch('password') !== watch('confirmPassword') && (
                                             <p className="form-control is-invalid form-error-label">
-                                                {t("CreateAccount.error.password")}
+                                                {t("CreateAccount.error.passwordsMustMatch")}
                                             </p>
                                         )}
                                     </div>
