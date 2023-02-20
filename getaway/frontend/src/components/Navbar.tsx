@@ -48,7 +48,14 @@ export default function Navbar(props: {nameProp: [string, Dispatch<SetStateActio
 
     const onSubmit = handleSubmit((data: FormDataSearch) => {
         nameProp[1](data.name)
+        navigate("/experiences")
     });
+
+    function clearNavBar() {
+        nameProp[1]("")
+        categoryProp[1]("")
+        reset()
+    }
 
     function resetForm(){
         nameProp[1]("")
@@ -58,7 +65,7 @@ export default function Navbar(props: {nameProp: [string, Dispatch<SetStateActio
     return (
         <div className="navbar container-fluid p-0 d-flex flex-column">
             <div className="container-fluid px-2 pt-2 d-flex">
-                <Link to="/" className="logo d-flex" onClick={()=>{nameProp[1](""); categoryProp[1]("")}}>
+                <Link to="/" className="logo d-flex" onClick={()=>{clearNavBar()}}>
                     <img className="logo-img" src={'./images/getaway-icon.png'} alt="Logo"/>
                     <span className="logo-text align-self-center text-uppercase font-weight-bold">
                         {t('PageName')}
@@ -79,7 +86,7 @@ export default function Navbar(props: {nameProp: [string, Dispatch<SetStateActio
                                            message: t("ExperienceForm.error.name.pattern"),
                                        }
                                    })}
-                                   defaultValue={nameProp[0]}
+                                   // defaultValue={nameProp[0]}
                             />
                             {errors.name?.type === "max" && (
                                 <p className="form-control is-invalid form-error-label">
@@ -95,6 +102,7 @@ export default function Navbar(props: {nameProp: [string, Dispatch<SetStateActio
 
                     <Link to="/experienceForm" style={{marginRight: '40px'}}>
                         <button type="button" onClick={() => {
+                            clearNavBar();
                             if (user === null) {
                                 navigate("/login")
                             }
@@ -109,7 +117,7 @@ export default function Navbar(props: {nameProp: [string, Dispatch<SetStateActio
 
 
                     {!isLogged &&
-                    <Link to="/login">
+                    <Link to="/login" onClick={()=>clearNavBar()}>
                         <button type="button" className="btn button-primary">
                             {t('Navbar.login')}
                         </button>
@@ -128,24 +136,27 @@ export default function Navbar(props: {nameProp: [string, Dispatch<SetStateActio
                         </button>
 
                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{left: "-50px"}}>
-                            <Link to="/user/profile" className="dropdown-item">
+                            <Link to="/user/profile" className="dropdown-item" onClick={()=>clearNavBar()}>
                                 <img src={'./images/ic_user.svg'} alt="Icono perfil"/>
                                 {t('Navbar.profile')}
                             </Link>
 
-                            {isProvider && <Link to="/user/experiences" className="dropdown-item">
+                            {isProvider &&
+                            <Link to="/user/experiences" className="dropdown-item" onClick={()=>clearNavBar()}>
                                 <img src={'./images/ic_experiences.svg'} alt="Icono experiencias"/>
                                 {t('Navbar.experiences')}
                             </Link>}
-                            <Link to="/user/favourites" className="dropdown-item">
+                            <Link to="/user/favourites" className="dropdown-item" onClick={()=>clearNavBar()}>
                                 <img src={'./images/ic_fav.svg'} alt="Icono favoritos"/>
                                 {t('Navbar.favourites')}
                             </Link>
-                            {isVerified && <Link to="/user/reviews" className="dropdown-item">
+                            {isVerified &&
+                            <Link to="/user/reviews" className="dropdown-item" onClick={()=>clearNavBar()}>
                                 <img src={'./images/ic_review.svg'} alt="Icono reseñas"/>
                                 {t('Navbar.reviews')}
                             </Link>}
                             <button className="dropdown-item" onClick={() => {
+                                clearNavBar()
                                 signOut(() => navigate("/"))
                             }}>
                                 <img src={'./images/ic_logout.svg'} alt="Icono cerrar sesion"/>

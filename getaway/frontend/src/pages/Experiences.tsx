@@ -5,23 +5,14 @@ import CardExperience from "../components/CardExperience";
 import {IconButton, Slider, Typography} from '@mui/material';
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {ExperienceModel, OrderByModel} from "../types";
-import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
-import { useQuery} from "../hooks/useQuery";
+import {useLocation, useNavigate} from "react-router-dom";
 import "../styles/star_rating.css";
 import {CityModel, CountryModel} from "../types";
 import {experienceService, locationService} from "../services";
-import {useForm} from "react-hook-form";
 import {serviceHandler} from "../scripts/serviceHandler";
 import Pagination from "../components/Pagination";
 import {Close} from "@mui/icons-material";
 import DataLoader from "../components/DataLoader";
-
-type FormFilterData = {
-    country: string,
-    city: number,
-    maxPrice: number,
-    score: number,
-};
 
 export default function Experiences(props: {nameProp: [string, Dispatch<SetStateAction<string>>], categoryProp: [string, Dispatch<SetStateAction<string>>]}) {
 
@@ -31,13 +22,13 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
 
     const {nameProp, categoryProp} = props
 
-    const [searchParams, setSearchParams] = useSearchParams()
     const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
     const [isLoading, setIsLoading] = useState(false)
 
     //------------FILTERS----------
     //Location
     const [countries, setCountries] = useState<CountryModel[]>(new Array(1))
+    const [country, setCountry] = useState(-1)
     const [cities, setCities] = useState<CityModel[]>(new Array(0))
     const [city, setCity] = useState(-1)
     //Price
@@ -53,7 +44,6 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
     const [maxPage, setMaxPage] = useState(1)
     const currentPage = useState<number>(1)
 
-    //TODO: city not refreshing
     useEffect(()=>{
         serviceHandler(
             experienceService.getUserOrderByModels(),
@@ -81,6 +71,8 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
     }, [])
 
     useEffect(() => {
+
+        console.log(country)
         setIsLoading(true)
         serviceHandler(
             experienceService.getExperiencesByFilter(categoryProp[0], nameProp[0], order[0], price, -rating, city, currentPage[0]),
@@ -112,12 +104,11 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
         );
     }, [categoryProp[0], nameProp[0], rating, city, order[0], currentPage[0], price])
 
-    function loadCities(countryName: string) {
+    function loadCities(countryId: number) {
         serviceHandler(
-            locationService.getCitiesByCountry(parseInt(countryName)),
+            locationService.getCitiesByCountry(countryId),
             navigate, (cities) => {
                 setCities(cities)
-                setCity(cities[0].id)
             },
             () => {
             },
@@ -134,18 +125,16 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
         }
     };
 
-    const {register, handleSubmit, formState: {errors}, reset}
-        = useForm<FormFilterData>({criteriaMode: "all"});
-
     function cleanForm() {
-        reset();
         setCities(new Array(0));
+        setCountry(-1)
         setCity(-1);
         setRating(0);
         setHover(0);
         setPrice(maxPrice);
         order[1]("OrderByAZ")
         currentPage[1](1)
+        console.log("Reseting filters")
     }
 
     function cleanQuery() {
@@ -153,12 +142,6 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
         categoryProp[1]("")
         nameProp[1]("")
     }
-
-    const onSubmit = handleSubmit((data: FormFilterData) => {
-
-        }
-    );
-
 
     return (
         <div className="container-fluid p-0 mt-3 d-flex">
@@ -168,17 +151,18 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
                     {t('Filters.title')}
                 </p>
 
-                <form id="submitForm" className="filter-form" onSubmit={onSubmit}>
+                <div className="filter-form">
                     <div>
                         <label className="form-label" htmlFor="country">
                             {t('Experience.country')}
                         </label>
                         <select id="experienceFormCountryInput" className="form-select"
-                                {...register("country", {required: false})}
-                                onChange={e => loadCities(e.target.value)}
+                                onChange={e => {setCountry(parseInt(e.target.value)); loadCities(parseInt(e.target.value))}}
                         >
-                            <option hidden value="">{t('Experience.placeholder')}</option>
-
+                            {/*TODO: check usage after filter reset*/}
+                            {country === -1 &&
+                                <option hidden value="">{t('Experience.placeholder')}</option>
+                            }
                             {countries.map((country) => (
                                 <option key={country.id} value={country.id}>
                                     {country.name}
@@ -191,11 +175,14 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
                             {t('Filters.city.field')}
                         </label>
                         <select id="experienceFormCityInput" className="form-select"
-                                {...register("city", {required: false})}
-                                disabled={cities.length <= 0}
+                                disabled={country === -1}
+                                onChange={e => setCity(parseInt(e.target.value))}
                         >
+                            {city === -1 &&
+                                <option hidden value="">{t('Experience.placeholder')}</option>
+                            }
                             {cities.map((city) => (
-                                <option key={city.id} value={city.id} onClick={e => setCity(city.id)}>
+                                <option key={city.id} value={city.id} >
                                     {city.name}
                                 </option>
                             ))}
@@ -249,12 +236,11 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
                         </div>
                         <input value="TODO" type="hidden" className="form-control" id="scoreInput"/>
                     </div>
-                </form>
+                </div>
 
-                <button className="btn btn-search px-3 py-2 my-2" type="submit" id="submitFormButton" form="submitForm">
-                    {t('Filters.btn.submit')}
-                </button>
-
+                {/*<button className="btn btn-search px-3 py-2 my-2" type="submit" id="submitFormButton" form="submitForm">*/}
+                {/*    {t('Filters.btn.submit')}*/}
+                {/*</button>*/}
 
                 <button className="btn btn-clean-filter px-3 py-2 my-2" type="reset" id="cleanFilterFormButton"
                         onClick={cleanForm}>
