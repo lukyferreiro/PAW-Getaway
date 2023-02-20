@@ -3,7 +3,7 @@ import "../common/i18n/index";
 import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, userService} from "../services";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
@@ -28,9 +28,10 @@ export default function UserProfile() {
     const [userImg, setUserImg] = useState<string | undefined>(undefined)
     const [isLoadingImg, setIsLoadingImg] = useState(false)
     const [reload, setReload] = useState(true)
+    const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        if (verificationToken !== "") {
+        if (verificationToken !== "" && !user?.verified ) {
             serviceHandler(
                 userService.verifyUser(verificationToken),
                 navigate, () => {
@@ -38,6 +39,8 @@ export default function UserProfile() {
                     setReload(!reload)
                 },
                 () => {
+                    searchParams.delete("verificationToken")
+                    setSearchParams(searchParams)
                     //TODO
                     //SHOW SNACKBAR
                 },

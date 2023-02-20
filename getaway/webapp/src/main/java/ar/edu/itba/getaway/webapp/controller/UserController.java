@@ -133,7 +133,6 @@ public class UserController {
 
     //Endpoint para la verificacion del mail
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
     @Path("/emailVerification")
     public Response verifyUser(
