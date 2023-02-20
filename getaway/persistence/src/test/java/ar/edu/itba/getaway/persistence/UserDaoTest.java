@@ -234,11 +234,12 @@ public class UserDaoTest {
     @Test
     @Rollback
     public void testUpdateRoles() {
-        userDao.updateRoles(USER_TO_UPDATE_ROLE, Roles.NOT_VERIFIED, Roles.VERIFIED);
-        UserModel user = em.find(UserModel.class, USER_TO_UPDATE_ROLE.getUserId());
+        Optional<UserModel> user = userDao.updateRoles(USER_TO_UPDATE_ROLE, Roles.NOT_VERIFIED, Roles.VERIFIED);
 
         assertNotNull(user);
-        final ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.getRoles());
+        assertTrue(user.isPresent());
+
+        final ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.get().getRoles());
 
         //Asserts to check changes in userModel
         assertTrue(arrayRoles.contains(USER_MODEL));
@@ -258,47 +259,48 @@ public class UserDaoTest {
     @Test
     @Rollback
     public void testUpdatePassword() {
-        userDao.updatePassword(MAIN_USER, "newpwd");
-        UserModel user = em.find(UserModel.class, MAIN_USER.getUserId());
+        Optional<UserModel> user = userDao.updatePassword(MAIN_USER, "newpwd");
 
         assertNotNull(user);
-        //Check if all the other info is the same
-        assertEquals(MAIN_USER.getEmail(), user.getEmail());
-        assertEquals(MAIN_USER.getName(), user.getName());
-        assertEquals(MAIN_USER.getSurname(), user.getSurname());
-        assertEquals(MAIN_USER.getRoles(), user.getRoles());
-        assertEquals(MAIN_USER.getProfileImage(), user.getProfileImage());
+        assertTrue(user.isPresent());
 
-        assertEquals("newpwd", user.getPassword());
+        //Check if all the other info is the same
+        assertEquals(MAIN_USER.getEmail(), user.get().getEmail());
+        assertEquals(MAIN_USER.getName(), user.get().getName());
+        assertEquals(MAIN_USER.getSurname(), user.get().getSurname());
+        assertEquals(MAIN_USER.getRoles(), user.get().getRoles());
+        assertEquals(MAIN_USER.getProfileImage(), user.get().getProfileImage());
+
+        assertEquals("newpwd", user.get().getPassword());
     }
 
     @Test
     @Rollback
     public void testUpdateUserInfo() {
-        userDao.updateUserInfo(MAIN_USER, new UserInfo("newusuario", "newuno"));
-        UserModel user = em.find(UserModel.class, MAIN_USER.getUserId());
+        Optional<UserModel> user = userDao.updateUserInfo(MAIN_USER, new UserInfo("newusuario", "newuno"));
 
         assertNotNull(user);
+        assertTrue(user.isPresent());
 
         //Check if all the other info is the same
-        assertEquals(MAIN_USER.getEmail(), user.getEmail());
-        assertEquals(MAIN_USER.getRoles(), user.getRoles());
-        assertEquals(MAIN_USER.getPassword(), user.getPassword());
-        assertEquals(MAIN_USER.getProfileImage(), user.getProfileImage());
+        assertEquals(MAIN_USER.getEmail(), user.get().getEmail());
+        assertEquals(MAIN_USER.getRoles(), user.get().getRoles());
+        assertEquals(MAIN_USER.getPassword(), user.get().getPassword());
+        assertEquals(MAIN_USER.getProfileImage(), user.get().getProfileImage());
 
-        assertEquals("newusuario", user.getName());
-        assertEquals("newuno", user.getSurname());
+        assertEquals("newusuario", user.get().getName());
+        assertEquals("newuno", user.get().getSurname());
     }
 
     @Test
     @Rollback
     public void testAddRole() {
-        userDao.addRole(USER_TO_ADD_ROLE, Roles.PROVIDER);
-        UserModel user = em.find(UserModel.class, USER_TO_ADD_ROLE.getUserId());
+        Optional<UserModel> user = userDao.addRole(USER_TO_ADD_ROLE, Roles.PROVIDER);
 
         assertNotNull(user);
+        assertTrue(user.isPresent());
 
-        final ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.getRoles());
+        final ArrayList<RoleModel> arrayRoles = new ArrayList<>(user.get().getRoles());
 
         assertTrue(arrayRoles.contains(USER_MODEL));
         assertTrue(arrayRoles.contains(NOT_VERIFIED_MODEL));
