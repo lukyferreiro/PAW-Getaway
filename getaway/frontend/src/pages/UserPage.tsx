@@ -1,6 +1,5 @@
-import {Location, Navigate, Outlet, To, useLocation, useNavigate} from "react-router-dom";
+import {Location, Navigate, Outlet, To, useLocation} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
-import {useEffect} from "react";
 
 function getCorrectPrivilegeRoute(location: Location): To {
     const startsWithUserOrError = location.pathname.startsWith("/user") || location.pathname.startsWith("/error");
@@ -12,17 +11,10 @@ function getCorrectPrivilegeRoute(location: Location): To {
 
 export default function UserPage() {
 
-    const {user, signIn} = useAuth()
+    const {user} = useAuth()
     const location = useLocation()
-    const navigate = useNavigate()
     const readUser = localStorage.getItem("user")
-    const rememberMe = localStorage.getItem("rememberMe") === "true"
     const correctRoute = getCorrectPrivilegeRoute(location)
-
-    useEffect(() => {
-        if (readUser && readUser !== "")
-            signIn(JSON.parse(readUser), rememberMe, () => navigate(correctRoute));
-    }, [])
 
     if (!user && !readUser) {
         // Redirect them to the /login page, but save the current location they were

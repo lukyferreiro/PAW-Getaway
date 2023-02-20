@@ -23,9 +23,19 @@ type FormDataExperience = {
 
 export default function ExperienceForm() {
 
+    const {user} = useAuth()
+    const readUser = localStorage.getItem("user");
+    const isVerified = localStorage.getItem("isVerified") === "true";
+
+    if (!user && !readUser) {
+        return <Navigate to="/login" state={{from: "/experienceForm"}} replace/>;
+    }
+    if (!isVerified) {
+        return <Navigate to="/user/profile" replace/>;
+    }
+
     const {t} = useTranslation()
     const navigate = useNavigate()
-    const {user} = useAuth()
 
     const [experience, setExperience] = useState<ExperienceModel | undefined>(undefined)
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
@@ -131,17 +141,6 @@ export default function ExperienceForm() {
             }
         }
     );
-
-    const readUser = localStorage.getItem("user");
-    const isVerified = localStorage.getItem("isVerified") === "true";
-
-    if (!user && !readUser) {
-        return <Navigate to="/login" state={{from: "/experienceForm"}} replace/>;
-    }
-    if (!isVerified) {
-        return <Navigate to="/user/profile" replace/>;
-    }
-
 
     return (
         <div className="d-flex flex-column justify-content-center mx-5 my-2 p-0">

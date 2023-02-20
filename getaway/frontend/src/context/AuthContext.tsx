@@ -19,9 +19,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
     let signIn = (newUser: UserModel, rememberMe: boolean, callback: VoidFunction) => {
         return internalAuthProvider.signIn(() => {
             setUser(newUser)
-            if (!localStorage.getItem("user")) {
-                localStorage.setItem("user", JSON.stringify(newUser))
-            }
+            localStorage.setItem("user", JSON.stringify(newUser))
             localStorage.setItem("token", newUser.token!)
             localStorage.setItem("isVerified", newUser.verified ? "true" : "false")
             localStorage.setItem("isProvider", newUser.provider ? "true" : "false")

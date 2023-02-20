@@ -20,19 +20,26 @@ type FormDataReview = {
 
 export default function ReviewForm() {
 
+    const {experienceId} = useParams()
+    const {user} = useAuth()
+    const readUser = localStorage.getItem("user")
+    const isVerified = localStorage.getItem("isVerified") === "true"
+
+    if (!user && !readUser) {
+        return <Navigate to="/login" state={{from: `/experiences/${experienceId}/createReview`}} replace/>;
+    }
+    if (!isVerified) {
+        return <Navigate to="/user/profile" replace/>;
+    }
+
     const {t} = useTranslation()
     const navigate = useNavigate()
 
     const [experience, setExperience] = useState<ExperienceNameModel | undefined>(undefined)
     const [review, setReview] = useState<ReviewModel | undefined>(undefined)
-    const {experienceId} = useParams()
 
     const [rating, setRating] = useState(1)
     const [hover, setHover] = useState(0)
-
-    const {user, signIn} = useAuth()
-    const readUser = localStorage.getItem("user")
-    const isVerified = localStorage.getItem("isVerified") === "true"
 
     const query = useQuery()
     const currentId = getQueryOrDefault(query, "id", "-1")
@@ -100,13 +107,6 @@ export default function ReviewForm() {
             }
         }
     );
-
-    if (!user && !readUser) {
-        return <Navigate to="/login" state={{from: `/experiences/${experienceId}/createReview`}} replace/>;
-    }
-    if (!isVerified) {
-        return <Navigate to="/user/profile" replace/>;
-    }
 
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">

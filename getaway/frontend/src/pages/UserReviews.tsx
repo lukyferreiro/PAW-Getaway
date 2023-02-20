@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {useLocation, useNavigate} from "react-router-dom";
+import {Navigate, useLocation, useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {ReviewModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
@@ -12,9 +12,14 @@ import DataLoader from "../components/DataLoader";
 
 export default function UserReviews() {
 
+    const isVerified = localStorage.getItem("isVerified") === "true"
+
+    if (!isVerified) {
+        return <Navigate to="/user/profile" replace/>;
+    }
+
     const {t} = useTranslation()
     const navigate = useNavigate()
-    const location = useLocation()
 
     const {user} = useAuth()
 

@@ -13,15 +13,15 @@ import ExperienceForm from "./pages/ExperienceForm";
 import ReviewForm from "./pages/ReviewForm";
 import Error from "./pages/Error";
 import Custom404 from "./pages/Custom404";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import {AuthProvider} from "./context/AuthContext";
 import Login from "./pages/Login";
 import CreateAccount from "./pages/CreateAccount";
 import EditAccount from "./pages/EditAccount";
+import RequireAuth from "./components/RequireAuth";
 
 function App() {
+
     const categoryProp = useState<string>("")
     const nameProp = useState<string>("")
 
@@ -29,11 +29,8 @@ function App() {
         <AuthProvider>
             <BrowserRouter basename={process.env.REACT_APP_CONTEXT}>
 
-                <Navbar categoryProp={categoryProp} nameProp={nameProp}/>
-                <hr className="separator"/>
-
                 <Routes>
-                    <Route path='/' element={<Landing/>}>
+                    <Route path='/' element={<RequireAuth><Landing/></RequireAuth>}>
                         <Route index element={<Home/>}/>
                         <Route path='/user' element={<UserPage/>}>
                             <Route index element={<UserProfile/>}/>
@@ -53,8 +50,6 @@ function App() {
                     <Route path='/login' element={<Login categoryProp={categoryProp} nameProp={nameProp}/>}/>
                     <Route path='/createAccount' element={<CreateAccount/>}/>
                 </Routes>
-
-                <Footer/>
 
             </BrowserRouter>
         </AuthProvider>

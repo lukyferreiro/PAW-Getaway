@@ -27,6 +27,12 @@ type FormUserExperiencesSearch = {
 
 export default function UserExperiences() {
 
+    const isProvider = localStorage.getItem("isProvider") === "true"
+
+    if (!isProvider) {
+        return <Navigate to="/" replace/>;
+    }
+
     const {t} = useTranslation()
     const navigate = useNavigate()
     const location = useLocation()
@@ -43,7 +49,6 @@ export default function UserExperiences() {
     const [onEdit, setOnEdit] = useState(false)
 
     const {user} = useAuth()
-    const isProvider = localStorage.getItem("isProvider") === "true"
 
 
     const {register, handleSubmit, formState: {errors}, reset}
@@ -102,15 +107,10 @@ export default function UserExperiences() {
         navigate({pathname: "/experienceForm", search: `?id=${experienceId}`}, {replace: true});
     }
 
-    if (!isProvider) {
-        return <Navigate to="/" replace/>;
-    }
-
     function resetForm() {
         setUserName("")
         reset()
     }
-
 
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>

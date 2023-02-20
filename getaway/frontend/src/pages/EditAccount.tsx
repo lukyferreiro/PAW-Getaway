@@ -6,7 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {userService} from "../services";
 import {useAuth} from "../hooks/useAuth";
-import {useLocation, useNavigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 
 
@@ -19,6 +19,12 @@ type FormDataEditAccount = {
 };
 
 export default function EditAccount() {
+
+    const isVerified = localStorage.getItem("isVerified") === "true"
+
+    if (!isVerified) {
+        return <Navigate to="/user/profile" replace/>;
+    }
 
     const {t} = useTranslation()
     const navigate = useNavigate()
