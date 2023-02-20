@@ -23,8 +23,8 @@ export default function EditAccount() {
     const navigate = useNavigate()
     const location = useLocation()
 
-    // @ts-ignore
-    let from = location.state?.from?.pathname || "/"
+
+    const from = location.state?.from?.pathname || "/"
 
     const [seePassword, setSeePassword] = useState(false)
     const [seeRepeatPassword, setSeeRepeatPassword] = useState(false)

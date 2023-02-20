@@ -11,6 +11,8 @@ import {
 import create from "zustand";
 import {Close} from "@mui/icons-material";
 import React from "react";
+import {t} from "i18next";
+
 
 type ConfirmDialogStore = {
     title: string;
@@ -54,15 +56,15 @@ const ConfirmDialogModal: React.FC = () => {
                 <DialogContentText>{message}</DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button color="primary" variant="contained" onClick={() => {
+                <button type="button" className="btn btn-error"   onClick={() => {
                     if (onSubmit) {
                         onSubmit()
                     }
                     close();
                 }
                 }>
-                    Confirmar
-                </Button>
+                    {t("Button.confirm")}
+                </button>
             </DialogActions>
         </Dialog>
     );

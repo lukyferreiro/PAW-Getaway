@@ -201,6 +201,7 @@ export const TRANSLATIONS_ES = {
     Button: {
         cancel: "Cancelar",
         create: "Guardar",
+        confirm: "Confirmar",
     },
 
     Input: {
