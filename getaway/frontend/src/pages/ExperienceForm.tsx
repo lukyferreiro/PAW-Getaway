@@ -22,20 +22,12 @@ type FormDataExperience = {
 };
 
 export default function ExperienceForm() {
-
     const {user} = useAuth()
     const readUser = localStorage.getItem("user");
     const isVerified = localStorage.getItem("isVerified") === "true";
-
-    if (!user && !readUser) {
-        return <Navigate to="/login" state={{from: "/experienceForm"}} replace/>;
-    }
-    if (!isVerified) {
-        return <Navigate to="/user/profile" replace/>;
-    }
+    const navigate = useNavigate()
 
     const {t} = useTranslation()
-    const navigate = useNavigate()
 
     const [experience, setExperience] = useState<ExperienceModel | undefined>(undefined)
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
@@ -46,6 +38,12 @@ export default function ExperienceForm() {
     const currentId = getQueryOrDefault(query, "id", "-1")
 
     useEffect(() => {
+        if (!user && !readUser) {
+            navigate("/login")
+        }
+        if (!isVerified) {
+            navigate("/user/profile")
+        }
         if (parseInt(currentId) !== -1) {
             serviceHandler(
                 experienceService.getExperienceById(parseInt(currentId), false),

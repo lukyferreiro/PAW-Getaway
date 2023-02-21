@@ -4,10 +4,11 @@ import {useForm} from "react-hook-form";
 import {loginService, userService} from "../services";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {IconButton} from "@mui/material";
+// @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
+// @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import {serviceHandler} from "../scripts/serviceHandler";
-import {Navigate, useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
 
 type FormDataResetPassword = {

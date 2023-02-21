@@ -222,8 +222,8 @@ public class ExperienceController {
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
 
         if(view) {
+            favAndViewExperienceService.setViewed(user, experience);
             if (user!=null && !experience.getUser().equals(user)) {
-                favAndViewExperienceService.setViewed(user, experience);
                 experienceService.increaseViews(experience);
             }
         }

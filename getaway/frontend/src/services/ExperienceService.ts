@@ -197,7 +197,7 @@ export class  ExperienceService {
         file: File
     ): Promise<Result<PutResponse>> {
         const formData = new FormData();
-        formData.append("file", file, file.name);
+        formData.append("experienceImage", file, file.name);
         return resultFetch<PutResponse>(this.basePath + `/experience/${experienceId}/experienceImage`, {
             method: "PUT",
             headers: {},

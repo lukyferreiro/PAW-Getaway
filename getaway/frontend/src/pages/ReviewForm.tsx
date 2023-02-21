@@ -18,21 +18,15 @@ type FormDataReview = {
 };
 
 export default function ReviewForm() {
-
     const {experienceId} = useParams()
     const {user} = useAuth()
     const readUser = localStorage.getItem("user")
     const isVerified = localStorage.getItem("isVerified") === "true"
+    const navigate = useNavigate()
 
-    if (!user && !readUser) {
-        return <Navigate to="/login" state={{from: `/experiences/${experienceId}/createReview`}} replace/>;
-    }
-    if (!isVerified) {
-        return <Navigate to="/user/profile" replace/>;
-    }
+
 
     const {t} = useTranslation()
-    const navigate = useNavigate()
 
     const [experience, setExperience] = useState<ExperienceNameModel | undefined>(undefined)
     const [review, setReview] = useState<ReviewModel | undefined>(undefined)
@@ -44,6 +38,12 @@ export default function ReviewForm() {
     const currentId = getQueryOrDefault(query, "id", "-1")
 
     useEffect(() => {
+        if (!user && !readUser) {
+            navigate("/login")
+        }
+        if (!isVerified) {
+            navigate("/user/profile")
+        }
         if (parseInt(currentId) !== -1) {
             serviceHandler(
                 reviewService.getReviewById(parseInt(currentId)),

@@ -82,7 +82,7 @@ export class UserService {
         file: File
     ): Promise<Result<PutResponse>> {
         const formData = new FormData();
-        formData.append("file", file, file.name);
+        formData.append("profileImage", file, file.name);
         return resultFetch<PutResponse>(this.basePath + "/" + userId + "/profileImage", {
             method: "PUT",
             headers: {},

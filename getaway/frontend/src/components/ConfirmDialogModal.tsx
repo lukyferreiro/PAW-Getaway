@@ -8,7 +8,7 @@ import {
     Box,
     IconButton
 } from "@mui/material";
-import create from "zustand";
+import {create} from 'zustand';
 import {Close} from "@mui/icons-material";
 import React from "react";
 import {t} from "i18next";
@@ -34,7 +34,7 @@ const UseConfirmDialogStore = create<ConfirmDialogStore>((set) => {
     });
 });
 
-export const confirmDialogModal = (title:string, message: string, onSubmit: () => void) => {
+export const confirmDialogModal = (title: string, message: string, onSubmit: () => void) => {
     UseConfirmDialogStore.setState({
         title,
         message,

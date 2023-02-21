@@ -27,15 +27,12 @@ type FormUserExperiencesSearch = {
 };
 
 export default function UserExperiences() {
-
     const isProvider = localStorage.getItem("isProvider") === "true"
+    const navigate = useNavigate()
 
-    if (!isProvider) {
-        return <Navigate to="/" replace/>;
-    }
+
 
     const {t} = useTranslation()
-    const navigate = useNavigate()
     const location = useLocation()
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -59,6 +56,9 @@ export default function UserExperiences() {
         = useForm<FormUserExperiencesSearch>({criteriaMode: "all"})
 
     useEffect(() => {
+        if (!isProvider) {
+            navigate("/")
+        }
         serviceHandler(
             experienceService.getProviderOrderByModels(),
             navigate, (orders) => {
@@ -301,6 +301,15 @@ export default function UserExperiences() {
                                                                     style={{fontSize: "x-large"}}>
                                                             <EditIcon/>
                                                         </IconButton>
+
+                                                        {/*<IconButton*/}
+                                                        {/*    onClick={() => (addPictureModal(experience.id, () => {}))}*/}
+                                                        {/*    aria-label="picture"*/}
+                                                        {/*    component="span"*/}
+                                                        {/*    style={{fontSize: "xx-large"}}>*/}
+                                                        {/*    <AddPhotoAlternateIcon/>*/}
+                                                        {/*</IconButton>*/}
+
                                                         <IconButton onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'), t('User.experiences.confirmDelete',{experienceName: experience.name}),() => deleteExperience(experience.id))}
                                                                     aria-label="trash" component="span"
                                                                     style={{fontSize: "x-large"}}>

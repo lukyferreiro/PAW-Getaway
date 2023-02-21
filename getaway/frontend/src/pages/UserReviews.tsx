@@ -12,15 +12,10 @@ import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 
 export default function UserReviews() {
-
     const isVerified = localStorage.getItem("isVerified") === "true"
-
-    if (!isVerified) {
-        return <Navigate to="/user/profile" replace/>;
-    }
+    const navigate = useNavigate()
 
     const {t} = useTranslation()
-    const navigate = useNavigate()
     const query = useQuery()
     const {user} = useAuth()
 
@@ -32,6 +27,9 @@ export default function UserReviews() {
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
 
     useEffect(() => {
+        if (!isVerified) {
+            navigate("/user/profile")
+        }
         setIsLoading(true)
         serviceHandler(
             userService.getUserReviews(user ? user.id : -1, currentPage[0]),

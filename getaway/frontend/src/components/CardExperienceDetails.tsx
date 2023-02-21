@@ -8,14 +8,16 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import React, {useEffect, useState} from "react";
 import {CategoryModel, ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import {experienceService} from "../services";
 import ConfirmDialogModal, { confirmDialogModal } from "../components/ConfirmDialogModal";
-import {Favorite, FavoriteBorder} from "@mui/icons-material";
+import { Favorite, FavoriteBorder} from "@mui/icons-material";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
+import AddPictureModal, {addPictureModal} from "../components/AddPictureModal";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel; isEditing: boolean; }) {
 
@@ -187,6 +189,28 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 </div>
             }
 
+            <div className="btn-fav">
+                {user ?
+                    <div>
+                        {fav ?
+                            <IconButton onClick={() => setFavExperience(false)}>
+                                <Favorite className="fa-heart heart-color"/>
+                            </IconButton>
+                            :
+                            <IconButton onClick={() => setFavExperience(true)}>
+                                <FavoriteBorder className="fa-heart"/>
+                            </IconButton>
+                        }
+                    </div>
+                    :
+                    <div>
+                        <IconButton onClick={() => navigate("/login")}>
+                            <FavoriteBorder className="fa-heart"/>
+                        </IconButton>
+                    </div>
+                }
+            </div>
+
             {isEditing &&
                 <div className="btn-group my-2 d-flex justify-content-center align-content-center" role="group">
                     {experience.observable ?
@@ -203,35 +227,20 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                 <VisibilityOffIcon/>
                             </IconButton>
                         </div>
-
-
                     }
 
-                    <div className="btn-fav">
-                        {user ?
-                            <div>
-                                {fav ?
-                                    <IconButton onClick={() => setFavExperience(false)}>
-                                        <Favorite className="fa-heart heart-color"/>
-                                    </IconButton>
-                                    :
-                                    <IconButton onClick={() => setFavExperience(true)}>
-                                        <FavoriteBorder className="fa-heart"/>
-                                    </IconButton>
-                                }
-                            </div>
-                            :
-                            <div>
-                                <IconButton onClick={() => navigate("/login")}>
-                                    <FavoriteBorder className="fa-heart"/>
-                                </IconButton>
-                            </div>
-                        }
-                    </div>
                     <IconButton onClick={() => editExperience(experience.id)} aria-label="edit" component="span"
                                 style={{fontSize: "xx-large"}}>
                         <EditIcon/>
                     </IconButton>
+
+                    {/*<IconButton*/}
+                    {/*    onClick={() => (addPictureModal(experience.id, () => {}))}*/}
+                    {/*    aria-label="picture"*/}
+                    {/*    component="span"*/}
+                    {/*    style={{fontSize: "xx-large"}}>*/}
+                    {/*    <AddPhotoAlternateIcon/>*/}
+                    {/*</IconButton>*/}
 
                     <IconButton
                         onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'),t('User.experiences.confirmDelete',{experienceName: experience.name}), () => deleteExperience(experience.id))}
@@ -240,6 +249,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                         style={{fontSize: "xx-large"}}>
                         <DeleteIcon/>
                     </IconButton>
+
                     <ConfirmDialogModal/>
                 </div>
 

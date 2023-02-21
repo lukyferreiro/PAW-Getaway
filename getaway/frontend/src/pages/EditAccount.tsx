@@ -19,15 +19,14 @@ type FormDataEditAccount = {
 };
 
 export default function EditAccount() {
-
     const isVerified = localStorage.getItem("isVerified") === "true"
+    const navigate = useNavigate()
 
     if (!isVerified) {
-        return <Navigate to="/user/profile" replace/>;
+        navigate("/user/profile")
     }
 
     const {t} = useTranslation()
-    const navigate = useNavigate()
 
     const {user} = useAuth()
 
