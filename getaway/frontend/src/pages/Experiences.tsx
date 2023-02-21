@@ -77,9 +77,6 @@ export default function Experiences(props: {nameProp: [string | undefined, Dispa
     //TODO: maxprice changes makes double refresh. Maybe add maxprice to experiencelist dto
     useEffect(() => {
         if( nameProp[0] !== undefined && categoryProp[0] !== undefined) {
-            searchParams.set("order", "OrderByAZ")
-            searchParams.set("page", "1")
-            setSearchParams(searchParams)
             serviceHandler(
                 experienceService.getFilterMaxPrice(categoryProp[0], nameProp[0]),
                 navigate, (priceModel) => {
@@ -106,6 +103,9 @@ export default function Experiences(props: {nameProp: [string | undefined, Dispa
                 navigate, (experiences) => {
                     setExperiences(experiences.getContent())
                     setMaxPage(experiences.getMaxPage())
+                    searchParams.set("order", order[0])
+                    searchParams.set("page", currentPage[0].toString())
+                    setSearchParams(searchParams)
                 },
                 () => {
                     setIsLoading(false)

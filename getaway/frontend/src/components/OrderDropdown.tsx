@@ -2,19 +2,13 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {OrderByModel} from "../types";
 import {Dispatch, SetStateAction} from "react";
-import {useSearchParams} from "react-router-dom";
 
 export default function OrderDropdown(props: { orders: OrderByModel[], order: [string, Dispatch<SetStateAction<string>>], currentPage: [number , Dispatch<SetStateAction<number>>] }) {
 
     const {t} = useTranslation()
     const {orders, order, currentPage} = props
 
-    const [searchParams, setSearchParams] = useSearchParams();
-
     function changeOrder(queryOrder: string) {
-        searchParams.set("page", "1")
-        searchParams.set("order", queryOrder)
-        setSearchParams(searchParams)
         currentPage[1](1)
         order[1](queryOrder)
     }

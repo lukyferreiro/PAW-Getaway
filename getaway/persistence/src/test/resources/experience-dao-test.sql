@@ -59,6 +59,7 @@ INSERT INTO images(imgid, imageObject, imgMimeType) VALUES(7, '0x1234', 'JPG');
 INSERT INTO images(imgid, imageObject, imgMimeType) VALUES(8, '0x1234', 'JPG');
 INSERT INTO images(imgid, imageObject, imgMimeType) VALUES(50, '0x1234', 'JPG');
 INSERT INTO images(imgid, imageObject, imgMimeType) VALUES(51, '0x1234', 'JPG');
+INSERT INTO images(imgid, imageObject, imgMimeType) VALUES(52, '0x1234', 'JPG');
 
 -- Add 1 experience of each category
 -- Add 3 to adventure with different price ranges and cities for filter testing
@@ -77,6 +78,8 @@ INSERT INTO experiences(experienceid, experiencename, price, address, descriptio
 VALUES (50, 'todelete', null, 'delete', null, null, 3, 6, 2, 'owner@mail.com', 50, true, 0);
 INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
 VALUES (51, 'torecommend', null, 'recommend1', null, null, 3, 1, 2, 'owner@mail.com', 51, true, 0);
+INSERT INTO experiences(experienceid, experiencename, price, address, description, siteurl, cityid, categoryid, userid, email, imgid, observable, views)
+VALUES (52, 'hidden', null, 'hidden', null, null, 3, 6, 2, 'owner@mail.com', 52, false, 0);
 
 -- User 1 favs
 INSERT INTO favuserexperience(userid, experienceid) VALUES (1, 1);

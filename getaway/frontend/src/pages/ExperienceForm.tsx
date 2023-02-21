@@ -46,7 +46,7 @@ export default function ExperienceForm() {
     const currentId = getQueryOrDefault(query, "id", "-1")
 
     useEffect(() => {
-        if (parseInt(currentId) != -1) {
+        if (parseInt(currentId) !== -1) {
             serviceHandler(
                 experienceService.getExperienceById(parseInt(currentId), false),
                 navigate, (fetchedExperience) => {
@@ -267,7 +267,7 @@ export default function ExperienceForm() {
                                       required: false,
                                       validate: {
                                           length: (description) =>
-                                              (!description) || description.length >= 0 && description.length <= 500,
+                                              (!description) || (description.length >= 0 && description.length <= 500),
                                       },
                                       pattern: {
                                           value: /^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°";$%#&=:¿?!¡\n\s\t/.-])*$/,
@@ -344,7 +344,7 @@ export default function ExperienceForm() {
                                        required: false,
                                        validate: {
                                            length: (url) =>
-                                               (!url) || url.length >= 0 && url.length <= 500,
+                                               (!url) || (url.length >= 0 && url.length <= 500),
                                        },
                                        pattern: {
                                            value: /^([(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*))?$/,

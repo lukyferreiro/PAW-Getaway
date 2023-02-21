@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {Navigate, useLocation, useNavigate} from "react-router-dom";
+import {Navigate, useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {ReviewModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
@@ -9,6 +9,7 @@ import {userService} from "../services";
 import CardReview from "../components/CardReview";
 import Pagination from "../components/Pagination";
 import DataLoader from "../components/DataLoader";
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 
 export default function UserReviews() {
 
@@ -20,14 +21,16 @@ export default function UserReviews() {
 
     const {t} = useTranslation()
     const navigate = useNavigate()
-
+    const location = useLocation()
+    const query = useQuery()
     const {user} = useAuth()
 
+    const [searchParams, setSearchParams] = useSearchParams();
     const [reviews, setReviews] = useState<ReviewModel[]>(new Array(0))
     const [isLoading, setIsLoading] = useState(false)
 
     const [maxPage, setMaxPage] = useState(1)
-    const currentPage = useState<number>(1)
+    const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
 
     useEffect(() => {
         setIsLoading(true)
@@ -36,6 +39,8 @@ export default function UserReviews() {
             navigate, (reviews) => {
                 setReviews(reviews.getContent())
                 setMaxPage(reviews ? reviews.getMaxPage() : 1)
+                searchParams.set("page", currentPage[0].toString())
+                setSearchParams(searchParams)
             },
             () => {
                 setIsLoading(false)

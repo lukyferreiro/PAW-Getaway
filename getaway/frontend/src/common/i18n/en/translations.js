@@ -46,8 +46,10 @@ export const TRANSLATIONS_EN = {
         surnamePlaceholder: "Doe",
         passwordPlaceholder: "Between 8 and 25 characters",
         editAccountPopUp: "Edit your account",
+        editPasswordPopUp: "Change your password",
         editPassword: "New password",
         confirmEditPassword: "Confirm new password",
+        changePassword:"Change password",
         editAccount:"Edit account"
     },
 

@@ -5,7 +5,6 @@ import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, reviewService} from "../services";
 import {useForm} from "react-hook-form";
-import {paths} from "../common";
 import {useAuth} from "../hooks/useAuth";
 import {ExperienceNameModel, ReviewModel} from "../types";
 import "../styles/star_rating.css";
@@ -45,7 +44,7 @@ export default function ReviewForm() {
     const currentId = getQueryOrDefault(query, "id", "-1")
 
     useEffect(() => {
-        if (parseInt(currentId) != -1) {
+        if (parseInt(currentId) !== -1) {
             serviceHandler(
                 reviewService.getReviewById(parseInt(currentId)),
                 navigate, (review) => {

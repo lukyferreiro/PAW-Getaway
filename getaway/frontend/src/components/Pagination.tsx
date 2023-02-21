@@ -10,8 +10,6 @@ export default function Pagination(props: { maxPage: number, currentPage: [numbe
 
     const {maxPage, currentPage} = props
 
-    const [searchParams, setSearchParams] = useSearchParams();
-
     const componentCurrentPage = currentPage[0]
 
     const PageArrow = styled.img<{ xRotated?: boolean }>`
@@ -22,8 +20,6 @@ export default function Pagination(props: { maxPage: number, currentPage: [numbe
     `;
 
     function changePage(page: number) {
-        searchParams.set("page", page.toString())
-        setSearchParams(searchParams)
         currentPage[1](page)
     }
 

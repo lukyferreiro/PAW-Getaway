@@ -10,22 +10,26 @@ import CardExperience from "../components/CardExperience";
 import Pagination from "../components/Pagination";
 import OrderDropdown from "../components/OrderDropdown";
 import DataLoader from "../components/DataLoader";
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 
 export default function UserFavourites() {
 
     const {t} = useTranslation()
     const navigate = useNavigate()
     const location = useLocation()
+    const query = useQuery()
 
     const {user} = useAuth()
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const [favExperiences, setFavExperiences] = useState<ExperienceModel[]>(new Array(0))
     const [isLoading, setIsLoading] = useState(false)
 
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const order = useState<string>("OrderByAZ");
+    const order = useState<string>(getQueryOrDefault(query, "order", "OrderByAZ"))
     const [maxPage, setMaxPage] = useState(1)
-    const currentPage = useState<number>(1)
+    const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
 
     useEffect(() => {
         serviceHandler(
@@ -48,6 +52,9 @@ export default function UserFavourites() {
             navigate, (experiences) => {
                 setFavExperiences(experiences.getContent())
                 setMaxPage(experiences ? experiences.getMaxPage() : 1)
+                searchParams.set("order", order[0])
+                searchParams.set("page", currentPage[0].toString())
+                setSearchParams(searchParams)
             },
             () => {
                 setIsLoading(false)
