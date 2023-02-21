@@ -88,6 +88,8 @@ public class WebConfig {
         return new JpaTransactionManager(emf);
     }
 
+    //TODO: no content change
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();

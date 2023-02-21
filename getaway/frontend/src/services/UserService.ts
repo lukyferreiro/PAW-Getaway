@@ -186,6 +186,4 @@ export class UserService {
             body: emailToSend,
         });
     }
-
-    //TODO: check send password encrypted
 }

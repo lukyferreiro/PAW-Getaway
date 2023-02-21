@@ -26,6 +26,8 @@ export default function ModalResetPassword(props: { isOpen: [boolean, Dispatch<S
                         if (user.hasFailed()) {
                             setInvalidEmail(true)
                         } else {
+                            isOpen[1](false);
+                            reset()
                             //TODO mostrar toast de que se mando el mail
                         }
                     }

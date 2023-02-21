@@ -157,7 +157,7 @@ public class UserController {
 
         userService.resendVerificationToken(user);
 
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 
     //Endpoint para resetear la contraseña
@@ -198,12 +198,10 @@ public class UserController {
         }
         dtoValidator.validate(passwordResetEmailDto, "Invalid Body Request");
 
-        //TODO: check
-        LOGGER.info(passwordResetEmailDto.getEmail());
         UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
         userService.generateNewPassword(user);
 
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 
     //Endpoint para obtener la imagen de perfil del usuario
