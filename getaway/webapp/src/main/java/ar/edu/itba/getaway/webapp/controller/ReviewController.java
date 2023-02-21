@@ -8,7 +8,6 @@ import ar.edu.itba.getaway.webapp.constraints.DtoConstraintValidator;
 import ar.edu.itba.getaway.webapp.constraints.exceptions.DtoValidationException;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
-import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

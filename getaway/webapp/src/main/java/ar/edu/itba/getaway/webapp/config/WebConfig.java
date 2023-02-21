@@ -1,8 +1,8 @@
 package ar.edu.itba.getaway.webapp.config;
 
 import ar.edu.itba.getaway.webapp.constraints.DtoConstraintValidator;
-import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
-import ar.edu.itba.getaway.webapp.security.services.AuthFacadeImpl;
+import ar.edu.itba.getaway.webapp.security.services.AuthContext;
+import ar.edu.itba.getaway.webapp.security.services.AuthContextImpl;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -148,8 +148,8 @@ public class WebConfig {
     }
 
     @Bean
-    public AuthFacade authFacade() {
-        return new AuthFacadeImpl();
+    public AuthContext authContext() {
+        return new AuthContextImpl();
     }
 
     @Bean

@@ -2,7 +2,7 @@ package ar.edu.itba.getaway.webapp.security.services;
 
 import ar.edu.itba.getaway.models.UserModel;
 
-public interface AuthFacade {
+public interface AuthContext {
     UserModel getCurrentUser();
     Long getCurrentUserId();
     boolean isVerifiedUser();

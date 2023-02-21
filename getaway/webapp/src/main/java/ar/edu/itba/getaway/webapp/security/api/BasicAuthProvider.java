@@ -51,15 +51,15 @@ public class BasicAuthProvider implements AuthenticationProvider {
         if (credentials.length != 2) {
             throw new InvalidUsernamePasswordException("Invalid username/password");
         }
-        final UserModel maybeUser = userService.getUserByEmail(credentials[0]).orElseThrow(() -> new BadCredentialsException("Bad credentials"));
-        if (!passwordEncoder.matches(credentials[1], maybeUser.getPassword())) {
+        final UserModel user = userService.getUserByEmail(credentials[0]).orElseThrow(() -> new BadCredentialsException("Bad credentials"));
+        if (!passwordEncoder.matches(credentials[1], user.getPassword())) {
             throw new BadCredentialsException("Bad username/password combination");
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(credentials[0]);
-        final String authenticationToken = tokenService.issueToken(credentials[0], mapToAuthority(userDetails.getAuthorities()));
-        final AuthToken tokenDetails = tokenService.parseToken(authenticationToken);
+        final String authToken = tokenService.issueToken(credentials[0], mapToAuthority(userDetails.getAuthorities()));
+        final AuthToken tokenDetails = tokenService.parseToken(authToken);
         final BasicAuthToken trustedAuth = new BasicAuthToken(credentials[0], credentials[1], userDetails.getAuthorities(), tokenDetails);
-        trustedAuth.setToken(authenticationToken);
+        trustedAuth.setToken(authToken);
         return trustedAuth;
     }
 

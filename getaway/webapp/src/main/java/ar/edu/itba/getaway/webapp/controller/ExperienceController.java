@@ -10,13 +10,12 @@ import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.*;
-import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
+import ar.edu.itba.getaway.webapp.security.services.AuthContext;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +46,7 @@ public class ExperienceController {
     @Autowired
     private int maxRequestSize;
     @Autowired
-    private AuthFacade authFacade;
+    private AuthContext authContext;
     @Autowired
     private DtoConstraintValidator dtoValidator;
     @Context
@@ -60,7 +59,7 @@ public class ExperienceController {
     @Path("/landingPage")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getLandingPageExperiences(){
-        UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
 
         List<List<ExperienceModel>> landingPageList;
 
@@ -103,7 +102,7 @@ public class ExperienceController {
             cityModel = locationService.getCityById(cityId).orElseThrow(CityNotFoundException::new);
         }
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
         final Page<ExperienceModel> experiences = experienceService.listExperiencesByFilter(categoryModel, name, maxPrice, maxScore, cityModel, Optional.of(order), page, user);
 
         if (experiences == null) {
@@ -186,7 +185,7 @@ public class ExperienceController {
         }
         dtoValidator.validate(experienceDto, "Invalid Body Request");
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
         final CityModel city = locationService.getCityByName(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel category = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
@@ -219,7 +218,7 @@ public class ExperienceController {
 
         LOGGER.info("Called /experiences/{} GET", id);
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
 
         if(view) {
@@ -242,7 +241,7 @@ public class ExperienceController {
     ) {
         LOGGER.info("Called /experiences/{} GET", id);
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
 
         final ExperienceNameDto experienceDto = new ExperienceNameDto(experience, uriInfo);
@@ -271,7 +270,7 @@ public class ExperienceController {
         }
         dtoValidator.validate(experienceDto, "Invalid Body Request");
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
 
         if (experience.getUser().getUserId() != (user.getUserId())) {
@@ -299,7 +298,7 @@ public class ExperienceController {
             @PathParam("experienceId") final long id
     ) {
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
 
         if (experienceModel.getUser().getUserId() != (user.getUserId())) {
@@ -407,7 +406,7 @@ public class ExperienceController {
         LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
         //TODO: check usage of localdate.now()
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
 
         final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experience, LocalDate.now(), user);
@@ -423,7 +422,7 @@ public class ExperienceController {
     ) {
         LOGGER.info("Called /experiences/{} GET", id);
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
 
         favAndViewExperienceService.setFav(user, set, experience);
@@ -440,7 +439,7 @@ public class ExperienceController {
     ) {
         LOGGER.info("Called /experiences/{} GET", id);
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
 
         experienceService.changeVisibility(experience, set);

@@ -55,7 +55,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AntMatcherVoter antMatcherVoter() { return new AntMatcherVoter();}
+    public AntMatcherVoter antMatcherVoter() {
+        return new AntMatcherVoter();
+    }
 
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
@@ -95,12 +97,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public BridgeAuthFilter bridgeAuthFilter() throws Exception {
-        BridgeAuthFilter bridgeAuthFilter = new BridgeAuthFilter();
-        bridgeAuthFilter.setAuthenticationManager(authenticationManagerBean());
-        bridgeAuthFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
-        bridgeAuthFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
-        return bridgeAuthFilter;
+    public AuthFilter authFilter() throws Exception {
+        AuthFilter authFilter = new AuthFilter();
+        authFilter.setAuthenticationManager(authenticationManagerBean());
+        authFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+        authFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
+        return authFilter;
     }
 
     @Bean
@@ -145,8 +147,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/users/currentUser").permitAll() //TODO: maybe authenticated
                     //logueado y rol NOT VERIFIED
-                    .antMatchers(HttpMethod.PUT, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")    //TODO check si es hasRole
-                    .antMatchers(HttpMethod.POST, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")    //TODO check si es hasRole
+                    .antMatchers(HttpMethod.PUT, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")
+                    .antMatchers(HttpMethod.POST, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")
                     //¿Olvidaste tu contraseña?
                     .antMatchers(HttpMethod.PUT, "/api/users/passwordReset").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/users/passwordReset").anonymous()
@@ -157,9 +159,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //logueado y hay que revisar que el id sea el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{userId}/profileImage").access("@antMatcherVoter.userEditHimself(authentication, #userId)")
                     //logueado y tiene que tener rol PROVIDER
-                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/experiences").hasAuthority("PROVIDER")    //TODO check si es hasRole
+                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/experiences").hasAuthority("PROVIDER")
                     //logueado y tiene que tener rol VERIFIED
-                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/reviews").hasAuthority("VERIFIED")    //TODO check si es hasRole
+                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/reviews").hasAuthority("VERIFIED")
                     //logueado y tiene que tener rol USER nada más
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}/favExperiences").access("@antMatcherVoter.accessFavs(authentication, #userId)")
                 //------------------- /experiences -------------------
@@ -169,7 +171,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/experiences/filter/maxPrice").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/filter/orderByModels").permitAll()
                 //logueado y VERIFIED (rol PROVIDER) se asigna en el momento
-                    .antMatchers(HttpMethod.POST, "/api/experiences").hasAuthority("VERIFIED")    //TODO check si es hasRole
+                    .antMatchers(HttpMethod.POST, "/api/experiences").hasAuthority("VERIFIED")
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/experience/{experienceId}").permitAll()
                     //logueado, VERIFIED y PROVIDER, chequear que sea el mismo usuario
@@ -180,12 +182,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/experiences/experience/{experienceId}/experienceImage").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/experience/{experienceId}/reviews").permitAll()
                     //logueado y VERIFIED
-                    .antMatchers(HttpMethod.POST, "/api/experiences/experience/{experienceId}/reviews").hasAuthority("VERIFIED")    //TODO check si es hasRole
+                    .antMatchers(HttpMethod.POST, "/api/experiences/experience/{experienceId}/reviews").hasAuthority("VERIFIED")
                     .antMatchers(HttpMethod.PUT, "/experience/{experienceId}/fav").authenticated()
                     .antMatchers(HttpMethod.PUT, "/experience/{experienceId}/observable").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
                 //------------------- /reviews -------------------
                     //logueado y VERIFIED, chequear que sea el mismo usuario
-                    .antMatchers(HttpMethod.GET, "/api/reviews/{reviewId}").hasAuthority("VERIFIED")    //TODO check si es hasRole
+                    .antMatchers(HttpMethod.GET, "/api/reviews/{reviewId}").hasAuthority("VERIFIED")
                     .antMatchers(HttpMethod.PUT, "/api/reviews/{reviewId}").access("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
                     .antMatchers(HttpMethod.DELETE, "/api/reviews/{reviewId}").access("@antMatcherVoter.canDeleteReviewById(authentication, #reviewId)")
                 //------------------- /location -------------------
@@ -196,7 +198,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //------------------- Others --------------------
                     .antMatchers("/**").permitAll()
                 .and()
-                    .addFilterBefore(bridgeAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+                    .addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 

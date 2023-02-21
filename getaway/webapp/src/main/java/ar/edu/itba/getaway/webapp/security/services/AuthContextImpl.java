@@ -14,12 +14,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuthFacadeImpl implements AuthFacade {
+public class AuthContextImpl implements AuthContext {
 
     @Autowired
     private UserService userService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthFacadeImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthContextImpl.class);
 
 
     @Override

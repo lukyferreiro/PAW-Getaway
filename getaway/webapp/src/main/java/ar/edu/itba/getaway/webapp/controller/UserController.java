@@ -14,7 +14,7 @@ import ar.edu.itba.getaway.webapp.dto.request.*;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.UserDto;
-import ar.edu.itba.getaway.webapp.security.services.AuthFacade;
+import ar.edu.itba.getaway.webapp.security.services.AuthContext;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class UserController {
     @Autowired
     private ReviewService reviewService;
     @Autowired
-    private AuthFacade authFacade;
+    private AuthContext authContext;
     @Autowired
     private DtoConstraintValidator dtoValidator;
     @Context
@@ -98,7 +98,7 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response getCurrentUser() {
         LOGGER.info("Called /users/currentUser GET");
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
 
         if(user != null){
             return Response.ok(new UserDto(user, uriInfo)).build();
@@ -124,7 +124,7 @@ public class UserController {
         }
         dtoValidator.validate(userInfoDto, "Invalid Body Request");
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
 
         userService.updateUserInfo(user, new UserInfo(userInfoDto.getName(), userInfoDto.getSurname()));
 
@@ -153,7 +153,7 @@ public class UserController {
     public Response resendUserVerification() {
         LOGGER.info("Called /users/emailVerification POST");
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
 
         userService.resendVerificationToken(user);
 
@@ -255,7 +255,7 @@ public class UserController {
             throw new IllegalContentTypeException();
         }
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
 
         imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
 
@@ -277,7 +277,7 @@ public class UserController {
 
         LOGGER.info("Called /users/{}/experiences GET", id);
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
 
         final Page<ExperienceModel> experiences = experienceService.listExperiencesSearchByUser(name, user, Optional.of(order), page);
 
@@ -312,7 +312,7 @@ public class UserController {
 
         LOGGER.info("Called /users/{}/experiences GET", id);
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
 
         final Page<ReviewModel> reviews = reviewService.getReviewsByUser(user, page);
 
@@ -344,7 +344,7 @@ public class UserController {
 
         LOGGER.info("Called /users/{}/favExperiences GET", id);
 
-        final UserModel user = authFacade.getCurrentUser();
+        final UserModel user = authContext.getCurrentUser();
 
         final Page<ExperienceModel> favExperiences = experienceService.listExperiencesFavsByUser(user, Optional.of(order), page);
 

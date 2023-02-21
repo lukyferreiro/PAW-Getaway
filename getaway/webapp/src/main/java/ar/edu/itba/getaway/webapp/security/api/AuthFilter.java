@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class BridgeAuthFilter extends AbstractAuthenticationProcessingFilter {
+public class AuthFilter extends AbstractAuthenticationProcessingFilter {
     private static final int BASIC_TOKEN_OFFSET = 6;
     private static final int JWT_TOKEN_OFFSET = 7;
 
@@ -29,7 +29,7 @@ public class BridgeAuthFilter extends AbstractAuthenticationProcessingFilter {
         chain.doFilter(request, response);
     }
 
-    public BridgeAuthFilter() {
+    public AuthFilter() {
         //TODO check esto
         super("/api/");
     }
