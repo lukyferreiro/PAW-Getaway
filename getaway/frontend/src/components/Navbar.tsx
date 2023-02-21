@@ -16,19 +16,18 @@ type FormDataSearch = {
     name: string
 };
 
-export default function Navbar(props: {nameProp: [string, Dispatch<SetStateAction<string>>], categoryProp: [string, Dispatch<SetStateAction<string>>]}) {
+export default function Navbar(props: {nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]}) {
     const {t} = useTranslation()
     const navigate = useNavigate()
+    const query = useQuery()
 
     const {nameProp, categoryProp} = props
 
-    const query = useQuery()
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    // const [searchParams, setSearchParams] = useSearchParams();
-    //
-    // nameProp[1](getQueryOrDefault(query, "name", ""))
-    // categoryProp[1](getQueryOrDefault(query, "category", ""))
-    //
+    nameProp[1](getQueryOrDefault(query, "name", ""))
+    categoryProp[1](getQueryOrDefault(query, "category", ""))
+
     const {signOut} = useAuth()
     const user = localStorage.getItem("user")
     let isLogged = user !== null
@@ -41,7 +40,6 @@ export default function Navbar(props: {nameProp: [string, Dispatch<SetStateActio
         = useForm<FormDataSearch>({criteriaMode: "all"})
 
     useEffect(() => {
-
         serviceHandler(
             categoryService.getCategories(),
             navigate, (category) => {
@@ -53,31 +51,23 @@ export default function Navbar(props: {nameProp: [string, Dispatch<SetStateActio
         );
     }, [])
 
-    // useEffect(() => {
-    //     if(nameProp[0]==="") {
-    //         reset()
-    //     }
-    // }, [nameProp[1]])
-
     const onSubmit = handleSubmit((data: FormDataSearch) => {
         nameProp[1](data.name)
-        // searchParams.set("name", data.name)
-        // setSearchParams(searchParams)
-        navigate("/experiences")
+        navigate({pathname: "/experiences", search: `?category=${categoryProp[0]}&name=${data.name}`}, {replace: true})
     });
 
     function clearNavBar() {
-        // searchParams.delete("category")
-        // searchParams.delete("name")
-        // setSearchParams(searchParams)
+        searchParams.delete("category")
+        searchParams.delete("name")
+        setSearchParams(searchParams)
         nameProp[1]("")
         categoryProp[1]("")
         reset()
     }
 
     function resetForm(){
-        // searchParams.delete("name")
-        // setSearchParams(searchParams)
+        searchParams.delete("name")
+        setSearchParams(searchParams)
         nameProp[1]("")
         reset()
     }
@@ -106,7 +96,7 @@ export default function Navbar(props: {nameProp: [string, Dispatch<SetStateActio
                                            message: t("ExperienceForm.error.name.pattern"),
                                        }
                                    })}
-                                   // defaultValue={nameProp[0]}
+                                // defaultValue={nameProp[0]}
                             />
                             {errors.name?.type === "max" && (
                                 <p className="form-control is-invalid form-error-label">
@@ -189,14 +179,12 @@ export default function Navbar(props: {nameProp: [string, Dispatch<SetStateActio
 
             <div className="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0">
                 {categories.map((category) => (
-                    <Link to={{pathname: "/experiences"}}>
-                        <button type="button" className={`btn btn-category ${(categoryProp[0]===category.name) ? 'isActive' : ''}`} key={category.id}
-                                onClick={()=>{categoryProp[1](category.name)}}
-                        >
-                            <img src={`./images/${category.name}.svg`} alt={`${category.name}`}/>
-                            {t('Categories.' + category.name)}
-                        </button>
-                    </Link>
+                    <button type="button" className={`btn btn-category ${(categoryProp[0]===category.name) ? 'isActive' : ''}`} key={category.id}
+                            onClick={()=>{categoryProp[1](category.name); console.log("Changed category"); navigate({pathname: "/experiences", search: `?category=${category.name}&name=${nameProp[0]}`})}}
+                    >
+                        <img src={`./images/${category.name}.svg`} alt={`${category.name}`}/>
+                        {t('Categories.' + category.name)}
+                    </button>
                 ))}
             </div>
         </div>

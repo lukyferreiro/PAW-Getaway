@@ -67,9 +67,6 @@ export default function CreateAccount() {
     );
     return (
         <>
-            <Navbar categoryProp={categoryProp} nameProp={nameProp}/>
-            <hr className="separator"/>
-
             <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
                 <div className="container-lg w-100 p-2 modalContainer">
                     <div className="row w-100 m-0 p-4 align-items-center justify-content-center">
@@ -315,8 +312,6 @@ export default function CreateAccount() {
                     </div>
                 </div>
             </div>
-
-            <Footer/>
         </>
     );
 }

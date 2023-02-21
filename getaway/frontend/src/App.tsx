@@ -19,15 +19,19 @@ import Login from "./pages/Login";
 import CreateAccount from "./pages/CreateAccount";
 import EditAccount from "./pages/EditAccount";
 import RequireAuth from "./components/RequireAuth";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 function App() {
-
-    const categoryProp = useState<string>("")
-    const nameProp = useState<string>("")
+    const categoryProp = useState<string | undefined>(undefined)
+    const nameProp = useState<string | undefined>(undefined)
 
     return (
         <AuthProvider>
             <BrowserRouter basename={process.env.REACT_APP_CONTEXT}>
+
+                <Navbar categoryProp={categoryProp} nameProp={nameProp}/>
+                <hr className="separator"/>
 
                 <Routes>
                     <Route path='/' element={<RequireAuth><Landing/></RequireAuth>}>
@@ -50,6 +54,8 @@ function App() {
                     <Route path='/login' element={<Login categoryProp={categoryProp} nameProp={nameProp}/>}/>
                     <Route path='/createAccount' element={<CreateAccount/>}/>
                 </Routes>
+
+                <Footer/>
 
             </BrowserRouter>
         </AuthProvider>

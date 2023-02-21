@@ -10,10 +10,7 @@ export default function Landing() {
 
     return (
         <>
-            <Navbar categoryProp={categoryProp} nameProp={nameProp}/>
-            <hr className="separator"/>
             <Outlet/>
-            <Footer/>
         </>
     )
 
