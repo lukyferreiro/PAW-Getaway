@@ -5,7 +5,7 @@ import CardExperience from "../components/CardExperience";
 import {IconButton, Slider, Typography} from '@mui/material';
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {ExperienceModel, OrderByModel} from "../types";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import "../styles/star_rating.css";
 import {CityModel, CountryModel} from "../types";
 import {experienceService, locationService} from "../services";
@@ -13,15 +13,18 @@ import {serviceHandler} from "../scripts/serviceHandler";
 import Pagination from "../components/Pagination";
 import {Close} from "@mui/icons-material";
 import DataLoader from "../components/DataLoader";
-import {useQuery} from "../hooks/useQuery";
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 
-export default function Experiences(props: {nameProp: [string, Dispatch<SetStateAction<string>>], categoryProp: [string, Dispatch<SetStateAction<string>>]}) {
-
+export default function Experiences(props: {nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]}) {
     const {t} = useTranslation()
     const navigate = useNavigate()
     const location = useLocation()
 
     const {nameProp, categoryProp} = props
+
+    const query = useQuery()
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
     const [isLoading, setIsLoading] = useState(false)
@@ -29,21 +32,21 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
     //------------FILTERS----------
     //Location
     const [countries, setCountries] = useState<CountryModel[]>(new Array(1))
-    const [country, setCountry] = useState(-1)
+    const [country, setCountry] = useState(parseInt(getQueryOrDefault(query, "country", "-1")))
     const [cities, setCities] = useState<CityModel[]>(new Array(0))
-    const [city, setCity] = useState(-1)
+    const [city, setCity] = useState(parseInt(getQueryOrDefault(query, "city", "-1")))
     //Price
     const [maxPrice, setMaxPrice] = useState<number>(-1)
-    const [price, setPrice] = useState<number>(-1)
+    const [price, setPrice] = useState<number>(parseInt(getQueryOrDefault(query, "price", "-1")))
     //Score
-    const [rating, setRating] = useState(0)
+    const [rating, setRating] = useState(parseInt(getQueryOrDefault(query, "rating", "0")))
     const [hover, setHover] = useState(0)
     //Order
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const order = useState<string>("OrderByAZ")
+    const order = useState<string>(getQueryOrDefault(query, "order", "OrderByAZ"))
     //Page
     const [maxPage, setMaxPage] = useState(1)
-    const currentPage = useState<number>(1)
+    const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
 
     useEffect(()=>{
         serviceHandler(
@@ -71,41 +74,54 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
         );
     }, [])
 
+    //TODO: maxprice changes makes double refresh. Maybe add maxprice to experiencelist dto
     useEffect(() => {
-
-        console.log(country)
-        setIsLoading(true)
-        serviceHandler(
-            experienceService.getExperiencesByFilter(categoryProp[0], nameProp[0], order[0], price, -rating, city, currentPage[0]),
-            navigate, (experiences) => {
-                setExperiences(experiences.getContent())
-                setMaxPage(experiences.getMaxPage())
-            },
-            () => {
-                setIsLoading(false)
-            },
-            () => {
-                setExperiences(new Array(0))
-                setIsLoading(false)
-            }
-        );
-        serviceHandler(
-            experienceService.getFilterMaxPrice(categoryProp[0], nameProp[0]),
-            navigate, (priceModel) => {
-                setMaxPrice(priceModel.maxPrice)
-                if (maxPrice != priceModel.maxPrice ||price>priceModel.maxPrice || price === -1) {
-                    setPrice(priceModel.maxPrice)
+        if( nameProp[0] !== undefined && categoryProp[0] !== undefined) {
+            searchParams.set("order", "OrderByAZ")
+            searchParams.set("page", "1")
+            setSearchParams(searchParams)
+            serviceHandler(
+                experienceService.getFilterMaxPrice(categoryProp[0], nameProp[0]),
+                navigate, (priceModel) => {
+                    setMaxPrice(priceModel.maxPrice)
+                    if (maxPrice != priceModel.maxPrice || price > priceModel.maxPrice || price === -1) {
+                        setPrice(priceModel.maxPrice)
+                    }
+                },
+                () => {
+                },
+                () => {
+                    setPrice(-1)
                 }
-            },
-            () => {
-            },
-            () => {
-                setPrice(-1)
-            }
-        );
+            );
+        }
+    }, [categoryProp[0], nameProp[0]])
+
+    useEffect(() => {
+        if( nameProp[0] !== undefined && categoryProp[0] !== undefined) {
+            console.log("Reloading experiences with neew filter")
+            setIsLoading(true)
+            serviceHandler(
+                experienceService.getExperiencesByFilter(categoryProp[0], nameProp[0], order[0], price, -rating, city, currentPage[0]),
+                navigate, (experiences) => {
+                    setExperiences(experiences.getContent())
+                    setMaxPage(experiences.getMaxPage())
+                },
+                () => {
+                    setIsLoading(false)
+                },
+                () => {
+                    setExperiences(new Array(0))
+                    setIsLoading(false)
+                }
+            );
+        }
     }, [categoryProp[0], nameProp[0], rating, city, order[0], currentPage[0], price])
 
-    function loadCities(countryId: number) {
+    function handleCountryChange(countryId: number) {
+        setCountry(countryId)
+        searchParams.set("country", countryId.toString())
+        setSearchParams(searchParams)
         serviceHandler(
             locationService.getCitiesByCountry(countryId),
             navigate, (cities) => {
@@ -120,13 +136,35 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
         );
     }
 
-    const handleChange = (event: Event, newValue: number | number[]) => {
+    function handleCityChange(cityId: number) {
+        searchParams.set("city", cityId.toString())
+        setSearchParams(searchParams)
+        setCity(cityId)
+    }
+
+    const handlePriceChange = (event: Event, newValue: number | number[]) => {
         if (typeof newValue === 'number') {
+            searchParams.set("price", newValue.toString())
+            setSearchParams(searchParams)
             setPrice(newValue);
         }
     };
 
+    function handleRatingChange(index: number) {
+        searchParams.set("rating", (-index).toString())
+        setSearchParams(searchParams)
+        setRating(index)
+    }
+
     function cleanForm() {
+        searchParams.delete("price")
+        searchParams.delete("country")
+        searchParams.delete("city")
+        searchParams.delete("rating")
+        searchParams.set("order", "OrderByAZ")
+        searchParams.set("page", "1")
+        setSearchParams(searchParams)
+
         setCities(new Array(0));
         setCountry(-1)
         setCity(-1);
@@ -158,11 +196,11 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
                             {t('Experience.country')}
                         </label>
                         <select id="experienceFormCountryInput" className="form-select"
-                                onChange={e => {setCountry(parseInt(e.target.value)); loadCities(parseInt(e.target.value))}}
+                                onChange={e => handleCountryChange(parseInt(e.target.value))}
                         >
                             {/*TODO: check usage after filter reset*/}
                             {country === -1 &&
-                                <option hidden value="">{t('Experience.placeholder')}</option>
+                            <option hidden value="">{t('Experience.placeholder')}</option>
                             }
                             {countries.map((country) => (
                                 <option key={country.id} value={country.id}>
@@ -177,10 +215,10 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
                         </label>
                         <select id="experienceFormCityInput" className="form-select"
                                 disabled={country === -1}
-                                onChange={e => setCity(parseInt(e.target.value))}
+                                onChange={e => handleCityChange(parseInt(e.target.value))}
                         >
                             {city === -1 &&
-                                <option hidden value="">{t('Experience.placeholder')}</option>
+                            <option hidden value="">{t('Experience.placeholder')}</option>
                             }
                             {cities.map((city) => (
                                 <option key={city.id} value={city.id} >
@@ -205,7 +243,7 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
                                 min={5}
                                 step={1}
                                 max={maxPrice}
-                                onChange={handleChange}
+                                onChange={handlePriceChange}
                                 valueLabelDisplay="auto"
                             />
                             <div className="value right">
@@ -226,7 +264,7 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
                                         type="button"
                                         key={index}
                                         className={index >= ((rating && hover) || hover) ? "on" : "off"}
-                                        onClick={() => setRating(index)}
+                                        onClick={() => handleRatingChange(index)}
                                         onMouseEnter={() => setHover(index)}
                                         onMouseLeave={() => setHover(rating)}
                                     >
@@ -262,13 +300,13 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
                         </div>
                         <div className="d-flex justify-content-center" style={{fontSize: "x-large"}}>
 
-                            {categoryProp[0].length > 0 ?
+                            { categoryProp[0] !== undefined && categoryProp[0].length > 0 ?
                                 <div>
                                     {t('Experiences.search.search')}
                                     {t('Experiences.search.category')}
                                     {t('Categories.' + categoryProp[0])}
                                     <div className="d-flex justify-content-center">
-                                        {
+                                        { nameProp[0] !== undefined &&
                                             nameProp[0].length > 0 &&
                                             <div>
                                                 {t('Experiences.search.name', {name: nameProp[0]})}
@@ -282,7 +320,7 @@ export default function Experiences(props: {nameProp: [string, Dispatch<SetState
                                 </div>
                                 :
                                 <div>
-                                    {nameProp[0].length > 0 &&
+                                    { nameProp[0] !== undefined && nameProp[0].length > 0 &&
                                     <div>
                                         {t('Experiences.search.search')}
                                         {t('Experiences.search.name', {name: nameProp[0]})}

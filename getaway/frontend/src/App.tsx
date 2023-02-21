@@ -22,8 +22,8 @@ import CreateAccount from "./pages/CreateAccount";
 import EditAccount from "./pages/EditAccount";
 
 function App() {
-    const categoryProp = useState<string>("")
-    const nameProp = useState<string>("")
+    const categoryProp = useState<string | undefined>(undefined)
+    const nameProp = useState<string | undefined>(undefined)
 
     return (
         <AuthProvider>

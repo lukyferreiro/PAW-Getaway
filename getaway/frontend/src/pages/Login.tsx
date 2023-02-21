@@ -22,7 +22,7 @@ type FormDataPassReset = {
     email: string;
 };
 
-export default function Login(props: {nameProp: [string, Dispatch<SetStateAction<string>>], categoryProp: [string, Dispatch<SetStateAction<string>>]}) {
+export default function Login(props: {nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]}) {
 
     const {t} = useTranslation()
     let navigate = useNavigate()

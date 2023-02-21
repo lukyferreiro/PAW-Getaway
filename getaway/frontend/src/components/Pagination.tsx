@@ -2,12 +2,15 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index"
 import React, {Dispatch, SetStateAction} from "react";
 import styled from "styled-components";
+import {useSearchParams} from "react-router-dom";
 
 export default function Pagination(props: { maxPage: number, currentPage: [number , Dispatch<SetStateAction<number>>] }) {
 
     const {t} = useTranslation()
 
     const {maxPage, currentPage} = props
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const componentCurrentPage = currentPage[0]
 
@@ -19,6 +22,8 @@ export default function Pagination(props: { maxPage: number, currentPage: [numbe
     `;
 
     function changePage(page: number) {
+        searchParams.set("page", page.toString())
+        setSearchParams(searchParams)
         currentPage[1](page)
     }
 
