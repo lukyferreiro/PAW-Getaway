@@ -46,8 +46,10 @@ export const TRANSLATIONS_ES = {
         surnamePlaceholder: "Martínez",
         passwordPlaceholder: "Entre 8 y 25 caracteres",
         editAccountPopUp: "Edit\u00E1 tu cuenta",
+        editPasswordPopUp: "Cambiar contraseña",
         editPassword: "Nueva contraseña",
         confirmEditPassword: "Confirmar nueva contraseña",
+        changePassword:"Cambiar contraseña",
         editAccount:"Editar cuenta"
     },
 
