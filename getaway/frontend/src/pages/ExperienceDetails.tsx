@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {ExperienceModel, ReviewModel} from "../types";
 import React, {useEffect, useState} from "react";
-import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import CardExperienceDetails from "../components/CardExperienceDetails";
 import CardReview from "../components/CardReview";
 import {serviceHandler} from "../scripts/serviceHandler";
@@ -10,12 +10,16 @@ import {experienceService} from "../services";
 import {useAuth} from "../hooks/useAuth";
 import Pagination from "../components/Pagination";
 import DataLoader from "../components/DataLoader";
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 
 export default function ExperienceDetails() {
 
     const {t} = useTranslation()
     const navigate = useNavigate()
     const location = useLocation()
+    const query = useQuery()
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const [experience, setExperience] = useState<ExperienceModel | undefined>(undefined)
     const [reviews, setReviews] = useState<ReviewModel[]>(new Array(0))
@@ -26,7 +30,7 @@ export default function ExperienceDetails() {
     let isVerified = localStorage.getItem("isVerified") === 'true'
 
     const [maxPage, setMaxPage] = useState(1)
-    const currentPage = useState<number>(1)
+    const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
 
     useEffect(() => {
         setIsLoading(true)
@@ -51,6 +55,8 @@ export default function ExperienceDetails() {
             navigate, (fetchedExperienceReviews) => {
                 setReviews(fetchedExperienceReviews.getContent())
                 setMaxPage(fetchedExperienceReviews ? fetchedExperienceReviews.getMaxPage() : 1)
+                searchParams.set("page", currentPage[0].toString())
+                setSearchParams(searchParams)
             },
             () => {
             },

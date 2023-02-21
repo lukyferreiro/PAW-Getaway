@@ -20,6 +20,7 @@ import OrderDropdown from "../components/OrderDropdown";
 import {Close} from "@mui/icons-material";
 import DataLoader from "../components/DataLoader";
 import ConfirmDialogModal, { confirmDialogModal } from "../components/ConfirmDialogModal";
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 
 type FormUserExperiencesSearch = {
     name: string
@@ -31,15 +32,18 @@ export default function UserExperiences() {
     const navigate = useNavigate()
     const location = useLocation()
 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const query = useQuery()
+
     const [userExperiences, setUserExperiences] = useState<ExperienceModel[]>(new Array(0))
     const [isLoading, setIsLoading] = useState(false)
     const [showModal, setShowModal] = useState(false)
 
     const [userName, setUserName] = useState("")
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
-    const order = useState<string>("OrderByAZ")
+    const order = useState<string>(getQueryOrDefault(query, "order", "OrderByAZ"))
     const [maxPage, setMaxPage] = useState(1)
-    const currentPage = useState<number>(1)
+    const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
     const [onEdit, setOnEdit] = useState(false)
 
     const {user} = useAuth()
@@ -71,6 +75,9 @@ export default function UserExperiences() {
             navigate, (experiences) => {
                 setUserExperiences(experiences.getContent())
                 setMaxPage(experiences ? experiences.getMaxPage() : 1)
+                searchParams.set("order", order[0])
+                searchParams.set("page", currentPage[0].toString())
+                setSearchParams(searchParams)
             },
             () => {
                 setIsLoading(false);
