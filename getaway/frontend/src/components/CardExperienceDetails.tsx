@@ -17,7 +17,7 @@ import ConfirmDialogModal, { confirmDialogModal } from "../components/ConfirmDia
 import { Favorite, FavoriteBorder} from "@mui/icons-material";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
-import AddPictureModal, {addPictureModal} from "../components/AddPictureModal";
+import AddPictureModal from "../components/AddPictureModal";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel; isEditing: boolean; }) {
 
@@ -26,6 +26,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const navigate = useNavigate()
     const {user} = useAuth()
 
+    const isOpenImage = useState(false)
     const [experienceImg, setExperienceImg] = useState<string | undefined>(undefined)
     const [fav, setFav] = useState(experience.fav)
 
@@ -66,7 +67,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 }
             );
         }
-    }, [])
+    }, [isOpenImage[0]])
 
     return (
         <>
@@ -234,13 +235,15 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                         <EditIcon/>
                     </IconButton>
 
-                    {/*<IconButton*/}
-                    {/*    onClick={() => (addPictureModal(experience.id, () => {}))}*/}
-                    {/*    aria-label="picture"*/}
-                    {/*    component="span"*/}
-                    {/*    style={{fontSize: "xx-large"}}>*/}
-                    {/*    <AddPhotoAlternateIcon/>*/}
-                    {/*</IconButton>*/}
+                    <IconButton
+                        onClick={() => {
+                            isOpenImage[1](true)
+                        }}
+                        aria-label="picture"
+                        component="span"
+                        style={{fontSize: "xx-large"}}>
+                        <AddPhotoAlternateIcon/>
+                    </IconButton>
 
                     <IconButton
                         onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'),t('User.experiences.confirmDelete',{experienceName: experience.name}), () => deleteExperience(experience.id))}
@@ -250,6 +253,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                         <DeleteIcon/>
                     </IconButton>
 
+                    <AddPictureModal isOpen={isOpenImage} experienceId={experience.id}/>
                     <ConfirmDialogModal/>
                 </div>
 

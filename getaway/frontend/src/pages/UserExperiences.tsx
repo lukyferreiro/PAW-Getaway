@@ -21,6 +21,8 @@ import {Close} from "@mui/icons-material";
 import DataLoader from "../components/DataLoader";
 import ConfirmDialogModal, { confirmDialogModal } from "../components/ConfirmDialogModal";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import AddPictureModal from "../components/AddPictureModal";
 
 type FormUserExperiencesSearch = {
     name: string
@@ -41,6 +43,7 @@ export default function UserExperiences() {
     const [userExperiences, setUserExperiences] = useState<ExperienceModel[]>(new Array(0))
     const [isLoading, setIsLoading] = useState(false)
     const [showModal, setShowModal] = useState(false)
+    const isOpenImage = useState(false)
 
     const [userName, setUserName] = useState("")
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
@@ -214,113 +217,120 @@ export default function UserExperiences() {
                                         </thead>
                                         <tbody>
                                         {userExperiences.map((experience) => (
-                                            <tr key={experience.id}>
-                                                <th scope="row">
-                                                    <div className="title-link" style={{width: "350px"}}>
-                                                        <Link to={"/experiences/" + experience.id}>
-                                                            <h4 className="experience card-title container-fluid p-0"
-                                                                style={{wordBreak: "break-all"}}>
-                                                                {experience.name}
+                                            <>
+                                                <tr key={experience.id}>
+                                                    <th scope="row">
+                                                        <div className="title-link" style={{width: "350px"}}>
+                                                            <Link to={"/experiences/" + experience.id}>
+                                                                <h4 className="experience card-title container-fluid p-0"
+                                                                    style={{wordBreak: "break-all"}}>
+                                                                    {experience.name}
+                                                                </h4>
+                                                            </Link>
+                                                        </div>
+                                                    </th>
+                                                    <td>
+                                                        <div className="container-fluid d-flex p-2 mb-1 align-items-end">
+                                                            <h4 className="container-fluid p-0">
+                                                                {t('Categories.' + experience.category.name)}
                                                             </h4>
-                                                        </Link>
-                                                    </div>
-                                                </th>
-                                                <td>
-                                                    <div className="container-fluid d-flex p-2 mb-1 align-items-end">
-                                                        <h4 className="container-fluid p-0">
-                                                            {t('Categories.' + experience.category.name)}
-                                                        </h4>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div className="container-fluid d-flex p-2 mb-1 align-items-end">
-                                                        <h5 className="mb-1">
-                                                            {t("User.experiences.reviewsCount", {count: experience.reviewCount})}
-                                                        </h5>
-                                                        <StarRating score={experience.score}/>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div className="container-fluid d-flex p-2 mb-1 align-items-end">
-                                                        <h5 className="mb-1">
-                                                            {
-                                                                (experience.price === undefined ?
-                                                                    <div>
-                                                                        <h6>
-                                                                            {t('Experience.price.null')}
-                                                                        </h6>
-                                                                    </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="container-fluid d-flex p-2 mb-1 align-items-end">
+                                                            <h5 className="mb-1">
+                                                                {t("User.experiences.reviewsCount", {count: experience.reviewCount})}
+                                                            </h5>
+                                                            <StarRating score={experience.score}/>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="container-fluid d-flex p-2 mb-1 align-items-end">
+                                                            <h5 className="mb-1">
+                                                                {
+                                                                    (experience.price === undefined ?
+                                                                        <div>
+                                                                            <h6>
+                                                                                {t('Experience.price.null')}
+                                                                            </h6>
+                                                                        </div>
 
-                                                                    :
-                                                                    (experience.price == 0 ?
-                                                                            <div>
-                                                                                <h6>
-                                                                                    {t('Experience.price.free')}
-                                                                                </h6>
-                                                                            </div>
-                                                                            :
-                                                                            <div>
-                                                                                <h6>
-                                                                                    {t('Experience.price.exist', {price: experience.price})}
-                                                                                </h6>
-                                                                            </div>
-                                                                    ))
+                                                                        :
+                                                                        (experience.price == 0 ?
+                                                                                <div>
+                                                                                    <h6>
+                                                                                        {t('Experience.price.free')}
+                                                                                    </h6>
+                                                                                </div>
+                                                                                :
+                                                                                <div>
+                                                                                    <h6>
+                                                                                        {t('Experience.price.exist', {price: experience.price})}
+                                                                                    </h6>
+                                                                                </div>
+                                                                        ))
+                                                                }
+                                                            </h5>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="container-fluid d-flex p-2 mb-1 align-items-end">
+                                                            <h5 className="mb-1">
+                                                                {experience.views}
+                                                            </h5>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div
+                                                            className="btn-group w-auto container-fluid p-2 d-flex align-items-end"
+                                                            role="group">
+                                                            {experience.observable ?
+                                                                <IconButton
+                                                                    onClick={() => setVisibility(experience.id, false)}
+                                                                    aria-label="visibilityOn" component="span"
+                                                                    style={{fontSize: "x-large"}} id="setFalse">
+                                                                    <VisibilityIcon/>
+                                                                </IconButton>
+                                                                :
+                                                                <IconButton
+                                                                    onClick={() => setVisibility(experience.id, true)}
+                                                                    aria-label="visibilityOff" component="span"
+                                                                    style={{fontSize: "xx-large"}} id="setTrue">
+                                                                    <VisibilityOffIcon/>
+                                                                </IconButton>
                                                             }
-                                                        </h5>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div className="container-fluid d-flex p-2 mb-1 align-items-end">
-                                                        <h5 className="mb-1">
-                                                            {experience.views}
-                                                        </h5>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div
-                                                        className="btn-group w-auto container-fluid p-2 d-flex align-items-end"
-                                                        role="group">
-                                                        {experience.observable ?
-                                                            <IconButton
-                                                                onClick={() => setVisibility(experience.id, false)}
-                                                                aria-label="visibilityOn" component="span"
-                                                                style={{fontSize: "x-large"}} id="setFalse">
-                                                                <VisibilityIcon/>
+
+                                                            <IconButton onClick={() => editExperience(experience.id)}
+                                                                        aria-label="edit" component="span"
+                                                                        style={{fontSize: "x-large"}}>
+                                                                <EditIcon/>
                                                             </IconButton>
-                                                            :
-                                                            <IconButton
-                                                                onClick={() => setVisibility(experience.id, true)}
-                                                                aria-label="visibilityOff" component="span"
-                                                                style={{fontSize: "xx-large"}} id="setTrue">
-                                                                <VisibilityOffIcon/>
+
+                                                            {/*TODO: check*/}
+                                                            {/*<IconButton*/}
+                                                            {/*    onClick={() => {*/}
+                                                            {/*        isOpenImage[1](true)*/}
+                                                            {/*    }}*/}
+                                                            {/*    aria-label="picture"*/}
+                                                            {/*    component="span"*/}
+                                                            {/*    style={{fontSize: "xx-large"}}>*/}
+                                                            {/*    <AddPhotoAlternateIcon/>*/}
+                                                            {/*</IconButton>*/}
+
+                                                            <IconButton onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'), t('User.experiences.confirmDelete',{experienceName: experience.name}),() => deleteExperience(experience.id))}
+                                                                        aria-label="trash" component="span"
+                                                                        style={{fontSize: "x-large"}}>
+                                                                <DeleteIcon/>
                                                             </IconButton>
-                                                        }
-
-                                                        <IconButton onClick={() => editExperience(experience.id)}
-                                                                    aria-label="edit" component="span"
-                                                                    style={{fontSize: "x-large"}}>
-                                                            <EditIcon/>
-                                                        </IconButton>
-
-                                                        {/*<IconButton*/}
-                                                        {/*    onClick={() => (addPictureModal(experience.id, () => {}))}*/}
-                                                        {/*    aria-label="picture"*/}
-                                                        {/*    component="span"*/}
-                                                        {/*    style={{fontSize: "xx-large"}}>*/}
-                                                        {/*    <AddPhotoAlternateIcon/>*/}
-                                                        {/*</IconButton>*/}
-
-                                                        <IconButton onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'), t('User.experiences.confirmDelete',{experienceName: experience.name}),() => deleteExperience(experience.id))}
-                                                                    aria-label="trash" component="span"
-                                                                    style={{fontSize: "x-large"}}>
-                                                            <DeleteIcon/>
-                                                        </IconButton>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <AddPictureModal isOpen={isOpenImage} experienceId={experience.id}/>
+                                            </>
+                                            ))}
                                         </tbody>
                                     </table>
+
 
                                     <div className="mt-auto d-flex justify-content-center align-items-center">
                                         {maxPage > 1 && (

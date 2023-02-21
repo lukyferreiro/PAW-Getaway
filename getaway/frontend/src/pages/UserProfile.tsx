@@ -80,6 +80,8 @@ export default function UserProfile() {
         useForm<FormDataImg>({ criteriaMode: 'all' })
 
     const onSubmit = handleSubmit((data: FormDataImg) => {
+        console.log(data.image![0].name)
+        console.log(data.image![0].size)
         userService
             .updateUserProfileImage(user ? user.id : -1, data.image![0])
             .then((result) => {

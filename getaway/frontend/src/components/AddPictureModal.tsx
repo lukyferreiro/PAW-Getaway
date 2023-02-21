@@ -8,105 +8,102 @@ import {
     Box,
     IconButton
 } from "@mui/material";
-import {create} from 'zustand';
 import {Close} from "@mui/icons-material";
-import React from "react";
+import React, {Dispatch, SetStateAction, useState} from "react";
 import {t} from "i18next";
 import {useForm} from "react-hook-form";
 import {experienceService, userService} from "../services";
-
-
-type AddPictureStore = {
-    experienceId: number;
-    onSubmitModal?: () => void;
-    close: () => void;
-}
+import {useTranslation} from "react-i18next";
+import Modal from "react-modal";
 
 type FormDataImg = {
     image?: FileList
 }
 
-const UseAddPictureStore = create<AddPictureStore>((set) => {
-    return ({
-        experienceId: -1,
-        onSubmitModal: undefined,
-        close: () => {
-            return set({
-                onSubmitModal: undefined,
-            });
-        },
+//TODO: make generic for user AND experiences
+export default function AddPictureModal(props: { isOpen: [boolean, Dispatch<SetStateAction<boolean>>], experienceId: number }) {
+    const {t} = useTranslation()
+    const {isOpen, experienceId} = props;
+
+    const {register, reset, handleSubmit, formState: {errors},} = useForm<FormDataImg>({
+        criteriaMode: "all",
     });
-});
-
-export const addPictureModal = (experienceId: number, onSubmitModal: () => void) => {
-    UseAddPictureStore.setState({
-        experienceId,
-        onSubmitModal,
-    })
-}
-
-const AddPictureModal: React.FC = () => {
-    const {experienceId, onSubmitModal, close} = UseAddPictureStore();
-    const {register, handleSubmit, reset, formState: { errors },} =
-        useForm<FormDataImg>({ criteriaMode: 'all' })
 
     const onSubmit = handleSubmit((data: FormDataImg) => {
         experienceService.updateExperienceImage(experienceId, data.image![0])
-    })
+            .then((result) => {
+                    if (result.getError().getStatus() === 204) {
+                        isOpen[1](false);
+                        reset()
+                    }
+                }
+            )
+            .catch(() => {
+            });
+        }
+    );
 
     return (
-        <Dialog open={Boolean(onSubmit)} onClose={close} maxWidth="sm" fullWidth>
-            {/*<DialogTitle>{title}</DialogTitle>*/}
-            <Box position="absolute" top={0} right={0}>
-                <IconButton onClick={close}>
-                    <Close/>
-                </IconButton>
-            </Box>
-            <DialogContent>
-                <div className="m-1 justify-self-center align-self-center">
-                    <form encType='multipart/form-data' acceptCharset='utf-8'
-                          id="imageForm" onSubmit={onSubmit} >
-                        <label className="form-label d-flex justify-content-between">
-                            {t("User.imgTitle")}
-                        </label>
+        <Modal style={{overlay: {zIndex: 100}}}
+               className="modal-pop-up"
+               isOpen={isOpen[0]}
+               contentLabel="PopUpImage"
+               onRequestClose={() => {
+                   isOpen[1](false);
+                   reset()
+               }}
+        >
 
-                        <input type='file'
-                               accept='image/png, image/jpeg, image/jpg' className="form-control"
-                               {...register("image", {
-                                   validate: {
-                                       required: (image) =>
-                                           image !== undefined && image[0] !== undefined,
+            <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
+                <div className="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">
+                    <div className="col-12">
+                        <h1 className="text-center title">
+                            {t('User.imgTitle')}
+                        </h1>
+                    </div>
 
-                                       size: (image) =>
-                                           image && image[0] && image[0].size / (1024 * 1024) < 5,
-                                   },
-                               })}
-                        />
-                        {errors.image?.type === 'required' && (
-                            <p className="form-control is-invalid form-error-label">
-                                {t("User.error.image.isRequired")}
-                            </p>
-                        )}
-                        {errors.image?.type === 'size' && (
-                            <p className="form-control is-invalid form-error-label">
-                                {t("User.error.image.size")}
-                            </p>
-                        )}
-                    </form>
+                    <div className="col-12">
+                        <div className="container-fluid">
+                            <div className="row">
+                                <form encType='multipart/form-data' acceptCharset='utf-8'
+                                      id="imageForm" onSubmit={onSubmit} >
+
+                                    <input type='file'
+                                           accept='image/png, image/jpeg, image/jpg' className="form-control"
+                                           {...register("image", {
+                                               validate: {
+                                                   required: (image) =>
+                                                       image !== undefined && image[0] !== undefined,
+
+                                                   size: (image) =>
+                                                       image && image[0] && image[0].size / (1024 * 1024) < 5,
+                                               },
+                                           })}
+                                    />
+                                    {errors.image?.type === 'required' && (
+                                        <p className="form-control is-invalid form-error-label">
+                                            {t("User.error.image.isRequired")}
+                                        </p>
+                                    )}
+                                    {errors.image?.type === 'size' && (
+                                        <p className="form-control is-invalid form-error-label">
+                                            {t("User.error.image.size")}
+                                        </p>
+                                    )}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div className="col-12 mt-3 d-flex align-items-center justify-content-center">
+                        <button form="imageForm" type="submit" id="ImageButton" className='btn button-primary'>
+                            {t('Navbar.resetPasswordButton')}
+                        </button>
+                    </div>
+
                 </div>
-            </DialogContent>
-            <DialogActions>
-                <button type="button" className="btn btn-error"   onClick={() => {
-                    if (onSubmitModal) {
-                    }
-                    close();
-                }
-                }>
-                    {t("Button.confirm")}
-                </button>
-            </DialogActions>
-        </Dialog>
+            </div>
+        </Modal>
     );
 };
-
-export default AddPictureModal

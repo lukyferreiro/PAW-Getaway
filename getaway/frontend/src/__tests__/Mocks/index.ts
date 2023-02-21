@@ -40,6 +40,7 @@ export const userModel: UserModel = {
     favsCount: 6,
     verified: true,
     provider: true,
+    hasImage: false
 };
 
 export const orderByModel: OrderByModel = {
@@ -72,6 +73,8 @@ export const experienceModelNoFav: ExperienceModel = {
     score: 4,
     reviewCount: 8,
     fav: false,
+    hasImage: false
+
 };
 
 export const experienceModelFav: ExperienceModel = {
@@ -91,6 +94,7 @@ export const experienceModelFav: ExperienceModel = {
     score: 4,
     reviewCount: 8,
     fav: true,
+    hasImage: false
 };
 
 export const experienceModelCategory: ExperienceModel = {
@@ -110,6 +114,7 @@ export const experienceModelCategory: ExperienceModel = {
     score: 4,
     reviewCount: 8,
     fav: true,
+    hasImage: false
 };
 
 export const reviewModel1: ReviewModel = {
