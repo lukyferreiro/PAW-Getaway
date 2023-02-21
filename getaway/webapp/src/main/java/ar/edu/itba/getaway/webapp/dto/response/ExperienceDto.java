@@ -32,6 +32,7 @@ public class ExperienceDto implements Serializable {
     private CategoryDto category;
     private boolean isFav;
     private boolean observable;
+    private boolean hasImage;
 
     public static Collection<ExperienceDto> mapExperienceToDto(Collection<ExperienceModel> experiences, UriInfo uriInfo) {
         return experiences.stream().map(exp -> new ExperienceDto(exp, uriInfo)).collect(Collectors.toList());
@@ -67,6 +68,7 @@ public class ExperienceDto implements Serializable {
         this.category = new CategoryDto(experience.getCategory());
         this.isFav = experience.getIsFav();
         this.observable = experience.getObservable();
+        this.hasImage = experience.getImage() != null;
     }
 
     public Long getId() {
@@ -177,12 +179,16 @@ public class ExperienceDto implements Serializable {
     public void setObservable(boolean observable) {
         this.observable = observable;
     }
-
     public String getSiteUrl() {
         return siteUrl;
     }
-
     public void setSiteUrl(String siteUrl) {
         this.siteUrl = siteUrl;
+    }
+    public boolean isHasImage() {
+        return hasImage;
+    }
+    public void setHasImage(boolean hasImage) {
+        this.hasImage = hasImage;
     }
 }

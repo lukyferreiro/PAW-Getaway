@@ -78,7 +78,7 @@ export default function ExperienceDetails() {
                         </h1>
                     </div>
                     {experience !== undefined &&
-                        <CardExperienceDetails experience={experience} categoryModel={experience.category} isEditing={experience.user.id === user?.id}/>
+                        <CardExperienceDetails experience={experience} isEditing={experience.user.id === user?.id}/>
                     }
                 </div>
 

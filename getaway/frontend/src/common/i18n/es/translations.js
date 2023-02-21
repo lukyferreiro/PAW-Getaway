@@ -49,8 +49,8 @@ export const TRANSLATIONS_ES = {
         editPasswordPopUp: "Cambiar contraseña",
         editPassword: "Nueva contraseña",
         confirmEditPassword: "Confirmar nueva contraseña",
-        changePassword:"Cambiar contraseña",
-        editAccount:"Editar cuenta"
+        changePassword: "Cambiar contraseña",
+        editAccount: "Editar cuenta"
     },
 
     Filters: {
@@ -182,7 +182,7 @@ export const TRANSLATIONS_ES = {
         favsTitle: "Mis favoritos",
         noReviews: "Aún no has escrito ninguna reseña",
         reviewsTitle: "Mis reseñas",
-        error:{
+        error: {
             image: {
                 isRequired: "Este campo no puede estar vac\u00EDo",
                 size: "La imagen es muy grande",
@@ -254,7 +254,7 @@ export const TRANSLATIONS_ES = {
     },
 
     CreateAccount: {
-        error:{
+        error: {
             email: {
                 isRequired: "Este campo es obligatorio",
                 length: "El mail debe tener un m\u00E1ximo de 255 caracteres",
@@ -275,13 +275,22 @@ export const TRANSLATIONS_ES = {
                 length: "La contraseña debe tener entre 8-25 caracteres",
                 pattern: "La contraseña ingresado no es v\u00E1lido",
             },
-            passwordsMustMatch:"Las contraseñas no coinciden",
+            passwordsMustMatch: "Las contraseñas no coinciden",
         }
+    },
+
+    Login: {
+        invalidCredentials: "El mail o contrase\u00F1a ingresados son incorrectos"
+    },
+
+    ChangePassword: {
+        title: "Ingresa tu nueva contraseña",
+        invalidEmail: "El email ingresado no es v\u00E1lido",
     },
 
     Experiences: {
         search: {
-            search:"Buscando ",
+            search: "Buscando ",
             category: "en ",
             name: " \" {{name}} \""
         }
@@ -293,9 +302,9 @@ export const TRANSLATIONS_ES = {
         score: "Puntaje",
     },
 
-    ReviewForm:{
+    ReviewForm: {
         title: "Escribe una reseña para {{experienceName}}",
-        editTitle:"Edita la reseña para {{experienceName}}",
+        editTitle: "Edita la reseña para {{experienceName}}",
         error: {
             title: {
                 pattern: "El titulo ingresado no posee un formato v\u00E1lido",

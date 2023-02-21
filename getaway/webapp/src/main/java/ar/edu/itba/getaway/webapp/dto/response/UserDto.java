@@ -20,6 +20,7 @@ public class UserDto implements Serializable {
     private String experiencesUrl;
     private boolean isVerified;
     private boolean isProvider;
+    private boolean hasImage;
 
     //TODO:
 
@@ -51,6 +52,7 @@ public class UserDto implements Serializable {
         this.experiencesUrl = uriBuilder.clone().path("experiences").build().toString();    // /user/{id}/experiences
         this.isVerified = user.isVerified();
         this.isProvider = user.isProvider();
+        this.hasImage = user.getImage() != null;
     }
 
     public long getId() {
@@ -104,17 +106,20 @@ public class UserDto implements Serializable {
     public boolean isVerified() {
         return isVerified;
     }
-
     public void setVerified(boolean verified) {
         isVerified = verified;
     }
-
     public boolean isProvider() {
         return isProvider;
     }
-
     public void setProvider(boolean provider) {
         isProvider = provider;
+    }
+    public boolean isHasImage() {
+        return hasImage;
+    }
+    public void setHasImage(boolean hasImage) {
+        this.hasImage = hasImage;
     }
 }
 

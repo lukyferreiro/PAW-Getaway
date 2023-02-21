@@ -49,8 +49,8 @@ export const TRANSLATIONS_EN = {
         editPasswordPopUp: "Change your password",
         editPassword: "New password",
         confirmEditPassword: "Confirm new password",
-        changePassword:"Change password",
-        editAccount:"Edit account"
+        changePassword: "Change password",
+        editAccount: "Edit account"
     },
 
     Filters: {
@@ -182,7 +182,7 @@ export const TRANSLATIONS_EN = {
         favsTitle: "My favourites",
         noReviews: "You haven't written any reviews yet",
         reviewsTitle: "My reviews",
-        error:{
+        error: {
             image: {
                 isRequired: "This field can not be empty",
                 size: "Image is too big",
@@ -254,7 +254,7 @@ export const TRANSLATIONS_EN = {
     },
 
     CreateAccount: {
-        error:{
+        error: {
             email: {
                 isRequired: "This field is required",
                 length: "The email must be under 255 characters long",
@@ -275,13 +275,22 @@ export const TRANSLATIONS_EN = {
                 length: "Password must be 8-25 characters long",
                 pattern: "Submitted password format is not valid",
             },
-            passwordsMustMatch:"Confirm password must match password",
+            passwordsMustMatch: "Confirm password must match password",
         }
+    },
+
+    Login: {
+        invalidCredentials: "Incorrect Email or password"
+    },
+
+    ChangePassword: {
+        title: "Enter your new password",
+        invalidEmail: "Submitted email is not valid",
     },
 
     Experiences: {
         search: {
-            search:"Searching ",
+            search: "Searching ",
             category: "in ",
             name: "\" {{name}} \""
         }
@@ -293,9 +302,9 @@ export const TRANSLATIONS_EN = {
         score: "Score",
     },
 
-    ReviewForm:{
+    ReviewForm: {
         title: "Write a review for {{experienceName}}",
-        editTitle:"Edit the review for {{experienceName}}",
+        editTitle: "Edit the review for {{experienceName}}",
         error: {
             title: {
                 pattern: "Submitted title format is not valid",

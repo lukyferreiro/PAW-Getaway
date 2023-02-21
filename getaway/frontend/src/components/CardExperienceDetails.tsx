@@ -8,21 +8,23 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {CategoryModel, ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import {experienceService} from "../services";
 import ConfirmDialogModal, { confirmDialogModal } from "../components/ConfirmDialogModal";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
 import {useAuth} from "../hooks/useAuth";
+import {serviceHandler} from "../scripts/serviceHandler";
 
-export default function CardExperienceDetails(props: { experience: ExperienceModel; categoryModel: CategoryModel; isEditing: boolean; }) {
+export default function CardExperienceDetails(props: { experience: ExperienceModel; isEditing: boolean; }) {
 
-    const {experience, categoryModel, isEditing} = props
+    const {experience, isEditing} = props
     const {t} = useTranslation();
-    const hasImage = false;
     const navigate = useNavigate()
     const {user} = useAuth()
+
+    const [experienceImg, setExperienceImg] = useState<string | undefined>(undefined)
     const [fav, setFav] = useState(experience.fav)
 
     function setVisibility(experienceId: number, visibility: boolean) {
@@ -49,20 +51,31 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
         setFav(fav)
     }
 
+    useEffect(() => {
+        if(experience.hasImage) {
+            serviceHandler(
+                experienceService.getExperienceImage(experience?.id),
+                navigate, (experienceImg) => {
+                    setExperienceImg(experienceImg.size > 0 ? URL.createObjectURL(experienceImg) : undefined)
+                },
+                () => {
+                },
+                () => {
+                }
+            );
+        }
+    }, [])
+
     return (
         <>
             <div className="d-flex flex-wrap justify-content-center align-content-center">
                 <div className="d-flex flex-column">
                     <div className="p-2" style={{width: "600px"}}>
-                        {hasImage ?
-                            <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "550px"}}
-                                 src={`/experiences/${experience.id}/experienceImage`}
-                                 alt={`Imagen ${experience.name}`}/>
-                            :
-                            <img className="container-fluid p-0" style={{height: "fit-content", maxHeight: "450px"}}
-                                 src={`./images/${categoryModel.name}.svg`} alt={`${categoryModel.name}`}/>
-                        }
-                        {!hasImage &&
+                        <img className="container-fluid p-0" alt={`Imagen ${experience.category.name}`}
+                             src={experienceImg ? experienceImg : `./images/${experience.category.name}.svg`}
+                             style={{height: "fit-content", maxHeight: experienceImg ? "550px" : "450px"}}/>
+
+                        {!experience.hasImage &&
                             <h5 className="mt-3 text-center">
                                 {t('ExperienceDetail.imageDefault')}
                             </h5>}

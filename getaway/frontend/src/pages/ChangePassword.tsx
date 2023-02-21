@@ -1,29 +1,29 @@
 import {useTranslation} from "react-i18next";
-import React, {useState} from "react";
-import {IconButton} from "@mui/material";
-// @ts-ignore
-import VisibilityIcon from "@mui/icons-material/Visibility";
-// @ts-ignore
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import {loginService, userService} from "../services";
-import {useAuth} from "../hooks/useAuth";
-import {useLocation, useNavigate} from "react-router-dom";
+import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
+import {loginService, userService} from "../services";
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import {IconButton} from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import {serviceHandler} from "../scripts/serviceHandler";
+import {Navigate, useLocation, useNavigate} from "react-router-dom";
+import {useAuth} from "../hooks/useAuth";
 
-type FormDataEditPassword = {
+type FormDataResetPassword = {
     password: string;
     confirmPassword: string;
 };
 
-export default function EditPassword() {
-
-    const {t} = useTranslation()
-    const navigate = useNavigate()
+export default function ChangePassword() {
 
     const {user} = useAuth()
+    const readUser = localStorage.getItem("user")
 
-    const {register, watch, handleSubmit, formState: {errors},}
-        = useForm<FormDataEditPassword>({criteriaMode: "all"})
+    const {t} = useTranslation()
+    const query = useQuery();
+    const navigate = useNavigate()
+    const passwordToken = getQueryOrDefault(query, "passwordToken", "")
 
     const [seePassword, setSeePassword] = useState(false)
     const [seeRepeatPassword, setSeeRepeatPassword] = useState(false)
@@ -36,34 +36,50 @@ export default function EditPassword() {
         setSeeRepeatPassword(!seeRepeatPassword)
     }
 
+    useEffect(() => {
+        if (user || readUser) {
+            navigate("/", {replace: true})
+        }
+        if(passwordToken === "" || passwordToken === undefined ){
+            navigate("/", {replace: true})
+        }
+    }, [])
 
-    const onSubmitEditPassword = handleSubmit((data: FormDataEditPassword) => {
-            userService.updateUserInfoById(user?.id, data.password, data.confirmPassword)
-                .then(() => {
-                    navigate("/user/profile")
-                })
-                .catch(() => {
-                })
+    const {register, watch, handleSubmit, formState: {errors},} = useForm<FormDataResetPassword>({
+        criteriaMode: "all",
+    });
+
+    const onSubmit = handleSubmit((data: FormDataResetPassword) => {
+        userService.resetPassword(passwordToken, data.password)
+            .then((user) => {
+                    if (!user.hasFailed()) {
+                        navigate("/", {replace: true})
+                    }
+                }
+            )
+            .catch(() => {
+            });
         }
     );
+
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
-            <div className="container-lg w-100 p-2 modalContainer">
-                <div className="row w-100 m-0 p-4 align-items-center justify-content-center">
+            <div className="w-100 modalContainer">
+                <div className="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">
                     <div className="col-12">
                         <h1 className="text-center title">
-                            {t('Navbar.editPasswordPopUp')}
+                            {t('ChangePassword.title')}
                         </h1>
                     </div>
                     <div className="col-12">
-                        <div className="container-lg">
+                        <div className="container-fluid">
                             <div className="row">
-                                <form id="changePasswordForm" onSubmit={onSubmitEditPassword}>
-                                    <div className="form-group">
+                                <form id="passwordReset" method="POST" acceptCharset="UTF-8" onSubmit={onSubmit}>
+                                    <div className="form-group mt-2 mb-4">
                                         <label htmlFor="password"
                                                className="form-label d-flex justify-content-between">
                                             <div>
-                                                {t('Navbar.editPassword')}
+                                                {t('Navbar.password')}
                                                 <span className="required-field">*</span>
                                             </div>
                                             <div className="align-self-center">
@@ -92,13 +108,10 @@ export default function EditPassword() {
                                                    })}
                                             />
                                             <div className="input-group-append">
-                                                <button className="btn btn-eye input-group-text"
-                                                        id="passwordEye" type="button" tabIndex={-1}
-                                                        onClick={() => showPassword()}>
-                                                    <IconButton aria-label="eye">
-                                                        {seePassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
-                                                    </IconButton>
-                                                </button>
+                                                <IconButton className="btn btn-eye input-group-text"
+                                                            id="passwordEye" type="button" tabIndex={-1} onClick={() => showPassword()} aria-label="eye">
+                                                    {seePassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
+                                                </IconButton>
                                             </div>
                                         </div>
                                         {errors.password?.type === "required" && (
@@ -115,7 +128,7 @@ export default function EditPassword() {
 
                                     <div className="form-group">
                                         <label htmlFor="confirmPassword" className="form-label">
-                                            {t('Navbar.confirmEditPassword')}
+                                            {t('Navbar.confirmPassword')}
                                             <span className="required-field">*</span>
                                         </label>
                                         <div className="input-group d-flex justify-content-start align-items-center">
@@ -135,13 +148,10 @@ export default function EditPassword() {
                                                        },
                                                    })}/>
                                             <div className="input-group-append">
-                                                <button className="btn btn-eye input-group-text"
-                                                        id="passwordEye2" type="button" tabIndex={-1}
-                                                        onClick={() => showRepeatPassword()}>
-                                                    <IconButton aria-label="eye2">
-                                                        {seeRepeatPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
-                                                    </IconButton>
-                                                </button>
+                                                <IconButton className="btn btn-eye input-group-text"
+                                                            id="passwordEye2" type="button" tabIndex={-1} onClick={() => showRepeatPassword()} aria-label="eye2">
+                                                    {seeRepeatPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
+                                                </IconButton>
                                             </div>
                                         </div>
                                         {errors.confirmPassword?.type === "required" && (
@@ -156,15 +166,13 @@ export default function EditPassword() {
                                         )}
                                     </div>
                                 </form>
-
-                                <div className="col-12 px-0 d-flex align-items-center justify-content-center">
-                                    <button form="createAccountForm" type="submit" id="registerFormButton"
-                                            className="w-100 btn-create-account my-2 ">
-                                        {t('Navbar.changePassword')}
-                                    </button>
-                                </div>
                             </div>
                         </div>
+                    </div>
+                    <div className="col-12 mt-3 d-flex align-items-center justify-content-center">
+                        <button form="passwordReset" id="passwordResetButton" type="submit" className="btn btn-continue">
+                            {t('Button.confirm')}
+                        </button>
                     </div>
                 </div>
             </div>

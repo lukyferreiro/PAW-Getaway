@@ -17,6 +17,7 @@ import Home from "./pages/Home";
 import {AuthProvider} from "./context/AuthContext";
 import Login from "./pages/Login";
 import CreateAccount from "./pages/CreateAccount";
+import ChangePassword from "./pages/ChangePassword";
 import EditAccount from "./pages/EditAccount";
 import RequireAuth from "./components/RequireAuth";
 import Navbar from "./components/Navbar";
@@ -53,6 +54,7 @@ function App() {
                     </Route>
                     <Route path='/login' element={<Login categoryProp={categoryProp} nameProp={nameProp}/>}/>
                     <Route path='/createAccount' element={<CreateAccount/>}/>
+                    <Route path='/changePassword' element={<ChangePassword/>}/>
                 </Routes>
 
                 <Footer/>

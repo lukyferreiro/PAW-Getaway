@@ -23,16 +23,18 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
     const [fav, setFav] = useState(experience.fav)
 
     useEffect(() => {
-        serviceHandler(
-            experienceService.getExperienceImage(experience?.id),
-            navigate, (experienceImg) => {
-                setExperienceImg(experienceImg.size > 0 ? URL.createObjectURL(experienceImg) : undefined)
-            },
-            () => {
-            },
-            () => {
-            }
-        );
+        if(experience.hasImage) {
+            serviceHandler(
+                experienceService.getExperienceImage(experience?.id),
+                navigate, (experienceImg) => {
+                    setExperienceImg(experienceImg.size > 0 ? URL.createObjectURL(experienceImg) : undefined)
+                },
+                () => {
+                },
+                () => {
+                }
+            );
+        }
     }, [])
 
     function setFavExperience(fav: boolean) {

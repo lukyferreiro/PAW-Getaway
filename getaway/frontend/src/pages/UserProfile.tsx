@@ -21,7 +21,6 @@ export default function UserProfile() {
     //TODO manejar estos token que recibe el usuario tras entrar al link por el mail
     const query = useQuery()
     const verificationToken = getQueryOrDefault(query, "verificationToken", "")
-    const passwordToken = getQueryOrDefault(query, "passwordToken", "")
 
     const rememberMe = localStorage.getItem("rememberMe") === "true"
 
@@ -61,7 +60,7 @@ export default function UserProfile() {
 
     useEffect(() => {
         setIsLoadingImg(true)
-        if (user) {
+        if (user?.hasImage) {
             serviceHandler(
                 userService.getUserProfileImage(user?.id),
                 navigate, (userImg) => {

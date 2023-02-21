@@ -5,7 +5,7 @@ import {categoryService, experienceService, locationService} from "../services";
 import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {useForm} from "react-hook-form";
-import {Navigate, useLocation, useNavigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 

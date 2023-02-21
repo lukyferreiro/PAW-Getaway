@@ -19,20 +19,25 @@ export default function CardReview(props: { reviewModel: ReviewModel; isEditing:
     const [userImg, setUserImg] = useState<string | undefined>(undefined)
 
     useEffect(() => {
-        serviceHandler(
-            userService.getUserProfileImage(reviewModel.user.id),
-            navigate, (userImg) => {
-                setUserImg(userImg.size > 0 ? URL.createObjectURL(userImg) : undefined)
-            },
-            () => {
-            },
-            () => {
-            },
-        )
+        if (reviewModel.user.hasImage) {
+            serviceHandler(
+                userService.getUserProfileImage(reviewModel.user.id),
+                navigate, (userImg) => {
+                    setUserImg(userImg.size > 0 ? URL.createObjectURL(userImg) : undefined)
+                },
+                () => {
+                },
+                () => {
+                },
+            )
+        }
     }, [])
 
     function editReview(reviewId: number) {
-        navigate({pathname: `/experiences/${reviewModel.experience.id}/reviewForm`, search: `?id=${reviewId}`}, {replace: true});
+        navigate({
+            pathname: `/experiences/${reviewModel.experience.id}/reviewForm`,
+            search: `?id=${reviewId}`
+        }, {replace: true});
     }
 
     return (

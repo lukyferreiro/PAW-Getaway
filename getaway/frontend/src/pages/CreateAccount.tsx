@@ -9,8 +9,6 @@ import {loginService, userService} from "../services";
 import {useAuth} from "../hooks/useAuth";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 
 type FormDataCreate = {
     name: string;
@@ -21,13 +19,11 @@ type FormDataCreate = {
 };
 
 export default function CreateAccount() {
+
     const {t} = useTranslation()
     let auth = useAuth()
     let navigate = useNavigate()
     let location = useLocation()
-
-    const categoryProp = useState<string>("")
-    const nameProp = useState<string>("")
 
     // @ts-ignore
     let from = location.state?.from?.pathname || "/"
@@ -236,12 +232,10 @@ export default function CreateAccount() {
                                                        })}
                                                 />
                                                 <div className="input-group-append">
-                                                    <button className="btn btn-eye input-group-text"
-                                                            id="passwordEye" type="button" tabIndex={-1} onClick={() => showPassword()}>
-                                                        <IconButton aria-label="eye">
-                                                            {seePassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
-                                                        </IconButton>
-                                                    </button>
+                                                    <IconButton className="btn btn-eye input-group-text"
+                                                                id="passwordEye" type="button" tabIndex={-1} onClick={() => showPassword()} aria-label="eye">
+                                                        {seePassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
+                                                    </IconButton>
                                                 </div>
                                             </div>
                                             {errors.password?.type === "required" && (
@@ -278,18 +272,15 @@ export default function CreateAccount() {
                                                            },
                                                        })}/>
                                                 <div className="input-group-append">
-                                                    <button className="btn btn-eye input-group-text"
-                                                            id="passwordEye2" type="button" tabIndex={-1} onClick={() => showRepeatPassword()}>
-                                                        <IconButton aria-label="eye2">
-                                                            {seeRepeatPassword ? <VisibilityIcon/> :
-                                                                <VisibilityOffIcon/>}
-                                                        </IconButton>
-                                                    </button>
+                                                    <IconButton className="btn btn-eye input-group-text"
+                                                                id="passwordEye2" type="button" tabIndex={-1} onClick={() => showRepeatPassword()} aria-label="eye2">
+                                                        {seeRepeatPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
+                                                    </IconButton>
                                                 </div>
                                             </div>
                                             {errors.confirmPassword?.type === "required" && (
                                                 <p className="form-control is-invalid form-error-label">
-                                                    {t("CreateAccount.error.isRequired")}
+                                                    {t("CreateAccount.error.password.isRequired")}
                                                 </p>
                                             )}
                                             {watch('password') !== watch('confirmPassword') && (

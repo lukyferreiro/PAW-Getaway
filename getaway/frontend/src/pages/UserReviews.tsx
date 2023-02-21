@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {Navigate, useLocation, useNavigate, useSearchParams} from "react-router-dom";
+import {Navigate, useNavigate, useSearchParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {ReviewModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
@@ -21,7 +21,6 @@ export default function UserReviews() {
 
     const {t} = useTranslation()
     const navigate = useNavigate()
-    const location = useLocation()
     const query = useQuery()
     const {user} = useAuth()
 

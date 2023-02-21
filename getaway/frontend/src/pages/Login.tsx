@@ -11,6 +11,7 @@ import {IconButton} from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import ModalResetPassword from "../components/ModalResetPassword";
 
 type FormDataLogin = {
     email: string;
@@ -18,11 +19,7 @@ type FormDataLogin = {
     rememberMe: boolean;
 };
 
-type FormDataPassReset = {
-    email: string;
-};
-
-export default function Login(props: {nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]}) {
+export default function Login(props: { nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
 
     const {t} = useTranslation()
     let navigate = useNavigate()
@@ -37,7 +34,7 @@ export default function Login(props: {nameProp: [string | undefined, Dispatch<Se
     // @ts-ignore
     let from = location.state?.from?.pathname || "/";
     const [seePassword, setSeePassword] = useState(false);
-    const [isOpenPassword, setIsOpenPassword] = useState(false);
+    const isOpenPassword = useState(false);
     const [invalidCredentials, setInvalidCredendtials] = useState(false);
 
     const {register, handleSubmit} = useForm<FormDataLogin>({
@@ -60,15 +57,6 @@ export default function Login(props: {nameProp: [string | undefined, Dispatch<Se
     function showPassword() {
         setSeePassword(!seePassword)
     }
-
-    // const {register, handleSubmit} = useForm<FormDataPassReset>({
-    //     criteriaMode: "all",
-    // });
-    //
-    // const onSubmitPassReset = handleSubmit((data: FormData) => {
-    //
-    //     }
-    // );
 
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
@@ -94,6 +82,7 @@ export default function Login(props: {nameProp: [string | undefined, Dispatch<Se
                                             {t('Navbar.email')}
                                         </label>
                                         <input type="text" id="email"
+                                               placeholder={t('Navbar.emailPlaceholder')}
                                                className="form-control mb-2"
                                                aria-describedby="email input"
                                                {...register("email", {})}/>
@@ -112,11 +101,11 @@ export default function Login(props: {nameProp: [string | undefined, Dispatch<Se
                                                 </label>
                                             </div>
                                             <div className="col-6 px-0 d-flex justify-content-end form-label">
-                                                <div className="link-primary" tabIndex={-1}
+                                                <div className="link-primary text-end" style={{cursor: "pointer"}} tabIndex={-1}
                                                      onClick={() => {
-                                                         setIsOpenPassword(true)
+                                                         isOpenPassword[1](true)
                                                      }}>
-                                                   <span className="text-right" style={{fontSize: "medium"}}>
+                                                   <span style={{fontSize: "medium"}}>
                                                        {t('Navbar.forgotPassword')}
                                                    </span>
                                                 </div>
@@ -127,10 +116,10 @@ export default function Login(props: {nameProp: [string | undefined, Dispatch<Se
                                                            id="password" aria-describedby="password input"
                                                            {...register("password", {})}/>
                                                     <div className="input-group-append">
-                                                            <IconButton className="btn btn-eye input-group-text"
-                                                                        id="passwordEye" type="button" tabIndex={-1} onClick={() => showPassword()} aria-label="eye">
-                                                                {seePassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
-                                                            </IconButton>
+                                                        <IconButton className="btn btn-eye input-group-text"
+                                                                    id="passwordEye" type="button" tabIndex={-1} onClick={() => showPassword()} aria-label="eye">
+                                                            {seePassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
+                                                        </IconButton>
                                                     </div>
                                                 </div>
                                             </div>
@@ -151,7 +140,9 @@ export default function Login(props: {nameProp: [string | undefined, Dispatch<Se
 
                     <div className="col-12 d-flex align-items-center justify-content-center">
                         {invalidCredentials &&
-                            <p>Todo mal</p>
+                            <p className="form-control is-invalid form-error-label">
+                                {t("Login.invalidCredentials")}
+                            </p>
                         }
                     </div>
 
@@ -174,61 +165,57 @@ export default function Login(props: {nameProp: [string | undefined, Dispatch<Se
                 </div>
             </div>
 
-            <Modal
-                style={{overlay: {zIndex: 100}}}
-                className="modal-pop-up"
-                isOpen={isOpenPassword}
-                contentLabel="PopUpPassword"
-                onRequestClose={() => setIsOpenPassword(false)}
-            >
-                <div
-                    className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
-                    <div
-                        className="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">
-                        <div className="col-12">
-                            <h1 className="text-center title">
-                                {t('Navbar.resetPasswordTitle')}
-                            </h1>
-                        </div>
-                        <div className="col-12">
-                            <div className="container-fluid">
-                                <div className="row">
-                                    {/*<form id="passResetRequest"*/}
-                                    {/*           modelAttribute="resetPasswordEmailForm"*/}
-                                    {/*           action="${postUrl}"*/}
-                                    {/*           method="POST" acceptCharset="UTF-8">*/}
-                                    <label className="form-label d-flex align-items-center"
-                                           htmlFor="email">
-                                        <img
-                                            src={"./images/ic_user.svg"}
-                                            alt="Imagen perfil"
-                                            style={{marginRight: "5px"}}/>
-                                        {t('Navbar.email')}
-                                        <span className="required-field">*</span>
+            <ModalResetPassword isOpen={isOpenPassword}/>
 
-                                    </label>
-                                    <input type="text" id="email" name="email"
-                                           className="form-control mb-2"
-                                           placeholder="juan@ejemplo.com"
-                                           aria-describedby="email input"/>
+            {/*<Modal style={{overlay: {zIndex: 100}}}*/}
+            {/*       className="modal-pop-up"*/}
+            {/*       isOpen={isOpenPassword}*/}
+            {/*       contentLabel="PopUpPassword"*/}
+            {/*       onRequestClose={() => setIsOpenPassword(false)}*/}
+            {/*>*/}
+            {/*    <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">*/}
+            {/*        <div className="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">*/}
+            {/*            <div className="col-12">*/}
+            {/*                <h1 className="text-center title">*/}
+            {/*                    {t('Navbar.resetPasswordTitle')}*/}
+            {/*                </h1>*/}
+            {/*            </div>*/}
+            {/*            <div className="col-12">*/}
+            {/*                <div className="container-fluid">*/}
+            {/*                    <div className="row">*/}
+            {/*                        <form id="passResetRequest" acceptCharset="utf-8"*/}
+            {/*                              onSubmit={onSubmit} method="post">*/}
+            {/*                            <label className="form-label d-flex align-items-center"*/}
+            {/*                                   htmlFor="email">*/}
+            {/*                                <img src={"./images/ic_user.svg"}*/}
+            {/*                                     alt="Imagen perfil"*/}
+            {/*                                     style={{marginRight: "5px"}}/>*/}
+            {/*                                {t('Navbar.email')}*/}
+            {/*                                <span className="required-field">*</span>*/}
 
-                                    {/*<form:errors path="email" cssClass="form-error-label"*/}
-                                    {/*             element="p"/>*/}
-                                    <div
-                                        className="col-12 mt-3 d-flex align-items-center justify-content-center">
-                                        <button type="button" className='btn button-primary'>
-                                            {/*<button form="passResetRequest" type="submit"*/}
-                                            {/*        className="btn btn-continue">*/}
-                                            {t('Navbar.resetPasswordButton')}
-                                        </button>
-                                    </div>
-                                    {/*</form>*/}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </Modal>
+            {/*                            </label>*/}
+            {/*                            <input type="text" id="email" name="email"*/}
+            {/*                                   className="form-control mb-2"*/}
+            {/*                                   placeholder="juan@ejemplo.com"*/}
+            {/*                                   aria-describedby="email input"/>*/}
+
+            {/*                            /!*<form:errors path="email" cssClass="form-error-label"*!/*/}
+            {/*                            /!*             element="p"/>*!/*/}
+            {/*                            <div*/}
+            {/*                                className="col-12 mt-3 d-flex align-items-center justify-content-center">*/}
+            {/*                                <button type="button" className='btn button-primary'>*/}
+            {/*                                    /!*<button form="passResetRequest" type="submit"*!/*/}
+            {/*                                    /!*        className="btn btn-continue">*!/*/}
+            {/*                                    {t('Navbar.resetPasswordButton')}*/}
+            {/*                                </button>*/}
+            {/*                            </div>*/}
+            {/*                        </form>*/}
+            {/*                    </div>*/}
+            {/*                </div>*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</Modal>*/}
 
         </div>
     );
