@@ -166,57 +166,6 @@ export default function Login(props: { nameProp: [string | undefined, Dispatch<S
             </div>
 
             <ModalResetPassword isOpen={isOpenPassword}/>
-
-            {/*<Modal style={{overlay: {zIndex: 100}}}*/}
-            {/*       className="modal-pop-up"*/}
-            {/*       isOpen={isOpenPassword}*/}
-            {/*       contentLabel="PopUpPassword"*/}
-            {/*       onRequestClose={() => setIsOpenPassword(false)}*/}
-            {/*>*/}
-            {/*    <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">*/}
-            {/*        <div className="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">*/}
-            {/*            <div className="col-12">*/}
-            {/*                <h1 className="text-center title">*/}
-            {/*                    {t('Navbar.resetPasswordTitle')}*/}
-            {/*                </h1>*/}
-            {/*            </div>*/}
-            {/*            <div className="col-12">*/}
-            {/*                <div className="container-fluid">*/}
-            {/*                    <div className="row">*/}
-            {/*                        <form id="passResetRequest" acceptCharset="utf-8"*/}
-            {/*                              onSubmit={onSubmit} method="post">*/}
-            {/*                            <label className="form-label d-flex align-items-center"*/}
-            {/*                                   htmlFor="email">*/}
-            {/*                                <img src={"./images/ic_user.svg"}*/}
-            {/*                                     alt="Imagen perfil"*/}
-            {/*                                     style={{marginRight: "5px"}}/>*/}
-            {/*                                {t('Navbar.email')}*/}
-            {/*                                <span className="required-field">*</span>*/}
-
-            {/*                            </label>*/}
-            {/*                            <input type="text" id="email" name="email"*/}
-            {/*                                   className="form-control mb-2"*/}
-            {/*                                   placeholder="juan@ejemplo.com"*/}
-            {/*                                   aria-describedby="email input"/>*/}
-
-            {/*                            /!*<form:errors path="email" cssClass="form-error-label"*!/*/}
-            {/*                            /!*             element="p"/>*!/*/}
-            {/*                            <div*/}
-            {/*                                className="col-12 mt-3 d-flex align-items-center justify-content-center">*/}
-            {/*                                <button type="button" className='btn button-primary'>*/}
-            {/*                                    /!*<button form="passResetRequest" type="submit"*!/*/}
-            {/*                                    /!*        className="btn btn-continue">*!/*/}
-            {/*                                    {t('Navbar.resetPasswordButton')}*/}
-            {/*                                </button>*/}
-            {/*                            </div>*/}
-            {/*                        </form>*/}
-            {/*                    </div>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*</Modal>*/}
-
         </div>
     );
 
