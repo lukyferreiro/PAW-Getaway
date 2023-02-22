@@ -12,7 +12,7 @@ public class UserLandingPageDto {
     private Collection<ExperienceDto> recommendedByReviews;
 
     public UserLandingPageDto() {
-
+        // Used by Jersey
     }
 
     public UserLandingPageDto(List<List<ExperienceModel>> experiencesList, UriInfo uriInfo) {

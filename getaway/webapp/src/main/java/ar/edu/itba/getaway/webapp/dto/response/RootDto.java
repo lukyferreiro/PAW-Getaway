@@ -15,6 +15,7 @@ public class RootDto {
 
     public RootDto(UriInfo uriInfo) {
         final String baseUrl = uriInfo.getBaseUriBuilder().build().toString();
+        //TODO check estas urls de la api
         usersUrl = baseUrl + "users/{id}";
         userExperiencesUrl = baseUrl+"users/{id}/experiences/{?,order,page}";
         experiencesUrl = baseUrl+"experiences/{category}/{?order,price,score,city,page}";

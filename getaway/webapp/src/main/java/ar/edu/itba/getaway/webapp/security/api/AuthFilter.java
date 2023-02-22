@@ -30,7 +30,6 @@ public class AuthFilter extends AbstractAuthenticationProcessingFilter {
     }
 
     public AuthFilter() {
-        //TODO check esto
         super("/api/");
     }
 

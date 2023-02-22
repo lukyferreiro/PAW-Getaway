@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {Navigate, useNavigate, useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {ReviewModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
@@ -68,7 +68,7 @@ export default function UserReviews() {
                         <div className="mx-5 my-2 d-flex flex-wrap justify-content-center align-content-center">
                             {reviews.map((review) => (
                                 <div style={{minWidth: "700px", maxWidth: "700px", height: "auto"}} key={review.id}>
-                                    <CardReview reviewModel={review} isEditing={true} />
+                                    <CardReview reviewModel={review} isEditing={true}/>
                                 </div>
                             ))}
                         </div>

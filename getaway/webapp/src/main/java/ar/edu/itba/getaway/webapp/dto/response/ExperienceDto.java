@@ -1,14 +1,11 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
-
 import ar.edu.itba.getaway.models.*;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class ExperienceDto implements Serializable {

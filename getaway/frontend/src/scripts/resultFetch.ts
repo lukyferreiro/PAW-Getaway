@@ -7,10 +7,8 @@ export async function resultFetch<RetType>(
     options: any
 ): Promise<Result<RetType>> {
     try {
-        let parsedResponse;
-
         const response = await authedFetch(url, options);
-
+        let parsedResponse;
         if (options.method === "POST") {
             parsedResponse = postCheckError(response);
         } else if (options.method === "PUT") {

@@ -1,20 +1,16 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
-import ar.edu.itba.getaway.models.CategoryModel;
 import ar.edu.itba.getaway.models.ExperienceModel;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class ExperienceNameDto {
     private Long id;
     private String name;
 
-    //TODO: check if uri can be returned and used in frontend navigate
 
     public static Collection<ExperienceNameDto> mapExperienceToDto(Collection<ExperienceModel> experiences, UriInfo uriInfo) {
         return experiences.stream().map(exp -> new ExperienceNameDto(exp, uriInfo)).collect(Collectors.toList());

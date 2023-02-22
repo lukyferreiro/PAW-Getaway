@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import React, {useEffect, useState, Dispatch, SetStateAction} from "react";
+import React, {useEffect, useState} from "react";
 import {ExperienceModel, OrderByModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";

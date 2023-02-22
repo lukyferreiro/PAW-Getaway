@@ -22,6 +22,8 @@ import EditAccount from "./pages/EditAccount";
 import RequireAuth from "./components/RequireAuth";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import 'react-toastify/dist/ReactToastify.css'
+import {ToastContainer} from "react-toastify";
 
 function App() {
     const categoryProp = useState<string | undefined>(undefined)
@@ -57,9 +59,22 @@ function App() {
                     <Route path='/changePassword' element={<ChangePassword/>}/>
                 </Routes>
 
+                <ToastContainer
+                    position='top-left'
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
+
                 <Footer/>
 
             </BrowserRouter>
+
         </AuthProvider>
     )
 }

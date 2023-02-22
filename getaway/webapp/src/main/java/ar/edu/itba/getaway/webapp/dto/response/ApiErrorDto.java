@@ -12,7 +12,9 @@ public class ApiErrorDto implements Serializable {
     private String message;
     private String path;
 
-    public ApiErrorDto() {}
+    public ApiErrorDto() {
+        // Used by Jersey
+    }
 
     public Integer getStatus() {
         return status;

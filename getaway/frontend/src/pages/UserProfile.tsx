@@ -18,7 +18,6 @@ export default function UserProfile() {
     const {t} = useTranslation()
     const navigate = useNavigate()
 
-    //TODO manejar estos token que recibe el usuario tras entrar al link por el mail
     const query = useQuery()
     const verificationToken = getQueryOrDefault(query, "verificationToken", "")
 
@@ -32,7 +31,7 @@ export default function UserProfile() {
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        if (verificationToken !== "" && !user?.verified ) {
+        if (verificationToken !== "" && !user?.verified) {
             serviceHandler(
                 userService.verifyUser(verificationToken),
                 navigate, () => {
@@ -41,8 +40,7 @@ export default function UserProfile() {
                 () => {
                     searchParams.delete("verificationToken")
                     setSearchParams(searchParams)
-                    //TODO
-                    //SHOW SNACKBAR
+                    //TODO mostrar toast
                 },
                 () => {
                 }
@@ -50,7 +48,9 @@ export default function UserProfile() {
             userService.getCurrentUser()
                 .then((user) => {
                         if (!user.hasFailed()) {
-                            signIn(user.getData(), rememberMe, ()=> {navigate("/user/profile")})
+                            signIn(user.getData(), rememberMe, () => {
+                                navigate("/user/profile")
+                            })
                         }
                     }
                 )
@@ -76,8 +76,8 @@ export default function UserProfile() {
         }
     }, [user, reload])
 
-    const {register, handleSubmit, reset, formState: { errors },} =
-        useForm<FormDataImg>({ criteriaMode: 'all' })
+    const {register, handleSubmit, reset, formState: {errors},} =
+        useForm<FormDataImg>({criteriaMode: 'all'})
 
     const onSubmit = handleSubmit((data: FormDataImg) => {
         console.log(data.image![0].name)
@@ -87,12 +87,13 @@ export default function UserProfile() {
             .then((result) => {
                 if (!result.hasFailed()) {
                     const imgAsUrl = URL.createObjectURL(data.image![0])
-                    setUser({ ...user!, url: imgAsUrl })
+                    setUser({...user!, url: imgAsUrl})
                     setReload(!reload)
                     reset()
                 }
             })
-            .catch(() => {})
+            .catch(() => {
+            })
     })
 
     return (

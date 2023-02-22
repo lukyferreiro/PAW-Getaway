@@ -1,7 +1,7 @@
 package ar.edu.itba.getaway.webapp.mappers;
 
 import ar.edu.itba.getaway.webapp.constraints.exceptions.DtoValidationException;
-import ar.edu.itba.getaway.webapp.dto.response.ExceptionDto;
+import ar.edu.itba.getaway.webapp.dto.response.ExceptionRequestDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +17,6 @@ public class DtoValidationExceptionMapper implements ExceptionMapper<DtoValidati
     public Response toResponse(final DtoValidationException exception) {
         LOGGER.error("Dto validation exception mapper");
         Response.Status status = Response.Status.CONFLICT;
-        return Response.status(status).entity(new ExceptionDto(exception.getMessage(), exception.getConstraintViolations(), status.getReasonPhrase(), status.getStatusCode())).build();
+        return Response.status(status).entity(new ExceptionRequestDto(exception.getMessage(), exception.getConstraintViolations(), status.getReasonPhrase(), status.getStatusCode())).build();
     }
 }

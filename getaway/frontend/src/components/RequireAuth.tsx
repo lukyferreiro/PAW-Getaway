@@ -1,10 +1,5 @@
-import {
-    useLocation,
-    useNavigate,
-    Location,
-    To,
-} from "react-router-dom";
-import React, { useEffect } from "react";
+import {useLocation, useNavigate, Location, To,} from "react-router-dom";
+import React, {useEffect} from "react";
 import {useAuth} from "../hooks/useAuth";
 
 function getCorrectPrivilegeRoute(location: Location): To {
@@ -15,8 +10,8 @@ function getCorrectPrivilegeRoute(location: Location): To {
     return "/";
 }
 
-function RequireAuth({ children }: { children: JSX.Element }) {
-    const { signIn } = useAuth();
+function RequireAuth({children}: { children: JSX.Element }) {
+    const {signIn} = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const readUser = localStorage.getItem("user");

@@ -22,8 +22,6 @@ public class UserDto implements Serializable {
     private boolean isProvider;
     private boolean hasImage;
 
-    //TODO:
-
     public static Collection<UserDto> mapUserToDto(Collection<UserModel> users, UriInfo uriInfo) {
         return users.stream().map(u -> new UserDto(u, uriInfo)).collect(Collectors.toList());
     }

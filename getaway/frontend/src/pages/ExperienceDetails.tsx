@@ -49,7 +49,7 @@ export default function ExperienceDetails() {
     }, []);
 
     //TODO: Add different dataloader
-    useEffect(()=> {
+    useEffect(() => {
         serviceHandler(
             experienceService.getExperienceReviews(parseInt(experienceId ? experienceId : '-1'), currentPage[0]),
             navigate, (fetchedExperienceReviews) => {
@@ -116,7 +116,11 @@ export default function ExperienceDetails() {
                             <>
                                 {reviews.map((review) => (
                                     <div className="pl-5 pr-2 w-50"
-                                         style={{minWidth: "400px", minHeight: "150px", height: "fit-content"}} key={review.id}>
+                                         style={{
+                                             minWidth: "400px",
+                                             minHeight: "150px",
+                                             height: "fit-content"
+                                         }} key={review.id}>
                                         <CardReview reviewModel={review} isEditing={false}/>
                                     </div>
                                 ))}

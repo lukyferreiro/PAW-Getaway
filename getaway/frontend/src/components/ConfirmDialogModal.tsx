@@ -4,7 +4,6 @@ import {
     DialogContent,
     DialogContentText,
     DialogActions,
-    Button,
     Box,
     IconButton
 } from "@mui/material";
@@ -56,7 +55,7 @@ const ConfirmDialogModal: React.FC = () => {
                 <DialogContentText>{message}</DialogContentText>
             </DialogContent>
             <DialogActions>
-                <button type="button" className="btn btn-error"   onClick={() => {
+                <button type="button" className="btn btn-error" onClick={() => {
                     if (onSubmit) {
                         onSubmit()
                     }

@@ -1,13 +1,12 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {Navigate, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, reviewService} from "../services";
 import {useForm} from "react-hook-form";
 import {useAuth} from "../hooks/useAuth";
 import {ExperienceNameModel, ReviewModel} from "../types";
-import "../styles/star_rating.css";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 
 
@@ -23,7 +22,6 @@ export default function ReviewForm() {
     const readUser = localStorage.getItem("user")
     const isVerified = localStorage.getItem("isVerified") === "true"
     const navigate = useNavigate()
-
 
 
     const {t} = useTranslation()
@@ -57,7 +55,8 @@ export default function ReviewForm() {
                     setValue('title', review.title);
                     setValue('description', review.description);
                 },
-                () => {},
+                () => {
+                },
                 () => {
                     setReview(undefined)
                     setRating(0)
@@ -97,10 +96,10 @@ export default function ReviewForm() {
             } else {
                 experienceService.postNewReview(parseInt(experienceId ? experienceId : "-1"), data.title, data.description, data.score)
                     .then((result) => {
-                            if (!result.hasFailed()) {
-                                navigate(`/experiences/${experienceId}`, {replace: true})
-                            }
-                        })
+                        if (!result.hasFailed()) {
+                            navigate(`/experiences/${experienceId}`, {replace: true})
+                        }
+                    })
                     .catch(() => {
                     });
             }
@@ -188,7 +187,7 @@ export default function ReviewForm() {
                                               message: t("ReviewForm.error.description.pattern"),
                                           },
                                       })}
-                                  defaultValue={review ? review.description : ""}
+                                      defaultValue={review ? review.description : ""}
                             />
 
                             {errors.description?.type === "required" && (

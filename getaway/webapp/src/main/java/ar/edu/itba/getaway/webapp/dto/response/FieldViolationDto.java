@@ -8,7 +8,9 @@ public class FieldViolationDto implements Serializable {
     private String field;
     private String violation;
 
-    public FieldViolationDto() {}
+    public FieldViolationDto() {
+        // Used by Jersey
+    }
 
     public FieldViolationDto(final ConstraintViolation<?> constraintViolation) {
         this.setField(constraintViolation.getPropertyPath().toString());

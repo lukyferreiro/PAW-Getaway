@@ -1,15 +1,15 @@
 import {useTranslation} from "react-i18next";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
-import {loginService, userService} from "../services";
+import {userService} from "../services";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {IconButton} from "@mui/material";
+import {useNavigate} from "react-router-dom";
+import {useAuth} from "../hooks/useAuth";
 // @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import {useNavigate} from "react-router-dom";
-import {useAuth} from "../hooks/useAuth";
 
 type FormDataResetPassword = {
     password: string;
@@ -41,7 +41,7 @@ export default function ChangePassword() {
         if (user || readUser) {
             navigate("/", {replace: true})
         }
-        if(passwordToken === "" || passwordToken === undefined ){
+        if (passwordToken === "" || passwordToken === undefined) {
             navigate("/", {replace: true})
         }
     }, [])
@@ -51,15 +51,15 @@ export default function ChangePassword() {
     });
 
     const onSubmit = handleSubmit((data: FormDataResetPassword) => {
-        userService.resetPassword(passwordToken, data.password)
-            .then((user) => {
-                    if (!user.hasFailed()) {
-                        navigate("/", {replace: true})
+            userService.resetPassword(passwordToken, data.password)
+                .then((user) => {
+                        if (!user.hasFailed()) {
+                            navigate("/", {replace: true})
+                        }
                     }
-                }
-            )
-            .catch(() => {
-            });
+                )
+                .catch(() => {
+                });
         }
     );
 

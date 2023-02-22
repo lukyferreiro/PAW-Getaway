@@ -1,13 +1,13 @@
 import {useTranslation} from "react-i18next";
 import React from "react";
+import {userService} from "../services";
+import {useAuth} from "../hooks/useAuth";
+import {useNavigate} from "react-router-dom";
+import {useForm} from "react-hook-form";
 // @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import {userService} from "../services";
-import {useAuth} from "../hooks/useAuth";
-import {Navigate, useNavigate} from "react-router-dom";
-import {useForm} from "react-hook-form";
 
 
 type FormDataEditAccount = {
@@ -35,8 +35,11 @@ export default function EditAccount() {
 
     const onSubmitEdit = handleSubmit((data: FormDataEditAccount) => {
             userService.updateUserInfoById(user?.id, data.name, data.surname)
-                .then(() => {navigate("/user/profile")})
-                .catch(() => {})
+                .then(() => {
+                    navigate("/user/profile")
+                })
+                .catch(() => {
+                })
         }
     );
     return (
@@ -69,7 +72,7 @@ export default function EditAccount() {
                                                className="form-control mb-2"
                                                placeholder={t('Navbar.emailPlaceholder')}
                                                aria-describedby="email input"
-                                               />
+                                        />
                                     </div>
 
                                     <div className="form-group">

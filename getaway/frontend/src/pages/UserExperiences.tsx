@@ -8,12 +8,8 @@ import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, userService} from "../services";
 import StarRating from "../components/StarRating";
 import {IconButton} from "@mui/material";
-// @ts-ignore
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-// @ts-ignore
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {useForm} from "react-hook-form";
 import Pagination from "../components/Pagination";
 import OrderDropdown from "../components/OrderDropdown";
@@ -21,8 +17,11 @@ import {Close} from "@mui/icons-material";
 import DataLoader from "../components/DataLoader";
 import ConfirmDialogModal, { confirmDialogModal } from "../components/ConfirmDialogModal";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import AddPictureModal from "../components/AddPictureModal";
+// @ts-ignore
+import VisibilityIcon from "@mui/icons-material/Visibility";
+// @ts-ignore
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 type FormUserExperiencesSearch = {
     name: string

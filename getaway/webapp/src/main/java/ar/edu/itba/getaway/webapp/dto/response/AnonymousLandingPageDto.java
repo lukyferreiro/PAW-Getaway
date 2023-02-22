@@ -15,6 +15,7 @@ public class AnonymousLandingPageDto {
     private Collection<ExperienceDto> Historico;
 
     public AnonymousLandingPageDto() {
+        // Used by Jersey
     }
 
     public AnonymousLandingPageDto(List<List<ExperienceModel>> experiencesList, UriInfo uriInfo) {

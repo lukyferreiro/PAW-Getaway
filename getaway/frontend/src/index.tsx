@@ -17,6 +17,7 @@ import "./styles/navbar.css";
 import "./styles/resetRequest.css";
 import "./styles/snackbar.css";
 import "./styles/table.css";
+import "./styles/star_rating.css";
 
 // Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";

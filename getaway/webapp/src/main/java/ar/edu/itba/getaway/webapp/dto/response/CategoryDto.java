@@ -1,9 +1,7 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
 import ar.edu.itba.getaway.models.CategoryModel;
-import ar.edu.itba.getaway.models.CountryModel;
 
-import javax.ws.rs.core.UriInfo;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.stream.Collectors;

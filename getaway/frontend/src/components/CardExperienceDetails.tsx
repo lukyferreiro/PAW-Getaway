@@ -1,23 +1,23 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {IconButton} from "@mui/material";
-// @ts-ignore
-import VisibilityIcon from "@mui/icons-material/Visibility";
-// @ts-ignore
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import React, {useEffect, useState} from "react";
-import {CategoryModel, ExperienceModel} from "../types";
+import {ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import {experienceService} from "../services";
-import ConfirmDialogModal, { confirmDialogModal } from "../components/ConfirmDialogModal";
-import { Favorite, FavoriteBorder} from "@mui/icons-material";
+import ConfirmDialogModal, {confirmDialogModal} from "../components/ConfirmDialogModal";
+import {Favorite, FavoriteBorder} from "@mui/icons-material";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import AddPictureModal from "../components/AddPictureModal";
+// @ts-ignore
+import VisibilityIcon from "@mui/icons-material/Visibility";
+// @ts-ignore
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel; isEditing: boolean; }) {
 
@@ -55,7 +55,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     }
 
     useEffect(() => {
-        if(experience.hasImage) {
+        if (experience.hasImage) {
             serviceHandler(
                 experienceService.getExperienceImage(experience?.id),
                 navigate, (experienceImg) => {
@@ -131,7 +131,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                     {t('ExperienceDetail.description')}
                                 </h5>
                                 <div className="information-text" id="experienceDescription">
-                                    {experience.description == '' ?
+                                    {experience.description === undefined ?
                                         <p>
                                             {t('ExperienceDetail.noData')}
                                         </p>
@@ -147,12 +147,11 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                 <h5 className="information-title">
                                     {t('ExperienceDetail.url')}
                                 </h5>
-                                {experience.siteUrl == '' ?
+                                {experience.siteUrl === undefined ?
                                     <p className="information-text">
                                         {t('ExperienceDetail.noData')}
                                     </p>
                                     :
-                                    //TODO: make this link to redirect
                                     <a href={experience.siteUrl}>
                                         <p className="information-text">
                                             {experience.siteUrl}
@@ -246,7 +245,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     </IconButton>
 
                     <IconButton
-                        onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'),t('User.experiences.confirmDelete',{experienceName: experience.name}), () => deleteExperience(experience.id))}
+                        onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'), t('User.experiences.confirmDelete', {experienceName: experience.name}), () => deleteExperience(experience.id))}
                         aria-label="trash"
                         component="span"
                         style={{fontSize: "xx-large"}}>

@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
-import ar.edu.itba.getaway.models.CityModel;
 import ar.edu.itba.getaway.models.OrderByModel;
 
 import java.util.Collection;

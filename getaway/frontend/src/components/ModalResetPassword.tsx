@@ -4,6 +4,7 @@ import Modal from "react-modal";
 import React, {Dispatch, SetStateAction, useState} from "react";
 import {useForm} from "react-hook-form";
 import {userService} from "../services";
+import {showToast} from "../scripts/toast";
 
 type FormDataPasswordResetEmail = {
     email: string;
@@ -28,6 +29,7 @@ export default function ModalResetPassword(props: { isOpen: [boolean, Dispatch<S
                         } else {
                             isOpen[1](false);
                             reset()
+                            showToast("Se te mando el mail capo", 'success')
                             //TODO mostrar toast de que se mando el mail
                         }
                     }

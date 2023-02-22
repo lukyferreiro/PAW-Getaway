@@ -4,14 +4,14 @@ import {useForm} from "react-hook-form";
 import React, {Dispatch, SetStateAction, useState} from "react";
 import {loginService} from "../services";
 import {useAuth} from "../hooks/useAuth";
-import Modal from "react-modal";
 import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {IconButton} from "@mui/material";
+import ModalResetPassword from "../components/ModalResetPassword";
 // @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import ModalResetPassword from "../components/ModalResetPassword";
+import {showToast} from "../scripts/toast";
 
 type FormDataLogin = {
     email: string;
@@ -48,6 +48,7 @@ export default function Login(props: { nameProp: [string | undefined, Dispatch<S
                     user.hasFailed() ? setInvalidCredendtials(true) :
                         signIn(user.getData(), data.rememberMe, () => {
                             navigate(from, {replace: true});
+                            showToast("Muy bien te logeaste", 'error')
                         })
                 )
                 .catch(() => navigate("/error?code=500&message=Server error"));

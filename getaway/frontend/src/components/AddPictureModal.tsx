@@ -1,18 +1,6 @@
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogContentText,
-    DialogActions,
-    Button,
-    Box,
-    IconButton
-} from "@mui/material";
-import {Close} from "@mui/icons-material";
-import React, {Dispatch, SetStateAction, useState} from "react";
-import {t} from "i18next";
+import React, {Dispatch, SetStateAction} from "react";
 import {useForm} from "react-hook-form";
-import {experienceService, userService} from "../services";
+import {experienceService} from "../services";
 import {useTranslation} from "react-i18next";
 import Modal from "react-modal";
 
@@ -30,16 +18,16 @@ export default function AddPictureModal(props: { isOpen: [boolean, Dispatch<SetS
     });
 
     const onSubmit = handleSubmit((data: FormDataImg) => {
-        experienceService.updateExperienceImage(experienceId, data.image![0])
-            .then((result) => {
-                    if (result.getError().getStatus() === 204) {
-                        isOpen[1](false);
-                        reset()
+            experienceService.updateExperienceImage(experienceId, data.image![0])
+                .then((result) => {
+                        if (result.getError().getStatus() === 204) {
+                            isOpen[1](false);
+                            reset()
+                        }
                     }
-                }
-            )
-            .catch(() => {
-            });
+                )
+                .catch(() => {
+                });
         }
     );
 
@@ -66,7 +54,7 @@ export default function AddPictureModal(props: { isOpen: [boolean, Dispatch<SetS
                         <div className="container-fluid">
                             <div className="row">
                                 <form encType='multipart/form-data' acceptCharset='utf-8'
-                                      id="imageForm" onSubmit={onSubmit} >
+                                      id="imageForm" onSubmit={onSubmit}>
 
                                     <input type='file'
                                            accept='image/png, image/jpeg, image/jpg' className="form-control"

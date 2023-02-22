@@ -16,7 +16,6 @@ public class CountryDto implements Serializable {
         return countries.stream().map(country -> new CountryDto(country, uriInfo)).collect(Collectors.toList());
     }
 
-
     public CountryDto() {
         // Used by Jersey
     }

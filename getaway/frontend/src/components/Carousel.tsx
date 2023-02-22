@@ -1,6 +1,5 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import '../styles/carousel.css'
 import React, {useEffect, useState} from "react";
 import CardExperience from "./CardExperience";
 import {ExperienceModel} from "../types";
@@ -53,7 +52,7 @@ export default function Carousel(props: { title: any, experiences: ExperienceMod
                                 <div className={`carousel-content show-${show}`}
                                      style={{transform: `translateX(-${currentIndex * (100 / show)}%)`}}>
                                     {experiences.map((exp) => (
-                                        <div className="d-flex justify-content-center align-content-center"  key={exp.id}>
+                                        <div className="d-flex justify-content-center align-content-center" key={exp.id}>
                                             <CardExperience experience={exp}/>
                                         </div>
                                     ))}

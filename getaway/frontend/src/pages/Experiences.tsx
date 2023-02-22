@@ -5,8 +5,7 @@ import CardExperience from "../components/CardExperience";
 import {IconButton, Slider, Typography} from '@mui/material';
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {ExperienceModel, OrderByModel} from "../types";
-import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
-import "../styles/star_rating.css";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {CityModel, CountryModel} from "../types";
 import {experienceService, locationService} from "../services";
 import {serviceHandler} from "../scripts/serviceHandler";
@@ -15,10 +14,9 @@ import {Close} from "@mui/icons-material";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 
-export default function Experiences(props: {nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]}) {
+export default function Experiences(props: { nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
     const {t} = useTranslation()
     const navigate = useNavigate()
-    const location = useLocation()
 
     const {nameProp, categoryProp} = props
 
@@ -48,7 +46,7 @@ export default function Experiences(props: {nameProp: [string | undefined, Dispa
     const [maxPage, setMaxPage] = useState(1)
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
 
-    useEffect(()=>{
+    useEffect(() => {
         serviceHandler(
             experienceService.getUserOrderByModels(),
             navigate, (orders) => {
@@ -76,7 +74,7 @@ export default function Experiences(props: {nameProp: [string | undefined, Dispa
 
     //TODO: maxprice changes makes double refresh. Maybe add maxprice to experiencelist dto
     useEffect(() => {
-        if( nameProp[0] !== undefined && categoryProp[0] !== undefined) {
+        if (nameProp[0] !== undefined && categoryProp[0] !== undefined) {
             serviceHandler(
                 experienceService.getFilterMaxPrice(categoryProp[0], nameProp[0]),
                 navigate, (priceModel) => {
@@ -95,7 +93,7 @@ export default function Experiences(props: {nameProp: [string | undefined, Dispa
     }, [categoryProp[0], nameProp[0]])
 
     useEffect(() => {
-        if( nameProp[0] !== undefined && categoryProp[0] !== undefined) {
+        if (nameProp[0] !== undefined && categoryProp[0] !== undefined) {
             console.log("Reloading experiences with neew filter")
             setIsLoading(true)
             serviceHandler(
@@ -200,7 +198,7 @@ export default function Experiences(props: {nameProp: [string | undefined, Dispa
                         >
                             {/*TODO: check usage after filter reset*/}
                             {country === -1 &&
-                            <option hidden value="">{t('Experience.placeholder')}</option>
+                                <option hidden value="">{t('Experience.placeholder')}</option>
                             }
                             {countries.map((country) => (
                                 <option key={country.id} value={country.id}>
@@ -218,10 +216,10 @@ export default function Experiences(props: {nameProp: [string | undefined, Dispa
                                 onChange={e => handleCityChange(parseInt(e.target.value))}
                         >
                             {city === -1 &&
-                            <option hidden value="">{t('Experience.placeholder')}</option>
+                                <option hidden value="">{t('Experience.placeholder')}</option>
                             }
                             {cities.map((city) => (
-                                <option key={city.id} value={city.id} >
+                                <option key={city.id} value={city.id}>
                                     {city.name}
                                 </option>
                             ))}
@@ -273,7 +271,7 @@ export default function Experiences(props: {nameProp: [string | undefined, Dispa
                                 );
                             })}
                         </div>
-                        <input value="TODO" type="hidden" className="form-control" id="scoreInput"/>
+                        <input type="hidden" className="form-control" id="scoreInput"/>
                     </div>
                 </div>
 
@@ -293,20 +291,17 @@ export default function Experiences(props: {nameProp: [string | undefined, Dispa
                  style={{minHeight: "650px"}}>
                 <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
 
-
                     <div className="d-flex justify-content-center align-content-center">
                         <div style={{margin: "0 auto 0 20px", flex: "1"}}>
                             <OrderDropdown orders={orders} order={order} currentPage={currentPage}/>
                         </div>
                         <div className="d-flex justify-content-center" style={{fontSize: "x-large"}}>
 
-                            { categoryProp[0] !== undefined && categoryProp[0].length > 0 ?
-                                <div>
-                                    {t('Experiences.search.search')}
-                                    {t('Experiences.search.category')}
-                                    {t('Categories.' + categoryProp[0])}
+                            {categoryProp[0] !== undefined && categoryProp[0].length > 0 ?
+                                <div className="d-flex align-self-center">
+                                    {t('Experiences.search.search') + t('Experiences.search.category') + t('Categories.' + categoryProp[0])}
                                     <div className="d-flex justify-content-center">
-                                        { nameProp[0] !== undefined &&
+                                        {nameProp[0] !== undefined &&
                                             nameProp[0].length > 0 &&
                                             <div>
                                                 {t('Experiences.search.name', {name: nameProp[0]})}
@@ -320,14 +315,13 @@ export default function Experiences(props: {nameProp: [string | undefined, Dispa
                                 </div>
                                 :
                                 <div>
-                                    { nameProp[0] !== undefined && nameProp[0].length > 0 &&
-                                    <div>
-                                        {t('Experiences.search.search')}
-                                        {t('Experiences.search.name', {name: nameProp[0]})}
-                                        <IconButton className="justify-content-center" onClick={cleanQuery}>
-                                            <Close/>
-                                        </IconButton>
-                                    </div>
+                                    {nameProp[0] !== undefined && nameProp[0].length > 0 &&
+                                        <div>
+                                            {t('Experiences.search.search') + t('Experiences.search.name', {name: nameProp[0]})}
+                                            <IconButton className="justify-content-center" onClick={cleanQuery}>
+                                                <Close/>
+                                            </IconButton>
+                                        </div>
                                     }
                                 </div>
                             }

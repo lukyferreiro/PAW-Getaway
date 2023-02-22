@@ -3,7 +3,6 @@ import "../common/i18n/index"
 import {Link, useNavigate, useSearchParams} from 'react-router-dom'
 import {CategoryModel} from "../types";
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
-import '../styles/navbar.css'
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {categoryService} from "../services";
@@ -16,7 +15,7 @@ type FormDataSearch = {
     name: string
 };
 
-export default function Navbar(props: {nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]}) {
+export default function Navbar(props: { nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
     const {t} = useTranslation()
     const navigate = useNavigate()
     const query = useQuery()
@@ -47,7 +46,9 @@ export default function Navbar(props: {nameProp: [string | undefined, Dispatch<S
             },
             () => {
             },
-            () => {setCategories(new Array(0))}
+            () => {
+                setCategories(new Array(0))
+            }
         );
     }, [])
 
@@ -65,7 +66,7 @@ export default function Navbar(props: {nameProp: [string | undefined, Dispatch<S
         reset()
     }
 
-    function resetForm(){
+    function resetForm() {
         searchParams.delete("name")
         setSearchParams(searchParams)
         nameProp[1]("")
@@ -75,7 +76,9 @@ export default function Navbar(props: {nameProp: [string | undefined, Dispatch<S
     return (
         <div className="navbar container-fluid p-0 d-flex flex-column">
             <div className="container-fluid px-2 pt-2 d-flex">
-                <Link to="/" className="logo d-flex" onClick={()=>{clearNavBar()}}>
+                <Link to="/" className="logo d-flex" onClick={() => {
+                    clearNavBar()
+                }}>
                     <img className="logo-img" src={'./images/getaway-icon.png'} alt="Logo"/>
                     <span className="logo-text align-self-center text-uppercase font-weight-bold">
                         {t('PageName')}
@@ -127,60 +130,67 @@ export default function Navbar(props: {nameProp: [string | undefined, Dispatch<S
 
 
                     {!isLogged &&
-                    <Link to="/login" onClick={()=>clearNavBar()}>
-                        <button type="button" className="btn button-primary">
-                            {t('Navbar.login')}
-                        </button>
-                    </Link>
+                        <Link to="/login" onClick={() => clearNavBar()}>
+                            <button type="button" className="btn button-primary">
+                                {t('Navbar.login')}
+                            </button>
+                        </Link>
                     }
 
 
                     {isLogged &&
-                    <div className="dropdown">
-                        <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
-                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src={'./images/ic_user_white.svg'} alt="Icono usuario" style={{
-                                width: "35px",
-                                height: "35px"
-                            }}/>
-                        </button>
-
-                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{left: "-50px"}}>
-                            <Link to="/user/profile" className="dropdown-item" onClick={()=>clearNavBar()}>
-                                <img src={'./images/ic_user.svg'} alt="Icono perfil"/>
-                                {t('Navbar.profile')}
-                            </Link>
-
-                            {isProvider &&
-                            <Link to="/user/experiences" className="dropdown-item" onClick={()=>clearNavBar()}>
-                                <img src={'./images/ic_experiences.svg'} alt="Icono experiencias"/>
-                                {t('Navbar.experiences')}
-                            </Link>}
-                            <Link to="/user/favourites" className="dropdown-item" onClick={()=>clearNavBar()}>
-                                <img src={'./images/ic_fav.svg'} alt="Icono favoritos"/>
-                                {t('Navbar.favourites')}
-                            </Link>
-                            {isVerified &&
-                            <Link to="/user/reviews" className="dropdown-item" onClick={()=>clearNavBar()}>
-                                <img src={'./images/ic_review.svg'} alt="Icono reseñas"/>
-                                {t('Navbar.reviews')}
-                            </Link>}
-                            <button className="dropdown-item" onClick={() => {
-                                clearNavBar()
-                                signOut(() => navigate("/"))
-                            }}>
-                                <img src={'./images/ic_logout.svg'} alt="Icono cerrar sesion"/>
-                                {t('Navbar.logout')}
+                        <div className="dropdown">
+                            <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
+                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src={'./images/ic_user_white.svg'} alt="Icono usuario" style={{
+                                    width: "35px",
+                                    height: "35px"
+                                }}/>
                             </button>
-                        </ul>
-                    </div>}
+
+                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{left: "-50px"}}>
+                                <Link to="/user/profile" className="dropdown-item" onClick={() => clearNavBar()}>
+                                    <img src={'./images/ic_user.svg'} alt="Icono perfil"/>
+                                    {t('Navbar.profile')}
+                                </Link>
+
+                                {isProvider &&
+                                    <Link to="/user/experiences" className="dropdown-item" onClick={() => clearNavBar()}>
+                                        <img src={'./images/ic_experiences.svg'} alt="Icono experiencias"/>
+                                        {t('Navbar.experiences')}
+                                    </Link>}
+                                <Link to="/user/favourites" className="dropdown-item" onClick={() => clearNavBar()}>
+                                    <img src={'./images/ic_fav.svg'} alt="Icono favoritos"/>
+                                    {t('Navbar.favourites')}
+                                </Link>
+                                {isVerified &&
+                                    <Link to="/user/reviews" className="dropdown-item" onClick={() => clearNavBar()}>
+                                        <img src={'./images/ic_review.svg'} alt="Icono reseñas"/>
+                                        {t('Navbar.reviews')}
+                                    </Link>}
+                                <button className="dropdown-item" onClick={() => {
+                                    clearNavBar()
+                                    signOut(() => navigate("/"))
+                                }}>
+                                    <img src={'./images/ic_logout.svg'} alt="Icono cerrar sesion"/>
+                                    {t('Navbar.logout')}
+                                </button>
+                            </ul>
+                        </div>}
                 </div>
             </div>
 
             <div className="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0">
                 {categories.map((category) => (
-                    <button type="button" className={`btn btn-category ${(categoryProp[0]===category.name) ? 'isActive' : ''}`} key={category.id}
-                            onClick={()=>{categoryProp[1](category.name); console.log("Changed category"); navigate({pathname: "/experiences", search: `?category=${category.name}&name=${nameProp[0]}`})}}
+                    <button type="button" className={`btn btn-category ${(categoryProp[0] === category.name) ? 'isActive' : ''}`} key={category.id}
+                            onClick={() => {
+                                categoryProp[1](category.name);
+                                console.log("Changed category");
+                                navigate({
+                                    pathname: "/experiences",
+                                    search: `?category=${category.name}&name=${nameProp[0]}`
+                                })
+                            }}
                     >
                         <img src={`./images/${category.name}.svg`} alt={`${category.name}`}/>
                         {t('Categories.' + category.name)}

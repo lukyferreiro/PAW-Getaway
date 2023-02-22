@@ -6,20 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class ExceptionDto implements Serializable {
+public class ExceptionRequestDto implements Serializable {
 
     private String title;
     private Integer status;
     private String message;
     private List<FieldViolationDto> errors;
 
-    public ExceptionDto() {}
+    public ExceptionRequestDto() {
+        // Used by Jersey
+    }
 
-    public ExceptionDto(final String message) {
+    public ExceptionRequestDto(final String message) {
         this.setMessage(message);
     }
 
-    public ExceptionDto(final String message, final Set<? extends ConstraintViolation<?>> constraintViolations, String title, Integer status) {
+    public ExceptionRequestDto(final String message, final Set<? extends ConstraintViolation<?>> constraintViolations, String title, Integer status) {
         this.setMessage(message);
         errors = new ArrayList<>(constraintViolations.size());
         this.title = title;

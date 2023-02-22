@@ -37,7 +37,6 @@
         <org.hibernate.jpa.version>1.0.0.Final</org.hibernate.jpa.version>
         <jersey.version>3.0-SNAPSHOT</jersey.version>
         <jjwt.version>0.7.0</jjwt.version>
-<!--        TODO check -->
         <jackson.version>2.9.4</jackson.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
     </properties>

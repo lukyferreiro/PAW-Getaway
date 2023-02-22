@@ -2,9 +2,8 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index"
 import React, {Dispatch, SetStateAction} from "react";
 import styled from "styled-components";
-import {useSearchParams} from "react-router-dom";
 
-export default function Pagination(props: { maxPage: number, currentPage: [number , Dispatch<SetStateAction<number>>] }) {
+export default function Pagination(props: { maxPage: number, currentPage: [number, Dispatch<SetStateAction<number>>] }) {
 
     const {t} = useTranslation()
 
@@ -30,7 +29,7 @@ export default function Pagination(props: { maxPage: number, currentPage: [numbe
                     <PageArrow xRotated={true}
                                src="./images/page-arrow.png"
                                alt={`${t("Pagination.alt.beforePage")}`}
-                        onClick={() => changePage(componentCurrentPage-1)}
+                               onClick={() => changePage(componentCurrentPage - 1)}
                     />
                 </div>
             )}
@@ -44,7 +43,7 @@ export default function Pagination(props: { maxPage: number, currentPage: [numbe
                 <div style={{alignItems: "center", display: "flex"}}>
                     <PageArrow src="./images/page-arrow.png"
                                alt={`${t("Pagination.alt.nextPage")}`}
-                               onClick={() => changePage(componentCurrentPage+1)}
+                               onClick={() => changePage(componentCurrentPage + 1)}
                     />
                 </div>
             )}

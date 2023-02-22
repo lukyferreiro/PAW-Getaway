@@ -5,11 +5,10 @@ import {ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
-import {experienceService, userService} from "../services";
+import {experienceService} from "../services";
 import {IconButton} from "@mui/material";
 import {useAuth} from "../hooks/useAuth";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
-import exp from "constants";
 
 export default function CardExperience(props: { experience: ExperienceModel; }) {
 
@@ -23,7 +22,7 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
     const [fav, setFav] = useState(experience.fav)
 
     useEffect(() => {
-        if(experience.hasImage) {
+        if (experience.hasImage) {
             serviceHandler(
                 experienceService.getExperienceImage(experience?.id),
                 navigate, (experienceImg) => {
@@ -50,7 +49,7 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
 
             <div className="card-link h-100 d-flex flex-column">
                 <div>
-                    <img className={`card-img-top container-fluid ${experienceImg ? "p-0" : "p-4" } mw-100`} alt={`Imagen ${experience.category.name}`}
+                    <img className={`card-img-top container-fluid ${experienceImg ? "p-0" : "p-4"} mw-100`} alt={`Imagen ${experience.category.name}`}
                          src={experienceImg ? experienceImg : `./images/${experience.category.name}.svg`}/>
 
                     <div className="card-body container-fluid p-2">
