@@ -10,6 +10,7 @@ import {useAuth} from "../hooks/useAuth";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import {showToast} from "../scripts/toast";
 
 type FormDataResetPassword = {
     password: string;
@@ -40,9 +41,10 @@ export default function ChangePassword() {
     useEffect(() => {
         if (user || readUser) {
             navigate("/", {replace: true})
-        }
-        if (passwordToken === "" || passwordToken === undefined) {
+            showToast(t('ChangePassword.toast.forbidden'), 'error')
+        } else if (passwordToken === "" || passwordToken === undefined) {
             navigate("/", {replace: true})
+            showToast(t('ChangePassword.toast.missPasswordToken'), 'error')
         }
     }, [])
 
@@ -54,11 +56,13 @@ export default function ChangePassword() {
             userService.resetPassword(passwordToken, data.password)
                 .then((user) => {
                         if (!user.hasFailed()) {
-                            navigate("/", {replace: true})
+                            navigate("/login", {replace: true})
+                            showToast(t('ChangePassword.toast.success'), 'success')
                         }
                     }
                 )
                 .catch(() => {
+                    showToast(t('ChangePassword.toast.error'), 'success')
                 });
         }
     );

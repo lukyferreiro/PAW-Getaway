@@ -5,7 +5,7 @@ import {ExperienceModel, OrderByModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, userService} from "../services";
-import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import CardExperience from "../components/CardExperience";
 import Pagination from "../components/Pagination";
 import OrderDropdown from "../components/OrderDropdown";
@@ -16,7 +16,6 @@ export default function UserFavourites() {
 
     const {t} = useTranslation()
     const navigate = useNavigate()
-    const location = useLocation()
     const query = useQuery()
 
     const {user} = useAuth()

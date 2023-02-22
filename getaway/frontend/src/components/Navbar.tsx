@@ -10,6 +10,7 @@ import {useForm} from "react-hook-form";
 import {Close} from "@mui/icons-material";
 import {IconButton} from "@mui/material";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import {showToast} from "../scripts/toast";
 
 type FormDataSearch = {
     name: string
@@ -73,6 +74,17 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
         reset()
     }
 
+    function attemptAccessCreateExperience() {
+        clearNavBar();
+        if (user === null) {
+            navigate("/login")
+            // showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
+        } else if (!isVerified) {
+            navigate("/user/profile")
+            // showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
+        }
+    }
+
     return (
         <div className="navbar container-fluid p-0 d-flex flex-column">
             <div className="container-fluid px-2 pt-2 d-flex">
@@ -114,24 +126,17 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
 
 
                     <Link to="/experienceForm" style={{marginRight: '40px'}}>
-                        <button type="button" onClick={() => {
-                            clearNavBar();
-                            if (user === null) {
-                                navigate("/login")
-                            }
-                            if (!isVerified) {
-                                navigate("/user/profile")
-                            }
-                        }} className='btn button-primary'
-                        >
+                        <button type="button" className='btn button-primary'
+                                onClick={() => attemptAccessCreateExperience()}>
                             {t('Navbar.createExperience')}
                         </button>
                     </Link>
 
 
                     {!isLogged &&
-                        <Link to="/login" onClick={() => clearNavBar()}>
-                            <button type="button" className="btn button-primary">
+                        <Link to="/login">
+                            <button type="button" className="btn button-primary"
+                                    onClick={() => clearNavBar()}>
                                 {t('Navbar.login')}
                             </button>
                         </Link>
@@ -142,29 +147,31 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                         <div className="dropdown">
                             <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
                                     id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src={'./images/ic_user_white.svg'} alt="Icono usuario" style={{
-                                    width: "35px",
-                                    height: "35px"
-                                }}/>
+                                <img src={'./images/ic_user_white.svg'} alt="Icono usuario"
+                                     style={{width: "35px", height: "35px"}}/>
                             </button>
 
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{left: "-50px"}}>
-                                <Link to="/user/profile" className="dropdown-item" onClick={() => clearNavBar()}>
+                                <Link to="/user/profile" className="dropdown-item"
+                                      onClick={() => clearNavBar()}>
                                     <img src={'./images/ic_user.svg'} alt="Icono perfil"/>
                                     {t('Navbar.profile')}
                                 </Link>
 
                                 {isProvider &&
-                                    <Link to="/user/experiences" className="dropdown-item" onClick={() => clearNavBar()}>
+                                    <Link to="/user/experiences" className="dropdown-item"
+                                          onClick={() => clearNavBar()}>
                                         <img src={'./images/ic_experiences.svg'} alt="Icono experiencias"/>
                                         {t('Navbar.experiences')}
                                     </Link>}
-                                <Link to="/user/favourites" className="dropdown-item" onClick={() => clearNavBar()}>
+                                <Link to="/user/favourites" className="dropdown-item"
+                                      onClick={() => clearNavBar()}>
                                     <img src={'./images/ic_fav.svg'} alt="Icono favoritos"/>
                                     {t('Navbar.favourites')}
                                 </Link>
                                 {isVerified &&
-                                    <Link to="/user/reviews" className="dropdown-item" onClick={() => clearNavBar()}>
+                                    <Link to="/user/reviews" className="dropdown-item"
+                                          onClick={() => clearNavBar()}>
                                         <img src={'./images/ic_review.svg'} alt="Icono reseñas"/>
                                         {t('Navbar.reviews')}
                                     </Link>}

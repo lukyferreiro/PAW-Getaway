@@ -8,6 +8,7 @@ import {useForm} from "react-hook-form";
 import {useAuth} from "../hooks/useAuth";
 import {ExperienceNameModel, ReviewModel} from "../types";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import {showToast} from "../scripts/toast";
 
 
 type FormDataReview = {
@@ -23,7 +24,6 @@ export default function ReviewForm() {
     const isVerified = localStorage.getItem("isVerified") === "true"
     const navigate = useNavigate()
 
-
     const {t} = useTranslation()
 
     const [experience, setExperience] = useState<ExperienceNameModel | undefined>(undefined)
@@ -38,11 +38,11 @@ export default function ReviewForm() {
     useEffect(() => {
         if (!user && !readUser) {
             navigate("/login")
-        }
-        if (!isVerified) {
+            showToast(t('ReviewForm.toast.forbidden.noUser'), 'error')
+        } else if (!isVerified) {
             navigate("/user/profile")
-        }
-        if (parseInt(currentId) !== -1) {
+            showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
+        } else if (parseInt(currentId) !== -1) {
             serviceHandler(
                 reviewService.getReviewById(parseInt(currentId)),
                 navigate, (review) => {
@@ -82,25 +82,27 @@ export default function ReviewForm() {
 
     const onSubmit = handleSubmit((data: FormDataReview) => {
             data.score = String(-rating);
-            console.log(data)
             if (review) {
                 reviewService.updateReviewById(parseInt(currentId), data.title, data.description, data.score)
                     .then((result) => {
                         if (!result.hasFailed()) {
-                            console.log("REDIRECTING")
                             navigate(`/experiences/${experienceId}`, {replace: true})
+                            showToast(t('ReviewForm.toast.updateSuccess', {reviewTitle: data.title}), 'success')
                         }
                     })
                     .catch(() => {
+                        showToast(t('ReviewForm.toast.updateError', {reviewTitle: data.title}), 'error')
                     });
             } else {
                 experienceService.postNewReview(parseInt(experienceId ? experienceId : "-1"), data.title, data.description, data.score)
                     .then((result) => {
                         if (!result.hasFailed()) {
                             navigate(`/experiences/${experienceId}`, {replace: true})
+                            showToast(t('ReviewForm.toast.createSuccess', {reviewTitle: data.title}), 'success')
                         }
                     })
                     .catch(() => {
+                        showToast(t('ReviewForm.toast.createError', {reviewTitle: data.title}), 'error')
                     });
             }
         }

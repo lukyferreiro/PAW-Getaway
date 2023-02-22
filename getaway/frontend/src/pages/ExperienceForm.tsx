@@ -8,6 +8,7 @@ import {useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import {showToast} from "../scripts/toast";
 
 type FormDataExperience = {
     name: string,
@@ -40,9 +41,11 @@ export default function ExperienceForm() {
     useEffect(() => {
         if (!user && !readUser) {
             navigate("/login")
+            showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
         }
         if (!isVerified) {
             navigate("/user/profile")
+            showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
         }
         if (parseInt(currentId) !== -1) {
             serviceHandler(
@@ -119,10 +122,12 @@ export default function ExperienceForm() {
                     .then((result) => {
                             if (!result.hasFailed()) {
                                 navigate("/experiences/" + currentId, {replace: true})
+                                showToast(t('ExperienceForm.toast.updateSuccess', {experienceName: data.name}), 'success')
                             }
                         }
                     )
                     .catch(() => {
+                        showToast(t('ExperienceForm.toast.updateError', {experienceName: data.name}), 'error')
                     });
             } else {
                 experienceService.createExperience(data.name, data.category, data.country, data.city,
@@ -131,10 +136,12 @@ export default function ExperienceForm() {
                             if (!result.hasFailed()) {
                                 console.log(result.getData().url.toString())
                                 navigate("/user/experiences", {replace: true})
+                                showToast(t('ExperienceForm.toast.createSuccess', {experienceName: data.name}), 'success')
                             }
                         }
                     )
                     .catch(() => {
+                        showToast(t('ExperienceForm.toast.createError', {experienceName: data.name}), 'error')
                     });
             }
         }

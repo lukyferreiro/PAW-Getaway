@@ -1,33 +1,56 @@
 import React, {Dispatch, SetStateAction} from "react";
 import {useForm} from "react-hook-form";
-import {experienceService} from "../services";
+import {experienceService, userService} from "../services";
 import {useTranslation} from "react-i18next";
 import Modal from "react-modal";
+import {showToast} from "../scripts/toast";
 
 type FormDataImg = {
     image?: FileList
 }
 
-//TODO: make generic for user AND experiences
-export default function AddPictureModal(props: { isOpen: [boolean, Dispatch<SetStateAction<boolean>>], experienceId: number }) {
+export default function AddPictureModal(
+    props: {
+        isOpen: [boolean, Dispatch<SetStateAction<boolean>>],
+        experienceId?: number,
+        userId?: number,
+    }
+) {
     const {t} = useTranslation()
-    const {isOpen, experienceId} = props;
+    const {isOpen, experienceId, userId} = props;
 
     const {register, reset, handleSubmit, formState: {errors},} = useForm<FormDataImg>({
         criteriaMode: "all",
     });
 
     const onSubmit = handleSubmit((data: FormDataImg) => {
-            experienceService.updateExperienceImage(experienceId, data.image![0])
-                .then((result) => {
-                        if (result.getError().getStatus() === 204) {
+            if (experienceId) {
+                experienceService.updateExperienceImage(experienceId, data.image![0])
+                    .then((result) => {
+                            if (result.getError().getStatus() === 204) {
+                                isOpen[1](false);
+                                reset()
+                                showToast(t('Experience.toast.imageSuccess'), "success")
+                            }
+                        }
+                    )
+                    .catch(() => {
+                        showToast(t('Experience.toast.imageError'), "error")
+                    });
+            } else if (userId) {
+                userService
+                    .updateUserProfileImage(userId ? userId : -1, data.image![0])
+                    .then((result) => {
+                        if (!result.hasFailed()) {
                             isOpen[1](false);
                             reset()
+                            showToast(t('User.toast.imageSuccess'), "success")
                         }
-                    }
-                )
-                .catch(() => {
-                });
+                    })
+                    .catch(() => {
+                        showToast(t('User.toast.imageError'), "error")
+                    })
+            }
         }
     );
 
@@ -46,7 +69,11 @@ export default function AddPictureModal(props: { isOpen: [boolean, Dispatch<SetS
                 <div className="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">
                     <div className="col-12">
                         <h1 className="text-center title">
-                            {t('User.imgTitle')}
+                            {
+                                (experienceId && t('Experience.imgTitle'))
+                                ||
+                                (userId && t('User.imgTitle'))
+                            }
                         </h1>
                     </div>
 
@@ -70,12 +97,12 @@ export default function AddPictureModal(props: { isOpen: [boolean, Dispatch<SetS
                                     />
                                     {errors.image?.type === 'required' && (
                                         <p className="form-control is-invalid form-error-label">
-                                            {t("User.error.image.isRequired")}
+                                            {t("Image.error.isRequired")}
                                         </p>
                                     )}
                                     {errors.image?.type === 'size' && (
                                         <p className="form-control is-invalid form-error-label">
-                                            {t("User.error.image.size")}
+                                            {t("Image.error.size")}
                                         </p>
                                     )}
                                 </form>
@@ -86,7 +113,7 @@ export default function AddPictureModal(props: { isOpen: [boolean, Dispatch<SetS
 
                     <div className="col-12 mt-3 d-flex align-items-center justify-content-center">
                         <button form="imageForm" type="submit" id="ImageButton" className='btn button-primary'>
-                            {t('Navbar.resetPasswordButton')}
+                            {t('Button.confirm')}
                         </button>
                     </div>
 

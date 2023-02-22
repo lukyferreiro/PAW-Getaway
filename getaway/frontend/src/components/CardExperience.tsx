@@ -9,6 +9,7 @@ import {experienceService} from "../services";
 import {IconButton} from "@mui/material";
 import {useAuth} from "../hooks/useAuth";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
+import {showToast} from "../scripts/toast";
 
 export default function CardExperience(props: { experience: ExperienceModel; }) {
 
@@ -37,9 +38,9 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
     }, [])
 
     function setFavExperience(fav: boolean) {
-        experienceService.setExperienceFav(experience.id, fav).then()
-            .catch(() => {
-            });
+        experienceService.setExperienceFav(experience.id, fav)
+            .then(() => { showToast(t('Experience.toast.favSuccess', {experienceName: experience.name}), "success") })
+            .catch(() => { showToast(t('Experience.toast.favError', {experienceName: experience.name}), "error") });
         setFav(fav)
     }
 

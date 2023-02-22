@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {ExperienceModel, ReviewModel} from "../types";
 import React, {useEffect, useState} from "react";
-import {Link, useLocation, useNavigate, useParams, useSearchParams} from "react-router-dom";
+import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import CardExperienceDetails from "../components/CardExperienceDetails";
 import CardReview from "../components/CardReview";
 import {serviceHandler} from "../scripts/serviceHandler";
@@ -11,12 +11,12 @@ import {useAuth} from "../hooks/useAuth";
 import Pagination from "../components/Pagination";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import {showToast} from "../scripts/toast";
 
 export default function ExperienceDetails() {
 
     const {t} = useTranslation()
     const navigate = useNavigate()
-    const location = useLocation()
     const query = useQuery()
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -67,6 +67,16 @@ export default function ExperienceDetails() {
         );
     }, [currentPage[0]])
 
+    function attemptAccessCreateReview() {
+        if (user === null) {
+            navigate("/login")
+            showToast(t('ReviewForm.toast.forbidden.noUser'), 'error')
+        } else if (!isVerified) {
+            navigate("/user/profile")
+            showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
+        }
+    }
+
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
             <div className="container-fluid px-5 d-flex justify-content-center align-content-center flex-column">
@@ -91,15 +101,7 @@ export default function ExperienceDetails() {
 
                         <Link to={`/experiences/${experienceId}/reviewForm`}>
                             <button type="button" className='btn button-primary'
-                                    onClick={() => {
-                                        if (user === null) {
-                                            navigate("/login")
-                                        }
-                                        if (!isVerified) {
-                                            navigate("/user/profile")
-                                        }
-                                    }}
-                            >
+                                    onClick={() => attemptAccessCreateReview()}>
                                 {t('ExperienceDetail.writeReview')}
                             </button>
                         </Link>

@@ -45,12 +45,12 @@ export const TRANSLATIONS_EN = {
         namePlaceholder: "John",
         surnamePlaceholder: "Doe",
         passwordPlaceholder: "Between 8 and 25 characters",
-        editAccountPopUp: "Edit your account",
+        editProfilePopUp: "Edit your profile",
         editPasswordPopUp: "Change your password",
         editPassword: "New password",
         confirmEditPassword: "Confirm new password",
         changePassword: "Change password",
-        editAccount: "Edit account"
+        editProfile: "Edit profile"
     },
 
     Filters: {

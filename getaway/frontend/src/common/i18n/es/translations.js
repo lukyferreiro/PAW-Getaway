@@ -45,12 +45,12 @@ export const TRANSLATIONS_ES = {
         namePlaceholder: "Juan",
         surnamePlaceholder: "Martínez",
         passwordPlaceholder: "Entre 8 y 25 caracteres",
-        editAccountPopUp: "Edit\u00E1 tu cuenta",
+        editProfilePopUp: "Edit\u00E1 tu cuenta",
         editPasswordPopUp: "Cambiar contraseña",
         editPassword: "Nueva contraseña",
         confirmEditPassword: "Confirmar nueva contraseña",
         changePassword: "Cambiar contraseña",
-        editAccount: "Editar cuenta"
+        editProfile: "Editar cuenta"
     },
 
     Filters: {
@@ -95,6 +95,18 @@ export const TRANSLATIONS_ES = {
         placeholder: "Escribe para buscar",
         reviews: "Reseñas {{reviewCount}}",
         notVisible: "La experiencia est\u00E1 oculta en este momento",
+        imgTitle: "Selecciona una imagen para la experiencia",
+        toast: {
+            imageSuccess: "¡Imagen de la experiencia actualizada exitosamente!",
+            imageError: "Error del servidor al actualizar la imagen de la experiencia",
+            favSuccess: "'{{experienceName}}' se ha agregado a tus favoritos",
+            favError: "Error del servidor al guardar '{{experienceName}}'",
+            visibilitySuccess: "'{{experienceName}}' ahora se encuentra visible para todos los usuarios",
+            noVisibilitySuccess: "Se ha ocultado '{{experienceName}}'",
+            visibilityError: "Error del servidor al cambiar la visibilidad de '{{experienceName}}'",
+            deleteSuccess: "'{{experienceName}}' se ha borrado exitosamente",
+            deleteError: "Error del servidor al borrar '{{experienceName}}'",
+        },
     },
 
     ExperienceDetail: {
@@ -153,7 +165,17 @@ export const TRANSLATIONS_ES = {
                 isRequired: "Este campo no puede estar vac\u00EDo",
                 length: "La direcci\u00F3n debe tener entre 5-100 caracteres",
             },
-        }
+        },
+        toast: {
+            forbidden: {
+                noUser: "Inicia sesión para crear experiencias",
+                notVerified: "Verifica tu cuenta para crear experiencias",
+            },
+            createSuccess: "¡'{{experienceName}}' creada exitosamente!",
+            createError: "Error del servidor al crear la experiencia '{{experienceName}}'",
+            updateSuccess: "¡'{{experienceName}}' actualizada exitosamente!",
+            updateError: "Error del servidor al actualizar la experiencia '{{experienceName}}'",
+        },
     },
 
     User: {
@@ -182,13 +204,33 @@ export const TRANSLATIONS_ES = {
         favsTitle: "Mis favoritos",
         noReviews: "Aún no has escrito ninguna reseña",
         reviewsTitle: "Mis reseñas",
-        error: {
-            image: {
-                isRequired: "Este campo no puede estar vac\u00EDo",
-                size: "La imagen es muy grande",
+        imgTitle: "Selecciona una imagen de perfil",
+        toast: {
+            imageSuccess: "¡Imagen de perfil actualizada exitosamente!",
+            imageError: "Error del servidor al actualizar la imagen de perfil",
+            passwordResetEmailSuccess: "Mail enviado exitosamente",
+            passwordResetEmailError: "Error del servidor al enviar el mail",
+            verify: {
+                success: "Tu cuenta ha sido verificada exitosamente",
+                error: "Token no valido",
+                alreadyVerified: "Tu cuenta ya se encuentra verificada",
+            },
+            resendVerify: {
+                success: "Mail enviado exitosamente",
+                error: "Error del servidor al enviar el mail",
+            },
+            editProfile: {
+                success:"¡Información de perfil actualizada exitosamente!",
+                error: "Error del servidor al actualizar la información de perfil",
+                forbidden: "Verifica tu cuenta para editar tu perfil",
+            },
+            experiences: {
+                forbidden: "Crea al menos una experiencia para acceder a 'Mis Experiencias'",
+            },
+            reviews: {
+                forbidden: "Verifica tu cuenta para acceder a 'Mis reseñas'",
             },
         },
-        imgTitle: "Selecciona una imagen de perfil",
     },
 
     EmptyResult: "Parece que no hay ninguna experiencia que coincida con tu búsqueda",
@@ -276,16 +318,30 @@ export const TRANSLATIONS_ES = {
                 pattern: "La contraseña ingresado no es v\u00E1lido",
             },
             passwordsMustMatch: "Las contraseñas no coinciden",
+        },
+        toast: {
+            error: "Error del servidor al registrarse",
         }
     },
 
     Login: {
+        toast: {
+            success: "¡Bienvenido {{name}} {{surname}}!",
+            error: "Error del servidor al intentar iniciar sesión",
+            verifySent: "Mail de verificación enviado",
+        },
         invalidCredentials: "El mail o contrase\u00F1a ingresados son incorrectos"
     },
 
     ChangePassword: {
         title: "Ingresa tu nueva contraseña",
         invalidEmail: "El email ingresado no es v\u00E1lido",
+        toast: {
+            forbidden: "No puedes cambiar tu contraseña si ya iniciaste sesión",
+            missPasswordToken: "Token no presente",
+            success: "¡Contraseña cambiada exitosamente!",
+            error: "Token no valido",
+        },
     },
 
     Experiences: {
@@ -300,6 +356,14 @@ export const TRANSLATIONS_ES = {
         title: "Título",
         description: "Descripci\u00F3n",
         score: "Puntaje",
+        deleteModal: {
+            title: "Eliminar reseña",
+            confirmDelete: "¿Est\u00E1 seguro que desea eliminar la reseña: {{reviewTitle}}?",
+        },
+        toast: {
+            deleteSuccess: "'{{reviewTitle}}' se ha borrado exitosamente",
+            deleteError: "Error del servidor al borrar '{{reviewTitle}}'",
+        },
     },
 
     ReviewForm: {
@@ -320,6 +384,23 @@ export const TRANSLATIONS_ES = {
                 pattern: "aaaa",
                 isRequired: "Este campo no puede estar vac\u00EDo",
             },
-        }
-    }
+        },
+        toast: {
+            forbidden: {
+                noUser: "Inicia sesión para crear reseñas",
+                notVerified: "Verifica tu cuenta para crear reseñas",
+            },
+            createSuccess: "¡'{{reviewTitle}}' creada exitosamente!",
+            createError: "Error del servidor al crear la reseña '{{reviewTitle}}'",
+            updateSuccess: "¡'{{reviewTitle}}' actualizada exitosamente!",
+            updateError: "Error del servidor al actualizar la reseña '{{reviewTitle}}'",
+        },
+    },
+
+    Image: {
+        error: {
+            isRequired: "Este campo no puede estar vac\u00EDo",
+            size: "La imagen es muy grande",
+        },
+    },
 };

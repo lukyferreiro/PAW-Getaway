@@ -18,7 +18,7 @@ import {AuthProvider} from "./context/AuthContext";
 import Login from "./pages/Login";
 import CreateAccount from "./pages/CreateAccount";
 import ChangePassword from "./pages/ChangePassword";
-import EditAccount from "./pages/EditAccount";
+import UserEditProfile from "./pages/UserEditProfile";
 import RequireAuth from "./components/RequireAuth";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -42,7 +42,7 @@ function App() {
                         <Route path='/user' element={<UserPage/>}>
                             <Route index element={<UserProfile/>}/>
                             <Route path='profile' element={<UserProfile/>}/>
-                            <Route path='editAccount' element={<EditAccount/>}/>
+                            <Route path='editProfile' element={<UserEditProfile/>}/>
                             <Route path='experiences' element={<UserExperiences/>}/>
                             <Route path='favourites' element={<UserFavourites/>}/>
                             <Route path='reviews' element={<UserReviews/>}/>

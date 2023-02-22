@@ -44,14 +44,27 @@ export default function Login(props: { nameProp: [string | undefined, Dispatch<S
     const onSubmitLogin = handleSubmit((data: FormDataLogin) => {
             setInvalidCredendtials(false);
             loginService.login(data.email, data.password)
-                .then((user) =>
-                    user.hasFailed() ? setInvalidCredendtials(true) :
+                .then((user) => {
+                    if (!user.hasFailed()) {
                         signIn(user.getData(), data.rememberMe, () => {
                             navigate(from, {replace: true});
-                            showToast("Muy bien te logeaste", 'error')
+                            //TODO ver aca si mandamos los dos o uno solo
+                            showToast(t('Login.toast.success', {
+                                name: user.getData().name,
+                                surname: user.getData().surname
+                            }), 'success')
+                            if (!user.getData().verified) {
+                                showToast(t('Login.toast.verifySent'), 'success')
+                            }
                         })
-                )
-                .catch(() => navigate("/error?code=500&message=Server error"));
+
+                    } else {
+                        setInvalidCredendtials(true)
+                    }
+                })
+                .catch(() => {
+                    showToast(t('Login.toast.error'), 'error')
+                });
         }
     );
 

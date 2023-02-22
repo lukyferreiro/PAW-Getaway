@@ -9,6 +9,7 @@ import {useForm} from "react-hook-form";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import {showToast} from "../scripts/toast";
 
 type FormDataCreate = {
     name: string;
@@ -21,12 +22,12 @@ type FormDataCreate = {
 export default function CreateAccount() {
 
     const {t} = useTranslation()
-    let auth = useAuth()
-    let navigate = useNavigate()
-    let location = useLocation()
+    const {signIn} = useAuth()
+    const navigate = useNavigate()
+    const location = useLocation()
 
     // @ts-ignore
-    let from = location.state?.from?.pathname || "/"
+    const from = location.state?.from?.pathname || "/"
 
     const [seePassword, setSeePassword] = useState(false)
     const [seeRepeatPassword, setSeeRepeatPassword] = useState(false)
@@ -49,15 +50,21 @@ export default function CreateAccount() {
                         loginService.login(data.email, data.password)
                             .then((user) => {
                                 if (!user.hasFailed()) {
-                                    auth.signIn(user.getData(), false, () => {
+                                    signIn(user.getData(), false, () => {
                                         navigate(from, {replace: true});
                                     })
+                                    showToast(t('Login.toast.success', {
+                                        name: user.getData().name,
+                                        surname: user.getData().surname
+                                    }), 'success')
                                 }
                             })
-                            .catch(() => {/*TODO mostrar toast*/
+                            .catch(() => {
+                                showToast(t('Login.toast.error'), 'error')
                             })
                 })
-                .catch(() => {/*TODO mostrar toast*/
+                .catch(() => {
+                    showToast(t('CreateAccount.toast.error'), 'error')
                 })
         }
     );

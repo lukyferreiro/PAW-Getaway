@@ -8,7 +8,9 @@ import React, {useEffect, useState} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StarRating from "./StarRating";
 import {serviceHandler} from "../scripts/serviceHandler";
-import {userService} from "../services";
+import {reviewService, userService} from "../services";
+import {showToast} from "../scripts/toast";
+import ConfirmDialogModal, {confirmDialogModal} from "./ConfirmDialogModal";
 
 export default function CardReview(props: { reviewModel: ReviewModel; isEditing: boolean; }) {
 
@@ -38,6 +40,17 @@ export default function CardReview(props: { reviewModel: ReviewModel; isEditing:
             pathname: `/experiences/${reviewModel.experience.id}/reviewForm`,
             search: `?id=${reviewId}`
         }, {replace: true});
+    }
+
+    function deleteReview(reviewId: number) {
+        reviewService.deleteReviewById(reviewId)
+            .then(() => {
+                showToast(t('Review.toast.deleteSuccess', {reviewTitle: reviewModel.title}), "success")
+            })
+            .catch(() => {
+                showToast(t('Review.toast.deleteError', {reviewTitle: reviewModel.title}), "error")
+            });
+        // navigate(-1)
     }
 
     return (
@@ -92,18 +105,24 @@ export default function CardReview(props: { reviewModel: ReviewModel; isEditing:
             {isEditing &&
                 <div className="btn-group card-body container-fluid p-1 d-flex justify-content-center align-items-end"
                      role="group">
-                    {/*<a href="<c:url value="/user/reviews/edit/${param.reviewId}"/>">*/}
-                    <IconButton onClick={() => editReview(reviewModel.id)} aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
+                    <IconButton onClick={() => editReview(reviewModel.id)}
+                                aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
                         <EditIcon/>
                     </IconButton>
-                    {/*</a>*/}
-                    {/*<a href="<c:url value="/user/reviews/delete/${param.reviewId}"/>">*/}
-                    <IconButton aria-label="trash" component="span" style={{fontSize: "xx-large"}}>
+                    <IconButton
+                        onClick={() => {
+                            confirmDialogModal(
+                                t('Review.deleteModal.title'), t('Review.deleteModal.confirmDelete',
+                                    {reviewTitle: reviewModel.title}),
+                                () => deleteReview(reviewModel.id)
+                            )
+                        }}
+                        aria-label="trash" component="span" style={{fontSize: "xx-large"}}>
                         <DeleteIcon/>
                     </IconButton>
-                    {/*</a>*/}
                 </div>
             }
+            <ConfirmDialogModal/>
         </div>
     );
 }

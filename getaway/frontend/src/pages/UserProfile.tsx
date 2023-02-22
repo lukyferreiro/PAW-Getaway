@@ -8,6 +8,10 @@ import {useAuth} from "../hooks/useAuth";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {useForm} from "react-hook-form";
+import {showToast} from "../scripts/toast";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import {IconButton} from "@mui/material";
+import AddPictureModal from "../components/AddPictureModal";
 
 type FormDataImg = {
     image?: FileList
@@ -25,41 +29,66 @@ export default function UserProfile() {
 
     const {user, setUser, signIn} = useAuth()
 
+    const isOpenImage = useState(false)
     const [userImg, setUserImg] = useState<string | undefined>(undefined)
     const [isLoadingImg, setIsLoadingImg] = useState(false)
-    const [reload, setReload] = useState(true)
     const [searchParams, setSearchParams] = useSearchParams();
 
-    useEffect(() => {
-        if (verificationToken !== "" && !user?.verified) {
-            serviceHandler(
-                userService.verifyUser(verificationToken),
-                navigate, () => {
+    function sendVerifyEmail() {
+        userService.sendNewVerifyUserEmail()
+            .then(() => {
+                showToast(t('User.toast.resendVerify.success'), 'success')
+            })
+            .catch(() => {
+                showToast(t('User.toast.resendVerify.error'), 'error')
+            })
+    }
 
-                },
-                () => {
-                    searchParams.delete("verificationToken")
-                    setSearchParams(searchParams)
-                    //TODO mostrar toast
-                },
-                () => {
-                }
-            )
-            userService.getCurrentUser()
-                .then((user) => {
-                        if (!user.hasFailed()) {
-                            signIn(user.getData(), rememberMe, () => {
-                                navigate("/user/profile")
-                            })
-                        }
-                    }
-                )
-                .catch(() => navigate("/error?code=500&message=Server error"));
+    useEffect(() => {
+        if (verificationToken !== "" || verificationToken === undefined) {
+            if (user?.verified) {
+                showToast(t('User.toast.verify.alreadyVerified'), 'error')
+            } else {
+                userService.verifyUser(verificationToken)
+                    .then(() => {
+                        showToast(t('User.toast.verify.success'), 'success')
+                    })
+                    .catch(() => {
+                        showToast(t('User.toast.verify.error'), 'error')
+                    })
+                    .finally(() => {
+                        searchParams.delete("verificationToken")
+                        setSearchParams(searchParams)
+                    })
+                // serviceHandler(
+                //     userService.verifyUser(verificationToken),
+                //     navigate, () => {
+                //
+                //     },
+                //     () => {
+                //         searchParams.delete("verificationToken")
+                //         setSearchParams(searchParams)
+                //         //TODO mostrar toast
+                //     },
+                //     () => {
+                //     }
+                // )
+                // userService.getCurrentUser()
+                //     .then((user) => {
+                //             if (!user.hasFailed()) {
+                //                 signIn(user.getData(), rememberMe, () => {
+                //                     navigate("/user/profile")
+                //                 })
+                //             }
+                //         }
+                //     )
+                //     .catch(() => navigate("/error?code=500&message=Server error"));
+            }
         }
     }, [])
 
     useEffect(() => {
-        setIsLoadingImg(true)
+        // setIsLoadingImg(true)
         if (user?.hasImage) {
             serviceHandler(
                 userService.getUserProfileImage(user?.id),
@@ -67,119 +96,75 @@ export default function UserProfile() {
                     setUserImg(userImg.size > 0 ? URL.createObjectURL(userImg) : undefined)
                 },
                 () => {
-                    setIsLoadingImg(false)
+                    // setIsLoadingImg(false)
                 },
                 () => {
-                    setIsLoadingImg(false)
+                    // setIsLoadingImg(false)
                 }
             )
         }
-    }, [user, reload])
+    }, [user, isOpenImage[0]])
 
-    const {register, handleSubmit, reset, formState: {errors},} =
-        useForm<FormDataImg>({criteriaMode: 'all'})
-
-    const onSubmit = handleSubmit((data: FormDataImg) => {
-        console.log(data.image![0].name)
-        console.log(data.image![0].size)
-        userService
-            .updateUserProfileImage(user ? user.id : -1, data.image![0])
-            .then((result) => {
-                if (!result.hasFailed()) {
-                    const imgAsUrl = URL.createObjectURL(data.image![0])
-                    setUser({...user!, url: imgAsUrl})
-                    setReload(!reload)
-                    reset()
-                }
-            })
-            .catch(() => {
-            })
-    })
 
     return (
-        <DataLoader spinnerMultiplier={2} isLoading={isLoadingImg}>
-            <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
-                <div className="container-lg w-100 modalContainer d-flex flex-column justify-content-center align-items-center">
-                    <div className="m-2">
-                        <h1>
-                            {t('User.profile.description')}
-                        </h1>
-                    </div>
-                    <div className="m-2" style={{maxWidth: "200px"}}>
-                        <img className="container-fluid p-0" style={{height: "fit-content"}} alt="Imagen usuario"
-                             src={userImg ? userImg : './images/user_default.png'}/>
-                    </div>
+        <>
+            <DataLoader spinnerMultiplier={2} isLoading={isLoadingImg}>
+                <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
+                    <div className="container-lg w-100 modalContainer d-flex flex-column justify-content-center align-items-center">
+                        <div className="m-2">
+                            <h1>
+                                {t('User.profile.description')}
+                            </h1>
+                        </div>
+                        <div className="m-2" style={{maxWidth: "200px"}}>
+                            <img className="container-fluid p-0" style={{height: "fit-content"}} alt="Imagen usuario"
+                                 src={userImg ? userImg : './images/user_default.png'}/>
+                        </div>
 
-                    <div className="m-1 justify-self-center align-self-center">
-                        <h3>
-                            {t('User.profile.name', {userName: user?.name})}
-                        </h3>
-                    </div>
-                    <div className="m-1 justify-self-center align-self-center">
-                        <h3>
-                            {t('User.profile.surname', {userSurname: user?.surname})}
-                        </h3>
-                    </div>
-                    <div className="m-1 justify-self-center align-self-center">
-                        <h3>
-                            {t('User.profile.email', {userEmail: user?.email})}
-                        </h3>
-                    </div>
+                        <div className="m-1 justify-self-center align-self-center">
+                            <h3>
+                                {t('User.profile.name', {userName: user?.name})}
+                            </h3>
+                        </div>
+                        <div className="m-1 justify-self-center align-self-center">
+                            <h3>
+                                {t('User.profile.surname', {userSurname: user?.surname})}
+                            </h3>
+                        </div>
+                        <div className="m-1 justify-self-center align-self-center">
+                            <h3>
+                                {t('User.profile.email', {userEmail: user?.email})}
+                            </h3>
+                        </div>
 
-                    <div className="m-1 justify-self-center align-self-center">
-                        <form encType='multipart/form-data' acceptCharset='utf-8'
-                              id="imageForm" onSubmit={onSubmit}>
-                            <label className="form-label d-flex justify-content-between">
-                                {t("User.imgTitle")}
-                            </label>
+                        <div className="m-1 justify-self-center align-self-center">
+                            <IconButton
+                                onClick={() => {
+                                    isOpenImage[1](true)
+                                }}
+                                aria-label="picture"
+                                component="span"
+                                style={{fontSize: "xx-large"}}>
+                                <AddPhotoAlternateIcon/>
+                            </IconButton>
+                        </div>
 
-                            <input type='file'
-                                   accept='image/png, image/jpeg, image/jpg' className="form-control"
-                                   {...register("image", {
-                                       validate: {
-                                           required: (image) =>
-                                               image !== undefined && image[0] !== undefined,
-
-                                           size: (image) =>
-                                               image && image[0] && image[0].size / (1024 * 1024) < 5,
-                                       },
-                                   })}
-                            />
-                            {errors.image?.type === 'required' && (
-                                <p className="form-control is-invalid form-error-label">
-                                    {t("User.error.image.isRequired")}
-                                </p>
-                            )}
-                            {errors.image?.type === 'size' && (
-                                <p className="form-control is-invalid form-error-label">
-                                    {t("User.error.image.size")}
-                                </p>
-                            )}
-                        </form>
-                    </div>
-                    <div className="m-1 justify-self-center align-self-center">
-                        <button className="btn btn-submit-form px-3 py-2" id="imageFormButton"
-                                form="imageForm" type="submit">
-                            {t('Button.create')}
-                        </button>
-                    </div>
-
-
-                    <div className="mb-2">
-                        {user?.verified ?
-                            <button onClick={() => navigate({pathname: "/user/editAccount"})} type="button" className="btn btn-error">
-                                {t('User.profile.editBtn')}
-                            </button>
-                            :
-                            <button onClick={() => userService.sendNewVerifyUserEmail()} type="button" className="btn btn-error">
-                                {/*TODO: add a snackbar to confirm*/}
-                                {t('User.profile.verifyAccountBtn')}
-                            </button>
-                        }
+                        <div className="mb-2">
+                            {user?.verified ?
+                                <button onClick={() => navigate({pathname: "/user/editProfile"})} type="button" className="btn btn-error">
+                                    {t('User.profile.editBtn')}
+                                </button>
+                                :
+                                <button onClick={() => sendVerifyEmail()} type="button" className="btn btn-error">
+                                    {t('User.profile.verifyAccountBtn')}
+                                </button>
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
-        </DataLoader>
+            </DataLoader>
+            <AddPictureModal isOpen={isOpenImage} userId={user?.id}/>
+        </>
     );
 
 }

@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {Link, Navigate, useLocation, useNavigate, useSearchParams} from "react-router-dom";
+import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {ExperienceModel, OrderByModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
@@ -22,19 +22,18 @@ import AddPictureModal from "../components/AddPictureModal";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import {showToast} from "../scripts/toast";
 
 type FormUserExperiencesSearch = {
     name: string
 };
 
 export default function UserExperiences() {
+
     const isProvider = localStorage.getItem("isProvider") === "true"
     const navigate = useNavigate()
 
-
-
     const {t} = useTranslation()
-    const location = useLocation()
 
     const [searchParams, setSearchParams] = useSearchParams();
     const query = useQuery()
@@ -53,13 +52,13 @@ export default function UserExperiences() {
 
     const {user} = useAuth()
 
-
     const {register, handleSubmit, formState: {errors}, reset}
         = useForm<FormUserExperiencesSearch>({criteriaMode: "all"})
 
     useEffect(() => {
         if (!isProvider) {
             navigate("/")
+            showToast(t('User.toast.experiences.forbidden'), 'error')
         }
         serviceHandler(
             experienceService.getProviderOrderByModels(),
@@ -99,15 +98,27 @@ export default function UserExperiences() {
         setUserName(data.name);
     });
 
-    function setVisibility(experienceId: number, visibility: boolean) {
-        experienceService.setExperienceObservable(experienceId, visibility).then()
+    function setVisibility(experience: ExperienceModel, visibility: boolean) {
+        experienceService.setExperienceObservable(experience.id, visibility)
+            .then(() => {
+                if (visibility) {
+                    showToast(t('Experience.toast.visibilitySuccess', {experienceName: experience.name}), "success")
+                } else {
+                    showToast(t('Experience.toast.noVisibilitySuccess', {experienceName: experience.name}), "success")
+                }
+            })
             .catch(() => {
+                showToast(t('Experience.toast.visibilityError', {experienceName: experience.name}), "error")
             });
     }
 
-    const deleteExperience = (experienceId: number) => {
-        experienceService.deleteExperienceById(experienceId).then()
+    const deleteExperience = (experience: ExperienceModel) => {
+        experienceService.deleteExperienceById(experience.id)
+            .then(() => {
+                showToast(t('Experience.toast.deleteSuccess', {experienceName: experience.name}), "success")
+            })
             .catch(() => {
+                showToast(t('Experience.toast.deleteError', {experienceName: experience.name}), "error")
             });
         setOnEdit(true)
     }
@@ -285,14 +296,14 @@ export default function UserExperiences() {
                                                             role="group">
                                                             {experience.observable ?
                                                                 <IconButton
-                                                                    onClick={() => setVisibility(experience.id, false)}
+                                                                    onClick={() => setVisibility(experience, false)}
                                                                     aria-label="visibilityOn" component="span"
                                                                     style={{fontSize: "x-large"}} id="setFalse">
                                                                     <VisibilityIcon/>
                                                                 </IconButton>
                                                                 :
                                                                 <IconButton
-                                                                    onClick={() => setVisibility(experience.id, true)}
+                                                                    onClick={() => setVisibility(experience, true)}
                                                                     aria-label="visibilityOff" component="span"
                                                                     style={{fontSize: "xx-large"}} id="setTrue">
                                                                     <VisibilityOffIcon/>
@@ -316,7 +327,7 @@ export default function UserExperiences() {
                                                             {/*    <AddPhotoAlternateIcon/>*/}
                                                             {/*</IconButton>*/}
 
-                                                            <IconButton onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'), t('User.experiences.confirmDelete',{experienceName: experience.name}),() => deleteExperience(experience.id))}
+                                                            <IconButton onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'), t('User.experiences.confirmDelete',{experienceName: experience.name}),() => deleteExperience(experience))}
                                                                         aria-label="trash" component="span"
                                                                         style={{fontSize: "x-large"}}>
                                                                 <DeleteIcon/>

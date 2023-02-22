@@ -18,6 +18,7 @@ import AddPictureModal from "../components/AddPictureModal";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import {showToast} from "../scripts/toast";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel; isEditing: boolean; }) {
 
@@ -31,14 +32,26 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const [fav, setFav] = useState(experience.fav)
 
     function setVisibility(experienceId: number, visibility: boolean) {
-        experienceService.setExperienceObservable(experienceId, visibility).then()
+        experienceService.setExperienceObservable(experienceId, visibility)
+            .then(() => {
+                if (visibility) {
+                    showToast(t('Experience.toast.visibilitySuccess', {experienceName: experience.name}), "success")
+                } else {
+                    showToast(t('Experience.toast.noVisibilitySuccess', {experienceName: experience.name}), "success")
+                }
+            })
             .catch(() => {
+                showToast(t('Experience.toast.visibilityError', {experienceName: experience.name}), "error")
             });
     }
 
     function deleteExperience(experienceId: number) {
-        experienceService.deleteExperienceById(experienceId).then()
+        experienceService.deleteExperienceById(experienceId)
+            .then(() => {
+                showToast(t('Experience.toast.deleteSuccess', {experienceName: experience.name}), "success")
+            })
             .catch(() => {
+                showToast(t('Experience.toast.deleteError', {experienceName: experience.name}), "error")
             });
         // navigate(-1)
     }
@@ -48,8 +61,12 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     }
 
     function setFavExperience(fav: boolean) {
-        experienceService.setExperienceFav(experience.id, fav).then()
+        experienceService.setExperienceFav(experience.id, fav)
+            .then(() => {
+                showToast(t('Experience.toast.favSuccess', {experienceName: experience.name}), "success")
+            })
             .catch(() => {
+                showToast(t('Experience.toast.favError', {experienceName: experience.name}), "error")
             });
         setFav(fav)
     }
@@ -245,7 +262,13 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     </IconButton>
 
                     <IconButton
-                        onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'), t('User.experiences.confirmDelete', {experienceName: experience.name}), () => deleteExperience(experience.id))}
+                        onClick={() => {
+                            confirmDialogModal(
+                                t('User.experiences.deleteTitle'), t('User.experiences.confirmDelete',
+                                    {experienceName: experience.name}),
+                                () => deleteExperience(experience.id)
+                            )
+                        }}
                         aria-label="trash"
                         component="span"
                         style={{fontSize: "xx-large"}}>

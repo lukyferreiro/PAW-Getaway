@@ -10,6 +10,7 @@ import CardReview from "../components/CardReview";
 import Pagination from "../components/Pagination";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import {showToast} from "../scripts/toast";
 
 export default function UserReviews() {
     const isVerified = localStorage.getItem("isVerified") === "true"
@@ -29,6 +30,7 @@ export default function UserReviews() {
     useEffect(() => {
         if (!isVerified) {
             navigate("/user/profile")
+            showToast(t('User.toast.reviews.forbidden'), 'error')
         }
         setIsLoading(true)
         serviceHandler(

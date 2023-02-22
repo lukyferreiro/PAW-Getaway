@@ -8,9 +8,10 @@ import {useForm} from "react-hook-form";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import {showToast} from "../scripts/toast";
 
 
-type FormDataEditAccount = {
+type FormDataEditProfile = {
     name: string;
     surname: string;
     email: string;
@@ -18,27 +19,30 @@ type FormDataEditAccount = {
     confirmPassword: string;
 };
 
-export default function EditAccount() {
+export default function UserEditProfile() {
+
+    const {t} = useTranslation()
+
+    const {user} = useAuth()
     const isVerified = localStorage.getItem("isVerified") === "true"
     const navigate = useNavigate()
 
     if (!isVerified) {
         navigate("/user/profile")
+        showToast(t('User.toast.editProfile.forbidden'), 'error')
     }
 
-    const {t} = useTranslation()
-
-    const {user} = useAuth()
-
     const {register, handleSubmit, formState: {errors},}
-        = useForm<FormDataEditAccount>({criteriaMode: "all"})
+        = useForm<FormDataEditProfile>({criteriaMode: "all"})
 
-    const onSubmitEdit = handleSubmit((data: FormDataEditAccount) => {
+    const onSubmitEdit = handleSubmit((data: FormDataEditProfile) => {
             userService.updateUserInfoById(user?.id, data.name, data.surname)
                 .then(() => {
                     navigate("/user/profile")
+                    showToast(t('User.toast.editProfile.success'), 'success')
                 })
                 .catch(() => {
+                    showToast(t('User.toast.editProfile.error'), 'error')
                 })
         }
     );
@@ -48,13 +52,13 @@ export default function EditAccount() {
                 <div className="row w-100 m-0 p-4 align-items-center justify-content-center">
                     <div className="col-12">
                         <h1 className="text-center title">
-                            {t('Navbar.editAccountPopUp')}
+                            {t('Navbar.editProfilePopUp')}
                         </h1>
                     </div>
                     <div className="col-12">
                         <div className="container-lg">
                             <div className="row">
-                                <form id="editAccountForm" onSubmit={onSubmitEdit}>
+                                <form id="editProfileForm" onSubmit={onSubmitEdit}>
                                     <div className="form-group">
                                         <label className="form-label d-flex justify-content-between"
                                                htmlFor="email">
@@ -161,7 +165,7 @@ export default function EditAccount() {
                                             onClick={() => navigate(-1)}>
                                         {t('Button.cancel')}
                                     </button>
-                                    <button form="editAccountForm" type="submit" id="editAccountFormButton"
+                                    <button form="editProfileForm" type="submit" id="editProfileFormButton"
                                             className="btn btn-submit-form px-3 py-2">
                                         {t('Button.create')}
                                     </button>

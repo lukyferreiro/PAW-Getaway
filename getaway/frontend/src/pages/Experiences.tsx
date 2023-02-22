@@ -94,7 +94,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
 
     useEffect(() => {
         if (nameProp[0] !== undefined && categoryProp[0] !== undefined) {
-            console.log("Reloading experiences with neew filter")
+            console.log("Reloading experiences with new filter")
             setIsLoading(true)
             serviceHandler(
                 experienceService.getExperiencesByFilter(categoryProp[0], nameProp[0], order[0], price, -rating, city, currentPage[0]),
