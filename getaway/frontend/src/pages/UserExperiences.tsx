@@ -266,7 +266,7 @@ export default function UserExperiences() {
                                                                         </div>
 
                                                                         :
-                                                                        (experience.price == 0 ?
+                                                                        (experience.price === 0 ?
                                                                                 <div>
                                                                                     <h6>
                                                                                         {t('Experience.price.free')}

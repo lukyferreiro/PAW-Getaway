@@ -110,7 +110,7 @@ export default function ExperienceDetails() {
 
                 <div className="d-flex mb-3 flex-column">
                     <div className="mx-5 my-2 d-flex flex-wrap">
-                        {reviews.length == 0 ?
+                        {reviews.length === 0 ?
                             <div className="d-flex justify-content-center mb-2" style={{fontSize: "x-large"}}>
                                 {t('ExperienceDetail.noReviews')}
                             </div>
@@ -132,7 +132,7 @@ export default function ExperienceDetails() {
                     </div>
                 </div>
 
-                {reviews.length != 0 && maxPage > 1 &&
+                {reviews.length !== 0 && maxPage > 1 &&
                     <div className="d-flex justify-content-center align-content-center">
                         <Pagination
                             maxPage={maxPage}

@@ -34,8 +34,8 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     const [cities, setCities] = useState<CityModel[]>(new Array(0))
     const [city, setCity] = useState(parseInt(getQueryOrDefault(query, "city", "-1")))
     //Price
-    const [maxPrice, setMaxPrice] = useState<number>(-1)
-    const [price, setPrice] = useState<number>(parseInt(getQueryOrDefault(query, "price", "-1")))
+    const [maxPrice, setMaxPrice] = useState<number>(0)
+    const [price, setPrice] = useState<number>(parseInt(getQueryOrDefault(query, "price", "0")))
     //Score
     const [rating, setRating] = useState(parseInt(getQueryOrDefault(query, "rating", "0")))
     const [hover, setHover] = useState(0)
@@ -79,14 +79,14 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 experienceService.getFilterMaxPrice(categoryProp[0], nameProp[0]),
                 navigate, (priceModel) => {
                     setMaxPrice(priceModel.maxPrice)
-                    if (maxPrice != priceModel.maxPrice || price > priceModel.maxPrice || price === -1) {
+                    if (maxPrice !== priceModel.maxPrice || price > priceModel.maxPrice) {
                         setPrice(priceModel.maxPrice)
                     }
                 },
                 () => {
                 },
                 () => {
-                    setPrice(-1)
+                    setPrice(0)
                 }
             );
         }

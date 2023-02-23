@@ -126,7 +126,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                             </h6>
                                         </div>
                                         :
-                                        (experience.price == 0 ?
+                                        (experience.price === 0 ?
                                                 <div>
                                                     <h6>
                                                         {t('Experience.price.free')}

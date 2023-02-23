@@ -4,10 +4,6 @@ import {userService} from "../services";
 import {useAuth} from "../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
-// @ts-ignore
-import VisibilityIcon from "@mui/icons-material/Visibility";
-// @ts-ignore
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {showToast} from "../scripts/toast";
 
 
