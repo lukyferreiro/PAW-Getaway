@@ -7,7 +7,6 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
-import {useForm} from "react-hook-form";
 import {showToast} from "../scripts/toast";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import {IconButton} from "@mui/material";
@@ -137,7 +136,7 @@ export default function UserProfile() {
                             </h3>
                         </div>
 
-                        <div className="m-1 justify-self-center align-self-center">
+                        <div className="d-flex justify-items-center align-items-center">
                             <IconButton
                                 onClick={() => {
                                     isOpenImage[1](true)
@@ -145,6 +144,9 @@ export default function UserProfile() {
                                 aria-label="picture"
                                 component="span"
                                 style={{fontSize: "xx-large"}}>
+                                <h4>
+                                    {t('User.profile.photo')}
+                                </h4>
                                 <AddPhotoAlternateIcon/>
                             </IconButton>
                         </div>

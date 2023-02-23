@@ -186,6 +186,7 @@ export const TRANSLATIONS_ES = {
             email: "Email: {{userEmail}}",
             editBtn: "Editar perfil",
             verifyAccountBtn: "Verifica tu cuenta",
+            photo: "Agregar imagen"
         },
         experiences: {
             title: "Mis experiencias",

@@ -164,6 +164,7 @@ export const TRANSLATIONS_EN = {
             email: "Email: {{userEmail}}",
             editBtn: "Edit profile",
             verifyAccountBtn: "Verify your account",
+            photo: "Add image"
         },
         experiences: {
             title: "My experiences",

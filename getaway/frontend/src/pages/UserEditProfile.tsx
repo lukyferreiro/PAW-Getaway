@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import React from "react";
+import React, {useEffect} from "react";
 import {userService} from "../services";
 import {useAuth} from "../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
@@ -11,8 +11,6 @@ type FormDataEditProfile = {
     name: string;
     surname: string;
     email: string;
-    password: string;
-    confirmPassword: string;
 };
 
 export default function UserEditProfile() {
@@ -28,11 +26,18 @@ export default function UserEditProfile() {
         showToast(t('User.toast.editProfile.forbidden'), 'error')
     }
 
-    const {register, handleSubmit, formState: {errors},}
+    useEffect(() => {
+        setValue('name', user!.name);
+        setValue('surname', user!.surname);
+        setValue('email', user!.email);
+    });
+
+    const {register, handleSubmit, setValue, formState: {errors},}
         = useForm<FormDataEditProfile>({criteriaMode: "all"})
 
     const onSubmitEdit = handleSubmit((data: FormDataEditProfile) => {
-            userService.updateUserInfoById(user?.id, data.name, data.surname)
+        console.log('entro')
+        userService.updateUserInfoById(user?.id, data.name, data.surname)
                 .then(() => {
                     navigate("/user/profile")
                     showToast(t('User.toast.editProfile.success'), 'success')
@@ -68,10 +73,21 @@ export default function UserEditProfile() {
                                                 </h6>
                                             </div>
                                         </label>
-                                        <input type="text" id="email" disabled={true}
+                                        <input type="text"  disabled={true} style={{color: "grey"}}
                                                className="form-control mb-2"
                                                placeholder={t('Navbar.emailPlaceholder')}
                                                aria-describedby="email input"
+                                            {...register("email", {
+                                                required: true,
+                                                validate: {
+                                                    length: (email) =>
+                                                        email.length >= 0 && email.length <= 255,
+                                                },
+                                                pattern: {
+                                                    value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
+                                                    message: t("CreateAccount.error.email.pattern"),
+                                                },
+                                            })}
                                         />
                                     </div>
 
@@ -100,7 +116,7 @@ export default function UserEditProfile() {
                                                    },
                                                    pattern: {
                                                        value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
-                                                       message: t("CreateAccount.error.namepattern"),
+                                                       message: t("CreateAccount.error.name.pattern"),
                                                    },
                                                })}/>
                                         {errors.name?.type === "required" && (

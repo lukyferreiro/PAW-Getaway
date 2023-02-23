@@ -183,7 +183,6 @@ export default function UserExperiences() {
                         </div>
 
                         <div className="mt-4 mx-5">
-                            {/*TODO cuando la busqueda por nombre tenga 0 mostrar esto*/}
                             {userExperiences.length === 0 ?
                                 <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
                                     <div className="d-flex justify-content-center align-content-center">
