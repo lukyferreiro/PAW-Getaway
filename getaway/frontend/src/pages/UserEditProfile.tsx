@@ -173,18 +173,18 @@ export default function UserEditProfile() {
                                             </p>
                                         )}
                                     </div>
-
-                                    <div className="col-12 px-0 d-flex align-items-center justify-content-around">
-                                        <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
-                                                onClick={() => navigate(-1)}>
-                                            {t('Button.cancel')}
-                                        </button>
-                                        <button form="editProfileForm" type="submit" id="editProfileFormButton"
-                                                className="btn btn-submit-form px-3 py-2">
-                                            {t('Button.create')}
-                                        </button>
-                                    </div>
                                 </form>
+
+                                <div className="col-12 px-0 d-flex align-items-center justify-content-around">
+                                    <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
+                                            onClick={() => navigate(-1)}>
+                                        {t('Button.cancel')}
+                                    </button>
+                                    <button form="editProfileForm" type="submit" id="editProfileFormButton"
+                                            className="btn btn-submit-form px-3 py-2">
+                                        {t('Button.create')}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
