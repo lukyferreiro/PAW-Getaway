@@ -30,14 +30,15 @@ export default function UserEditProfile() {
         setValue('name', user!.name);
         setValue('surname', user!.surname);
         setValue('email', user!.email);
-    });
+    }, []);
 
     const {register, handleSubmit, setValue, formState: {errors},}
         = useForm<FormDataEditProfile>({criteriaMode: "all"})
 
     const onSubmitEdit = handleSubmit((data: FormDataEditProfile) => {
         console.log('entro')
-        userService.updateUserInfoById(user?.id, data.name, data.surname)
+        if(user) {
+            userService.updateUserInfoById(user.id, data.name, data.surname)
                 .then(() => {
                     navigate("/user/profile")
                     showToast(t('User.toast.editProfile.success'), 'success')
@@ -45,8 +46,10 @@ export default function UserEditProfile() {
                 .catch(() => {
                     showToast(t('User.toast.editProfile.error'), 'error')
                 })
+        }else{
+        //    TODO:ERROR
         }
-    );
+    });
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
             <div className="container-lg w-100 p-2 modalContainer">
@@ -59,7 +62,7 @@ export default function UserEditProfile() {
                     <div className="col-12">
                         <div className="container-lg">
                             <div className="row">
-                                <form id="editProfileForm" onSubmit={onSubmitEdit}>
+                                <form id="editProfileForm" onSubmit={onSubmitEdit} method="post">
                                     <div className="form-group">
                                         <label className="form-label d-flex justify-content-between"
                                                htmlFor="email">
@@ -170,18 +173,18 @@ export default function UserEditProfile() {
                                             </p>
                                         )}
                                     </div>
-                                </form>
 
-                                <div className="col-12 px-0 d-flex align-items-center justify-content-around">
-                                    <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
-                                            onClick={() => navigate(-1)}>
-                                        {t('Button.cancel')}
-                                    </button>
-                                    <button form="editProfileForm" type="submit" id="editProfileFormButton"
-                                            className="btn btn-submit-form px-3 py-2">
-                                        {t('Button.create')}
-                                    </button>
-                                </div>
+                                    <div className="col-12 px-0 d-flex align-items-center justify-content-around">
+                                        <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
+                                                onClick={() => navigate(-1)}>
+                                            {t('Button.cancel')}
+                                        </button>
+                                        <button form="editProfileForm" type="submit" id="editProfileFormButton"
+                                                className="btn btn-submit-form px-3 py-2">
+                                            {t('Button.create')}
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
