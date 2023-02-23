@@ -66,8 +66,10 @@ public class FavAndViewExperienceServiceImpl implements FavAndViewExperienceServ
     @Transactional
     @Override
     public void setViewed(UserModel user, ExperienceModel experience) {
-        if (!isViewed(user, experience)) {
-            addViewed(user, experience);
+        if (user != null) {
+            if (!isViewed(user, experience)) {
+                addViewed(user, experience);
+            }
         }
     }
 }
