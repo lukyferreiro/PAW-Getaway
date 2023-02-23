@@ -203,7 +203,7 @@ export default function UserExperiences() {
                                 <div>
                                     <table className="table table-bordered table-hover table-fit">
                                         <thead className="table-light">
-                                        <tr>
+                                        <tr key={1}>
                                             <th scope="col">
                                                 <h4 className="table-title"> {t('User.experiences.title')}</h4>
                                             </th>

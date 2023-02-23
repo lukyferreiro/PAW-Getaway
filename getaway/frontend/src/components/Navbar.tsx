@@ -36,7 +36,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
 
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
 
-    const {register, handleSubmit, formState: {errors}, reset}
+    const {register, handleSubmit, formState: {errors}, reset, setValue}
         = useForm<FormDataSearch>({criteriaMode: "all"})
 
     useEffect(() => {
@@ -53,18 +53,18 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
         );
     }, [])
 
+    useEffect(() => {
+        setValue("name", getQueryOrDefault(query, "name", ""))
+    }, [nameProp[0]])
+
     const onSubmit = handleSubmit((data: FormDataSearch) => {
-        nameProp[1](data.name)
         navigate({pathname: "/experiences", search: `?category=${categoryProp[0]}&name=${data.name}`}, {replace: true})
     });
 
     function clearNavBar() {
         searchParams.delete("category")
-        searchParams.delete("name")
-        setSearchParams(searchParams)
-        nameProp[1]("")
         categoryProp[1]("")
-        reset()
+        resetForm()
     }
 
     function resetForm() {
@@ -111,7 +111,6 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                            message: t("ExperienceForm.error.name.pattern"),
                                        }
                                    })}
-                                // defaultValue={nameProp[0]}
                             />
                             {errors.name?.type === "max" && (
                                 <p className="form-control is-invalid form-error-label">
@@ -192,7 +191,6 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                     <button type="button" className={`btn btn-category ${(categoryProp[0] === category.name) ? 'isActive' : ''}`} key={category.id}
                             onClick={() => {
                                 categoryProp[1](category.name);
-                                console.log("Changed category");
                                 navigate({
                                     pathname: "/experiences",
                                     search: `?category=${category.name}&name=${nameProp[0]}`
