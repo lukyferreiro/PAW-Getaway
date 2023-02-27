@@ -30,11 +30,12 @@ type FormUserExperiencesSearch = {
 
 export default function UserExperiences() {
 
-    const isProvider = localStorage.getItem("isProvider") === "true"
     const navigate = useNavigate()
 
     const {t} = useTranslation()
+    const {user, isProvider} = useAuth()
 
+    const isProviderValue = isProvider
     const [searchParams, setSearchParams] = useSearchParams();
     const query = useQuery()
 
@@ -50,13 +51,11 @@ export default function UserExperiences() {
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
     const [onEdit, setOnEdit] = useState(false)
 
-    const {user} = useAuth()
-
     const {register, handleSubmit, formState: {errors}, reset}
         = useForm<FormUserExperiencesSearch>({criteriaMode: "all"})
 
     useEffect(() => {
-        if (!isProvider) {
+        if (!isProviderValue) {
             navigate("/")
             showToast(t('User.toast.experiences.forbidden'), 'error')
         }

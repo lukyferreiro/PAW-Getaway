@@ -8,15 +8,20 @@ interface AuthContextType {
     setUser: Dispatch<SetStateAction<UserModel | null>>
     signIn: (user: UserModel, rememberMe: boolean, callback: VoidFunction) => void;
     signOut: (callback: VoidFunction) => void
+    verifyUser: (callback: VoidFunction) => void
+    makeProvider: (callback: VoidFunction) => void
+    editUserInfo: (name: string, surname: string, callback: VoidFunction) => void
+    isLogged: () => boolean
+    isVerified: () => boolean
+    isProvider: () => boolean
 }
 
 export const AuthContext = createContext<AuthContextType>(null!)
 
 export function AuthProvider({children}: { children: ReactNode }) {
+    const [user, setUser] = useState<UserModel | null>(null)
 
-    let [user, setUser] = useState<UserModel | null>(null)
-
-    let signIn = (newUser: UserModel, rememberMe: boolean, callback: VoidFunction) => {
+    const signIn = (newUser: UserModel, rememberMe: boolean, callback: VoidFunction) => {
         return internalAuthProvider.signIn(() => {
             setUser(newUser)
             localStorage.setItem("user", JSON.stringify(newUser))
@@ -28,7 +33,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
         })
     }
 
-    let signOut = (callback: VoidFunction) => {
+    const signOut = (callback: VoidFunction) => {
         return internalAuthProvider.signOut(() => {
             setUser(null)
             localStorage.removeItem("user")
@@ -41,7 +46,49 @@ export function AuthProvider({children}: { children: ReactNode }) {
         })
     }
 
-    let value = {user, setUser, signIn, signOut}
+    const verifyUser = (callback: VoidFunction) => {
+        if (user !== null) {
+            user.verified = true
+            setUser(user)
+            localStorage.setItem("user", JSON.stringify(user))
+        }
+        localStorage.setItem("isVerified", "true")
+        callback()
+    }
+
+    const makeProvider = (callback: VoidFunction) => {
+        if (user !== null) {
+            user.provider = true
+            setUser(user)
+            localStorage.setItem("user", JSON.stringify(user))
+        }
+        localStorage.setItem("isProvider", "true")
+        callback()
+    }
+
+    const editUserInfo = (name: string, surname: string, callback: VoidFunction) => {
+        if (user !== null) {
+            user.name = name
+            user.surname = surname
+            setUser(user)
+            localStorage.setItem("user", JSON.stringify(user))
+        }
+        callback()
+    }
+
+    const isLogged = () => {
+        return localStorage.getItem("user") !== null
+    }
+
+    const isVerified = () => {
+        return localStorage.getItem("isVerified") === 'true'
+    }
+
+    const isProvider = () => {
+        return localStorage.getItem("isProvider") === 'true'
+    }
+
+    const value = {user, setUser, signIn, signOut, verifyUser, makeProvider, editUserInfo, isLogged, isVerified, isProvider}
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

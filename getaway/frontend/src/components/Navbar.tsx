@@ -28,11 +28,10 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
     nameProp[1](getQueryOrDefault(query, "name", ""))
     categoryProp[1](getQueryOrDefault(query, "category", ""))
 
-    const {signOut} = useAuth()
-    const user = localStorage.getItem("user")
-    let isLogged = user !== null
-    let isProvider = localStorage.getItem("isProvider") === 'true'
-    let isVerified = localStorage.getItem("isVerified") === 'true'
+    const {signOut, isLogged, isProvider, isVerified} = useAuth()
+    const isLoggedValue = isLogged()
+    const isProviderValue = isProvider()
+    const isVerifiedValue = isVerified()
 
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
 
@@ -76,7 +75,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
 
     function attemptAccessCreateExperience() {
         clearNavBar();
-        if (user === null) {
+        if (!isLoggedValue) {
             navigate("/login")
             // showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
         } else if (!isVerified) {
@@ -132,7 +131,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                     </Link>
 
 
-                    {!isLogged &&
+                    {!isLoggedValue &&
                         <Link to="/login">
                             <button type="button" className="btn button-primary"
                                     onClick={() => clearNavBar()}>
@@ -142,7 +141,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                     }
 
 
-                    {isLogged &&
+                    {isLoggedValue &&
                         <div className="dropdown">
                             <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
                                     id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -157,7 +156,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                     {t('Navbar.profile')}
                                 </Link>
 
-                                {isProvider &&
+                                {isProviderValue &&
                                     <Link to="/user/experiences" className="dropdown-item"
                                           onClick={() => clearNavBar()}>
                                         <img src={'./images/ic_experiences.svg'} alt="Icono experiencias"/>
@@ -168,7 +167,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                     <img src={'./images/ic_fav.svg'} alt="Icono favoritos"/>
                                     {t('Navbar.favourites')}
                                 </Link>
-                                {isVerified &&
+                                {isVerifiedValue &&
                                     <Link to="/user/reviews" className="dropdown-item"
                                           onClick={() => clearNavBar()}>
                                         <img src={'./images/ic_review.svg'} alt="Icono reseñas"/>

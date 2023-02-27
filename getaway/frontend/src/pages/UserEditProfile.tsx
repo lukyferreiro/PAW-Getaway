@@ -16,11 +16,11 @@ export default function UserEditProfile() {
 
     const {t} = useTranslation()
 
-    const {user} = useAuth()
-    const isVerified = localStorage.getItem("isVerified") === "true"
+    const {user, isVerified, editUserInfo} = useAuth()
+    const isVerifiedValue = isVerified()
     const navigate = useNavigate()
 
-    if (!isVerified) {
+    if (!isVerifiedValue) {
         navigate("/user/profile")
         showToast(t('User.toast.editProfile.forbidden'), 'error')
     }
@@ -37,7 +37,7 @@ export default function UserEditProfile() {
         if(user) {
             userService.updateUserInfoById(user.id, data.name, data.surname)
                 .then(() => {
-                    navigate("/user/profile")
+                    editUserInfo(data.name, data.surname, () => navigate("/user/profile"))
                     showToast(t('User.toast.editProfile.success'), 'success')
                 })
                 .catch(() => {

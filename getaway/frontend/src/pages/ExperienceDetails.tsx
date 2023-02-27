@@ -26,8 +26,8 @@ export default function ExperienceDetails() {
     const {experienceId} = useParams()
     const [isLoading, setIsLoading] = useState(false)
 
-    const {user} = useAuth()
-    let isVerified = localStorage.getItem("isVerified") === 'true'
+    const {user, isVerified} = useAuth()
+    const isVerifiedValue = isVerified()
 
     const [maxPage, setMaxPage] = useState(1)
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
@@ -71,7 +71,7 @@ export default function ExperienceDetails() {
         if (user === null) {
             navigate("/login")
             showToast(t('ReviewForm.toast.forbidden.noUser'), 'error')
-        } else if (!isVerified) {
+        } else if (!isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
         }

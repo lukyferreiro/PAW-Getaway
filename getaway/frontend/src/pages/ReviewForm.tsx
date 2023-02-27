@@ -19,9 +19,9 @@ type FormDataReview = {
 
 export default function ReviewForm() {
     const {experienceId} = useParams()
-    const {user} = useAuth()
+    const {user, isVerified} = useAuth()
     const readUser = localStorage.getItem("user")
-    const isVerified = localStorage.getItem("isVerified") === "true"
+    const isVerifiedValue = isVerified()
     const navigate = useNavigate()
 
     const {t} = useTranslation()
@@ -39,7 +39,7 @@ export default function ReviewForm() {
         if (!user && !readUser) {
             navigate("/login")
             showToast(t('ReviewForm.toast.forbidden.noUser'), 'error')
-        } else if (!isVerified) {
+        } else if (!isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
         } else if (parseInt(currentId) !== -1) {

@@ -13,12 +13,12 @@ import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {showToast} from "../scripts/toast";
 
 export default function UserReviews() {
-    const isVerified = localStorage.getItem("isVerified") === "true"
     const navigate = useNavigate()
 
     const {t} = useTranslation()
     const query = useQuery()
-    const {user} = useAuth()
+    const {user, isVerified} = useAuth()
+    const isVerifiedValue = isVerified()
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [reviews, setReviews] = useState<ReviewModel[]>(new Array(0))
@@ -28,7 +28,7 @@ export default function UserReviews() {
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
 
     useEffect(() => {
-        if (!isVerified) {
+        if (!isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('User.toast.reviews.forbidden'), 'error')
         }

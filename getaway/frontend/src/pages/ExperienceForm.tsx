@@ -23,9 +23,9 @@ type FormDataExperience = {
 };
 
 export default function ExperienceForm() {
-    const {user} = useAuth()
+    const {user, isVerified, makeProvider} = useAuth()
     const readUser = localStorage.getItem("user");
-    const isVerified = localStorage.getItem("isVerified") === "true";
+    const isVerifiedValue = isVerified()
     const navigate = useNavigate()
 
     const {t} = useTranslation()
@@ -43,7 +43,7 @@ export default function ExperienceForm() {
             navigate("/login")
             showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
         }
-        if (!isVerified) {
+        if (!isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
         }
@@ -134,8 +134,8 @@ export default function ExperienceForm() {
                     data.address, data.mail, data.price, data.url, data.description)
                     .then((result) => {
                             if (!result.hasFailed()) {
+                                makeProvider(()=> navigate("/user/experiences"))
                                 console.log(result.getData().url.toString())
-                                navigate("/user/experiences", {replace: true})
                                 showToast(t('ExperienceForm.toast.createSuccess', {experienceName: data.name}), 'success')
                             }
                         }

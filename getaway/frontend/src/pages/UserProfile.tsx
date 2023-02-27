@@ -12,10 +12,6 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import {IconButton} from "@mui/material";
 import AddPictureModal from "../components/AddPictureModal";
 
-type FormDataImg = {
-    image?: FileList
-}
-
 export default function UserProfile() {
 
     const {t} = useTranslation()
@@ -24,10 +20,9 @@ export default function UserProfile() {
     const query = useQuery()
     const verificationToken = getQueryOrDefault(query, "verificationToken", "")
 
-    const rememberMe = localStorage.getItem("rememberMe") === "true"
+    const {user, verifyUser, isVerified} = useAuth()
 
-    const {user, setUser, signIn} = useAuth()
-
+    const isVerifiedValue = isVerified()
     const isOpenImage = useState(false)
     const [userImg, setUserImg] = useState<string | undefined>(undefined)
     const [isLoadingImg, setIsLoadingImg] = useState(false)
@@ -56,9 +51,11 @@ export default function UserProfile() {
                         showToast(t('User.toast.verify.error'), 'error')
                     })
                     .finally(() => {
+                        verifyUser(()=> navigate("/user/profile"))
                         searchParams.delete("verificationToken")
                         setSearchParams(searchParams)
                     })
+
                 // serviceHandler(
                 //     userService.verifyUser(verificationToken),
                 //     navigate, () => {
@@ -152,7 +149,7 @@ export default function UserProfile() {
                         </div>
 
                         <div className="mb-2">
-                            {user?.verified ?
+                            {isVerifiedValue ?
                                 <button onClick={() => navigate({pathname: "/user/editProfile"})} type="button" className="btn btn-error">
                                     {t('User.profile.editBtn')}
                                 </button>
