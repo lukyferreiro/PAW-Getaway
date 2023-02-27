@@ -23,9 +23,10 @@ type FormDataExperience = {
 };
 
 export default function ExperienceForm() {
-    const {user, isVerified, makeProvider} = useAuth()
+    const {user, isVerified, isProvider, makeProvider} = useAuth()
     const readUser = localStorage.getItem("user");
     const isVerifiedValue = isVerified()
+    const isProviderValue = isProvider()
     const navigate = useNavigate()
 
     const {t} = useTranslation()
@@ -134,7 +135,11 @@ export default function ExperienceForm() {
                     data.address, data.mail, data.price, data.url, data.description)
                     .then((result) => {
                             if (!result.hasFailed()) {
-                                makeProvider(()=> navigate("/user/experiences"))
+                                if (isProviderValue) {
+                                    navigate("/user/experiences")
+                                } else {
+                                    makeProvider(() => navigate("/user/experiences"))
+                                }
                                 console.log(result.getData().url.toString())
                                 showToast(t('ExperienceForm.toast.createSuccess', {experienceName: data.name}), 'success')
                             }
