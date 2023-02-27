@@ -10,7 +10,6 @@ import {showToast} from "../scripts/toast";
 type FormDataEditProfile = {
     name: string;
     surname: string;
-    email: string;
 };
 
 export default function UserEditProfile() {
@@ -29,14 +28,12 @@ export default function UserEditProfile() {
     useEffect(() => {
         setValue('name', user!.name);
         setValue('surname', user!.surname);
-        setValue('email', user!.email);
     }, []);
 
     const {register, handleSubmit, setValue, formState: {errors},}
         = useForm<FormDataEditProfile>({criteriaMode: "all"})
 
     const onSubmitEdit = handleSubmit((data: FormDataEditProfile) => {
-        console.log('entro')
         if(user) {
             userService.updateUserInfoById(user.id, data.name, data.surname)
                 .then(() => {
@@ -80,17 +77,7 @@ export default function UserEditProfile() {
                                                className="form-control mb-2"
                                                placeholder={t('Navbar.emailPlaceholder')}
                                                aria-describedby="email input"
-                                            {...register("email", {
-                                                required: true,
-                                                validate: {
-                                                    length: (email) =>
-                                                        email.length >= 0 && email.length <= 255,
-                                                },
-                                                pattern: {
-                                                    value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
-                                                    message: t("CreateAccount.error.email.pattern"),
-                                                },
-                                            })}
+                                               defaultValue={user?.email}
                                         />
                                     </div>
 
@@ -127,7 +114,7 @@ export default function UserEditProfile() {
                                                 {t("CreateAccount.error.name.isRequired")}
                                             </p>
                                         )}
-                                        {errors.email?.type === "length" && (
+                                        {errors.name?.type === "length" && (
                                             <p className="form-control is-invalid form-error-label">
                                                 {t("CreateAccount.error.name.length")}
                                             </p>
@@ -167,7 +154,7 @@ export default function UserEditProfile() {
                                                 {t("CreateAccount.error.surname.isRequired")}
                                             </p>
                                         )}
-                                        {errors.email?.type === "length" && (
+                                        {errors.surname?.type === "length" && (
                                             <p className="form-control is-invalid form-error-label">
                                                 {t("CreateAccount.error.surname.length")}
                                             </p>
@@ -180,8 +167,8 @@ export default function UserEditProfile() {
                                             onClick={() => navigate(-1)}>
                                         {t('Button.cancel')}
                                     </button>
-                                    <button form="editProfileForm" type="submit" id="editProfileFormButton"
-                                            className="btn btn-submit-form px-3 py-2">
+                                    <button form="editProfileForm"  id="editProfileFormButton"
+                                            className="btn btn-submit-form px-3 py-2" type="submit">
                                         {t('Button.create')}
                                     </button>
                                 </div>
