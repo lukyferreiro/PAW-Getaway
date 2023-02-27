@@ -6,12 +6,12 @@ export function serviceHandler<T>(
     navigate: NavigateFunction,
     setterFunction: (data: T) => void,
     cleanerFunction: () => void,
-    errorFunction: () => void
+    noContentFunction: () => void
 ): void {
     promise.then((response: Result<T>) => {
         if (response.hasFailed()) {
             if (response.getError().getStatus() === 204) {
-                errorFunction();
+                noContentFunction();
             } else if (isNaN(response.getError().getStatus())) {
                 return;
             } else {

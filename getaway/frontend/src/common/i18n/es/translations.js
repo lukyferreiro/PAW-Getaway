@@ -31,7 +31,7 @@ export const TRANSLATIONS_ES = {
         experiences: "Mis experiencias",
         favourites: "Mis favoritos",
         reviews: "Mis reseñas",
-        rememberMe: "Recuerdame",
+        rememberMe: "Recuérdame",
         logout: "Cerrar sesi\u00F3n",
         resetPasswordTitle: "Ingresa tu email y recibe un enlace de recuperaci\u00F3n",
         resetPasswordButton: "Enviar",

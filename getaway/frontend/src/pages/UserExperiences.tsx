@@ -10,6 +10,7 @@ import StarRating from "../components/StarRating";
 import {IconButton} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import {useForm} from "react-hook-form";
 import Pagination from "../components/Pagination";
 import OrderDropdown from "../components/OrderDropdown";
@@ -202,23 +203,23 @@ export default function UserExperiences() {
                                 <div>
                                     <table className="table table-bordered table-hover table-fit">
                                         <thead className="table-light">
-                                        <tr key={1}>
-                                            <th scope="col">
+                                        <tr>
+                                            <th scope="col" key={1}>
                                                 <h4 className="table-title"> {t('User.experiences.title')}</h4>
                                             </th>
-                                            <th scope="col">
+                                            <th scope="col" key={2}>
                                                 <h4 className="table-title"> {t('User.experiences.category')}</h4>
                                             </th>
-                                            <th scope="col">
+                                            <th scope="col" key={3}>
                                                 <h4 className="table-title"> {t('User.experiences.score')}</h4>
                                             </th>
-                                            <th scope="col">
+                                            <th scope="col" key={4}>
                                                 <h4 className="table-title"> {t('User.experiences.price')}</h4>
                                             </th>
-                                            <th scope="col">
+                                            <th scope="col" key={5}>
                                                 <h4 className="table-title"> {t('User.experiences.views')}</h4>
                                             </th>
-                                            <th scope="col">
+                                            <th scope="col" key={6}>
                                                 <h4 className="table-title"> {t('User.experiences.actions')}</h4>
                                             </th>
                                         </tr>
@@ -314,16 +315,15 @@ export default function UserExperiences() {
                                                                 <EditIcon/>
                                                             </IconButton>
 
-                                                            {/*TODO: check*/}
-                                                            {/*<IconButton*/}
-                                                            {/*    onClick={() => {*/}
-                                                            {/*        isOpenImage[1](true)*/}
-                                                            {/*    }}*/}
-                                                            {/*    aria-label="picture"*/}
-                                                            {/*    component="span"*/}
-                                                            {/*    style={{fontSize: "xx-large"}}>*/}
-                                                            {/*    <AddPhotoAlternateIcon/>*/}
-                                                            {/*</IconButton>*/}
+                                                            <IconButton
+                                                                onClick={() => {
+                                                                    isOpenImage[1](true)
+                                                                }}
+                                                                aria-label="picture"
+                                                                component="span"
+                                                                style={{fontSize: "xx-large"}}>
+                                                                <AddPhotoAlternateIcon/>
+                                                            </IconButton>
 
                                                             <IconButton onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'), t('User.experiences.confirmDelete',{experienceName: experience.name}),() => deleteExperience(experience))}
                                                                         aria-label="trash" component="span"

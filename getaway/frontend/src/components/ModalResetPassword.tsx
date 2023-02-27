@@ -24,12 +24,12 @@ export default function ModalResetPassword(props: { isOpen: [boolean, Dispatch<S
             setInvalidEmail(false);
             userService.sendPasswordResetEmail(data.email)
                 .then((user) => {
-                        if (user.hasFailed()) {
-                            setInvalidEmail(true)
-                        } else {
+                        if (user.getError().getStatus()===204) {
                             isOpen[1](false);
                             reset()
                             showToast(t('User.toast.passwordResetEmailSuccess'), 'success')
+                        } else {
+                            setInvalidEmail(true)
                         }
                     }
                 )

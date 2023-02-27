@@ -157,7 +157,7 @@ public class UserController {
 
         userService.resendVerificationToken(user);
 
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     //Endpoint para resetear la contraseña
@@ -201,7 +201,7 @@ public class UserController {
         UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
         userService.generateNewPassword(user);
 
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     //Endpoint para obtener la imagen de perfil del usuario
