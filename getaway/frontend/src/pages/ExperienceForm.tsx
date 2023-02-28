@@ -113,13 +113,27 @@ export default function ExperienceForm() {
         );
     }
 
+    function checkUrl(url: string | undefined): string | undefined {
+        if (
+            url
+            && url.length !== 0
+            && !url.startsWith("http://")
+            && !url.startsWith("https://")
+        ) {
+            url = "https://" + url;
+        }
+        return url;
+    }
+
     const {register, handleSubmit, setValue, formState: {errors},}
         = useForm<FormDataExperience>({criteriaMode: "all"});
 
     const onSubmit = handleSubmit((data: FormDataExperience) => {
+            const newUrl = checkUrl(data.url)
+
             if (experience !== undefined) {
                 experienceService.updateExperienceById(parseInt(currentId), data.name, data.category, data.country, data.city,
-                    data.address, data.mail, data.price, data.url, data.description)
+                    data.address, data.mail, data.price, newUrl, data.description)
                     .then((result) => {
                             if (!result.hasFailed()) {
                                 navigate("/experiences/" + currentId, {replace: true})
@@ -132,7 +146,7 @@ export default function ExperienceForm() {
                     });
             } else {
                 experienceService.createExperience(data.name, data.category, data.country, data.city,
-                    data.address, data.mail, data.price, data.url, data.description)
+                    data.address, data.mail, data.price, newUrl, data.description)
                     .then((result) => {
                             if (!result.hasFailed()) {
                                 if (isProviderValue) {
