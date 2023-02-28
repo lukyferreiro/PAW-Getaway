@@ -9,8 +9,8 @@ INSERT INTO roles(roleId, roleName) VALUES (2, 'USER');
 INSERT INTO roles(roleId, roleName) VALUES (3, 'VERIFIED');
 INSERT INTO roles(roleId, roleName) VALUES (4, 'NOT_VERIFIED');
 
-INSERT INTO images(imgid, imageobject, imgMimeType) VALUES (15, '0x5678', 'JPG');
-INSERT INTO images(imgid, imageobject, imgMimeType) VALUES (16, '0x5678', 'JPG');
+INSERT INTO images(imgid, imageobject, imgMimeType) VALUES (15, '0x5678', 'image/jpg');
+INSERT INTO images(imgid, imageobject, imgMimeType) VALUES (16, '0x5678', 'image/jpg');
 
 -- Creating user with userid 1
 INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (1, 'usuario', 'uno', 'uno@mail.com', 15, 'contra1');

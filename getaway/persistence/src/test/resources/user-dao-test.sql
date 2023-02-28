@@ -13,10 +13,10 @@ INSERT INTO roles(roleId, roleName) VALUES (3, 'VERIFIED');
 INSERT INTO roles(roleId, roleName) VALUES (4, 'NOT_VERIFIED');
 
 -- Adding an image for updateProfileImg test
-INSERT INTO images(imgid, imageobject, imgMimeType) VALUES (15, '0x5678', 'JPG');
-INSERT INTO images(imgid, imageobject, imgMimeType) VALUES (16, '0x1234', 'JPG');
-INSERT INTO images(imgid, imageobject, imgMimeType) VALUES (17, '0x1234', 'JPG');
-INSERT INTO images(imgid, imageobject, imgMimeType) VALUES (18, '0x1234', 'JPG');
+INSERT INTO images(imgid, imageobject, imgMimeType) VALUES (15, '0x5678', 'image/jpg');
+INSERT INTO images(imgid, imageobject, imgMimeType) VALUES (16, '0x1234', 'image/jpg');
+INSERT INTO images(imgid, imageobject, imgMimeType) VALUES (17, '0x1234', 'image/jpg');
+INSERT INTO images(imgid, imageobject, imgMimeType) VALUES (18, '0x1234', 'image/jpg');
 
 -- Creating user with userid 1
 INSERT INTO users(userid, username, usersurname, email, imgid, password) VALUES (10, 'usuario', 'uno', 'uno@mail.com', 15, 'contra1');
@@ -52,8 +52,8 @@ INSERT INTO cities(cityid, cityname, countryid) VALUES(2, 'Test City Two', 1);
 INSERT INTO cities(cityid, cityname, countryid) VALUES(3, 'Test City Three', 1);
 
 -- Add images (with value null) for consistency
-INSERT INTO images(imgid, imageObject, imgMimeType) VALUES(1, '0x1234', 'JPG');
-INSERT INTO images(imgid, imageObject, imgMimeType) VALUES(2, '0x1234', 'JPG');
+INSERT INTO images(imgid, imageObject, imgMimeType) VALUES(1, '0x1234', 'image/jpg');
+INSERT INTO images(imgid, imageObject, imgMimeType) VALUES(2, '0x1234', 'image/jpg');
 
 -- Add 1 experience of each category
 -- Add 3 to adventure with different price ranges and cities for filter testing
