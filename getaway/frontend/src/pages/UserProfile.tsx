@@ -55,30 +55,6 @@ export default function UserProfile() {
                         searchParams.delete("verificationToken")
                         setSearchParams(searchParams)
                     })
-
-                // serviceHandler(
-                //     userService.verifyUser(verificationToken),
-                //     navigate, () => {
-                //
-                //     },
-                //     () => {
-                //         searchParams.delete("verificationToken")
-                //         setSearchParams(searchParams)
-                //         //TODO mostrar toast
-                //     },
-                //     () => {
-                //     }
-                // )
-                // userService.getCurrentUser()
-                //     .then((user) => {
-                //             if (!user.hasFailed()) {
-                //                 signIn(user.getData(), rememberMe, () => {
-                //                     navigate("/user/profile")
-                //                 })
-                //             }
-                //         }
-                //     )
-                //     .catch(() => navigate("/error?code=500&message=Server error"));
             }
         }
     }, [])

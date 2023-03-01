@@ -136,7 +136,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .accessDeniedHandler(accessDeniedHandler())
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                //TODO check si esto va
                 .and()
                     .headers().cacheControl().disable()
                 .and().authorizeRequests()
@@ -145,7 +144,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, "/api/users").anonymous()
                     //permitAll, porque no se usa solo para usuarios logueados va para cualquiera
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/users/currentUser").permitAll() //TODO: maybe authenticated
+                    .antMatchers(HttpMethod.GET, "/api/users/currentUser").permitAll()
                     //logueado y rol NOT VERIFIED
                     .antMatchers(HttpMethod.PUT, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")
                     .antMatchers(HttpMethod.POST, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")

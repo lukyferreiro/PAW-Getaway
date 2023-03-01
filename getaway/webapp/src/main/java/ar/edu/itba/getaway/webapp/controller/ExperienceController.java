@@ -205,8 +205,6 @@ public class ExperienceController {
         return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
     }
 
-    //TODO: limit when views is increased somehow
-
     // Endpoint para obtener una experiencia a partir de su ID
     @GET
     @Path("/experience/{experienceId}")
@@ -404,7 +402,6 @@ public class ExperienceController {
         dtoValidator.validate(newReviewDto, "Invalid Body Request");
 
         LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
-        //TODO: check usage of localdate.now()
 
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
