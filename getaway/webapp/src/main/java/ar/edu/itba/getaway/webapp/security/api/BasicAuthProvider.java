@@ -26,18 +26,18 @@ import java.util.stream.Collectors;
 @Component
 public class BasicAuthProvider implements AuthenticationProvider {
 
-    //TODO aca creo que deberia ser MyUserDetailsService
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final AuthTokenService tokenService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private AuthTokenService tokenService;
+    public BasicAuthProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, UserService userService, AuthTokenService tokenService) {
+        this.userDetailsService = userDetailsService;
+        this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
+        this.tokenService = tokenService;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

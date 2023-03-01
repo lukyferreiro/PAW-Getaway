@@ -38,7 +38,9 @@ public class PaginationResponse {
 
         responseBuilder.link(uriBuilder.clone().replaceQueryParam("page", first).build(), "first");
 
-        responseBuilder.link(uriBuilder.clone().replaceQueryParam("page", last).build(), "last");
+        if (first != last) {
+            responseBuilder.link(uriBuilder.clone().replaceQueryParam("page", last).build(), "last");
+        }
 
         if (page != first) {
             responseBuilder.link(uriBuilder.clone().replaceQueryParam("page", prev).build(), "prev");

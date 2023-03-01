@@ -82,15 +82,18 @@
 <!--            </param-value>-->
 <!--        </init-param>-->
 <!--        <init-param>-->
-<!--            <param-name>jersey.config.server.provider.classnames</param-name>-->
-<!--            <param-value>-->
-<!--                org.glassfish.jersey.media.multipart.MultiPartFeature,-->
-<!--            </param-value>-->
+<!--            <param-name>jersey.config.beanValidation.enableOutputValidationErrorEntity.server</param-name>-->
+<!--            <param-value>true</param-value>-->
 <!--        </init-param>-->
+<!--        &lt;!&ndash; pass to next filter if Jersey/App returns 404 &ndash;&gt;-->
 <!--        <init-param>-->
 <!--            <param-name>jersey.config.servlet.filter.forwardOn404</param-name>-->
 <!--            <param-value>true</param-value>-->
 <!--        </init-param>-->
+<!--&lt;!&ndash;        <init-param>&ndash;&gt;-->
+<!--&lt;!&ndash;            <param-name>jersey.config.server.provider.classnames</param-name>&ndash;&gt;-->
+<!--&lt;!&ndash;            <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>&ndash;&gt;-->
+<!--&lt;!&ndash;        </init-param>&ndash;&gt;-->
 <!--    </filter>-->
 
 <!--    <filter-mapping>-->
@@ -127,6 +130,15 @@
     <filter-mapping>
         <filter-name>openEntityManagerInViewFilter</filter-name>
         <url-pattern>/api/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>CacheControlFilter</filter-name>
+        <filter-class>ar.edu.itba.getaway.webapp.security.api.CacheControlFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CacheControlFilter</filter-name>
+        <url-pattern>/resources/*</url-pattern>
     </filter-mapping>
 
     <error-page>

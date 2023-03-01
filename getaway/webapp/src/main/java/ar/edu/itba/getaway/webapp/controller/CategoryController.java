@@ -18,8 +18,13 @@ import java.util.List;
 @Path("categories")
 @Component
 public class CategoryController {
+
+    private final CategoryService categoryService;
+
     @Autowired
-    private CategoryService categoryService;
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
