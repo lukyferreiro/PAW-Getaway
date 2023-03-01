@@ -17,7 +17,7 @@
 
 .logo-text {
     padding-left: 15px;
-    font-family: 'Yeseva One', sans-serif;
+    font-family: 'Yeseva One', sans-serif !important;
     font-size: xxx-large;
     background: linear-gradient(to left, #F87037, #F5C404);
     -webkit-text-fill-color: transparent;

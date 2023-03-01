@@ -3,7 +3,8 @@ import "../common/i18n/index";
 import React, {useEffect, useState} from "react";
 import CardExperience from "./CardExperience";
 import {ExperienceModel} from "../types";
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 export default function Carousel(props: { title: any, experiences: ExperienceModel[] | undefined; show: any; }) {
 
@@ -44,7 +45,7 @@ export default function Carousel(props: { title: any, experiences: ExperienceMod
                         <div className="carousel-wrapper">
                             {currentIndex > 0 &&
                                 <button onClick={prev} className="left-arrow">
-                                    &lt;
+                                    <ArrowBackIcon/>
                                 </button>
                             }
 
@@ -61,7 +62,7 @@ export default function Carousel(props: { title: any, experiences: ExperienceMod
 
                             {currentIndex < (length - show) &&
                                 <button onClick={next} className="right-arrow">
-                                    &gt;
+                                    <ArrowForwardIcon/>
                                 </button>
                             }
                         </div>

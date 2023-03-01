@@ -95,6 +95,21 @@ export const TRANSLATIONS_EN = {
         placeholder: "Write in order to search",
         reviews: "Reviews {{reviewCount}}",
         notVisible: "This experience is not currently visible",
+        imgTitle: "Select an image for the experinece",
+        toast: {
+            imageSuccess: "Experience image updated successfully!",
+            imageInvalidFormat: "Image format is invalid",
+            imageError: "A server error occurred when updating the image",
+            favSuccess: "'{{experienceName}}' was added to your favourites",
+            noFavSuccess: "'{{experienceName}}' was removed from your favourites",
+            favError: "Server error adding '{{experienceName}}'",
+            noFavError: "Server error removing '{{experienceName}}'",
+            visibilitySuccess: "'{{experienceName}}' is now visible to all users",
+            noVisibilitySuccess: "'{{experienceName}}' was hidden",
+            visibilityError: "Server error changing '{{experienceName}}' visibility",
+            deleteSuccess: "'{{experienceName}}' was deleted successfully",
+            deleteError: "Server error deleting '{{experienceName}}'",
+        },
     },
 
     ExperienceDetail: {
@@ -153,7 +168,17 @@ export const TRANSLATIONS_EN = {
                 isRequired: "This field can not be empty",
                 length: "Address must be 5-100 characters long",
             },
-        }
+        },
+        toast: {
+            forbidden: {
+                noUser: "Sign in to create an experience",
+                notVerified: "Verify your account to create an experience",
+            },
+            createSuccess: "'{{experienceName}}' created successfully!",
+            createError: "Server error creating experience '{{experienceName}}'",
+            updateSuccess: "'{{experienceName}}' updated successfully!",
+            updateError: "Server error updating experience '{{experienceName}}'",
+        },
     },
 
     User: {
@@ -175,7 +200,7 @@ export const TRANSLATIONS_EN = {
             actions: "Actions",
             reviewsCount: "Reviews {{count}}",
             deleteTitle: "Delete experience",
-            confirmDelete: "Are you sure you want to delete this experience: {{experienceName}}?"
+            confirmDelete: "Are you sure you want to delete experience: {{experienceName}}?"
         },
         noExperiences: "You haven't created any experience yet",
         experiencesTitle: "My experiences",
@@ -183,13 +208,34 @@ export const TRANSLATIONS_EN = {
         favsTitle: "My favourites",
         noReviews: "You haven't written any reviews yet",
         reviewsTitle: "My reviews",
-        error: {
-            image: {
-                isRequired: "This field can not be empty",
-                size: "Image is too big",
+        imgTitle: "Select a profile image",
+        toast: {
+            imageSuccess: "Profile image updated successfully!",
+            imageError: "Server error when updating profile image",
+            imageInvalidFormat: "Image format is invalid",
+            passwordResetEmailSuccess: "Email sent successfully",
+            passwordResetEmailError: "Server error when sending email",
+            verify: {
+                success: "Your account was verified successfully",
+                error: "Invalid token",
+                alreadyVerified: "Your account is already verified",
+            },
+            resendVerify: {
+                success: "Email sent successfully",
+                error: "Server error when sending email",
+            },
+            editProfile: {
+                success:"Profile information updated successfully",
+                error: "Server error when updating profile information",
+                forbidden: "Verify your account to edit your profile",
+            },
+            experiences: {
+                forbidden: "Create at least one experience to access 'My Experiences'",
+            },
+            reviews: {
+                forbidden: "Verify your account to access 'My Reviews'",
             },
         },
-        imgTitle: "Select a profile image",
     },
 
     EmptyResult: "It seems there are no experiences matching your search",
@@ -277,16 +323,30 @@ export const TRANSLATIONS_EN = {
                 pattern: "Submitted password format is not valid",
             },
             passwordsMustMatch: "Confirm password must match password",
+        },
+        toast: {
+            error: "Server error when signing up",
         }
     },
 
     Login: {
+        toast: {
+            success: "Welcome {{name}} {{surname}}!",
+            error: "Server error when signing in",
+            verifySent: "Verification email sent",
+        },
         invalidCredentials: "Incorrect Email or password"
     },
 
     ChangePassword: {
         title: "Enter your new password",
         invalidEmail: "Submitted email is not valid",
+        toast: {
+            forbidden: "You can not change your password if you are signed in",
+            missPasswordToken: "Missing token",
+            success: "Password changed successfully!",
+            error: "Invalid token",
+        },
     },
 
     Experiences: {
@@ -301,6 +361,14 @@ export const TRANSLATIONS_EN = {
         title: "Title",
         description: "Description",
         score: "Score",
+        deleteModal: {
+            title: "Delete review",
+            confirmDelete: "Are you sure you want to delete review: {{reviewTitle}}?",
+        },
+        toast: {
+            deleteSuccess: "'{{reviewTitle}}' deleted successfully",
+            deleteError: "Server error deleting review '{{reviewTitle}}'",
+        },
     },
 
     ReviewForm: {
@@ -318,9 +386,25 @@ export const TRANSLATIONS_EN = {
                 length: "Description must be 3-255 characters long",
             },
             score: {
-                pattern: "aaaa",
                 isRequired: "This field can not be empty",
             },
-        }
+        },
+        toast: {
+            forbidden: {
+                noUser: "Sign in to create reviews",
+                notVerified: "Verify your account to create reviews",
+            },
+            createSuccess: "'{{reviewTitle}}' created successfully!",
+            createError: "Server error creating review '{{reviewTitle}}'",
+            updateSuccess: "'{{reviewTitle}}' updated successfully!",
+            updateError: "Server error updating review '{{reviewTitle}}'",
+        },
+    },
+
+    Image: {
+        error: {
+            isRequired: "This field can not be empty",
+            size: "The image is too big",
+        },
     },
 };

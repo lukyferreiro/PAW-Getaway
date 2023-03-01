@@ -46,24 +46,24 @@ const ConfirmDialogModal: React.FC = () => {
     return (
         <Dialog open={Boolean(onSubmit)} onClose={close} maxWidth="sm" fullWidth>
             <DialogTitle>{title}</DialogTitle>
-            <Box position="absolute" top={0} right={0}>
-                <IconButton onClick={close}>
-                    <Close/>
-                </IconButton>
-            </Box>
             <DialogContent>
                 <DialogContentText>{message}</DialogContentText>
             </DialogContent>
-            <DialogActions>
-                <button type="button" className="btn btn-error" onClick={() => {
-                    if (onSubmit) {
-                        onSubmit()
+            <DialogActions className="d-flex align-items-center justify-content-around">
+                    <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
+                            onClick={close}>
+                        {t('Button.cancel')}
+                    </button>
+                    <button  type="button" id="confirmDelete" className='btn button-primary'
+                     onClick={() => {
+                        if (onSubmit) {
+                            onSubmit()
+                        }
+                        close();
                     }
-                    close();
-                }
-                }>
-                    {t("Button.confirm")}
-                </button>
+                    }>
+                        {t('Button.confirm')}
+                    </button>
             </DialogActions>
         </Dialog>
     );

@@ -134,6 +134,9 @@ export default function UserProfile() {
                         </div>
 
                         <div className="d-flex justify-items-center align-items-center">
+                            <h4>
+                                {t('User.profile.photo')}
+                            </h4>
                             <IconButton
                                 onClick={() => {
                                     isOpenImage[1](true)
@@ -141,9 +144,6 @@ export default function UserProfile() {
                                 aria-label="picture"
                                 component="span"
                                 style={{fontSize: "xx-large"}}>
-                                <h4>
-                                    {t('User.profile.photo')}
-                                </h4>
                                 <AddPhotoAlternateIcon/>
                             </IconButton>
                         </div>

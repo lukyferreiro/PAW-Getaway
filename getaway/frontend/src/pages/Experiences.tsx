@@ -74,7 +74,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
 
     //TODO: maxprice changes makes double refresh. Maybe add maxprice to experiencelist dto
     useEffect(() => {
-        if (nameProp !== undefined && categoryProp[0] !== undefined) {
+        if (nameProp[0] !== undefined && categoryProp[0] !== undefined) {
             serviceHandler(
                 experienceService.getFilterMaxPrice(categoryProp[0], nameProp[0]),
                 navigate, (priceModel) => {
@@ -90,10 +90,10 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 }
             );
         }
-    }, [categoryProp[0], nameProp])
+    }, [categoryProp[0], nameProp[0]])
 
     useEffect(() => {
-        if (nameProp !== undefined && categoryProp[0] !== undefined) {
+        if (nameProp[0] !== undefined && categoryProp[0] !== undefined) {
             setIsLoading(true)
             serviceHandler(
                 experienceService.getExperiencesByFilter(categoryProp[0], nameProp[0], order[0], price, -rating, city, currentPage[0]),
@@ -113,7 +113,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 }
             );
         }
-    }, [categoryProp[0], nameProp, rating, city, order[0], currentPage[0], price])
+    }, [categoryProp[0], nameProp[0], rating, city, order[0], currentPage[0], price])
 
 
     function handleCountryChange(countryId: number) {
@@ -175,7 +175,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     }
 
     function cleanQuery() {
-        categoryProp[1]("")
+        // categoryProp[1]("")
         nameProp[1]("")
         searchParams.delete("name")
         setSearchParams(searchParams)

@@ -39,9 +39,21 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
 
     function setFavExperience(fav: boolean) {
         experienceService.setExperienceFav(experience.id, fav)
-            .then(() => { showToast(t('Experience.toast.favSuccess', {experienceName: experience.name}), "success") })
-            .catch(() => { showToast(t('Experience.toast.favError', {experienceName: experience.name}), "error") });
-        setFav(fav)
+            .then(() => {
+                if (fav) {
+                    showToast(t('Experience.toast.favSuccess', {experienceName: experience.name}), "success")
+                } else {
+                    showToast(t('Experience.toast.noFavSuccess', {experienceName: experience.name}), "success")
+                }
+                setFav(fav)
+            })
+            .catch(() => {
+                if (fav) {
+                    showToast(t('Experience.toast.favError', {experienceName: experience.name}), "error")
+                } else {
+                    showToast(t('Experience.toast.noFavError', {experienceName: experience.name}), "error")
+                }
+            });
     }
 
     return (

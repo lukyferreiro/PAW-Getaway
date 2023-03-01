@@ -30,6 +30,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const isOpenImage = useState(false)
     const [experienceImg, setExperienceImg] = useState<string | undefined>(undefined)
     const [fav, setFav] = useState(experience.fav)
+    const [view, setView] = useState(experience.observable)
 
     function setVisibility(experienceId: number, visibility: boolean) {
         experienceService.setExperienceObservable(experienceId, visibility)
@@ -39,6 +40,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 } else {
                     showToast(t('Experience.toast.noVisibilitySuccess', {experienceName: experience.name}), "success")
                 }
+                setView(visibility)
             })
             .catch(() => {
                 showToast(t('Experience.toast.visibilityError', {experienceName: experience.name}), "error")
@@ -48,12 +50,12 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     function deleteExperience(experienceId: number) {
         experienceService.deleteExperienceById(experienceId)
             .then(() => {
+                navigate("/user/experiences")
                 showToast(t('Experience.toast.deleteSuccess', {experienceName: experience.name}), "success")
             })
             .catch(() => {
                 showToast(t('Experience.toast.deleteError', {experienceName: experience.name}), "error")
             });
-        // navigate(-1)
     }
 
     function editExperience(experienceId: number) {
@@ -63,12 +65,20 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     function setFavExperience(fav: boolean) {
         experienceService.setExperienceFav(experience.id, fav)
             .then(() => {
-                showToast(t('Experience.toast.favSuccess', {experienceName: experience.name}), "success")
+                if (fav) {
+                    showToast(t('Experience.toast.favSuccess', {experienceName: experience.name}), "success")
+                } else {
+                    showToast(t('Experience.toast.noFavSuccess', {experienceName: experience.name}), "success")
+                }
+                setFav(fav)
             })
             .catch(() => {
-                showToast(t('Experience.toast.favError', {experienceName: experience.name}), "error")
+                if (fav) {
+                    showToast(t('Experience.toast.favError', {experienceName: experience.name}), "error")
+                } else {
+                    showToast(t('Experience.toast.noFavError', {experienceName: experience.name}), "error")
+                }
             });
-        setFav(fav)
     }
 
     useEffect(() => {
@@ -198,7 +208,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 </div>
             </div>
 
-            {!experience.observable &&
+            {!view &&
                 <div className="my-1 d-flex justify-content-center align-content-center">
                     <h6 className="obs-info">
                         {t('ExperienceDetail.notVisible')}
@@ -230,7 +240,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
 
             {isEditing &&
                 <div className="btn-group my-2 d-flex justify-content-center align-content-center" role="group">
-                    {experience.observable ?
+                    {view ?
                         <div>
                             <IconButton onClick={() => setVisibility(experience.id, false)} aria-label="visibilityOn"
                                         component="span" style={{fontSize: "xxx-large"}} id="setFalse">

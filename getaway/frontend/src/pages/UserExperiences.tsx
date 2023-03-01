@@ -41,6 +41,7 @@ export default function UserExperiences() {
     const query = useQuery()
 
     const [userExperiences, setUserExperiences] = useState<ExperienceModel[]>(new Array(0))
+    const [experienceId, setExperienceId] = useState(-1)
     const [isLoading, setIsLoading] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const isOpenImage = useState(false)
@@ -317,6 +318,7 @@ export default function UserExperiences() {
 
                                                             <IconButton
                                                                 onClick={() => {
+                                                                    setExperienceId(experience.id);
                                                                     isOpenImage[1](true)
                                                                 }}
                                                                 aria-label="picture"
@@ -333,7 +335,6 @@ export default function UserExperiences() {
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <AddPictureModal isOpen={isOpenImage} experienceId={experience.id}/>
                                             </>
                                             ))}
                                         </tbody>
@@ -355,6 +356,7 @@ export default function UserExperiences() {
                 }
             </div>
             <ConfirmDialogModal/>
+            <AddPictureModal isOpen={isOpenImage} experienceId={experienceId}/>
         </DataLoader>
     );
 

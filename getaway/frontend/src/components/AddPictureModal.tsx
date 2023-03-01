@@ -32,19 +32,24 @@ export default function AddPictureModal(
                                 reset()
                                 showToast(t('Experience.toast.imageSuccess'), "success")
                             }
+                            else {
+                                showToast(t('Experience.toast.imageInvalidFormat'), "error")
+                            }
                         }
                     )
                     .catch(() => {
                         showToast(t('Experience.toast.imageError'), "error")
                     });
             } else if (userId) {
-                userService
-                    .updateUserProfileImage(userId ? userId : -1, data.image![0])
+                userService.updateUserProfileImage(userId ? userId : -1, data.image![0])
                     .then((result) => {
-                        if (!result.hasFailed()) {
+                        if (result.getError().getStatus() === 204) {
                             isOpen[1](false);
                             reset()
                             showToast(t('User.toast.imageSuccess'), "success")
+                        }
+                        else {
+                            showToast(t('User.toast.imageInvalidFormat'), "error")
                         }
                     })
                     .catch(() => {
@@ -68,13 +73,13 @@ export default function AddPictureModal(
             <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
                 <div className="row w-100 h-100 py-5 px-3 m-0 align-items-center justify-content-center">
                     <div className="col-12">
-                        <h1 className="text-center title">
+                        <h2 className="text-center" style={{fontWeight: "600", marginBottom: "10px"}}>
                             {
                                 (experienceId && t('Experience.imgTitle'))
                                 ||
                                 (userId && t('User.imgTitle'))
                             }
-                        </h1>
+                        </h2>
                     </div>
 
                     <div className="col-12">
@@ -110,8 +115,15 @@ export default function AddPictureModal(
                         </div>
                     </div>
 
-
-                    <div className="col-12 mt-3 d-flex align-items-center justify-content-center">
+                    <div className="col-12 mt-3 d-flex align-items-center justify-content-around">
+                        <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
+                                onClick={() => {
+                                    isOpen[1](false);
+                                    reset()
+                                }
+                                }>
+                            {t('Button.cancel')}
+                        </button>
                         <button form="imageForm" type="submit" id="ImageButton" className='btn button-primary'>
                             {t('Button.confirm')}
                         </button>
