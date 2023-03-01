@@ -20,8 +20,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class AuthTokenServiceImpl implements AuthTokenService {
+
+    private final Settings settings;
+
     @Autowired
-    Settings settings;
+    public AuthTokenServiceImpl(Settings settings) {
+        this.settings = settings;
+    }
 
     @Override
     public String issueToken(String email, Set<Roles> roles) {

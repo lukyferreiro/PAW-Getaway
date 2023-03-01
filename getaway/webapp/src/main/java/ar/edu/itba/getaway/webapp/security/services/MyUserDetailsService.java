@@ -24,13 +24,11 @@ import java.util.regex.Pattern;
 @Component
 public class MyUserDetailsService implements UserDetailsService {
 
-    private final PasswordEncoder encoder;
-
-    private final Pattern BCRYPT_HASH_PATTERN = Pattern.compile("^\\$2[ayb]\\$.{56}$");
-
-    private final UserService userService;
     @Autowired
     private MessageSource messageSource;
+    private final PasswordEncoder encoder;
+    private final Pattern BCRYPT_HASH_PATTERN = Pattern.compile("^\\$2[ayb]\\$.{56}$");
+    private final UserService userService;
     private final Locale locale = LocaleContextHolder.getLocale();
     private static final Logger LOGGER = LoggerFactory.getLogger(MyUserDetailsService.class);
 
