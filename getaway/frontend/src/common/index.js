@@ -11,10 +11,3 @@ export const paths = {
 };
 
 export const APPLICATION_JSON_TYPE = 'application/json';
-
-export const userRoles = {
-    PROVIDER: 1,
-    USER: 2,
-    VERIFIED: 3,
-    NOT_VERIFIED: 4,
-};

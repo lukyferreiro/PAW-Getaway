@@ -136,6 +136,7 @@
         <filter-name>CacheControlFilter</filter-name>
         <filter-class>ar.edu.itba.getaway.webapp.security.api.CacheControlFilter</filter-class>
     </filter>
+<!--    TODO check aca las cosas que se cachean-->
     <filter-mapping>
         <filter-name>CacheControlFilter</filter-name>
         <url-pattern>/resources/*</url-pattern>
