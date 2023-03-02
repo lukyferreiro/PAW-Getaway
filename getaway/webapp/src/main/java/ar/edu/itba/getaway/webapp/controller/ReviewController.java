@@ -22,14 +22,17 @@ import javax.ws.rs.core.*;
 @Component
 public class ReviewController {
 
-    @Autowired
-    private ReviewService reviewService;
-    @Autowired
-    private DtoConstraintValidator dtoValidator;
     @Context
     private UriInfo uriInfo;
-
+    private final ReviewService reviewService;
+    private final DtoConstraintValidator dtoValidator;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
+
+    @Autowired
+    public ReviewController(ReviewService reviewService, DtoConstraintValidator dtoValidator) {
+        this.reviewService = reviewService;
+        this.dtoValidator = dtoValidator;
+    }
 
     @GET
     @Path("/{reviewId}")

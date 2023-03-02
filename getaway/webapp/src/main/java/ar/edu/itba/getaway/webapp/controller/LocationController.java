@@ -23,13 +23,15 @@ import java.util.Collection;
 @Component
 public class LocationController {
 
-    @Autowired
-    private LocationService locationService;
-
     @Context
     private UriInfo uriInfo;
-
+    private final LocationService locationService;
     private static final Logger LOGGER = LoggerFactory.getLogger(LocationController.class);
+
+    @Autowired
+    public LocationController(LocationService locationService) {
+        this.locationService = locationService;
+    }
 
     // Endpoint para obtener el listado completo de países
     @GET

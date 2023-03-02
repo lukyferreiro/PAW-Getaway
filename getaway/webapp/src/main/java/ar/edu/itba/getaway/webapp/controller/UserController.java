@@ -9,6 +9,7 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.constraints.DtoConstraintValidator;
 import ar.edu.itba.getaway.webapp.constraints.exceptions.DtoValidationException;
+import ar.edu.itba.getaway.webapp.controller.util.ConditionalCacheResponse;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.*;
 import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
@@ -36,23 +37,27 @@ import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 @Component
 public class UserController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private ImageService imageService;
-    @Autowired
-    private ExperienceService experienceService;
-    @Autowired
-    private ReviewService reviewService;
-    @Autowired
-    private AuthContext authContext;
-    @Autowired
-    private DtoConstraintValidator dtoValidator;
     @Context
     private UriInfo uriInfo;
-
+    private final UserService userService;
+    private final ImageService imageService;
+    private final ExperienceService experienceService;
+    private final ReviewService reviewService;
+    private final AuthContext authContext;
+    private final DtoConstraintValidator dtoValidator;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private static final String ACCEPTED_MIME_TYPES = "image/";
+
+    @Autowired
+    public UserController(UserService userService, ImageService imageService, ExperienceService experienceService, ReviewService reviewService,
+                          AuthContext authContext, DtoConstraintValidator dtoValidator) {
+        this.userService = userService;
+        this.imageService = imageService;
+        this.experienceService = experienceService;
+        this.reviewService = reviewService;
+        this.authContext = authContext;
+        this.dtoValidator = dtoValidator;
+    }
 
     //Endpoint que crea un usuario nuevo
     @POST
@@ -216,23 +221,14 @@ public class UserController {
         LOGGER.info("Called /users/{}/profileImage GET", id);
 
         final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
-        final ImageModel img = user.getProfileImage();
+        final ImageModel image = user.getProfileImage();
 
-        if (img == null) {
+        if (image == null) {
             return Response.noContent().build();
         }
 
-        final EntityTag eTag = new EntityTag(String.valueOf(img.getImageId()));
-        final CacheControl cacheControl = new CacheControl();
-        cacheControl.setNoCache(true);
+        return ConditionalCacheResponse.conditionalCacheResponse(image, request);
 
-        Response.ResponseBuilder responseBuilder = request.evaluatePreconditions(eTag);
-        if (responseBuilder == null) {
-            final byte[] profileImage = img.getImage();
-            responseBuilder = Response.ok(profileImage).type(img.getMimeType()).tag(eTag);
-        }
-
-        return responseBuilder.cacheControl(cacheControl).build();
     }
 
     //Endpoint para editar la imagen de perfil del usuario
@@ -257,9 +253,7 @@ public class UserController {
 
         imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
 
-        return Response.noContent()
-                .contentLocation(UserDto.getUserUriBuilder(user, uriInfo).path("profileImage").build())
-                .build();
+        return Response.created(UserDto.getUserUriBuilder(user, uriInfo).path("profileImage").build()).build();
     }
 
     //Endpoint para obtener las experiencias creadas por un usuario

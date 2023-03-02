@@ -52,7 +52,6 @@ export default function Login(props: { nameProp: [string | undefined, Dispatch<S
                     if (!user.hasFailed()) {
                         signIn(user.getData(), data.rememberMe, () => {
                             navigate(from, {replace: true});
-                            //TODO ver aca si mandamos los dos o uno solo
                             showToast(t('Login.toast.success', {
                                 name: user.getData().name,
                                 surname: user.getData().surname

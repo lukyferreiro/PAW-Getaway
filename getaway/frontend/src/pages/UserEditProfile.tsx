@@ -35,18 +35,15 @@ export default function UserEditProfile() {
         = useForm<FormDataEditProfile>({criteriaMode: "all"})
 
     const onSubmitEdit = handleSubmit((data: FormDataEditProfile) => {
-        if(user) {
-            userService.updateUserInfoById(user.id, data.name, data.surname)
-                .then(() => {
-                    editUserInfo(data.name, data.surname, () => navigate("/user/profile"))
-                    showToast(t('User.toast.editProfile.success'), 'success')
-                })
-                .catch(() => {
-                    showToast(t('User.toast.editProfile.error'), 'error')
-                })
-        }else{
-        //    TODO:ERROR
-        }
+        userService.updateUserInfoById(user.id, data.name, data.surname)
+            .then(() => {
+                editUserInfo(data.name, data.surname, () => navigate("/user/profile"))
+                showToast(t('User.toast.editProfile.success'), 'success')
+            })
+            .catch(() => {
+                showToast(t('User.toast.editProfile.error'), 'error')
+            })
+
     });
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
@@ -74,7 +71,7 @@ export default function UserEditProfile() {
                                                 </h6>
                                             </div>
                                         </label>
-                                        <input type="text"  disabled={true} style={{color: "grey"}}
+                                        <input type="text" disabled={true} style={{color: "grey"}}
                                                className="form-control mb-2"
                                                placeholder={t('Navbar.emailPlaceholder')}
                                                aria-describedby="email input"
@@ -168,7 +165,7 @@ export default function UserEditProfile() {
                                             onClick={() => navigate(-1)}>
                                         {t('Button.cancel')}
                                     </button>
-                                    <button form="editProfileForm"  id="editProfileFormButton"
+                                    <button form="editProfileForm" id="editProfileFormButton"
                                             className="btn btn-submit-form px-3 py-2" type="submit">
                                         {t('Button.create')}
                                     </button>

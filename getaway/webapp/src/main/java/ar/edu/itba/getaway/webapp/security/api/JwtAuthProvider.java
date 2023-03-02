@@ -14,12 +14,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtAuthProvider implements AuthenticationProvider {
 
-    @Autowired
-    private AuthTokenService authenticationTokenService;
+    private final AuthTokenService authenticationTokenService;
+    private final UserDetailsService userDetailsService;
 
-    //TODO aca creo que deberia ser MyUserDetailsService
     @Autowired
-    private UserDetailsService userDetailsService;
+    public JwtAuthProvider(UserDetailsService userDetailsService, AuthTokenService authenticationTokenService) {
+        this.userDetailsService = userDetailsService;
+        this.authenticationTokenService = authenticationTokenService;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

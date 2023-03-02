@@ -6,6 +6,7 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.constraints.DtoConstraintValidator;
 import ar.edu.itba.getaway.webapp.constraints.exceptions.DtoValidationException;
+import ar.edu.itba.getaway.webapp.controller.util.ConditionalCacheResponse;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
@@ -26,34 +27,39 @@ import javax.ws.rs.core.*;
 import java.time.LocalDate;
 import java.util.*;
 
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-
 @Path("experiences")
 @Component
 public class ExperienceController {
-    @Autowired
-    private ExperienceService experienceService;
-    @Autowired
-    private FavAndViewExperienceService favAndViewExperienceService;
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private LocationService locationService;
-    @Autowired
-    private ImageService imageService;
-    @Autowired
-    private ReviewService reviewService;
-    @Autowired
-    private int maxRequestSize;
-    @Autowired
-    private AuthContext authContext;
-    @Autowired
-    private DtoConstraintValidator dtoValidator;
+
     @Context
     private UriInfo uriInfo;
+    private final ExperienceService experienceService;
+    private final FavAndViewExperienceService favAndViewExperienceService;
+    private final CategoryService categoryService;
+    private final LocationService locationService;
+    private final ImageService imageService;
+    private final ReviewService reviewService;
+    private final Integer maxRequestSize;
+    private final AuthContext authContext;
+    private final DtoConstraintValidator dtoValidator;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
     private static final String ACCEPTED_MIME_TYPES = "image/";
+
+    @Autowired
+    public ExperienceController(ExperienceService experienceService, FavAndViewExperienceService favAndViewExperienceService, CategoryService categoryService,
+                                LocationService locationService, ImageService imageService, ReviewService reviewService,
+                                Integer maxRequestSize, AuthContext authContext, DtoConstraintValidator dtoValidator) {
+        this.experienceService = experienceService;
+        this.favAndViewExperienceService = favAndViewExperienceService;
+        this.categoryService = categoryService;
+        this.locationService = locationService;
+        this.imageService = imageService;
+        this.reviewService = reviewService;
+        this.maxRequestSize = maxRequestSize;
+        this.authContext = authContext;
+        this.dtoValidator = dtoValidator;
+    }
 
     @GET
     @Path("/landingPage")
@@ -74,6 +80,7 @@ public class ExperienceController {
         }
     }
 
+    // TODO abria que agregar el country como queryParam
     // Endpoint para obtener las experiencias de una categoria
     @GET
     @Path("/filter")
@@ -160,10 +167,9 @@ public class ExperienceController {
             throw new BadRequestException();
         }
 
-        if (owner){
+        if (owner) {
             orderByModels = OrderByModel.getProviderOrderByModel();
-        }
-        else if (user) {
+        } else if (user) {
             orderByModels = OrderByModel.getUserOrderByModel();
         }
 
@@ -204,8 +210,6 @@ public class ExperienceController {
         LOGGER.info("Created experience with id {}", experience.getExperienceId());
         return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
     }
-
-    //TODO: limit when views is increased somehow
 
     // Endpoint para obtener una experiencia a partir de su ID
     @GET
@@ -321,23 +325,13 @@ public class ExperienceController {
     ) {
 
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(UserNotFoundException::new);
-        final ImageModel img = experience.getExperienceImage();
+        final ImageModel image = experience.getExperienceImage();
 
-        if (img == null) {
-            return Response.status(NOT_FOUND).build();
+        if (image == null) {
+            return Response.noContent().build();
         }
 
-        final EntityTag eTag = new EntityTag(String.valueOf(img.getImageId()));
-        final CacheControl cacheControl = new CacheControl();
-        cacheControl.setNoCache(true);
-
-        Response.ResponseBuilder responseBuilder = request.evaluatePreconditions(eTag);
-        if (responseBuilder == null) {
-            final byte[] profileImage = img.getImage();
-            responseBuilder = Response.ok(profileImage).type(img.getMimeType()).tag(eTag);
-        }
-
-        return responseBuilder.cacheControl(cacheControl).build();
+        return ConditionalCacheResponse.conditionalCacheResponse(image, request);
     }
 
     @PUT
@@ -361,9 +355,7 @@ public class ExperienceController {
 
         imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), experience.getExperienceImage());
 
-        return Response.noContent()
-                .contentLocation(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).path("experienceImage").build())
-                .build();
+        return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).path("experienceImage").build()).build();
     }
 
     // Endpoint para obtener la reseñas de una experiencia
@@ -404,7 +396,6 @@ public class ExperienceController {
         dtoValidator.validate(newReviewDto, "Invalid Body Request");
 
         LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
-        //TODO: check usage of localdate.now()
 
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
