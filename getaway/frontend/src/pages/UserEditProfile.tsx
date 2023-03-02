@@ -35,7 +35,7 @@ export default function UserEditProfile() {
         = useForm<FormDataEditProfile>({criteriaMode: "all"})
 
     const onSubmitEdit = handleSubmit((data: FormDataEditProfile) => {
-        userService.updateUserInfoById(user.id, data.name, data.surname)
+        userService.updateUserInfoById(user?.id, data.name, data.surname)
             .then(() => {
                 editUserInfo(data.name, data.surname, () => navigate("/user/profile"))
                 showToast(t('User.toast.editProfile.success'), 'success')
