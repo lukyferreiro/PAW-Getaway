@@ -1,10 +1,15 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {Link} from "react-router-dom";
+import {useEffect} from "react";
 
 export default function Custom404() {
 
     const {t} = useTranslation()
+
+    useEffect(()=> {
+        document.title = `${t('PageName')} - ${t('PageTitles.custom404')}`
+    }, [])
 
     return (
         <div className="container-fluid p-0 h-100 d-flex justify-content-center align-items-center">

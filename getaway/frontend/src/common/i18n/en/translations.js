@@ -2,6 +2,29 @@ export const TRANSLATIONS_EN = {
 
     PageName: "Getaway",
 
+    PageTitles: {
+        changePassword: "Change Password",
+        createAccount: "Sign Up",
+        custom404: "404",
+        error: "Error",
+        experienceDetails: "{{experienceName}}",
+        experienceForm: {
+            create: "Create Experience",
+            edit: "Edit Experience",
+        },
+        experiences: "Experiences",
+        login: "Sign In",
+        reviewForm: {
+            create: "Create Review",
+            edit: "Edit Review",
+        },
+        userEditProfile: "Edit Profile",
+        userExperiences: "My Experiences",
+        userFavourites: "My Favourites",
+        userProfile: "My Profile",
+        userReviews: "My Reviews",
+    },
+
     Categories: {
         Aventura: "Adventure",
         Gastronomia: "Gastronomy",

@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {IconButton} from "@mui/material";
 import {loginService, userService} from "../services";
 import {useAuth} from "../hooks/useAuth";
@@ -31,6 +31,10 @@ export default function CreateAccount() {
 
     const [seePassword, setSeePassword] = useState(false)
     const [seeRepeatPassword, setSeeRepeatPassword] = useState(false)
+
+    useEffect(() => {
+        document.title = `${t('PageName')} - ${t('PageTitles.createAccount')}`
+    }, [])
 
     function showPassword() {
         setSeePassword(!seePassword)

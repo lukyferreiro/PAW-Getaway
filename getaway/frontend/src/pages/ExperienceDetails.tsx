@@ -46,6 +46,7 @@ export default function ExperienceDetails() {
                 setExperience(undefined)
             }
         );
+        document.title = `${t('PageName')} - ${t('PageTitles.experienceDetails', {experienceName: experience?.name})}`
     }, []);
 
     //TODO: Add different dataloader

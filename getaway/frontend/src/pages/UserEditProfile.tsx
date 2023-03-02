@@ -27,7 +27,8 @@ export default function UserEditProfile() {
 
     useEffect(() => {
         setValue('name', user!.name);
-        setValue('surname', user!.surname);
+        setValue('surname', user!.surname)
+        document.title = `${t('PageName')} - ${t('PageTitles.userEditProfile')}`
     }, []);
 
     const {register, handleSubmit, setValue, formState: {errors},}

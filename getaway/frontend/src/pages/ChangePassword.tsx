@@ -46,6 +46,7 @@ export default function ChangePassword() {
             navigate("/", {replace: true})
             showToast(t('ChangePassword.toast.missPasswordToken'), 'error')
         }
+        document.title = `${t('PageName')} - ${t('PageTitles.changePassword')}`
     }, [])
 
     const {register, watch, handleSubmit, formState: {errors},} = useForm<FormDataResetPassword>({

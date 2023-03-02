@@ -3,13 +3,14 @@ import "../common/i18n/index";
 import {getQueryOrDefault, getQueryOrDefaultMultiple, useQuery} from "../hooks/useQuery";
 import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
+import {useEffect} from "react";
 
 export default function Error() {
 
     const {t} = useTranslation()
     const query = useQuery()
     const navigate = useNavigate()
-    let auth = useAuth()
+    const auth = useAuth()
 
     let error = getQueryOrDefault(query, "code", "404")
     if (error === "401") {
@@ -19,7 +20,11 @@ export default function Error() {
         error = "404"
     }
 
-    let description = getQueryOrDefaultMultiple(query, "description")
+    useEffect(()=>{
+        document.title = `${t('PageName')} - ${t('PageTitles.error')}`
+    }, [])
+
+    const description = getQueryOrDefaultMultiple(query, "description")
 
     return (
         <div className="container-fluid p-0 h-100 d-flex justify-content-center align-items-center">

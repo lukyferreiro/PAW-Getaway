@@ -81,6 +81,7 @@ export default function UserProfile() {
                 //     .catch(() => navigate("/error?code=500&message=Server error"));
             }
         }
+        document.title = `${t('PageName')} - ${t('PageTitles.userProfile')}`
     }, [])
 
     useEffect(() => {

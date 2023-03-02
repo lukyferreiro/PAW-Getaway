@@ -42,6 +42,7 @@ export default function UserFavourites() {
                 setOrders(new Array(0))
             }
         );
+        document.title = `${t('PageName')} - ${t('PageTitles.userFavourites')}`
     }, [])
 
     useEffect(() => {

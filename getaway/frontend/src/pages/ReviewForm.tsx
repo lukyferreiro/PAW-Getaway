@@ -42,7 +42,9 @@ export default function ReviewForm() {
         } else if (!isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
-        } else if (parseInt(currentId) !== -1) {
+        }
+        document.title = `${t('PageName')} - ${t('PageTitles.reviewForm.create')}`
+        if (parseInt(currentId) !== -1) {
             serviceHandler(
                 reviewService.getReviewById(parseInt(currentId)),
                 navigate, (review) => {
@@ -63,6 +65,7 @@ export default function ReviewForm() {
                     setHover(0)
                 }
             )
+            document.title = `${t('PageName')} - ${t('PageTitles.reviewForm.edit')}`
         }
         serviceHandler(
             experienceService.getExperienceNameById(parseInt(experienceId ? experienceId : '-1')),

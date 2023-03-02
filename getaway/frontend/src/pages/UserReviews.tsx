@@ -28,6 +28,10 @@ export default function UserReviews() {
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
 
     useEffect(() => {
+        document.title = `${t('PageName')} - ${t('PageTitles.userReviews')}`
+    })
+
+    useEffect(() => {
         if (!isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('User.toast.reviews.forbidden'), 'error')

@@ -47,6 +47,7 @@ export default function Home() {
                 }
             );
         }
+        document.title = `${t('PageName')}`
     }, []);
 
     return (

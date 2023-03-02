@@ -70,6 +70,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 setCountries(new Array(0))
             }
         );
+        document.title = `${t('PageName')} - ${t('PageTitles.experiences')}`
     }, [])
 
     //TODO: maxprice changes makes double refresh. Maybe add maxprice to experiencelist dto

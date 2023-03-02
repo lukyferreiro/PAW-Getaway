@@ -44,10 +44,11 @@ export default function ExperienceForm() {
             navigate("/login")
             showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
         }
-        if (!isVerifiedValue) {
+        if (user && readUser && !isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
         }
+        document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.create')}`
         if (parseInt(currentId) !== -1) {
             serviceHandler(
                 experienceService.getExperienceById(parseInt(currentId), false),
@@ -74,6 +75,7 @@ export default function ExperienceForm() {
                     setExperience(undefined)
                 }
             )
+            document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.edit')}`
         }
         serviceHandler(
             categoryService.getCategories(),

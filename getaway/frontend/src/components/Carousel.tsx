@@ -33,7 +33,7 @@ export default function Carousel(props: { title: any, experiences: ExperienceMod
 
     return (
         <>
-            {experiences !== undefined &&
+            {experiences !== undefined && experiences.length > 0 &&
                 <>
                     <div className="d-flex justify-content-center align-content-center">
                         <h2 style={{fontWeight: "600", textDecoration: "underline"}}>

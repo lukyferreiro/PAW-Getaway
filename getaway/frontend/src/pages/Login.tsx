@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {useForm} from "react-hook-form";
-import React, {Dispatch, SetStateAction, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {loginService} from "../services";
 import {useAuth} from "../hooks/useAuth";
 import {Link, useLocation, useNavigate} from 'react-router-dom'
@@ -40,6 +40,10 @@ export default function Login(props: { nameProp: [string | undefined, Dispatch<S
     const {register, handleSubmit} = useForm<FormDataLogin>({
         criteriaMode: "all",
     });
+
+    useEffect(() => {
+        document.title = `${t('PageName')} - ${t('PageTitles.login')}`
+    }, [])
 
     const onSubmitLogin = handleSubmit((data: FormDataLogin) => {
             setInvalidCredendtials(false);

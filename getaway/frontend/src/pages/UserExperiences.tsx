@@ -72,6 +72,7 @@ export default function UserExperiences() {
                 setOrders(new Array(0))
             }
         );
+        document.title = `${t('PageName')} - ${t('PageTitles.userExperiences')}`
     }, [])
 
     useEffect(() => {
