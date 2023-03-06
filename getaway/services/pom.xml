@@ -20,21 +20,17 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-        </dependency>
         <!--Modulo interfaces-->
         <dependency>
             <groupId>ar.edu.itba.getaway</groupId>
             <artifactId>interfaces</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <!--Modulo persistance-->
         <dependency>
             <groupId>ar.edu.itba.getaway</groupId>
             <artifactId>persistence</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
             <scope>runtime</scope>
         </dependency>
         <!--Mockito-->

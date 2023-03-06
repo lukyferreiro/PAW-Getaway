@@ -37,13 +37,13 @@
         <dependency>
             <groupId>ar.edu.itba.getaway</groupId>
             <artifactId>interfaces</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <!--Modulo models -->
         <dependency>
             <groupId>ar.edu.itba.getaway</groupId>
             <artifactId>models</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <!--Mockito-->
         <dependency>

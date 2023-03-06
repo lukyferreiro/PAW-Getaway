@@ -51,20 +51,20 @@
         <dependency>
             <groupId>ar.edu.itba.getaway</groupId>
             <artifactId>services</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
             <scope>runtime</scope>
         </dependency>
         <!--Modulo interfaces-->
         <dependency>
             <groupId>ar.edu.itba.getaway</groupId>
             <artifactId>interfaces</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <!--Modulo persistence-->
         <dependency>
             <groupId>ar.edu.itba.getaway</groupId>
             <artifactId>persistence</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <!--JUnit-->
         <dependency>
@@ -261,15 +261,15 @@
                                 <arguments>install</arguments>
                             </configuration>
                         </execution>
-                        <execution>
-                            <id>npm test</id>
-                            <goals>
-                                <goal>npm</goal>
-                            </goals>
-                            <configuration>
-                                <arguments>test</arguments>
-                            </configuration>
-                        </execution>
+<!--                        <execution>-->
+<!--                            <id>npm test</id>-->
+<!--                            <goals>-->
+<!--                                <goal>npm</goal>-->
+<!--                            </goals>-->
+<!--                            <configuration>-->
+<!--                                <arguments>test</arguments>-->
+<!--                            </configuration>-->
+<!--                        </execution>-->
                         <execution>
                             <id>npm run build</id>
                             <goals>

@@ -38,6 +38,7 @@ export default function ExperienceDetails() {
             experienceService.getExperienceById(parseInt(experienceId ? experienceId : '-1'), true),
             navigate, (experience) => {
                 setExperience(experience)
+                document.title = `${t('PageName')} - ${t('PageTitles.experienceDetails', {experienceName: experience.name})}`
             },
             () => {
                 setIsLoading(false)
@@ -46,7 +47,6 @@ export default function ExperienceDetails() {
                 setExperience(undefined)
             }
         );
-        document.title = `${t('PageName')} - ${t('PageTitles.experienceDetails', {experienceName: experience?.name})}`
     }, []);
 
     //TODO: Add different dataloader
