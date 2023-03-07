@@ -1,4 +1,5 @@
 import React from "react";
+import StarRoundedIcon from "@mui/icons-material/StarRounded";
 
 export default function StarRating(props: { score: number }) {
 
@@ -10,7 +11,8 @@ export default function StarRating(props: { score: number }) {
                 index -= 5;
                 return (
                     <div key={index} className={index >= -score ? "on" : "off"}>
-                        <span className="star">&#9733;</span>
+                        {/*<span className="star">&#9733;</span>*/}
+                        <StarRoundedIcon className="star"/>
                     </div>
                 );
             })}

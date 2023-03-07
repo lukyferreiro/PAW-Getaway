@@ -9,6 +9,7 @@ import {useAuth} from "../hooks/useAuth";
 import {ExperienceNameModel, ReviewModel} from "../types";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {showToast} from "../scripts/toast";
+import StarRoundedIcon from "@mui/icons-material/StarRounded";
 
 
 type FormDataReview = {
@@ -226,7 +227,8 @@ export default function ReviewForm() {
                                                     onMouseEnter={() => setHover(index)}
                                                     onMouseLeave={() => setHover(rating)}
                                                 >
-                                                    <span className="star">&#9733;</span>
+                                                    {/*<span className="star">&#9733;</span>*/}
+                                                    <StarRoundedIcon className="star"/>
                                                 </button>
                                             );
                                         })}

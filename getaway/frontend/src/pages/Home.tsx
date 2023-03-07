@@ -14,7 +14,7 @@ export default function Home() {
     const {t} = useTranslation()
     const navigate = useNavigate()
 
-    const {user} = useAuth()
+    const {isLogged} = useAuth()
 
     const [anonymousLandingPage, setAnonymousLandingPage] = useState<AnonymousLandingPageModel | undefined>(undefined)
     const [userLandingPage, setUserLandingPage] = useState<UserLandingPageModel | undefined>(undefined)
@@ -22,7 +22,7 @@ export default function Home() {
 
     useEffect(() => {
         setIsLoading(true);
-        if (user) {
+        if (isLogged()) {
             serviceHandler(
                 experienceService.getUserLandingPage(),
                 navigate, (userLandingPage) => {
@@ -53,13 +53,7 @@ export default function Home() {
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
             <div className="my-2">
-                {user ?
-                    <>
-                        <Carousel title={t('Landing.user.viewed')} experiences={userLandingPage?.viewed} show={3}/>
-                        <Carousel title={t('Landing.user.recommendedByFavs')} experiences={userLandingPage?.recommendedByFavs} show={3}/>
-                        <Carousel title={t('Landing.user.recommendedByReviews')} experiences={userLandingPage?.recommendedByReviews} show={3}/>
-                    </>
-                    :
+                { anonymousLandingPage !== undefined &&
                     <>
                         <Carousel title={t('Landing.anonymous.aventura')} experiences={anonymousLandingPage?.aventura} show={3}/>
                         <Carousel title={t('Landing.anonymous.gastronomia')} experiences={anonymousLandingPage?.gastronomia} show={3}/>
@@ -69,6 +63,15 @@ export default function Home() {
                         <Carousel title={t('Landing.anonymous.historico')} experiences={anonymousLandingPage?.historico} show={3}/>
                     </>
                 }
+                { userLandingPage !== undefined &&
+                    <>
+                        <Carousel title={t('Landing.user.viewed')} experiences={userLandingPage?.viewed} show={3}/>
+                        <Carousel title={t('Landing.user.recommendedByFavs')} experiences={userLandingPage?.recommendedByFavs} show={3}/>
+                        <Carousel title={t('Landing.user.recommendedByReviews')} experiences={userLandingPage?.recommendedByReviews} show={3}/>
+                    </>
+                }
+
+
             </div>
         </DataLoader>
 

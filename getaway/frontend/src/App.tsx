@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
-
 import Landing from "./pages/Landing";
 import UserPage from "./pages/UserPage";
 import UserProfile from "./pages/UserProfile";
@@ -24,6 +23,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import 'react-toastify/dist/ReactToastify.css'
 import {ToastContainer} from "react-toastify";
+import {paths} from "./common";
 
 function App() {
     const categoryProp = useState<string | undefined>(undefined)
@@ -31,7 +31,7 @@ function App() {
 
     return (
         <AuthProvider>
-            <BrowserRouter basename={process.env.REACT_APP_CONTEXT}>
+            <BrowserRouter basename={paths.LOCAL_BASE_URL}>
 
                 <Navbar categoryProp={categoryProp} nameProp={nameProp}/>
                 <hr className="separator"/>

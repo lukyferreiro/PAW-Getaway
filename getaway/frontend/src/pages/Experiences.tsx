@@ -13,6 +13,7 @@ import Pagination from "../components/Pagination";
 import {Close} from "@mui/icons-material";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import StarRoundedIcon from "@mui/icons-material/StarRounded";
 
 export default function Experiences(props: { nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
     const {t} = useTranslation()
@@ -36,6 +37,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     //Price
     const [maxPrice, setMaxPrice] = useState<number>(0)
     const [price, setPrice] = useState<number>(parseInt(getQueryOrDefault(query, "price", "0")))
+    const [onPriceChange, setOnPriceChange] = useState<boolean>(false)
     //Score
     const [rating, setRating] = useState(parseInt(getQueryOrDefault(query, "rating", "0")))
     const [hover, setHover] = useState(0)
@@ -73,7 +75,6 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
         document.title = `${t('PageName')} - ${t('PageTitles.experiences')}`
     }, [])
 
-    //TODO: maxprice changes makes double refresh. Maybe add maxprice to experiencelist dto
     useEffect(() => {
         if (nameProp[0] !== undefined && categoryProp[0] !== undefined) {
             serviceHandler(
@@ -114,7 +115,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 }
             );
         }
-    }, [categoryProp[0], nameProp[0], rating, city, order[0], currentPage[0], price])
+    }, [categoryProp[0], nameProp[0], rating, city, order[0], currentPage[0], onPriceChange])
 
 
     function handleCountryChange(countryId: number) {
@@ -146,6 +147,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
             searchParams.set("price", newValue.toString())
             setSearchParams(searchParams)
             setPrice(newValue);
+            setOnPriceChange(!onPriceChange)
         }
     };
 
@@ -267,7 +269,8 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                                         onMouseEnter={() => setHover(index)}
                                         onMouseLeave={() => setHover(rating)}
                                     >
-                                        <span className="star">&#9733;</span>
+                                        {/*<span className="star">&#9733;</span>*/}
+                                        <StarRoundedIcon className="star"/>
                                     </button>
                                 );
                             })}

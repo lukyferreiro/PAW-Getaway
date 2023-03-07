@@ -76,7 +76,6 @@ export default function UserExperiences() {
     }, [])
 
     useEffect(() => {
-        setOnEdit(false)
         setIsLoading(true);
         serviceHandler(
             userService.getUserExperiences(user ? user.id : -1, userName, order[0], currentPage[0]),
@@ -122,7 +121,7 @@ export default function UserExperiences() {
             .catch(() => {
                 showToast(t('Experience.toast.deleteError', {experienceName: experience.name}), "error")
             });
-        setOnEdit(true)
+        setOnEdit(!onEdit)
     }
 
     function editExperience(experienceId: number) {
@@ -297,14 +296,14 @@ export default function UserExperiences() {
                                                             role="group">
                                                             {experience.observable ?
                                                                 <IconButton
-                                                                    onClick={() => setVisibility(experience, false)}
+                                                                    onClick={() => setVisibility(experience, false) }
                                                                     aria-label="visibilityOn" component="span"
                                                                     style={{fontSize: "x-large"}} id="setFalse">
                                                                     <VisibilityIcon/>
                                                                 </IconButton>
                                                                 :
                                                                 <IconButton
-                                                                    onClick={() => setVisibility(experience, true)}
+                                                                    onClick={() => setVisibility(experience, true) }
                                                                     aria-label="visibilityOff" component="span"
                                                                     style={{fontSize: "xx-large"}} id="setTrue">
                                                                     <VisibilityOffIcon/>
