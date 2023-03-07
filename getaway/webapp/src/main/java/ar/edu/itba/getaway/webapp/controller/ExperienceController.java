@@ -355,7 +355,7 @@ public class ExperienceController {
 
         imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), experience.getExperienceImage());
 
-        return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).path("experienceImage").build()).build();
+        return Response.noContent().build();
     }
 
     // Endpoint para obtener la reseñas de una experiencia
@@ -438,4 +438,3 @@ public class ExperienceController {
         return Response.noContent().build();
     }
 }
-

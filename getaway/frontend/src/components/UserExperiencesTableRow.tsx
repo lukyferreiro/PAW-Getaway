@@ -1,6 +1,6 @@
 import {ExperienceModel} from "../types";
 import React, {Dispatch, SetStateAction, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import StarRating from "./StarRating";
 import {IconButton} from "@mui/material";
 import {deleteExperience, editExperience, setVisibility} from "../scripts/experienceOperations";
@@ -21,6 +21,7 @@ export default function UserExperiencesTableRow(props: {
 }) {
 
     const {t} = useTranslation()
+    const navigate = useNavigate()
     const {experience, onEdit, setExperienceId, isOpenImage} = props
     const [view, setView] = useState(experience.observable)
 
@@ -70,21 +71,21 @@ export default function UserExperiencesTableRow(props: {
                     <div className="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
                         {view ?
                             <div>
-                                <IconButton onClick={() => setVisibility(experience, false, setView)} aria-label="Visibility"
+                                <IconButton onClick={() => setVisibility(experience, false, setView, t)} aria-label="Visibility"
                                             component="span" style={{fontSize: "x-large"}} id="setFalse">
                                     <VisibilityIcon/>
                                 </IconButton>
                             </div>
                             :
                             <div>
-                                <IconButton onClick={() => setVisibility(experience, true, setView)} aria-label="Visibility"
+                                <IconButton onClick={() => setVisibility(experience, true, setView, t)} aria-label="Visibility"
                                             component="span" style={{fontSize: "xx-large"}} id="setTrue">
                                     <VisibilityOffIcon/>
                                 </IconButton>
                             </div>
                         }
 
-                        <IconButton onClick={() => editExperience(experience.id)}
+                        <IconButton onClick={() => editExperience(experience.id, navigate)}
                                     aria-label="edit" component="span"
                                     style={{fontSize: "x-large"}}>
                             <EditIcon/>
@@ -104,7 +105,7 @@ export default function UserExperiencesTableRow(props: {
                         <IconButton onClick={() => confirmDialogModal(
                             t('User.experiences.deleteTitle'),
                             t('User.experiences.confirmDelete', {experienceName: experience.name}),
-                            () => deleteExperience(experience, onEdit, true))
+                            () => deleteExperience(experience, onEdit, true, navigate, t))
                         }
                                     aria-label="trash" component="span"
                                     style={{fontSize: "x-large"}}>

@@ -10,6 +10,7 @@ interface AuthContextType {
     signOut: (callback: VoidFunction) => void
     verifyUser: (callback: VoidFunction) => void
     makeProvider: (callback: VoidFunction) => void
+    setHasImage: () => void
     editUserInfo: (name: string, surname: string, callback: VoidFunction) => void
     isLogged: () => boolean
     isVerified: () => boolean
@@ -67,6 +68,14 @@ export function AuthProvider({children}: { children: ReactNode }) {
         callback()
     }
 
+    const setHasImage = () => {
+        if (user !== null) {
+            user.hasImage = true
+            setUser(user)
+            localStorage.setItem("user", JSON.stringify(user))
+        }
+    }
+
     const editUserInfo = (name: string, surname: string, callback: VoidFunction) => {
         if (user !== null) {
             user.name = name
@@ -94,7 +103,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
         return localRemember === null ? false : localRemember === 'true'
     }
 
-    const value = {user, setUser, signIn, signOut, verifyUser, makeProvider, editUserInfo, isLogged, isVerified, isProvider, isRememberMe}
+    const value = {user, setUser, signIn, signOut, verifyUser, makeProvider, setHasImage, editUserInfo, isLogged, isVerified, isProvider, isRememberMe}
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

@@ -253,7 +253,7 @@ public class UserController {
 
         imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
 
-        return Response.created(UserDto.getUserUriBuilder(user, uriInfo).path("profileImage").build()).build();
+        return Response.noContent().build();
     }
 
     //Endpoint para obtener las experiencias creadas por un usuario

@@ -86,11 +86,11 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                     {user ?
                         <div>
                             {fav ?
-                                <IconButton onClick={() => setFavExperience(experience, false, setFav)}>
+                                <IconButton onClick={() => setFavExperience(experience, false, setFav, t)}>
                                     <Favorite className="fa-heart heart-color"/>
                                 </IconButton>
                                 :
-                                <IconButton onClick={() => setFavExperience(experience, true, setFav)}>
+                                <IconButton onClick={() => setFavExperience(experience, true, setFav, t)}>
                                     <FavoriteBorder className="fa-heart"/>
                                 </IconButton>
                             }

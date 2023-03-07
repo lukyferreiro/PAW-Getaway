@@ -152,11 +152,11 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 {user ?
                     <div>
                         {fav ?
-                            <IconButton onClick={() => setFavExperience(experience, false, setFav)}>
+                            <IconButton onClick={() => setFavExperience(experience, false, setFav, t)}>
                                 <Favorite className="fa-heart heart-color"/>
                             </IconButton>
                             :
-                            <IconButton onClick={() => setFavExperience(experience, true, setFav)}>
+                            <IconButton onClick={() => setFavExperience(experience, true, setFav, t)}>
                                 <FavoriteBorder className="fa-heart"/>
                             </IconButton>
                         }
@@ -174,21 +174,21 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 <div className="btn-group my-2 d-flex justify-content-center align-content-center" role="group">
                     {view ?
                         <div>
-                            <IconButton onClick={() => setVisibility(experience, false, setView)} aria-label="Visibility"
+                            <IconButton onClick={() => setVisibility(experience, false, setView, t)} aria-label="Visibility"
                                         component="span" style={{fontSize: "xxx-large"}} id="setFalse">
                                 <VisibilityIcon/>
                             </IconButton>
                         </div>
                         :
                         <div>
-                            <IconButton onClick={() => setVisibility(experience, true, setView)} aria-label="Visibility"
+                            <IconButton onClick={() => setVisibility(experience, true, setView, t)} aria-label="Visibility"
                                         component="span" style={{fontSize: "xx-large"}} id="setTrue">
                                 <VisibilityOffIcon/>
                             </IconButton>
                         </div>
                     }
 
-                    <IconButton onClick={() => editExperience(experience.id)} aria-label="edit" component="span"
+                    <IconButton onClick={() => editExperience(experience.id, navigate)} aria-label="edit" component="span"
                                 style={{fontSize: "xx-large"}}>
                         <EditIcon/>
                     </IconButton>
@@ -208,7 +208,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                             confirmDialogModal(
                                 t('User.experiences.deleteTitle'), t('User.experiences.confirmDelete',
                                     {experienceName: experience.name}),
-                                () => deleteExperience(experience, undefined, false)
+                                () => deleteExperience(experience, undefined, false, navigate, t)
                             )
                         }}
                         aria-label="trash"

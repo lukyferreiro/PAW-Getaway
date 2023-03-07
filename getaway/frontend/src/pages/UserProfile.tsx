@@ -110,26 +110,28 @@ export default function UserProfile() {
                             </h3>
                         </div>
 
-                        <div className="d-flex justify-items-center align-items-center">
-                            <h4>
-                                {t('User.profile.photo')}
-                            </h4>
-                            <IconButton
-                                onClick={() => {
-                                    isOpenImage[1](true)
-                                }}
-                                aria-label="picture"
-                                component="span"
-                                style={{fontSize: "xx-large"}}>
-                                <AddPhotoAlternateIcon/>
-                            </IconButton>
-                        </div>
-
                         <div className="mb-2">
                             {isVerifiedValue ?
-                                <button onClick={() => navigate({pathname: "/user/editProfile"})} type="button" className="btn btn-error">
-                                    {t('User.profile.editBtn')}
-                                </button>
+                                <>
+                                    <div className="d-flex justify-items-center align-items-center">
+                                        <h4>
+                                            {t('User.profile.photo')}
+                                        </h4>
+                                        <IconButton
+                                            onClick={() => {
+                                                isOpenImage[1](true)
+                                            }}
+                                            aria-label="picture"
+                                            component="span"
+                                            style={{fontSize: "xx-large"}}>
+                                            <AddPhotoAlternateIcon/>
+                                        </IconButton>
+                                    </div>
+
+                                    <button onClick={() => navigate({pathname: "/user/editProfile"})} type="button" className="btn btn-error">
+                                        {t('User.profile.editBtn')}
+                                    </button>
+                                </>
                                 :
                                 <button onClick={() => sendVerifyEmail()} type="button" className="btn btn-error">
                                     {t('User.profile.verifyAccountBtn')}

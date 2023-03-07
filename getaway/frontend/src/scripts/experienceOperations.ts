@@ -1,17 +1,16 @@
 import {ExperienceModel} from "../types";
 import {experienceService} from "../services";
 import {showToast} from "./toast";
-import {useNavigate} from "react-router-dom";
-import {useTranslation} from "react-i18next";
+import {NavigateFunction} from "react-router-dom";
 import {Dispatch, SetStateAction} from "react";
+import {TFunction} from "react-i18next";
 
-const navigate = useNavigate()
-const {t} = useTranslation()
 
 export function setVisibility(
     experience: ExperienceModel,
     visibility: boolean,
     setView:  Dispatch<SetStateAction<boolean>>,
+    t: TFunction
 ) {
     experienceService.setExperienceObservable(experience.id, visibility)
         .then(() => {
@@ -30,7 +29,8 @@ export function setVisibility(
 export function setFavExperience(
     experience: ExperienceModel,
     fav: boolean,
-    setFav:  Dispatch<SetStateAction<boolean>>
+    setFav:  Dispatch<SetStateAction<boolean>>,
+    t: TFunction
 ) {
     experienceService.setExperienceFav(experience.id, fav)
         .then(() => {
@@ -54,6 +54,8 @@ export function deleteExperience(
     experience: ExperienceModel,
     onEdit: [boolean, Dispatch<SetStateAction<boolean>>] | undefined,
     isOnEdit: boolean,
+    navigate: NavigateFunction,
+    t: TFunction
 ) {
     experienceService.deleteExperienceById(experience.id)
         .then(() => {
@@ -71,6 +73,9 @@ export function deleteExperience(
 
 }
 
-export function editExperience(experienceId: number) {
+export function editExperience(
+    experienceId: number,
+    navigate: NavigateFunction
+) {
     navigate({pathname: "/experienceForm", search: `?id=${experienceId}`}, {replace: true});
 }

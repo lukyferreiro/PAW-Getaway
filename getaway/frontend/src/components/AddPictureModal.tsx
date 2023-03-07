@@ -4,6 +4,7 @@ import {experienceService, userService} from "../services";
 import {useTranslation} from "react-i18next";
 import Modal from "react-modal";
 import {showToast} from "../scripts/toast";
+import {useAuth} from "../hooks/useAuth";
 
 type FormDataImg = {
     image?: FileList
@@ -18,6 +19,7 @@ export default function AddPictureModal(
 ) {
     const {t} = useTranslation()
     const {isOpen, experienceId, userId} = props;
+    const {user, setHasImage} = useAuth()
 
     const {register, reset, handleSubmit, formState: {errors},} = useForm<FormDataImg>({
         criteriaMode: "all",
@@ -44,6 +46,9 @@ export default function AddPictureModal(
                 userService.updateUserProfileImage(userId ? userId : -1, data.image![0])
                     .then((result) => {
                         if (result.getError().getStatus() === 204) {
+                            if (!user?.hasImage) {
+                                setHasImage()
+                            }
                             isOpen[1](false)
                             reset()
                             showToast(t('User.toast.imageSuccess'), "success")
