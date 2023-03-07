@@ -3,7 +3,6 @@ export default interface UserModel {
     name: string;
     surname: string;
     email: string;
-    favsCount: number;
     verified: boolean;
     provider: boolean;
     token?: string;

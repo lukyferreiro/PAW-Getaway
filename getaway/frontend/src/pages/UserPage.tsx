@@ -10,13 +10,11 @@ function getCorrectPrivilegeRoute(location: Location): To {
 }
 
 export default function UserPage() {
-
-    const {user} = useAuth()
+    const {isLogged} = useAuth()
     const location = useLocation()
-    const readUser = localStorage.getItem("user")
     const correctRoute = getCorrectPrivilegeRoute(location)
 
-    if (!user && !readUser) {
+    if (!isLogged()) {
         return <Navigate to="/login" state={{from: correctRoute}} replace/>
     }
 
