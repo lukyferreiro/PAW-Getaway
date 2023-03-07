@@ -14,7 +14,6 @@ public class UserDto implements Serializable {
     private String name;
     private String surname;
     private String email;
-    private Integer favsCount;
     private String selfUrl;
     private String profileImageUrl;
     private String experiencesUrl;
@@ -40,7 +39,6 @@ public class UserDto implements Serializable {
         this.name = user.getName();
         this.surname = user.getSurname();
         this.email = user.getEmail();
-        this.favsCount = user.getFavExperiences().size();
         this.selfUrl = uriBuilder.clone().build().toString();
         if (user.getProfileImage() != null) {
             this.profileImageUrl = uriBuilder.clone().path("profileImage").build().toString();  // /user/{id}/profileImage
@@ -76,12 +74,6 @@ public class UserDto implements Serializable {
     }
     public void setEmail(String email) {
         this.email = email;
-    }
-    public Integer getFavsCount() {
-        return favsCount;
-    }
-    public void setFavsCount(Integer favsCount) {
-        this.favsCount = favsCount;
     }
     public String getSelfUrl() {
         return selfUrl;

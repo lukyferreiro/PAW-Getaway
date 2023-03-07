@@ -37,7 +37,6 @@ export const userModel: UserModel = {
     name: "Lucas",
     surname: "Ferreiro",
     email: "lferreiro@itba.edu.ar",
-    favsCount: 6,
     verified: true,
     provider: true,
     hasImage: false
