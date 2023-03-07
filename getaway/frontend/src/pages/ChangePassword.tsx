@@ -13,8 +13,8 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {showToast} from "../scripts/toast";
 
 type FormDataResetPassword = {
-    password: string;
-    confirmPassword: string;
+    password: string,
+    confirmPassword: string,
 };
 
 export default function ChangePassword() {
@@ -64,9 +64,9 @@ export default function ChangePassword() {
                 )
                 .catch(() => {
                     showToast(t('ChangePassword.toast.error'), 'success')
-                });
+                })
         }
-    );
+    )
 
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">

@@ -1,12 +1,13 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
 import javax.ws.rs.core.UriInfo;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-public class RootDto {
+public class RootDto implements Serializable {
 
     private Collection<String> usersUrl;
     private Collection<String> experiencesUrl;
@@ -37,12 +38,10 @@ public class RootDto {
 
     public RootDto(UriInfo uriInfo) {
         final String baseUrl = uriInfo.getBaseUriBuilder().build().toString();
-        usersUrl = userStrings.stream().map(String::new).collect(Collectors.toList());
-        ;
-        experiencesUrl = experienceStrings.stream().map(String::new).collect(Collectors.toList());
-        ;
+        usersUrl = userStrings.stream().map(s -> baseUrl + s).collect(Collectors.toList());
+        experiencesUrl = experienceStrings.stream().map(s -> baseUrl + s).collect(Collectors.toList());
         reviewsUrl = baseUrl + reviewString;
-        locationUrl = locationStrings.stream().map(String::new).collect(Collectors.toList());
+        locationUrl = locationStrings.stream().map(s -> baseUrl + s).collect(Collectors.toList());
         categoryUrl = baseUrl + categoryString;
     }
 

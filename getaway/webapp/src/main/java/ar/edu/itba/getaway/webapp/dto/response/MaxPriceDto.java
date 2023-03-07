@@ -1,6 +1,8 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
-public class MaxPriceDto {
+import java.io.Serializable;
+
+public class MaxPriceDto implements Serializable {
     private Double maxPrice;
 
     public MaxPriceDto() {

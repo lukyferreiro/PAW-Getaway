@@ -10,23 +10,19 @@ import {useForm} from "react-hook-form";
 import {Close} from "@mui/icons-material";
 import {IconButton} from "@mui/material";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
-import {showToast} from "../scripts/toast";
 
 type FormDataSearch = {
     name: string
 };
 
 export default function Navbar(props: { nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
+
     const {t} = useTranslation()
     const navigate = useNavigate()
     const query = useQuery()
 
     const {nameProp, categoryProp} = props
-
     const [searchParams, setSearchParams] = useSearchParams();
-
-    nameProp[1](getQueryOrDefault(query, "name", ""))
-    categoryProp[1](getQueryOrDefault(query, "category", ""))
 
     const {signOut, isLogged, isProvider, isVerified} = useAuth()
     const isLoggedValue = isLogged()
@@ -39,6 +35,8 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
         = useForm<FormDataSearch>({criteriaMode: "all"})
 
     useEffect(() => {
+        nameProp[1](getQueryOrDefault(query, "name", ""))
+        categoryProp[1](getQueryOrDefault(query, "category", ""))
         serviceHandler(
             categoryService.getCategories(),
             navigate, (category) => {
@@ -49,7 +47,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
             () => {
                 setCategories(new Array(0))
             }
-        );
+        )
     }, [])
 
     useEffect(() => {
@@ -58,7 +56,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
 
     const onSubmit = handleSubmit((data: FormDataSearch) => {
         navigate({pathname: "/experiences", search: `?category=${categoryProp[0]}&name=${data.name}`}, {replace: true})
-    });
+    })
 
     function clearNavBar() {
         searchParams.delete("category")
@@ -77,10 +75,8 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
         clearNavBar();
         if (!isLoggedValue) {
             navigate("/login")
-            // showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
         } else if (!isVerified) {
             navigate("/user/profile")
-            // showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
         }
     }
 

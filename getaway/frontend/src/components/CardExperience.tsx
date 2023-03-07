@@ -9,7 +9,9 @@ import {experienceService} from "../services";
 import {IconButton} from "@mui/material";
 import {useAuth} from "../hooks/useAuth";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
-import {showToast} from "../scripts/toast";
+import {setFavExperience} from "../scripts/experienceOperations";
+import Price from "./Price";
+import DataLoader from "./DataLoader";
 
 export default function CardExperience(props: { experience: ExperienceModel; }) {
 
@@ -20,41 +22,26 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
     const {user} = useAuth()
 
     const [experienceImg, setExperienceImg] = useState<string | undefined>(undefined)
+    const [isLoadingImg, setIsLoadingImg] = useState(false)
     const [fav, setFav] = useState(experience.fav)
 
     useEffect(() => {
         if (experience.hasImage) {
+            setIsLoadingImg(true)
             serviceHandler(
                 experienceService.getExperienceImage(experience?.id),
                 navigate, (experienceImg) => {
                     setExperienceImg(experienceImg.size > 0 ? URL.createObjectURL(experienceImg) : undefined)
                 },
                 () => {
+                    setIsLoadingImg(false)
                 },
                 () => {
+                    setIsLoadingImg(false)
                 }
-            );
+            )
         }
     }, [])
-
-    function setFavExperience(fav: boolean) {
-        experienceService.setExperienceFav(experience.id, fav)
-            .then(() => {
-                if (fav) {
-                    showToast(t('Experience.toast.favSuccess', {experienceName: experience.name}), "success")
-                } else {
-                    showToast(t('Experience.toast.noFavSuccess', {experienceName: experience.name}), "success")
-                }
-                setFav(fav)
-            })
-            .catch(() => {
-                if (fav) {
-                    showToast(t('Experience.toast.favError', {experienceName: experience.name}), "error")
-                } else {
-                    showToast(t('Experience.toast.noFavError', {experienceName: experience.name}), "error")
-                }
-            });
-    }
 
     return (
 
@@ -62,8 +49,10 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
 
             <div className="card-link h-100 d-flex flex-column">
                 <div>
-                    <img className={`card-img-top container-fluid ${experienceImg ? "p-0" : "p-4"} mw-100`} alt={`Imagen ${experience.category.name}`}
-                         src={experienceImg ? experienceImg : `./images/${experience.category.name}.svg`}/>
+                    <DataLoader spinnerMultiplier={2} isLoading={isLoadingImg}>
+                        <img className={`card-img-top container-fluid ${experienceImg ? "p-0" : "p-4"} mw-100`} alt={`Imagen ${experience.category.name}`}
+                             src={experienceImg ? experienceImg : `./images/${experience.category.name}.svg`}/>
+                    </DataLoader>
 
                     <div className="card-body container-fluid p-2">
                         <div className="title-link">
@@ -81,29 +70,7 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                             <h5 className="text-truncate">
                                 {experience.address}, {experience.city.name}, {experience.country.name}
                             </h5>
-                            {
-                                (experience.price === undefined ?
-                                    <div>
-                                        <h6>
-                                            {t('Experience.price.null')}
-                                        </h6>
-                                    </div>
-
-                                    :
-                                    (experience.price === 0 ?
-                                            <div>
-                                                <h6>
-                                                    {t('Experience.price.free')}
-                                                </h6>
-                                            </div>
-                                            :
-                                            <div>
-                                                <h6>
-                                                    {t('Experience.price.exist', {price: experience.price})}
-                                                </h6>
-                                            </div>
-                                    ))
-                            }
+                            <Price price={experience.price}/>
                         </div>
                     </div>
                 </div>
@@ -119,11 +86,11 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                     {user ?
                         <div>
                             {fav ?
-                                <IconButton onClick={() => setFavExperience(false)}>
+                                <IconButton onClick={() => setFavExperience(experience, false, setFav)}>
                                     <Favorite className="fa-heart heart-color"/>
                                 </IconButton>
                                 :
-                                <IconButton onClick={() => setFavExperience(true)}>
+                                <IconButton onClick={() => setFavExperience(experience, true, setFav)}>
                                     <FavoriteBorder className="fa-heart"/>
                                 </IconButton>
                             }

@@ -21,14 +21,14 @@ export default function AddPictureModal(
 
     const {register, reset, handleSubmit, formState: {errors},} = useForm<FormDataImg>({
         criteriaMode: "all",
-    });
+    })
 
     const onSubmit = handleSubmit((data: FormDataImg) => {
             if (experienceId) {
                 experienceService.updateExperienceImage(experienceId, data.image![0])
                     .then((result) => {
                             if (result.getError().getStatus() === 204) {
-                                isOpen[1](false);
+                                isOpen[1](false)
                                 reset()
                                 showToast(t('Experience.toast.imageSuccess'), "success")
                             }
@@ -39,12 +39,12 @@ export default function AddPictureModal(
                     )
                     .catch(() => {
                         showToast(t('Experience.toast.imageError'), "error")
-                    });
+                    })
             } else if (userId) {
                 userService.updateUserProfileImage(userId ? userId : -1, data.image![0])
                     .then((result) => {
                         if (result.getError().getStatus() === 204) {
-                            isOpen[1](false);
+                            isOpen[1](false)
                             reset()
                             showToast(t('User.toast.imageSuccess'), "success")
                         }

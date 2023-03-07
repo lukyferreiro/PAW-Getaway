@@ -1,16 +1,16 @@
-import {useTranslation} from "react-i18next";
-import "../common/i18n/index";
-import React, {useEffect, useState} from "react";
-import {serviceHandler} from "../scripts/serviceHandler";
-import {userService} from "../services";
-import {useNavigate, useSearchParams} from "react-router-dom";
-import {useAuth} from "../hooks/useAuth";
-import DataLoader from "../components/DataLoader";
-import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
-import {showToast} from "../scripts/toast";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import {IconButton} from "@mui/material";
-import AddPictureModal from "../components/AddPictureModal";
+import {useTranslation} from "react-i18next"
+import "../common/i18n/index"
+import React, {useEffect, useState} from "react"
+import {serviceHandler} from "../scripts/serviceHandler"
+import {userService} from "../services"
+import {useNavigate, useSearchParams} from "react-router-dom"
+import {useAuth} from "../hooks/useAuth"
+import DataLoader from "../components/DataLoader"
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery"
+import {showToast} from "../scripts/toast"
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate"
+import {IconButton} from "@mui/material"
+import AddPictureModal from "../components/AddPictureModal"
 
 export default function UserProfile() {
 
@@ -61,18 +61,18 @@ export default function UserProfile() {
     }, [])
 
     useEffect(() => {
-        // setIsLoadingImg(true)
         if (user?.hasImage) {
+            setIsLoadingImg(true)
             serviceHandler(
                 userService.getUserProfileImage(user?.id),
                 navigate, (userImg) => {
                     setUserImg(userImg.size > 0 ? URL.createObjectURL(userImg) : undefined)
                 },
                 () => {
-                    // setIsLoadingImg(false)
+                    setIsLoadingImg(false)
                 },
                 () => {
-                    // setIsLoadingImg(false)
+                    setIsLoadingImg(false)
                 }
             )
         }

@@ -1,12 +1,12 @@
-import {Location, Navigate, Outlet, To, useLocation} from "react-router-dom";
-import {useAuth} from "../hooks/useAuth";
+import {Location, Navigate, Outlet, To, useLocation} from "react-router-dom"
+import {useAuth} from "../hooks/useAuth"
 
 function getCorrectPrivilegeRoute(location: Location): To {
-    const startsWithUserOrError = location.pathname.startsWith("/user") || location.pathname.startsWith("/error");
+    const startsWithUserOrError = location.pathname.startsWith("/user") || location.pathname.startsWith("/error")
     if (startsWithUserOrError) {
-        return location;
+        return location
     }
-    return "/";
+    return "/"
 }
 
 export default function UserPage() {
@@ -17,9 +17,6 @@ export default function UserPage() {
     const correctRoute = getCorrectPrivilegeRoute(location)
 
     if (!user && !readUser) {
-        // Redirect them to the /login page, but save the current location they were
-        // trying to go to when they were redirected. This allows us to send them
-        // along to that page after they login
         return <Navigate to="/login" state={{from: correctRoute}} replace/>
     }
 
@@ -29,7 +26,7 @@ export default function UserPage() {
 
     return (
         <Outlet/>
-    );
+    )
 
 }
 

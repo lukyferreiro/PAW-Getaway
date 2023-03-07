@@ -4,10 +4,11 @@ import ar.edu.itba.getaway.models.ExperienceModel;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class ExperienceNameDto {
+public class ExperienceNameDto implements Serializable {
     private Long id;
     private String name;
 

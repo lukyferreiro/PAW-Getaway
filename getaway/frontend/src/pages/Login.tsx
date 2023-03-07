@@ -1,17 +1,17 @@
-import {useTranslation} from "react-i18next";
-import "../common/i18n/index";
-import {useForm} from "react-hook-form";
-import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {loginService} from "../services";
-import {useAuth} from "../hooks/useAuth";
+import {useTranslation} from "react-i18next"
+import "../common/i18n/index"
+import {useForm} from "react-hook-form"
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react"
+import {loginService} from "../services"
+import {useAuth} from "../hooks/useAuth"
 import {Link, useLocation, useNavigate} from 'react-router-dom'
-import {IconButton} from "@mui/material";
-import ModalResetPassword from "../components/ModalResetPassword";
+import {IconButton} from "@mui/material"
+import ModalResetPassword from "../components/ModalResetPassword"
+import {showToast} from "../scripts/toast"
 // @ts-ignore
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityIcon from "@mui/icons-material/Visibility"
 // @ts-ignore
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import {showToast} from "../scripts/toast";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
 
 type FormDataLogin = {
     email: string;
@@ -22,17 +22,14 @@ type FormDataLogin = {
 export default function Login(props: { nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
 
     const {t} = useTranslation()
-    let navigate = useNavigate()
-    let location = useLocation()
+    const navigate = useNavigate()
+    const location = useLocation()
 
-    let {signIn} = useAuth()
+    const {signIn} = useAuth()
     const {nameProp, categoryProp} = props
 
-    nameProp[1]("")
-    categoryProp[1]("")
-
     // @ts-ignore
-    let from = location.state?.from?.pathname || "/";
+    const from = location.state?.from?.pathname || "/";
     const [seePassword, setSeePassword] = useState(false);
     const isOpenPassword = useState(false);
     const [invalidCredentials, setInvalidCredendtials] = useState(false);
@@ -42,6 +39,8 @@ export default function Login(props: { nameProp: [string | undefined, Dispatch<S
     });
 
     useEffect(() => {
+        nameProp[1]("")
+        categoryProp[1]("")
         document.title = `${t('PageName')} - ${t('PageTitles.login')}`
     }, [])
 
@@ -60,7 +59,6 @@ export default function Login(props: { nameProp: [string | undefined, Dispatch<S
                                 showToast(t('Login.toast.verifySent'), 'success')
                             }
                         })
-
                     } else {
                         setInvalidCredendtials(true)
                     }

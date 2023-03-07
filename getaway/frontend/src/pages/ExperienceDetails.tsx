@@ -46,8 +46,8 @@ export default function ExperienceDetails() {
             () => {
                 setExperience(undefined)
             }
-        );
-    }, []);
+        )
+    }, [])
 
     //TODO: Add different dataloader
     useEffect(() => {
@@ -65,7 +65,7 @@ export default function ExperienceDetails() {
                 setReviews(new Array(0))
                 setMaxPage(0)
             }
-        );
+        )
     }, [currentPage[0]])
 
     function attemptAccessCreateReview() {

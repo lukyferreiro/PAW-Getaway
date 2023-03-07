@@ -13,19 +13,19 @@ type FormDataPasswordResetEmail = {
 export default function ModalResetPassword(props: { isOpen: [boolean, Dispatch<SetStateAction<boolean>>] }) {
 
     const {t} = useTranslation()
-    const {isOpen} = props;
-    const [invalidEmail, setInvalidEmail] = useState(false);
+    const {isOpen} = props
+    const [invalidEmail, setInvalidEmail] = useState(false)
 
     const {register, reset, handleSubmit, formState: {errors},} = useForm<FormDataPasswordResetEmail>({
         criteriaMode: "all",
-    });
+    })
 
     const onSubmit = handleSubmit((data: FormDataPasswordResetEmail) => {
-            setInvalidEmail(false);
+            setInvalidEmail(false)
             userService.sendPasswordResetEmail(data.email)
                 .then((user) => {
                         if (user.getError().getStatus()===204) {
-                            isOpen[1](false);
+                            isOpen[1](false)
                             reset()
                             showToast(t('User.toast.passwordResetEmailSuccess'), 'success')
                         } else {
@@ -35,9 +35,9 @@ export default function ModalResetPassword(props: { isOpen: [boolean, Dispatch<S
                 )
                 .catch(() => {
                     showToast(t('User.toast.passwordResetEmailError'), 'success')
-                });
+                })
         }
-    );
+    )
 
     return (
         <Modal style={{overlay: {zIndex: 100}}}

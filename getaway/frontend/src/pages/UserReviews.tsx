@@ -27,6 +27,8 @@ export default function UserReviews() {
     const [maxPage, setMaxPage] = useState(1)
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
 
+    const onEdit = useState(false)
+
     useEffect(() => {
         document.title = `${t('PageName')} - ${t('PageTitles.userReviews')}`
     })
@@ -53,7 +55,7 @@ export default function UserReviews() {
                 setMaxPage(1)
             }
         )
-    }, [currentPage[0]])
+    }, [currentPage[0], onEdit[0]])
 
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
@@ -74,7 +76,7 @@ export default function UserReviews() {
                         <div className="mx-5 my-2 d-flex flex-wrap justify-content-center align-content-center">
                             {reviews.map((review) => (
                                 <div style={{minWidth: "700px", maxWidth: "700px", height: "auto"}} key={review.id}>
-                                    <CardReview reviewModel={review} isEditing={true}/>
+                                    <CardReview reviewModel={review} isEditing={true} onEdit={onEdit}/>
                                 </div>
                             ))}
                         </div>

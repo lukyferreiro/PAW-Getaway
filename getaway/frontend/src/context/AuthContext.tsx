@@ -6,7 +6,7 @@ import {removeCookie} from "../scripts/cookies"
 interface AuthContextType {
     user: UserModel | null
     setUser: Dispatch<SetStateAction<UserModel | null>>
-    signIn: (user: UserModel, rememberMe: boolean, callback: VoidFunction) => void;
+    signIn: (user: UserModel, rememberMe: boolean, callback: VoidFunction) => void
     signOut: (callback: VoidFunction) => void
     verifyUser: (callback: VoidFunction) => void
     makeProvider: (callback: VoidFunction) => void

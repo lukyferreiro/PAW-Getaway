@@ -1,29 +1,27 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {Link, useNavigate, useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {ExperienceModel, OrderByModel} from "../types";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, userService} from "../services";
-import StarRating from "../components/StarRating";
 import {IconButton} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import {useForm} from "react-hook-form";
 import Pagination from "../components/Pagination";
 import OrderDropdown from "../components/OrderDropdown";
 import {Close} from "@mui/icons-material";
 import DataLoader from "../components/DataLoader";
-import ConfirmDialogModal, { confirmDialogModal } from "../components/ConfirmDialogModal";
+import ConfirmDialogModal from "../components/ConfirmDialogModal";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import AddPictureModal from "../components/AddPictureModal";
+import {showToast} from "../scripts/toast";
+import UserExperiencesTable from "../components/UserExperiencesTable";
 // @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import {showToast} from "../scripts/toast";
+
 
 type FormUserExperiencesSearch = {
     name: string
@@ -41,9 +39,8 @@ export default function UserExperiences() {
     const query = useQuery()
 
     const [userExperiences, setUserExperiences] = useState<ExperienceModel[]>(new Array(0))
-    const [experienceId, setExperienceId] = useState(-1)
+    const experienceId = useState(-1)
     const [isLoading, setIsLoading] = useState(false)
-    const [showModal, setShowModal] = useState(false)
     const isOpenImage = useState(false)
 
     const [userName, setUserName] = useState("")
@@ -51,7 +48,7 @@ export default function UserExperiences() {
     const order = useState<string>(getQueryOrDefault(query, "order", "OrderByAZ"))
     const [maxPage, setMaxPage] = useState(1)
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
-    const [onEdit, setOnEdit] = useState(false)
+    const onEdit = useState(false)
 
     const {register, handleSubmit, formState: {errors}, reset}
         = useForm<FormUserExperiencesSearch>({criteriaMode: "all"})
@@ -93,40 +90,11 @@ export default function UserExperiences() {
                 setMaxPage(1)
             }
         )
-    }, [currentPage[0], userName, order[0], onEdit])
+    }, [currentPage[0], userName, order[0], onEdit[0]])
 
     const onSubmit = handleSubmit((data: FormUserExperiencesSearch) => {
         setUserName(data.name);
     });
-
-    function setVisibility(experience: ExperienceModel, visibility: boolean) {
-        experienceService.setExperienceObservable(experience.id, visibility)
-            .then(() => {
-                if (visibility) {
-                    showToast(t('Experience.toast.visibilitySuccess', {experienceName: experience.name}), "success")
-                } else {
-                    showToast(t('Experience.toast.noVisibilitySuccess', {experienceName: experience.name}), "success")
-                }
-            })
-            .catch(() => {
-                showToast(t('Experience.toast.visibilityError', {experienceName: experience.name}), "error")
-            });
-    }
-
-    const deleteExperience = (experience: ExperienceModel) => {
-        experienceService.deleteExperienceById(experience.id)
-            .then(() => {
-                showToast(t('Experience.toast.deleteSuccess', {experienceName: experience.name}), "success")
-            })
-            .catch(() => {
-                showToast(t('Experience.toast.deleteError', {experienceName: experience.name}), "error")
-            });
-        setOnEdit(!onEdit)
-    }
-
-    function editExperience(experienceId: number) {
-        navigate({pathname: "/experienceForm", search: `?id=${experienceId}`}, {replace: true});
-    }
 
     function resetForm() {
         setUserName("")
@@ -201,145 +169,12 @@ export default function UserExperiences() {
                                     </div>
                                 </div>
                                 :
-                                <div>
-                                    <table className="table table-bordered table-hover table-fit">
-                                        <thead className="table-light">
-                                        <tr>
-                                            <th scope="col" key={1}>
-                                                <h4 className="table-title"> {t('User.experiences.title')}</h4>
-                                            </th>
-                                            <th scope="col" key={2}>
-                                                <h4 className="table-title"> {t('User.experiences.category')}</h4>
-                                            </th>
-                                            <th scope="col" key={3}>
-                                                <h4 className="table-title"> {t('User.experiences.score')}</h4>
-                                            </th>
-                                            <th scope="col" key={4}>
-                                                <h4 className="table-title"> {t('User.experiences.price')}</h4>
-                                            </th>
-                                            <th scope="col" key={5}>
-                                                <h4 className="table-title"> {t('User.experiences.views')}</h4>
-                                            </th>
-                                            <th scope="col" key={6}>
-                                                <h4 className="table-title"> {t('User.experiences.actions')}</h4>
-                                            </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {userExperiences.map((experience) => (
-                                            <>
-                                                <tr key={experience.id}>
-                                                    <th scope="row">
-                                                        <div className="title-link" style={{width: "350px"}}>
-                                                            <Link to={"/experiences/" + experience.id}>
-                                                                <h4 className="experience card-title container-fluid p-0"
-                                                                    style={{wordBreak: "break-all"}}>
-                                                                    {experience.name}
-                                                                </h4>
-                                                            </Link>
-                                                        </div>
-                                                    </th>
-                                                    <td>
-                                                        <div className="container-fluid d-flex p-2 mb-1 align-items-end">
-                                                            <h4 className="container-fluid p-0">
-                                                                {t('Categories.' + experience.category.name)}
-                                                            </h4>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className="container-fluid d-flex p-2 mb-1 align-items-end">
-                                                            <h5 className="mb-1">
-                                                                {t("User.experiences.reviewsCount", {count: experience.reviewCount})}
-                                                            </h5>
-                                                            <StarRating score={experience.score}/>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className="container-fluid d-flex p-2 mb-1 align-items-end">
-                                                            <h5 className="mb-1">
-                                                                {
-                                                                    (experience.price === undefined ?
-                                                                        <div>
-                                                                            <h6>
-                                                                                {t('Experience.price.null')}
-                                                                            </h6>
-                                                                        </div>
-
-                                                                        :
-                                                                        (experience.price === 0 ?
-                                                                                <div>
-                                                                                    <h6>
-                                                                                        {t('Experience.price.free')}
-                                                                                    </h6>
-                                                                                </div>
-                                                                                :
-                                                                                <div>
-                                                                                    <h6>
-                                                                                        {t('Experience.price.exist', {price: experience.price})}
-                                                                                    </h6>
-                                                                                </div>
-                                                                        ))
-                                                                }
-                                                            </h5>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className="container-fluid d-flex p-2 mb-1 align-items-end">
-                                                            <h5 className="mb-1">
-                                                                {experience.views}
-                                                            </h5>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div
-                                                            className="btn-group w-auto container-fluid p-2 d-flex align-items-end"
-                                                            role="group">
-                                                            {experience.observable ?
-                                                                <IconButton
-                                                                    onClick={() => setVisibility(experience, false) }
-                                                                    aria-label="visibilityOn" component="span"
-                                                                    style={{fontSize: "x-large"}} id="setFalse">
-                                                                    <VisibilityIcon/>
-                                                                </IconButton>
-                                                                :
-                                                                <IconButton
-                                                                    onClick={() => setVisibility(experience, true) }
-                                                                    aria-label="visibilityOff" component="span"
-                                                                    style={{fontSize: "xx-large"}} id="setTrue">
-                                                                    <VisibilityOffIcon/>
-                                                                </IconButton>
-                                                            }
-
-                                                            <IconButton onClick={() => editExperience(experience.id)}
-                                                                        aria-label="edit" component="span"
-                                                                        style={{fontSize: "x-large"}}>
-                                                                <EditIcon/>
-                                                            </IconButton>
-
-                                                            <IconButton
-                                                                onClick={() => {
-                                                                    setExperienceId(experience.id);
-                                                                    isOpenImage[1](true)
-                                                                }}
-                                                                aria-label="picture"
-                                                                component="span"
-                                                                style={{fontSize: "xx-large"}}>
-                                                                <AddPhotoAlternateIcon/>
-                                                            </IconButton>
-
-                                                            <IconButton onClick={() => confirmDialogModal(t('User.experiences.deleteTitle'), t('User.experiences.confirmDelete',{experienceName: experience.name}),() => deleteExperience(experience))}
-                                                                        aria-label="trash" component="span"
-                                                                        style={{fontSize: "x-large"}}>
-                                                                <DeleteIcon/>
-                                                            </IconButton>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </>
-                                            ))}
-                                        </tbody>
-                                    </table>
-
+                                <>
+                                    <UserExperiencesTable experiences={userExperiences}
+                                                          onEdit={onEdit}
+                                                          setExperienceId={experienceId[1]}
+                                                          isOpenImage={isOpenImage}
+                                    />
 
                                     <div className="mt-auto d-flex justify-content-center align-items-center">
                                         {maxPage > 1 && (
@@ -349,14 +184,14 @@ export default function UserExperiences() {
                                             />
                                         )}
                                     </div>
-                                </div>
+                                </>
                             }
                         </div>
                     </>
                 }
             </div>
             <ConfirmDialogModal/>
-            <AddPictureModal isOpen={isOpenImage} experienceId={experienceId}/>
+            <AddPictureModal isOpen={isOpenImage} experienceId={experienceId[0]}/>
         </DataLoader>
     );
 

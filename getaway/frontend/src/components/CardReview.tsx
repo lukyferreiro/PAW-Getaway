@@ -4,7 +4,7 @@ import {ReviewModel} from "../types";
 import {Link, useNavigate} from 'react-router-dom'
 import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import React, {useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StarRating from "./StarRating";
 import {serviceHandler} from "../scripts/serviceHandler";
@@ -12,11 +12,15 @@ import {reviewService, userService} from "../services";
 import {showToast} from "../scripts/toast";
 import ConfirmDialogModal, {confirmDialogModal} from "./ConfirmDialogModal";
 
-export default function CardReview(props: { reviewModel: ReviewModel; isEditing: boolean; }) {
+export default function CardReview(props: {
+    reviewModel: ReviewModel,
+    isEditing: boolean,
+    onEdit?: [boolean, Dispatch<SetStateAction<boolean>>],
+}) {
 
     const {t} = useTranslation()
     const navigate = useNavigate()
-    const {reviewModel, isEditing} = props
+    const {reviewModel, isEditing, onEdit} = props
 
     const [userImg, setUserImg] = useState<string | undefined>(undefined)
 
@@ -39,18 +43,20 @@ export default function CardReview(props: { reviewModel: ReviewModel; isEditing:
         navigate({
             pathname: `/experiences/${reviewModel.experience.id}/reviewForm`,
             search: `?id=${reviewId}`
-        }, {replace: true});
+        }, {replace: true})
     }
 
     function deleteReview(reviewId: number) {
         reviewService.deleteReviewById(reviewId)
             .then(() => {
+                if(onEdit){
+                    onEdit[1](!onEdit[0])
+                }
                 showToast(t('Review.toast.deleteSuccess', {reviewTitle: reviewModel.title}), "success")
             })
             .catch(() => {
                 showToast(t('Review.toast.deleteError', {reviewTitle: reviewModel.title}), "error")
             });
-        // navigate(-1)
     }
 
     return (

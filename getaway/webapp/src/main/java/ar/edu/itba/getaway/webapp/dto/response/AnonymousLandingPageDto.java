@@ -3,10 +3,11 @@ package ar.edu.itba.getaway.webapp.dto.response;
 import ar.edu.itba.getaway.models.ExperienceModel;
 
 import javax.ws.rs.core.UriInfo;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-public class AnonymousLandingPageDto {
+public class AnonymousLandingPageDto implements Serializable {
     private Collection<ExperienceDto> Aventura;
     private Collection<ExperienceDto> Gastronomia;
     private Collection<ExperienceDto> Hoteleria;

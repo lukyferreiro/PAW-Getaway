@@ -11,7 +11,6 @@ export default function StarRating(props: { score: number }) {
                 index -= 5;
                 return (
                     <div key={index} className={index >= -score ? "on" : "off"}>
-                        {/*<span className="star">&#9733;</span>*/}
                         <StarRoundedIcon className="star"/>
                     </div>
                 );

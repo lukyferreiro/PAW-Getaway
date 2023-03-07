@@ -2,10 +2,11 @@ package ar.edu.itba.getaway.webapp.dto.response;
 
 import ar.edu.itba.getaway.models.OrderByModel;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class OrderByDto {
+public class OrderByDto implements Serializable {
     private OrderByModel order;
 
     public static Collection<OrderByDto> mapOrderByToDto(Collection<OrderByModel> orderByModels) {

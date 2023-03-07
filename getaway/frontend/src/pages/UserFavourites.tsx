@@ -1,16 +1,16 @@
-import {useTranslation} from "react-i18next";
-import "../common/i18n/index";
-import React, {useEffect, useState} from "react";
-import {ExperienceModel, OrderByModel} from "../types";
-import {useAuth} from "../hooks/useAuth";
-import {serviceHandler} from "../scripts/serviceHandler";
-import {experienceService, userService} from "../services";
-import {useNavigate, useSearchParams} from "react-router-dom";
-import CardExperience from "../components/CardExperience";
-import Pagination from "../components/Pagination";
-import OrderDropdown from "../components/OrderDropdown";
-import DataLoader from "../components/DataLoader";
-import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import {useTranslation} from "react-i18next"
+import "../common/i18n/index"
+import React, {useEffect, useState} from "react"
+import {ExperienceModel, OrderByModel} from "../types"
+import {useAuth} from "../hooks/useAuth"
+import {serviceHandler} from "../scripts/serviceHandler"
+import {experienceService, userService} from "../services"
+import {useNavigate, useSearchParams} from "react-router-dom"
+import CardExperience from "../components/CardExperience"
+import Pagination from "../components/Pagination"
+import OrderDropdown from "../components/OrderDropdown"
+import DataLoader from "../components/DataLoader"
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery"
 
 export default function UserFavourites() {
 
@@ -41,12 +41,12 @@ export default function UserFavourites() {
             () => {
                 setOrders(new Array(0))
             }
-        );
+        )
         document.title = `${t('PageName')} - ${t('PageTitles.userFavourites')}`
     }, [])
 
     useEffect(() => {
-        setIsLoading(true);
+        setIsLoading(true)
         serviceHandler(
             userService.getUserFavExperiences(user ? user.id : -1, order[0], currentPage[0]),
             navigate, (experiences) => {

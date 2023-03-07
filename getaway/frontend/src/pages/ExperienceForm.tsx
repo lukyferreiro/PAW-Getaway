@@ -23,6 +23,7 @@ type FormDataExperience = {
 };
 
 export default function ExperienceForm() {
+
     const {user, isVerified, isProvider, makeProvider} = useAuth()
     const readUser = localStorage.getItem("user");
     const isVerifiedValue = isVerified()
@@ -35,6 +36,8 @@ export default function ExperienceForm() {
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
     const [countries, setCountries] = useState<CountryModel[]>(new Array(0))
     const [cities, setCities] = useState<CityModel[]>(new Array(0))
+
+    const [isLoadingData, setIsLoadingData] = useState(false)
 
     const query = useQuery()
     const currentId = getQueryOrDefault(query, "id", "-1")
@@ -49,25 +52,26 @@ export default function ExperienceForm() {
             showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
         }
         document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.create')}`
+
         if (parseInt(currentId) !== -1) {
             serviceHandler(
                 experienceService.getExperienceById(parseInt(currentId), false),
                 navigate, (fetchedExperience) => {
                     if (fetchedExperience.user.id !== user?.id) {
-                        navigate("/", {replace: true});
+                        navigate("/", {replace: true})
                     }
                     setExperience(fetchedExperience)
                     loadCities(fetchedExperience.country.id)
 
-                    setValue('name', fetchedExperience.name);
-                    setValue('category', fetchedExperience.category.id);
-                    setValue('country', fetchedExperience.country.id.toString());
-                    setValue('city', fetchedExperience.city.name);
-                    setValue('address', fetchedExperience.address);
-                    setValue('mail', fetchedExperience.email);
-                    setValue('price', fetchedExperience.price);
-                    setValue('url', fetchedExperience.siteUrl);
-                    setValue('description', fetchedExperience.description);
+                    setValue('name', fetchedExperience.name)
+                    setValue('category', fetchedExperience.category.id)
+                    setValue('country', fetchedExperience.country.id.toString())
+                    setValue('city', fetchedExperience.city.name)
+                    setValue('address', fetchedExperience.address)
+                    setValue('mail', fetchedExperience.email)
+                    setValue('price', fetchedExperience.price)
+                    setValue('url', fetchedExperience.siteUrl)
+                    setValue('description', fetchedExperience.description)
                 },
                 () => {
                 },
@@ -87,7 +91,7 @@ export default function ExperienceForm() {
             () => {
                 setCategories(new Array(0))
             }
-        );
+        )
         serviceHandler(
             locationService.getCountries(),
             navigate, (country) => {
@@ -98,7 +102,7 @@ export default function ExperienceForm() {
             () => {
                 setCountries(new Array(0))
             }
-        );
+        )
     }, [])
 
     function loadCities(countryId: number) {
@@ -112,7 +116,7 @@ export default function ExperienceForm() {
             () => {
                 setCities(new Array(0))
             }
-        );
+        )
     }
 
     function checkUrl(url: string | undefined): string | undefined {
@@ -128,7 +132,7 @@ export default function ExperienceForm() {
     }
 
     const {register, handleSubmit, setValue, formState: {errors},}
-        = useForm<FormDataExperience>({criteriaMode: "all"});
+        = useForm<FormDataExperience>({criteriaMode: "all"})
 
     const onSubmit = handleSubmit((data: FormDataExperience) => {
             const newUrl = checkUrl(data.url)
@@ -145,7 +149,7 @@ export default function ExperienceForm() {
                     )
                     .catch(() => {
                         showToast(t('ExperienceForm.toast.updateError', {experienceName: data.name}), 'error')
-                    });
+                    })
             } else {
                 experienceService.createExperience(data.name, data.category, data.country, data.city,
                     data.address, data.mail, data.price, newUrl, data.description)
@@ -163,10 +167,10 @@ export default function ExperienceForm() {
                     )
                     .catch(() => {
                         showToast(t('ExperienceForm.toast.createError', {experienceName: data.name}), 'error')
-                    });
+                    })
             }
         }
-    );
+    )
 
     return (
         <div className="d-flex flex-column justify-content-center mx-5 my-2 p-0">

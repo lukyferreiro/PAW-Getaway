@@ -3,10 +3,11 @@ package ar.edu.itba.getaway.webapp.dto.response;
 import ar.edu.itba.getaway.models.ExperienceModel;
 
 import javax.ws.rs.core.UriInfo;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-public class UserLandingPageDto {
+public class UserLandingPageDto implements Serializable {
     private Collection<ExperienceDto> viewed;
     private Collection<ExperienceDto> recommendedByFavs;
     private Collection<ExperienceDto> recommendedByReviews;

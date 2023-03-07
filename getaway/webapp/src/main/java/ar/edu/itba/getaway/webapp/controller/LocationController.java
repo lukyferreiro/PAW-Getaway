@@ -68,7 +68,7 @@ public class LocationController {
             return Response.noContent().build();
         }
 
-        final Collection<CityDto> citiesDtos = CityDto.mapCityToDto(cities);
+        final Collection<CityDto> citiesDtos = CityDto.mapCityToDto(cities, uriInfo);
 
         return Response.ok(new GenericEntity<Collection<CityDto>>(citiesDtos) {}).build();
     }
@@ -85,6 +85,6 @@ public class LocationController {
 
         final CityModel city = locationService.getCityById(id).orElseThrow(CityNotFoundException::new);
 
-        return Response.ok(new CityDto(city)).build();
+        return Response.ok(new CityDto(city, uriInfo)).build();
     }
 }

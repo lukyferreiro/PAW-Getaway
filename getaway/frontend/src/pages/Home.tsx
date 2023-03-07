@@ -1,13 +1,13 @@
-import {useTranslation} from "react-i18next";
-import "../common/i18n/index";
-import Carousel from "../components/Carousel";
-import {useEffect, useState} from "react";
-import {AnonymousLandingPageModel, UserLandingPageModel} from "../types";
-import {useAuth} from "../hooks/useAuth";
-import {useNavigate} from "react-router-dom";
-import {serviceHandler} from "../scripts/serviceHandler";
-import {experienceService} from "../services";
-import DataLoader from "../components/DataLoader";
+import {useTranslation} from "react-i18next"
+import "../common/i18n/index"
+import Carousel from "../components/Carousel"
+import {useEffect, useState} from "react"
+import {AnonymousLandingPageModel, UserLandingPageModel} from "../types"
+import {useAuth} from "../hooks/useAuth"
+import {useNavigate} from "react-router-dom"
+import {serviceHandler} from "../scripts/serviceHandler"
+import {experienceService} from "../services"
+import DataLoader from "../components/DataLoader"
 
 export default function Home() {
 
@@ -18,10 +18,10 @@ export default function Home() {
 
     const [anonymousLandingPage, setAnonymousLandingPage] = useState<AnonymousLandingPageModel | undefined>(undefined)
     const [userLandingPage, setUserLandingPage] = useState<UserLandingPageModel | undefined>(undefined)
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
-        setIsLoading(true);
+        setIsLoading(true)
         if (isLogged()) {
             serviceHandler(
                 experienceService.getUserLandingPage(),
@@ -32,7 +32,7 @@ export default function Home() {
                     setIsLoading(false)
                 },
                 () => setUserLandingPage(undefined)
-            );
+            )
         } else {
             serviceHandler(
                 experienceService.getAnonymousLandingPage(),
@@ -45,10 +45,10 @@ export default function Home() {
                 () => {
                     setAnonymousLandingPage(undefined)
                 }
-            );
+            )
         }
         document.title = `${t('PageName')}`
-    }, []);
+    }, [])
 
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>

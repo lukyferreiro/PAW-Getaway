@@ -1,16 +1,16 @@
-import {useTranslation} from "react-i18next";
-import React, {useEffect} from "react";
-import {userService} from "../services";
-import {useAuth} from "../hooks/useAuth";
-import {useNavigate} from "react-router-dom";
-import {useForm} from "react-hook-form";
-import {showToast} from "../scripts/toast";
+import {useTranslation} from "react-i18next"
+import React, {useEffect} from "react"
+import {userService} from "../services"
+import {useAuth} from "../hooks/useAuth"
+import {useNavigate} from "react-router-dom"
+import {useForm} from "react-hook-form"
+import {showToast} from "../scripts/toast"
 
 
 type FormDataEditProfile = {
-    name: string;
-    surname: string;
-};
+    name: string
+    surname: string
+}
 
 export default function UserEditProfile() {
 
@@ -29,7 +29,7 @@ export default function UserEditProfile() {
         setValue('name', user!.name);
         setValue('surname', user!.surname)
         document.title = `${t('PageName')} - ${t('PageTitles.userEditProfile')}`
-    }, []);
+    }, [])
 
     const {register, handleSubmit, setValue, formState: {errors},}
         = useForm<FormDataEditProfile>({criteriaMode: "all"})
@@ -44,7 +44,8 @@ export default function UserEditProfile() {
                 showToast(t('User.toast.editProfile.error'), 'error')
             })
 
-    });
+    })
+
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
             <div className="container-lg w-100 p-2 modalContainer">

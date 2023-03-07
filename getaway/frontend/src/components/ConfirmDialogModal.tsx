@@ -1,23 +1,14 @@
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogContentText,
-    DialogActions,
-    Box,
-    IconButton
-} from "@mui/material";
+import {Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,} from "@mui/material";
 import {create} from 'zustand';
-import {Close} from "@mui/icons-material";
 import React from "react";
 import {t} from "i18next";
 
 
 type ConfirmDialogStore = {
-    title: string;
-    message: string;
-    onSubmit?: () => void;
-    close: () => void;
+    title: string,
+    message: string,
+    onSubmit?: () => void,
+    close: () => void,
 }
 
 const UseConfirmDialogStore = create<ConfirmDialogStore>((set) => {
@@ -30,8 +21,8 @@ const UseConfirmDialogStore = create<ConfirmDialogStore>((set) => {
                 onSubmit: undefined,
             });
         },
-    });
-});
+    })
+})
 
 export const confirmDialogModal = (title: string, message: string, onSubmit: () => void) => {
     UseConfirmDialogStore.setState({
@@ -42,7 +33,9 @@ export const confirmDialogModal = (title: string, message: string, onSubmit: () 
 }
 
 const ConfirmDialogModal: React.FC = () => {
-    const {title, message, onSubmit, close} = UseConfirmDialogStore();
+
+    const {title, message, onSubmit, close} = UseConfirmDialogStore()
+
     return (
         <Dialog open={Boolean(onSubmit)} onClose={close} maxWidth="sm" fullWidth>
             <DialogTitle>{title}</DialogTitle>
@@ -50,20 +43,20 @@ const ConfirmDialogModal: React.FC = () => {
                 <DialogContentText>{message}</DialogContentText>
             </DialogContent>
             <DialogActions className="d-flex align-items-center justify-content-around">
-                    <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
-                            onClick={close}>
-                        {t('Button.cancel')}
-                    </button>
-                    <button  type="button" id="confirmDelete" className='btn button-primary'
-                     onClick={() => {
-                        if (onSubmit) {
-                            onSubmit()
+                <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
+                        onClick={close}>
+                    {t('Button.cancel')}
+                </button>
+                <button type="button" id="confirmDelete" className='btn button-primary'
+                        onClick={() => {
+                            if (onSubmit) {
+                                onSubmit()
+                            }
+                            close();
                         }
-                        close();
-                    }
-                    }>
-                        {t('Button.confirm')}
-                    </button>
+                        }>
+                    {t('Button.confirm')}
+                </button>
             </DialogActions>
         </Dialog>
     );

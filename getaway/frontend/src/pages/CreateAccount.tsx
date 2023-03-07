@@ -12,11 +12,11 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {showToast} from "../scripts/toast";
 
 type FormDataCreate = {
-    name: string;
-    surname: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
+    name: string
+    surname: string
+    email: string
+    password: string
+    confirmPassword: string
 };
 
 export default function CreateAccount() {
@@ -71,7 +71,8 @@ export default function CreateAccount() {
                     showToast(t('CreateAccount.toast.error'), 'error')
                 })
         }
-    );
+    )
+
     return (
         <>
             <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">

@@ -1,19 +1,19 @@
-import {useTranslation} from "react-i18next";
-import "../common/i18n/index";
-import OrderDropdown from "../components/OrderDropdown";
-import CardExperience from "../components/CardExperience";
-import {IconButton, Slider, Typography} from '@mui/material';
-import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {ExperienceModel, OrderByModel} from "../types";
-import {useNavigate, useSearchParams} from "react-router-dom";
-import {CityModel, CountryModel} from "../types";
-import {experienceService, locationService} from "../services";
-import {serviceHandler} from "../scripts/serviceHandler";
-import Pagination from "../components/Pagination";
-import {Close} from "@mui/icons-material";
-import DataLoader from "../components/DataLoader";
-import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
-import StarRoundedIcon from "@mui/icons-material/StarRounded";
+import {useTranslation} from "react-i18next"
+import "../common/i18n/index"
+import OrderDropdown from "../components/OrderDropdown"
+import CardExperience from "../components/CardExperience"
+import {IconButton, Slider, Typography} from '@mui/material'
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react"
+import {ExperienceModel, OrderByModel} from "../types"
+import {useNavigate, useSearchParams} from "react-router-dom"
+import {CityModel, CountryModel} from "../types"
+import {experienceService, locationService} from "../services"
+import {serviceHandler} from "../scripts/serviceHandler"
+import Pagination from "../components/Pagination"
+import {Close} from "@mui/icons-material"
+import DataLoader from "../components/DataLoader"
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery"
+import StarRoundedIcon from "@mui/icons-material/StarRounded"
 
 export default function Experiences(props: { nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
     const {t} = useTranslation()
@@ -23,7 +23,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
 
     const {nameProp, categoryProp} = props
 
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams()
 
     const [experiences, setExperiences] = useState<ExperienceModel[]>(new Array(0))
     const [isLoading, setIsLoading] = useState(false)
@@ -60,7 +60,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 setOrders(new Array(0))
                 order[1]("OrderByAZ")
             }
-        );
+        )
         serviceHandler(
             locationService.getCountries(),
             navigate, (country) => {
@@ -71,7 +71,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
             () => {
                 setCountries(new Array(0))
             }
-        );
+        )
         document.title = `${t('PageName')} - ${t('PageTitles.experiences')}`
     }, [])
 
@@ -90,7 +90,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 () => {
                     setPrice(0)
                 }
-            );
+            )
         }
     }, [categoryProp[0], nameProp[0]])
 
@@ -113,7 +113,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                     setExperiences(new Array(0))
                     setIsLoading(false)
                 }
-            );
+            )
         }
     }, [categoryProp[0], nameProp[0], rating, city, order[0], currentPage[0], onPriceChange])
 
@@ -131,9 +131,9 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
             },
             () => {
                 setCities(new Array(0))
-                setCity(-1);
+                setCity(-1)
             }
-        );
+        )
     }
 
     function handleCityChange(cityId: number) {
@@ -146,10 +146,10 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
         if (typeof newValue === 'number') {
             searchParams.set("price", newValue.toString())
             setSearchParams(searchParams)
-            setPrice(newValue);
+            setPrice(newValue)
             setOnPriceChange(!onPriceChange)
         }
-    };
+    }
 
     function handleRatingChange(index: number) {
         searchParams.set("rating", (-index).toString())
@@ -166,12 +166,12 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
         searchParams.set("page", "1")
         setSearchParams(searchParams)
 
-        setCities(new Array(0));
+        setCities(new Array(0))
         setCountry(-1)
-        setCity(-1);
-        setRating(0);
-        setHover(0);
-        setPrice(maxPrice);
+        setCity(-1)
+        setRating(0)
+        setHover(0)
+        setPrice(maxPrice)
         order[1]("OrderByAZ")
         currentPage[1](1)
         console.log("Reseting filters")
@@ -259,7 +259,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                         </label>
                         <div className="star-rating">
                             {[...Array(5)].map((star, index) => {
-                                index -= 5;
+                                index -= 5
                                 return (
                                     <button
                                         type="button"
@@ -269,10 +269,9 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                                         onMouseEnter={() => setHover(index)}
                                         onMouseLeave={() => setHover(rating)}
                                     >
-                                        {/*<span className="star">&#9733;</span>*/}
                                         <StarRoundedIcon className="star"/>
                                     </button>
-                                );
+                                )
                             })}
                         </div>
                         <input type="hidden" className="form-control" id="scoreInput"/>

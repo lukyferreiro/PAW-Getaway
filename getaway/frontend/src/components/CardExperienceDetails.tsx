@@ -14,16 +14,17 @@ import {Favorite, FavoriteBorder} from "@mui/icons-material";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import AddPictureModal from "../components/AddPictureModal";
+import {deleteExperience, editExperience, setFavExperience, setVisibility} from "../scripts/experienceOperations";
 // @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import {showToast} from "../scripts/toast";
+import Price from "./Price";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel; isEditing: boolean; }) {
 
     const {experience, isEditing} = props
-    const {t} = useTranslation();
+    const {t} = useTranslation()
     const navigate = useNavigate()
     const {user} = useAuth()
 
@@ -31,55 +32,6 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const [experienceImg, setExperienceImg] = useState<string | undefined>(undefined)
     const [fav, setFav] = useState(experience.fav)
     const [view, setView] = useState(experience.observable)
-
-    function setVisibility(experienceId: number, visibility: boolean) {
-        experienceService.setExperienceObservable(experienceId, visibility)
-            .then(() => {
-                if (visibility) {
-                    showToast(t('Experience.toast.visibilitySuccess', {experienceName: experience.name}), "success")
-                } else {
-                    showToast(t('Experience.toast.noVisibilitySuccess', {experienceName: experience.name}), "success")
-                }
-                setView(visibility)
-            })
-            .catch(() => {
-                showToast(t('Experience.toast.visibilityError', {experienceName: experience.name}), "error")
-            });
-    }
-
-    function deleteExperience(experienceId: number) {
-        experienceService.deleteExperienceById(experienceId)
-            .then(() => {
-                navigate("/user/experiences")
-                showToast(t('Experience.toast.deleteSuccess', {experienceName: experience.name}), "success")
-            })
-            .catch(() => {
-                showToast(t('Experience.toast.deleteError', {experienceName: experience.name}), "error")
-            });
-    }
-
-    function editExperience(experienceId: number) {
-        navigate({pathname: "/experienceForm", search: `?id=${experienceId}`}, {replace: true});
-    }
-
-    function setFavExperience(fav: boolean) {
-        experienceService.setExperienceFav(experience.id, fav)
-            .then(() => {
-                if (fav) {
-                    showToast(t('Experience.toast.favSuccess', {experienceName: experience.name}), "success")
-                } else {
-                    showToast(t('Experience.toast.noFavSuccess', {experienceName: experience.name}), "success")
-                }
-                setFav(fav)
-            })
-            .catch(() => {
-                if (fav) {
-                    showToast(t('Experience.toast.favError', {experienceName: experience.name}), "error")
-                } else {
-                    showToast(t('Experience.toast.noFavError', {experienceName: experience.name}), "error")
-                }
-            });
-    }
 
     useEffect(() => {
         if (experience.hasImage) {
@@ -129,27 +81,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                     {t('Experience.price.name')}
                                 </h5>
                                 <div className="information-text">
-                                    {(experience.price === undefined ?
-                                        <div>
-                                            <h6>
-                                                {t('Experience.price.null')}
-                                            </h6>
-                                        </div>
-                                        :
-                                        (experience.price === 0 ?
-                                                <div>
-                                                    <h6>
-                                                        {t('Experience.price.free')}
-                                                    </h6>
-                                                </div>
-                                                :
-                                                <div>
-                                                    <h6>
-                                                        {t('Experience.price.exist', {price: experience.price})}
-                                                    </h6>
-                                                </div>
-                                        ))
-                                    }
+                                    <Price price={experience.price}/>
                                 </div>
                             </div>
 
@@ -220,11 +152,11 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 {user ?
                     <div>
                         {fav ?
-                            <IconButton onClick={() => setFavExperience(false)}>
+                            <IconButton onClick={() => setFavExperience(experience, false, setFav)}>
                                 <Favorite className="fa-heart heart-color"/>
                             </IconButton>
                             :
-                            <IconButton onClick={() => setFavExperience(true)}>
+                            <IconButton onClick={() => setFavExperience(experience, true, setFav)}>
                                 <FavoriteBorder className="fa-heart"/>
                             </IconButton>
                         }
@@ -242,14 +174,14 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 <div className="btn-group my-2 d-flex justify-content-center align-content-center" role="group">
                     {view ?
                         <div>
-                            <IconButton onClick={() => setVisibility(experience.id, false)} aria-label="visibilityOn"
+                            <IconButton onClick={() => setVisibility(experience, false, setView)} aria-label="Visibility"
                                         component="span" style={{fontSize: "xxx-large"}} id="setFalse">
                                 <VisibilityIcon/>
                             </IconButton>
                         </div>
                         :
                         <div>
-                            <IconButton onClick={() => setVisibility(experience.id, true)} aria-label="visibilityOff"
+                            <IconButton onClick={() => setVisibility(experience, true, setView)} aria-label="Visibility"
                                         component="span" style={{fontSize: "xx-large"}} id="setTrue">
                                 <VisibilityOffIcon/>
                             </IconButton>
@@ -276,7 +208,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                             confirmDialogModal(
                                 t('User.experiences.deleteTitle'), t('User.experiences.confirmDelete',
                                     {experienceName: experience.name}),
-                                () => deleteExperience(experience.id)
+                                () => deleteExperience(experience, undefined, false)
                             )
                         }}
                         aria-label="trash"

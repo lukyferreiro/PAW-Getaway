@@ -1,22 +1,22 @@
-import {useTranslation} from "react-i18next";
-import "../common/i18n/index";
-import {useNavigate, useParams} from "react-router-dom";
-import React, {useEffect, useState} from "react";
-import {serviceHandler} from "../scripts/serviceHandler";
-import {experienceService, reviewService} from "../services";
-import {useForm} from "react-hook-form";
-import {useAuth} from "../hooks/useAuth";
-import {ExperienceNameModel, ReviewModel} from "../types";
-import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
-import {showToast} from "../scripts/toast";
-import StarRoundedIcon from "@mui/icons-material/StarRounded";
+import {useTranslation} from "react-i18next"
+import "../common/i18n/index"
+import {useNavigate, useParams} from "react-router-dom"
+import React, {useEffect, useState} from "react"
+import {serviceHandler} from "../scripts/serviceHandler"
+import {experienceService, reviewService} from "../services"
+import {useForm} from "react-hook-form"
+import {useAuth} from "../hooks/useAuth"
+import {ExperienceNameModel, ReviewModel} from "../types"
+import {getQueryOrDefault, useQuery} from "../hooks/useQuery"
+import {showToast} from "../scripts/toast"
+import StarRoundedIcon from "@mui/icons-material/StarRounded"
 
 
 type FormDataReview = {
-    title: string;
-    description: string;
-    score: string;
-};
+    title: string
+    description: string
+    score: string
+}
 
 export default function ReviewForm() {
     const {experienceId} = useParams()
@@ -50,13 +50,13 @@ export default function ReviewForm() {
                 reviewService.getReviewById(parseInt(currentId)),
                 navigate, (review) => {
                     if (review.user.id !== user?.id) {
-                        navigate("/", {replace: true});
+                        navigate("/", {replace: true})
                     }
                     setReview(review)
                     setRating(-review.score)
                     setHover(-review.score)
-                    setValue('title', review.title);
-                    setValue('description', review.description);
+                    setValue('title', review.title)
+                    setValue('description', review.description)
                 },
                 () => {
                 },
@@ -78,14 +78,14 @@ export default function ReviewForm() {
             () => {
                 setExperience(undefined)
             }
-        );
-    }, []);
+        )
+    }, [])
 
     const {register, handleSubmit, setValue, formState: {errors},}
-        = useForm<FormDataReview>({criteriaMode: "all"});
+        = useForm<FormDataReview>({criteriaMode: "all"})
 
     const onSubmit = handleSubmit((data: FormDataReview) => {
-            data.score = String(-rating);
+            data.score = String(-rating)
             if (review) {
                 reviewService.updateReviewById(parseInt(currentId), data.title, data.description, data.score)
                     .then((result) => {
@@ -96,7 +96,7 @@ export default function ReviewForm() {
                     })
                     .catch(() => {
                         showToast(t('ReviewForm.toast.updateError', {reviewTitle: data.title}), 'error')
-                    });
+                    })
             } else {
                 experienceService.postNewReview(parseInt(experienceId ? experienceId : "-1"), data.title, data.description, data.score)
                     .then((result) => {
@@ -107,10 +107,10 @@ export default function ReviewForm() {
                     })
                     .catch(() => {
                         showToast(t('ReviewForm.toast.createError', {reviewTitle: data.title}), 'error')
-                    });
+                    })
             }
         }
-    );
+    )
 
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
@@ -217,7 +217,7 @@ export default function ReviewForm() {
                                 <div className="w-50">
                                     <div className="star-rating">
                                         {[...Array(5)].map((star, index) => {
-                                            index -= 5;
+                                            index -= 5
                                             return (
                                                 <button
                                                     type="button"
@@ -227,10 +227,9 @@ export default function ReviewForm() {
                                                     onMouseEnter={() => setHover(index)}
                                                     onMouseLeave={() => setHover(rating)}
                                                 >
-                                                    {/*<span className="star">&#9733;</span>*/}
                                                     <StarRoundedIcon className="star"/>
                                                 </button>
-                                            );
+                                            )
                                         })}
                                     </div>
                                 </div>
