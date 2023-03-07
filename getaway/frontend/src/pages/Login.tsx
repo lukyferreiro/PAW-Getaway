@@ -39,8 +39,6 @@ export default function Login(props: { nameProp: [string | undefined, Dispatch<S
     });
 
     useEffect(() => {
-        nameProp[1]("")
-        categoryProp[1]("")
         document.title = `${t('PageName')} - ${t('PageTitles.login')}`
     }, [])
 

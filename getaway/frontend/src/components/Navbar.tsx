@@ -51,10 +51,11 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
     }, [])
 
     useEffect(() => {
-        setValue("name", getQueryOrDefault(query, "name", ""))
+        setValue("name", nameProp[0]? nameProp[0] : "")
     }, [nameProp[0]])
 
     const onSubmit = handleSubmit((data: FormDataSearch) => {
+        nameProp[1](data.name)
         navigate({pathname: "/experiences", search: `?category=${categoryProp[0]}&name=${data.name}`}, {replace: true})
     })
 
