@@ -19,14 +19,12 @@ type FormDataLogin = {
     rememberMe: boolean;
 };
 
-export default function Login(props: { nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
-
+export default function Login() {
     const {t} = useTranslation()
     const navigate = useNavigate()
     const location = useLocation()
 
     const {signIn} = useAuth()
-    const {nameProp, categoryProp} = props
 
     // @ts-ignore
     const from = location.state?.from?.pathname || "/";

@@ -54,7 +54,7 @@ function App() {
                         <Route path='error' element={<Error/>}/>
                         <Route path='*' element={<Custom404/>}/>
                     </Route>
-                    <Route path='/login' element={<Login categoryProp={categoryProp} nameProp={nameProp}/>}/>
+                    <Route path='/login' element={<Login/>}/>
                     <Route path='/createAccount' element={<CreateAccount/>}/>
                     <Route path='/changePassword' element={<ChangePassword/>}/>
                 </Routes>
@@ -68,7 +68,6 @@ function App() {
                     rtl={false}
                     pauseOnFocusLoss
                     draggable
-                    pauseOnHover
                 />
 
                 <Footer/>

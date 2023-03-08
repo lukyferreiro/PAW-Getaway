@@ -61,8 +61,11 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
 
     function clearNavBar() {
         searchParams.delete("category")
+        searchParams.delete("name")
+        setSearchParams(searchParams)
         categoryProp[1]("")
-        resetForm()
+        nameProp[1]("")
+        reset()
     }
 
     function resetForm() {

@@ -48,7 +48,7 @@ export default function Home() {
             )
         }
         document.title = `${t('PageName')}`
-    }, [])
+    }, [isLogged()])
 
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
@@ -70,8 +70,6 @@ export default function Home() {
                         <Carousel title={t('Landing.user.recommendedByReviews')} experiences={userLandingPage?.recommendedByReviews} show={3}/>
                     </>
                 }
-
-
             </div>
         </DataLoader>
 
