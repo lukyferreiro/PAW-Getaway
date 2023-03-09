@@ -6,7 +6,7 @@ import {removeCookie} from "../scripts/cookies"
 interface AuthContextType {
     user: UserModel | null
     setUser: Dispatch<SetStateAction<UserModel | null>>
-    signIn: (user: UserModel, rememberMe: boolean, callback: VoidFunction) => void
+    signIn: (user: UserModel, callback: VoidFunction) => void
     signOut: (callback: VoidFunction) => void
     verifyUser: (callback: VoidFunction) => void
     makeProvider: (callback: VoidFunction) => void
@@ -15,7 +15,6 @@ interface AuthContextType {
     isLogged: () => boolean
     isVerified: () => boolean
     isProvider: () => boolean
-    isRememberMe: () => boolean
 }
 
 export const AuthContext = createContext<AuthContextType>(null!)
@@ -23,14 +22,13 @@ export const AuthContext = createContext<AuthContextType>(null!)
 export function AuthProvider({children}: { children: ReactNode }) {
     const [user, setUser] = useState<UserModel | null>(null)
 
-    const signIn = (newUser: UserModel, rememberMe: boolean, callback: VoidFunction) => {
+    const signIn = (newUser: UserModel, callback: VoidFunction) => {
         return internalAuthProvider.signIn(() => {
             setUser(newUser)
             localStorage.setItem("user", JSON.stringify(newUser))
             localStorage.setItem("token", newUser.token!)
             localStorage.setItem("isVerified", newUser.verified ? "true" : "false")
             localStorage.setItem("isProvider", newUser.provider ? "true" : "false")
-            localStorage.setItem("rememberMe", rememberMe ? "true" : "false")
             callback()
         })
     }
@@ -42,7 +40,6 @@ export function AuthProvider({children}: { children: ReactNode }) {
             localStorage.removeItem("token")
             localStorage.removeItem("isVerified")
             localStorage.removeItem("isProvider")
-            localStorage.removeItem("rememberMe")
             removeCookie("basic-token")
             callback()
         })
@@ -98,12 +95,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
         return localStorage.getItem("isProvider") === 'true'
     }
 
-    const isRememberMe = () => {
-        const localRemember = localStorage.getItem("rememberMe")
-        return localRemember === null ? false : localRemember === 'true'
-    }
-
-    const value = {user, setUser, signIn, signOut, verifyUser, makeProvider, setHasImage, editUserInfo, isLogged, isVerified, isProvider, isRememberMe}
+    const value = {user, setUser, signIn, signOut, verifyUser, makeProvider, setHasImage, editUserInfo, isLogged, isVerified, isProvider}
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

@@ -54,7 +54,6 @@ export const TRANSLATIONS_EN = {
         experiences: "My experiences",
         favourites: "My favourites",
         reviews: "My reviews",
-        rememberMe: "Remember me",
         logout: "Log out",
         resetPasswordTitle: "Enter your email and get a link to recover your password",
         resetPasswordButton: "Send",
@@ -100,7 +99,7 @@ export const TRANSLATIONS_EN = {
             name: "Price",
             null: "Price not listed",
             free: "Free",
-            exist: "${{price}}",
+            exist: "$ {{price}}",
         },
         information: "Description",
         mail: {
@@ -140,7 +139,7 @@ export const TRANSLATIONS_EN = {
         price: {
             null: "Price not listed",
             free: "Free",
-            exist: "${{price}}",
+            exist: "$ {{price}}",
         },
         description: "Description",
         noData: "Information not provided",

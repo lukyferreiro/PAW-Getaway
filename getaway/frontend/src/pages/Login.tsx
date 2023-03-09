@@ -16,7 +16,6 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
 type FormDataLogin = {
     email: string;
     password: string;
-    rememberMe: boolean;
 };
 
 export default function Login() {
@@ -45,7 +44,7 @@ export default function Login() {
             loginService.login(data.email, data.password)
                 .then((user) => {
                     if (!user.hasFailed()) {
-                        signIn(user.getData(), data.rememberMe, () => {
+                        signIn(user.getData(), () => {
                             navigate(from, {replace: true});
                             showToast(t('Login.toast.success', {
                                 name: user.getData().name,
@@ -136,14 +135,6 @@ export default function Login() {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div className="col-12 mt-3 d-flex justify-content-start align-items-center">
-                                    <input type="checkbox" id="rememberMe"
-                                           {...register("rememberMe", {})}/>
-                                    <label className="mb-0 mx-2" htmlFor="rememberMe" style={{fontSize: "medium"}}>
-                                        {t('Navbar.rememberMe')}
-                                    </label>
                                 </div>
                             </form>
                         </div>

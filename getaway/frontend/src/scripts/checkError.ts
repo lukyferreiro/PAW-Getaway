@@ -15,8 +15,7 @@ function handleResponseStatus<RetType>(response: Response): Promise<RetType> {
 
 export function checkError<RetType>(response: Response): Promise<RetType> {
     if (
-        response.status === 401 &&
-        localStorage.getItem("rememberMe") === "true"
+        response.status === 401
     ) {
         localStorage.removeItem("token");
         const basic = getCookie("basic-token");

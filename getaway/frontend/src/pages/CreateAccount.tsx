@@ -54,7 +54,7 @@ export default function CreateAccount() {
                         loginService.login(data.email, data.password)
                             .then((user) => {
                                 if (!user.hasFailed()) {
-                                    signIn(user.getData(), false, () => {
+                                    signIn(user.getData(), () => {
                                         navigate(from, {replace: true});
                                     })
                                     showToast(t('Login.toast.success', {
