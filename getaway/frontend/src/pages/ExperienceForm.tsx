@@ -42,17 +42,44 @@ export default function ExperienceForm() {
     const query = useQuery()
     const currentId = getQueryOrDefault(query, "id", "-1")
 
-    useEffect(() => {
-        if (!user && !readUser) {
-            navigate("/login")
-            showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
-        }
-        if (user && readUser && !isVerifiedValue) {
-            navigate("/user/profile")
-            showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
-        }
-        document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.create')}`
+    if (!user && !readUser) {
+        navigate("/login")
+        showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
+    }
+    if (user && readUser && !isVerifiedValue) {
+        navigate("/user/profile")
+        showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
+    }
 
+    const {register, handleSubmit, reset, setValue, formState: {errors},}
+        = useForm<FormDataExperience>({criteriaMode: "all"})
+
+    useEffect(()=> {
+        serviceHandler(
+            categoryService.getCategories(),
+            navigate, (category) => {
+                setCategories(category)
+            },
+            () => {
+            },
+            () => {
+                setCategories(new Array(0))
+            }
+        )
+        serviceHandler(
+            locationService.getCountries(),
+            navigate, (country) => {
+                setCountries(country)
+            },
+            () => {
+            },
+            () => {
+                setCountries(new Array(0))
+            }
+        )
+    }, [])
+
+    useEffect(() => {
         if (parseInt(currentId) !== -1) {
             serviceHandler(
                 experienceService.getExperienceById(parseInt(currentId), false),
@@ -81,29 +108,14 @@ export default function ExperienceForm() {
             )
             document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.edit')}`
         }
-        serviceHandler(
-            categoryService.getCategories(),
-            navigate, (category) => {
-                setCategories(category)
-            },
-            () => {
-            },
-            () => {
-                setCategories(new Array(0))
-            }
-        )
-        serviceHandler(
-            locationService.getCountries(),
-            navigate, (country) => {
-                setCountries(country)
-            },
-            () => {
-            },
-            () => {
-                setCountries(new Array(0))
-            }
-        )
-    }, [])
+        else {
+            document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.create')}`
+            reset()
+            setExperience(undefined)
+            setCities(new Array(0))
+        }
+    }, [currentId])
+
 
     function loadCities(countryId: number) {
         serviceHandler(
@@ -130,9 +142,6 @@ export default function ExperienceForm() {
         }
         return url;
     }
-
-    const {register, handleSubmit, setValue, formState: {errors},}
-        = useForm<FormDataExperience>({criteriaMode: "all"})
 
     const onSubmit = handleSubmit((data: FormDataExperience) => {
             const newUrl = checkUrl(data.url)
@@ -262,7 +271,7 @@ export default function ExperienceForm() {
                             <input type="number" max="9999999" className="form-control" id="experienceFormPriceInput" placeholder="0"
                                    {...register("price", {
                                        validate: {
-                                           isNotBigger: (price) => {
+                                           isNotGreater: (price) => {
                                                return (!price) || price <= 9999999
                                            },
                                        }

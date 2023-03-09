@@ -36,15 +36,15 @@ export default function ReviewForm() {
     const query = useQuery()
     const currentId = getQueryOrDefault(query, "id", "-1")
 
+    if (!user && !readUser) {
+        navigate("/login")
+        showToast(t('ReviewForm.toast.forbidden.noUser'), 'error')
+    } else if (!isVerifiedValue) {
+        navigate("/user/profile")
+        showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
+    }
+
     useEffect(() => {
-        if (!user && !readUser) {
-            navigate("/login")
-            showToast(t('ReviewForm.toast.forbidden.noUser'), 'error')
-        } else if (!isVerifiedValue) {
-            navigate("/user/profile")
-            showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
-        }
-        document.title = `${t('PageName')} - ${t('PageTitles.reviewForm.create')}`
         if (parseInt(currentId) !== -1) {
             serviceHandler(
                 reviewService.getReviewById(parseInt(currentId)),
@@ -68,6 +68,11 @@ export default function ReviewForm() {
             )
             document.title = `${t('PageName')} - ${t('PageTitles.reviewForm.edit')}`
         }
+        else {
+            document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.create')}`
+            reset()
+            setReview(undefined)
+        }
         serviceHandler(
             experienceService.getExperienceNameById(parseInt(experienceId ? experienceId : '-1')),
             navigate, (fetchedExperience) => {
@@ -81,7 +86,7 @@ export default function ReviewForm() {
         )
     }, [])
 
-    const {register, handleSubmit, setValue, formState: {errors},}
+    const {register, handleSubmit, reset, setValue, formState: {errors},}
         = useForm<FormDataReview>({criteriaMode: "all"})
 
     const onSubmit = handleSubmit((data: FormDataReview) => {
