@@ -169,7 +169,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/experiences/filter").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/filter/maxPrice").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/filter/orderByModels").permitAll()
-                //logueado y VERIFIED (rol PROVIDER) se asigna en el momento
+                    //logueado y VERIFIED (rol PROVIDER) se asigna en el momento
                     .antMatchers(HttpMethod.POST, "/api/experiences").hasAuthority("VERIFIED")
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/experience/{experienceId}").permitAll()
@@ -182,8 +182,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/experiences/experience/{experienceId}/reviews").permitAll()
                     //logueado y VERIFIED
                     .antMatchers(HttpMethod.POST, "/api/experiences/experience/{experienceId}/reviews").hasAuthority("VERIFIED")
-                    .antMatchers(HttpMethod.PUT, "/experience/{experienceId}/fav").authenticated()
                     .antMatchers(HttpMethod.PUT, "/experience/{experienceId}/observable").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
+                    //logueado
+                    .antMatchers(HttpMethod.PUT, "/experience/{experienceId}/fav").authenticated()
                 //------------------- /reviews -------------------
                     //logueado y VERIFIED, chequear que sea el mismo usuario
                     .antMatchers(HttpMethod.GET, "/api/reviews/{reviewId}").hasAuthority("VERIFIED")
@@ -194,6 +195,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/location/countries").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/location/countries/{countryId}/cities").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/location/cities/{cityId}").permitAll()
+                //------------------- /categories --------------------
+                    //permitAll para navbar
+                    .antMatchers(HttpMethod.GET, "/api/categories").permitAll()
                 //------------------- Others --------------------
                     .antMatchers("/**").permitAll()
                 .and()

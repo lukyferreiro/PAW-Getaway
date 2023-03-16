@@ -72,6 +72,22 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 setCountries(new Array(0))
             }
         )
+        if (country !== -1) {
+            console.log(city)
+            serviceHandler(
+                locationService.getCitiesByCountry(country),
+                navigate, (cities) => {
+                    setCities(cities)
+                },
+                () => {
+                },
+                () => {
+                    setCities(new Array(0))
+                    setCity(-1)
+                }
+            )
+        }
+
         document.title = `${t('PageName')} - ${t('PageTitles.experiences')}`
     }, [])
 
@@ -81,7 +97,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 experienceService.getFilterMaxPrice(categoryProp[0], nameProp[0]),
                 navigate, (priceModel) => {
                     setMaxPrice(priceModel.maxPrice)
-                    if (maxPrice !== priceModel.maxPrice || price > priceModel.maxPrice) {
+                    if (price > priceModel.maxPrice) {
                         setPrice(priceModel.maxPrice)
                     }
                 },
@@ -120,6 +136,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
 
     function handleCountryChange(countryId: number) {
         setCountry(countryId)
+        setCity(-1)
         searchParams.set("country", countryId.toString())
         setSearchParams(searchParams)
         serviceHandler(
@@ -197,17 +214,22 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                         <label className="form-label" htmlFor="country">
                             {t('Experience.country')}
                         </label>
-                        <select id="experienceFormCountryInput" className="form-select"
-                                onChange={e => handleCountryChange(parseInt(e.target.value))}
+                        <select
+                            id="experienceFormCountryInput"
+                            className="form-select"
+                            onChange={(e) => handleCountryChange(parseInt(e.target.value))}
+                            value={country}
                         >
-                            {country === -1 &&
-                                <option hidden value="">{t('Experience.placeholder')}</option>
-                            }
                             {countries.map((country) => (
                                 <option key={country.id} value={country.id}>
                                     {country.name}
                                 </option>
                             ))}
+                            {country === -1 && (
+                                <option disabled hidden value={-1}>
+                                    {t("Experience.placeholder")}
+                                </option>
+                            )}
                         </select>
                     </div>
                     <div className="mt-2">
@@ -217,6 +239,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                         <select id="experienceFormCityInput" className="form-select"
                                 disabled={country === -1}
                                 onChange={e => handleCityChange(parseInt(e.target.value))}
+                                value={city}
                         >
                             {city === -1 &&
                                 <option hidden value="">{t('Experience.placeholder')}</option>
