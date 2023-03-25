@@ -59,10 +59,10 @@
             <param-name>jersey.config.server.provider.classnames</param-name>
             <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
         </init-param>
-<!--        <init-param>-->
-<!--            <param-name>jersey.config.server.response.setStatusOverSendError</param-name>-->
-<!--            <param-value>true</param-value>-->
-<!--        </init-param>-->
+        <init-param>
+            <param-name>jersey.config.server.response.setStatusOverSendError</param-name>
+            <param-value>true</param-value>
+        </init-param>
     </servlet>
 
     <servlet-mapping>
@@ -70,36 +70,19 @@
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
 
-<!--    <filter>-->
-<!--        <filter-name>jersey</filter-name>-->
-<!--        <filter-class>org.glassfish.jersey.servlet.ServletContainer</filter-class>-->
-<!--        <init-param>-->
-<!--            <param-name>jersey.config.server.provider.packages</param-name>-->
-<!--            <param-value>-->
-<!--                ar.edu.itba.getaway.webapp.controller,-->
-<!--                ar.edu.itba.getaway.webapp.config,-->
-<!--                ar.edu.itba.getaway.webapp.mappers,-->
-<!--            </param-value>-->
-<!--        </init-param>-->
-<!--        <init-param>-->
-<!--            <param-name>jersey.config.beanValidation.enableOutputValidationErrorEntity.server</param-name>-->
-<!--            <param-value>true</param-value>-->
-<!--        </init-param>-->
-<!--        &lt;!&ndash; pass to next filter if Jersey/App returns 404 &ndash;&gt;-->
-<!--        <init-param>-->
-<!--            <param-name>jersey.config.servlet.filter.forwardOn404</param-name>-->
-<!--            <param-value>true</param-value>-->
-<!--        </init-param>-->
-<!--&lt;!&ndash;        <init-param>&ndash;&gt;-->
-<!--&lt;!&ndash;            <param-name>jersey.config.server.provider.classnames</param-name>&ndash;&gt;-->
-<!--&lt;!&ndash;            <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>&ndash;&gt;-->
-<!--&lt;!&ndash;        </init-param>&ndash;&gt;-->
-<!--    </filter>-->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/resources/*</url-pattern>
+    </servlet-mapping>
 
-<!--    <filter-mapping>-->
-<!--        <filter-name>jersey</filter-name>-->
-<!--        <url-pattern>/api/*</url-pattern>-->
-<!--    </filter-mapping>-->
+    <servlet>
+        <servlet-name>index</servlet-name>
+        <jsp-file>/resources/index.html</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>index</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
 
     <filter>
         <filter-name>charsetFilter</filter-name>
