@@ -7,7 +7,6 @@
     <artifactId>getaway</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-
     <name>getaway</name>
 
     <properties>
@@ -346,8 +345,7 @@
         <module>models</module>
         <module>persistence</module>
         <module>services</module>
-<!--        TODO check si va -->
-<!--        <module>frontend</module>-->
+        <module>frontend</module>
     </modules>
 
     <build>
