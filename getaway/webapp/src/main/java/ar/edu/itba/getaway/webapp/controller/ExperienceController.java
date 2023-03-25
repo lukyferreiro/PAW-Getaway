@@ -6,7 +6,7 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.constraints.DtoConstraintValidator;
 import ar.edu.itba.getaway.webapp.constraints.exceptions.DtoValidationException;
-import ar.edu.itba.getaway.webapp.controller.util.ConditionalCacheResponse;
+import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
@@ -331,7 +331,7 @@ public class ExperienceController {
             return Response.noContent().build();
         }
 
-        return ConditionalCacheResponse.conditionalCacheResponse(image, request);
+        return CacheResponse.conditionalCacheResponse(image, request, true);
     }
 
     @PUT

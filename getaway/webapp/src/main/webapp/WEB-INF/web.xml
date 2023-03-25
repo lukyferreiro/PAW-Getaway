@@ -132,15 +132,15 @@
         <url-pattern>/api/*</url-pattern>
     </filter-mapping>
 
-<!--    <filter>-->
-<!--        <filter-name>CacheControlFilter</filter-name>-->
-<!--        <filter-class>ar.edu.itba.getaway.webapp.security.api.CacheControlFilter</filter-class>-->
-<!--    </filter>-->
-<!--&lt;!&ndash;    TODO check aca las cosas que se cachean&ndash;&gt;-->
-<!--    <filter-mapping>-->
-<!--        <filter-name>CacheControlFilter</filter-name>-->
-<!--        <url-pattern>/resources/*</url-pattern>-->
-<!--    </filter-mapping>-->
+    <filter>
+        <filter-name>CacheControlFilter</filter-name>
+        <filter-class>ar.edu.itba.getaway.webapp.security.api.CacheControlFilter</filter-class>
+    </filter>
+<!--    TODO check aca las cosas que se cachean-->
+    <filter-mapping>
+        <filter-name>CacheControlFilter</filter-name>
+        <url-pattern>/resources/*</url-pattern>
+    </filter-mapping>
 
     <error-page>
         <error-code>404</error-code>

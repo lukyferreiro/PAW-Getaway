@@ -26,6 +26,13 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.HeaderWriter;
+import org.springframework.security.web.header.writers.CacheControlHeadersWriter;
+import org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -127,6 +134,18 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
+
+        RequestMatcher notResourcesMatcher = new NegatedRequestMatcher(
+                new OrRequestMatcher(
+//                        new AntPathRequestMatcher("/api/users/{userId}/profileImage"),
+//                        new AntPathRequestMatcher("/api/users/{userId}/profileImage/"),
+                        new AntPathRequestMatcher("/api/experiences/experience/{experienceId}/experienceImage/"),
+                        new AntPathRequestMatcher("/api/experiences/experience/{experienceId}/experienceImage/")
+                )
+        );
+
+        HeaderWriter notResourcesHeaderWriter = new DelegatingRequestMatcherHeaderWriter(notResourcesMatcher, new CacheControlHeadersWriter());
+
         http
                 .cors()
                 .and()
@@ -137,7 +156,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                    .headers().cacheControl().disable()
+                    .headers().cacheControl().disable().addHeaderWriter(notResourcesHeaderWriter)
                 .and().authorizeRequests()
                 //------------------- /users -------------------
                     //anonymous porque sino no se puede acceder a boton register
