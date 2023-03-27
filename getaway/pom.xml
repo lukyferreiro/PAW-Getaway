@@ -7,6 +7,7 @@
     <artifactId>getaway</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
     <name>getaway</name>
 
     <properties>
@@ -237,7 +238,7 @@
                 <version>${jersey.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- La versión incluida requiere Java 9+ -->
+                        <!-- La versiÃ³n incluida requiere Java 9+ -->
                         <groupId>org.glassfish.hk2</groupId>
                         <artifactId>hk2</artifactId>
                     </exclusion>
@@ -258,7 +259,7 @@
             <dependency>
                 <groupId>org.glassfish.hk2</groupId>
                 <artifactId>hk2</artifactId>
-                <version>2.5.0-b05</version> <!-- última versión compatible con Java 8 -->
+                <version>2.5.0-b05</version> <!-- Ãºltima versiÃ³n compatible con Java 8 -->
                 <exclusions>
                     <exclusion>
                         <groupId>org.glassfish.hk2.external</groupId>
@@ -345,7 +346,8 @@
         <module>models</module>
         <module>persistence</module>
         <module>services</module>
-        <module>frontend</module>
+        <!--        TODO check si va -->
+        <!--        <module>frontend</module>-->
     </modules>
 
     <build>

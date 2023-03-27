@@ -15,6 +15,15 @@
     <name>webapp Maven Webapp</name>
     <url>http://pawserver.it.itba.edu.ar/paw-2022b-1</url>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <frontend-src-dir>${project.parent.basedir}/frontend</frontend-src-dir>
+        <!--        TODO ver que onda estas versiones-->
+        <node.version>v14.17.3</node.version>
+        <npm.version>6.14.4</npm.version>
+        <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
+    </properties>
+
     <dependencies>
         <!--Spring-->
         <dependency>
@@ -186,62 +195,92 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jdk8</artifactId>
         </dependency>
-        <dependency>
-            <groupId>ar.edu.itba.getaway</groupId>
-            <artifactId>frontend</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
     </dependencies>
 
 
-        <build>
-            <finalName>webapp</finalName>
-            <pluginManagement>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-clean-plugin</artifactId>
-                        <version>3.1.0</version>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <version>3.0.2</version>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.8.0</version>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.22.1</version>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <version>3.2.2</version>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-install-plugin</artifactId>
-                        <version>2.5.2</version>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-deploy-plugin</artifactId>
-                        <version>2.8.2</version>
-                    </plugin>
-                </plugins>
-            </pluginManagement>
+    <build>
+        <finalName>webapp</finalName>
+        <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.1</version>
+                </plugin>
+                <plugin>
                     <artifactId>maven-war-plugin</artifactId>
-                    <configuration>
-                        <packagingExcludes>**/logback-test.xml</packagingExcludes>
-                        <webResources>
-                            <resource>
-                                <directory>${project.parent.basedir}/frontend/dist/frontend</directory>
-                                <targetPath>resources</targetPath>
-                            </resource>
-                        </webResources>
-                    </configuration>
+                    <version>3.2.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
                 </plugin>
             </plugins>
-        </build>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>${frontend-maven-plugin.version}</version>
+                <configuration>
+                    <workingDirectory>${frontend-src-dir}</workingDirectory>
+                    <installDirectory>target</installDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>${node.version}</nodeVersion>
+                            <npmVersion>${npm.version}</npmVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <!--                        <execution>-->
+                    <!--                            <id>npm test</id>-->
+                    <!--                            <goals>-->
+                    <!--                                <goal>npm</goal>-->
+                    <!--                            </goals>-->
+                    <!--                            <configuration>-->
+                    <!--                                <arguments>test</arguments>-->
+                    <!--                            </configuration>-->
+                    <!--                        </execution>-->
+                    <execution>
+                        <id>npm run build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
