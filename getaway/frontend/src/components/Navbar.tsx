@@ -56,7 +56,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
 
     const onSubmit = handleSubmit((data: FormDataSearch) => {
         nameProp[1](data.name)
-        navigate({pathname: "/experiences", search: `?category=${categoryProp[0]}&name=${data.name}`}, {replace: true})
+        navigate({pathname: "/experiences", search: `?category=${categoryProp[0]}&name=${data.name}&order=OrderByAZ&page=1`}, {replace: true})
     })
 
     function clearNavBar() {
@@ -192,7 +192,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                 categoryProp[1](category.name);
                                 navigate({
                                     pathname: "/experiences",
-                                    search: `?category=${category.name}&name=${nameProp[0]}`
+                                    search: `?category=${category.name}&name=${nameProp[0]}&order=OrderByAZ&page=1`
                                 })
                             }}
                     >
