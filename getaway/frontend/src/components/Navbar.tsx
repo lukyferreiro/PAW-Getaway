@@ -102,18 +102,21 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                             <img src={'./images/ic_lupa.svg'} alt="Lupa"/>
                         </button>
                         <form id="searchExperienceForm" acceptCharset="utf-8" className="my-auto" onSubmit={onSubmit}>
-                            <input type="text" className="form-control" placeholder={t('Navbar.search')}
+                            <input max="50" type="text" className="form-control" placeholder={t('Navbar.search')}
                                    {...register("name", {
-                                       max: 255,
+                                       validate: {
+                                           length: (name) =>
+                                               name.length <= 50,
+                                       },
                                        pattern: {
                                            value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
                                            message: t("ExperienceForm.error.name.pattern"),
                                        }
                                    })}
                             />
-                            {errors.name?.type === "max" && (
+                            {errors.name?.type === "length" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("ExperienceForm.error.name.max")}
+                                    {t("Navbar.error")}
                                 </p>
                             )}
                         </form>

@@ -36,7 +36,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     const [city, setCity] = useState(parseInt(getQueryOrDefault(query, "city", "-1")))
     //Price
     const [maxPrice, setMaxPrice] = useState<number>(0)
-    const [price, setPrice] = useState<number>(parseInt(getQueryOrDefault(query, "price", "0")))
+    const [price, setPrice] = useState<number>(parseInt(getQueryOrDefault(query, "price", "-1")))
     const [onPriceChange, setOnPriceChange] = useState<boolean>(false)
     //Score
     const [rating, setRating] = useState(parseInt(getQueryOrDefault(query, "rating", "0")))
@@ -97,7 +97,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 experienceService.getFilterMaxPrice(categoryProp[0], nameProp[0]),
                 navigate, (priceModel) => {
                     setMaxPrice(priceModel.maxPrice)
-                    if (price > priceModel.maxPrice) {
+                    if (price > priceModel.maxPrice || price === -1) {
                         setPrice(priceModel.maxPrice)
                     }
                 },
@@ -127,6 +127,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 },
                 () => {
                     setExperiences(new Array(0))
+                    setMaxPage(0)
                     setIsLoading(false)
                 }
             )
@@ -215,7 +216,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                     {t('Filters.title')}
                 </p>
 
-                <div className="filter-form">
+                <div className="filter-form w-100">
                     <div>
                         <label className="form-label" htmlFor="country">
                             {t('Experience.country')}
@@ -267,11 +268,10 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                             <div className="value left">
                                 {t('Filters.price.min')}
                             </div>
-
                             <Slider
-                                style={{color: "var(--primary-color)"}}
+                                style={{color: "var(--primary-color)", margin: "0 10px"}}
                                 value={price}
-                                min={5}
+                                min={0}
                                 step={1}
                                 max={maxPrice}
                                 onChange={handlePriceChange}
@@ -309,10 +309,6 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                     </div>
                 </div>
 
-                {/*<button className="btn btn-search px-3 py-2 my-2" type="submit" id="submitFormButton" form="submitForm">*/}
-                {/*    {t('Filters.btn.submit')}*/}
-                {/*</button>*/}
-
                 <button className="btn btn-clean-filter px-3 py-2 my-2" type="reset" id="cleanFilterFormButton"
                         onClick={cleanForm}>
                     {t('Filters.btn.clear')}
@@ -329,37 +325,38 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                         <div style={{margin: "0 auto 0 20px", flex: "1"}}>
                             <OrderDropdown orders={orders} order={order} currentPage={currentPage}/>
                         </div>
-                        <div className="d-flex justify-content-center" style={{fontSize: "x-large"}}>
 
+                        <div className="d-flex justify-content-center" style={{fontSize: "x-large", maxWidth:"400px"}}>
                             {categoryProp[0] !== undefined && categoryProp[0].length > 0 ?
-                                <div className="d-flex align-self-center">
-                                    {t('Experiences.search.search') + t('Experiences.search.category') + t('Categories.' + categoryProp[0])}
-                                    <div className="d-flex justify-content-center">
-                                        {nameProp[0] !== undefined &&
-                                            nameProp[0].length > 0 &&
-                                            <div>
-                                                {t('Experiences.search.name', {name: nameProp[0]})}
-                                                <IconButton className="justify-content-center" onClick={cleanQuery}>
-                                                    <Close/>
-                                                </IconButton>
-                                            </div>
-                                        }
-                                    </div>
-
+                                <div className="align-self-center flex-wrap" style={{maxWidth:"400px", wordWrap:"break-word"}}>
+                                    {nameProp[0] !== undefined && nameProp[0].length > 0 ?
+                                        <>
+                                            {t('Experiences.search.search') + t('Experiences.search.category')
+                                                + t('Categories.' + categoryProp[0]) + t('Experiences.search.name', {name: nameProp[0]})}
+                                            <IconButton className="justify-content-center" onClick={cleanQuery}>
+                                                <Close/>
+                                            </IconButton>
+                                        </>
+                                        :
+                                        <>
+                                            {t('Experiences.search.search') + t('Experiences.search.category') + t('Categories.' + categoryProp[0])}
+                                        </>
+                                    }
                                 </div>
                                 :
-                                <div>
+                                <>
                                     {nameProp[0] !== undefined && nameProp[0].length > 0 &&
-                                        <div>
+                                        <div className="align-self-center flex-wrap" style={{maxWidth:"400px", wordWrap:"break-word"}}>
                                             {t('Experiences.search.search') + t('Experiences.search.name', {name: nameProp[0]})}
                                             <IconButton className="justify-content-center" onClick={cleanQuery}>
                                                 <Close/>
                                             </IconButton>
                                         </div>
                                     }
-                                </div>
+                                </>
                             }
                         </div>
+
                         <div style={{margin: "0 20px 0 auto", flex: "1"}}/>
                     </div>
 

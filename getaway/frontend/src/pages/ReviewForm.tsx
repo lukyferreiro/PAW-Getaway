@@ -121,7 +121,7 @@ export default function ReviewForm() {
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
             <div className="container-lg w-100 modalContainer d-flex flex-column justify-content-center align-items-center">
                 <form id="createReviewForm" acceptCharset="utf-8" onSubmit={onSubmit} method="post" style={{width: "100%"}}>
-                    <div className="p-4 mx-4 mt-4 m-1">
+                    <div className="p-4 mx-4 mt-4">
                         <div className="col m-2">
                             <h3 className="text-center" style={{wordBreak: "break-all"}}>
                                 {!review ?
@@ -243,7 +243,7 @@ export default function ReviewForm() {
                         </div>
                     </div>
 
-                    <div className="p-0 d-flex justify-content-around">
+                    <div className="p-0 mb-2 d-flex justify-content-around">
                         <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
                                 onClick={() => navigate(-1)}>
                             {t('Button.cancel')}

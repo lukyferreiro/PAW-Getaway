@@ -72,7 +72,8 @@ export const TRANSLATIONS_EN = {
         editPassword: "New password",
         confirmEditPassword: "Confirm new password",
         changePassword: "Change password",
-        editProfile: "Edit profile"
+        editProfile: "Edit profile",
+        error: "Less than 50 characters"
     },
 
     Filters: {
@@ -375,7 +376,7 @@ export const TRANSLATIONS_EN = {
         search: {
             search: "Searching ",
             category: "in ",
-            name: "\" {{name}} \""
+            name: " \"{{name}}\""
         }
     },
 

@@ -104,7 +104,7 @@ export default function CreateAccount() {
                                                 </div>
                                             </label>
                                             <input type="text" id="email"
-                                                   className="form-control mb-2"
+                                                   className="form-control"
                                                    placeholder={t('Navbar.emailPlaceholder')}
                                                    aria-describedby="email input"
                                                    max="255"
@@ -164,7 +164,7 @@ export default function CreateAccount() {
                                                     {t("CreateAccount.error.name.isRequired")}
                                                 </p>
                                             )}
-                                            {errors.email?.type === "length" && (
+                                            {errors.name?.type === "length" && (
                                                 <p className="form-control is-invalid form-error-label">
                                                     {t("CreateAccount.error.name.length")}
                                                 </p>
@@ -204,7 +204,7 @@ export default function CreateAccount() {
                                                     {t("CreateAccount.error.surname.isRequired")}
                                                 </p>
                                             )}
-                                            {errors.email?.type === "length" && (
+                                            {errors.surname?.type === "length" && (
                                                 <p className="form-control is-invalid form-error-label">
                                                     {t("CreateAccount.error.surname.length")}
                                                 </p>

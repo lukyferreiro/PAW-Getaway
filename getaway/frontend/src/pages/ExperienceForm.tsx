@@ -220,8 +220,8 @@ export default function ExperienceForm() {
                                    {...register("name", {
                                        required: true,
                                        validate: {
-                                           length: (email) =>
-                                               email.length >= 3 && email.length <= 50,
+                                           length: (name) =>
+                                               name.length >= 3 && name.length <= 50,
                                        },
                                        pattern: {
                                            value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
@@ -392,7 +392,7 @@ export default function ExperienceForm() {
                             <input max="500" id="experienceFormUrlInput" type="text"
                                    className="form-control" placeholder={t('Experience.url.placeholder')}
                                    {...register("url", {
-                                       required: false,
+                                       required: true,
                                        validate: {
                                            length: (url) =>
                                                (!url) || (url.length >= 0 && url.length <= 500),
@@ -498,7 +498,7 @@ export default function ExperienceForm() {
                                     {t("ExperienceForm.error.address.isRequired")}
                                 </p>
                             )}
-                            {errors.address?.type === "address" && (
+                            {errors.address?.type === "length" && (
                                 <p className="form-control is-invalid form-error-label">
                                     {t("ExperienceForm.error.address.max")}
                                 </p>
