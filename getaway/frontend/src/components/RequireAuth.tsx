@@ -17,10 +17,10 @@ export default function RequireAuth({children}: { children: JSX.Element }) {
     const readUser = localStorage.getItem("user")
     const correctRoute = getCorrectPrivilegeRoute(location)
 
-    useEffect(() => {
-        if (readUser && readUser !== "")
-            signIn(JSON.parse(readUser), () => navigate(correctRoute))
-    }, [])
+    // useEffect(() => {
+    //     if (readUser && readUser !== "")
+    //         signIn(JSON.parse(readUser), () => navigate(correctRoute))
+    // }, [])
 
     return children;
 }

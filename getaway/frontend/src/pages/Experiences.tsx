@@ -3,7 +3,7 @@ import "../common/i18n/index"
 import OrderDropdown from "../components/OrderDropdown"
 import CardExperience from "../components/CardExperience"
 import {IconButton, Slider, Typography} from '@mui/material'
-import React, {Dispatch, SetStateAction, useEffect, useState} from "react"
+import React, {Dispatch, SetStateAction, SyntheticEvent, useEffect, useState} from "react"
 import {ExperienceModel, OrderByModel} from "../types"
 import {useNavigate, useSearchParams} from "react-router-dom"
 import {CityModel, CountryModel} from "../types"
@@ -161,6 +161,12 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
 
     const handlePriceChange = (event: Event, newValue: number | number[]) => {
         if (typeof newValue === 'number') {
+            setPrice(newValue)
+        }
+    }
+
+    const handlePriceChangeCommitted = (event: Event | SyntheticEvent<Element, Event>, newValue: number | number[]) => {
+        if (typeof newValue === 'number') {
             searchParams.set("price", newValue.toString())
             setSearchParams(searchParams)
             setPrice(newValue)
@@ -261,13 +267,15 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                             <div className="value left">
                                 {t('Filters.price.min')}
                             </div>
-                            <div className="slider"/>
+
                             <Slider
+                                style={{color: "var(--primary-color)"}}
                                 value={price}
                                 min={5}
                                 step={1}
                                 max={maxPrice}
                                 onChange={handlePriceChange}
+                                onChangeCommitted={handlePriceChangeCommitted}
                                 valueLabelDisplay="auto"
                             />
                             <div className="value right">
