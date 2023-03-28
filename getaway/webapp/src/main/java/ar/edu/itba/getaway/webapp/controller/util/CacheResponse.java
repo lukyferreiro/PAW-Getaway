@@ -15,7 +15,7 @@ public class CacheResponse {
         // Avoid instantiation of util class
     }
 
-    public static Response conditionalCacheResponse(ImageModel image, Request request, boolean isExperience) {
+    public static Response cacheResponse(ImageModel image, Request request, boolean isExperience) {
 
         EntityTag eTag = null;
         if (!isExperience) {
@@ -36,14 +36,17 @@ public class CacheResponse {
         if (!isExperience) {
             Response.ResponseBuilder response = request.evaluatePreconditions(eTag);
             if (response == null) {
-                response = Response.ok(image.getImage())
+                response = Response.ok(image.getImage(), image.getMimeType())
                         .tag(eTag)
-                        .type(image.getMimeType());
+                        .type(image.getMimeType())
+                        .header("Content-Disposition", "inline; filename=" + image.getImageId())
+                ;
             }
             return response.cacheControl(cacheControl).build();
         } else {
-            return Response.ok(image.getImage())
+            return Response.ok(image.getImage(), image.getMimeType())
                     .type(image.getMimeType())
+                    .header("Content-Disposition", "inline; filename=" + image.getImageId())
                     .cacheControl(cacheControl)
                     .build();
         }

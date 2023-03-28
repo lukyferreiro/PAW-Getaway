@@ -22,7 +22,7 @@ public class NewExperienceDto {
     private String country;
 
     @NotEmpty(message = "NotEmpty")
-    private String city;
+    private long city;
 
     @NotEmpty(message = "NotEmpty")
     @Size(min = 5, max = 100, message = "Size.experienceForm.experienceAddress")
@@ -76,11 +76,11 @@ public class NewExperienceDto {
         this.country = country;
     }
 
-    public String getCity() {
+    public long getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(long city) {
         this.city = city;
     }
 

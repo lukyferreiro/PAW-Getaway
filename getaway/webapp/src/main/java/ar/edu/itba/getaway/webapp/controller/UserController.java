@@ -227,7 +227,7 @@ public class UserController {
             return Response.noContent().build();
         }
 
-        return CacheResponse.conditionalCacheResponse(image, request, false);
+        return CacheResponse.cacheResponse(image, request, false);
 
     }
 

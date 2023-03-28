@@ -9,12 +9,14 @@ import {useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {showToast} from "../scripts/toast";
+import {Simulate} from "react-dom/test-utils";
+import load = Simulate.load;
 
 type FormDataExperience = {
     name: string,
     category: number,
-    country: string,
-    city: string,
+    country: number,
+    city: number,
     address: string,
     mail: string,
     price?: number,
@@ -36,6 +38,9 @@ export default function ExperienceForm() {
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
     const [countries, setCountries] = useState<CountryModel[]>(new Array(0))
     const [cities, setCities] = useState<CityModel[]>(new Array(0))
+
+    const [country, setCountry] = useState<number>(-1)
+    const [city, setCity] = useState<number>(-1)
 
     const [isLoadingData, setIsLoadingData] = useState(false)
 
@@ -92,8 +97,10 @@ export default function ExperienceForm() {
 
                     setValue('name', fetchedExperience.name)
                     setValue('category', fetchedExperience.category.id)
-                    setValue('country', fetchedExperience.country.id.toString())
-                    setValue('city', fetchedExperience.city.name)
+                    setValue('country', fetchedExperience.country.id)
+                    setCountry(fetchedExperience.country.id)
+                    setValue('city', fetchedExperience.city.id)
+                    setCity(fetchedExperience.city.id)
                     setValue('address', fetchedExperience.address)
                     setValue('mail', fetchedExperience.email)
                     setValue('price', fetchedExperience.price)
@@ -129,6 +136,11 @@ export default function ExperienceForm() {
                 setCities(new Array(0))
             }
         )
+    }
+
+    function handleCountryChange(countryId: number) {
+        setCountry(countryId)
+        loadCities(countryId)
     }
 
     function checkUrl(url: string | undefined): string | undefined {
@@ -408,14 +420,15 @@ export default function ExperienceForm() {
                             </label>
                             <select id="experienceFormCountryInput" className="form-select" required
                                     {...register("country", {required: true})}
-                                    onChange={e => loadCities(parseInt(e.target.value))}
+                                    onChange={(e) => handleCountryChange(parseInt(e.target.value))}
+                                    value={country}
                             >
                                 {experience === undefined &&
                                     <option hidden value="">{t('Experience.placeholder')}</option>
                                 }
 
                                 {countries.map((country) => (
-                                    <option defaultValue={experience ? experience.country.id : ""} key={country.id} value={country.id}>
+                                    <option key={country.id} value={country.id}>
                                         {country.name}
                                     </option>
                                 ))}
@@ -434,13 +447,15 @@ export default function ExperienceForm() {
                             <select id="experienceFormCityInput" className="form-select" required
                                     {...register("city", {required: true})}
                                     disabled={cities.length <= 0 && experience === undefined}
+                                    onChange={(e) => setCity(parseInt(e.target.value))}
+                                    value={city}
                             >
                                 {experience === undefined &&
                                     <option hidden value="">{t('Experience.placeholder')}</option>
                                 }
 
                                 {cities.map((city) => (
-                                    <option defaultValue={experience ? experience.city.id : ""} key={city.id} value={city.name}>
+                                    <option key={city.id} value={city.id}>
                                         {city.name}
                                     </option>
                                 ))}

@@ -192,7 +192,7 @@ public class ExperienceController {
         dtoValidator.validate(experienceDto, "Invalid Body Request");
 
         final UserModel user = authContext.getCurrentUser();
-        final CityModel city = locationService.getCityByName(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
+        final CityModel city = locationService.getCityById(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel category = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
         ExperienceModel experience;
@@ -283,7 +283,7 @@ public class ExperienceController {
             throw new IllegalOperationException();
         }
 
-        final CityModel cityModel = locationService.getCityByName(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
+        final CityModel cityModel = locationService.getCityById(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel categoryModel = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
         final ExperienceModel toUpdateExperience = new ExperienceModel(id, experienceDto.getName(), experienceDto.getAddress(), experienceDto.getDescription(),
@@ -331,7 +331,7 @@ public class ExperienceController {
             return Response.noContent().build();
         }
 
-        return CacheResponse.conditionalCacheResponse(image, request, true);
+        return CacheResponse.cacheResponse(image, request, true);
     }
 
     @PUT

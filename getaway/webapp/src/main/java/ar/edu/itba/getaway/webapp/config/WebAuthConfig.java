@@ -139,7 +139,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 new OrRequestMatcher(
 //                        new AntPathRequestMatcher("/api/users/{userId}/profileImage"),
 //                        new AntPathRequestMatcher("/api/users/{userId}/profileImage/"),
-                        new AntPathRequestMatcher("/api/experiences/experience/{experienceId}/experienceImage/"),
+                        new AntPathRequestMatcher("/api/experiences/experience/{experienceId}/experienceImage"),
                         new AntPathRequestMatcher("/api/experiences/experience/{experienceId}/experienceImage/")
                 )
         );
