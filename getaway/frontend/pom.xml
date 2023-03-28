@@ -13,6 +13,15 @@
 
     <name>frontend</name>
     <url>http://www.example.com</url>
-</project>
 
-        <!--TODO check si va este pom-->
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

@@ -346,8 +346,7 @@
         <module>models</module>
         <module>persistence</module>
         <module>services</module>
-        <!--        TODO check si va -->
-        <!--        <module>frontend</module>-->
+        <module>frontend</module>
     </modules>
 
     <build>
