@@ -12,7 +12,6 @@ public class ExperienceNameDto implements Serializable {
     private Long id;
     private String name;
 
-
     public static Collection<ExperienceNameDto> mapExperienceToDto(Collection<ExperienceModel> experiences, UriInfo uriInfo) {
         return experiences.stream().map(exp -> new ExperienceNameDto(exp, uriInfo)).collect(Collectors.toList());
     }

@@ -1,5 +1,5 @@
-import UserModel from "./UserModel";
 import ExperienceNameModel from "./ExperienceNameModel";
+import {UserInfoModel} from "./index";
 
 export default interface ReviewModel {
     id: number;
@@ -8,5 +8,5 @@ export default interface ReviewModel {
     score: number;
     date: string;
     experience: ExperienceNameModel;
-    user: UserModel;
+    user: UserInfoModel;
 }

@@ -5,7 +5,6 @@ import ar.edu.itba.getaway.models.ReviewModel;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -16,7 +15,7 @@ public class ReviewDto implements Serializable {
     private String description;
     private long score;
     private String date;
-    private UserDto user;
+    private UserInfoDto user;
     private ExperienceNameDto experience;
     private String selfUrl;
     private String experienceUrl;
@@ -39,7 +38,7 @@ public class ReviewDto implements Serializable {
         this.description = review.getDescription();
         this.score = review.getScore();
         this.date = review.getReviewDate().toString();
-        this.user = new UserDto(review.getUser(), uriInfo);
+        this.user = new UserInfoDto(review.getUser());
         this.experience = new ExperienceNameDto(review.getExperience(), uriInfo);
         this.selfUrl = getReviewUriBuilder(review, uriInfo).build().toString();
         this.experienceUrl = uriInfo.getBaseUriBuilder().path("experiences").path("experience")
@@ -77,10 +76,10 @@ public class ReviewDto implements Serializable {
     public void setDate(String date) {
         this.date = date;
     }
-    public UserDto getUser() {
+    public UserInfoDto getUser() {
         return user;
     }
-    public void setUser(UserDto user) {
+    public void setUser(UserInfoDto user) {
         this.user = user;
     }
     public String getSelfUrl() {

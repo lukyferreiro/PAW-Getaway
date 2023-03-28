@@ -1,7 +1,7 @@
 import CityModel from "./CityModel";
-import UserModel from "./UserModel";
 import CategoryModel from "./CategoryModel";
 import CountryModel from "./CountryModel";
+import {UserInfoModel} from "./index";
 
 export default interface ExperienceModel {
     id: number;
@@ -14,7 +14,7 @@ export default interface ExperienceModel {
     city: CityModel;
     country: CountryModel;
     category: CategoryModel;
-    user: UserModel;
+    user: UserInfoModel;
     observable: boolean;
     views: number;
     score: number;

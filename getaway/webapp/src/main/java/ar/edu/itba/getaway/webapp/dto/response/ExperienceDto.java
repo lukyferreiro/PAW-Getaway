@@ -25,7 +25,7 @@ public class ExperienceDto implements Serializable {
     private Long reviewCount;
     private CountryDto country;
     private CityDto city;
-    private UserDto user;
+    private UserInfoDto user;
     private CategoryDto category;
     private boolean isFav;
     private boolean observable;
@@ -61,7 +61,7 @@ public class ExperienceDto implements Serializable {
         this.reviewCount = experience.getReviewCount();
         this.country = new CountryDto(experience.getCity().getCountry(), uriInfo);
         this.city = new CityDto(experience.getCity(), uriInfo);
-        this.user = new UserDto(experience.getUser(), uriInfo);
+        this.user = new UserInfoDto(experience.getUser());
         this.category = new CategoryDto(experience.getCategory());
         this.isFav = experience.getIsFav();
         this.observable = experience.getObservable();
@@ -152,10 +152,10 @@ public class ExperienceDto implements Serializable {
     public void setCity(CityDto city) {
         this.city = city;
     }
-    public UserDto getUser() {
+    public UserInfoDto getUser() {
         return user;
     }
-    public void setUser(UserDto user) {
+    public void setUser(UserInfoDto user) {
         this.user= user;
     }
     public CategoryDto getCategory() {
