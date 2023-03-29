@@ -27,15 +27,10 @@
 }
 
 .fa-heart {
-    font-size: x-large !important;
-}
-
-.fa-heart:hover {
     font-size: xx-large !important;
 }
 
-.heart-color {
-    font-size: xx-large !important;
+.heart-color, .fa-heart:hover {
     color: red !important;
 }
 
