@@ -26,10 +26,17 @@
     color: gold !important;
 }
 
+.fa-heart {
+    font-size: x-large !important;
+}
 
-.fa-heart.heart-color, .fa-heart:hover {
-    color: red !important;
+.fa-heart:hover {
     font-size: xx-large !important;
+}
+
+.heart-color {
+    font-size: xx-large !important;
+    color: red !important;
 }
 
 

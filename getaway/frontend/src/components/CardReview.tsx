@@ -85,7 +85,7 @@ export default function CardReview(props: {
 
                     <div className="d-flex flex-column justify-content-center align-content-center">
                         <h5 className="my-1">
-                            {reviewModel.user.name} , {reviewModel.user.surname}
+                            {reviewModel.user.name} {reviewModel.user.surname}
                         </h5>
                         <h6 className="my-1" style={{fontSize: "small"}}>
                             {reviewModel.date}
