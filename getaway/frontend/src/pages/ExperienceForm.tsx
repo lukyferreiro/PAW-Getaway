@@ -10,7 +10,6 @@ import {useAuth} from "../hooks/useAuth";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {showToast} from "../scripts/toast";
 import {Simulate} from "react-dom/test-utils";
-import load = Simulate.load;
 
 type FormDataExperience = {
     name: string,
@@ -47,41 +46,42 @@ export default function ExperienceForm() {
     const query = useQuery()
     const currentId = getQueryOrDefault(query, "id", "-1")
 
-    if (!user && !readUser) {
-        navigate("/login")
-        showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
-    }
-    if (user && readUser && !isVerifiedValue) {
-        navigate("/user/profile")
-        showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
-    }
-
     const {register, handleSubmit, reset, setValue, formState: {errors},}
         = useForm<FormDataExperience>({criteriaMode: "all"})
 
     useEffect(()=> {
-        serviceHandler(
-            categoryService.getCategories(),
-            navigate, (category) => {
-                setCategories(category)
-            },
-            () => {
-            },
-            () => {
-                setCategories(new Array(0))
-            }
-        )
-        serviceHandler(
-            locationService.getCountries(),
-            navigate, (country) => {
-                setCountries(country)
-            },
-            () => {
-            },
-            () => {
-                setCountries(new Array(0))
-            }
-        )
+        if (!user && !readUser) {
+            navigate("/login")
+            showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
+        }
+        else if (user && readUser && !isVerifiedValue) {
+            navigate("/user/profile")
+            showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
+        }
+        else {
+            serviceHandler(
+                categoryService.getCategories(),
+                navigate, (category) => {
+                    setCategories(category)
+                },
+                () => {
+                },
+                () => {
+                    setCategories(new Array(0))
+                }
+            )
+            serviceHandler(
+                locationService.getCountries(),
+                navigate, (country) => {
+                    setCountries(country)
+                },
+                () => {
+                },
+                () => {
+                    setCountries(new Array(0))
+                }
+            )
+        }
     }, [])
 
     useEffect(() => {
@@ -120,6 +120,7 @@ export default function ExperienceForm() {
             reset()
             setExperience(undefined)
             setCities(new Array(0))
+            setCountry(-1)
         }
     }, [currentId])
 
@@ -354,7 +355,7 @@ export default function ExperienceForm() {
                                        required: true,
                                        validate: {
                                            length: (mail) =>
-                                               mail.length >= 0 && mail.length <= 250,
+                                               mail.length >= 0 && mail.length <= 255,
                                        },
                                        pattern: {
                                            value: /^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$/,
@@ -385,17 +386,17 @@ export default function ExperienceForm() {
                                 </div>
                                 <div className="align-self-center">
                                     <h6 className="max-input-text">
-                                        {t('Input.maxValue', {value: 500})}
+                                        {t('Input.maxValue', {value: 255})}
                                     </h6>
                                 </div>
                             </label>
-                            <input max="500" id="experienceFormUrlInput" type="text"
+                            <input maxLength={255} id="experienceFormUrlInput" type="text"
                                    className="form-control" placeholder={t('Experience.url.placeholder')}
                                    {...register("url", {
-                                       required: true,
+                                       required: false,
                                        validate: {
                                            length: (url) =>
-                                               (!url) || (url.length >= 0 && url.length <= 500),
+                                               (!url) || (url.length >= 0 && url.length <= 255),
                                        },
                                        pattern: {
                                            value: /^([(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*))?$/,
@@ -500,7 +501,7 @@ export default function ExperienceForm() {
                             )}
                             {errors.address?.type === "length" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("ExperienceForm.error.address.max")}
+                                    {t("ExperienceForm.error.address.length")}
                                 </p>
                             )}
                         </div>

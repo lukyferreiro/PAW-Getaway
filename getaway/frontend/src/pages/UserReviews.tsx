@@ -38,23 +38,25 @@ export default function UserReviews() {
             navigate("/user/profile")
             showToast(t('User.toast.reviews.forbidden'), 'error')
         }
-        setIsLoading(true)
-        serviceHandler(
-            userService.getUserReviews(user ? user.id : -1, currentPage[0]),
-            navigate, (reviews) => {
-                setReviews(reviews.getContent())
-                setMaxPage(reviews ? reviews.getMaxPage() : 1)
-                searchParams.set("page", currentPage[0].toString())
-                setSearchParams(searchParams)
-            },
-            () => {
-                setIsLoading(false)
-            },
-            () => {
-                setReviews(new Array(0))
-                setMaxPage(1)
-            }
-        )
+        else {
+            setIsLoading(true)
+            serviceHandler(
+                userService.getUserReviews(user ? user.id : -1, currentPage[0]),
+                navigate, (reviews) => {
+                    setReviews(reviews.getContent())
+                    setMaxPage(reviews ? reviews.getMaxPage() : 1)
+                    searchParams.set("page", currentPage[0].toString())
+                    setSearchParams(searchParams)
+                },
+                () => {
+                    setIsLoading(false)
+                },
+                () => {
+                    setReviews(new Array(0))
+                    setMaxPage(1)
+                }
+            )
+        }
     }, [currentPage[0], onEdit[0]])
 
     return (

@@ -18,10 +18,10 @@ public class NewExperienceDto {
     @NotNull(message = "NotNull")
     private long category;
 
-    @NotEmpty(message = "NotEmpty")
-    private String country;
+    @NotNull(message = "NotNull")
+    private long country;
 
-    @NotEmpty(message = "NotEmpty")
+    @NotNull(message = "NotNull")
     private long city;
 
     @NotEmpty(message = "NotEmpty")
@@ -68,11 +68,11 @@ public class NewExperienceDto {
         this.category = category;
     }
 
-    public String getCountry() {
+    public long getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(long country) {
         this.country = country;
     }
 

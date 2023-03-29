@@ -33,64 +33,74 @@ export default function ReviewForm() {
     const [rating, setRating] = useState(1)
     const [hover, setHover] = useState(0)
 
+    const [invalidScore, setInvalidScore] = useState(false);
+
     const query = useQuery()
     const currentId = getQueryOrDefault(query, "id", "-1")
 
-    if (!user && !readUser) {
-        navigate("/login")
-        showToast(t('ReviewForm.toast.forbidden.noUser'), 'error')
-    } else if (!isVerifiedValue) {
-        navigate("/user/profile")
-        showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
-    }
+
 
     useEffect(() => {
-        if (parseInt(currentId) !== -1) {
-            serviceHandler(
-                reviewService.getReviewById(parseInt(currentId)),
-                navigate, (review) => {
-                    if (review.user.id !== user?.id) {
-                        navigate("/", {replace: true})
-                    }
-                    setReview(review)
-                    setRating(-review.score)
-                    setHover(-review.score)
-                    setValue('title', review.title)
-                    setValue('description', review.description)
-                },
-                () => {
-                },
-                () => {
-                    setReview(undefined)
-                    setRating(0)
-                    setHover(0)
-                }
-            )
-            document.title = `${t('PageName')} - ${t('PageTitles.reviewForm.edit')}`
+        if (!user && !readUser) {
+            navigate("/login")
+            showToast(t('ReviewForm.toast.forbidden.noUser'), 'error')
+        } else if (!isVerifiedValue) {
+            navigate("/user/profile")
+            showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
         }
         else {
-            document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.create')}`
-            reset()
-            setReview(undefined)
-        }
-        serviceHandler(
-            experienceService.getExperienceNameById(parseInt(experienceId ? experienceId : '-1')),
-            navigate, (fetchedExperience) => {
-                setExperience(fetchedExperience)
-            },
-            () => {
-            },
-            () => {
-                setExperience(undefined)
+            if (parseInt(currentId) !== -1) {
+                serviceHandler(
+                    reviewService.getReviewById(parseInt(currentId)),
+                    navigate, (review) => {
+                        if (review.user.id !== user?.id) {
+                            navigate("/", {replace: true})
+                        }
+                        setReview(review)
+                        setRating(-review.score)
+                        setHover(-review.score)
+                        setValue('title', review.title)
+                        setValue('description', review.description)
+                    },
+                    () => {
+                    },
+                    () => {
+                        setReview(undefined)
+                        setRating(0)
+                        setHover(0)
+                    }
+                )
+                document.title = `${t('PageName')} - ${t('PageTitles.reviewForm.edit')}`
             }
-        )
+            else {
+                document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.create')}`
+                reset()
+                setReview(undefined)
+            }
+            serviceHandler(
+                experienceService.getExperienceNameById(parseInt(experienceId ? experienceId : '-1')),
+                navigate, (fetchedExperience) => {
+                    setExperience(fetchedExperience)
+                },
+                () => {
+                },
+                () => {
+                    setExperience(undefined)
+                }
+            )
+        }
     }, [])
 
     const {register, handleSubmit, reset, setValue, formState: {errors},}
         = useForm<FormDataReview>({criteriaMode: "all"})
 
     const onSubmit = handleSubmit((data: FormDataReview) => {
-            data.score = String(-rating)
+        data.score = String(-rating)
+        if (data.score === "-1"){
+            setInvalidScore(true)
+        }
+        else {
+            setInvalidScore(false)
             if (review) {
                 reviewService.updateReviewById(parseInt(currentId), data.title, data.description, data.score)
                     .then((result) => {
@@ -115,7 +125,7 @@ export default function ReviewForm() {
                     })
             }
         }
-    )
+    })
 
     return (
         <div className="container-fluid p-0 my-auto h-auto w-100 d-flex justify-content-center align-items-center">
@@ -240,6 +250,11 @@ export default function ReviewForm() {
                                 </div>
                             </div>
                             <input name="score" type="hidden" className="form-control" id="score"/>
+                                {invalidScore &&
+                                    <p className="form-control is-invalid form-error-label">
+                                        {t("ReviewForm.error.score.isRequired")}
+                                    </p>
+                                }
                         </div>
                     </div>
 

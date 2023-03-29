@@ -58,18 +58,20 @@ export default function UserExperiences() {
             navigate("/")
             showToast(t('User.toast.experiences.forbidden'), 'error')
         }
-        serviceHandler(
-            experienceService.getProviderOrderByModels(),
-            navigate, (orders) => {
-                setOrders(orders)
-            },
-            () => {
-            },
-            () => {
-                setOrders(new Array(0))
-            }
-        );
-        document.title = `${t('PageName')} - ${t('PageTitles.userExperiences')}`
+        else {
+            serviceHandler(
+                experienceService.getProviderOrderByModels(),
+                navigate, (orders) => {
+                    setOrders(orders)
+                },
+                () => {
+                },
+                () => {
+                    setOrders(new Array(0))
+                }
+            );
+            document.title = `${t('PageName')} - ${t('PageTitles.userExperiences')}`
+        }
     }, [])
 
     useEffect(() => {

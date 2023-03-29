@@ -20,15 +20,18 @@ export default function UserEditProfile() {
     const isVerifiedValue = isVerified()
     const navigate = useNavigate()
 
-    if (!isVerifiedValue) {
-        navigate("/user/profile")
-        showToast(t('User.toast.editProfile.forbidden'), 'error')
-    }
+
 
     useEffect(() => {
-        setValue('name', user!.name);
-        setValue('surname', user!.surname)
-        document.title = `${t('PageName')} - ${t('PageTitles.userEditProfile')}`
+        if (!isVerifiedValue) {
+            navigate("/user/profile")
+            showToast(t('User.toast.editProfile.forbidden'), 'error')
+        }
+        else {
+            setValue('name', user!.name);
+            setValue('surname', user!.surname)
+            document.title = `${t('PageName')} - ${t('PageTitles.userEditProfile')}`
+        }
     }, [])
 
     const {register, handleSubmit, setValue, formState: {errors},}
