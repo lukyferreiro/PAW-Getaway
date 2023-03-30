@@ -11,6 +11,8 @@ export function getQueryOrDefault(query: URLSearchParams, queryParam: string, de
     if (fetcher === null) {
         return defaultRet
     }
+    console.log(queryParam)
+    console.log(fetcher)
     return fetcher
 }
 
@@ -18,14 +20,6 @@ export function getQueryOrDefaultMultiple(query: URLSearchParams, queryParam: st
     const fetcher = query.getAll(queryParam);
     if (fetcher === null) {
         return []
-    }
-    return fetcher
-}
-
-export function queryHasParam(query: URLSearchParams, queryParam: string) {
-    const fetcher = query.has(queryParam);
-    if (fetcher === null) {
-        return false
     }
     return fetcher
 }

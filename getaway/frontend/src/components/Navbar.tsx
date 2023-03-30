@@ -196,7 +196,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                 navigate({
                                     pathname: "/experiences",
                                     search: `?category=${category.name}&name=${nameProp[0]}&order=OrderByAZ&page=1`
-                                })
+                                }, {replace: true})
                             }}
                     >
                         <img src={`./images/${category.name}.svg`} alt={`${category.name}`}/>

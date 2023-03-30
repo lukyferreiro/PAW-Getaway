@@ -97,14 +97,19 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 experienceService.getFilterMaxPrice(categoryProp[0], nameProp[0]),
                 navigate, (priceModel) => {
                     setMaxPrice(priceModel.maxPrice)
-                    if (price > priceModel.maxPrice || price === -1) {
+                    if (price !== priceModel.maxPrice || price === -1) {
                         setPrice(priceModel.maxPrice)
                     }
+                    order[1]("OrderByAZ")
+                    currentPage[1](1)
+                    searchParams.set("order", order[0])
+                    searchParams.set("page", currentPage[0].toString())
+                    setSearchParams(searchParams)
                 },
                 () => {
                 },
                 () => {
-                    setPrice(0)
+                    setPrice(-1)
                 }
             )
         }
@@ -113,6 +118,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     useEffect(() => {
         if (nameProp[0] !== undefined && categoryProp[0] !== undefined) {
             setIsLoading(true)
+            console.log(currentPage[0])
             serviceHandler(
                 experienceService.getExperiencesByFilter(categoryProp[0], nameProp[0], order[0], price, -rating, city, currentPage[0]),
                 navigate, (experiences) => {
@@ -196,22 +202,27 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
         setCity(-1)
         setRating(0)
         setHover(0)
-        setPrice(maxPrice)
+        setPrice(-1)
         order[1]("OrderByAZ")
         currentPage[1](1)
-        console.log("Reseting filters")
     }
 
     function cleanQueryForName() {
         nameProp[1]("")
         searchParams.delete("name")
         setSearchParams(searchParams)
+        order[1]("OrderByAZ")
+        currentPage[1](1)
+        cleanForm()
     }
 
     function cleanQueryForCategory() {
         categoryProp[1]("")
         searchParams.delete("category")
         setSearchParams(searchParams)
+        order[1]("OrderByAZ")
+        currentPage[1](1)
+        cleanForm()
     }
 
     return (
