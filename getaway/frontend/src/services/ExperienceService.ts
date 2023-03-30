@@ -82,7 +82,7 @@ export class  ExperienceService {
         if (typeof order === "string") {
             url.searchParams.append("order", order);
         }
-        if (price) {
+        if (price || price === 0) {
             url.searchParams.append("price", price.toString());
         }
         if (score) {

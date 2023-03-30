@@ -190,6 +190,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
         searchParams.set("page", "1")
         setSearchParams(searchParams)
 
+        setOnPriceChange(!onPriceChange)
         setCities(new Array(0))
         setCountry(-1)
         setCity(-1)
