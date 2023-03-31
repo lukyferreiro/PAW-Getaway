@@ -11,8 +11,6 @@ export function getQueryOrDefault(query: URLSearchParams, queryParam: string, de
     if (fetcher === null) {
         return defaultRet
     }
-    console.log(queryParam)
-    console.log(fetcher)
     return fetcher
 }
 

@@ -20,9 +20,10 @@ type FormDataReview = {
 
 export default function ReviewForm() {
     const {experienceId} = useParams()
-    const {user, isVerified} = useAuth()
-    const readUser = localStorage.getItem("user")
+    const {isLogged, isVerified, getUser} = useAuth()
+    const user = getUser()
     const isVerifiedValue = isVerified()
+    const isLoggedValue = isLogged()
     const navigate = useNavigate()
 
     const {t} = useTranslation()
@@ -38,13 +39,14 @@ export default function ReviewForm() {
     const query = useQuery()
     const currentId = getQueryOrDefault(query, "id", "-1")
 
-
+    const {register, handleSubmit, reset, setValue, formState: {errors},}
+        = useForm<FormDataReview>({criteriaMode: "all"})
 
     useEffect(() => {
-        if (!user && !readUser) {
+        if (!isLoggedValue) {
             navigate("/login")
             showToast(t('ReviewForm.toast.forbidden.noUser'), 'error')
-        } else if (!isVerifiedValue) {
+        } else if (isLoggedValue && !isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
         }
@@ -73,7 +75,7 @@ export default function ReviewForm() {
                 document.title = `${t('PageName')} - ${t('PageTitles.reviewForm.edit')}`
             }
             else {
-                document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.create')}`
+                document.title = `${t('PageName')} - ${t('PageTitles.reviewForm.create')}`
                 reset()
                 setReview(undefined)
             }
@@ -90,9 +92,6 @@ export default function ReviewForm() {
             )
         }
     }, [])
-
-    const {register, handleSubmit, reset, setValue, formState: {errors},}
-        = useForm<FormDataReview>({criteriaMode: "all"})
 
     const onSubmit = handleSubmit((data: FormDataReview) => {
         data.score = String(-rating)

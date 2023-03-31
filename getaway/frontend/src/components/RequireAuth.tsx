@@ -11,22 +11,21 @@ function getCorrectPrivilegeRoute(location: Location): To {
 }
 
 export default function RequireAuth({children}: { children: JSX.Element }) {
-    const {signIn, signOut} = useAuth()
+    const {signIn, signOut, getUser} = useAuth()
     const location = useLocation()
     const navigate = useNavigate()
-    const readUser = localStorage.getItem("user")
+    const readUser = getUser()
     const correctRoute = getCorrectPrivilegeRoute(location)
 
-    // useEffect(() => {
-    //     if (readUser && readUser !== "")
-    //         signIn(JSON.parse(readUser), () => navigate(correctRoute))
-    // }, [])
-
     useEffect(() => {
-        if (!readUser || readUser === "") {
+        if (readUser) {
+            signIn(readUser, () => navigate(correctRoute))
+        }
+        else {
             signOut(()=>{})
         }
-    })
+
+    }, [])
 
     return children;
 }

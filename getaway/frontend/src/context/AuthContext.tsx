@@ -15,6 +15,7 @@ interface AuthContextType {
     isLogged: () => boolean
     isVerified: () => boolean
     isProvider: () => boolean
+    getUser: () => UserModel | null
 }
 
 export const AuthContext = createContext<AuthContextType>(null!)
@@ -95,7 +96,15 @@ export function AuthProvider({children}: { children: ReactNode }) {
         return localStorage.getItem("isProvider") === 'true'
     }
 
-    const value = {user, setUser, signIn, signOut, verifyUser, makeProvider, setHasImage, editUserInfo, isLogged, isVerified, isProvider}
+    const getUser = () => {
+        const readUser = localStorage.getItem("user")
+        if (readUser) {
+            return JSON.parse(readUser)
+        }
+        return null
+    }
+
+    const value = {user, setUser, signIn, signOut, verifyUser, makeProvider, setHasImage, editUserInfo, isLogged, isVerified, isProvider, getUser}
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

@@ -10,6 +10,7 @@ import {useForm} from "react-hook-form";
 import {Close} from "@mui/icons-material";
 import {IconButton} from "@mui/material";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
+import {showToast} from "../scripts/toast";
 
 type FormDataSearch = {
     name: string
@@ -79,8 +80,13 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
         clearNavBar();
         if (!isLoggedValue) {
             navigate("/login")
-        } else if (!isVerified) {
+            showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
+        } else if (isLoggedValue && !isVerifiedValue) {
             navigate("/user/profile")
+            showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
+        }
+        else {
+            navigate(`/experienceForm`)
         }
     }
 
@@ -125,14 +131,10 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                         </IconButton>
                     </div>
 
-
-                    <Link to="/experienceForm" style={{marginRight: '40px'}}>
-                        <button type="button" className='btn button-primary'
-                                onClick={() => attemptAccessCreateExperience()}>
-                            {t('Navbar.createExperience')}
-                        </button>
-                    </Link>
-
+                    <button type="button" style={{marginRight: '40px'}} className='btn button-primary'
+                            onClick={() => attemptAccessCreateExperience()}>
+                        {t('Navbar.createExperience')}
+                    </button>
 
                     {!isLoggedValue &&
                         <Link to="/login">

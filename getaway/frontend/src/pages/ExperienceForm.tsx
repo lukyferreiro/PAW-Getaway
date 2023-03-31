@@ -25,8 +25,9 @@ type FormDataExperience = {
 
 export default function ExperienceForm() {
 
-    const {user, isVerified, isProvider, makeProvider} = useAuth()
-    const readUser = localStorage.getItem("user");
+    const {isLogged, isVerified, isProvider, makeProvider, getUser} = useAuth()
+    const user = getUser()
+    const isLoggedValue = isLogged()
     const isVerifiedValue = isVerified()
     const isProviderValue = isProvider()
     const navigate = useNavigate()
@@ -50,11 +51,11 @@ export default function ExperienceForm() {
         = useForm<FormDataExperience>({criteriaMode: "all"})
 
     useEffect(()=> {
-        if (!user && !readUser) {
+        if (!isLoggedValue) {
             navigate("/login")
             showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
         }
-        else if (user && readUser && !isVerifiedValue) {
+        else if (isLoggedValue && !isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
         }

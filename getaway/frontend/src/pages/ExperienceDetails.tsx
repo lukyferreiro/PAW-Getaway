@@ -26,8 +26,10 @@ export default function ExperienceDetails() {
     const {experienceId} = useParams()
     const [isLoading, setIsLoading] = useState(false)
 
-    const {user, isVerified} = useAuth()
+    const {isLogged, getUser, isVerified} = useAuth()
+    const isLoggedValue = isLogged()
     const isVerifiedValue = isVerified()
+    const user = getUser()
 
     const [maxPage, setMaxPage] = useState(1)
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
@@ -69,12 +71,15 @@ export default function ExperienceDetails() {
     }, [currentPage[0]])
 
     function attemptAccessCreateReview() {
-        if (user === null) {
+        if (!isLoggedValue) {
             navigate("/login")
             showToast(t('ReviewForm.toast.forbidden.noUser'), 'error')
-        } else if (!isVerifiedValue) {
+        } else if (isLoggedValue && !isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
+        }
+        else {
+            navigate(`/experiences/${experienceId}/reviewForm`)
         }
     }
 
@@ -100,12 +105,10 @@ export default function ExperienceDetails() {
                             {t('ExperienceDetail.review')}
                         </h2>
 
-                        <Link to={`/experiences/${experienceId}/reviewForm`}>
-                            <button type="button" className='btn button-primary'
-                                    onClick={() => attemptAccessCreateReview()}>
-                                {t('ExperienceDetail.writeReview')}
-                            </button>
-                        </Link>
+                        <button type="button" className='btn button-primary'
+                                onClick={() => attemptAccessCreateReview()}>
+                            {t('ExperienceDetail.writeReview')}
+                        </button>
                     </div>
                 </div>
 

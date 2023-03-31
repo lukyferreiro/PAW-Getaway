@@ -73,7 +73,6 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
             }
         )
         if (country !== -1) {
-            console.log(city)
             serviceHandler(
                 locationService.getCitiesByCountry(country),
                 navigate, (cities) => {
@@ -118,7 +117,6 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     useEffect(() => {
         if (nameProp[0] !== undefined && categoryProp[0] !== undefined) {
             setIsLoading(true)
-            console.log(currentPage[0])
             serviceHandler(
                 experienceService.getExperiencesByFilter(categoryProp[0], nameProp[0], order[0], price, -rating, city, currentPage[0]),
                 navigate, (experiences) => {

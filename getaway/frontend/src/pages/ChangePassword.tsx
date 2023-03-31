@@ -18,9 +18,8 @@ type FormDataResetPassword = {
 };
 
 export default function ChangePassword() {
-
-    const {user} = useAuth()
-    const readUser = localStorage.getItem("user")
+    const {isLogged} = useAuth()
+    const isLoggedValue = isLogged()
 
     const {t} = useTranslation()
     const query = useQuery();
@@ -39,7 +38,7 @@ export default function ChangePassword() {
     }
 
     useEffect(() => {
-        if (user || readUser) {
+        if (isLoggedValue) {
             navigate("/", {replace: true})
             showToast(t('ChangePassword.toast.forbidden'), 'error')
         } else if (passwordToken === "" || passwordToken === undefined) {
