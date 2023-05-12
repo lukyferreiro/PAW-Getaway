@@ -29,7 +29,7 @@ export default function AddPictureModal(
             if (experienceId) {
                 experienceService.updateExperienceImage(experienceId, data.image![0])
                     .then((result) => {
-                            if (result.getError().getStatus() === 204) {
+                            if (!result.hasFailed()) {
                                 isOpen[1](false)
                                 reset()
                                 showToast(t('Experience.toast.imageSuccess'), "success")
@@ -45,7 +45,7 @@ export default function AddPictureModal(
             } else if (userId) {
                 userService.updateUserProfileImage(userId ? userId : -1, data.image![0])
                     .then((result) => {
-                        if (result.getError().getStatus() === 204) {
+                        if (!result.hasFailed()) {
                             if (!user?.hasImage) {
                                 setHasImage()
                             }

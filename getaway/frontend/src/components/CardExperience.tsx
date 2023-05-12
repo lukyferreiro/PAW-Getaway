@@ -1,9 +1,9 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index"
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useNavigate, useSearchParams} from 'react-router-dom'
 import {ExperienceModel} from "../types";
 import StarRating from "./StarRating";
-import React, {useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService} from "../services";
 import {IconButton} from "@mui/material";
@@ -13,10 +13,10 @@ import {setFavExperience} from "../scripts/experienceOperations";
 import Price from "./Price";
 import DataLoader from "./DataLoader";
 
-export default function CardExperience(props: { experience: ExperienceModel; }) {
-
+export default function CardExperience(props: { experience: ExperienceModel, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]}) {
     const {t} = useTranslation()
-    const {experience} = props
+    const {experience, nameProp, categoryProp} = props
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate()
 
     const {user} = useAuth()
@@ -42,6 +42,14 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
             )
         }
     }, [])
+
+    function clearNavBar() {
+        searchParams.delete("category")
+        searchParams.delete("name")
+        setSearchParams(searchParams)
+        categoryProp[1]("")
+        nameProp[1]("")
+    }
 
     return (
 
@@ -97,7 +105,7 @@ export default function CardExperience(props: { experience: ExperienceModel; }) 
                         </div>
                         :
                         <div>
-                            <IconButton onClick={() => navigate("/login")}>
+                            <IconButton onClick={() => {clearNavBar(); navigate("/login")}}>
                                 <FavoriteBorder className="fa-heart"/>
                             </IconButton>
                         </div>

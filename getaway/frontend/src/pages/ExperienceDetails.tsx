@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {ExperienceModel, ReviewModel} from "../types";
-import React, {useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import CardExperienceDetails from "../components/CardExperienceDetails";
 import CardReview from "../components/CardReview";
@@ -12,13 +12,15 @@ import Pagination from "../components/Pagination";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {showToast} from "../scripts/toast";
+import CardExperience from "../components/CardExperience";
 
-export default function ExperienceDetails() {
+export default function ExperienceDetails(props: { nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]} ) {
 
     const {t} = useTranslation()
     const navigate = useNavigate()
     const query = useQuery()
 
+    const {nameProp, categoryProp} = props
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [experience, setExperience] = useState<ExperienceModel | undefined>(undefined)
@@ -70,11 +72,21 @@ export default function ExperienceDetails() {
         )
     }, [currentPage[0]])
 
+    function clearNavBar() {
+        searchParams.delete("category")
+        searchParams.delete("name")
+        setSearchParams(searchParams)
+        categoryProp[1]("")
+        nameProp[1]("")
+    }
+
     function attemptAccessCreateReview() {
         if (!isLoggedValue) {
+            clearNavBar()
             navigate("/login")
             showToast(t('ReviewForm.toast.forbidden.noUser'), 'error')
         } else if (isLoggedValue && !isVerifiedValue) {
+            clearNavBar()
             navigate("/user/profile")
             showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
         }
@@ -94,7 +106,7 @@ export default function ExperienceDetails() {
                         </h1>
                     </div>
                     {experience !== undefined &&
-                        <CardExperienceDetails experience={experience} isEditing={experience.user.id === user?.id}/>
+                        <CardExperienceDetails experience={experience} isEditing={experience.user.id === user?.id}  nameProp={nameProp} categoryProp={categoryProp}/>
                     }
                 </div>
 

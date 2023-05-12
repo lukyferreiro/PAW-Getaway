@@ -72,7 +72,7 @@ public class ReviewController {
         reviewModel.setTitle(reviewDto.getTitle());
         reviewService.updateReview(reviewModel);
 
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 
     @DELETE
@@ -82,6 +82,6 @@ public class ReviewController {
         LOGGER.info("Called /reviews/{} DELETE", id);
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
         reviewService.deleteReview(reviewModel);
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 }

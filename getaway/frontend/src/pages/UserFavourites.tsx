@@ -30,6 +30,9 @@ export default function UserFavourites() {
     const [maxPage, setMaxPage] = useState(1)
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
 
+    const dummyCategoryProp = useState<string | undefined>(undefined)
+    const dummyNameProp = useState<string | undefined>(undefined)
+
     useEffect(() => {
         serviceHandler(
             experienceService.getUserOrderByModels(),
@@ -89,7 +92,7 @@ export default function UserFavourites() {
 
                         <div className="container-fluid my-3 d-flex flex-wrap justify-content-center">
                             {favExperiences.map((experience) => (
-                                <CardExperience experience={experience} key={experience.id}/>
+                                <CardExperience experience={experience} key={experience.id} categoryProp={dummyCategoryProp} nameProp={dummyNameProp}/>
                             ))}
                         </div>
 

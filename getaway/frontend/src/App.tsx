@@ -48,7 +48,7 @@ function App() {
                             <Route path='reviews' element={<UserReviews/>}/>
                         </Route>
                         <Route path='experiences' element={<Experiences categoryProp={categoryProp} nameProp={nameProp}/>}/>
-                        <Route path='experiences/:experienceId' element={<ExperienceDetails/>}/>
+                        <Route path='experiences/:experienceId' element={<ExperienceDetails categoryProp={categoryProp} nameProp={nameProp}/>}/>
                         <Route path='experiences/:experienceId/reviewForm' element={<ReviewForm/>} />
                         <Route path='experienceForm' element={<ExperienceForm/>}/>
                         <Route path='error' element={<Error/>}/>

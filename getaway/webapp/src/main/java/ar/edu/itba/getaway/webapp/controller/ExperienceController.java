@@ -76,11 +76,10 @@ public class ExperienceController {
         else {
             landingPageList = experienceService.getExperiencesListByCategories(null);
             return Response.ok(new GenericEntity<AnonymousLandingPageDto>(new AnonymousLandingPageDto(landingPageList, uriInfo)){}).build();
-
         }
     }
 
-    // TODO abria que agregar el country como queryParam
+    // TODO habria que agregar el country como queryParam
     // Endpoint para obtener las experiencias de una categoria
     @GET
     @Path("/filter")
@@ -312,7 +311,7 @@ public class ExperienceController {
         }
 
         experienceService.deleteExperience(experienceModel);
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 
     // Endpoint para obtener la imagen de una experiencia
@@ -355,7 +354,7 @@ public class ExperienceController {
 
         imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), experience.getExperienceImage());
 
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 
     // Endpoint para obtener la reseñas de una experiencia
@@ -418,7 +417,7 @@ public class ExperienceController {
 
         favAndViewExperienceService.setFav(user, set, experience);
 
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 
     @PUT
@@ -435,6 +434,6 @@ public class ExperienceController {
 
         experienceService.changeVisibility(experience, set);
 
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 }

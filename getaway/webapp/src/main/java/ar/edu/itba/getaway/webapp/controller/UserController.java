@@ -105,11 +105,11 @@ public class UserController {
         LOGGER.info("Called /users/currentUser GET");
         final UserModel user = authContext.getCurrentUser();
 
-        if(user != null){
-            return Response.ok(new UserDto(user, uriInfo)).build();
+        if(user == null){
+            return Response.noContent().build();
         }
 
-        return Response.noContent().build();
+        return Response.ok(new UserDto(user, uriInfo)).build();
     }
 
     //Endpoint para editar la informacion del usuario
@@ -148,7 +148,7 @@ public class UserController {
 
         userService.verifyAccount(token).orElseThrow(UserNotFoundException::new);
 
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 
     //Endpoint para la verificacion del mail
@@ -162,7 +162,7 @@ public class UserController {
 
         userService.resendVerificationToken(user);
 
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 
     //Endpoint para resetear la contraseña
@@ -184,7 +184,7 @@ public class UserController {
 
         userService.updatePassword(token, passwordResetDto.getPassword()).orElseThrow(UserNotFoundException::new);
 
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 
     //Endpoint para resetear la contraseña
@@ -206,7 +206,7 @@ public class UserController {
         UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
         userService.generateNewPassword(user);
 
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 
     //Endpoint para obtener la imagen de perfil del usuario
@@ -253,7 +253,7 @@ public class UserController {
 
         imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
 
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 
     //Endpoint para obtener las experiencias creadas por un usuario

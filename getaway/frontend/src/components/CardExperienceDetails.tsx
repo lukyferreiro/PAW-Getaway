@@ -1,11 +1,11 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import React, {useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import {experienceService} from "../services";
@@ -21,12 +21,15 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Price from "./Price";
 
-export default function CardExperienceDetails(props: { experience: ExperienceModel; isEditing: boolean; }) {
+export default function CardExperienceDetails(props: { experience: ExperienceModel, isEditing: boolean, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]}
+) {
 
-    const {experience, isEditing} = props
+    const {experience, isEditing, nameProp, categoryProp} = props
     const {t} = useTranslation()
     const navigate = useNavigate()
     const {user} = useAuth()
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const isOpenImage = useState(false)
     const [experienceImg, setExperienceImg] = useState<string | undefined>(undefined)
@@ -47,6 +50,14 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
             );
         }
     }, [isOpenImage[0]])
+
+    function clearNavBar() {
+        searchParams.delete("category")
+        searchParams.delete("name")
+        setSearchParams(searchParams)
+        categoryProp[1]("")
+        nameProp[1]("")
+    }
 
     return (
         <>
@@ -163,7 +174,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     </div>
                     :
                     <div>
-                        <IconButton onClick={() => navigate("/login")}>
+                        <IconButton onClick={() => {clearNavBar(); navigate("/login")}}>
                             <FavoriteBorder className="fa-heart"/>
                         </IconButton>
                     </div>

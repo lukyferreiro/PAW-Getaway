@@ -103,6 +103,7 @@ export default function ReviewForm() {
             if (review) {
                 reviewService.updateReviewById(parseInt(currentId), data.title, data.description, data.score)
                     .then((result) => {
+                        //TODO: redirect a mis reviews?
                         if (!result.hasFailed()) {
                             navigate(`/experiences/${experienceId}`, {replace: true})
                             showToast(t('ReviewForm.toast.updateSuccess', {reviewTitle: data.title}), 'success')

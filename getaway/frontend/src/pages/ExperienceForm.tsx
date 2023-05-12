@@ -183,7 +183,6 @@ export default function ExperienceForm() {
                                 } else {
                                     makeProvider(() => navigate("/user/experiences"))
                                 }
-                                console.log(result.getData().url.toString())
                                 showToast(t('ExperienceForm.toast.createSuccess', {experienceName: data.name}), 'success')
                             }
                         }

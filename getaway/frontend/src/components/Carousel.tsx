@@ -12,6 +12,9 @@ export default function Carousel(props: { title: any, experiences: ExperienceMod
     const [currentIndex, setCurrentIndex] = useState(0)
     const [length, setLength] = useState(0)
 
+    const dummyCategoryProp = useState<string | undefined>(undefined)
+    const dummyNameProp = useState<string | undefined>(undefined)
+
     // Set the length to match current children from props
     useEffect(() => {
         setLength(experiences === undefined ? 0 : experiences.length)
@@ -52,7 +55,7 @@ export default function Carousel(props: { title: any, experiences: ExperienceMod
                                      style={{transform: `translateX(-${currentIndex * (100 / show)}%)`}}>
                                     {experiences.map((exp) => (
                                         <div className="d-flex justify-content-center align-content-center" key={exp.id}>
-                                            <CardExperience experience={exp}/>
+                                            <CardExperience experience={exp} categoryProp={dummyCategoryProp} nameProp={dummyNameProp}/>
                                         </div>
                                     ))}
                                 </div>
