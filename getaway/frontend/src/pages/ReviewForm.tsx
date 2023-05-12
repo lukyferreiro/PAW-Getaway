@@ -105,7 +105,7 @@ export default function ReviewForm() {
                     .then((result) => {
                         //TODO: redirect a mis reviews?
                         if (!result.hasFailed()) {
-                            navigate(`/experiences/${experienceId}`, {replace: true})
+                            navigate(`/user/reviews`, {replace: true})
                             showToast(t('ReviewForm.toast.updateSuccess', {reviewTitle: data.title}), 'success')
                         }
                     })
@@ -257,19 +257,17 @@ export default function ReviewForm() {
                                 }
                         </div>
                     </div>
-
-                    <div className="p-0 mb-2 d-flex justify-content-around">
-                        <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
-                                onClick={() => navigate(-1)}>
-                            {t('Button.cancel')}
-                        </button>
-                        <button className="btn btn-submit-form px-3 py-2" id="createReviewFormButton"
-                                form="createReviewForm" type="submit">
-                            {t('Button.create')}
-                        </button>
-                    </div>
-
                 </form>
+                <div className="p-0 mb-2 w-100 d-flex justify-content-around">
+                    <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
+                            onClick={() => navigate(-1)}>
+                        {t('Button.cancel')}
+                    </button>
+                    <button className="btn btn-submit-form px-3 py-2" id="createReviewFormButton"
+                            form="createReviewForm" type="submit">
+                        {t('Button.create')}
+                    </button>
+                </div>
             </div>
         </div>
     )

@@ -11,6 +11,7 @@ import Pagination from "../components/Pagination";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {showToast} from "../scripts/toast";
+import ConfirmDialogModal from "../components/ConfirmDialogModal";
 
 export default function UserReviews() {
     const navigate = useNavigate()
@@ -93,6 +94,8 @@ export default function UserReviews() {
                         </div>
                     </>
                 }
+            <ConfirmDialogModal/>
+
             </div>
         </DataLoader>
     );

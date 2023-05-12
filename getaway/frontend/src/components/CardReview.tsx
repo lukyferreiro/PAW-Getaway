@@ -128,7 +128,6 @@ export default function CardReview(props: {
                     </IconButton>
                 </div>
             }
-            <ConfirmDialogModal/>
         </div>
     );
 }
