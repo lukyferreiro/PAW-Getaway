@@ -44,7 +44,7 @@ public class WebConfig {
     private static final Integer MAX_SIZE_PER_FILE = 10000000;
     private static final Integer MAX_REQUEST_SIZE = 3500000;
 
-    private static final boolean DEV_BUILD = true;
+    private static final boolean DEV_BUILD = false;
 
     private static boolean isOnDevBuild() {
         return DEV_BUILD;

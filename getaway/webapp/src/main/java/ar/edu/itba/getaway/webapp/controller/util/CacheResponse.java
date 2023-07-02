@@ -6,6 +6,7 @@ import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import java.io.ByteArrayInputStream;
 
 public class CacheResponse {
 
@@ -36,7 +37,7 @@ public class CacheResponse {
         if (!isExperience) {
             Response.ResponseBuilder response = request.evaluatePreconditions(eTag);
             if (response == null) {
-                response = Response.ok(image.getImage(), image.getMimeType())
+                response = Response.ok(new ByteArrayInputStream(image.getImage()))
                         .tag(eTag)
                         .type(image.getMimeType())
                         .header("Content-Disposition", "inline; filename=" + image.getImageId())
@@ -44,7 +45,7 @@ public class CacheResponse {
             }
             return response.cacheControl(cacheControl).build();
         } else {
-            return Response.ok(image.getImage(), image.getMimeType())
+            return Response.ok(new ByteArrayInputStream(image.getImage()))
                     .type(image.getMimeType())
                     .header("Content-Disposition", "inline; filename=" + image.getImageId())
                     .cacheControl(cacheControl)

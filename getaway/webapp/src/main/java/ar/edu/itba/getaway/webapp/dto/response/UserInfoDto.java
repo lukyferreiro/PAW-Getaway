@@ -2,6 +2,8 @@ package ar.edu.itba.getaway.webapp.dto.response;
 
 import ar.edu.itba.getaway.models.UserModel;
 
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import java.io.Serializable;
 
 public class UserInfoDto implements Serializable {
@@ -10,16 +12,28 @@ public class UserInfoDto implements Serializable {
     private String name;
     private String surname;
     private boolean hasImage;
+    private String profileImageUrl;
 
     public UserInfoDto() {
         // Used by Jersey
     }
 
-    public UserInfoDto(UserModel user) {
+    public static UriBuilder getUserUriBuilder(UserModel user, UriInfo uriInfo) {
+        return uriInfo.getBaseUriBuilder().clone().path("users").path(String.valueOf(user.getUserId()));
+    }
+
+
+    public UserInfoDto(UserModel user, UriInfo uriInfo) {
+        final UriBuilder uriBuilder = getUserUriBuilder(user, uriInfo);
         this.id = user.getUserId();
         this.name = user.getName();
         this.surname = user.getSurname();
         this.hasImage = user.getImage() != null;
+        if (user.getProfileImage() != null) {
+            this.profileImageUrl = uriBuilder.clone().path("profileImage").build().toString();  // /user/{id}/profileImage
+        } else {
+            this.profileImageUrl = "";
+        }
     }
 
     public long getId() {
@@ -46,5 +60,10 @@ public class UserInfoDto implements Serializable {
     public void setHasImage(boolean hasImage) {
         this.hasImage = hasImage;
     }
-
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
 }

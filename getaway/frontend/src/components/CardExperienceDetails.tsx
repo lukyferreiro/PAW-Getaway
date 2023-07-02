@@ -5,24 +5,21 @@ import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction, useState} from "react";
 import {ExperienceModel} from "../types";
 import StarRating from "./StarRating";
-import {experienceService} from "../services";
 import ConfirmDialogModal, {confirmDialogModal} from "../components/ConfirmDialogModal";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
 import {useAuth} from "../hooks/useAuth";
-import {serviceHandler} from "../scripts/serviceHandler";
 import AddPictureModal from "../components/AddPictureModal";
 import {deleteExperience, editExperience, setFavExperience, setVisibility} from "../scripts/experienceOperations";
 import Price from "./Price";
-
 // @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-export default function CardExperienceDetails(props: { experience: ExperienceModel, isEditing: boolean, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]}
+export default function CardExperienceDetails(props: { experience: ExperienceModel, isEditing: boolean, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }
 ) {
 
     const {experience, isEditing, nameProp, categoryProp} = props
@@ -33,24 +30,8 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const [searchParams, setSearchParams] = useSearchParams();
 
     const isOpenImage = useState(false)
-    const [experienceImg, setExperienceImg] = useState<string | undefined>(undefined)
     const [fav, setFav] = useState(experience.fav)
     const [view, setView] = useState(experience.observable)
-
-    useEffect(() => {
-        if (experience.hasImage) {
-            serviceHandler(
-                experienceService.getExperienceImage(experience?.id),
-                navigate, (experienceImg) => {
-                    setExperienceImg(experienceImg.size > 0 ? URL.createObjectURL(experienceImg) : undefined)
-                },
-                () => {
-                },
-                () => {
-                }
-            );
-        }
-    }, [isOpenImage[0]])
 
     function clearNavBar() {
         searchParams.delete("category")
@@ -66,8 +47,8 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 <div className="d-flex flex-column">
                     <div className="p-2" style={{width: "600px"}}>
                         <img className="container-fluid p-0" alt={`Imagen ${experience.category.name}`}
-                             src={experienceImg ? experienceImg : `./images/${experience.category.name}.svg`}
-                             style={{height: "fit-content", maxHeight: experienceImg ? "550px" : "450px"}}/>
+                             src={experience.hasImage ? experience.imageUrl : `./images/${experience.category.name}.svg`}
+                             style={{height: "fit-content", maxHeight: experience.hasImage ? "550px" : "450px"}}/>
 
                         {!experience.hasImage &&
                             <h5 className="mt-3 text-center">
@@ -175,7 +156,10 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     </div>
                     :
                     <div>
-                        <IconButton onClick={() => {clearNavBar(); navigate("/login")}}>
+                        <IconButton onClick={() => {
+                            clearNavBar();
+                            navigate("/login")
+                        }}>
                             <FavoriteBorder className="fa-heart"/>
                         </IconButton>
                     </div>

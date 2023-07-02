@@ -1,5 +1,4 @@
 import {APPLICATION_JSON_TYPE, paths} from "../common";
-import {getImageFetch} from "../scripts/getImageFetch";
 import {
     ErrorResponse, ExperienceModel,
     PagedContent, PostResponse,
@@ -71,10 +70,6 @@ export class UserService {
             },
             body: userToUpdate,
         });
-    }
-
-    public async getUserProfileImage(userId: number): Promise<Result<Blob>> {
-        return getImageFetch(this.basePath + "/" + userId + "/profileImage");
     }
 
     public async updateUserProfileImage(

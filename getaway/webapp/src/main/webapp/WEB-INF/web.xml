@@ -76,7 +76,7 @@
     </filter>
     <filter-mapping>
         <filter-name>charsetFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/api/*</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -101,10 +101,17 @@
         <filter-name>CacheControlFilter</filter-name>
         <filter-class>ar.edu.itba.getaway.webapp.security.api.CacheControlFilter</filter-class>
     </filter>
-<!--    TODO check aca las cosas que se cachean-->
     <filter-mapping>
         <filter-name>CacheControlFilter</filter-name>
-        <url-pattern>/resources/*</url-pattern>
+        <url-pattern>/static/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CacheControlFilter</filter-name>
+        <url-pattern>/images/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CacheControlFilter</filter-name>
+        <url-pattern>*.png</url-pattern>
     </filter-mapping>
 
     <error-page>

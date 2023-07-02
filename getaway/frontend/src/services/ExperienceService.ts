@@ -1,6 +1,5 @@
 import { paths, APPLICATION_JSON_TYPE } from "../common";
 import {
-    ErrorResponse,
     ExperienceModel,
     PagedContent,
     PostResponse,
@@ -14,7 +13,6 @@ import {
 import {resultFetch} from "../scripts/resultFetch";
 import {getPagedFetch} from "../scripts/getPagedFetch";
 import {authedFetch} from "../scripts/authedFetch";
-import {getImageFetch} from "../scripts/getImageFetch";
 
 export class  ExperienceService {
     private readonly basePath = paths.BASE_URL + paths.EXPERIENCES;
@@ -186,10 +184,6 @@ export class  ExperienceService {
         return authedFetch(this.basePath + `/experience/${experienceId}`, {
             method: "DELETE",
         });
-    }
-
-    public async getExperienceImage(experienceId: number): Promise<Result<Blob>> {
-        return getImageFetch(this.basePath + `/experience/${experienceId}/experienceImage`);
     }
 
     public async updateExperienceImage(

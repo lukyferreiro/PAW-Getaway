@@ -1,7 +1,6 @@
 import {useTranslation} from "react-i18next"
 import "../common/i18n/index"
 import React, {useEffect, useState} from "react"
-import {serviceHandler} from "../scripts/serviceHandler"
 import {userService} from "../services"
 import {useNavigate, useSearchParams} from "react-router-dom"
 import {useAuth} from "../hooks/useAuth"
@@ -24,7 +23,6 @@ export default function UserProfile() {
 
     const isVerifiedValue = isVerified()
     const isOpenImage = useState(false)
-    const [userImg, setUserImg] = useState<string | undefined>(undefined)
     const [isLoadingImg, setIsLoadingImg] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -60,25 +58,6 @@ export default function UserProfile() {
         document.title = `${t('PageName')} - ${t('PageTitles.userProfile')}`
     }, [])
 
-    useEffect(() => {
-        if (user?.hasImage) {
-            setIsLoadingImg(true)
-            serviceHandler(
-                userService.getUserProfileImage(user?.id),
-                navigate, (userImg) => {
-                    setUserImg(userImg.size > 0 ? URL.createObjectURL(userImg) : undefined)
-                },
-                () => {
-                    setIsLoadingImg(false)
-                },
-                () => {
-                    setIsLoadingImg(false)
-                }
-            )
-        }
-    }, [user, isOpenImage[0]])
-
-
     return (
         <>
             <DataLoader spinnerMultiplier={2} isLoading={isLoadingImg}>
@@ -91,7 +70,7 @@ export default function UserProfile() {
                         </div>
                         <div className="m-2" style={{maxWidth: "200px"}}>
                             <img className="container-fluid p-0" style={{height: "fit-content"}} alt="Imagen usuario"
-                                 src={userImg ? userImg : './images/user_default.png'}/>
+                                 src={user?.hasImage ? user.profileImageUrl : './images/user_default.png'}/>
                         </div>
 
                         <div className="m-1 justify-self-center align-self-center">
@@ -113,24 +92,25 @@ export default function UserProfile() {
                         <div className="mb-2">
                             {isVerifiedValue ?
                                 <>
-                                    <div className="d-flex justify-items-center align-items-center">
-                                        <h4 className="mb-0">
-                                            {t('User.profile.photo')}
-                                        </h4>
-                                        <IconButton
-                                            onClick={() => {
-                                                isOpenImage[1](true)
-                                            }}
-                                            aria-label="picture"
-                                            component="span"
-                                            style={{fontSize: "xx-large"}}>
-                                            <AddPhotoAlternateIcon/>
-                                        </IconButton>
+                                    <div className="d-flex flex-column justify-items-center align-items-center">
+                                        <div className="d-flex justify-items-center align-items-center">
+                                            <h4 className="mb-0">
+                                                {t('User.profile.photo')}
+                                            </h4>
+                                            <IconButton
+                                                onClick={() => {
+                                                    isOpenImage[1](true)
+                                                }}
+                                                aria-label="picture"
+                                                component="span"
+                                                style={{fontSize: "xx-large"}}>
+                                                <AddPhotoAlternateIcon/>
+                                            </IconButton>
+                                        </div>
+                                        <button onClick={() => navigate({pathname: "/user/editProfile"})} type="button" className="btn btn-error">
+                                            {t('User.profile.editBtn')}
+                                        </button>
                                     </div>
-
-                                    <button onClick={() => navigate({pathname: "/user/editProfile"})} type="button" className="btn btn-error">
-                                        {t('User.profile.editBtn')}
-                                    </button>
                                 </>
                                 :
                                 <button onClick={() => sendVerifyEmail()} type="button" className="btn btn-error">

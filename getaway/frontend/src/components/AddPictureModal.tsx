@@ -33,8 +33,7 @@ export default function AddPictureModal(
                                 isOpen[1](false)
                                 reset()
                                 showToast(t('Experience.toast.imageSuccess'), "success")
-                            }
-                            else {
+                            } else {
                                 showToast(t('Experience.toast.imageInvalidFormat'), "error")
                             }
                         }
@@ -52,8 +51,7 @@ export default function AddPictureModal(
                             isOpen[1](false)
                             reset()
                             showToast(t('User.toast.imageSuccess'), "success")
-                        }
-                        else {
+                        } else {
                             showToast(t('User.toast.imageInvalidFormat'), "error")
                         }
                     })

@@ -8,4 +8,5 @@ export default interface UserModel {
     token?: string;
     url?: string;
     hasImage: boolean;
+    profileImageUrl: string;
 }

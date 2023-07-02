@@ -3,4 +3,5 @@ export default interface UserInfoModel {
     name: string;
     surname: string;
     hasImage: boolean;
+    profileImageUrl: string;
 }

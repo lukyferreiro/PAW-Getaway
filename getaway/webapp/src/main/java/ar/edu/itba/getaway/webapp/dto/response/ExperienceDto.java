@@ -56,12 +56,12 @@ public class ExperienceDto implements Serializable {
         this.siteUrl = experience.getSiteUrl();
         this.views = experience.getViews();
         this.selfUrl = uriBuilder.build().toString();
-        this.imageUrl = uriBuilder.clone().path("image").build().toString();    // /experience/{id}/image
+        this.imageUrl = uriBuilder.clone().path("experienceImage").build().toString();    // /experience/{id}/experienceImage
         this.reviewsUrl = uriBuilder.clone().path("reviews").build().toString();    // /experience/{id}/reviews
         this.reviewCount = experience.getReviewCount();
         this.country = new CountryDto(experience.getCity().getCountry(), uriInfo);
         this.city = new CityDto(experience.getCity(), uriInfo);
-        this.user = new UserInfoDto(experience.getUser());
+        this.user = new UserInfoDto(experience.getUser(), uriInfo);
         this.category = new CategoryDto(experience.getCategory());
         this.isFav = experience.getIsFav();
         this.observable = experience.getObservable();

@@ -3,9 +3,7 @@ import "../common/i18n/index"
 import {Link, useNavigate, useSearchParams} from 'react-router-dom'
 import {ExperienceModel} from "../types";
 import StarRating from "./StarRating";
-import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {serviceHandler} from "../scripts/serviceHandler";
-import {experienceService} from "../services";
+import React, {Dispatch, SetStateAction, useState} from "react";
 import {IconButton} from "@mui/material";
 import {useAuth} from "../hooks/useAuth";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
@@ -21,27 +19,8 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
 
     const {user} = useAuth()
 
-    const [experienceImg, setExperienceImg] = useState<string | undefined>(undefined)
     const [isLoadingImg, setIsLoadingImg] = useState(false)
     const [fav, setFav] = useState(experience.fav)
-
-    useEffect(() => {
-        if (experience.hasImage) {
-            setIsLoadingImg(true)
-            serviceHandler(
-                experienceService.getExperienceImage(experience?.id),
-                navigate, (experienceImg) => {
-                    setExperienceImg(experienceImg.size > 0 ? URL.createObjectURL(experienceImg) : undefined)
-                },
-                () => {
-                    setIsLoadingImg(false)
-                },
-                () => {
-                    setIsLoadingImg(false)
-                }
-            )
-        }
-    }, [])
 
     function clearNavBar() {
         searchParams.delete("category")
@@ -58,8 +37,8 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
             <div className="card-link h-100 d-flex flex-column">
                 <div>
                     <DataLoader spinnerMultiplier={2} isLoading={isLoadingImg}>
-                        <img className={`card-img-top container-fluid ${experienceImg ? "p-0" : "p-4"} mw-100`} alt={`Imagen ${experience.category.name}`}
-                             src={experienceImg ? experienceImg : `./images/${experience.category.name}.svg`}/>
+                        <img className={`card-img-top container-fluid ${experience.hasImage ? "p-0" : "p-4"} mw-100`} alt={`Imagen ${experience.category.name}`}
+                             src={experience.hasImage ? experience.imageUrl : `./images/${experience.category.name}.svg`}/>
                     </DataLoader>
 
                     <div className="card-body container-fluid p-2">

@@ -4,11 +4,10 @@ import {ReviewModel} from "../types";
 import {Link, useNavigate} from 'react-router-dom'
 import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StarRating from "./StarRating";
-import {serviceHandler} from "../scripts/serviceHandler";
-import {reviewService, userService} from "../services";
+import {reviewService} from "../services";
 import {showToast} from "../scripts/toast";
 import {confirmDialogModal} from "./ConfirmDialogModal";
 
@@ -22,23 +21,6 @@ export default function CardReview(props: {
     const navigate = useNavigate()
     const {reviewModel, isEditing, onEdit} = props
 
-    const [userImg, setUserImg] = useState<string | undefined>(undefined)
-
-    useEffect(() => {
-        if (reviewModel.user.hasImage) {
-            serviceHandler(
-                userService.getUserProfileImage(reviewModel.user.id),
-                navigate, (userImg) => {
-                    setUserImg(userImg.size > 0 ? URL.createObjectURL(userImg) : undefined)
-                },
-                () => {
-                },
-                () => {
-                },
-            )
-        }
-    }, [])
-
     function editReview(reviewId: number) {
         navigate({
             pathname: `/experiences/${reviewModel.experience.id}/reviewForm`,
@@ -49,7 +31,7 @@ export default function CardReview(props: {
     function deleteReview(reviewId: number) {
         reviewService.deleteReviewById(reviewId)
             .then(() => {
-                if(onEdit){
+                if (onEdit) {
                     onEdit[1](!onEdit[0])
                 }
                 showToast(t('Review.toast.deleteSuccess', {reviewTitle: reviewModel.title}), "success")
@@ -79,9 +61,9 @@ export default function CardReview(props: {
 
             <div className="card-title m-2 d-flex justify-content-between">
                 <div className="d-flex">
-                    <img className="user-img" src={userImg ? userImg : './images/user_default.png'}
+                    <img className="user-img" src={reviewModel.user.hasImage ? reviewModel.user.profileImageUrl : './images/user_default.png'}
                          alt="Imagen"
-                         style={{marginRight: userImg ? "8px" : ""}}/>
+                         style={{marginRight: reviewModel.user.hasImage ? "8px" : ""}}/>
 
                     <div className="d-flex flex-column justify-content-center align-content-center">
                         <h5 className="my-1">

@@ -21,4 +21,5 @@ export default interface ExperienceModel {
     reviewCount: number;
     fav: boolean;
     hasImage: boolean;
+    imageUrl: string;
 }
