@@ -212,7 +212,7 @@ export const TRANSLATIONS_ES = {
             email: "Email: {{userEmail}}",
             editBtn: "Editar perfil",
             verifyAccountBtn: "Verifica tu cuenta",
-            photo: "Agregar imagen"
+            photo: "Cambiar imagen de perfil"
         },
         experiences: {
             title: "Mis experiencias",

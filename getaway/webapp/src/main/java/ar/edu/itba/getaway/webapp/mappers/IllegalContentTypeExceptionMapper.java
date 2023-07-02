@@ -6,10 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.stereotype.Component;
 
-import javax.inject.Singleton;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -21,12 +18,16 @@ public class IllegalContentTypeExceptionMapper implements ExceptionMapper<Illega
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IllegalContentTypeExceptionMapper.class);
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Context
     private UriInfo uriInfo;
 
     @Override
     public Response toResponse(IllegalContentTypeException e) {
         LOGGER.error("Illegal content type exception mapper");
-        return ExceptionMapperUtil.toResponse(Response.Status.BAD_REQUEST, e.getMessage(), uriInfo);
+        String message = ExceptionMapperUtil.getLocalizedMessage(e.getMessage(), messageSource);
+        return ExceptionMapperUtil.toResponse(Response.Status.BAD_REQUEST, message, uriInfo);
     }
 }

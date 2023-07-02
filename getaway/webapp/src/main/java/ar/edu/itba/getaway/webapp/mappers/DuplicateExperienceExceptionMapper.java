@@ -1,6 +1,6 @@
 package ar.edu.itba.getaway.webapp.mappers;
 
-import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.DuplicateExperienceException;
 import ar.edu.itba.getaway.webapp.mappers.util.ExceptionMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +14,8 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class UserNotFoundExceptionMapper implements ExceptionMapper<UserNotFoundException> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserNotFoundExceptionMapper.class);
+public class DuplicateExperienceExceptionMapper implements ExceptionMapper<DuplicateExperienceException> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DuplicateExperienceException.class);
 
     @Autowired
     private MessageSource messageSource;
@@ -24,9 +24,9 @@ public class UserNotFoundExceptionMapper implements ExceptionMapper<UserNotFound
     private UriInfo uriInfo;
 
     @Override
-    public Response toResponse(UserNotFoundException e) {
-        LOGGER.error("User not found exception mapper");
+    public Response toResponse(DuplicateExperienceException e) {
+        LOGGER.error("Duplicate experience exception mapper");
         String message = ExceptionMapperUtil.getLocalizedMessage(e.getMessage(), messageSource);
-        return ExceptionMapperUtil.toResponse(Response.Status.NOT_FOUND, message, uriInfo);
+        return ExceptionMapperUtil.toResponse(Response.Status.CONFLICT, message, uriInfo);
     }
 }

@@ -24,7 +24,7 @@ export default function ModalResetPassword(props: { isOpen: [boolean, Dispatch<S
             setInvalidEmail(false)
             userService.sendPasswordResetEmail(data.email)
                 .then((user) => {
-                        if (user.getError().getStatus()===204) {
+                        if (!user.hasFailed()) {
                             isOpen[1](false)
                             reset()
                             showToast(t('User.toast.passwordResetEmailSuccess'), 'success')
@@ -34,7 +34,7 @@ export default function ModalResetPassword(props: { isOpen: [boolean, Dispatch<S
                     }
                 )
                 .catch(() => {
-                    showToast(t('User.toast.passwordResetEmailError'), 'success')
+                    showToast(t('User.toast.passwordResetEmailError'), 'error')
                 })
         }
     )

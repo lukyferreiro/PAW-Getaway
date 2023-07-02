@@ -6,10 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.stereotype.Component;
 
-import javax.inject.Singleton;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -30,6 +27,7 @@ public class IllegalOperationExceptionMapper implements ExceptionMapper<IllegalO
     @Override
     public Response toResponse(IllegalOperationException e) {
         LOGGER.error("Illegal operation exception mapper");
-        return ExceptionMapperUtil.toResponse(Response.Status.UNAUTHORIZED, e.getMessage(), uriInfo);
+        String message = ExceptionMapperUtil.getLocalizedMessage(e.getMessage(), messageSource);
+        return ExceptionMapperUtil.toResponse(Response.Status.UNAUTHORIZED, message, uriInfo);
     }
 }

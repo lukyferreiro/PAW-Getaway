@@ -6,19 +6,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.stereotype.Component;
 
 import javax.inject.Singleton;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
 
 @Singleton
 public class MaxUploadSizeExceptionMapper implements ExceptionMapper<MaxUploadSizeRequestException> {
     private static final Logger LOGGER = LoggerFactory.getLogger(MaxUploadSizeExceptionMapper.class);
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Context
     private UriInfo uriInfo;
@@ -26,6 +26,7 @@ public class MaxUploadSizeExceptionMapper implements ExceptionMapper<MaxUploadSi
     @Override
     public Response toResponse(MaxUploadSizeRequestException e) {
         LOGGER.error("Max upload size exception mapper)");
-        return ExceptionMapperUtil.toResponse(Response.Status.BAD_REQUEST, e.getMessage(), uriInfo);
+        String message = ExceptionMapperUtil.getLocalizedMessage(e.getMessage(), messageSource);
+        return ExceptionMapperUtil.toResponse(Response.Status.BAD_REQUEST, message, uriInfo);
     }
 }

@@ -20,8 +20,8 @@ test("Should create a new experience", async () => {
     return experienceService.createExperience(
         "Test experiencia",
         1,
-        "Argentina",
-        "Buenos Aires",
+        14,
+        18,
         "Madero 123",
         "lferreiro@itba.edu.ar",
         500,

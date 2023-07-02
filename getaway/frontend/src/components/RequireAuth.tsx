@@ -20,9 +20,9 @@ export default function RequireAuth({children}: { children: JSX.Element }) {
     useEffect(() => {
         if (readUser) {
             signIn(readUser, () => navigate(correctRoute))
-        }
-        else {
-            signOut(()=>{})
+        } else {
+            signOut(() => {
+            })
         }
 
     }, [])

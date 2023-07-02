@@ -10,7 +10,7 @@ import StarRating from "./StarRating";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {reviewService, userService} from "../services";
 import {showToast} from "../scripts/toast";
-import ConfirmDialogModal, {confirmDialogModal} from "./ConfirmDialogModal";
+import {confirmDialogModal} from "./ConfirmDialogModal";
 
 export default function CardReview(props: {
     reviewModel: ReviewModel,

@@ -15,11 +15,12 @@ import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
 import AddPictureModal from "../components/AddPictureModal";
 import {deleteExperience, editExperience, setFavExperience, setVisibility} from "../scripts/experienceOperations";
+import Price from "./Price";
+
 // @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import Price from "./Price";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel, isEditing: boolean, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]}
 ) {

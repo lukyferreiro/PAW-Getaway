@@ -114,7 +114,7 @@ export default function UserProfile() {
                             {isVerifiedValue ?
                                 <>
                                     <div className="d-flex justify-items-center align-items-center">
-                                        <h4>
+                                        <h4 className="mb-0">
                                             {t('User.profile.photo')}
                                         </h4>
                                         <IconButton

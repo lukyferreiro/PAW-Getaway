@@ -15,12 +15,9 @@ type FormDataEditProfile = {
 export default function UserEditProfile() {
 
     const {t} = useTranslation()
-
     const {user, isVerified, editUserInfo} = useAuth()
     const isVerifiedValue = isVerified()
     const navigate = useNavigate()
-
-
 
     useEffect(() => {
         if (!isVerifiedValue) {
@@ -107,7 +104,7 @@ export default function UserEditProfile() {
                                                            name.length >= 0 && name.length <= 50,
                                                    },
                                                    pattern: {
-                                                       value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
+                                                       value: /^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$/,
                                                        message: t("CreateAccount.error.name.pattern"),
                                                    },
                                                })}/>
@@ -146,7 +143,7 @@ export default function UserEditProfile() {
                                                            surname.length >= 0 && surname.length <= 50,
                                                    },
                                                    pattern: {
-                                                       value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
+                                                       value: /^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$/,
                                                        message: t("CreateAccount.error.surname.pattern"),
                                                    },
                                                })}
