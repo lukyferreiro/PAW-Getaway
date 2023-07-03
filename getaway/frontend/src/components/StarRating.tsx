@@ -10,7 +10,7 @@ export default function StarRating(props: { score: number }) {
             {[...Array(5)].map((star, index) => {
                 index -= 5;
                 return (
-                    <div key={index} className={`d-flex align-self-center ${index >= -score ? "on" : "off"} `} >
+                    <div key={index} className={`d-flex align-self-center ${index >= -score ? "on" : "off"} `}>
                         <StarRoundedIcon className="star"/>
                     </div>
                 );

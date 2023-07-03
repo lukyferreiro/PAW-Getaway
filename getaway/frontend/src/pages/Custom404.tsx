@@ -7,7 +7,7 @@ export default function Custom404() {
 
     const {t} = useTranslation()
 
-    useEffect(()=> {
+    useEffect(() => {
         document.title = `${t('PageName')} - ${t('PageTitles.custom404')}`
     }, [])
 

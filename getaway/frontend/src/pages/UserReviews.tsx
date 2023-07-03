@@ -39,8 +39,7 @@ export default function UserReviews() {
         if (!isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('User.toast.reviews.forbidden'), 'error')
-        }
-        else {
+        } else {
             setIsLoading(true)
             serviceHandler(
                 userService.getUserReviews(user ? user.id : -1, currentPage[0]),
@@ -95,7 +94,7 @@ export default function UserReviews() {
                         </div>
                     </>
                 }
-            <ConfirmDialogModal/>
+                <ConfirmDialogModal/>
 
             </div>
         </DataLoader>

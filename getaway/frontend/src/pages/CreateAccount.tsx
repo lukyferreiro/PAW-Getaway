@@ -5,11 +5,11 @@ import {loginService, userService} from "../services";
 import {useAuth} from "../hooks/useAuth";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
+import {showToast} from "../scripts/toast";
 // @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import {showToast} from "../scripts/toast";
 
 type FormDataCreate = {
     name: string
@@ -131,7 +131,7 @@ export default function CreateAccount() {
                                             )}
                                             {errors.email?.type === "pattern" && (
                                                 <p className="form-control is-invalid form-error-label">
-                                                    {t("ExperienceForm.error.email.pattern")}
+                                                    {t("CreateAccount.error.email.pattern")}
                                                 </p>
                                             )}
                                         </div>
@@ -176,7 +176,7 @@ export default function CreateAccount() {
                                             )}
                                             {errors.name?.type === "pattern" && (
                                                 <p className="form-control is-invalid form-error-label">
-                                                    {t("ExperienceForm.error.name.pattern")}
+                                                    {t("CreateAccount.error.name.pattern")}
                                                 </p>
                                             )}
                                         </div>
@@ -221,7 +221,7 @@ export default function CreateAccount() {
                                             )}
                                             {errors.surname?.type === "pattern" && (
                                                 <p className="form-control is-invalid form-error-label">
-                                                    {t("ExperienceForm.error.surname.pattern")}
+                                                    {t("CreateAccount.error.surname.pattern")}
                                                 </p>
                                             )}
                                         </div>
@@ -277,7 +277,7 @@ export default function CreateAccount() {
                                             )}
                                             {errors.password?.type === "pattern" && (
                                                 <p className="form-control is-invalid form-error-label">
-                                                    {t("ExperienceForm.error.password.pattern")}
+                                                    {t("CreateAccount.error.password.pattern")}
                                                 </p>
                                             )}
                                         </div>

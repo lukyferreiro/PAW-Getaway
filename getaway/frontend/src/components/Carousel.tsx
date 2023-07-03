@@ -1,4 +1,3 @@
-import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import React, {useEffect, useState} from "react";
 import CardExperience from "./CardExperience";

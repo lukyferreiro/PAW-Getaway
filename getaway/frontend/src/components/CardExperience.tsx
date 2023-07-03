@@ -10,8 +10,9 @@ import {Favorite, FavoriteBorder} from "@mui/icons-material";
 import {setFavExperience} from "../scripts/experienceOperations";
 import Price from "./Price";
 import DataLoader from "./DataLoader";
+import {showToast} from "../scripts/toast";
 
-export default function CardExperience(props: { experience: ExperienceModel, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]}) {
+export default function CardExperience(props: { experience: ExperienceModel, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
     const {t} = useTranslation()
     const {experience, nameProp, categoryProp} = props
     const [searchParams, setSearchParams] = useSearchParams();
@@ -84,7 +85,11 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
                         </div>
                         :
                         <div>
-                            <IconButton onClick={() => {clearNavBar(); navigate("/login")}}>
+                            <IconButton onClick={() => {
+                                clearNavBar();
+                                navigate("/login");
+                                showToast(t('Experience.toast.favNotSigned'), "success")
+                            }}>
                                 <FavoriteBorder className="fa-heart"/>
                             </IconButton>
                         </div>

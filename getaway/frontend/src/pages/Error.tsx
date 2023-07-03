@@ -20,7 +20,7 @@ export default function Error() {
         error = "404"
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         document.title = `${t('PageName')} - ${t('PageTitles.error')}`
     }, [])
 

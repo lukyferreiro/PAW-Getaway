@@ -53,7 +53,7 @@ export default function Home() {
     return (
         <DataLoader spinnerMultiplier={2} isLoading={isLoading}>
             <div className="my-2">
-                { anonymousLandingPage !== undefined &&
+                {anonymousLandingPage !== undefined &&
                     <>
                         <Carousel title={t('Landing.anonymous.aventura')} experiences={anonymousLandingPage?.aventura} show={3}/>
                         <Carousel title={t('Landing.anonymous.gastronomia')} experiences={anonymousLandingPage?.gastronomia} show={3}/>
@@ -63,7 +63,7 @@ export default function Home() {
                         <Carousel title={t('Landing.anonymous.historico')} experiences={anonymousLandingPage?.historico} show={3}/>
                     </>
                 }
-                { userLandingPage !== undefined &&
+                {userLandingPage !== undefined &&
                     <>
                         <Carousel title={t('Landing.user.viewed')} experiences={userLandingPage?.viewed} show={3}/>
                         <Carousel title={t('Landing.user.recommendedByFavs')} experiences={userLandingPage?.recommendedByFavs} show={3}/>

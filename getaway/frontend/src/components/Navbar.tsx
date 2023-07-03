@@ -52,12 +52,15 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
     }, [])
 
     useEffect(() => {
-        setValue("name", nameProp[0]? nameProp[0] : "")
+        setValue("name", nameProp[0] ? nameProp[0] : "")
     }, [nameProp[0]])
 
     const onSubmit = handleSubmit((data: FormDataSearch) => {
         nameProp[1](data.name)
-        navigate({pathname: "/experiences", search: `?category=${categoryProp[0]}&name=${data.name}&order=OrderByAZ&page=1`}, {replace: true})
+        navigate({
+            pathname: "/experiences",
+            search: `?category=${categoryProp[0]}&name=${data.name}&order=OrderByAZ&page=1`
+        }, {replace: true})
     })
 
     function clearNavBar() {
@@ -84,8 +87,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
         } else if (isLoggedValue && !isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
-        }
-        else {
+        } else {
             navigate(`/experienceForm`)
         }
     }

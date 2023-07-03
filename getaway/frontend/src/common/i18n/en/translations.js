@@ -127,6 +127,7 @@ export const TRANSLATIONS_EN = {
             noFavSuccess: "'{{experienceName}}' was removed from your favourites",
             favError: "Server error adding '{{experienceName}}'",
             noFavError: "Server error removing '{{experienceName}}'",
+            favNotSigned: "Sign in to fav an experience",
             visibilitySuccess: "'{{experienceName}}' is now visible to all users",
             noVisibilitySuccess: "'{{experienceName}}' was hidden",
             visibilityError: "Server error changing '{{experienceName}}' visibility",
@@ -239,6 +240,7 @@ export const TRANSLATIONS_EN = {
             imageInvalidFormat: "Image format is invalid",
             passwordResetEmailSuccess: "Email sent successfully",
             passwordResetEmailError: "Server error when sending email",
+            notSigned: "Sign in to access your profile information",
             verify: {
                 success: "Your account was verified successfully",
                 error: "Invalid token",

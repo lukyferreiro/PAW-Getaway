@@ -23,8 +23,7 @@ export default function UserEditProfile() {
         if (!isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('User.toast.editProfile.forbidden'), 'error')
-        }
-        else {
+        } else {
             setValue('name', user!.name);
             setValue('surname', user!.surname)
             document.title = `${t('PageName')} - ${t('PageTitles.userEditProfile')}`

@@ -50,7 +50,7 @@ export default function UserProfile() {
                         showToast(t('User.toast.verify.error'), 'error')
                     })
                     .finally(() => {
-                        verifyUser(()=> navigate("/user/profile"))
+                        verifyUser(() => navigate("/user/profile"))
                         searchParams.delete("verificationToken")
                         setSearchParams(searchParams)
                     })

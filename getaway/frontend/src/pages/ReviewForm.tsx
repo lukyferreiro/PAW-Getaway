@@ -182,7 +182,7 @@ export default function ReviewForm() {
                             )}
                             {errors.title?.type === "pattern" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("ExperienceForm.error.title.pattern")}
+                                    {t("ReviewForm.error.title.pattern")}
                                 </p>
                             )}
                         </div>
@@ -226,7 +226,7 @@ export default function ReviewForm() {
                             )}
                             {errors.description?.type === "pattern" && (
                                 <p className="form-control is-invalid form-error-label">
-                                    {t("ExperienceForm.error.description.pattern")}
+                                    {t("ReviewForm.error.description.pattern")}
                                 </p>
                             )}
                         </div>

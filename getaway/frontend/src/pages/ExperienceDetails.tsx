@@ -13,7 +13,7 @@ import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {showToast} from "../scripts/toast";
 
-export default function ExperienceDetails(props: { nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]} ) {
+export default function ExperienceDetails(props: { nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
 
     const {t} = useTranslation()
     const navigate = useNavigate()
@@ -88,8 +88,7 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
             clearNavBar()
             navigate("/user/profile")
             showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
-        }
-        else {
+        } else {
             navigate(`/experiences/${experienceId}/reviewForm`)
         }
     }
@@ -105,7 +104,7 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
                         </h1>
                     </div>
                     {experience !== undefined &&
-                        <CardExperienceDetails experience={experience} isEditing={experience.user.id === user?.id}  nameProp={nameProp} categoryProp={categoryProp}/>
+                        <CardExperienceDetails experience={experience} isEditing={experience.user.id === user?.id} nameProp={nameProp} categoryProp={categoryProp}/>
                     }
                 </div>
 

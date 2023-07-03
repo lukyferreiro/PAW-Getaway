@@ -27,15 +27,15 @@ export const TRANSLATIONS_ES = {
 
     Categories: {
         Aventura: "Aventura",
-        Gastronomia: "Gastronom\u00EDa",
-        Hoteleria: "Hoteler\u00EDa",
+        Gastronomia: "Gastronomía",
+        Hoteleria: "Hotelería",
         Relax: "Relax",
         Vida_nocturna: "Vida nocturna",
-        Historico: "Hist\u00F3rico",
+        Historico: "Histórico",
     },
 
     Carousel: {
-        experienceEmpty: "Esta categor\u00EDa aun no tiene suficientes experiencias cargadas"
+        experienceEmpty: "Esta categoróa aun no tiene suficientes experiencias cargadas"
     },
 
     Navbar: {
@@ -44,9 +44,9 @@ export const TRANSLATIONS_ES = {
         email: "Email",
         search: "Buscar",
         forgotPassword: "¿Olvidaste tu contraseña?",
-        login: "Iniciar sesi\u00F3n",
-        loginTitle: "Iniciar sesi\u00F3n en Getaway",
-        loginDescription: "Experiencias nuevas todos los d\u00EDas",
+        login: "Iniciar sesión",
+        loginTitle: "Iniciar sesión en Getaway",
+        loginDescription: "Experiencias nuevas todos los días",
         newUser: "¿Eres nuevo en Getaway?",
         password: "Contraseña",
         confirmPassword: "Confirmar contraseña",
@@ -54,12 +54,12 @@ export const TRANSLATIONS_ES = {
         experiences: "Mis experiencias",
         favourites: "Mis favoritos",
         reviews: "Mis reseñas",
-        logout: "Cerrar sesi\u00F3n",
-        resetPasswordTitle: "Ingresa tu email y recibe un enlace de recuperaci\u00F3n",
+        logout: "Cerrar sesión",
+        resetPasswordTitle: "Ingresa tu email y recibe un enlace de recuperación",
         resetPasswordButton: "Enviar",
         createAccountPopUp: "Crea tu cuenta",
         createAccountDescription: "Ingresa tus datos para comenzar a ofrecer tus experiencias y hacer reseñas",
-        max: "(M\u00E1ximo {{num}})",
+        max: "(Máximo {{num}})",
         name: "Nombre",
         surname: "Apellido",
         createButton: "Crear cuenta",
@@ -67,7 +67,7 @@ export const TRANSLATIONS_ES = {
         namePlaceholder: "Juan",
         surnamePlaceholder: "Martínez",
         passwordPlaceholder: "Entre 8 y 25 caracteres",
-        editProfilePopUp: "Edit\u00E1 tu cuenta",
+        editProfilePopUp: "Editá tu cuenta",
         editPasswordPopUp: "Cambiar contraseña",
         editPassword: "Nueva contraseña",
         confirmEditPassword: "Confirmar nueva contraseña",
@@ -95,14 +95,14 @@ export const TRANSLATIONS_ES = {
 
     Experience: {
         name: "Nombre",
-        category: "Categor\u00EDa",
+        category: "Categoría",
         price: {
             name: "Precio",
             null: "Precio no listado",
             free: "Gratis",
             exist: "$ {{price}}",
         },
-        information: "Descripci\u00F3n",
+        information: "Descripción",
         mail: {
             field: "Email",
             placeholder: "juanmartinez@ejemplo.com",
@@ -113,11 +113,11 @@ export const TRANSLATIONS_ES = {
         },
         country: "País",
         city: "Ciudad",
-        address: "Direcci\u00F3n",
+        address: "Dirección",
         image: "Imagen",
         placeholder: "Escribe para buscar",
         reviews: "Reseñas {{reviewCount}}",
-        notVisible: "La experiencia est\u00E1 oculta en este momento",
+        notVisible: "La experiencia está oculta en este momento",
         imgTitle: "Selecciona una imagen para la experiencia",
         toast: {
             imageSuccess: "¡Imagen de la experiencia actualizada con éxito!",
@@ -127,6 +127,7 @@ export const TRANSLATIONS_ES = {
             noFavSuccess: "'{{experienceName}}' se ha quitado de tus favoritos",
             favError: "Error del servidor al agregar '{{experienceName}}'",
             noFavError: "Error del servidor al quitar '{{experienceName}}'",
+            favNotSigned: "Inicia sesión para guardar en favoritos",
             visibilitySuccess: "'{{experienceName}}' ahora se encuentra visible para todos los usuarios",
             noVisibilitySuccess: "Se ha ocultado '{{experienceName}}'",
             visibilityError: "Error del servidor al cambiar la visibilidad de '{{experienceName}}'",
@@ -142,54 +143,54 @@ export const TRANSLATIONS_ES = {
             free: "Gratis",
             exist: "$ {{price}}",
         },
-        description: "Descripci\u00F3n",
-        noData: "Informaci\u00F3n no brindada",
+        description: "Descripción",
+        noData: "Información no brindada",
         url: "Sitio oficial",
         email: "Email",
         review: "Reseñas",
         writeReview: "Escribir Reseña",
-        notVisible: "La experiencia est\u00E1 oculta en este momento",
-        noReviews: "Esta experiencia no tiene rese\u00F1as a\u00FAn. S\u00E9 el primero en realizar una!"
+        notVisible: "La experiencia está oculta en este momento",
+        noReviews: "Esta experiencia no tiene reseñas aún. Sé el primero en realizar una!"
     },
 
     ExperienceForm: {
         title: "Crea tu experiencia",
         error: {
             name: {
-                isRequired: "Este campo no puede estar vac\u00EDo",
-                pattern: "El nombre ingresado no posee un formato v\u00E1lido00EDo",
+                isRequired: "Este campo no puede estar vacío",
+                pattern: "El nombre ingresado no posee un formato válido",
                 length: "El nombre de la experiencia debe tener entre 3-50 caracteres",
             },
             category: {
-                isRequired: "Este campo no puede estar vac\u00EDo",
+                isRequired: "Este campo no puede estar vacío",
             },
             price: {
                 max: "El precio debe ser menor a $9999999",
             },
             description: {
-                pattern: "La descripci\u00F3n ingresada no posee un formato v\u00E1lido",
-                isRequired: "Este campo no puede estar vac\u00EDo",
-                length: "La descripci\u00F3n debe tener un m\u00E1ximo de 500 caracteres",
+                pattern: "La descripción ingresada no posee un formato válido",
+                isRequired: "Este campo no puede estar vacío",
+                length: "La descripción debe tener un máximo de 500 caracteres",
             },
             mail: {
-                pattern: "El email ingresado no es v\u00E1lido",
-                isRequired: "Este campo no puede estar vac\u00EDo",
-                length: "El mail debe tener un m\u00E1ximo de 255 caracteres",
+                pattern: "El email ingresado no es válido",
+                isRequired: "Este campo no puede estar vacío",
+                length: "El mail debe tener un máximo de 255 caracteres",
             },
             url: {
-                pattern: "La URL ingresada no es v\u00E1lido",
-                length: "La URL debe tener un m\u00E1ximo de 500 caracteres",
+                pattern: "La URL ingresada no es válido",
+                length: "La URL debe tener un máximo de 500 caracteres",
             },
             country: {
-                isRequired: "Este campo no puede estar vac\u00EDo",
+                isRequired: "Este campo no puede estar vacío",
             },
             city: {
-                isRequired: "Este campo no puede estar vac\u00EDo",
+                isRequired: "Este campo no puede estar vacío",
             },
             address: {
-                pattern: "La direcci\u00F3n ingresada no es v\u00E1lido",
-                isRequired: "Este campo no puede estar vac\u00EDo",
-                length: "La direcci\u00F3n debe tener entre 5-100 caracteres",
+                pattern: "La dirección ingresada no es válido",
+                isRequired: "Este campo no puede estar vacío",
+                length: "La dirección debe tener entre 5-100 caracteres",
             },
         },
         toast: {
@@ -217,14 +218,14 @@ export const TRANSLATIONS_ES = {
         },
         experiences: {
             title: "Mis experiencias",
-            category: "Categor\u00EDa",
+            category: "Categoría",
             score: "Puntaje",
             price: "Precio",
             views: "Vistas",
             actions: "Acciones",
             reviewsCount: "Reseñas {{count}}",
             deleteTitle: "Eliminar experiencia",
-            confirmDelete: "¿Est\u00E1 seguro que desea eliminar la experiencia: {{experienceName}}?"
+            confirmDelete: "¿Está seguro que desea eliminar la experiencia: {{experienceName}}?"
         },
         noExperiences: "Aún no has creado ninguna experiencia",
         experiencesTitle: "Mis experiencias",
@@ -239,6 +240,7 @@ export const TRANSLATIONS_ES = {
             imageInvalidFormat: "El formato de la imagen es incorrecto",
             passwordResetEmailSuccess: "Mail enviado exitosamente",
             passwordResetEmailError: "Error del servidor al enviar el mail",
+            notSigned: "Inicia sesión para acceder a tu información de perfil",
             verify: {
                 success: "Tu cuenta ha sido verificada exitosamente",
                 error: "Token no válido",
@@ -272,7 +274,7 @@ export const TRANSLATIONS_ES = {
 
     Input: {
         optional: "(Opcional)",
-        maxValue: "(M\u00E1ximo {{value}})",
+        maxValue: "(Máximo {{value}})",
     },
 
     Copyright: "Getaway Copyright © {{year}} - Todos los derechos reservados",
@@ -305,22 +307,22 @@ export const TRANSLATIONS_ES = {
         OrderByLowPrice: "Menor precio",
         OrderByHighPrice: "Mayor precio",
         OrderByViewAsc: "Menos vistas",
-        OrderByViewDesc: "M\u00E1s vistas",
+        OrderByViewDesc: "Más vistas",
     },
 
     Landing: {
         user: {
-            viewed: "\u00DAltimas visitadas",
+            viewed: "Últimas visitadas",
             recommendedByFavs: "Basado en tus favoritos",
-            recommendedByReviews: "Basado en tus rese\u00F1as",
+            recommendedByReviews: "Basado en tus reseñas",
         },
         anonymous: {
             aventura: "Mejores valoradas de aventura",
-            gastronomia: "Mejores valoradas de gastronom\u00EDa",
-            hoteleria: "Mejores valoradas de hoteler\u00EDa",
+            gastronomia: "Mejores valoradas de gastronomía",
+            hoteleria: "Mejores valoradas de hotelería",
             relax: "Mejores valoradas de relax",
             vida_nocturna: "Mejores valoradas de vida nocturna",
-            historico: "Mejores valoradas de hist\u00F3rico",
+            historico: "Mejores valoradas de histórico",
         },
     },
 
@@ -328,23 +330,23 @@ export const TRANSLATIONS_ES = {
         error: {
             email: {
                 isRequired: "Este campo es obligatorio",
-                length: "El mail debe tener un m\u00E1ximo de 255 caracteres",
-                pattern: "El email ingresado no es v\u00E1lido",
+                length: "El mail debe tener un máximo de 255 caracteres",
+                pattern: "El email ingresado no es válido",
             },
             name: {
                 isRequired: "Este campo es obligatorio",
-                length: "El nombre debe tener un m\u00E1ximo de 50 caracteres",
-                pattern: "El nombre ingresado no es v\u00E1lido",
+                length: "El nombre debe tener un máximo de 50 caracteres",
+                pattern: "El nombre ingresado no es válido",
             },
             surname: {
                 isRequired: "Este campo es obligatorio",
-                length: "El apellido debe tener un m\u00E1ximo de 50 caracteres",
-                pattern: "El apellido ingresado no es v\u00E1lido",
+                length: "El apellido debe tener un máximo de 50 caracteres",
+                pattern: "El apellido ingresado no es válido",
             },
             password: {
                 isRequired: "Este campo es obligatorio",
                 length: "La contraseña debe tener entre 8-25 caracteres",
-                pattern: "La contraseña ingresado no es v\u00E1lido",
+                pattern: "La contraseña ingresado no es válido",
             },
             passwordsMustMatch: "Las contraseñas no coinciden",
         },
@@ -359,12 +361,12 @@ export const TRANSLATIONS_ES = {
             error: "Error del servidor al intentar iniciar sesión",
             verifySent: "Mail de verificación enviado",
         },
-        invalidCredentials: "El mail o contrase\u00F1a ingresados son incorrectos"
+        invalidCredentials: "El mail o contraseña ingresados son incorrectos"
     },
 
     ChangePassword: {
         title: "Ingresa tu nueva contraseña",
-        invalidEmail: "El email ingresado no es v\u00E1lido",
+        invalidEmail: "El email ingresado no es válido",
         toast: {
             forbidden: "No puedes cambiar tu contraseña si ya iniciaste sesión",
             missPasswordToken: "Token no presente",
@@ -383,11 +385,11 @@ export const TRANSLATIONS_ES = {
 
     Review: {
         title: "Título",
-        description: "Descripci\u00F3n",
+        description: "Descripción",
         score: "Puntaje",
         deleteModal: {
             title: "Eliminar reseña",
-            confirmDelete: "¿Est\u00E1 seguro que desea eliminar la reseña: {{reviewTitle}}?",
+            confirmDelete: "¿Está seguro que desea eliminar la reseña: {{reviewTitle}}?",
         },
         toast: {
             deleteSuccess: "'{{reviewTitle}}' se ha borrado con éxito",
@@ -400,24 +402,24 @@ export const TRANSLATIONS_ES = {
         editTitle: "Edita la reseña para {{experienceName}}",
         error: {
             title: {
-                pattern: "El titulo ingresado no posee un formato v\u00E1lido",
-                isRequired: "Este campo no puede estar vac\u00EDo",
+                pattern: "El titulo ingresado no posee un formato válido",
+                isRequired: "Este campo no puede estar vacío",
                 length: "El titulo debe tener entre 3-50 caracteres",
             },
             description: {
-                pattern: "La descripci\u00F3n ingresada no posee un formato v\u00E1lido",
-                isRequired: "Este campo no puede estar vac\u00EDo",
-                length: "La descripci\u00F3n debe tener entre 3-255 caracteres",
+                pattern: "La descripción ingresada no posee un formato válido",
+                isRequired: "Este campo no puede estar vacío",
+                length: "La descripción debe tener entre 3-255 caracteres",
             },
             score: {
-                isRequired: "Este campo no puede estar vac\u00EDo",
+                isRequired: "Este campo no puede estar vacío",
             },
         },
         toast: {
             forbidden: {
                 noUser: "Inicia sesión para crear reseñas",
                 notVerified: "Verifica tu cuenta para crear reseñas",
-                notAllowed: "No tienes permisos para modificar esta experiencia",
+                notAllowed: "No tienes permisos para modificar esta reseña",
             },
             createSuccess: "¡'{{reviewTitle}}' creada con éxito!",
             createError: "Error del servidor al crear la reseña '{{reviewTitle}}'",
@@ -428,7 +430,7 @@ export const TRANSLATIONS_ES = {
 
     Image: {
         error: {
-            isRequired: "Este campo no puede estar vac\u00EDo",
+            isRequired: "Este campo no puede estar vacío",
             size: "La imagen es muy grande",
         },
     },

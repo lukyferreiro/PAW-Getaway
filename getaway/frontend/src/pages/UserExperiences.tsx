@@ -58,8 +58,7 @@ export default function UserExperiences() {
         if (!isProviderValue) {
             navigate("/")
             showToast(t('User.toast.experiences.forbidden'), 'error')
-        }
-        else {
+        } else {
             serviceHandler(
                 experienceService.getProviderOrderByModels(),
                 navigate, (orders) => {

@@ -18,6 +18,7 @@ import Price from "./Price";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import {showToast} from "../scripts/toast";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel, isEditing: boolean, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }
 ) {
@@ -158,7 +159,8 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     <div>
                         <IconButton onClick={() => {
                             clearNavBar();
-                            navigate("/login")
+                            navigate("/login");
+                            showToast(t('Experience.toast.favNotSigned'), "success")
                         }}>
                             <FavoriteBorder className="fa-heart"/>
                         </IconButton>

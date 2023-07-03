@@ -6,11 +6,11 @@ import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {IconButton} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
+import {showToast} from "../scripts/toast";
 // @ts-ignore
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import {showToast} from "../scripts/toast";
 
 type FormDataResetPassword = {
     password: string,
@@ -171,7 +171,7 @@ export default function ChangePassword() {
                                         )}
                                         {errors.confirmPassword?.type === "pattern" && (
                                             <p className="form-control is-invalid form-error-label">
-                                                {t("ExperienceForm.error.password.pattern")}
+                                                {t("CreateAccount.error.password.pattern")}
                                             </p>
                                         )}
                                         {watch('password') !== watch('confirmPassword') && (
