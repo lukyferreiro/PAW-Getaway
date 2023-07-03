@@ -19,7 +19,8 @@ export default function UserProfile() {
     const query = useQuery()
     const verificationToken = getQueryOrDefault(query, "verificationToken", "")
 
-    const {user, verifyUser, isVerified} = useAuth()
+    const {getUser, verifyUser, isVerified} = useAuth()
+    const user = getUser()
 
     const isVerifiedValue = isVerified()
     const isOpenImage = useState(false)

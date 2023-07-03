@@ -118,6 +118,11 @@ export default function UserEditProfile() {
                                                 {t("CreateAccount.error.name.length")}
                                             </p>
                                         )}
+                                        {errors.name?.type === "pattern" && (
+                                            <p className="form-control is-invalid form-error-label">
+                                                {t("CreateAccount.error.name.pattern")}
+                                            </p>
+                                        )}
                                     </div>
 
                                     <div className="form-group">
@@ -156,6 +161,11 @@ export default function UserEditProfile() {
                                         {errors.surname?.type === "length" && (
                                             <p className="form-control is-invalid form-error-label">
                                                 {t("CreateAccount.error.surname.length")}
+                                            </p>
+                                        )}
+                                        {errors.name?.type === "pattern" && (
+                                            <p className="form-control is-invalid form-error-label">
+                                                {t("CreateAccount.error.surname.pattern")}
                                             </p>
                                         )}
                                     </div>

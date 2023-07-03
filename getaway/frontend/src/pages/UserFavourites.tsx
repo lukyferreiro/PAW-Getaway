@@ -18,7 +18,8 @@ export default function UserFavourites() {
     const navigate = useNavigate()
     const query = useQuery()
 
-    const {user} = useAuth()
+    const {getUser} = useAuth()
+    const user = getUser()
 
     const [searchParams, setSearchParams] = useSearchParams();
 

@@ -129,6 +129,11 @@ export default function ChangePassword() {
                                                 {t("CreateAccount.error.password.length")}
                                             </p>
                                         )}
+                                        {errors.password?.type === "pattern" && (
+                                            <p className="form-control is-invalid form-error-label">
+                                                {t("CreateAccount.error.password.pattern")}
+                                            </p>
+                                        )}
                                     </div>
 
                                     <div className="form-group">
@@ -162,6 +167,11 @@ export default function ChangePassword() {
                                         {errors.confirmPassword?.type === "required" && (
                                             <p className="form-control is-invalid form-error-label">
                                                 {t("CreateAccount.error.isRequired")}
+                                            </p>
+                                        )}
+                                        {errors.confirmPassword?.type === "pattern" && (
+                                            <p className="form-control is-invalid form-error-label">
+                                                {t("ExperienceForm.error.password.pattern")}
                                             </p>
                                         )}
                                         {watch('password') !== watch('confirmPassword') && (

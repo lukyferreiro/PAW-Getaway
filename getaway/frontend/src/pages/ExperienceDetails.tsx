@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {ExperienceModel, ReviewModel} from "../types";
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import CardExperienceDetails from "../components/CardExperienceDetails";
 import CardReview from "../components/CardReview";
 import {serviceHandler} from "../scripts/serviceHandler";
@@ -12,7 +12,6 @@ import Pagination from "../components/Pagination";
 import DataLoader from "../components/DataLoader";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {showToast} from "../scripts/toast";
-import CardExperience from "../components/CardExperience";
 
 export default function ExperienceDetails(props: { nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>]} ) {
 

@@ -18,7 +18,8 @@ export default function UserReviews() {
 
     const {t} = useTranslation()
     const query = useQuery()
-    const {user, isVerified} = useAuth()
+    const {getUser, isVerified} = useAuth()
+    const user = getUser()
     const isVerifiedValue = isVerified()
 
     const [searchParams, setSearchParams] = useSearchParams();

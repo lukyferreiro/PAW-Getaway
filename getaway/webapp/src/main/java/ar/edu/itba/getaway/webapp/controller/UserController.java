@@ -28,6 +28,7 @@ import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
+import java.net.URI;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -228,7 +229,6 @@ public class UserController {
         }
 
         return CacheResponse.cacheResponse(image, request, false);
-
     }
 
     //Endpoint para editar la imagen de perfil del usuario
@@ -253,7 +253,8 @@ public class UserController {
 
         imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
 
-        return Response.ok().build();
+        final URI location = uriInfo.getAbsolutePathBuilder().build();
+        return Response.created(location).build();
     }
 
     //Endpoint para obtener las experiencias creadas por un usuario

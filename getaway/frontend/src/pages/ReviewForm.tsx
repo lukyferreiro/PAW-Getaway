@@ -49,14 +49,14 @@ export default function ReviewForm() {
         } else if (isLoggedValue && !isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
-        }
-        else {
+        } else {
             if (parseInt(currentId) !== -1) {
                 serviceHandler(
                     reviewService.getReviewById(parseInt(currentId)),
                     navigate, (review) => {
                         if (review.user.id !== user?.id) {
                             navigate("/", {replace: true})
+                            showToast(t('ReviewForm.toast.forbidden.notAllowed'), 'error')
                         }
                         setReview(review)
                         setRating(-review.score)
@@ -73,8 +73,7 @@ export default function ReviewForm() {
                     }
                 )
                 document.title = `${t('PageName')} - ${t('PageTitles.reviewForm.edit')}`
-            }
-            else {
+            } else {
                 document.title = `${t('PageName')} - ${t('PageTitles.reviewForm.create')}`
                 reset()
                 setReview(undefined)
@@ -95,10 +94,9 @@ export default function ReviewForm() {
 
     const onSubmit = handleSubmit((data: FormDataReview) => {
         data.score = String(-rating)
-        if (data.score === "-1"){
+        if (data.score === "-1") {
             setInvalidScore(true)
-        }
-        else {
+        } else {
             setInvalidScore(false)
             if (review) {
                 reviewService.updateReviewById(parseInt(currentId), data.title, data.description, data.score)
@@ -182,6 +180,11 @@ export default function ReviewForm() {
                                     {t("ReviewForm.error.title.length")}
                                 </p>
                             )}
+                            {errors.title?.type === "pattern" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("ExperienceForm.error.title.pattern")}
+                                </p>
+                            )}
                         </div>
 
                         <div className="col m-2">
@@ -221,6 +224,11 @@ export default function ReviewForm() {
                                     {t("ReviewForm.error.description.length")}
                                 </p>
                             )}
+                            {errors.description?.type === "pattern" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("ExperienceForm.error.description.pattern")}
+                                </p>
+                            )}
                         </div>
                         <div className="col m-2">
                             <label htmlFor="score" className="form-label">
@@ -250,11 +258,11 @@ export default function ReviewForm() {
                                 </div>
                             </div>
                             <input name="score" type="hidden" className="form-control" id="score"/>
-                                {invalidScore &&
-                                    <p className="form-control is-invalid form-error-label">
-                                        {t("ReviewForm.error.score.isRequired")}
-                                    </p>
-                                }
+                            {invalidScore &&
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("ReviewForm.error.score.isRequired")}
+                                </p>
+                            }
                         </div>
                     </div>
                 </form>

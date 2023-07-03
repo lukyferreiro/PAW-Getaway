@@ -196,6 +196,7 @@ export const TRANSLATIONS_EN = {
             forbidden: {
                 noUser: "Sign in to create an experience",
                 notVerified: "Verify your account to create an experience",
+                notAllowed: "You can not modify this experience",
             },
             createSuccess: "'{{experienceName}}' created successfully!",
             createError: "Server error creating experience '{{experienceName}}'",
@@ -416,6 +417,7 @@ export const TRANSLATIONS_EN = {
             forbidden: {
                 noUser: "Sign in to create reviews",
                 notVerified: "Verify your account to create reviews",
+                notAllowed: "You can not modify this review",
             },
             createSuccess: "'{{reviewTitle}}' created successfully!",
             createError: "Server error creating review '{{reviewTitle}}'",

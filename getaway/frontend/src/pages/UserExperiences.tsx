@@ -32,7 +32,8 @@ export default function UserExperiences() {
     const navigate = useNavigate()
 
     const {t} = useTranslation()
-    const {user, isProvider} = useAuth()
+    const {getUser, isProvider} = useAuth()
+    const user = getUser()
 
     const isProviderValue = isProvider
     const [searchParams, setSearchParams] = useSearchParams();
@@ -144,6 +145,11 @@ export default function UserExperiences() {
                                     {errors.name?.type === "max" && (
                                         <p className="form-control is-invalid form-error-label">
                                             {t("ExperienceForm.error.name.max")}
+                                        </p>
+                                    )}
+                                    {errors.name?.type === "pattern" && (
+                                        <p className="form-control is-invalid form-error-label">
+                                            {t("CreateAccount.error.name.pattern")}
                                         </p>
                                     )}
                                 </form>

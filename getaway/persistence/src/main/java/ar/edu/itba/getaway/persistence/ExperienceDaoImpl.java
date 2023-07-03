@@ -68,7 +68,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         StringBuilder finalQuery = new StringBuilder();
         StringBuilder baseQuery = new StringBuilder("SELECT experiences.experienceid \n" + "FROM (experiences NATURAL JOIN (cities NATURAL JOIN countries)) LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" + "WHERE (\n" + "(LOWER(experienceName) LIKE LOWER(CONCAT('%', :name ,'%')))\n" + "OR (LOWER(experiences.description) LIKE LOWER(CONCAT('%',  :name,'%')))\n" + "OR (LOWER(address) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" + "OR (LOWER(cityName) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" + "OR (LOWER(countryName) LIKE LOWER(CONCAT('%',  :name,'%')))\n" + ") \n" + "AND COALESCE(price,0) <= :max \n" + "AND observable = true \n");
 
-        String groupByClause = "GROUP BY experiences.experienceId HAVING AVG(COALESCE(score,0))>= :score\n";
+        String groupByClause = "GROUP BY experiences.experienceId HAVING FLOOR(AVG(COALESCE(score,0)))>= :score\n";
         String categorySearch = "AND categoryId = :categoryId ";
         String citySearch = "AND cityid = :cityId ";
 
@@ -122,7 +122,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         StringBuilder finalQuery = new StringBuilder();
         StringBuilder baseQuery = new StringBuilder("SELECT experiences.experienceid \n" + "FROM (experiences NATURAL JOIN (cities NATURAL JOIN countries)) LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" + "WHERE (\n" + "(LOWER(experienceName) LIKE LOWER(CONCAT('%', :name ,'%')))\n" + "OR (LOWER(experiences.description) LIKE LOWER(CONCAT('%',  :name,'%')))\n" + "OR (LOWER(address) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" + "OR (LOWER(cityName) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" + "OR (LOWER(countryName) LIKE LOWER(CONCAT('%',  :name,'%')))\n" + ") \n" + "AND COALESCE(price,0) <= :max \n" + "AND observable = true \n");
 
-        String groupByClause = "GROUP BY experiences.experienceId HAVING AVG(COALESCE(score,0))>= :score\n";
+        String groupByClause = "GROUP BY experiences.experienceId HAVING FLOOR(AVG(COALESCE(score,0)))>= :score\n";
         String categorySearch = "AND categoryId = :categoryId ";
         String citySearch = "AND cityid = :cityId ";
 
@@ -183,7 +183,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
         LOGGER.debug("List experiences of user with id {}", user.getUserId());
         String orderQuery = getOrderQuery(order);
 
-        Query queryForIds = em.createNativeQuery("SELECT experienceId \n" + "FROM experiences \n" + "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%'))) AND userid = :userId");
+        Query queryForIds = em.createNativeQuery(
+                "SELECT experienceId \n" +
+                        "FROM experiences \n" +
+                        "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%'))) AND userid = :userId");
 
         queryForIds.setParameter("name", name);
         queryForIds.setParameter("userId", user.getUserId());
@@ -208,7 +211,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public long getCountExperiencesByUser(String name, UserModel user) {
-        Query query = em.createNativeQuery("SELECT count(experienceId) \n" + "FROM experiences \n" + "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) ) AND userid = :userId");
+        Query query = em.createNativeQuery(
+                "SELECT count(experienceId) \n" +
+                        "FROM experiences \n" +
+                        "WHERE (LOWER(experienceName) LIKE LOWER(CONCAT('%', :name,'%')) ) AND userid = :userId");
         query.setParameter("name", name);
         query.setParameter("userId", user.getUserId());
 
@@ -231,7 +237,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
         LOGGER.debug("List experiences of user with id {}", user.getUserId());
         String orderQuery = getOrderQuery(order);
 
-        Query queryForIds = em.createNativeQuery("SELECT favuserexperience.experienceid \n" + "FROM favuserexperience JOIN experiences ON favuserexperience.experienceId = experiences.experienceid \n" + "WHERE observable = true AND favuserexperience.userid = :userId");
+        Query queryForIds = em.createNativeQuery(
+                "SELECT favuserexperience.experienceid \n" +
+                        "FROM favuserexperience JOIN experiences ON favuserexperience.experienceId = experiences.experienceid \n" +
+                        "WHERE observable = true AND favuserexperience.userid = :userId");
 
         queryForIds.setParameter("userId", user.getUserId());
 
@@ -254,7 +263,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public long getCountListExperiencesFavsByUser(UserModel user) {
-        Query query = em.createNativeQuery("SELECT COUNT(favuserexperience.experienceid) \n" + "FROM favuserexperience JOIN experiences ON favuserexperience.experienceId = experiences.experienceid \n" + "WHERE observable = true AND favuserexperience.userid = :userId");
+        Query query = em.createNativeQuery(
+                "SELECT COUNT(favuserexperience.experienceid) \n" +
+                        "FROM favuserexperience JOIN experiences ON favuserexperience.experienceId = experiences.experienceid \n" +
+                        "WHERE observable = true AND favuserexperience.userid = :userId");
 
         query.setParameter("userId", user.getUserId());
         try {
@@ -267,7 +279,23 @@ public class ExperienceDaoImpl implements ExperienceDao {
     @Override
     public List<ExperienceModel> getRecommendedByFavs(UserModel user, int maxResults) {
         LOGGER.debug("Getting possible ids of experiences to recommend based on user {} favourites", user.getUserId());
-        final Query queryForIds = em.createNativeQuery("SELECT experienceid\n" + "FROM favuserexperience\n" + "WHERE userid IN (\n" + "    SELECT userid\n" + "    FROM favuserexperience\n" + "    WHERE userid != :userid AND experienceid IN (\n" + "        SELECT experienceid\n" + "        FROM favuserexperience\n" + "        WHERE userid = :userid\n" + "    )\n" + ")\n" + "  AND experienceid NOT IN (\n" + "        SELECT experienceid\n" + "        FROM favuserexperience\n" + "        WHERE userid = :userid\n" + "    )");
+        final Query queryForIds = em.createNativeQuery(
+                "SELECT experienceid\n" +
+                        "FROM favuserexperience\n" +
+                        "WHERE userid IN (\n" +
+                        "    SELECT userid\n" +
+                        "    FROM favuserexperience\n" +
+                        "    WHERE userid != :userid AND experienceid IN (\n" +
+                        "        SELECT experienceid\n" +
+                        "        FROM favuserexperience\n" +
+                        "        WHERE userid = :userid\n" +
+                        "    )\n" +
+                        ")\n" +
+                        "  AND experienceid NOT IN (\n" +
+                        "        SELECT experienceid\n" +
+                        "        FROM favuserexperience\n" +
+                        "        WHERE userid = :userid\n" +
+                        "    )");
 
         queryForIds.setParameter("userid", user.getUserId());
         List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
@@ -289,7 +317,23 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public List<ExperienceModel> getRecommendedByViews(UserModel user, int maxResults, List<Long> alreadyAdded) {
-        final Query queryForIds = em.createNativeQuery("SELECT experienceid\n" + "FROM viewed\n" + "WHERE userid IN (\n" + "    SELECT userid\n" + "    FROM viewed\n" + "    WHERE userid != :userid AND experienceid IN (\n" + "        SELECT experienceid\n" + "        FROM viewed\n" + "        WHERE userid = :userid\n" + "    )\n" + ")\n" + "  AND experienceid NOT IN (\n" + "        SELECT experienceid\n" + "        FROM viewed\n" + "        WHERE userid = :userid\n" + "    )\n");
+        final Query queryForIds = em.createNativeQuery(
+                "SELECT experienceid\n" +
+                        "FROM viewed\n" +
+                        "WHERE userid IN (\n" +
+                        "    SELECT userid\n" +
+                        "    FROM viewed\n" +
+                        "    WHERE userid != :userid AND experienceid IN (\n" +
+                        "        SELECT experienceid\n" +
+                        "        FROM viewed\n" +
+                        "        WHERE userid = :userid\n" +
+                        "    )\n" +
+                        ")\n" +
+                        "  AND experienceid NOT IN (\n" +
+                        "        SELECT experienceid\n" +
+                        "        FROM viewed\n" +
+                        "        WHERE userid = :userid\n" +
+                        "    )\n");
 
         queryForIds.setParameter("userid", user.getUserId());
         List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
@@ -334,7 +378,31 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public List<ExperienceModel> getRecommendedByReviewsCity(UserModel user, int maxResults, List<Long> alreadyAdded, List<Long> reviewedIds) {
-        final Query queryForCityIds = em.createNativeQuery("SELECT cityid\n" + "FROM (\n" + "    SELECT cityid\n" + "    FROM experiences\n" + "    where experienceid IN (\n" + "        SELECT experienceid\n" + "        FROM reviews\n" + "        WHERE userid=:userid AND score>=3\n" + "        )\n" + "    )  AS aux\n" + "GROUP BY cityid\n" + "HAVING COUNT(cityid) >= ALL (\n" + "    SELECT COUNT(cityid)\n" + "    FROM (\n" + "        SELECT cityid\n" + "        FROM experiences\n" + "        where experienceid IN (\n" + "            SELECT experienceid\n" + "            FROM reviews\n" + "            WHERE userid=:userid AND score>=3\n" + "        )\n" + "    ) AS aux2\n" + "    GROUP BY cityid\n" + "    )");
+        final Query queryForCityIds = em.createNativeQuery(
+                "SELECT cityid\n" +
+                        "FROM (\n" +
+                        "    SELECT cityid\n" +
+                        "    FROM experiences\n" +
+                        "    where experienceid IN (\n" +
+                        "        SELECT experienceid\n" +
+                        "        FROM reviews\n" +
+                        "        WHERE userid=:userid AND score>=3\n" +
+                        "        )\n" +
+                        "    )  AS aux\n" +
+                        "GROUP BY cityid\n" +
+                        "HAVING COUNT(cityid) >= ALL (\n" +
+                        "    SELECT COUNT(cityid)\n" +
+                        "    FROM (\n" +
+                        "        SELECT cityid\n" +
+                        "        FROM experiences\n" +
+                        "        where experienceid IN (\n" +
+                        "            SELECT experienceid\n" +
+                        "            FROM reviews\n" +
+                        "            WHERE userid=:userid AND score>=3\n" +
+                        "        )\n" +
+                        "    ) AS aux2\n" +
+                        "    GROUP BY cityid\n" +
+                        "    )");
 
         queryForCityIds.setParameter("userid", user.getUserId());
         List<Number> resultingIds = (List<Number>) queryForCityIds.getResultList();
@@ -359,7 +427,31 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     public List<ExperienceModel> getRecommendedByReviewsProvider(UserModel user, int maxResults, List<Long> alreadyAdded, List<Long> reviewedIds) {
-        final Query queryForProviderIds = em.createNativeQuery("SELECT userid\n" + "FROM (\n" + "    SELECT userid\n" + "    FROM experiences\n" + "    where experienceid IN (\n" + "        SELECT experienceid\n" + "        FROM reviews\n" + "        WHERE userid=:userid AND score>=3\n" + "        )\n" + "    )  AS aux\n" + "GROUP BY userid\n" + "HAVING COUNT(userid) >= ALL (\n" + "    SELECT COUNT(userid)\n" + "    FROM (\n" + "        SELECT userid\n" + "        FROM experiences\n" + "        where experienceid IN (\n" + "            SELECT experienceid\n" + "            FROM reviews\n" + "            WHERE userid=:userid AND score>=3\n" + "        )\n" + "    ) AS aux\n" + "    GROUP BY userid\n" + "    )");
+        final Query queryForProviderIds = em.createNativeQuery(
+                "SELECT userid\n" +
+                        "FROM (\n" +
+                        "    SELECT userid\n" +
+                        "    FROM experiences\n" +
+                        "    where experienceid IN (\n" +
+                        "        SELECT experienceid\n" +
+                        "        FROM reviews\n" +
+                        "        WHERE userid=:userid AND score>=3\n" +
+                        "        )\n" +
+                        "    )  AS aux\n" +
+                        "GROUP BY userid\n" +
+                        "HAVING COUNT(userid) >= ALL (\n" +
+                        "    SELECT COUNT(userid)\n" +
+                        "    FROM (\n" +
+                        "        SELECT userid\n" +
+                        "        FROM experiences\n" +
+                        "        where experienceid IN (\n" +
+                        "            SELECT experienceid\n" +
+                        "            FROM reviews\n" +
+                        "            WHERE userid=:userid AND score>=3\n" +
+                        "        )\n" +
+                        "    ) AS aux\n" +
+                        "    GROUP BY userid\n" +
+                        "    )");
 
         queryForProviderIds.setParameter("userid", user.getUserId());
         List<Number> resultingIds = (List<Number>) queryForProviderIds.getResultList();
@@ -386,7 +478,31 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     public List<ExperienceModel> getRecommendedByReviewsCategory(UserModel user, int maxResults, List<Long> alreadyAdded, List<Long> reviewedIds) {
-        final Query queryForCategoryIds = em.createNativeQuery("SELECT categoryid\n" + "FROM (\n" + "    SELECT categoryid\n" + "    FROM experiences\n" + "    where experienceid IN (\n" + "        SELECT experienceid\n" + "        FROM reviews\n" + "        WHERE userid=:userid AND score>=3\n" + "        )\n" + "    )  AS aux\n" + "GROUP BY categoryid\n" + "HAVING COUNT(categoryid) >= ALL (\n" + "    SELECT COUNT(categoryid)\n" + "    FROM (\n" + "        SELECT categoryid\n" + "        FROM experiences\n" + "        where experienceid IN (\n" + "            SELECT experienceid\n" + "            FROM reviews\n" + "            WHERE userid=:userid AND score>=3\n" + "        )\n" + "    ) AS aux\n" + "    GROUP BY categoryid\n" + "    )\n");
+        final Query queryForCategoryIds = em.createNativeQuery(
+                "SELECT categoryid\n" +
+                "FROM (\n" +
+                "    SELECT categoryid\n" +
+                "    FROM experiences\n" +
+                "    where experienceid IN (\n" +
+                "        SELECT experienceid\n" +
+                "        FROM reviews\n" +
+                "        WHERE userid=:userid AND score>=3\n" +
+                "        )\n" +
+                "    )  AS aux\n" +
+                "GROUP BY categoryid\n" +
+                "HAVING COUNT(categoryid) >= ALL (\n" +
+                "    SELECT COUNT(categoryid)\n" +
+                "    FROM (\n" +
+                "        SELECT categoryid\n" +
+                "        FROM experiences\n" +
+                "        where experienceid IN (\n" +
+                "            SELECT experienceid\n" +
+                "            FROM reviews\n" +
+                "            WHERE userid=:userid AND score>=3\n" +
+                "        )\n" +
+                "    ) AS aux\n" +
+                "    GROUP BY categoryid\n" +
+                "    )\n");
 
         queryForCategoryIds.setParameter("userid", user.getUserId());
         List<Number> resultingIds = (List<Number>) queryForCategoryIds.getResultList();

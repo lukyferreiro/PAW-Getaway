@@ -129,6 +129,11 @@ export default function CreateAccount() {
                                                     {t("CreateAccount.error.email.length")}
                                                 </p>
                                             )}
+                                            {errors.email?.type === "pattern" && (
+                                                <p className="form-control is-invalid form-error-label">
+                                                    {t("ExperienceForm.error.email.pattern")}
+                                                </p>
+                                            )}
                                         </div>
 
                                         <div className="form-group">
@@ -169,6 +174,11 @@ export default function CreateAccount() {
                                                     {t("CreateAccount.error.name.length")}
                                                 </p>
                                             )}
+                                            {errors.name?.type === "pattern" && (
+                                                <p className="form-control is-invalid form-error-label">
+                                                    {t("ExperienceForm.error.name.pattern")}
+                                                </p>
+                                            )}
                                         </div>
 
                                         <div className="form-group">
@@ -207,6 +217,11 @@ export default function CreateAccount() {
                                             {errors.surname?.type === "length" && (
                                                 <p className="form-control is-invalid form-error-label">
                                                     {t("CreateAccount.error.surname.length")}
+                                                </p>
+                                            )}
+                                            {errors.surname?.type === "pattern" && (
+                                                <p className="form-control is-invalid form-error-label">
+                                                    {t("ExperienceForm.error.surname.pattern")}
                                                 </p>
                                             )}
                                         </div>
@@ -258,6 +273,11 @@ export default function CreateAccount() {
                                             {errors.password?.type === "length" && (
                                                 <p className="form-control is-invalid form-error-label">
                                                     {t("CreateAccount.error.password.length")}
+                                                </p>
+                                            )}
+                                            {errors.password?.type === "pattern" && (
+                                                <p className="form-control is-invalid form-error-label">
+                                                    {t("ExperienceForm.error.password.pattern")}
                                                 </p>
                                             )}
                                         </div>

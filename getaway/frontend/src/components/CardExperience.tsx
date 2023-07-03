@@ -63,7 +63,7 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
                 </div>
 
                 <div className="card-body container-fluid d-flex p-2 mb-1 align-items-end">
-                    <h5 className="mb-1">
+                    <h5 className="mb-0">
                         {t('Experience.reviews', {reviewCount: experience.reviewCount})}
                     </h5>
                     <StarRating score={experience.score}/>

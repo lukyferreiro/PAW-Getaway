@@ -122,7 +122,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                             </div>
 
                             <div className="d-flex"> {/* Ranking */}
-                                <h6 className="information-title">
+                                <h6 className="information-title mb-0">
                                     {t('ExperienceDetail.review')}: {experience.reviewCount}
                                 </h6>
                                 <StarRating score={experience.score}/>

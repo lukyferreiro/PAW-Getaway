@@ -344,7 +344,10 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                         <div className="d-flex flex-column justify-content-center align-content-center"
                              style={{fontSize: "x-large", maxWidth: "400px"}}>
                             {categoryProp[0] !== undefined && categoryProp[0].length > 0 &&
-                                <div className="justify-self-center align-self-center flex-wrap text-center" style={{maxWidth: "400px", wordWrap: "break-word"}}>
+                                <div className="justify-self-center align-self-center flex-wrap text-center" style={{
+                                    maxWidth: "400px",
+                                    wordWrap: "break-word"
+                                }}>
                                     {t('Experiences.search.search') + t('Experiences.search.category') + t('Categories.' + categoryProp[0])}
                                     <IconButton className="justify-content-center" onClick={cleanQueryForCategory}>
                                         <Close/>
@@ -352,7 +355,10 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                                 </div>
                             }
                             {nameProp[0] !== undefined && nameProp[0].length > 0 &&
-                                <div className="justify-self-center align-self-center flex-wrap text-center" style={{maxWidth: "400px", wordWrap: "break-word"}}>
+                                <div className="justify-self-center align-self-center flex-wrap text-center" style={{
+                                    maxWidth: "400px",
+                                    wordWrap: "break-word"
+                                }}>
                                     {t('Experiences.search.search') + t('Experiences.search.name', {name: nameProp[0]})}
                                     <IconButton className="justify-content-center" onClick={cleanQueryForName}>
                                         <Close/>

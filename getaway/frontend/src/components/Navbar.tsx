@@ -125,6 +125,11 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                     {t("Navbar.error")}
                                 </p>
                             )}
+                            {errors.name?.type === "pattern" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("ExperienceForm.error.name.pattern")}
+                                </p>
+                            )}
                         </form>
                         <IconButton onClick={resetForm}>
                             <Close/>

@@ -50,16 +50,14 @@ export default function ExperienceForm() {
     const {register, handleSubmit, reset, setValue, formState: {errors},}
         = useForm<FormDataExperience>({criteriaMode: "all"})
 
-    useEffect(()=> {
+    useEffect(() => {
         if (!isLoggedValue) {
             navigate("/login")
             showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
-        }
-        else if (isLoggedValue && !isVerifiedValue) {
+        } else if (isLoggedValue && !isVerifiedValue) {
             navigate("/user/profile")
             showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
-        }
-        else {
+        } else {
             serviceHandler(
                 categoryService.getCategories(),
                 navigate, (category) => {
@@ -92,6 +90,7 @@ export default function ExperienceForm() {
                 navigate, (fetchedExperience) => {
                     if (fetchedExperience.user.id !== user?.id) {
                         navigate("/", {replace: true})
+                        showToast(t('ExperienceForm.toast.forbidden.notAllowed'), 'error')
                     }
                     setExperience(fetchedExperience)
                     loadCities(fetchedExperience.country.id)
@@ -115,8 +114,7 @@ export default function ExperienceForm() {
                 }
             )
             document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.edit')}`
-        }
-        else {
+        } else {
             document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.create')}`
             reset()
             setExperience(undefined)
@@ -241,6 +239,11 @@ export default function ExperienceForm() {
                                     {t("ExperienceForm.error.name.length")}
                                 </p>
                             )}
+                            {errors.name?.type === "pattern" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("ExperienceForm.error.name.pattern")}
+                                </p>
+                            )}
                         </div>
                         <div className="col m-2">
                             <label className="form-label" htmlFor="experienceCategory">
@@ -333,6 +336,11 @@ export default function ExperienceForm() {
                                 {t("ExperienceForm.error.description.length")}
                             </p>
                         )}
+                        {errors.description?.type === "pattern" && (
+                            <p className="form-control is-invalid form-error-label">
+                                {t("ExperienceForm.error.description.pattern")}
+                            </p>
+                        )}
                     </div>
 
                     <div className="p-0 m-0 d-flex">
@@ -374,6 +382,11 @@ export default function ExperienceForm() {
                                     {t("ExperienceForm.error.mail.length")}
                                 </p>
                             )}
+                            {errors.mail?.type === "pattern" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("ExperienceForm.error.mail.pattern")}
+                                </p>
+                            )}
                         </div>
                         <div className="col m-2">
                             <label className="form-label d-flex justify-content-between"
@@ -408,6 +421,11 @@ export default function ExperienceForm() {
                             {errors.url?.type === "length" && (
                                 <p className="form-control is-invalid form-error-label">
                                     {t("ExperienceForm.error.url.length")}
+                                </p>
+                            )}
+                            {errors.url?.type === "pattern" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("ExperienceForm.error.url.pattern")}
                                 </p>
                             )}
                         </div>
@@ -502,6 +520,11 @@ export default function ExperienceForm() {
                             {errors.address?.type === "length" && (
                                 <p className="form-control is-invalid form-error-label">
                                     {t("ExperienceForm.error.address.length")}
+                                </p>
+                            )}
+                            {errors.address?.type === "pattern" && (
+                                <p className="form-control is-invalid form-error-label">
+                                    {t("ExperienceForm.error.address.pattern")}
                                 </p>
                             )}
                         </div>

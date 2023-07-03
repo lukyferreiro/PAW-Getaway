@@ -196,6 +196,7 @@ export const TRANSLATIONS_ES = {
             forbidden: {
                 noUser: "Inicia sesión para crear experiencias",
                 notVerified: "Verifica tu cuenta para crear experiencias",
+                notAllowed: "No tienes permisos para modificar esta experiencia"
             },
             createSuccess: "¡'{{experienceName}}' creada con éxito!",
             createError: "Error del servidor al crear la experiencia '{{experienceName}}'",
@@ -416,6 +417,7 @@ export const TRANSLATIONS_ES = {
             forbidden: {
                 noUser: "Inicia sesión para crear reseñas",
                 notVerified: "Verifica tu cuenta para crear reseñas",
+                notAllowed: "No tienes permisos para modificar esta experiencia",
             },
             createSuccess: "¡'{{reviewTitle}}' creada con éxito!",
             createError: "Error del servidor al crear la reseña '{{reviewTitle}}'",
