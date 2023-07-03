@@ -33,7 +33,7 @@ Para levantar el frontend, dirigirse a la carpeta '/frontend' y correr:
 ```
 npm start
 ```
-Nota: Revisar la baseUrl de la API en `/src/common/constants/index.js`
+Nota: Revisar la baseUrl de la API en `/src/common/index.js`
 
 Para ejecutar los tests correr:
 ```
