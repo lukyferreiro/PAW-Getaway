@@ -29,8 +29,10 @@ export default function UserProfile() {
 
     function sendVerifyEmail() {
         userService.sendNewVerifyUserEmail()
-            .then(() => {
-                showToast(t('User.toast.resendVerify.success'), 'success')
+            .then((result) => {
+                if(!result.hasFailed()) {
+                    showToast(t('User.toast.resendVerify.success'), 'success')
+                }
             })
             .catch(() => {
                 showToast(t('User.toast.resendVerify.error'), 'error')
@@ -38,19 +40,21 @@ export default function UserProfile() {
     }
 
     useEffect(() => {
-        if (verificationToken !== "" || verificationToken === undefined) {
-            if (user?.verified) {
+        if (verificationToken !== "" || verificationToken !== undefined) {
+            if (isVerifiedValue) {
                 showToast(t('User.toast.verify.alreadyVerified'), 'error')
             } else {
                 userService.verifyUser(verificationToken)
-                    .then(() => {
-                        showToast(t('User.toast.verify.success'), 'success')
+                    .then((result) => {
+                        if (!result.hasFailed()) {
+                            verifyUser(() => navigate("/user/profile"))
+                            showToast(t('User.toast.verify.success'), 'success')
+                        }
                     })
                     .catch(() => {
                         showToast(t('User.toast.verify.error'), 'error')
                     })
                     .finally(() => {
-                        verifyUser(() => navigate("/user/profile"))
                         searchParams.delete("verificationToken")
                         setSearchParams(searchParams)
                     })

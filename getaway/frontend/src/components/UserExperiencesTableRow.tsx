@@ -47,7 +47,7 @@ export default function UserExperiencesTableRow(props: {
                 </td>
                 <td>
                     <div className="container-fluid d-flex p-2 mb-1 align-items-end">
-                        <h5 className="mb-1">
+                        <h5 className="mb-0">
                             {t("User.experiences.reviewsCount", {count: experience.reviewCount})}
                         </h5>
                         <StarRating score={experience.score}/>

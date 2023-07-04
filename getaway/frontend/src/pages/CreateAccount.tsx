@@ -61,6 +61,7 @@ export default function CreateAccount() {
                                         name: user.getData().name,
                                         surname: user.getData().surname
                                     }), 'success')
+                                    showToast(t('User.toast.resendVerify.success'), 'success')
                                 }
                             })
                             .catch(() => {
@@ -160,7 +161,7 @@ export default function CreateAccount() {
                                                                name.length >= 0 && name.length <= 50,
                                                        },
                                                        pattern: {
-                                                           value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
+                                                           value: /^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$/,
                                                            message: t("CreateAccount.error.name.pattern"),
                                                        },
                                                    })}/>
@@ -204,7 +205,7 @@ export default function CreateAccount() {
                                                                surname.length >= 0 && surname.length <= 50,
                                                        },
                                                        pattern: {
-                                                           value: /^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°"·#$%&=:¿?!¡/.-]*$/,
+                                                           value: /^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$/,
                                                            message: t("CreateAccount.error.surname.pattern"),
                                                        },
                                                    })}

@@ -223,7 +223,7 @@ export const TRANSLATIONS_ES = {
             price: "Precio",
             views: "Vistas",
             actions: "Acciones",
-            reviewsCount: "Reseñas {{count}}",
+            reviewsCount: "Reseñas ({{count}})",
             deleteTitle: "Eliminar experiencia",
             confirmDelete: "¿Está seguro que desea eliminar la experiencia: {{experienceName}}?"
         },
@@ -246,6 +246,7 @@ export const TRANSLATIONS_ES = {
                 error: "Token no válido",
                 alreadyVerified: "Tu cuenta ya se encuentra verificada",
             },
+            sendVerify: "Se ha enviado un mail a tu casilla para que verifiques tu cuenta",
             resendVerify: {
                 success: "Mail enviado exitosamente",
                 error: "Error del servidor al enviar el mail",

@@ -223,7 +223,7 @@ export const TRANSLATIONS_EN = {
             price: "Price",
             views: "Views",
             actions: "Actions",
-            reviewsCount: "Reviews {{count}}",
+            reviewsCount: "Reviews ({{count}})",
             deleteTitle: "Delete experience",
             confirmDelete: "Are you sure you want to delete experience: {{experienceName}}?"
         },
@@ -246,6 +246,7 @@ export const TRANSLATIONS_EN = {
                 error: "Invalid token",
                 alreadyVerified: "Your account is already verified",
             },
+            sendVerify: "Email sent to verify your account",
             resendVerify: {
                 success: "Email sent successfully",
                 error: "Server error when sending email",

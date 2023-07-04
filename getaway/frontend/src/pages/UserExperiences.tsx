@@ -32,10 +32,11 @@ export default function UserExperiences() {
     const navigate = useNavigate()
 
     const {t} = useTranslation()
-    const {getUser, isProvider} = useAuth()
+    const {getUser, isProvider, isVerified} = useAuth()
     const user = getUser()
+    const isProviderValue = isProvider()
+    const isVerifiedValue = isVerified()
 
-    const isProviderValue = isProvider
     const [searchParams, setSearchParams] = useSearchParams();
     const query = useQuery()
 
@@ -55,7 +56,10 @@ export default function UserExperiences() {
         = useForm<FormUserExperiencesSearch>({criteriaMode: "all"})
 
     useEffect(() => {
-        if (!isProviderValue) {
+        if (!isVerifiedValue) {
+            navigate("/user/profile")
+            showToast(t('User.toast.reviews.forbidden'), 'error')
+        } else if (!isProviderValue) {
             navigate("/")
             showToast(t('User.toast.experiences.forbidden'), 'error')
         } else {
@@ -75,23 +79,25 @@ export default function UserExperiences() {
     }, [])
 
     useEffect(() => {
-        setIsLoading(true);
-        serviceHandler(
-            userService.getUserExperiences(user ? user.id : -1, userName, order[0], currentPage[0]),
-            navigate, (experiences) => {
-                setUserExperiences(experiences.getContent())
-                setMaxPage(experiences ? experiences.getMaxPage() : 1)
-                searchParams.set("order", order[0])
-                searchParams.set("page", currentPage[0].toString())
-                setSearchParams(searchParams)
-            },
-            () => {
-                setIsLoading(false);
-            }, () => {
-                setUserExperiences(new Array(0))
-                setMaxPage(1)
-            }
-        )
+        if(isProviderValue) {
+            setIsLoading(true);
+            serviceHandler(
+                userService.getUserExperiences(user ? user.id : -1, userName, order[0], currentPage[0]),
+                navigate, (experiences) => {
+                    setUserExperiences(experiences.getContent())
+                    setMaxPage(experiences ? experiences.getMaxPage() : 1)
+                    searchParams.set("order", order[0])
+                    searchParams.set("page", currentPage[0].toString())
+                    setSearchParams(searchParams)
+                },
+                () => {
+                    setIsLoading(false);
+                }, () => {
+                    setUserExperiences(new Array(0))
+                    setMaxPage(1)
+                }
+            )
+        }
     }, [currentPage[0], userName, order[0], onEdit[0]])
 
     const onSubmit = handleSubmit((data: FormUserExperiencesSearch) => {
