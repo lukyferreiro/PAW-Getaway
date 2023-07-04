@@ -17,10 +17,10 @@ test("Should return a valid token", async () => {
 });
 
 test("Should not return a valid token", async () => {
-    successfullyMockResponse(401, userModel);
+    successfullyMockResponse(403, userModel);
     return loginService.login("username", "password")
         .then((response) => {
             expect(response.hasFailed()).toBeTruthy();
-            expect(response.getError().getStatus()).toBe(401);
+            expect(response.getError().getStatus()).toBe(403);
         });
 });

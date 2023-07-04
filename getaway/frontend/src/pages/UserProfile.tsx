@@ -40,7 +40,7 @@ export default function UserProfile() {
     }
 
     useEffect(() => {
-        if (verificationToken !== "" || verificationToken !== undefined) {
+        if (verificationToken !== "" || verificationToken === undefined) {
             if (isVerifiedValue) {
                 showToast(t('User.toast.verify.alreadyVerified'), 'error')
             } else {

@@ -54,21 +54,25 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
 
     //TODO: Add different dataloader
     useEffect(() => {
-        serviceHandler(
-            experienceService.getExperienceReviews(parseInt(experienceId ? experienceId : '-1'), currentPage[0]),
-            navigate, (fetchedExperienceReviews) => {
-                setReviews(fetchedExperienceReviews.getContent())
-                setMaxPage(fetchedExperienceReviews ? fetchedExperienceReviews.getMaxPage() : 1)
-                searchParams.set("page", currentPage[0].toString())
-                setSearchParams(searchParams)
-            },
-            () => {
-            },
-            () => {
-                setReviews(new Array(0))
-                setMaxPage(0)
-            }
-        )
+        //TODO chequear, cuando refresheas en una pagina que no tiene reseñas, te redifige a login y hace este pedido igual
+        //No deberia hacerse pq reviewCount es igual a 0, pero sospecho que entra igual pq experience == undefined
+        if (experience?.reviewCount !== 0) {
+            serviceHandler(
+                experienceService.getExperienceReviews(parseInt(experienceId ? experienceId : '-1'), currentPage[0]),
+                navigate, (fetchedExperienceReviews) => {
+                    setReviews(fetchedExperienceReviews.getContent())
+                    setMaxPage(fetchedExperienceReviews ? fetchedExperienceReviews.getMaxPage() : 1)
+                    searchParams.set("page", currentPage[0].toString())
+                    setSearchParams(searchParams)
+                },
+                () => {
+                },
+                () => {
+                    setReviews(new Array(0))
+                    setMaxPage(0)
+                }
+            )
+        }
     }, [currentPage[0]])
 
     function clearNavBar() {
@@ -146,7 +150,7 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
                     </div>
                 </div>
 
-                {reviews.length !== 0 && maxPage > 1 &&
+                {experience?.reviewCount !== 0 && reviews.length !== 0 && maxPage > 1 &&
                     <div className="d-flex justify-content-center align-content-center">
                         <Pagination
                             maxPage={maxPage}

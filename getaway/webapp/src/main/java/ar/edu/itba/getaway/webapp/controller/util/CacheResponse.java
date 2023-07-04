@@ -16,16 +16,16 @@ public class CacheResponse {
         // Avoid instantiation of util class
     }
 
-    public static Response cacheResponse(ImageModel image, Request request, boolean isExperience) {
+    public static Response cacheResponse(ImageModel image, Request request, boolean toCache) {
 
         EntityTag eTag = null;
-        if (!isExperience) {
+        if (!toCache) {
             eTag = new EntityTag(String.valueOf(image.getImageId()));
         }
 
         final CacheControl cacheControl = new CacheControl();
 
-        if (!isExperience) {
+        if (!toCache) {
             cacheControl.setNoCache(true);
         } else {
             cacheControl.setNoTransform(false);
@@ -34,7 +34,7 @@ public class CacheResponse {
             cacheControl.getCacheExtension().put("immutable", null);
         }
 
-        if (!isExperience) {
+        if (!toCache) {
             Response.ResponseBuilder response = request.evaluatePreconditions(eTag);
             if (response == null) {
                 response = Response.ok(new ByteArrayInputStream(image.getImage()))

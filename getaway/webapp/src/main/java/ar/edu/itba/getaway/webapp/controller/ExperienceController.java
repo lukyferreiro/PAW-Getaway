@@ -311,7 +311,7 @@ public class ExperienceController {
         }
 
         experienceService.deleteExperience(experienceModel);
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     // Endpoint para obtener la imagen de una experiencia

@@ -137,8 +137,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
         RequestMatcher notResourcesMatcher = new NegatedRequestMatcher(
                 new OrRequestMatcher(
-//                        new AntPathRequestMatcher("/api/users/{userId}/profileImage"),
-//                        new AntPathRequestMatcher("/api/users/{userId}/profileImage/"),
+                        new AntPathRequestMatcher("/api/users/{userId}/profileImage"),
+                        new AntPathRequestMatcher("/api/users/{userId}/profileImage/"),
                         new AntPathRequestMatcher("/api/experiences/experience/{experienceId}/experienceImage"),
                         new AntPathRequestMatcher("/api/experiences/experience/{experienceId}/experienceImage/")
                 )
@@ -177,11 +177,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //logueado y hay que revisar que el id sea el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{userId}/profileImage").access("@antMatcherVoter.userEditHimself(authentication, #userId)")
                     //logueado y tiene que tener rol PROVIDER
-                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/experiences").hasAuthority("PROVIDER")
+                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/experiences").access("hasAuthority('PROVIDER') and @antMatcherVoter.accessUserInfo(authentication, #userId)")
                     //logueado y tiene que tener rol VERIFIED
-                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/reviews").hasAuthority("VERIFIED")
+                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/reviews").access("hasAuthority('VERIFIED') and @antMatcherVoter.accessUserInfo(authentication, #userId)")
                     //logueado y tiene que tener rol USER nada más
-                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/favExperiences").access("@antMatcherVoter.accessFavs(authentication, #userId)")
+                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/favExperiences").access("@antMatcherVoter.accessUserInfo(authentication, #userId)")
                 //------------------- /experiences -------------------
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/landingPage").permitAll()

@@ -81,7 +81,8 @@ public class UserController {
             throw new DuplicateUserException();
         }
 
-        return Response.created(UserDto.getUserUriBuilder(user, uriInfo).build()).build();
+        final URI location = UserDto.getUserUriBuilder(user, uriInfo).build();
+        return Response.created(location).build();
     }
 
     //Endpoint que devuelve informacion de un usuario segun el ID
@@ -228,7 +229,7 @@ public class UserController {
             return Response.noContent().build();
         }
 
-        return CacheResponse.cacheResponse(image, request, false);
+        return CacheResponse.cacheResponse(image, request, true);
     }
 
     //Endpoint para editar la imagen de perfil del usuario
@@ -253,8 +254,7 @@ public class UserController {
 
         imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
 
-        final URI location = uriInfo.getAbsolutePathBuilder().build();
-        return Response.created(location).build();
+        return Response.ok().build();
     }
 
     //Endpoint para obtener las experiencias creadas por un usuario

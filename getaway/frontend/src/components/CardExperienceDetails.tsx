@@ -84,7 +84,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                     {t('ExperienceDetail.description')}
                                 </h5>
                                 <div className="information-text" id="experienceDescription">
-                                    {experience.description === undefined ?
+                                    {experience.description === undefined || experience.description === "" ?
                                         <p>
                                             {t('ExperienceDetail.noData')}
                                         </p>
@@ -100,7 +100,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                 <h5 className="information-title">
                                     {t('ExperienceDetail.url')}
                                 </h5>
-                                {experience.siteUrl === undefined ?
+                                {experience.siteUrl === undefined || experience.siteUrl === "" ?
                                     <p className="information-text">
                                         {t('ExperienceDetail.noData')}
                                     </p>

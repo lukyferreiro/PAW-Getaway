@@ -99,7 +99,7 @@ public class AntMatcherVoter {
         return false;
     }
 
-    public boolean accessFavs(Authentication authentication, long userId) {
+    public boolean accessUserInfo(Authentication authentication, long userId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
         final Optional<UserModel> userToAccess = userService.getUserById(userId);
 

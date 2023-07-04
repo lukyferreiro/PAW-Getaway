@@ -22,7 +22,7 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.*;
 
-//TODO: statements involving filters can not be prepared
+//TODO: statements involving filters can not be prepared because HSQL does not support LOWER
 
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -272,14 +272,14 @@ public class ExperienceDaoTest {
         assertEquals(DEFAULT_ADV, experienceModelList.get(2));
     }
 
-    @Test
-    public void testListExperiencesSearch() {
+//    @Test
+//    public void testListExperiencesSearch() {
 //        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesSearch("aventura2", NO_ORDER, 1, PAGE_SIZE);
 //        assertFalse(experienceModelList.isEmpty());
 //        assertFalse(experienceModelList.contains(DEFAULT_ADV));
 //        assertTrue(experienceModelList.contains(DEFAULT_ADV2));
 //        assertFalse(experienceModelList.contains(DEFAULT_ADV3));
-    }
+//    }
 
 //    @Test
 //    public void testGetCountByName() {

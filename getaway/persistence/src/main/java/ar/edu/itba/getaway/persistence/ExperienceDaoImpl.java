@@ -68,7 +68,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         StringBuilder finalQuery = new StringBuilder();
         StringBuilder baseQuery = new StringBuilder("SELECT experiences.experienceid \n" + "FROM (experiences NATURAL JOIN (cities NATURAL JOIN countries)) LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" + "WHERE (\n" + "(LOWER(experienceName) LIKE LOWER(CONCAT('%', :name ,'%')))\n" + "OR (LOWER(experiences.description) LIKE LOWER(CONCAT('%',  :name,'%')))\n" + "OR (LOWER(address) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" + "OR (LOWER(cityName) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" + "OR (LOWER(countryName) LIKE LOWER(CONCAT('%',  :name,'%')))\n" + ") \n" + "AND COALESCE(price,0) <= :max \n" + "AND observable = true \n");
 
-        String groupByClause = "GROUP BY experiences.experienceId HAVING FLOOR(AVG(COALESCE(score,0)))>= :score\n";
+        String groupByClause = "GROUP BY experiences.experienceId HAVING AVG(COALESCE(score,0))>= :score\n";
         String categorySearch = "AND categoryId = :categoryId ";
         String citySearch = "AND cityid = :cityId ";
 
@@ -122,7 +122,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         StringBuilder finalQuery = new StringBuilder();
         StringBuilder baseQuery = new StringBuilder("SELECT experiences.experienceid \n" + "FROM (experiences NATURAL JOIN (cities NATURAL JOIN countries)) LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" + "WHERE (\n" + "(LOWER(experienceName) LIKE LOWER(CONCAT('%', :name ,'%')))\n" + "OR (LOWER(experiences.description) LIKE LOWER(CONCAT('%',  :name,'%')))\n" + "OR (LOWER(address) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" + "OR (LOWER(cityName) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" + "OR (LOWER(countryName) LIKE LOWER(CONCAT('%',  :name,'%')))\n" + ") \n" + "AND COALESCE(price,0) <= :max \n" + "AND observable = true \n");
 
-        String groupByClause = "GROUP BY experiences.experienceId HAVING FLOOR(AVG(COALESCE(score,0)))>= :score\n";
+        String groupByClause = "GROUP BY experiences.experienceId HAVING AVG(COALESCE(score,0))>= :score\n";
         String categorySearch = "AND categoryId = :categoryId ";
         String citySearch = "AND cityid = :cityId ";
 

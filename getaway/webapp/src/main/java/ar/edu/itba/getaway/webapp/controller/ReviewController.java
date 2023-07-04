@@ -82,6 +82,6 @@ public class ReviewController {
         LOGGER.info("Called /reviews/{} DELETE", id);
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
         reviewService.deleteReview(reviewModel);
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 }
