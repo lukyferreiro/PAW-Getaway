@@ -59,7 +59,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
         nameProp[1](data.name)
         navigate({
             pathname: "/experiences",
-            search: `?category=${categoryProp[0]}&name=${data.name}&order=OrderByAZ&page=1`
+            search: `?category=${categoryProp[0]}&name=${nameProp[0]}&order=OrderByAZ&page=1`
         }, {replace: true})
     })
 

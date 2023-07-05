@@ -40,6 +40,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     const [onPriceChange, setOnPriceChange] = useState<boolean>(false)
     //Score
     const [rating, setRating] = useState(parseInt(getQueryOrDefault(query, "rating", "0")))
+    //const [hover, setHover] = useState(parseInt(getQueryOrDefault(query, "rating", "0")))
     const [hover, setHover] = useState(0)
     //Order
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
@@ -96,19 +97,13 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 experienceService.getFilterMaxPrice(categoryProp[0], nameProp[0]),
                 navigate, (priceModel) => {
                     setMaxPrice(priceModel.maxPrice)
-                    if (price !== priceModel.maxPrice || price === -1) {
+                    if ((price !== priceModel.maxPrice && price === -1) || (price < -1 || price > priceModel.maxPrice)) {
                         setPrice(priceModel.maxPrice)
                     }
-                    order[1]("OrderByAZ")
-                    currentPage[1](1)
-                    searchParams.set("order", order[0])
-                    searchParams.set("page", currentPage[0].toString())
-                    setSearchParams(searchParams)
                 },
                 () => {
                 },
                 () => {
-                    setPrice(-1)
                 }
             )
         }
@@ -118,12 +113,26 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
         if (nameProp[0] !== undefined && categoryProp[0] !== undefined) {
             setIsLoading(true)
             serviceHandler(
-                experienceService.getExperiencesByFilter(categoryProp[0], nameProp[0], order[0], price, -rating, city, currentPage[0]),
+                experienceService.getExperiencesByFilter(categoryProp[0], nameProp[0], order[0], price, Math.abs(rating), city, currentPage[0]),
                 navigate, (experiences) => {
                     setExperiences(experiences.getContent())
                     setMaxPage(experiences.getMaxPage())
-                    searchParams.set("order", order[0])
-                    searchParams.set("page", currentPage[0].toString())
+                    //handleRatingChange(rating)
+                    if (currentPage[0] <= 0) {
+                        searchParams.set("page", "1")
+                        currentPage[1](1)
+                    } else if (currentPage[0] > experiences.getMaxPage()) {
+                        searchParams.set("page", experiences.getMaxPage().toString())
+                        currentPage[1](experiences.getMaxPage())
+                    } else {
+                        searchParams.set("page", currentPage[0].toString())
+                    }
+                    if (orders.some(item => item.order === order[0])) {
+                        searchParams.set("order", order[0])
+                    } else {
+                        searchParams.set("order", "OrderByAZ")
+                        order[1]("OrderByAZ")
+                    }
                     setSearchParams(searchParams)
                 },
                 () => {
@@ -182,7 +191,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     function handleRatingChange(index: number) {
         searchParams.set("rating", (-index).toString())
         setSearchParams(searchParams)
-        setRating(index)
+        setRating(-index)
     }
 
     function cleanForm() {
@@ -190,7 +199,6 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
         searchParams.delete("country")
         searchParams.delete("city")
         searchParams.delete("rating")
-        searchParams.set("order", "OrderByAZ")
         searchParams.set("page", "1")
         setSearchParams(searchParams)
 
@@ -200,27 +208,24 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
         setCity(-1)
         setRating(0)
         setHover(0)
-        setPrice(-1)
-        order[1]("OrderByAZ")
+        setPrice(maxPrice)
         currentPage[1](1)
     }
 
     function cleanQueryForName() {
         nameProp[1]("")
         searchParams.delete("name")
+        searchParams.set("page", "1")
         setSearchParams(searchParams)
-        order[1]("OrderByAZ")
         currentPage[1](1)
-        cleanForm()
     }
 
     function cleanQueryForCategory() {
         categoryProp[1]("")
         searchParams.delete("category")
+        searchParams.set("page", "1")
         setSearchParams(searchParams)
-        order[1]("OrderByAZ")
         currentPage[1](1)
-        cleanForm()
     }
 
     return (
@@ -310,10 +315,10 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                                     <button
                                         type="button"
                                         key={index}
-                                        className={index >= ((rating && hover) || hover) ? "on" : "off"}
+                                        className={index >= ((-rating && hover) || hover) ? "on" : "off"}
                                         onClick={() => handleRatingChange(index)}
                                         onMouseEnter={() => setHover(index)}
-                                        onMouseLeave={() => setHover(rating)}
+                                        onMouseLeave={() => setHover(-rating)}
                                     >
                                         <StarRoundedIcon className="star"/>
                                     </button>

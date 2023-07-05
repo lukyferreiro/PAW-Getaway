@@ -318,7 +318,7 @@ export const TRANSLATIONS_EN = {
             recommendedByReviews: "Based on your reviews",
         },
         anonymous: {
-            aventura: "Top ranked of adventur",
+            aventura: "Top ranked of adventure",
             gastronomia: "Top ranked of gastronomy",
             hoteleria: "Top ranked of hotels",
             relax: "Top ranked of relax",

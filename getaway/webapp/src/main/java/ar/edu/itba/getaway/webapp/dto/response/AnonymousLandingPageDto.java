@@ -24,8 +24,8 @@ public class AnonymousLandingPageDto implements Serializable {
         this.Gastronomia = ExperienceDto.mapExperienceToDto(experiencesList.get(1), uriInfo);
         this.Hoteleria = ExperienceDto.mapExperienceToDto(experiencesList.get(2), uriInfo);
         this.Relax = ExperienceDto.mapExperienceToDto(experiencesList.get(3), uriInfo);
-        this.Historico = ExperienceDto.mapExperienceToDto(experiencesList.get(4), uriInfo);
-        this.Vida_nocturna = ExperienceDto.mapExperienceToDto(experiencesList.get(5), uriInfo);
+        this.Vida_nocturna = ExperienceDto.mapExperienceToDto(experiencesList.get(4), uriInfo);
+        this.Historico = ExperienceDto.mapExperienceToDto(experiencesList.get(5), uriInfo);
     }
 
     public Collection<ExperienceDto> getAventura() {
