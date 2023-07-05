@@ -146,22 +146,23 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 {user ?
                     <div>
                         {fav ?
-                            <IconButton onClick={() => setFavExperience(experience, false, setFav, t)}>
+                            <IconButton onClick={() => setFavExperience(experience, false, setFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                 <Favorite className="fa-heart heart-color"/>
                             </IconButton>
                             :
-                            <IconButton onClick={() => setFavExperience(experience, true, setFav, t)}>
+                            <IconButton onClick={() => setFavExperience(experience, true, setFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                 <FavoriteBorder className="fa-heart"/>
                             </IconButton>
                         }
                     </div>
                     :
                     <div>
-                        <IconButton onClick={() => {
-                            clearNavBar();
-                            navigate("/login");
-                            showToast(t('Experience.toast.favNotSigned'), "error")
-                        }}>
+                        <IconButton aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}
+                                    onClick={() => {
+                                        clearNavBar();
+                                        navigate("/login");
+                                        showToast(t('Experience.toast.favNotSigned'), "error")
+                                    }}>
                             <FavoriteBorder className="fa-heart"/>
                         </IconButton>
                     </div>
@@ -172,21 +173,24 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 <div className="btn-group my-2 d-flex justify-content-center align-content-center" role="group">
                     {view ?
                         <div>
-                            <IconButton onClick={() => setVisibility(experience, false, setView, t)} aria-label="Visibility"
+                            <IconButton onClick={() => setVisibility(experience, false, setView, t)}
+                                        aria-label={t("AriaLabel.visibility")} title={t("AriaLabel.visibility")}
                                         component="span" style={{fontSize: "xxx-large"}} id="setFalse">
                                 <VisibilityIcon/>
                             </IconButton>
                         </div>
                         :
                         <div>
-                            <IconButton onClick={() => setVisibility(experience, true, setView, t)} aria-label="Visibility"
+                            <IconButton onClick={() => setVisibility(experience, true, setView, t)}
+                                        aria-label={t("AriaLabel.visibility")} title={t("AriaLabel.visibility")}
                                         component="span" style={{fontSize: "xx-large"}} id="setTrue">
                                 <VisibilityOffIcon/>
                             </IconButton>
                         </div>
                     }
 
-                    <IconButton onClick={() => editExperience(experience.id, navigate)} aria-label="edit" component="span"
+                    <IconButton onClick={() => editExperience(experience.id, navigate)} component="span"
+                                aria-label={t("AriaLabel.editExperience")} title={t("AriaLabel.editExperience")}
                                 style={{fontSize: "xx-large"}}>
                         <EditIcon/>
                     </IconButton>
@@ -195,7 +199,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                         onClick={() => {
                             isOpenImage[1](true)
                         }}
-                        aria-label="picture"
+                        aria-label={t("AriaLabel.editImage")} title={t("AriaLabel.editImage")}
                         component="span"
                         style={{fontSize: "xx-large"}}>
                         <AddPhotoAlternateIcon/>
@@ -209,7 +213,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                 () => deleteExperience(experience, undefined, false, navigate, t)
                             )
                         }}
-                        aria-label="trash"
+                        aria-label={t("AriaLabel.deleteExperience")} title={t("AriaLabel.deleteExperience")}
                         component="span"
                         style={{fontSize: "xx-large"}}>
                         <DeleteIcon/>
@@ -218,8 +222,6 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                     <AddPictureModal isOpen={isOpenImage} experienceId={experience.id}/>
                     <ConfirmDialogModal/>
                 </div>
-
-
             }
         </>
     );

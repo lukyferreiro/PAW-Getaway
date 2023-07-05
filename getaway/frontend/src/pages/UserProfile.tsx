@@ -106,19 +106,20 @@ export default function UserProfile() {
                                                 onClick={() => {
                                                     isOpenImage[1](true)
                                                 }}
-                                                aria-label="picture"
-                                                component="span"
-                                                style={{fontSize: "xx-large"}}>
+                                                aria-label={t("AriaLabel.editImage")} title={t("AriaLabel.editImage")}
+                                                component="span" style={{fontSize: "xx-large"}}>
                                                 <AddPhotoAlternateIcon/>
                                             </IconButton>
                                         </div>
-                                        <button onClick={() => navigate({pathname: "/user/editProfile"})} type="button" className="btn btn-error">
+                                        <button onClick={() => navigate({pathname: "/user/editProfile"})} type="button" className="btn btn-error"
+                                                aria-label={t("AriaLabel.editProfile")} title={t("AriaLabel.editProfile")}>
                                             {t('User.profile.editBtn')}
                                         </button>
                                     </div>
                                 </>
                                 :
-                                <button onClick={() => sendVerifyEmail()} type="button" className="btn btn-error">
+                                <button onClick={() => sendVerifyEmail()} type="button" className="btn btn-error"
+                                        aria-label={t("AriaLabel.verifyAccount")} title={t("AriaLabel.verifyAccount")}>
                                     {t('User.profile.verifyAccountBtn')}
                                 </button>
                             }

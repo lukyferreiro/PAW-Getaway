@@ -12,23 +12,23 @@ export default function Price(props: { price: number | undefined }) {
             {
                 (price === undefined ?
                     <div>
-                        <h6>
+                        <p>
                             {t('Experience.price.null')}
-                        </h6>
+                        </p>
                     </div>
 
                     :
                     (price === 0 ?
                             <div>
-                                <h6>
+                                <p>
                                     {t('Experience.price.free')}
-                                </h6>
+                                </p>
                             </div>
                             :
                             <div>
-                                <h6>
+                                <p>
                                     {t('Experience.price.exist', {price: price})}
-                                </h6>
+                                </p>
                             </div>
                     ))
             }

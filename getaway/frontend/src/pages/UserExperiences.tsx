@@ -133,7 +133,7 @@ export default function UserExperiences() {
                             <div className="d-flex justify-content-center align-content-center"
                                  style={{margin: "0 20px 0 auto", flex: "1"}}>
                                 <button className="btn btn-search-navbar p-0" type="submit"
-                                        form="searchExperiencePrivateForm">
+                                        form="searchExperiencePrivateForm" aria-label={t("AriaLabel.search")} title={t("AriaLabel.search")}>
                                     <img src={'./images/ic_lupa.svg'} alt="Icono lupa"/>
                                 </button>
                                 <form className="my-auto" id="searchExperiencePrivateForm" onSubmit={onSubmit}>
@@ -158,7 +158,7 @@ export default function UserExperiences() {
                                         </p>
                                     )}
                                 </form>
-                                <IconButton onClick={resetForm}>
+                                <IconButton onClick={resetForm} aria-label={t("AriaLabel.closeForm")} title={t("AriaLabel.closeForm")}>
                                     <Close/>
                                 </IconButton>
                             </div>

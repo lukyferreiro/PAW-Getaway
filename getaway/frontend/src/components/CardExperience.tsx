@@ -74,22 +74,23 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
                     {user ?
                         <div>
                             {fav ?
-                                <IconButton onClick={() => setFavExperience(experience, false, setFav, t)}>
+                                <IconButton onClick={() => setFavExperience(experience, false, setFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                     <Favorite className="fa-heart heart-color"/>
                                 </IconButton>
                                 :
-                                <IconButton onClick={() => setFavExperience(experience, true, setFav, t)}>
+                                <IconButton onClick={() => setFavExperience(experience, true, setFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                     <FavoriteBorder className="fa-heart"/>
                                 </IconButton>
                             }
                         </div>
                         :
                         <div>
-                            <IconButton onClick={() => {
-                                clearNavBar();
-                                navigate("/login");
-                                showToast(t('Experience.toast.favNotSigned'), "error")
-                            }}>
+                            <IconButton aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}
+                                        onClick={() => {
+                                            clearNavBar();
+                                            navigate("/login");
+                                            showToast(t('Experience.toast.favNotSigned'), "error")
+                                        }}>
                                 <FavoriteBorder className="fa-heart"/>
                             </IconButton>
                         </div>

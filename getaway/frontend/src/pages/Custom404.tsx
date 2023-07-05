@@ -23,7 +23,7 @@ export default function Custom404() {
                     {t('404.description')}
                 </h1>
                 <Link to="/">
-                    <button type="button" className="btn btn-error">
+                    <button type="button" className="btn btn-error" aria-label={t("AriaLabel.home")} title={t("AriaLabel.home")}>
                         {t('Error.backBtn')}
                     </button>
                 </Link>

@@ -127,7 +127,8 @@ export default function Login() {
                                                            {...register("password", {})}/>
                                                     <div className="input-group-append">
                                                         <IconButton className="btn btn-eye input-group-text"
-                                                                    id="passwordEye" type="button" tabIndex={-1} onClick={() => showPassword()} aria-label="eye">
+                                                                    id="passwordEye" type="button" tabIndex={-1} onClick={() => showPassword()}
+                                                                    aria-label={t("AriaLabel.showPassword")} title={t("AriaLabel.showPassword")}>
                                                             {seePassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
                                                         </IconButton>
                                                     </div>
@@ -150,7 +151,8 @@ export default function Login() {
 
 
                     <div className="col-12 d-flex align-items-center justify-content-center">
-                        <button form="loginForm" type="submit" className="w-100 btn-login my-2">
+                        <button form="loginForm" type="submit" className="w-100 btn-login my-2"
+                                aria-label={t("AriaLabel.login")} title={t("AriaLabel.login")}>
                             {t('Navbar.login')}
                         </button>
                     </div>

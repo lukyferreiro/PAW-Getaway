@@ -17,7 +17,8 @@ export default function OrderDropdown(props: { orders: OrderByModel[], order: [s
         <div className="d-flex justify-content-center align-content-center">
             <div>
                 <button className="btn btn-search my-2 dropdown-toggle" type="button"
-                        id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
+                        aria-label={t("AriaLabel.order")} title={t("AriaLabel.order")}>
                     {t('Order.title')}
                     <b>
                         {t(`Order.${order[0]}`)}

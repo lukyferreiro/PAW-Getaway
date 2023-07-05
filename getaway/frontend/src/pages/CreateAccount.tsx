@@ -261,7 +261,8 @@ export default function CreateAccount() {
                                                 />
                                                 <div className="input-group-append">
                                                     <IconButton className="btn btn-eye input-group-text"
-                                                                id="passwordEye" type="button" tabIndex={-1} onClick={() => showPassword()} aria-label="eye">
+                                                                id="passwordEye" type="button" tabIndex={-1} onClick={() => showPassword()}
+                                                                aria-label={t("AriaLabel.showPassword")} title={t("AriaLabel.showPassword")}>
                                                         {seePassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
                                                     </IconButton>
                                                 </div>
@@ -306,7 +307,8 @@ export default function CreateAccount() {
                                                        })}/>
                                                 <div className="input-group-append">
                                                     <IconButton className="btn btn-eye input-group-text"
-                                                                id="passwordEye2" type="button" tabIndex={-1} onClick={() => showRepeatPassword()} aria-label="eye2">
+                                                                id="passwordEye2" type="button" tabIndex={-1} onClick={() => showRepeatPassword()}
+                                                                aria-label={t("AriaLabel.showPassword")} title={t("AriaLabel.showPassword")}>
                                                         {seeRepeatPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
                                                     </IconButton>
                                                 </div>
@@ -326,6 +328,7 @@ export default function CreateAccount() {
 
                                     <div className="col-12 px-0 d-flex align-items-center justify-content-center">
                                         <button form="createAccountForm" type="submit" id="registerFormButton"
+                                                aria-label={t("AriaLabel.createAccount")} title={t("AriaLabel.createAccount")}
                                                 className="w-100 btn-create-account my-2 ">
                                             {t('Navbar.createAccount')}
                                         </button>

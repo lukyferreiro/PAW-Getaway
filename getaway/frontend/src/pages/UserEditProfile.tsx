@@ -174,11 +174,13 @@ export default function UserEditProfile() {
 
                                 <div className="col-12 px-0 d-flex align-items-center justify-content-around">
                                     <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
+                                            aria-label={t("AriaLabel.cancel")} title={t("AriaLabel.cancel")}
                                             onClick={() => navigate(-1)}>
                                         {t('Button.cancel')}
                                     </button>
                                     <button form="editProfileForm" id="editProfileFormButton"
-                                            className="btn btn-submit-form px-3 py-2" type="submit">
+                                            className="btn btn-submit-form px-3 py-2" type="submit"
+                                            aria-label={t("AriaLabel.save")} title={t("AriaLabel.save")}>
                                         {t('Button.create')}
                                     </button>
                                 </div>

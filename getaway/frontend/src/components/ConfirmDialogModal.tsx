@@ -44,10 +44,12 @@ const ConfirmDialogModal: React.FC = () => {
             </DialogContent>
             <DialogActions className="d-flex align-items-center justify-content-around">
                 <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
+                        aria-label={t("AriaLabel.cancel")} title={t("AriaLabel.cancel")}
                         onClick={close}>
                     {t('Button.cancel')}
                 </button>
                 <button type="button" id="confirmDelete" className='btn button-primary'
+                        aria-label={t("AriaLabel.confirm")} title={t("AriaLabel.confirm")}
                         onClick={() => {
                             if (onSubmit) {
                                 onSubmit()

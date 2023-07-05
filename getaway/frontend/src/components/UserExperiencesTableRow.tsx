@@ -71,14 +71,16 @@ export default function UserExperiencesTableRow(props: {
                     <div className="btn-group w-auto container-fluid p-2 d-flex align-items-end" role="group">
                         {view ?
                             <div>
-                                <IconButton onClick={() => setVisibility(experience, false, setView, t)} aria-label="Visibility"
+                                <IconButton onClick={() => setVisibility(experience, false, setView, t)}
+                                            aria-label={t("AriaLabel.visibility")} title={t("AriaLabel.visibility")}
                                             component="span" style={{fontSize: "x-large"}} id="setFalse">
                                     <VisibilityIcon/>
                                 </IconButton>
                             </div>
                             :
                             <div>
-                                <IconButton onClick={() => setVisibility(experience, true, setView, t)} aria-label="Visibility"
+                                <IconButton onClick={() => setVisibility(experience, true, setView, t)}
+                                            aria-label={t("AriaLabel.visibility")} title={t("AriaLabel.visibility")}
                                             component="span" style={{fontSize: "xx-large"}} id="setTrue">
                                     <VisibilityOffIcon/>
                                 </IconButton>
@@ -86,8 +88,8 @@ export default function UserExperiencesTableRow(props: {
                         }
 
                         <IconButton onClick={() => editExperience(experience.id, navigate)}
-                                    aria-label="edit" component="span"
-                                    style={{fontSize: "x-large"}}>
+                                    aria-label={t("AriaLabel.editExperience")} title={t("AriaLabel.editExperience")}
+                                    component="span" style={{fontSize: "x-large"}}>
                             <EditIcon/>
                         </IconButton>
 
@@ -96,19 +98,19 @@ export default function UserExperiencesTableRow(props: {
                                 setExperienceId(experience.id);
                                 isOpenImage[1](true)
                             }}
-                            aria-label="picture"
-                            component="span"
-                            style={{fontSize: "xx-large"}}>
+                            aria-label={t("AriaLabel.editImage")} title={t("AriaLabel.editImage")}
+                            component="span" style={{fontSize: "xx-large"}}>
                             <AddPhotoAlternateIcon/>
                         </IconButton>
 
-                        <IconButton onClick={() => confirmDialogModal(
-                            t('User.experiences.deleteTitle'),
-                            t('User.experiences.confirmDelete', {experienceName: experience.name}),
-                            () => deleteExperience(experience, onEdit, true, navigate, t))
+                        <IconButton onClick={() =>
+                            confirmDialogModal(
+                                t('User.experiences.deleteTitle'),
+                                t('User.experiences.confirmDelete', {experienceName: experience.name}),
+                                () => deleteExperience(experience, onEdit, true, navigate, t))
                         }
-                                    aria-label="trash" component="span"
-                                    style={{fontSize: "x-large"}}>
+                                    aria-label={t("AriaLabel.deleteExperience")} title={t("AriaLabel.deleteExperience")}
+                                    component="span" style={{fontSize: "x-large"}}>
                             <DeleteIcon/>
                         </IconButton>
                     </div>

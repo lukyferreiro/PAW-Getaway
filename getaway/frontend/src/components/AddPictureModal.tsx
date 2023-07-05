@@ -120,6 +120,7 @@ export default function AddPictureModal(
 
                     <div className="col-12 mt-3 d-flex align-items-center justify-content-around">
                         <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
+                                aria-label={t("AriaLabel.cancel")} title={t("AriaLabel.cancel")}
                                 onClick={() => {
                                     isOpen[1](false);
                                     reset()
@@ -127,7 +128,8 @@ export default function AddPictureModal(
                                 }>
                             {t('Button.cancel')}
                         </button>
-                        <button form="imageForm" type="submit" id="ImageButton" className='btn button-primary'>
+                        <button form="imageForm" type="submit" id="ImageButton" className='btn button-primary'
+                                aria-label={t("AriaLabel.confirm")} title={t("AriaLabel.confirm")}>
                             {t('Button.confirm')}
                         </button>
                     </div>

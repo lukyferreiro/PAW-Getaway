@@ -4,9 +4,11 @@ import CardExperience from "./CardExperience";
 import {ExperienceModel} from "../types";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import {useTranslation} from "react-i18next";
 
 export default function Carousel(props: { title: any, experiences: ExperienceModel[] | undefined; show: any; }) {
 
+    const {t} = useTranslation()
     const {title, experiences, show} = props
     const [currentIndex, setCurrentIndex] = useState(0)
     const [length, setLength] = useState(0)
@@ -44,7 +46,7 @@ export default function Carousel(props: { title: any, experiences: ExperienceMod
                     <div className="carousel-container">
                         <div className="carousel-wrapper">
                             {currentIndex > 0 &&
-                                <button onClick={prev} className="left-arrow">
+                                <button onClick={prev} className="left-arrow" aria-label={t("AriaLabel.leftArrow")} title={t("AriaLabel.leftArrow")}>
                                     <ArrowBackIcon/>
                                 </button>
                             }
@@ -61,7 +63,7 @@ export default function Carousel(props: { title: any, experiences: ExperienceMod
                             </div>
 
                             {currentIndex < (length - show) &&
-                                <button onClick={next} className="right-arrow">
+                                <button onClick={next} className="right-arrow" aria-label={t("AriaLabel.rightArrow")} title={t("AriaLabel.rightArrow")}>
                                     <ArrowForwardIcon/>
                                 </button>
                             }

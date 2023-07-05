@@ -268,10 +268,12 @@ export default function ReviewForm() {
                 </form>
                 <div className="p-0 mb-2 w-100 d-flex justify-content-around">
                     <button className="btn btn-cancel-form px-3 py-2" id="cancelFormButton"
+                            aria-label={t("AriaLabel.cancel")} title={t("AriaLabel.cancel")}
                             onClick={() => navigate(-1)}>
                         {t('Button.cancel')}
                     </button>
                     <button className="btn btn-submit-form px-3 py-2" id="createReviewFormButton"
+                            aria-label={t("AriaLabel.createReview")} title={t("AriaLabel.createReview")}
                             form="createReviewForm" type="submit">
                         {t('Button.create')}
                     </button>

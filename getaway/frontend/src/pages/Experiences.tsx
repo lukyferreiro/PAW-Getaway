@@ -325,6 +325,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 </div>
 
                 <button className="btn btn-clean-filter px-3 py-2 my-2" type="reset" id="cleanFilterFormButton"
+                        aria-label={t("AriaLabel.cleanFilter")} title={t("AriaLabel.cleanFilter")}
                         onClick={cleanForm}>
                     {t('Filters.btn.clear')}
                 </button>
@@ -349,7 +350,8 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                                     wordWrap: "break-word"
                                 }}>
                                     {t('Experiences.search.search') + t('Experiences.search.category') + t('Categories.' + categoryProp[0])}
-                                    <IconButton className="justify-content-center" onClick={cleanQueryForCategory}>
+                                    <IconButton className="justify-content-center" onClick={cleanQueryForCategory}
+                                                aria-label={t("AriaLabel.closeForm")} title={t("AriaLabel.closeForm")}>
                                         <Close/>
                                     </IconButton>
                                 </div>
@@ -360,7 +362,8 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                                     wordWrap: "break-word"
                                 }}>
                                     {t('Experiences.search.search') + t('Experiences.search.name', {name: nameProp[0]})}
-                                    <IconButton className="justify-content-center" onClick={cleanQueryForName}>
+                                    <IconButton className="justify-content-center" onClick={cleanQueryForName}
+                                                aria-label={t("AriaLabel.closeForm")} title={t("AriaLabel.closeForm")}>
                                         <Close/>
                                     </IconButton>
                                 </div>

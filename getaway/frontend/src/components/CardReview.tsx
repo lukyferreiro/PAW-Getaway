@@ -62,8 +62,7 @@ export default function CardReview(props: {
             <div className="card-title m-2 d-flex justify-content-between">
                 <div className="d-flex">
                     <img className="user-img" src={reviewModel.user.hasImage ? reviewModel.user.profileImageUrl : './images/user_default.png'}
-                         alt="Imagen"
-                         style={{marginRight: reviewModel.user.hasImage ? "8px" : ""}}/>
+                         alt="Imagen" style={{marginRight: reviewModel.user.hasImage ? "8px" : ""}}/>
 
                     <div className="d-flex flex-column justify-content-center align-content-center">
                         <h5 className="my-1">
@@ -94,7 +93,8 @@ export default function CardReview(props: {
                 <div className="btn-group card-body container-fluid p-1 d-flex justify-content-center align-items-end"
                      role="group">
                     <IconButton onClick={() => editReview(reviewModel.id)}
-                                aria-label="edit" component="span" style={{fontSize: "xx-large"}}>
+                                aria-label={t("AriaLabel.editReview")} title={t("AriaLabel.editReview")}
+                                component="span" style={{fontSize: "xx-large"}}>
                         <EditIcon/>
                     </IconButton>
                     <IconButton
@@ -105,7 +105,8 @@ export default function CardReview(props: {
                                 () => deleteReview(reviewModel.id)
                             )
                         }}
-                        aria-label="trash" component="span" style={{fontSize: "xx-large"}}>
+                        aria-label={t("AriaLabel.deleteReview")} title={t("AriaLabel.deleteReview")}
+                        component="span" style={{fontSize: "xx-large"}}>
                         <DeleteIcon/>
                     </IconButton>
                 </div>

@@ -114,7 +114,8 @@ export default function ChangePassword() {
                                             />
                                             <div className="input-group-append">
                                                 <IconButton className="btn btn-eye input-group-text"
-                                                            id="passwordEye" type="button" tabIndex={-1} onClick={() => showPassword()} aria-label="eye">
+                                                            id="passwordEye" type="button" tabIndex={-1} onClick={() => showPassword()}
+                                                            aria-label={t("AriaLabel.showPassword")} title={t("AriaLabel.showPassword")}>
                                                     {seePassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
                                                 </IconButton>
                                             </div>
@@ -159,7 +160,8 @@ export default function ChangePassword() {
                                                    })}/>
                                             <div className="input-group-append">
                                                 <IconButton className="btn btn-eye input-group-text"
-                                                            id="passwordEye2" type="button" tabIndex={-1} onClick={() => showRepeatPassword()} aria-label="eye2">
+                                                            id="passwordEye2" type="button" tabIndex={-1} onClick={() => showRepeatPassword()}
+                                                            aria-label={t("AriaLabel.showPassword")} title={t("AriaLabel.showPassword")}>
                                                     {seeRepeatPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
                                                 </IconButton>
                                             </div>
@@ -185,7 +187,8 @@ export default function ChangePassword() {
                         </div>
                     </div>
                     <div className="col-12 mt-3 d-flex align-items-center justify-content-center">
-                        <button form="passwordReset" id="passwordResetButton" type="submit" className="btn btn-continue">
+                        <button form="passwordReset" id="passwordResetButton" type="submit" className="btn btn-continue"
+                                aria-label={t("AriaLabel.confirm")} title={t("AriaLabel.confirm")}>
                             {t('Button.confirm')}
                         </button>
                     </div>

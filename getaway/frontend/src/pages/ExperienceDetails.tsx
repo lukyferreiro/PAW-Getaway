@@ -120,6 +120,7 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
                         </h2>
 
                         <button type="button" className='btn button-primary'
+                                aria-label={t("AriaLabel.writeReview")} title={t("AriaLabel.writeReview")}
                                 onClick={() => attemptAccessCreateReview()}>
                             {t('ExperienceDetail.writeReview')}
                         </button>

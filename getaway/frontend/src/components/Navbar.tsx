@@ -98,7 +98,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                 <Link to="/" className="logo d-flex" onClick={() => {
                     clearNavBar()
                 }}>
-                    <img className="logo-img" src={'./images/getaway-icon.png'} alt="Logo"/>
+                    <img className="logo-img w-auto h-auto" src={'./images/getaway-icon.png'} alt="Logo"/>
                     <span className="logo-text align-self-center text-uppercase font-weight-bold">
                         {t('PageName')}
                     </span>
@@ -106,8 +106,9 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                 <div className="container-navbar-buttons d-flex justify-content-between align-items-center">
                     <div className="d-flex justify-items-center align-items-center"
                          style={{marginRight: '40px'}}>
-                        <button className="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm">
-                            <img src={'./images/ic_lupa.svg'} alt="Lupa"/>
+                        <button className="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm"
+                                aria-label={t("AriaLabel.search")} title={t("AriaLabel.search")}>
+                            <img className="w-auto h-auto" src={'./images/ic_lupa.svg'} alt="Lupa"/>
                         </button>
                         <form id="searchExperienceForm" acceptCharset="utf-8" className="my-auto" onSubmit={onSubmit}>
                             <input max="50" type="text" className="form-control" placeholder={t('Navbar.search')}
@@ -133,12 +134,13 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                 </p>
                             )}
                         </form>
-                        <IconButton onClick={resetForm}>
+                        <IconButton onClick={resetForm} aria-label={t("AriaLabel.closeForm")} title={t("AriaLabel.closeForm")}>
                             <Close/>
                         </IconButton>
                     </div>
 
                     <button type="button" style={{marginRight: '40px'}} className='btn button-primary'
+                            aria-label={t("AriaLabel.createExperience")} title={t("AriaLabel.createExperience")}
                             onClick={() => attemptAccessCreateExperience()}>
                         {t('Navbar.createExperience')}
                     </button>
@@ -146,6 +148,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                     {!isLoggedValue &&
                         <Link to="/login">
                             <button type="button" className="btn button-primary"
+                                    aria-label={t("AriaLabel.login")} title={t("AriaLabel.login")}
                                     onClick={() => clearNavBar()}>
                                 {t('Navbar.login')}
                             </button>
@@ -156,7 +159,8 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                     {isLoggedValue &&
                         <div className="dropdown">
                             <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
-                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
+                                    aria-label={t("AriaLabel.profileInfo")} title={t("AriaLabel.profileInfo")}>
                                 <img src={'./images/ic_user_white.svg'} alt="Icono usuario"
                                      style={{width: "35px", height: "35px"}}/>
                             </button>
@@ -185,7 +189,8 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                         <img src={'./images/ic_review.svg'} alt="Icono reseñas"/>
                                         {t('Navbar.reviews')}
                                     </Link>}
-                                <button className="dropdown-item" onClick={() => {
+                                <button className="dropdown-item" aria-label={t("AriaLabel.signOut")} title={t("AriaLabel.signOut")}
+                                        onClick={() => {
                                     clearNavBar()
                                     signOut(() => navigate("/"))
                                 }}>
@@ -200,6 +205,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
             <div className="container-types container-fluid pb-2 p-0 d-flex justify-content-center m-0">
                 {categories.map((category) => (
                     <button type="button" className={`btn btn-category ${(categoryProp[0] === category.name) ? 'isActive' : ''}`} key={category.id}
+                            aria-label={`${category.name}`} title={`${category.name}`}
                             onClick={() => {
                                 categoryProp[1](category.name);
                                 navigate({

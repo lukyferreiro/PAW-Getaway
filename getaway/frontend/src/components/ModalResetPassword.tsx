@@ -92,7 +92,8 @@ export default function ModalResetPassword(props: { isOpen: [boolean, Dispatch<S
                     </div>
 
                     <div className="col-12 mt-3 d-flex align-items-center justify-content-center">
-                        <button form="passResetRequestEmail" type="submit" id="passResetEmailButton" className='btn button-primary'>
+                        <button form="passResetRequestEmail" type="submit" id="passResetEmailButton" className='btn button-primary'
+                                aria-label={t("AriaLabel.send")} title={t("AriaLabel.send")}>
                             {t('Navbar.resetPasswordButton')}
                         </button>
                     </div>
