@@ -436,7 +436,7 @@ export const TRANSLATIONS_EN = {
         },
     },
 
-    AriaLabels: {
+    AriaLabel: {
         fav: "Save in favourites",
         closeForm: "Delete search",
         leftArrow: "Previous experience",
