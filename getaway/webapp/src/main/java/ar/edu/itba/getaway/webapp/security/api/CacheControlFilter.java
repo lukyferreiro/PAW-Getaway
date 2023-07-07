@@ -16,7 +16,8 @@ public class CacheControlFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (!request.getRequestURI().contains("index.html")) {
+//        if (!request.getRequestURI().contains("index.html")) {
+        if(request.getMethod().equals("GET")) {
             response.setHeader("Cache-Control", String.format("public, max-age=%d, inmutable", MAX_TIME));
         }
         filterChain.doFilter(request, response);

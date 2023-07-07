@@ -135,16 +135,16 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
 
-        RequestMatcher notResourcesMatcher = new NegatedRequestMatcher(
-                new OrRequestMatcher(
-                        new AntPathRequestMatcher("/api/users/{userId}/profileImage"),
-                        new AntPathRequestMatcher("/api/users/{userId}/profileImage/"),
-                        new AntPathRequestMatcher("/api/experiences/experience/{experienceId}/experienceImage"),
-                        new AntPathRequestMatcher("/api/experiences/experience/{experienceId}/experienceImage/")
-                )
-        );
-
-        HeaderWriter notResourcesHeaderWriter = new DelegatingRequestMatcherHeaderWriter(notResourcesMatcher, new CacheControlHeadersWriter());
+//        RequestMatcher notResourcesMatcher = new NegatedRequestMatcher(
+//                new OrRequestMatcher(
+//                        new AntPathRequestMatcher("/api/users/{userId}/profileImage"),
+//                        new AntPathRequestMatcher("/api/users/{userId}/profileImage/"),
+//                        new AntPathRequestMatcher("/api/experiences/experience/{experienceId}/experienceImage"),
+//                        new AntPathRequestMatcher("/api/experiences/experience/{experienceId}/experienceImage/")
+//                )
+//        );
+//
+//        HeaderWriter notResourcesHeaderWriter = new DelegatingRequestMatcherHeaderWriter(notResourcesMatcher, new CacheControlHeadersWriter());
 
         http
                 .cors()
@@ -156,7 +156,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                    .headers().cacheControl().disable().addHeaderWriter(notResourcesHeaderWriter)
+                    .headers().cacheControl().disable()
+//                .addHeaderWriter(notResourcesHeaderWriter)
                 .and().authorizeRequests()
                 //------------------- /users -------------------
                     //anonymous porque sino no se puede acceder a boton register

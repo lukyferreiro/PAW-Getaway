@@ -229,7 +229,7 @@ public class UserController {
             return Response.noContent().build();
         }
 
-        return CacheResponse.cacheResponse(image, request, true);
+        return CacheResponse.cacheResponse(image, request);
     }
 
     //Endpoint para editar la imagen de perfil del usuario

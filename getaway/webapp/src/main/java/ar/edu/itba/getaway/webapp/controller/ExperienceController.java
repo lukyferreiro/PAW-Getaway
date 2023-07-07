@@ -330,7 +330,7 @@ public class ExperienceController {
             return Response.noContent().build();
         }
 
-        return CacheResponse.cacheResponse(image, request, true);
+        return CacheResponse.cacheResponse(image, request);
     }
 
     @PUT
