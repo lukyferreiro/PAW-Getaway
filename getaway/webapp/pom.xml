@@ -15,16 +15,16 @@
     <name>webapp Maven Webapp</name>
     <url>http://pawserver.it.itba.edu.ar/paw-2022b-1</url>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <frontend-src-dir>${project.parent.basedir}/frontend</frontend-src-dir>
-        <!--        TODO ver que onda estas versiones-->
-        <node.version>v16.14.2</node.version>
-        <npm.version>9.3.1</npm.version>
-        <!--node.version>v14.17.3</node.version>
-        <npm.version>6.14.4</npm.version>-->
-        <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
-    </properties>
+<!--    <properties>-->
+<!--        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
+<!--        <frontend-src-dir>${project.parent.basedir}/frontend</frontend-src-dir>-->
+<!--        &lt;!&ndash;        TODO ver que onda estas versiones&ndash;&gt;-->
+<!--        <node.version>v16.14.2</node.version>-->
+<!--        <npm.version>9.3.1</npm.version>-->
+<!--        &lt;!&ndash;node.version>v14.17.3</node.version>-->
+<!--        <npm.version>6.14.4</npm.version>&ndash;&gt;-->
+<!--        <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>-->
+<!--    </properties>-->
 
     <dependencies>
         <!--Spring-->
@@ -234,55 +234,55 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-                <version>${frontend-maven-plugin.version}</version>
-                <configuration>
-                    <workingDirectory>${frontend-src-dir}</workingDirectory>
-                    <installDirectory>target</installDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>install node and npm</id>
-                        <goals>
-                            <goal>install-node-and-npm</goal>
-                        </goals>
-                        <configuration>
-                            <nodeVersion>${node.version}</nodeVersion>
-                            <npmVersion>${npm.version}</npmVersion>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>npm install</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>install</arguments>
-                        </configuration>
-                    </execution>
-                    <!--                        <execution>-->
-                    <!--                            <id>npm test</id>-->
-                    <!--                            <goals>-->
-                    <!--                                <goal>npm</goal>-->
-                    <!--                            </goals>-->
-                    <!--                            <configuration>-->
-                    <!--                                <arguments>test</arguments>-->
-                    <!--                            </configuration>-->
-                    <!--                        </execution>-->
-                    <execution>
-                        <id>npm run build</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>run build</arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>com.github.eirslett</groupId>-->
+<!--                <artifactId>frontend-maven-plugin</artifactId>-->
+<!--                <version>${frontend-maven-plugin.version}</version>-->
+<!--                <configuration>-->
+<!--                    <workingDirectory>${frontend-src-dir}</workingDirectory>-->
+<!--                    <installDirectory>target</installDirectory>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>install node and npm</id>-->
+<!--                        <goals>-->
+<!--                            <goal>install-node-and-npm</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <nodeVersion>${node.version}</nodeVersion>-->
+<!--                            <npmVersion>${npm.version}</npmVersion>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                    <execution>-->
+<!--                        <id>npm install</id>-->
+<!--                        <goals>-->
+<!--                            <goal>npm</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <arguments>install</arguments>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                    &lt;!&ndash;                        <execution>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            <id>npm test</id>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            <goals>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                <goal>npm</goal>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            </goals>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            <configuration>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                <arguments>test</arguments>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            </configuration>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                        </execution>&ndash;&gt;-->
+<!--                    <execution>-->
+<!--                        <id>npm run build</id>-->
+<!--                        <goals>-->
+<!--                            <goal>npm</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <arguments>run build</arguments>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
     </build>
 </project>
