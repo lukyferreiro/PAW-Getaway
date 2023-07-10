@@ -37,23 +37,22 @@ function App() {
                 <hr className="separator"/>
 
                 <Routes>
-                    <Route path='/' element={<RequireAuth><Landing/></RequireAuth>}>
+                    <Route path='/' element={<Landing/>}>
                         <Route index element={<Home/>}/>
-                        <Route path='/user' element={<UserPage/>}>
-                            <Route index element={<UserProfile/>}/>
-                            <Route path='profile' element={<UserProfile/>}/>
-                            <Route path='editProfile' element={<UserEditProfile/>}/>
-                            <Route path='experiences' element={<UserExperiences/>}/>
-                            <Route path='favourites' element={<UserFavourites/>}/>
-                            <Route path='reviews' element={<UserReviews/>}/>
-                        </Route>
-                        <Route path='experiences' element={<Experiences categoryProp={categoryProp} nameProp={nameProp}/>}/>
-                        <Route path='experiences/:experienceId' element={<ExperienceDetails categoryProp={categoryProp} nameProp={nameProp}/>}/>
-                        <Route path='experiences/:experienceId/reviewForm' element={<ReviewForm/>} />
-                        <Route path='experienceForm' element={<ExperienceForm/>}/>
-                        <Route path='error' element={<Error/>}/>
-                        <Route path='*' element={<Custom404/>}/>
                     </Route>
+                    <Route path='/user' element={<RequireAuth><UserPage/></RequireAuth>}>
+                        <Route path='profile' element={<UserProfile/>}/>
+                        <Route path='editProfile' element={<UserEditProfile/>}/>
+                        <Route path='experiences' element={<UserExperiences/>}/>
+                        <Route path='favourites' element={<UserFavourites/>}/>
+                        <Route path='reviews' element={<UserReviews/>}/>
+                    </Route>
+                    <Route path='/experiences' element={<Experiences categoryProp={categoryProp} nameProp={nameProp}/>}/>
+                    <Route path='/experiences/:experienceId' element={<ExperienceDetails categoryProp={categoryProp} nameProp={nameProp}/>}/>
+                    <Route path='/experiences/:experienceId/reviewForm' element={<ReviewForm/>} />
+                    <Route path='/experienceForm' element={<ExperienceForm/>}/>
+                    <Route path='error' element={<Error/>}/>
+                    <Route path='*' element={<Custom404/>}/>
                     <Route path='/login' element={<Login/>}/>
                     <Route path='/createAccount' element={<CreateAccount/>}/>
                     <Route path='/changePassword' element={<ChangePassword/>}/>

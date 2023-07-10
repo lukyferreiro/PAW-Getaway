@@ -23,8 +23,7 @@ export function checkError<RetType>(response: Response): Promise<RetType> {
             authedFetch(response.url, {headers: {Authorization: `Basic ${basic}`},})
                 .then((newResponse) => {
                     response = newResponse;
-                    const token = newResponse.headers
-                        .get("Authorization")?.toString().split(" ")[1];
+                    const token = newResponse.headers.get("Authorization")?.toString().split(" ")[1];
                     if (token){
                         localStorage.setItem("token", token);
                     }

@@ -54,9 +54,7 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
 
     //TODO: Add different dataloader
     useEffect(() => {
-        //TODO chequear, cuando refresheas en una pagina que no tiene reseñas, te redifige a login y hace este pedido igual
-        //No deberia hacerse pq reviewCount es igual a 0, pero sospecho que entra igual pq experience == undefined
-        if (experience?.reviewCount !== 0) {
+        if (experience !== null && experience !== undefined && experience?.reviewCount !== 0) {
             serviceHandler(
                 experienceService.getExperienceReviews(parseInt(experienceId ? experienceId : '-1'), currentPage[0]),
                 navigate, (fetchedExperienceReviews) => {

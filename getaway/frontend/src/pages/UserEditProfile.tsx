@@ -6,7 +6,6 @@ import {useNavigate} from "react-router-dom"
 import {useForm} from "react-hook-form"
 import {showToast} from "../scripts/toast"
 
-
 type FormDataEditProfile = {
     name: string
     surname: string

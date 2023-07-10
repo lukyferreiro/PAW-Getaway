@@ -19,7 +19,7 @@ export default function Custom404() {
                     {t('404.title')}
                 </h1>
                 <h1 className="font-weight-bold text-center" style={{fontSize: "5vh;"}}>
-                    <span style={{color: "red;"}}>{t('Error.whoops')}</span>
+                    <span style={{color: "red"}}>{t('Error.whoops')}</span>
                     {t('404.description')}
                 </h1>
                 <Link to="/">
