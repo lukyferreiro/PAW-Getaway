@@ -60,7 +60,7 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
 
     //TODO: Add different dataloader
     useEffect(() => {
-        if (experience !== null && experience !== undefined && experience?.reviewCount !== 0) {
+        if (experience?.reviewCount !== 0) {
             serviceHandler(
                 experienceService.getExperienceReviews(parsedExperienceId, currentPage[0]),
                 navigate, (fetchedExperienceReviews) => {
