@@ -24,7 +24,13 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
 
     const [experience, setExperience] = useState<ExperienceModel | undefined>(undefined)
     const [reviews, setReviews] = useState<ReviewModel[]>(new Array(0))
+
     const {experienceId} = useParams()
+    let parsedExperienceId = -1
+    if (typeof experienceId === "string" && /^\d+$/.test(experienceId)) {
+        parsedExperienceId = parseInt(experienceId, 10);
+    }
+
     const [isLoading, setIsLoading] = useState(false)
 
     const {isLogged, getUser, isVerified} = useAuth()
@@ -38,7 +44,7 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
     useEffect(() => {
         setIsLoading(true)
         serviceHandler(
-            experienceService.getExperienceById(parseInt(experienceId ? experienceId : '-1'), true),
+            experienceService.getExperienceById(parsedExperienceId, true),
             navigate, (experience) => {
                 setExperience(experience)
                 document.title = `${t('PageName')} - ${t('PageTitles.experienceDetails', {experienceName: experience.name})}`
@@ -56,7 +62,7 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
     useEffect(() => {
         if (experience !== null && experience !== undefined && experience?.reviewCount !== 0) {
             serviceHandler(
-                experienceService.getExperienceReviews(parseInt(experienceId ? experienceId : '-1'), currentPage[0]),
+                experienceService.getExperienceReviews(parsedExperienceId, currentPage[0]),
                 navigate, (fetchedExperienceReviews) => {
                     setReviews(fetchedExperienceReviews.getContent())
                     setMaxPage(fetchedExperienceReviews ? fetchedExperienceReviews.getMaxPage() : 1)
@@ -84,14 +90,14 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
     function attemptAccessCreateReview() {
         if (!isLoggedValue) {
             clearNavBar()
-            navigate("/login")
+            navigate("/login",{replace: true})
             showToast(t('ReviewForm.toast.forbidden.noUser'), 'error')
         } else if (isLoggedValue && !isVerifiedValue) {
             clearNavBar()
-            navigate("/user/profile")
+            navigate("/user/profile",{replace: true})
             showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
         } else {
-            navigate(`/experiences/${experienceId}/reviewForm`)
+            navigate(`/experiences/${experienceId}/reviewForm`,{replace: true})
         }
     }
 

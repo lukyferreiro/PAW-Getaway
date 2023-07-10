@@ -160,7 +160,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                         <IconButton aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}
                                     onClick={() => {
                                         clearNavBar();
-                                        navigate("/login");
+                                        navigate("/login",{replace: true});
                                         showToast(t('Experience.toast.favNotSigned'), "error")
                                     }}>
                             <FavoriteBorder className="fa-heart"/>

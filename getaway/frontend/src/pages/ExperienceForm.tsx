@@ -52,10 +52,10 @@ export default function ExperienceForm() {
 
     useEffect(() => {
         if (!isLoggedValue) {
-            navigate("/login")
+            navigate("/login",{replace: true})
             showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
         } else if (isLoggedValue && !isVerifiedValue) {
-            navigate("/user/profile")
+            navigate("/user/profile",{replace: true})
             showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
         } else {
             serviceHandler(
@@ -177,9 +177,9 @@ export default function ExperienceForm() {
                     .then((result) => {
                             if (!result.hasFailed()) {
                                 if (isProviderValue) {
-                                    navigate("/user/experiences")
+                                    navigate("/user/experiences",{replace: true})
                                 } else {
-                                    makeProvider(() => navigate("/user/experiences"))
+                                    makeProvider(() => navigate("/user/experiences",{replace: true}))
                                 }
                                 showToast(t('ExperienceForm.toast.createSuccess', {experienceName: data.name}), 'success')
                             }

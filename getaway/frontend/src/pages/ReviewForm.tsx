@@ -19,7 +19,7 @@ type FormDataReview = {
 }
 
 export default function ReviewForm() {
-    const {experienceId} = useParams()
+
     const {isLogged, isVerified, getUser} = useAuth()
     const user = getUser()
     const isVerifiedValue = isVerified()
@@ -27,6 +27,12 @@ export default function ReviewForm() {
     const navigate = useNavigate()
 
     const {t} = useTranslation()
+
+    const {experienceId} = useParams()
+    let parsedExperienceId = -1
+    if (typeof experienceId === "string" && /^\d+$/.test(experienceId)) {
+        parsedExperienceId = parseInt(experienceId, 10);
+    }
 
     const [experience, setExperience] = useState<ExperienceNameModel | undefined>(undefined)
     const [review, setReview] = useState<ReviewModel | undefined>(undefined)
@@ -44,10 +50,10 @@ export default function ReviewForm() {
 
     useEffect(() => {
         if (!isLoggedValue) {
-            navigate("/login")
+            navigate("/login",{replace: true})
             showToast(t('ReviewForm.toast.forbidden.noUser'), 'error')
         } else if (isLoggedValue && !isVerifiedValue) {
-            navigate("/user/profile")
+            navigate("/user/profile",{replace: true})
             showToast(t('ReviewForm.toast.forbidden.notVerified'), 'error')
         } else {
             if (parseInt(currentId) !== -1) {
@@ -79,7 +85,7 @@ export default function ReviewForm() {
                 setReview(undefined)
             }
             serviceHandler(
-                experienceService.getExperienceNameById(parseInt(experienceId ? experienceId : '-1')),
+                experienceService.getExperienceNameById(parsedExperienceId),
                 navigate, (fetchedExperience) => {
                     setExperience(fetchedExperience)
                 },
@@ -111,7 +117,7 @@ export default function ReviewForm() {
                         showToast(t('ReviewForm.toast.updateError', {reviewTitle: data.title}), 'error')
                     })
             } else {
-                experienceService.postNewReview(parseInt(experienceId ? experienceId : "-1"), data.title, data.description, data.score)
+                experienceService.postNewReview(parsedExperienceId, data.title, data.description, data.score)
                     .then((result) => {
                         if (!result.hasFailed()) {
                             navigate(`/experiences/${experienceId}`, {replace: true})

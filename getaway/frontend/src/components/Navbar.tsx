@@ -82,13 +82,13 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
     function attemptAccessCreateExperience() {
         clearNavBar();
         if (!isLoggedValue) {
-            navigate("/login")
+            navigate("/login",{replace: true})
             showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
         } else if (isLoggedValue && !isVerifiedValue) {
-            navigate("/user/profile")
+            navigate("/user/profile",{replace: true})
             showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
         } else {
-            navigate(`/experienceForm`)
+            navigate(`/experienceForm`,{replace: true})
         }
     }
 
@@ -192,7 +192,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                 <button className="dropdown-item" aria-label={t("AriaLabel.signOut")} title={t("AriaLabel.signOut")}
                                         onClick={() => {
                                     clearNavBar()
-                                    signOut(() => navigate("/"))
+                                    signOut(() => navigate("/",{replace: true}))
                                 }}>
                                     <img src={'./images/ic_logout.svg'} alt="Icono cerrar sesion"/>
                                     {t('Navbar.logout')}

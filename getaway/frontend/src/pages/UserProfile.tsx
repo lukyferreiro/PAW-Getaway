@@ -47,7 +47,7 @@ export default function UserProfile() {
                 userService.verifyUser(verificationToken)
                     .then((result) => {
                         if (!result.hasFailed()) {
-                            verifyUser(() => navigate("/user/profile"))
+                            verifyUser(() => navigate("/user/profile",{replace: true}))
                             showToast(t('User.toast.verify.success'), 'success')
                         }
                     })
@@ -111,7 +111,7 @@ export default function UserProfile() {
                                                 <AddPhotoAlternateIcon/>
                                             </IconButton>
                                         </div>
-                                        <button onClick={() => navigate({pathname: "/user/editProfile"})} type="button" className="btn btn-error"
+                                        <button onClick={() => navigate({pathname: "/user/editProfile"},{replace: true})} type="button" className="btn btn-error"
                                                 aria-label={t("AriaLabel.editProfile")} title={t("AriaLabel.editProfile")}>
                                             {t('User.profile.editBtn')}
                                         </button>

@@ -86,7 +86,7 @@ export const TRANSLATIONS_EN = {
             title: "Price",
             min: "0",
         },
-        scoreAssign: "Score",
+        scoreAssign: "Minimum score",
         btn: {
             submit: "Search",
             clear: "Clean filters",

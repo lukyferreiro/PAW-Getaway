@@ -57,10 +57,10 @@ export default function UserExperiences() {
 
     useEffect(() => {
         if (!isVerifiedValue) {
-            navigate("/user/profile")
+            navigate("/user/profile",{replace: true})
             showToast(t('User.toast.reviews.forbidden'), 'error')
         } else if (!isProviderValue) {
-            navigate("/")
+            navigate("/",{replace: true})
             showToast(t('User.toast.experiences.forbidden'), 'error')
         } else {
             serviceHandler(

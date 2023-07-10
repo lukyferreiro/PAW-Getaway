@@ -37,7 +37,7 @@ export default function UserReviews() {
 
     useEffect(() => {
         if (!isVerifiedValue) {
-            navigate("/user/profile")
+            navigate("/user/profile",{replace: true})
             showToast(t('User.toast.reviews.forbidden'), 'error')
         } else {
             setIsLoading(true)

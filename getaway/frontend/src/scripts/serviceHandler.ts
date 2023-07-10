@@ -15,12 +15,26 @@ export function serviceHandler<T>(
             } else if (isNaN(response.getError().getStatus())) {
                 return;
             } else {
-                navigate(`/error?code=${response.getError().getStatus()}&message=${response.getError().getMessage()}`);
+                navigate('/error', {
+                    state: {
+                        code: response.getError().getStatus(),
+                        message: response.getError().getMessage(),
+                    },
+                    replace: true,
+                })
             }
         } else {
             setterFunction(response.getData());
         }
     })
-        .catch(() => navigate(`/error?code=500&message=Server error`))
+        .catch(() => {
+            navigate('/error', {
+                state: {
+                    code: 500,
+                    message: 'Server error',
+                },
+                replace: true,
+            })
+        })
         .finally(cleanerFunction);
 }

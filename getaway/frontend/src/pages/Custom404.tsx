@@ -20,7 +20,7 @@ export default function Custom404() {
                 </h1>
                 <h1 className="font-weight-bold text-center" style={{fontSize: "5vh;"}}>
                     <span style={{color: "red"}}>{t('Error.whoops')}</span>
-                    {t('404.description')}
+                    {' '}{t('404.description')}
                 </h1>
                 <Link to="/">
                     <button type="button" className="btn btn-error" aria-label={t("AriaLabel.home")} title={t("AriaLabel.home")}>

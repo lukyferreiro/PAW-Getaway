@@ -20,7 +20,7 @@ export default function UserEditProfile() {
 
     useEffect(() => {
         if (!isVerifiedValue) {
-            navigate("/user/profile")
+            navigate("/user/profile",{replace: true})
             showToast(t('User.toast.editProfile.forbidden'), 'error')
         } else {
             setValue('name', user!.name);
@@ -36,7 +36,7 @@ export default function UserEditProfile() {
         userService.updateUserInfoById(user?.id, data.name, data.surname)
             .then((result) => {
                 if(!result.hasFailed()) {
-                    editUserInfo(data.name, data.surname, () => navigate("/user/profile"))
+                    editUserInfo(data.name, data.surname, () => navigate("/user/profile",{replace: true}))
                     showToast(t('User.toast.editProfile.success'), 'success')
                 }
             })

@@ -88,7 +88,7 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
                             <IconButton aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}
                                         onClick={() => {
                                             clearNavBar();
-                                            navigate("/login");
+                                            navigate("/login", {replace: true});
                                             showToast(t('Experience.toast.favNotSigned'), "error")
                                         }}>
                                 <FavoriteBorder className="fa-heart"/>

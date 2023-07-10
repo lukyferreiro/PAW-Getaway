@@ -60,7 +60,7 @@ export function deleteExperience(
     experienceService.deleteExperienceById(experience.id)
         .then(() => {
             if(!isOnEdit){
-                navigate('/user/experiences')
+                navigate('/user/experiences',{replace: true})
             }
             if(isOnEdit && onEdit) {
                 onEdit[1](!onEdit[0])

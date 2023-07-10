@@ -341,12 +341,12 @@
     </dependencyManagement>
 
     <modules>
+        <module>frontend</module>
         <module>webapp</module>
         <module>interfaces</module>
         <module>models</module>
         <module>persistence</module>
         <module>services</module>
-        <module>frontend</module>
     </modules>
 
     <build>
