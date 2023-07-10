@@ -26,8 +26,9 @@ export default function UserReviews() {
     const [reviews, setReviews] = useState<ReviewModel[]>(new Array(0))
     const [isLoading, setIsLoading] = useState(false)
 
-    const [maxPage, setMaxPage] = useState(1)
+    const [maxPage, setMaxPage] = useState(0)
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
+    const pageToShow = useState<number>(1)
 
     const onEdit = useState(false)
 
@@ -40,23 +41,39 @@ export default function UserReviews() {
             navigate("/user/profile",{replace: true})
             showToast(t('User.toast.reviews.forbidden'), 'error')
         } else {
-            setIsLoading(true)
-            serviceHandler(
-                userService.getUserReviews(user ? user.id : -1, currentPage[0]),
-                navigate, (reviews) => {
-                    setReviews(reviews.getContent())
-                    setMaxPage(reviews ? reviews.getMaxPage() : 1)
-                    searchParams.set("page", currentPage[0].toString())
-                    setSearchParams(searchParams)
-                },
-                () => {
-                    setIsLoading(false)
-                },
-                () => {
-                    setReviews(new Array(0))
-                    setMaxPage(1)
-                }
-            )
+            if ((maxPage === 0 && (pageToShow[0] <= 1 || pageToShow[0] > maxPage))
+                ||
+                ((pageToShow[0] >= 1 && pageToShow[0] <= maxPage) && (currentPage[0] >= 0 && currentPage[0] <= maxPage))
+            ) {
+                setIsLoading(true)
+                serviceHandler(
+                    userService.getUserReviews(user ? user.id : -1, currentPage[0]===0 ? 1 : currentPage[0]),
+                    navigate, (reviews) => {
+                        setReviews(reviews.getContent())
+                        setMaxPage(reviews ? reviews.getMaxPage() : 0)
+                        if (currentPage[0] <= 0) {
+                            pageToShow[1](currentPage[0])
+                            searchParams.set("page", "1")
+                            currentPage[1](1)
+                        } else if (currentPage[0] > reviews.getMaxPage()) {
+                            pageToShow[1](currentPage[0])
+                            searchParams.set("page", reviews.getMaxPage().toString())
+                            currentPage[1](reviews.getMaxPage())
+                        } else {
+                            pageToShow[1](currentPage[0])
+                            searchParams.set("page", currentPage[0].toString())
+                        }
+                        setSearchParams(searchParams)
+                    },
+                    () => {
+                        setIsLoading(false)
+                    },
+                    () => {
+                        setReviews(new Array(0))
+                        setMaxPage(1)
+                    }
+                )
+            }
         }
     }, [currentPage[0], onEdit[0]])
 
@@ -89,6 +106,7 @@ export default function UserReviews() {
                                 <Pagination
                                     maxPage={maxPage}
                                     currentPage={currentPage}
+                                    pageToShow={pageToShow}
                                 />
                             )}
                         </div>

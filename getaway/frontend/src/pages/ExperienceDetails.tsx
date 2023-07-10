@@ -38,8 +38,9 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
     const isVerifiedValue = isVerified()
     const user = getUser()
 
-    const [maxPage, setMaxPage] = useState(1)
+    const [maxPage, setMaxPage] = useState(0)
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
+    const pageToShow = useState<number>(1)
 
     useEffect(() => {
         setIsLoading(true)
@@ -61,21 +62,37 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
     //TODO: Add different dataloader
     useEffect(() => {
         if (experience?.reviewCount !== 0) {
-            serviceHandler(
-                experienceService.getExperienceReviews(parsedExperienceId, currentPage[0]),
-                navigate, (fetchedExperienceReviews) => {
-                    setReviews(fetchedExperienceReviews.getContent())
-                    setMaxPage(fetchedExperienceReviews ? fetchedExperienceReviews.getMaxPage() : 1)
-                    searchParams.set("page", currentPage[0].toString())
-                    setSearchParams(searchParams)
-                },
-                () => {
-                },
-                () => {
-                    setReviews(new Array(0))
-                    setMaxPage(0)
-                }
-            )
+            if ((maxPage === 0 && (pageToShow[0] <= 1 || pageToShow[0] > maxPage))
+                ||
+                ((pageToShow[0] >= 1 && pageToShow[0] <= maxPage) && (currentPage[0] >= 0 && currentPage[0] <= maxPage))
+            ) {
+                serviceHandler(
+                    experienceService.getExperienceReviews(parsedExperienceId, currentPage[0]===0 ? 1 : currentPage[0]),
+                    navigate, (fetchedExperienceReviews) => {
+                        setReviews(fetchedExperienceReviews.getContent())
+                        setMaxPage(fetchedExperienceReviews ? fetchedExperienceReviews.getMaxPage() : 0)
+                        if (currentPage[0] <= 0) {
+                            pageToShow[1](currentPage[0])
+                            searchParams.set("page", "1")
+                            currentPage[1](1)
+                        } else if (currentPage[0] > fetchedExperienceReviews.getMaxPage()) {
+                            pageToShow[1](currentPage[0])
+                            searchParams.set("page", fetchedExperienceReviews.getMaxPage().toString())
+                            currentPage[1](fetchedExperienceReviews.getMaxPage())
+                        } else {
+                            pageToShow[1](currentPage[0])
+                            searchParams.set("page", currentPage[0].toString())
+                        }
+                        setSearchParams(searchParams)
+                    },
+                    () => {
+                    },
+                    () => {
+                        setReviews(new Array(0))
+                        setMaxPage(0)
+                    }
+                )
+            }
         }
     }, [currentPage[0]])
 
@@ -160,6 +177,7 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
                         <Pagination
                             maxPage={maxPage}
                             currentPage={currentPage}
+                            pageToShow={pageToShow}
                         />
                     </div>
                 }

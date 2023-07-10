@@ -3,11 +3,11 @@ import "../common/i18n/index"
 import React, {Dispatch, SetStateAction} from "react";
 import styled from "styled-components";
 
-export default function Pagination(props: { maxPage: number, currentPage: [number, Dispatch<SetStateAction<number>>] }) {
+export default function Pagination(props: { maxPage: number, currentPage: [number, Dispatch<SetStateAction<number>>], pageToShow: [number, Dispatch<SetStateAction<number>>]}) {
 
     const {t} = useTranslation()
 
-    const {maxPage, currentPage} = props
+    const {maxPage, currentPage, pageToShow} = props
 
     const componentCurrentPage = currentPage[0]
 
@@ -20,6 +20,7 @@ export default function Pagination(props: { maxPage: number, currentPage: [numbe
 
     function changePage(page: number) {
         currentPage[1](page)
+        pageToShow[1](page)
     }
 
     return (

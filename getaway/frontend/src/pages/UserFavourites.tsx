@@ -28,8 +28,10 @@ export default function UserFavourites() {
 
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
     const order = useState<string>(getQueryOrDefault(query, "order", "OrderByAZ"))
-    const [maxPage, setMaxPage] = useState(1)
+
+    const [maxPage, setMaxPage] = useState(0)
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
+    const pageToShow = useState<number>(1)
 
     const dummyCategoryProp = useState<string | undefined>(undefined)
     const dummyNameProp = useState<string | undefined>(undefined)
@@ -49,25 +51,45 @@ export default function UserFavourites() {
         document.title = `${t('PageName')} - ${t('PageTitles.userFavourites')}`
     }, [])
 
+
     useEffect(() => {
-        setIsLoading(true)
-        serviceHandler(
-            userService.getUserFavExperiences(user ? user.id : -1, order[0], currentPage[0]),
-            navigate, (experiences) => {
-                setFavExperiences(experiences.getContent())
-                setMaxPage(experiences ? experiences.getMaxPage() : 1)
-                searchParams.set("order", order[0])
-                searchParams.set("page", currentPage[0].toString())
-                setSearchParams(searchParams)
-            },
-            () => {
-                setIsLoading(false)
-            },
-            () => {
-                setFavExperiences(new Array(0))
-                setMaxPage(1)
-            }
-        )
+        console.log(`pageToShow: ${pageToShow}`)
+        console.log(`MaxPage: ${maxPage}`)
+        console.log(`CurrentPage: ${currentPage[0]}`)
+        if ((maxPage === 0 && (pageToShow[0] <= 1 || pageToShow[0] > maxPage))
+            ||
+            ((pageToShow[0] >= 1 && pageToShow[0] <= maxPage) && (currentPage[0] >= 0 && currentPage[0] <= maxPage))
+        ) {
+            setIsLoading(true)
+            serviceHandler(
+                userService.getUserFavExperiences(user ? user.id : -1, order[0], currentPage[0]===0 ? 1 : currentPage[0]),
+                navigate, (experiences) => {
+                    setFavExperiences(experiences.getContent())
+                    setMaxPage(experiences ? experiences.getMaxPage() : 0)
+                    searchParams.set("order", order[0])
+                    if (currentPage[0] <= 0) {
+                        pageToShow[1](currentPage[0])
+                        searchParams.set("page", "1")
+                        currentPage[1](1)
+                    } else if (currentPage[0] > experiences.getMaxPage()) {
+                        pageToShow[1](currentPage[0])
+                        searchParams.set("page", experiences.getMaxPage().toString())
+                        currentPage[1](experiences.getMaxPage())
+                    } else {
+                        pageToShow[1](currentPage[0])
+                        searchParams.set("page", currentPage[0].toString())
+                    }
+                    setSearchParams(searchParams)
+                },
+                () => {
+                    setIsLoading(false)
+                },
+                () => {
+                    setFavExperiences(new Array(0))
+                    setMaxPage(1)
+                }
+            )
+        }
     }, [currentPage[0], order[0]])
 
     return (
@@ -102,6 +124,7 @@ export default function UserFavourites() {
                                 <Pagination
                                     maxPage={maxPage}
                                     currentPage={currentPage}
+                                    pageToShow={pageToShow}
                                 />
                             )}
                         </div>

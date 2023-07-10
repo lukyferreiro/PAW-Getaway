@@ -44,12 +44,15 @@ export default function UserExperiences() {
     const experienceId = useState(-1)
     const [isLoading, setIsLoading] = useState(false)
     const isOpenImage = useState(false)
-
     const [userName, setUserName] = useState("")
+
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
     const order = useState<string>(getQueryOrDefault(query, "order", "OrderByAZ"))
-    const [maxPage, setMaxPage] = useState(1)
+
+    const [maxPage, setMaxPage] = useState(0)
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
+    const pageToShow = useState<number>(1)
+
     const onEdit = useState(false)
 
     const {register, handleSubmit, formState: {errors}, reset}
@@ -80,23 +83,36 @@ export default function UserExperiences() {
 
     useEffect(() => {
         if(isProviderValue) {
-            setIsLoading(true);
-            serviceHandler(
-                userService.getUserExperiences(user ? user.id : -1, userName, order[0], currentPage[0]),
-                navigate, (experiences) => {
-                    setUserExperiences(experiences.getContent())
-                    setMaxPage(experiences ? experiences.getMaxPage() : 1)
-                    searchParams.set("order", order[0])
-                    searchParams.set("page", currentPage[0].toString())
-                    setSearchParams(searchParams)
-                },
-                () => {
-                    setIsLoading(false);
-                }, () => {
-                    setUserExperiences(new Array(0))
-                    setMaxPage(1)
-                }
-            )
+            if ((maxPage === 0 && (pageToShow[0] <= 1 || pageToShow[0] > maxPage))
+                ||
+                ((pageToShow[0] >= 1 && pageToShow[0] <= maxPage) && (currentPage[0] >= 0 && currentPage[0] <= maxPage))
+            ) {
+                setIsLoading(true);
+                serviceHandler(
+                    userService.getUserExperiences(user ? user.id : -1, userName, order[0], currentPage[0]===0 ? 1 : currentPage[0]),
+                    navigate, (experiences) => {
+                        setUserExperiences(experiences.getContent())
+                        setMaxPage(experiences ? experiences.getMaxPage() : 0)
+                        searchParams.set("order", order[0])
+                        if (currentPage[0] <= 0) {
+                            searchParams.set("page", "1")
+                            currentPage[1](1)
+                        } else if (currentPage[0] > experiences.getMaxPage()) {
+                            searchParams.set("page", experiences.getMaxPage().toString())
+                            currentPage[1](experiences.getMaxPage())
+                        } else {
+                            searchParams.set("page", currentPage[0].toString())
+                        }
+                        setSearchParams(searchParams)
+                    },
+                    () => {
+                        setIsLoading(false);
+                    }, () => {
+                        setUserExperiences(new Array(0))
+                        setMaxPage(1)
+                    }
+                )
+            }
         }
     }, [currentPage[0], userName, order[0], onEdit[0]])
 
@@ -194,6 +210,7 @@ export default function UserExperiences() {
                                             <Pagination
                                                 currentPage={currentPage}
                                                 maxPage={maxPage}
+                                                pageToShow={pageToShow}
                                             />
                                         )}
                                     </div>

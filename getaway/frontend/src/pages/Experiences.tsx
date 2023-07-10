@@ -45,8 +45,9 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
     const order = useState<string>(getQueryOrDefault(query, "order", "OrderByAZ"))
     //Page
-    const [maxPage, setMaxPage] = useState(1)
+    const [maxPage, setMaxPage] = useState(0)
     const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
+    const pageToShow = useState<number>(1)
 
     useEffect(() => {
         serviceHandler(
@@ -110,38 +111,46 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
 
     useEffect(() => {
         if (nameProp[0] !== undefined && categoryProp[0] !== undefined) {
-            setIsLoading(true)
-            serviceHandler(
-                experienceService.getExperiencesByFilter(categoryProp[0], nameProp[0], order[0], price, Math.abs(rating), city, currentPage[0]),
-                navigate, (experiences) => {
-                    setExperiences(experiences.getContent())
-                    setMaxPage(experiences.getMaxPage())
-                    if (currentPage[0] <= 0) {
-                        searchParams.set("page", "1")
-                        currentPage[1](1)
-                    } else if (currentPage[0] > experiences.getMaxPage()) {
-                        searchParams.set("page", experiences.getMaxPage().toString())
-                        currentPage[1](experiences.getMaxPage())
-                    } else {
-                        searchParams.set("page", currentPage[0].toString())
+            if ((maxPage === 0 && (pageToShow[0] <= 1 || pageToShow[0] > maxPage))
+                ||
+                ((pageToShow[0] >= 1 && pageToShow[0] <= maxPage) && (currentPage[0] >= 0 && currentPage[0] <= maxPage))
+            ) {
+                setIsLoading(true)
+                serviceHandler(
+                    experienceService.getExperiencesByFilter(categoryProp[0], nameProp[0], order[0], price, Math.abs(rating), city, currentPage[0]===0 ? 1 : currentPage[0]),
+                    navigate, (experiences) => {
+                        setExperiences(experiences.getContent())
+                        setMaxPage(experiences ? experiences.getMaxPage() : 0)
+                        if (currentPage[0] <= 0) {
+                            pageToShow[1](currentPage[0])
+                            searchParams.set("page", "1")
+                            currentPage[1](1)
+                        } else if (currentPage[0] > experiences.getMaxPage()) {
+                            pageToShow[1](currentPage[0])
+                            searchParams.set("page", experiences.getMaxPage().toString())
+                            currentPage[1](experiences.getMaxPage())
+                        } else {
+                            pageToShow[1](currentPage[0])
+                            searchParams.set("page", currentPage[0].toString())
+                        }
+                        if (orders.some(item => item.order === order[0])) {
+                            searchParams.set("order", order[0])
+                        } else {
+                            searchParams.set("order", "OrderByAZ")
+                            order[1]("OrderByAZ")
+                        }
+                        setSearchParams(searchParams)
+                    },
+                    () => {
+                        setIsLoading(false)
+                    },
+                    () => {
+                        setExperiences(new Array(0))
+                        setMaxPage(0)
+                        setIsLoading(false)
                     }
-                    if (orders.some(item => item.order === order[0])) {
-                        searchParams.set("order", order[0])
-                    } else {
-                        searchParams.set("order", "OrderByAZ")
-                        order[1]("OrderByAZ")
-                    }
-                    setSearchParams(searchParams)
-                },
-                () => {
-                    setIsLoading(false)
-                },
-                () => {
-                    setExperiences(new Array(0))
-                    setMaxPage(0)
-                    setIsLoading(false)
-                }
-            )
+                )
+            }
         }
     }, [categoryProp[0], nameProp[0], rating, city, order[0], currentPage[0], onPriceChange])
 
@@ -409,6 +418,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                             <Pagination
                                 maxPage={maxPage}
                                 currentPage={currentPage}
+                                pageToShow={pageToShow}
                             />
                         )}
                     </div>
