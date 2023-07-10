@@ -24,6 +24,7 @@ import Footer from "./components/Footer";
 import 'react-toastify/dist/ReactToastify.css'
 import {ToastContainer} from "react-toastify";
 import {paths} from "./common";
+import RequireNoAuth from "./components/RequireNoAuth";
 
 function App() {
     const categoryProp = useState<string | undefined>(undefined)
@@ -38,7 +39,7 @@ function App() {
 
                 <Routes>
                     <Route path='/' element={<Landing/>}>
-                        <Route index element={<Home/>}/>
+                        <Route index element={<RequireAuth><Home/></RequireAuth>}/>
                     </Route>
                     <Route path='/user' element={<RequireAuth><UserPage/></RequireAuth>}>
                         <Route path='profile' element={<UserProfile/>}/>
@@ -47,15 +48,15 @@ function App() {
                         <Route path='favourites' element={<UserFavourites/>}/>
                         <Route path='reviews' element={<UserReviews/>}/>
                     </Route>
-                    <Route path='/experiences' element={<Experiences categoryProp={categoryProp} nameProp={nameProp}/>}/>
-                    <Route path='/experiences/:experienceId' element={<ExperienceDetails categoryProp={categoryProp} nameProp={nameProp}/>}/>
-                    <Route path='/experiences/:experienceId/reviewForm' element={<ReviewForm/>} />
-                    <Route path='/experienceForm' element={<ExperienceForm/>}/>
+                    <Route path='/experiences' element={<RequireAuth><Experiences categoryProp={categoryProp} nameProp={nameProp}/></RequireAuth>}/>
+                    <Route path='/experiences/:experienceId' element={<RequireAuth><ExperienceDetails categoryProp={categoryProp} nameProp={nameProp}/></RequireAuth>}/>
+                    <Route path='/experiences/:experienceId/reviewForm' element={<RequireAuth><ReviewForm/></RequireAuth>} />
+                    <Route path='/experienceForm' element={<RequireAuth><ExperienceForm/></RequireAuth>}/>
                     <Route path='error' element={<Error/>}/>
                     <Route path='*' element={<Custom404/>}/>
-                    <Route path='/login' element={<Login/>}/>
-                    <Route path='/createAccount' element={<CreateAccount/>}/>
-                    <Route path='/changePassword' element={<ChangePassword/>}/>
+                    <Route path='/login' element={<RequireNoAuth><Login/></RequireNoAuth>}/>
+                    <Route path='/createAccount' element={<RequireNoAuth><CreateAccount/></RequireNoAuth>}/>
+                    <Route path='/changePassword' element={<RequireNoAuth><ChangePassword/></RequireNoAuth>}/>
                 </Routes>
 
                 <ToastContainer

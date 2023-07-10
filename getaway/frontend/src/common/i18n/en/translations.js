@@ -241,6 +241,7 @@ export const TRANSLATIONS_EN = {
             passwordResetEmailSuccess: "Email sent successfully",
             passwordResetEmailError: "Server error when sending email",
             notSigned: "Sign in to access your profile information",
+            alreadySigned: "You are already sign in",
             verify: {
                 success: "Your account was verified successfully",
                 error: "Invalid token",

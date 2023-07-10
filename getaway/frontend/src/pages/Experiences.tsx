@@ -116,7 +116,6 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 navigate, (experiences) => {
                     setExperiences(experiences.getContent())
                     setMaxPage(experiences.getMaxPage())
-                    //handleRatingChange(rating)
                     if (currentPage[0] <= 0) {
                         searchParams.set("page", "1")
                         currentPage[1](1)
