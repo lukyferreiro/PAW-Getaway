@@ -242,6 +242,7 @@ export const TRANSLATIONS_ES = {
             passwordResetEmailError: "Error del servidor al enviar el mail",
             notSigned: "Inicia sesión para acceder a tu información de perfil",
             alreadySigned: "Ya iniciaste sesión",
+            sessionExpired: "Tu sesión ha expirado",
             verify: {
                 success: "Tu cuenta ha sido verificada exitosamente",
                 error: "Token no válido",

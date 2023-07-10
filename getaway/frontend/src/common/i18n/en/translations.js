@@ -242,6 +242,7 @@ export const TRANSLATIONS_EN = {
             passwordResetEmailError: "Server error when sending email",
             notSigned: "Sign in to access your profile information",
             alreadySigned: "You are already sign in",
+            sessionExpired: "Your session has expired",
             verify: {
                 success: "Your account was verified successfully",
                 error: "Invalid token",

@@ -1,6 +1,6 @@
 import {ErrorResponse, PagedContent, Result} from "../types";
 import {authedFetch} from "./authedFetch";
-import {checkError} from "./checkError";
+import {checkValidJWT} from "./checkError";
 
 export async function getPagedFetch<RetType>(
     url: string,
@@ -14,7 +14,7 @@ export async function getPagedFetch<RetType>(
         const response = await authedFetch(urlPaged.toString(), {
             method: "GET",
         });
-        const parsedResponse = await checkError<RetType>(response);
+        const parsedResponse = await checkValidJWT<RetType>(response);
         const maxPage = response.headers.get("X-Total-Pages");
         return Result.ok(
             new PagedContent(parsedResponse, maxPage ? parseInt(maxPage) : 1)

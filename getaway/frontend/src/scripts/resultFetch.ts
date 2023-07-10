@@ -1,6 +1,6 @@
 import {ErrorResponse, PostResponse, PutResponse, Result} from "../types";
 import {authedFetch} from "./authedFetch";
-import {checkError} from "./checkError";
+import {checkValidJWT} from "./checkError";
 
 export async function resultFetch<RetType>(
     url: string,
@@ -14,7 +14,7 @@ export async function resultFetch<RetType>(
         } else if (options.method === "PUT") {
             parsedResponse = putCheckError(response);
         } else {
-            parsedResponse = await checkError<RetType>(response);
+            parsedResponse = await checkValidJWT<RetType>(response);
         }
         return Result.ok(parsedResponse as RetType);
     } catch (err: any) {

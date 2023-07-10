@@ -13,10 +13,11 @@ function handleResponseStatus<RetType>(response: Response): Promise<RetType> {
     }
 }
 
-export function checkError<RetType>(response: Response): Promise<RetType> {
-    if (
-        response.status === 401
-    ) {
+// Si obtenemos un 401 quiere decir que vencio el token, entonces nos volvemos a autenticar
+// con Basic (el cual lo teniamos encodeado en una cookie) y obtenemos el nuevo token
+// que volvemos a guardar en local storage
+export function checkValidJWT<RetType>(response: Response): Promise<RetType> {
+    if (response.status === 401) {
         localStorage.removeItem("token");
         const basic = getCookie("basic-token");
         if (basic) {
@@ -24,11 +25,11 @@ export function checkError<RetType>(response: Response): Promise<RetType> {
                 .then((newResponse) => {
                     response = newResponse;
                     const token = newResponse.headers.get("Authorization")?.toString().split(" ")[1];
-                    if (token){
+                    if (token) {
                         localStorage.setItem("token", token);
                     }
                     return handleResponseStatus(response);
-            });
+                });
         }
     }
     return handleResponseStatus(response);

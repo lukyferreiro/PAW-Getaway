@@ -173,7 +173,7 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
                 </div>
 
                 {experience?.reviewCount !== 0 && reviews.length !== 0 && maxPage > 1 &&
-                    <div className="d-flex justify-content-center align-content-center">
+                    <div className="mb-3 d-flex justify-content-center align-items-center">
                         <Pagination
                             maxPage={maxPage}
                             currentPage={currentPage}

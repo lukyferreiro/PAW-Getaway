@@ -1,5 +1,5 @@
 import { paths } from "../common/";
-import { checkError } from "../scripts/checkError";
+import { checkValidJWT } from "../scripts/checkError";
 import { ErrorResponse, Result, UserModel } from "../types";
 import { setCookie } from "../scripts/cookies";
 
@@ -18,7 +18,7 @@ export class LoginService {
                     Authorization: "Basic " + hash,
                 },
             });
-            const parsedResponse = await checkError<UserModel>(response);
+            const parsedResponse = await checkValidJWT<UserModel>(response);
             parsedResponse.token = response.headers.get("Authorization")?.toString().split(" ")[1];
             return Result.ok(parsedResponse as UserModel);
         } catch (err: any) {

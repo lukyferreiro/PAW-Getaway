@@ -2,6 +2,8 @@ import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {Link, useLocation} from "react-router-dom";
 import {useEffect} from "react";
+import {showToast} from "../scripts/toast";
+import {useAuth} from "../hooks/useAuth";
 
 export default function Error() {
 
@@ -9,7 +11,13 @@ export default function Error() {
     const location = useLocation();
     const {code, message} = location.state || {};
 
+    const {signOut} = useAuth()
+
     useEffect(() => {
+        if(code === 401){
+            // signOut(() => {})
+            showToast(t('User.toast.sessionExpired'), 'error')
+        }
         document.title = `${t('PageName')} - ${t('PageTitles.error')}`
     }, [])
 
