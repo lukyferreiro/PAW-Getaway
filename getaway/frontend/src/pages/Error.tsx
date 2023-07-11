@@ -15,7 +15,7 @@ export default function Error() {
 
     useEffect(() => {
         if(code === 401){
-            // signOut(() => {})
+            signOut(() => {})
             showToast(t('User.toast.sessionExpired'), 'error')
         }
         document.title = `${t('PageName')} - ${t('PageTitles.error')}`

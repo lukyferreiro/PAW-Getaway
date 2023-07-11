@@ -41,7 +41,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
             localStorage.removeItem("token")
             localStorage.removeItem("isVerified")
             localStorage.removeItem("isProvider")
-            removeCookie("basic-token")
+            // removeCookie("basic-token")
             callback()
         })
     }
