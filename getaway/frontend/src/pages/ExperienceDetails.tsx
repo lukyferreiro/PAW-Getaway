@@ -59,7 +59,6 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
         )
     }, [])
 
-    //TODO: Add different dataloader
     useEffect(() => {
         if (experience?.reviewCount !== 0) {
             if ((maxPage === 0 && (pageToShow[0] <= 1 || pageToShow[0] > maxPage))
