@@ -133,12 +133,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                             pageToShow[1](currentPage[0])
                             searchParams.set("page", currentPage[0].toString())
                         }
-                        if (orders.some(item => item.order === order[0])) {
-                            searchParams.set("order", order[0])
-                        } else {
-                            searchParams.set("order", "OrderByAZ")
-                            order[1]("OrderByAZ")
-                        }
+                        searchParams.set("order", order[0])
                         setSearchParams(searchParams)
                     },
                     () => {
