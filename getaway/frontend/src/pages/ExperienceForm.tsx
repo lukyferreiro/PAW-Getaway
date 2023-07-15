@@ -52,10 +52,10 @@ export default function ExperienceForm() {
 
     useEffect(() => {
         if (!isLoggedValue) {
-            navigate("/login",{replace: true})
+            navigate("/login", {replace: true})
             showToast(t('ExperienceForm.toast.forbidden.noUser'), 'error')
         } else if (isLoggedValue && !isVerifiedValue) {
-            navigate("/user/profile",{replace: true})
+            navigate("/user/profile", {replace: true})
             showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
         } else {
             serviceHandler(
@@ -158,6 +158,7 @@ export default function ExperienceForm() {
     const onSubmit = handleSubmit((data: FormDataExperience) => {
             const newUrl = checkUrl(data.url)
 
+            //TODO ver que onda pq category, country, city y price se mandan como string
             if (experience !== undefined) {
                 experienceService.updateExperienceById(parseInt(currentId), data.name, data.category, data.country, data.city,
                     data.address, data.mail, data.price, newUrl, data.description)
@@ -177,9 +178,9 @@ export default function ExperienceForm() {
                     .then((result) => {
                             if (!result.hasFailed()) {
                                 if (isProviderValue) {
-                                    navigate("/user/experiences",{replace: true})
+                                    navigate("/user/experiences", {replace: true})
                                 } else {
-                                    makeProvider(() => navigate("/user/experiences",{replace: true}))
+                                    makeProvider(() => navigate("/user/experiences", {replace: true}))
                                 }
                                 showToast(t('ExperienceForm.toast.createSuccess', {experienceName: data.name}), 'success')
                             }
@@ -194,9 +195,15 @@ export default function ExperienceForm() {
 
     return (
         <div className="d-flex flex-column justify-content-center mx-5 my-2 p-0">
-            <h2 className="text-center font-weight-bold">
-                {t('ExperienceForm.title')}
-            </h2>
+            {experience !== undefined ?
+                <h2 className="text-center font-weight-bold">
+                    {t('ExperienceForm.edit')}
+                </h2>
+                :
+                <h2 className="text-center font-weight-bold">
+                    {t('ExperienceForm.title')}
+                </h2>
+            }
 
             <form id="createExperienceForm" acceptCharset="utf-8"
                   onSubmit={onSubmit} method="post">

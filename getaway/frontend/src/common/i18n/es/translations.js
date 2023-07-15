@@ -155,6 +155,7 @@ export const TRANSLATIONS_ES = {
 
     ExperienceForm: {
         title: "Crea tu experiencia",
+        edit: "Edita tu experiencia",
         error: {
             name: {
                 isRequired: "Este campo no puede estar vacío",

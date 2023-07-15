@@ -155,6 +155,7 @@ export const TRANSLATIONS_EN = {
 
     ExperienceForm: {
         title: "Create your experience",
+        edit: "Edit your experience",
         error: {
             name: {
                 pattern: "Submitted name format is not valid",
