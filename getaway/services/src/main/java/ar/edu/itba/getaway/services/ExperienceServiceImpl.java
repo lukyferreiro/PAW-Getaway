@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -317,7 +318,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             return listExperiencesByCategory;
         }
 
-        listExperiencesByCategory.add(new ArrayList<>());
+        listExperiencesByCategory.add(Collections.emptyList());
         return listExperiencesByCategory;
     }
 

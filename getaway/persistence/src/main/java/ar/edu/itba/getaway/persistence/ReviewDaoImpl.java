@@ -73,7 +73,7 @@ public class ReviewDaoImpl implements ReviewDao {
         }
 
         LOGGER.debug("User with id {} has no reviews yet", user.getUserId());
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
@@ -118,7 +118,7 @@ public class ReviewDaoImpl implements ReviewDao {
             }
 
             LOGGER.debug("Experience with id {} has no reviews yet", experience.getExperienceId());
-            return new ArrayList<>();
+            return Collections.emptyList();
     }
 
     @Override

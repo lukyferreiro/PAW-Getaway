@@ -121,7 +121,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
 
         LOGGER.debug("No results available for these filters");
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
@@ -218,7 +218,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
 
         LOGGER.debug("No results available for this name search for user with id{}", user.getUserId());
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
@@ -270,7 +270,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
 
         LOGGER.debug("User with id {} has no observable faved experiences", user.getUserId());
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
@@ -324,7 +324,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
 
         LOGGER.debug("Not possible to make a recommendation by favourites alone");
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
@@ -366,7 +366,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
 
         LOGGER.debug("Not possible to make a recommendation by views alone");
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     public List<ExperienceModel> getRecommendedBestRanked(int maxResults, List<Long> alreadyAdded) {
@@ -435,7 +435,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
             return queryForExperiences.getResultList();
         }
 
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     public List<ExperienceModel> getRecommendedByReviewsProvider(UserModel user, int maxResults, List<Long> alreadyAdded, List<Long> reviewedIds) {
@@ -485,7 +485,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
             return queryForExperiences.getResultList();
         }
 
-        return new ArrayList<>();
+        return Collections.emptyList();
 
     }
 
@@ -535,7 +535,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
             return queryForExperiences.getResultList();
         }
 
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
 
