@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.webapp.config;
 
-import ar.edu.itba.getaway.webapp.constraints.DtoConstraintValidator;
 import ar.edu.itba.getaway.webapp.security.services.AuthContext;
 import ar.edu.itba.getaway.webapp.security.services.AuthContextImpl;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -58,6 +57,13 @@ public class WebConfig {
         messageSource.setCacheSeconds((int) TimeUnit.SECONDS.toSeconds(5));
         messageSource.setFallbackToSystemLocale(false);
         return messageSource;
+    }
+
+    @Bean
+    public Validator validator(MessageSource messageSource) {
+        LocalValidatorFactoryBean factoryBean = new LocalValidatorFactoryBean();
+        factoryBean.setValidationMessageSource(messageSource);
+        return factoryBean;
     }
 
     @Bean
@@ -152,11 +158,4 @@ public class WebConfig {
         return new AuthContextImpl();
     }
 
-    @Bean
-    public Validator validator() {
-        return new LocalValidatorFactoryBean();
-    }
-
-    @Bean
-    public DtoConstraintValidator dtoConstraintValidator() { return new DtoConstraintValidator(); }
 }

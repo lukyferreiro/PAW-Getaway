@@ -11,7 +11,7 @@ public class CategoryDto implements Serializable {
     private String name;
 
     public static Collection<CategoryDto> mapCategoriesToDto(Collection<CategoryModel> categories) {
-        return categories.stream().map(category -> new CategoryDto(category)).collect(Collectors.toList());
+        return categories.stream().map(CategoryDto::new).collect(Collectors.toList());
     }
 
 

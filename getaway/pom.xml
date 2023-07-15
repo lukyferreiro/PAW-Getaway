@@ -24,7 +24,7 @@
         <junit.version>4.13.2</junit.version>
         <hsqldb.version>2.4.1</hsqldb.version>
         <javax.validation-api.version>1.0.0.GA</javax.validation-api.version>
-        <org.hibernate.validator>4.3.1.Final</org.hibernate.validator>
+        <org.hibernate.validator.version>5.1.3.Final</org.hibernate.validator.version>
         <jaxb.version>2.3.1</jaxb.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <mail.version>1.4.7</mail.version>
@@ -225,6 +225,17 @@
                 <artifactId>hibernate-java8</artifactId>
                 <version>${org.hibernate.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${org.hibernate.validator.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.jboss.logging</groupId>
+                        <artifactId>jboss-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
             <!-- Para el FINAL -->
             <!-- JERSEY -->
             <dependency>
@@ -251,8 +262,8 @@
                 <version>${jersey.version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>org.jboss.logging</groupId>
-                        <artifactId>jboss-logging</artifactId>
+                        <groupId>org.hibernate</groupId>
+                        <artifactId>hibernate-validator</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>

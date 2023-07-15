@@ -1,24 +1,30 @@
 package ar.edu.itba.getaway.webapp.dto.request;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 public class NewReviewDto {
-    @NotEmpty(message = "NotEmpty")
-    @Size(min = 3, max = 50, message = "Size.reviewForm.title")
+
+    @NotNull(message = "NotNull")
+    @NotBlank(message = "NotEmpty")
+    @Length(min = 3, max = 50, message = "Size.reviewForm.title")
     @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\"$%#&=:¿?!¡/.-])*$",
              message = "Pattern.reviewForm.title")
     private String title;
 
-    @NotEmpty(message = "NotEmpty")
-    @Size(min = 3, max = 255, message = "Size.reviewForm.description")
+    @NotNull(message = "NotNull")
+    @NotBlank(message = "NotEmpty")
+    @Length(min = 3, max = 255, message = "Size.reviewForm.description")
     @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\"$%#&=:;\\n\\s\\t¿?!¡/.-])*$",
             message = "Pattern.reviewForm.description")
     private String description;
 
-    @NotEmpty(message = "NotEmpty")
+    @NotNull(message = "NotNull")
+    @NotBlank(message = "NotEmpty")
+    @Length(min = 1, max = 1, message = "Pattern.reviewForm.score")
     @Pattern(regexp = "^([1-5])$", message = "Pattern.reviewForm.score")
     private String score;
 

@@ -7,8 +7,6 @@ import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
-import ar.edu.itba.getaway.webapp.constraints.DtoConstraintValidator;
-import ar.edu.itba.getaway.webapp.constraints.exceptions.DtoValidationException;
 import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.*;
@@ -45,19 +43,17 @@ public class UserController {
     private final ExperienceService experienceService;
     private final ReviewService reviewService;
     private final AuthContext authContext;
-    private final DtoConstraintValidator dtoValidator;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private static final String ACCEPTED_MIME_TYPES = "image/";
 
     @Autowired
     public UserController(UserService userService, ImageService imageService, ExperienceService experienceService, ReviewService reviewService,
-                          AuthContext authContext, DtoConstraintValidator dtoValidator) {
+                          AuthContext authContext) {
         this.userService = userService;
         this.imageService = imageService;
         this.experienceService = experienceService;
         this.reviewService = reviewService;
         this.authContext = authContext;
-        this.dtoValidator = dtoValidator;
     }
 
     //Endpoint que crea un usuario nuevo
@@ -65,13 +61,12 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response registerUser(
             @Valid final RegisterDto registerDto
-    ) throws DuplicateUserException, DtoValidationException {
+    ) throws DuplicateUserException {
 
         LOGGER.info("Called /users/ POST");
         if (registerDto == null) {
             throw new ContentExpectedException();
         }
-        dtoValidator.validate(registerDto, "Invalid Body Request");
 
         UserModel user;
         try {
@@ -122,14 +117,13 @@ public class UserController {
     public Response updateUser(
             @Valid final UserInfoDto userInfoDto,
             @PathParam("userId") final long id
-    ) throws DtoValidationException {
+    ) {
 
         LOGGER.info("Called /users/ PUT");
 
         if (userInfoDto == null) {
             throw new ContentExpectedException();
         }
-        dtoValidator.validate(userInfoDto, "Invalid Body Request");
 
         final UserModel user = authContext.getCurrentUser();
 
@@ -182,7 +176,6 @@ public class UserController {
         if (passwordResetDto == null) {
             throw new ContentExpectedException();
         }
-        dtoValidator.validate(passwordResetDto, "Invalid Body Request");
 
         userService.updatePassword(token, passwordResetDto.getPassword()).orElseThrow(UserNotFoundException::new);
 
@@ -203,7 +196,6 @@ public class UserController {
         if (passwordResetEmailDto == null) {
             throw new ContentExpectedException();
         }
-        dtoValidator.validate(passwordResetEmailDto, "Invalid Body Request");
 
         UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
         userService.generateNewPassword(user);

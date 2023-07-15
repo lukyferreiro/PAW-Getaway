@@ -1,32 +1,38 @@
 package ar.edu.itba.getaway.webapp.dto.request;
 
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.web.multipart.MultipartFile;
+import ar.edu.itba.getaway.webapp.constraints.EmailNotUsed;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 public class RegisterDto {
-    @NotEmpty(message = "NotEmpty")
-    @Size(max = 50, message = "Size.registerForm.name")
+    @NotNull(message = "NotNull")
+    @NotBlank(message = "NotEmpty")
+    @Length(max = 50, message = "Size.registerForm.name")
     @Pattern(regexp = "^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$",
              message = "Pattern.registerForm.name")
     private String name;
 
-    @NotEmpty(message = "NotEmpty")
-    @Size(max = 50, message = "Size.registerForm.surname")
+    @NotNull(message = "NotNull")
+    @NotBlank(message = "NotEmpty")
+    @Length(max = 50, message = "Size.registerForm.surname")
     @Pattern(regexp = "^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$",
             message = "Pattern.registerForm.surname")
     private String surname;
 
-    @NotEmpty(message = "NotEmpty")
-    @Size(max = 255, message = "Size.registerForm.email")
+    @NotNull(message = "NotNull")
+    @NotBlank(message = "NotEmpty")
+    @Length(max = 255, message = "Size.registerForm.email")
     @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$", message = "Pattern.registerForm.email")
+    @EmailNotUsed
     private String email;
 
     //https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
-    @NotEmpty(message = "NotEmpty")
-    @Size(min = 8, max = 25, message = "Size.registerForm.password")
+    @NotNull(message = "NotNull")
+    @NotBlank(message = "NotEmpty")
+    @Length(min = 8, max = 25, message = "Size.registerForm.password")
     @Pattern(regexp = "^[A-Za-z0-9@$!%*#?&_]*$", message = "Pattern.registerForm.password")
     private String password;
 

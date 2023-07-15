@@ -4,8 +4,6 @@ import ar.edu.itba.getaway.interfaces.exceptions.ContentExpectedException;
 import ar.edu.itba.getaway.interfaces.exceptions.ReviewNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.ReviewService;
 import ar.edu.itba.getaway.models.ReviewModel;
-import ar.edu.itba.getaway.webapp.constraints.DtoConstraintValidator;
-import ar.edu.itba.getaway.webapp.constraints.exceptions.DtoValidationException;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import org.slf4j.Logger;
@@ -25,13 +23,11 @@ public class ReviewController {
     @Context
     private UriInfo uriInfo;
     private final ReviewService reviewService;
-    private final DtoConstraintValidator dtoValidator;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
     @Autowired
-    public ReviewController(ReviewService reviewService, DtoConstraintValidator dtoValidator) {
+    public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
-        this.dtoValidator = dtoValidator;
     }
 
     @GET
@@ -56,14 +52,13 @@ public class ReviewController {
             @PathParam("reviewId") final Long id,
             @Context final HttpServletRequest request,
             @Valid final NewReviewDto reviewDto
-    ) throws DtoValidationException {
+    ) {
 
         LOGGER.info("Called /reviews/{} PUT", id);
 
         if (reviewDto == null) {
             throw new ContentExpectedException();
         }
-        dtoValidator.validate(reviewDto, "Invalid Body Request");
 
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
 

@@ -4,8 +4,6 @@ import ar.edu.itba.getaway.interfaces.exceptions.*;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
-import ar.edu.itba.getaway.webapp.constraints.DtoConstraintValidator;
-import ar.edu.itba.getaway.webapp.constraints.exceptions.DtoValidationException;
 import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
@@ -41,7 +39,6 @@ public class ExperienceController {
     private final ReviewService reviewService;
     private final Integer maxRequestSize;
     private final AuthContext authContext;
-    private final DtoConstraintValidator dtoValidator;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceController.class);
     private static final String ACCEPTED_MIME_TYPES = "image/";
@@ -49,7 +46,7 @@ public class ExperienceController {
     @Autowired
     public ExperienceController(ExperienceService experienceService, FavAndViewExperienceService favAndViewExperienceService, CategoryService categoryService,
                                 LocationService locationService, ImageService imageService, ReviewService reviewService,
-                                Integer maxRequestSize, AuthContext authContext, DtoConstraintValidator dtoValidator) {
+                                Integer maxRequestSize, AuthContext authContext) {
         this.experienceService = experienceService;
         this.favAndViewExperienceService = favAndViewExperienceService;
         this.categoryService = categoryService;
@@ -58,7 +55,6 @@ public class ExperienceController {
         this.reviewService = reviewService;
         this.maxRequestSize = maxRequestSize;
         this.authContext = authContext;
-        this.dtoValidator = dtoValidator;
     }
 
     @GET
@@ -181,14 +177,13 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response registerExperience(
             @Valid final NewExperienceDto experienceDto
-    ) throws DuplicateExperienceException, DtoValidationException {
+    ) throws DuplicateExperienceException {
 
         LOGGER.info("Called /experiences/ POST");
 
         if (experienceDto == null) {
             throw new ContentExpectedException();
         }
-        dtoValidator.validate(experienceDto, "Invalid Body Request");
 
         final UserModel user = authContext.getCurrentUser();
         final CityModel city = locationService.getCityById(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
@@ -271,7 +266,6 @@ public class ExperienceController {
         if (experienceDto == null) {
             throw new ContentExpectedException();
         }
-        dtoValidator.validate(experienceDto, "Invalid Body Request");
 
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
@@ -387,12 +381,11 @@ public class ExperienceController {
     public Response createExperienceReview(
             @PathParam("experienceId") final long id,
             @Valid final NewReviewDto newReviewDto
-    ) throws DtoValidationException {
+    ) {
 
         if (newReviewDto == null) {
             throw new ContentExpectedException();
         }
-        dtoValidator.validate(newReviewDto, "Invalid Body Request");
 
         LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
 
