@@ -51,6 +51,20 @@ public class LocationController {
         return Response.ok(new GenericEntity<Collection<CountryDto>>(countryDtos) {}).build();
     }
 
+    // Endpoint para obtener el listado completo de países
+    @GET
+    @Path("/countries/{countryId}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getCountries(
+            @PathParam("countryId") final long id
+    ) {
+        LOGGER.info("Called /locations/countries/{} GET", id);
+
+        final CountryModel country = locationService.getCountryById(id).orElseThrow(CountryNotFoundException::new);
+
+        return Response.ok(new CountryDto(country, uriInfo)).build();
+    }
+
     // Endpoint para obtener el listado completo de ciudades del país {id}
     @GET
     @Path("/countries/{countryId}/cities")

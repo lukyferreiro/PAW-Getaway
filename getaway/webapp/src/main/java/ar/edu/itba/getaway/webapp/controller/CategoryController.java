@@ -1,17 +1,19 @@
 package ar.edu.itba.getaway.webapp.controller;
 
+import ar.edu.itba.getaway.interfaces.exceptions.CategoryNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.CategoryService;
 import ar.edu.itba.getaway.models.CategoryModel;
 import ar.edu.itba.getaway.webapp.dto.response.CategoryDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,7 +21,11 @@ import java.util.List;
 @Component
 public class CategoryController {
 
+    @Context
+    private UriInfo uriInfo;
     private final CategoryService categoryService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
+
 
     @Autowired
     public CategoryController(CategoryService categoryService) {
@@ -31,8 +37,22 @@ public class CategoryController {
     public Response getCategories(){
         final List<CategoryModel> categories = categoryService.listAllCategories();
 
-        final Collection<CategoryDto> categoriesDtos = CategoryDto.mapCategoriesToDto(categories);
+        final Collection<CategoryDto> categoriesDtos = CategoryDto.mapCategoriesToDto(categories, uriInfo);
 
         return Response.ok(new GenericEntity<Collection<CategoryDto>>(categoriesDtos) {}).build();
+    }
+
+    @GET
+    @Path("/{categoryId}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getCityById(
+            @PathParam("categoryId") final long id
+    ) {
+
+        LOGGER.info("Called /categories/{} GET", id);
+
+        final CategoryModel category = categoryService.getCategoryById(id).orElseThrow(CategoryNotFoundException::new);
+
+        return Response.ok(new CategoryDto(category, uriInfo)).build();
     }
 }

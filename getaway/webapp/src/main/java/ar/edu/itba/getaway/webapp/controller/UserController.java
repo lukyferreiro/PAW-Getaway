@@ -95,6 +95,7 @@ public class UserController {
     }
 
     //Endpoint que devuelve informacion de un usuario segun el ID
+    //TODO cambiar
     @GET
     @Path("/currentUser")
     @Produces(value = {MediaType.APPLICATION_JSON,})
@@ -133,6 +134,7 @@ public class UserController {
     }
 
     //Endpoint para la verificacion del mail
+    //TODO cambiar
     @PUT
     @Produces(value = {MediaType.APPLICATION_JSON,})
     @Path("/emailVerification")
@@ -148,6 +150,7 @@ public class UserController {
     }
 
     //Endpoint para la verificacion del mail
+    //TODO cambiar
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON,})
     @Path("/emailVerification")
@@ -162,6 +165,7 @@ public class UserController {
     }
 
     //Endpoint para resetear la contraseña
+    //TODO cambiar
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -183,6 +187,7 @@ public class UserController {
     }
 
     //Endpoint para resetear la contraseña
+    //TODO cambiar
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -352,5 +357,6 @@ public class UserController {
         }, uriBuilder);
     }
 
+    //TODO agrear /userid/recommendations
 
 }

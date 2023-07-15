@@ -5,6 +5,7 @@ import ar.edu.itba.getaway.models.*;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.io.Serializable;
+import java.net.URI;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -18,10 +19,10 @@ public class ExperienceDto implements Serializable {
     private Double price;
     private Long score;
     private Integer views;
-    private String selfUrl;
     private String siteUrl;
-    private String imageUrl;
-    private String reviewsUrl;
+    private URI selfUrl;
+    private URI imageUrl;
+    private URI reviewsUrl;
     private Long reviewCount;
     private CountryDto country;
     private CityDto city;
@@ -55,14 +56,14 @@ public class ExperienceDto implements Serializable {
         this.score = experience.getAverageScore();
         this.siteUrl = experience.getSiteUrl();
         this.views = experience.getViews();
-        this.selfUrl = uriBuilder.build().toString();
-        this.imageUrl = uriBuilder.clone().path("experienceImage").build().toString();    // /experience/{id}/experienceImage
-        this.reviewsUrl = uriBuilder.clone().path("reviews").build().toString();    // /experience/{id}/reviews
+        this.selfUrl = uriBuilder.build();
+        this.imageUrl = uriBuilder.clone().path("experienceImage").build();    // /experience/{id}/experienceImage
+        this.reviewsUrl = uriBuilder.clone().path("reviews").build();    // /experience/{id}/reviews
         this.reviewCount = experience.getReviewCount();
         this.country = new CountryDto(experience.getCity().getCountry(), uriInfo);
         this.city = new CityDto(experience.getCity(), uriInfo);
         this.user = new UserInfoDto(experience.getUser(), uriInfo);
-        this.category = new CategoryDto(experience.getCategory());
+        this.category = new CategoryDto(experience.getCategory(), uriInfo);
         this.isFav = experience.getIsFav();
         this.observable = experience.getObservable();
         this.hasImage = experience.getImage() != null;
@@ -116,22 +117,22 @@ public class ExperienceDto implements Serializable {
     public void setViews(Integer views) {
         this.views = views;
     }
-    public String getSelfUrl() {
+    public URI getSelfUrl() {
         return selfUrl;
     }
-    public void setSelfUrl(String selfUrl) {
+    public void setSelfUrl(URI selfUrl) {
         this.selfUrl = selfUrl;
     }
-    public String getImageUrl() {
+    public URI getImageUrl() {
         return imageUrl;
     }
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(URI imageUrl) {
         this.imageUrl = imageUrl;
     }
-    public String getReviewsUrl() {
+    public URI getReviewsUrl() {
         return reviewsUrl;
     }
-    public void setReviewsUrl(String reviewsUrl) {
+    public void setReviewsUrl(URI reviewsUrl) {
         this.reviewsUrl = reviewsUrl;
     }
     public Long getReviewCount() {

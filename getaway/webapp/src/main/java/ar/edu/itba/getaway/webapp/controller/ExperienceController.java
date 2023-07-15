@@ -57,6 +57,7 @@ public class ExperienceController {
         this.authContext = authContext;
     }
 
+    //TODO cambiar
     @GET
     @Path("/landingPage")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -67,15 +68,16 @@ public class ExperienceController {
 
         if (user != null ){
             landingPageList = experienceService.userLandingPage(user);
-            return Response.ok(new GenericEntity<UserLandingPageDto>(new UserLandingPageDto(landingPageList, uriInfo)){}).build();
+            return Response.ok(new GenericEntity<UserRecommendationsDto>(new UserRecommendationsDto(landingPageList, uriInfo)){}).build();
         }
         else {
             landingPageList = experienceService.getExperiencesListByCategories(null);
-            return Response.ok(new GenericEntity<AnonymousLandingPageDto>(new AnonymousLandingPageDto(landingPageList, uriInfo)){}).build();
+            return Response.ok(new GenericEntity<AnonymousRecommendationsDto>(new AnonymousRecommendationsDto(landingPageList, uriInfo)){}).build();
         }
     }
 
     // TODO habria que agregar el country como queryParam
+    //TODO cambiar
     // Endpoint para obtener las experiencias de una categoria
     @GET
     @Path("/filter")
@@ -134,6 +136,7 @@ public class ExperienceController {
         }, uriBuilder);
     }
 
+    //TODO cambiar
     @GET
     @Path("/filter/maxPrice")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -149,6 +152,7 @@ public class ExperienceController {
         return Response.ok(new MaxPriceDto(maxPrice)).build();
     }
 
+    //TODO cambiar
     @GET
     @Path("/filter/orderByModels")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -206,6 +210,7 @@ public class ExperienceController {
     }
 
     // Endpoint para obtener una experiencia a partir de su ID
+    //TODO cambiar
     @GET
     @Path("/experience/{experienceId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -231,6 +236,7 @@ public class ExperienceController {
     }
 
     // Endpoint para obtener una experiencia a partir de su ID
+    //TODO cambiar
     @GET
     @Path("/experience/{experienceId}/name")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -247,6 +253,7 @@ public class ExperienceController {
     }
 
     // Endpoint para editar una experiencia
+    //TODO cambiar
     @PUT
     @Path("/experience/{experienceId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -288,6 +295,7 @@ public class ExperienceController {
     }
 
     // Endpoint para eliminar una experiencia
+    //TODO cambiar
     @DELETE
     @Path("/experience/{experienceId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -309,6 +317,7 @@ public class ExperienceController {
     }
 
     // Endpoint para obtener la imagen de una experiencia
+    //TODO cambiar
     @GET
     @Path("/experience/{experienceId}/experienceImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON})
@@ -327,6 +336,7 @@ public class ExperienceController {
         return CacheResponse.cacheResponse(image, request);
     }
 
+    //TODO cambiar
     @PUT
     @Path("/experience/{experienceId}/experienceImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON})
@@ -352,6 +362,7 @@ public class ExperienceController {
     }
 
     // Endpoint para obtener la reseñas de una experiencia
+    //TODO cambiar
     @GET
     @Path("/experience/{experienceId}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -375,6 +386,7 @@ public class ExperienceController {
     }
 
     // Endpoint para crear una reseña en la experiencia
+    //TODO cambiar
     @POST
     @Path("/experience/{experienceId}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -396,6 +408,7 @@ public class ExperienceController {
         return Response.created(ReviewDto.getReviewUriBuilder(reviewModel, uriInfo).build()).build();
     }
 
+    //TODO cambiar
     @PUT
     @Path("/experience/{experienceId}/fav")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -413,6 +426,7 @@ public class ExperienceController {
         return Response.ok().build();
     }
 
+    //TODO cambiar
     @PUT
     @Path("/experience/{experienceId}/observable")
     @Produces(value = {MediaType.APPLICATION_JSON})

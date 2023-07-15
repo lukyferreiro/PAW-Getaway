@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-public class AnonymousLandingPageDto implements Serializable {
+public class AnonymousRecommendationsDto implements Serializable {
     private Collection<ExperienceDto> Aventura;
     private Collection<ExperienceDto> Gastronomia;
     private Collection<ExperienceDto> Hoteleria;
@@ -15,11 +15,11 @@ public class AnonymousLandingPageDto implements Serializable {
     private Collection<ExperienceDto> Vida_nocturna;
     private Collection<ExperienceDto> Historico;
 
-    public AnonymousLandingPageDto() {
+    public AnonymousRecommendationsDto() {
         // Used by Jersey
     }
 
-    public AnonymousLandingPageDto(List<List<ExperienceModel>> experiencesList, UriInfo uriInfo) {
+    public AnonymousRecommendationsDto(List<List<ExperienceModel>> experiencesList, UriInfo uriInfo) {
         this.Aventura = ExperienceDto.mapExperienceToDto(experiencesList.get(0), uriInfo)  ;
         this.Gastronomia = ExperienceDto.mapExperienceToDto(experiencesList.get(1), uriInfo);
         this.Hoteleria = ExperienceDto.mapExperienceToDto(experiencesList.get(2), uriInfo);

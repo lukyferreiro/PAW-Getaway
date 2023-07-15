@@ -4,6 +4,7 @@ import ar.edu.itba.getaway.models.CityModel;
 
 import javax.ws.rs.core.UriInfo;
 import java.io.Serializable;
+import java.net.URI;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,7 @@ public class CityDto implements Serializable {
     private long id;
     private String name;
     private CountryDto countryDto;
+    private URI self;
 
     public static Collection<CityDto> mapCityToDto(Collection<CityModel> cities, UriInfo uriInfo) {
         return cities.stream().map(city -> new CityDto(city, uriInfo)).collect(Collectors.toList());
@@ -25,6 +27,11 @@ public class CityDto implements Serializable {
         this.id = city.getCityId();
         this.name = city.getCityName();
         this.countryDto = new CountryDto(city.getCountry(), uriInfo);
+        this.self = uriInfo.getBaseUriBuilder()
+                .path("location")
+                .path("cities")
+                .path(String.valueOf(city.getCityId()))
+                .build();       // /location/cities/{cityId}
     }
 
     public long getId() {
@@ -44,5 +51,11 @@ public class CityDto implements Serializable {
     }
     public void setCountryDto(CountryDto countryDto) {
         this.countryDto = countryDto;
+    }
+    public URI getSelf() {
+        return self;
+    }
+    public void setSelf(URI self) {
+        this.self = self;
     }
 }

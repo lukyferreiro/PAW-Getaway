@@ -5,6 +5,7 @@ import ar.edu.itba.getaway.models.ReviewModel;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.io.Serializable;
+import java.net.URI;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -17,8 +18,8 @@ public class ReviewDto implements Serializable {
     private String date;
     private UserInfoDto user;
     private ExperienceNameDto experience;
-    private String selfUrl;
-    private String experienceUrl;
+    private URI selfUrl;
+    private URI experienceUrl;
 
     public static Collection<ReviewDto> mapReviewToDto(Collection<ReviewModel> reviews, UriInfo uriInfo) {
         return reviews.stream().map(r -> new ReviewDto(r, uriInfo)).collect(Collectors.toList());
@@ -40,10 +41,10 @@ public class ReviewDto implements Serializable {
         this.date = review.getReviewDate().toString();
         this.user = new UserInfoDto(review.getUser(), uriInfo);
         this.experience = new ExperienceNameDto(review.getExperience(), uriInfo);
-        this.selfUrl = getReviewUriBuilder(review, uriInfo).build().toString();
+        this.selfUrl = getReviewUriBuilder(review, uriInfo).build();
         this.experienceUrl = uriInfo.getBaseUriBuilder().path("experiences").path("experience")
                 .path(review.getExperience().getExperienceId().toString())
-                .build().toString();    // /experiences/experience/{id}
+                .build();    // /experiences/experience/{id}
     }
 
     public long getId() {
@@ -82,16 +83,16 @@ public class ReviewDto implements Serializable {
     public void setUser(UserInfoDto user) {
         this.user = user;
     }
-    public String getSelfUrl() {
+    public URI getSelfUrl() {
         return selfUrl;
     }
-    public void setSelfUrl(String selfUrl) {
+    public void setSelfUrl(URI selfUrl) {
         this.selfUrl = selfUrl;
     }
-    public String getExperienceUrl() {
+    public URI getExperienceUrl() {
         return experienceUrl;
     }
-    public void setExperienceUrl(String experienceUrl) {
+    public void setExperienceUrl(URI experienceUrl) {
         this.experienceUrl = experienceUrl;
     }
     public ExperienceNameDto getExperience() {

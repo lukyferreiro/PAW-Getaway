@@ -5,6 +5,7 @@ import ar.edu.itba.getaway.models.UserModel;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.io.Serializable;
+import java.net.URI;
 
 public class UserInfoDto implements Serializable {
 
@@ -12,7 +13,7 @@ public class UserInfoDto implements Serializable {
     private String name;
     private String surname;
     private boolean hasImage;
-    private String profileImageUrl;
+    private URI profileImageUrl;
 
     public UserInfoDto() {
         // Used by Jersey
@@ -30,9 +31,7 @@ public class UserInfoDto implements Serializable {
         this.surname = user.getSurname();
         this.hasImage = user.getImage() != null;
         if (user.getProfileImage() != null) {
-            this.profileImageUrl = uriBuilder.clone().path("profileImage").build().toString();  // /user/{id}/profileImage
-        } else {
-            this.profileImageUrl = "";
+            this.profileImageUrl = uriBuilder.clone().path("profileImage").build();  // /user/{id}/profileImage
         }
     }
 
@@ -60,10 +59,10 @@ public class UserInfoDto implements Serializable {
     public void setHasImage(boolean hasImage) {
         this.hasImage = hasImage;
     }
-    public String getProfileImageUrl() {
+    public URI getProfileImageUrl() {
         return profileImageUrl;
     }
-    public void setProfileImageUrl(String profileImageUrl) {
+    public void setProfileImageUrl(URI profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }
 }
