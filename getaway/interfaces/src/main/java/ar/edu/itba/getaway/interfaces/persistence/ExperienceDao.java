@@ -1,13 +1,13 @@
 package ar.edu.itba.getaway.interfaces.persistence;
 
+import ar.edu.itba.getaway.interfaces.exceptions.DuplicateExperienceException;
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.getaway.models.pagination.Page;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ExperienceDao {
-    ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel cityId, CategoryModel categoryId, UserModel userId, ImageModel experienceImage);
+    ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel cityId, CategoryModel categoryId, UserModel userId, ImageModel experienceImage) throws DuplicateExperienceException;
 
     void updateExperience(ExperienceModel experienceModel);
 

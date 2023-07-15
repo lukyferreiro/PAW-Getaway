@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.persistence;
 
+import ar.edu.itba.getaway.interfaces.exceptions.DuplicateExperienceException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
 import org.slf4j.Logger;
@@ -19,9 +20,20 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDaoImpl.class);
 
+    private boolean checkDuplicateExperience(String name, String address, CityModel city){
+        final TypedQuery<ExperienceModel> query = em.createQuery("FROM ExperienceModel WHERE experienceName = :experienceName AND address = :address AND cityid = :cityId ", ExperienceModel.class);
+        query.setParameter("experienceName", name);
+        query.setParameter("address", address);
+        query.setParameter("cityId", city.getCityId());
+        return query.getResultList().size() != 0;
+    }
 
     @Override
-    public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) {
+    public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user, ImageModel experienceImage) throws DuplicateExperienceException {
+
+        if(checkDuplicateExperience(name, address, city)){
+            throw new DuplicateExperienceException();
+        }
 
         final ExperienceModel experience = new ExperienceModel(name, address, description, email, url, price, city, category, user, experienceImage, true, 0);
         em.persist(experience);

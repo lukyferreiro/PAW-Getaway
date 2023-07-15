@@ -1,5 +1,8 @@
 package ar.edu.itba.getaway.persistence;
 
+import ar.edu.itba.getaway.interfaces.exceptions.DuplicateExperienceException;
+import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
+import ar.edu.itba.getaway.interfaces.services.ExperienceService;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
 import ar.edu.itba.getaway.persistence.config.TestConfig;
@@ -102,7 +105,16 @@ public class ExperienceDaoTest {
     @Test
     @Rollback
     public void testCreateExperience() {
-        final ExperienceModel experienceModel = experienceDao.createExperience("TestCreate", "DirectionCreate", null, "owner@mail.com", null, null, CITY_1, CATEGORY_1, USER_1, IMAGE);
+
+        ExperienceModel experienceModel = null;
+
+        try {
+            experienceModel = experienceDao.createExperience("TestCreate", "DirectionCreate", null, "owner@mail.com", null, null, CITY_1, CATEGORY_1, USER_1, IMAGE);
+            assertNotNull(experienceModel);
+        } catch (DuplicateExperienceException e) {
+            e.printStackTrace();
+        }
+
         assertNotNull(experienceModel);
         assertEquals("TestCreate", experienceModel.getExperienceName());
         assertEquals("DirectionCreate", experienceModel.getAddress());

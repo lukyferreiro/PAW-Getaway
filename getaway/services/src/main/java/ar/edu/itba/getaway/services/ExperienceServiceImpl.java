@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.services;
 
+import ar.edu.itba.getaway.interfaces.exceptions.DuplicateExperienceException;
 import ar.edu.itba.getaway.interfaces.services.CategoryService;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
@@ -39,7 +40,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     @Transactional
-    public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user) {
+    public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user) throws DuplicateExperienceException {
         LOGGER.debug("Creating experience with name {}", name);
         final ImageModel experienceImage = imageService.createImg(null, null);
         final ExperienceModel experienceModel = experienceDao.createExperience(name, address, description, email, url, price, city, category, user, experienceImage);
