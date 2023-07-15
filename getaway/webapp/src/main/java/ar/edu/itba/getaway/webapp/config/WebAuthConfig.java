@@ -49,12 +49,16 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MyUserDetailsService myUserDetailsService;
-
     @Autowired
     private BasicAuthProvider basicAuthProvider;
-
     @Autowired
     private JwtAuthProvider jwtAuthProvider;
+    @Autowired
+    private AuthFailureHandler authFailureHandler;
+    @Autowired
+    private AuthSuccessHandler authSuccessHandler;
+    @Autowired
+    private AuthEntryPoint authEntryPoint;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -67,28 +71,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationEntryPoint authenticationEntryPoint() {
-        return new AuthEntryPoint();
-    }
-
-    @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new AuthSuccessHandler();
-    }
-
-    @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
-        return new AuthFailureHandler();
-    }
-
-    @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         return new CustomAccessDeniedHandler();
-    }
-
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
-        return new PropertySourcesPlaceholderConfigurer();
     }
 
     @Bean
@@ -107,8 +91,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public AuthFilter authFilter() throws Exception {
         AuthFilter authFilter = new AuthFilter();
         authFilter.setAuthenticationManager(authenticationManagerBean());
-        authFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
-        authFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
+        authFilter.setAuthenticationSuccessHandler(authSuccessHandler);
+        authFilter.setAuthenticationFailureHandler(authFailureHandler);
         return authFilter;
     }
 
@@ -151,7 +135,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .exceptionHandling()
-                    .authenticationEntryPoint(authenticationEntryPoint())
+                    .authenticationEntryPoint(authEntryPoint)
                     .accessDeniedHandler(accessDeniedHandler())
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
