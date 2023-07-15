@@ -28,4 +28,6 @@ public interface UserDao {
     Optional<UserModel> getUserByExperienceId(long experienceId);
 
     Optional<UserModel> getUserByReviewId(long reviewId);
+
+    void verifyEmail(long id);
 }

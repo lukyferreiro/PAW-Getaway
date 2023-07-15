@@ -12,6 +12,7 @@ import {showToast} from "../scripts/toast"
 import VisibilityIcon from "@mui/icons-material/Visibility"
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
+import { getResourcePath } from "../constants"
 
 type FormDataLogin = {
     email: string;
@@ -87,7 +88,7 @@ export default function Login() {
                                     <div className="col-12">  {/*  Email */}
                                         <label className="form-label d-flex align-items-center"
                                                htmlFor="email">
-                                            <img src={"./images/ic_user.svg"} alt="Imagen perfil"
+                                            <img src={getResourcePath("./images/ic_user.svg")} alt="Imagen perfil"
                                                  style={{marginRight: "5px"}}/>
                                             {t('Navbar.email')}
                                         </label>
@@ -105,7 +106,7 @@ export default function Login() {
                                             <div className="col-6 px-0">
                                                 <label className="form-label d-flex align-items-center"
                                                        htmlFor="password">
-                                                    <img src={"./images/ic_password.svg"} alt="Imagen perfil"
+                                                    <img src={getResourcePath("./images/ic_password.svg")} alt="Imagen perfil"
                                                          style={{marginRight: "5px"}}/>
                                                     {t('Navbar.password')}
                                                 </label>

@@ -82,13 +82,21 @@ public class UserServiceImpl implements UserService {
         }
 
         final VerificationToken verificationToken = verificationTokenOptional.get();
-        verificationTokenDao.removeToken(verificationToken);
-        LOGGER.debug("Removed verification token with id {}", verificationToken.getId());
-
+       
         if (!verificationToken.isValid()) {
             LOGGER.warn("Verification token with value {} is invalid", token);
             return Optional.empty();
         }
+
+        if(!verificationToken.isValidToken()){
+            LOGGER.info("Trying to validate token {}, but it has expired", token);
+            return Optional.empty();
+        }
+        userDao.verifyEmail(verificationToken.getUserId());
+
+         verificationTokenDao.removeToken(verificationToken);
+        LOGGER.debug("Removed verification token with id {}", verificationToken.getId());
+
 
         LOGGER.debug("Validating user with id {}", verificationToken.getUser().getUserId());
         return userDao.updateRoles(verificationToken.getUser(), Roles.NOT_VERIFIED, Roles.VERIFIED);

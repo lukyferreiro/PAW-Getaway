@@ -21,6 +21,7 @@ import UserExperiencesTable from "../components/UserExperiencesTable";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { getResourcePath } from "../constants";
 
 
 type FormUserExperiencesSearch = {
@@ -150,7 +151,7 @@ export default function UserExperiences() {
                                  style={{margin: "0 20px 0 auto", flex: "1"}}>
                                 <button className="btn btn-search-navbar p-0" type="submit"
                                         form="searchExperiencePrivateForm" aria-label={t("AriaLabel.search")} title={t("AriaLabel.search")}>
-                                    <img src={'./images/ic_lupa.svg'} alt="Icono lupa"/>
+                                    <img src={getResourcePath('./images/ic_lupa.svg')} alt="Icono lupa"/>
                                 </button>
                                 <form className="my-auto" id="searchExperiencePrivateForm" onSubmit={onSubmit}>
                                     <input type="text" className="form-control" placeholder={t('Navbar.search')}

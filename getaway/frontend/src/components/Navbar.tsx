@@ -11,6 +11,7 @@ import {Close} from "@mui/icons-material";
 import {IconButton} from "@mui/material";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {showToast} from "../scripts/toast";
+import { getResourcePath } from "../constants";
 
 type FormDataSearch = {
     name: string
@@ -108,7 +109,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                          style={{marginRight: '40px'}}>
                         <button className="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm"
                                 aria-label={t("AriaLabel.search")} title={t("AriaLabel.search")}>
-                            <img className="w-auto h-auto" src={'./images/ic_lupa.svg'} alt="Lupa"/>
+                            <img className="w-auto h-auto" src={getResourcePath('./images/ic_lupa.svg')} alt="Lupa"/>
                         </button>
                         <form id="searchExperienceForm" acceptCharset="utf-8" className="my-auto" onSubmit={onSubmit}>
                             <input max="50" type="text" className="form-control" placeholder={t('Navbar.search')}
@@ -161,32 +162,32 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                             <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
                                     id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
                                     aria-label={t("AriaLabel.profileInfo")} title={t("AriaLabel.profileInfo")}>
-                                <img src={'./images/ic_user_white.svg'} alt="Icono usuario"
+                                <img src={getResourcePath('./images/ic_user_white.svg')} alt="Icono usuario"
                                      style={{width: "35px", height: "35px"}}/>
                             </button>
 
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{left: "-50px"}}>
                                 <Link to="/user/profile" className="dropdown-item"
                                       onClick={() => clearNavBar()}>
-                                    <img src={'./images/ic_user.svg'} alt="Icono perfil"/>
+                                    <img src={getResourcePath('./images/ic_user.svg')} alt="Icono perfil"/>
                                     {t('Navbar.profile')}
                                 </Link>
 
                                 {isProviderValue &&
                                     <Link to="/user/experiences" className="dropdown-item"
                                           onClick={() => clearNavBar()}>
-                                        <img src={'./images/ic_experiences.svg'} alt="Icono experiencias"/>
+                                        <img src={getResourcePath('./images/ic_experiences.svg')} alt="Icono experiencias"/>
                                         {t('Navbar.experiences')}
                                     </Link>}
                                 <Link to="/user/favourites" className="dropdown-item"
                                       onClick={() => clearNavBar()}>
-                                    <img src={'./images/ic_fav.svg'} alt="Icono favoritos"/>
+                                    <img src={getResourcePath('./images/ic_fav.svg')} alt="Icono favoritos"/>
                                     {t('Navbar.favourites')}
                                 </Link>
                                 {isVerifiedValue &&
                                     <Link to="/user/reviews" className="dropdown-item"
                                           onClick={() => clearNavBar()}>
-                                        <img src={'./images/ic_review.svg'} alt="Icono reseñas"/>
+                                        <img src={getResourcePath('./images/ic_review.svg')} alt="Icono reseñas"/>
                                         {t('Navbar.reviews')}
                                     </Link>}
                                 <button className="dropdown-item" aria-label={t("AriaLabel.signOut")} title={t("AriaLabel.signOut")}
@@ -194,7 +195,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                     clearNavBar()
                                     signOut(() => navigate("/",{replace: true}))
                                 }}>
-                                    <img src={'./images/ic_logout.svg'} alt="Icono cerrar sesion"/>
+                                    <img src={getResourcePath('./images/ic_logout.svg')} alt="Icono cerrar sesion"/>
                                     {t('Navbar.logout')}
                                 </button>
                             </ul>
@@ -211,10 +212,11 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                 navigate({
                                     pathname: "/experiences",
                                     search: `?category=${category.name}&name=${nameProp[0]}&order=OrderByAZ&page=1`
-                                }, {replace: true})
+                                }, {replace: true});
+                                window.location.reload();
                             }}
                     >
-                        <img src={`./images/${category.name}.svg`} alt={`${category.name}`}/>
+                        <img src={getResourcePath(`./images/${category.name}.svg`)} alt={`${category.name}`}/>
                         {t('Categories.' + category.name)}
                     </button>
                 ))}

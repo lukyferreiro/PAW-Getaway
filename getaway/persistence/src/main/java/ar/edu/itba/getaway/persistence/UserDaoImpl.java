@@ -150,4 +150,10 @@ public class UserDaoImpl implements UserDao {
 
         return Optional.empty();
     }
+
+    @Override
+    public void verifyEmail(long id) {
+        final UserModel user = getUserById(id).get();
+        em.persist(user);
+    }
 }
