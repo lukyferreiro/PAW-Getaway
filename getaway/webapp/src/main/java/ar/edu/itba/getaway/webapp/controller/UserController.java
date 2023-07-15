@@ -220,11 +220,12 @@ public class UserController {
         LOGGER.info("Called /users/{}/profileImage GET", id);
 
         final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
-        final ImageModel image = user.getProfileImage();
 
-        if (image == null) {
+        if(user.getImage() == null) {
             return Response.noContent().build();
         }
+
+        final ImageModel image = user.getProfileImage();
 
         return CacheResponse.cacheResponse(image, request);
     }

@@ -327,11 +327,12 @@ public class ExperienceController {
     ) {
 
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(UserNotFoundException::new);
-        final ImageModel image = experience.getExperienceImage();
 
-        if (image == null) {
+        if(experience.getImage() == null) {
             return Response.noContent().build();
         }
+
+        final ImageModel image = experience.getExperienceImage();
 
         return CacheResponse.cacheResponse(image, request);
     }
