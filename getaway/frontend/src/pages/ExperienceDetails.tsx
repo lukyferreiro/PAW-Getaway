@@ -123,7 +123,7 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
 
                 <div className="card mx-5 my-3 px-5 pt-4">
                     <div className="d-flex justify-content-center align-content-center">
-                        <h1 className="text-center" style={{wordBreak: "break-all"}}>
+                        <h1 className="text-center" style={{wordBreak: "break-word"}}>
                             {experience?.name}
                         </h1>
                     </div>

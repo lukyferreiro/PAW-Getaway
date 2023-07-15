@@ -138,11 +138,11 @@ export default function ReviewForm() {
                         <div className="col m-2">
                             <h3 className="text-center" style={{wordBreak: "break-all"}}>
                                 {!review ?
-                                    <div>
+                                    <div style={{wordBreak: "break-word"}}>
                                         {t('ReviewForm.title', {experienceName: experience?.name})}
                                     </div>
                                     :
-                                    <div>
+                                    <div style={{wordBreak: "break-word"}}>
                                         {t('ReviewForm.editTitle', {experienceName: experience?.name})}
                                     </div>
                                 }
