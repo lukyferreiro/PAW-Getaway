@@ -185,7 +185,7 @@ export default function UserExperiences() {
                             {userExperiences.length === 0 ?
                                 <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
                                     <div className="d-flex justify-content-center align-content-center">
-                                        <img src={'./images/ic_no_search.jpeg'} alt="Imagen lupa"
+                                        <img src={getResourcePath('./images/ic_no_search.jpeg')} alt="Imagen lupa"
                                              style={{
                                                  width: "150px",
                                                  height: "150px",

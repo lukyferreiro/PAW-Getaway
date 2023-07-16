@@ -45,16 +45,9 @@ public class VerificationToken {
     }
 
     
-    public long getUserId() {
-        return user.getUserId();
-    }
 
     public boolean isValid() {
         return expirationDate.compareTo(LocalDateTime.now()) > 0;
-    }
-
-    public boolean isValidToken() {
-        return LocalDateTime.now().isBefore(expirationDate);
     }
 
     public String getValue() {

@@ -99,7 +99,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                 <Link to="/" className="logo d-flex" onClick={() => {
                     clearNavBar()
                 }}>
-                    <img className="logo-img w-auto h-auto" src={'./images/getaway-icon.png'} alt="Logo"/>
+                    <img className="logo-img w-auto h-auto" src={getResourcePath('./images/getaway-icon.png')} alt="Logo"/>
                     <span className="logo-text align-self-center text-uppercase font-weight-bold">
                         {t('PageName')}
                     </span>

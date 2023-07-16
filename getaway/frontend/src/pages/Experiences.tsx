@@ -14,6 +14,7 @@ import {Close} from "@mui/icons-material"
 import DataLoader from "../components/DataLoader"
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery"
 import StarRoundedIcon from "@mui/icons-material/StarRounded"
+import { getResourcePath } from "../constants";
 
 export default function Experiences(props: { nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
     const {t} = useTranslation()
@@ -384,7 +385,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                     {experiences.length === 0 ?
                         <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
                             <div className="d-flex justify-content-center align-content-center">
-                                <img src={'./images/ic_no_search.jpeg'} alt="Imagen lupa"
+                                <img src={getResourcePath('./images/ic_no_search.jpeg')} alt="Imagen lupa"
                                      style={{
                                          width: "150px",
                                          height: "150px",

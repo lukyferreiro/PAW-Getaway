@@ -10,6 +10,7 @@ import {showToast} from "../scripts/toast"
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate"
 import {IconButton} from "@mui/material"
 import AddPictureModal from "../components/AddPictureModal"
+import { getResourcePath } from "../constants";
 
 export default function UserProfile() {
 
@@ -75,7 +76,7 @@ export default function UserProfile() {
                         </div>
                         <div className="m-2" style={{maxWidth: "200px"}}>
                             <img className="container-fluid p-0" style={{height: "fit-content"}} alt="Imagen usuario"
-                                 src={user?.hasImage ? user.profileImageUrl : './images/user_default.png'}/>
+                                 src={user?.hasImage ? user.profileImageUrl : getResourcePath('./images/user_default.png')}/>
                         </div>
 
                         <div className="m-1 justify-self-center align-self-center">

@@ -10,6 +10,7 @@ import StarRating from "./StarRating";
 import {reviewService} from "../services";
 import {showToast} from "../scripts/toast";
 import {confirmDialogModal} from "./ConfirmDialogModal";
+import {getResourcePath} from "../constants";
 
 export default function CardReview(props: {
     reviewModel: ReviewModel,
@@ -61,7 +62,7 @@ export default function CardReview(props: {
 
             <div className="card-title m-2 d-flex justify-content-between">
                 <div className="d-flex">
-                    <img className="user-img" src={reviewModel.user.hasImage ? reviewModel.user.profileImageUrl : './images/user_default.png'}
+                    <img className="user-img" src={reviewModel.user.hasImage ? reviewModel.user.profileImageUrl : getResourcePath('./images/user_default.png')}
                          alt="Imagen" style={{marginRight: reviewModel.user.hasImage ? "8px" : ""}}/>
 
                     <div className="d-flex flex-column justify-content-center align-content-center">
