@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -21,18 +20,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.header.HeaderWriter;
-import org.springframework.security.web.header.writers.CacheControlHeadersWriter;
-import org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -119,17 +108,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
 
-//        RequestMatcher notResourcesMatcher = new NegatedRequestMatcher(
-//                new OrRequestMatcher(
-//                        new AntPathRequestMatcher("/api/users/{userId}/profileImage"),
-//                        new AntPathRequestMatcher("/api/users/{userId}/profileImage/"),
-//                        new AntPathRequestMatcher("/api/experiences/experience/{experienceId}/experienceImage"),
-//                        new AntPathRequestMatcher("/api/experiences/experience/{experienceId}/experienceImage/")
-//                )
-//        );
-//
-//        HeaderWriter notResourcesHeaderWriter = new DelegatingRequestMatcherHeaderWriter(notResourcesMatcher, new CacheControlHeadersWriter());
-
         http
                 .cors()
                 .and()
@@ -197,11 +175,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //------------------- /location -------------------
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/location/countries").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/location/countries/{countryId}").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/location/countries/{countryId}/cities").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/location/cities/{cityId}").permitAll()
                 //------------------- /categories --------------------
                     //permitAll para navbar
                     .antMatchers(HttpMethod.GET, "/api/categories").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/categories/{categoryId}").permitAll()
                 //------------------- Others --------------------
                     .antMatchers("/**").permitAll()
                 .and()
