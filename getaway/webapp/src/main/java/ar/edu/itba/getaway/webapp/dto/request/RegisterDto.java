@@ -9,21 +9,21 @@ import javax.validation.constraints.Pattern;
 
 public class RegisterDto {
     @NotNull(message = "NotNull")
-    @NotBlank(message = "NotEmpty")
+    @NotBlank(message = "NotBlank")
     @Length(max = 50, message = "Size.registerForm.name")
     @Pattern(regexp = "^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$",
              message = "Pattern.registerForm.name")
     private String name;
 
     @NotNull(message = "NotNull")
-    @NotBlank(message = "NotEmpty")
+    @NotBlank(message = "NotBlank")
     @Length(max = 50, message = "Size.registerForm.surname")
     @Pattern(regexp = "^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$",
             message = "Pattern.registerForm.surname")
     private String surname;
 
     @NotNull(message = "NotNull")
-    @NotBlank(message = "NotEmpty")
+    @NotBlank(message = "NotBlank")
     @Length(max = 255, message = "Size.registerForm.email")
     @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$", message = "Pattern.registerForm.email")
     @EmailNotUsed
@@ -31,7 +31,7 @@ public class RegisterDto {
 
     //https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
     @NotNull(message = "NotNull")
-    @NotBlank(message = "NotEmpty")
+    @NotBlank(message = "NotBlank")
     @Length(min = 8, max = 25, message = "Size.registerForm.password")
     @Pattern(regexp = "^[A-Za-z0-9@$!%*#?&_]*$", message = "Pattern.registerForm.password")
     private String password;

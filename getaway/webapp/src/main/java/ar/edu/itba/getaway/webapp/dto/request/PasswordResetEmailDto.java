@@ -9,9 +9,9 @@ import javax.validation.constraints.Pattern;
 public class PasswordResetEmailDto {
 
     @NotNull(message = "NotNull")
-    @NotBlank(message = "NotEmpty")
-    @Length(max = 255)
-    @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$")
+    @NotBlank(message = "NotBlank")
+    @Length(max = 255,  message = "Size.registerForm.email")
+    @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$", message = "Pattern.registerForm.email")
     private String email;
 
     public PasswordResetEmailDto() {

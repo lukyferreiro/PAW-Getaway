@@ -8,14 +8,14 @@ import javax.validation.constraints.Pattern;
 
 public class UserInfoDto {
     @NotNull(message = "NotNull")
-    @NotBlank(message = "NotEmpty")
+    @NotBlank(message = "NotBlank")
     @Length(max = 50, message = "Size.registerForm.name")
     @Pattern(regexp = "^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$",
             message = "Pattern.registerForm.name")
     private String name;
 
     @NotNull(message = "NotNull")
-    @NotBlank(message = "NotEmpty")
+    @NotBlank(message = "NotBlank")
     @Length(max = 50, message = "Size.registerForm.surname")
     @Pattern(regexp = "^[A-Za-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð' ]*$",
             message = "Pattern.registerForm.surname")

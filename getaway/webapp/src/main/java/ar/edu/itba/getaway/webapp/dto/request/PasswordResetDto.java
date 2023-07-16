@@ -9,9 +9,9 @@ import javax.validation.constraints.Pattern;
 public class PasswordResetDto {
 
     @NotNull(message = "NotNull")
-    @NotBlank(message = "NotEmpty")
-    @Length(min = 8, max = 25)
-    @Pattern(regexp = "^[A-Za-z0-9@$!%*#?&_]*$")
+    @NotBlank(message = "NotBlank")
+    @Length(min = 8, max = 25,  message = "Size.registerForm.password")
+    @Pattern(regexp = "^[A-Za-z0-9@$!%*#?&_]*$", message = "Pattern.registerForm.password")
     private String password;
 
     public String getPassword() {

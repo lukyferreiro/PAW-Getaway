@@ -1,20 +1,25 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+
 import javax.validation.ConstraintViolation;
 import java.io.Serializable;
+import java.util.Locale;
 
-public class FieldViolationDto implements Serializable {
+public class ValidationErrorDto implements Serializable {
 
     private String field;
     private String violation;
 
-    public FieldViolationDto() {
+    public ValidationErrorDto() {
         // Used by Jersey
     }
 
-    public FieldViolationDto(final ConstraintViolation<?> constraintViolation) {
+    public ValidationErrorDto(final ConstraintViolation<?> constraintViolation, MessageSource messageSource) {
         this.setField(constraintViolation.getPropertyPath().toString());
-        this.setViolation(constraintViolation.getMessage());
+        Locale locale = LocaleContextHolder.getLocale();
+        this.setViolation(messageSource.getMessage(constraintViolation.getMessage(), null, locale));
     }
 
     public String getField() {

@@ -1,5 +1,7 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
+import org.springframework.context.MessageSource;
+
 import javax.validation.ConstraintViolation;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ public class ExceptionRequestDto implements Serializable {
     private String title;
     private Integer status;
     private String message;
-    private List<FieldViolationDto> errors;
+    private List<ValidationErrorDto> errors;
 
     public ExceptionRequestDto() {
         // Used by Jersey
@@ -21,14 +23,14 @@ public class ExceptionRequestDto implements Serializable {
         this.setMessage(message);
     }
 
-    public ExceptionRequestDto(final String message, final Set<? extends ConstraintViolation<?>> constraintViolations, String title, Integer status) {
+    public ExceptionRequestDto(final String message, final Set<? extends ConstraintViolation<?>> constraintViolations, String title, Integer status, MessageSource messageSource) {
         this.setMessage(message);
         errors = new ArrayList<>(constraintViolations.size());
         this.title = title;
         this.status = status;
         constraintViolations.forEach((constraintViolation) -> {
             if (!constraintViolation.getPropertyPath().toString().isEmpty())
-                errors.add(new FieldViolationDto(constraintViolation));
+                errors.add(new ValidationErrorDto(constraintViolation, messageSource));
         });
     }
 
@@ -40,11 +42,11 @@ public class ExceptionRequestDto implements Serializable {
         this.message = message;
     }
 
-    public List<FieldViolationDto> getErrors() {
+    public List<ValidationErrorDto> getErrors() {
         return errors;
     }
 
-    public void setErrors(final List<FieldViolationDto> errors) {
+    public void setErrors(final List<ValidationErrorDto> errors) {
         this.errors = errors;
     }
 

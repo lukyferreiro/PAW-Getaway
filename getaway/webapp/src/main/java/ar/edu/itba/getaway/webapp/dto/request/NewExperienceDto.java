@@ -8,14 +8,15 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 
 public class NewExperienceDto {
 
-    @NotNull
-    @NotBlank
-    @Length(min = 3, max = 50)
-    @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\"·#$%&=:¿?!¡/.-]*$")
+    @NotNull(message = "NotNull")
+    @NotBlank(message = "NotBlank")
+    @Length(min = 3, max = 50, message = "Size.experienceForm.experienceName")
+    @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\"·#$%&=:¿?!¡/.-]*$", message = "Pattern.experienceForm.experienceName")
     private String name;
 
     @NotNull(message = "NotNull")
@@ -31,32 +32,27 @@ public class NewExperienceDto {
     private Long city;
 
     @NotNull(message = "NotNull")
-    @NotBlank(message = "NotEmpty")
+    @NotBlank(message = "NotBlank")
     @Length(min = 5, max = 100, message = "Size.experienceForm.experienceAddress")
-    @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\"·#$%&=:¿?!¡/.-]*$",
-            message = "Pattern.experienceForm.experienceAddress")
+    @Pattern(regexp = "^[A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\"·#$%&=:¿?!¡/.-]*$", message = "Pattern.experienceForm.experienceAddress")
     private String address;
 
-    @NotNull(message = "NotNull")
     @Range(max = 9999999, message = "Size.experienceForm.experiencePrice")
     private Double price;
 
     // https://regexr.com/39nr7
-    @NotNull(message = "NotNull")
     @Length(max = 500, message = "Size.experienceForm.experienceUrl")
     @Pattern(regexp = "^([(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*))?$", message = "Pattern.experienceForm.experienceUrl")
     private String url;
 
     @NotNull(message = "NotNull")
-    @NotBlank(message = "NotEmpty")
+    @NotBlank(message = "NotBlank")
     @Length(max = 255, message = "Size.experienceForm.experienceMail")
     @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$", message = "Pattern.experienceForm.experienceMail")
     private String mail;
 
-    @NotNull(message = "NotNull")
     @Length(max = 500, message = "Size.experienceForm.experienceInfo")
-    @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\";$%#&=:¿?!¡\\n\\s\\t/.-])*$",
-            message = "Pattern.experienceForm.experienceInfo")
+    @Pattern(regexp = "^([A-Za-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ()<>_,'°\";$%#&=:¿?!¡\\n\\s\\t/.-])*$", message = "Pattern.experienceForm.experienceInfo")
     private String description;
 
     public NewExperienceDto() {
