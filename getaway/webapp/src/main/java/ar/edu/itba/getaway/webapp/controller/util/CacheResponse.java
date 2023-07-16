@@ -26,11 +26,12 @@ public class CacheResponse {
         if (response == null) {
             response = Response
                     .ok(new ByteArrayInputStream(image.getImage()))
+                    .cacheControl(cacheControl)
                     .tag(eTag)
                     .type(image.getMimeType())
                     .header("Content-Disposition", "inline; filename=" + image.getImageId());
         }
-        return response.cacheControl(cacheControl).build();
+        return response.build();
 
     }
     private static String getImageHash(byte[] image) {
