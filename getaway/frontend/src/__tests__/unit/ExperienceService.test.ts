@@ -40,7 +40,7 @@ test("Should get all experiences", async () => {
 
     successfullyMockResponse(200, [experienceModelFav, experienceModelNoFav, experienceModelCategory], headers);
 
-    return experienceService.getExperiencesByFilter()
+    return experienceService.getExperiences()
         .then((response) => {
             expect(response.hasFailed()).toBeFalsy();
             expect(response.getData().getContent()[0]).toBe(experienceModelFav);
@@ -55,7 +55,7 @@ test("Should get experiences of category with id 2", async () => {
 
     successfullyMockResponse(200, [experienceModelCategory], headers);
 
-    return experienceService.getExperiencesByFilter("Gastronomia")
+    return experienceService.getExperiences("Gastronomia")
         .then((response) => {
             expect(response.hasFailed()).toBeFalsy();
             expect(response.getData().getContent()[0]).toBe(experienceModelCategory);
@@ -68,7 +68,7 @@ test("Should get experiences with name", async () => {
 
     successfullyMockResponse(200, [experienceModelNoFav], headers);
 
-    return experienceService.getExperiencesByFilter(undefined, "Experiencia comun")
+    return experienceService.getExperiences(undefined, "Experiencia comun")
         .then((response) => {
             expect(response.hasFailed()).toBeFalsy();
             expect(response.getData().getContent()[0]).toBe(experienceModelNoFav);

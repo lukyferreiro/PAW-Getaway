@@ -10,9 +10,8 @@ import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.*;
-import ar.edu.itba.getaway.webapp.dto.response.ExperienceDto;
-import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
-import ar.edu.itba.getaway.webapp.dto.response.UserDto;
+import ar.edu.itba.getaway.webapp.dto.request.UserInfoDto;
+import ar.edu.itba.getaway.webapp.dto.response.*;
 import ar.edu.itba.getaway.webapp.security.services.AuthContext;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -28,6 +27,7 @@ import javax.ws.rs.core.*;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
@@ -81,8 +81,9 @@ public class UserController {
     }
 
     //Endpoint que devuelve informacion de un usuario segun el ID
+    //TODO no se si chequear que userId coincida con el authContext.getCurrentUser()
     @GET
-    @Path("/{userId}")
+    @Path("/{userId:[0-9]+}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response getUser(
             @PathParam("userId") final long id
@@ -94,25 +95,9 @@ public class UserController {
         return Response.ok(new UserDto(user, uriInfo)).build();
     }
 
-    //Endpoint que devuelve informacion de un usuario segun el ID
-    //TODO cambiar
-    @GET
-    @Path("/currentUser")
-    @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response getCurrentUser() {
-        LOGGER.info("Called /users/currentUser GET");
-        final UserModel user = authContext.getCurrentUser();
-
-        if(user == null){
-            return Response.noContent().build();
-        }
-
-        return Response.ok(new UserDto(user, uriInfo)).build();
-    }
-
     //Endpoint para editar la informacion del usuario
     @PUT
-    @Path("/{userId}")
+    @Path("/{userId:[0-9]+}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response updateUser(
@@ -133,29 +118,29 @@ public class UserController {
         return Response.ok().build();
     }
 
-    //Endpoint para la verificacion del mail
-    //TODO cambiar
+    //Endpoint para la verificar al usuario cuando recibo el token
+    //TODO no se si meterlo en el endpoint anterior
     @PUT
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    @Path("/emailVerification")
+    @Path("/emailToken")
     public Response verifyUser(
             @QueryParam("token") final String token
     ) {
 
-        LOGGER.info("Called /users/emailVerification PUT");
+        LOGGER.info("Called /users/emailToken PUT");
 
         userService.verifyAccount(token).orElseThrow(UserNotFoundException::new);
 
         return Response.ok().build();
     }
 
-    //Endpoint para la verificacion del mail
+    //Endpoint para reenviar el mail de verificacion
     //TODO cambiar
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    @Path("/emailVerification")
+    @Path("/emailToken")
     public Response resendUserVerification() {
-        LOGGER.info("Called /users/emailVerification POST");
+        LOGGER.info("Called /users/emailToken POST");
 
         final UserModel user = authContext.getCurrentUser();
 
@@ -164,18 +149,18 @@ public class UserController {
         return Response.ok().build();
     }
 
-    //Endpoint para resetear la contraseña
+    //Endpoint para resetear la contraseña, recibiendo el token y la contraseña nueva
     //TODO cambiar
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/passwordReset")
+    @Path("/passwordToken")
     public Response resetPassword(
             @QueryParam("token") final String token,
             @Valid final PasswordResetDto passwordResetDto
     ) {
 
-        LOGGER.info("Called /users/passwordReset PUT");
+        LOGGER.info("Called /users/passwordToken PUT");
 
         if (passwordResetDto == null) {
             throw new ContentExpectedException();
@@ -186,17 +171,17 @@ public class UserController {
         return Response.ok().build();
     }
 
-    //Endpoint para resetear la contraseña
+    //Endpoint para enviar el mail del email que quiere reiniciar la contraseña
     //TODO cambiar
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/passwordReset")
+    @Path("/passwordToken")
     public Response sendResetPasswordEmail(
             @Valid final PasswordResetEmailDto passwordResetEmailDto
     ) {
 
-        LOGGER.info("Called /users/passwordReset POST");
+        LOGGER.info("Called /users/passwordToken POST");
 
         if (passwordResetEmailDto == null) {
             throw new ContentExpectedException();
@@ -210,7 +195,7 @@ public class UserController {
 
     //Endpoint para obtener la imagen de perfil del usuario
     @GET
-    @Path("/{userId}/profileImage")
+    @Path("/{userId:[0-9]+}/profileImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON})
     public Response getUserProfileImage(
             @PathParam("userId") final long id,
@@ -233,7 +218,7 @@ public class UserController {
     //Endpoint para editar la imagen de perfil del usuario
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{userId}/profileImage")
+    @Path("/{userId:[0-9]+}/profileImage")
     public Response updateUserProfileImage(
             @PathParam("userId") final long id,
             @FormDataParam("profileImage") final FormDataBodyPart profileImageBody,
@@ -257,7 +242,7 @@ public class UserController {
 
     //Endpoint para obtener las experiencias creadas por un usuario
     @GET
-    @Path("/{userId}/experiences")
+    @Path("/{userId:[0-9]+}/experiences")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserExperiences(
             @PathParam("userId") final long id,
@@ -294,7 +279,7 @@ public class UserController {
 
     //Endpoint para obtener las reseñas creadas por un usuario
     @GET
-    @Path("/{userId}/reviews")
+    @Path("/{userId:[0-9]+}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserReviews(
             @PathParam("userId") final long id,
@@ -325,7 +310,7 @@ public class UserController {
     }
 
     @GET
-    @Path("/{userId}/favExperiences")
+    @Path("/{userId:[0-9]+}/favExperiences")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserFavExperiences(
             @PathParam("userId") final long id,
@@ -358,6 +343,19 @@ public class UserController {
         }, uriBuilder);
     }
 
-    //TODO agrear /userid/recommendations
+    //Endpoint para obtener las recomendaciones para un usuario
+    @GET
+    @Path("/{userId:[0-9]+}/recommendations")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getUserRecommendations(
+            @PathParam("userId") final long id
+    ) {
+
+        final UserModel user = authContext.getCurrentUser();
+        List<List<ExperienceModel>> recommendations = experienceService.userLandingPage(user);
+        return Response.ok(new GenericEntity<UserRecommendationsDto>(new UserRecommendationsDto(recommendations, user, uriInfo)) {
+        }).build();
+
+    }
 
 }

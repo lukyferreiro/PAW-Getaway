@@ -17,7 +17,6 @@ public class CategoryDto implements Serializable {
         return categories.stream().map(category -> new CategoryDto(category, uriInfo)).collect(Collectors.toList());
     }
 
-
     public CategoryDto() {
         // Used by Jersey
     }
@@ -25,11 +24,7 @@ public class CategoryDto implements Serializable {
     public CategoryDto(CategoryModel category, UriInfo uriInfo) {
         this.id = category.getCategoryId();
         this.name = category.getCategoryName();
-        this.self = uriInfo.getBaseUriBuilder()
-                .path("categories")
-                .path(String.valueOf(category.getCategoryId()))
-                .build();       // /categories/{categoryId}
-
+        this.self = uriInfo.getBaseUriBuilder().path("categories").path(String.valueOf(category.getCategoryId())).build();
     }
 
     public long getId() {

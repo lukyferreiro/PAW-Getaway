@@ -44,8 +44,6 @@ public class VerificationToken {
         this.expirationDate = expirationDate;
     }
 
-    
-
     public boolean isValid() {
         return expirationDate.compareTo(LocalDateTime.now()) > 0;
     }

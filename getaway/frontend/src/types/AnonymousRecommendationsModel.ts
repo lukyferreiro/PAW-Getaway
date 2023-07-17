@@ -1,6 +1,6 @@
 import ExperienceModel from "./ExperienceModel";
 
-export default interface anonymousLandingPageModel {
+export default interface AnonymousRecommendationsModel {
     aventura: ExperienceModel[];
     gastronomia: ExperienceModel[];
     hoteleria: ExperienceModel[];

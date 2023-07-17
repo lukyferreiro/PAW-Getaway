@@ -16,10 +16,12 @@ public class ReviewDto implements Serializable {
     private String description;
     private long score;
     private String date;
+    private URI self;
+    private URI userUrl;
+    private URI experienceUrl;
+    //TODO ver que onda estos DTOs
     private UserInfoDto user;
     private ExperienceNameDto experience;
-    private URI selfUrl;
-    private URI experienceUrl;
 
     public static Collection<ReviewDto> mapReviewToDto(Collection<ReviewModel> reviews, UriInfo uriInfo) {
         return reviews.stream().map(r -> new ReviewDto(r, uriInfo)).collect(Collectors.toList());
@@ -34,17 +36,17 @@ public class ReviewDto implements Serializable {
     }
 
     public ReviewDto(ReviewModel review, UriInfo uriInfo) {
+        final UriBuilder uriBuilder = getReviewUriBuilder(review, uriInfo);
         this.id = review.getReviewId();
         this.title = review.getTitle();
         this.description = review.getDescription();
         this.score = review.getScore();
         this.date = review.getReviewDate().toString();
+        this.self = uriBuilder.clone().build();
+        this.userUrl = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).build();
+        this.experienceUrl = uriInfo.getBaseUriBuilder().path("experiences").path(String.valueOf(experience.getId())).build();;
         this.user = new UserInfoDto(review.getUser(), uriInfo);
         this.experience = new ExperienceNameDto(review.getExperience(), uriInfo);
-        this.selfUrl = getReviewUriBuilder(review, uriInfo).build();
-        this.experienceUrl = uriInfo.getBaseUriBuilder().path("experiences").path("experience")
-                .path(review.getExperience().getExperienceId().toString())
-                .build();    // /experiences/experience/{id}
     }
 
     public long getId() {
@@ -77,23 +79,29 @@ public class ReviewDto implements Serializable {
     public void setDate(String date) {
         this.date = date;
     }
-    public UserInfoDto getUser() {
-        return user;
+    public URI getSelf() {
+        return self;
     }
-    public void setUser(UserInfoDto user) {
-        this.user = user;
+    public void setSelf(URI self) {
+        this.self = self;
     }
-    public URI getSelfUrl() {
-        return selfUrl;
+    public URI getUserUrl() {
+        return userUrl;
     }
-    public void setSelfUrl(URI selfUrl) {
-        this.selfUrl = selfUrl;
+    public void setUserUrl(URI userUrl) {
+        this.userUrl = userUrl;
     }
     public URI getExperienceUrl() {
         return experienceUrl;
     }
     public void setExperienceUrl(URI experienceUrl) {
         this.experienceUrl = experienceUrl;
+    }
+    public UserInfoDto getUser() {
+        return user;
+    }
+    public void setUser(UserInfoDto user) {
+        this.user = user;
     }
     public ExperienceNameDto getExperience() {
         return experience;

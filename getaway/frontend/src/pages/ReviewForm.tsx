@@ -116,7 +116,7 @@ export default function ReviewForm() {
                         showToast(t('ReviewForm.toast.updateError', {reviewTitle: data.title}), 'error')
                     })
             } else {
-                experienceService.postNewReview(parsedExperienceId, data.title, data.description, data.score)
+                reviewService.postNewReview(parsedExperienceId, data.title, data.description, data.score)
                     .then((result) => {
                         if (!result.hasFailed()) {
                             navigate(`/experiences/${experienceId}`, {replace: true})

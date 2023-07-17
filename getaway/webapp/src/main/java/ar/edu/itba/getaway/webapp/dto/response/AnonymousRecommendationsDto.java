@@ -4,6 +4,7 @@ import ar.edu.itba.getaway.models.ExperienceModel;
 
 import javax.ws.rs.core.UriInfo;
 import java.io.Serializable;
+import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class AnonymousRecommendationsDto implements Serializable {
     private Collection<ExperienceDto> Relax;
     private Collection<ExperienceDto> Vida_nocturna;
     private Collection<ExperienceDto> Historico;
+    private URI self;
 
     public AnonymousRecommendationsDto() {
         // Used by Jersey
@@ -26,53 +28,49 @@ public class AnonymousRecommendationsDto implements Serializable {
         this.Relax = ExperienceDto.mapExperienceToDto(experiencesList.get(3), uriInfo);
         this.Vida_nocturna = ExperienceDto.mapExperienceToDto(experiencesList.get(4), uriInfo);
         this.Historico = ExperienceDto.mapExperienceToDto(experiencesList.get(5), uriInfo);
+        this.self = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(0)).path("recommendations").build();
     }
 
     public Collection<ExperienceDto> getAventura() {
         return Aventura;
     }
-
     public void setAventura(Collection<ExperienceDto> aventura) {
         Aventura = aventura;
     }
-
     public Collection<ExperienceDto> getGastronomia() {
         return Gastronomia;
     }
-
     public void setGastronomia(Collection<ExperienceDto> gastronomia) {
         Gastronomia = gastronomia;
     }
-
     public Collection<ExperienceDto> getHoteleria() {
         return Hoteleria;
     }
-
     public void setHoteleria(Collection<ExperienceDto> hoteleria) {
         Hoteleria = hoteleria;
     }
-
     public Collection<ExperienceDto> getRelax() {
         return Relax;
     }
-
     public void setRelax(Collection<ExperienceDto> relax) {
         Relax = relax;
     }
-
     public Collection<ExperienceDto> getVida_nocturna() {
         return Vida_nocturna;
     }
-
     public void setVida_nocturna(Collection<ExperienceDto> vida_nocturna) {
         Vida_nocturna = vida_nocturna;
     }
-
     public Collection<ExperienceDto> getHistorico() {
         return Historico;
     }
-
     public void setHistorico(Collection<ExperienceDto> historico) {
         Historico = historico;
+    }
+    public URI getSelf() {
+        return self;
+    }
+    public void setSelf(URI self) {
+        this.self = self;
     }
 }

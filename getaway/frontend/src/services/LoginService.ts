@@ -12,7 +12,7 @@ export class LoginService {
         const hash = btoa(credentials);
         // setCookie("basic-token", hash, 7);
         try {
-            const response = await fetch(paths.BASE_URL + paths.USERS + "/currentUser", {
+            const response = await fetch(paths.BASE_URL + paths.CATEGORIES, {
                 method: "GET",
                 headers: {
                     Authorization: "Basic " + hash,

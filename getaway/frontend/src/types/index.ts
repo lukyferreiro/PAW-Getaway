@@ -13,5 +13,5 @@ export type {default as OrderByModel} from "./OrderByModel";
 export type {default as MaxPriceModel} from "./MaxPriceModel";
 export type {default as UserModel} from "./UserModel";
 export type {default as UserInfoModel} from "./UserInfoModel";
-export type {default as AnonymousLandingPageModel} from "./AnonymousLandingPageModel";
-export type {default as UserLandingPageModel} from "./UserLandingPageModel";
+export type {default as AnonymousRecommendationsModel} from "./AnonymousRecommendationsModel";
+export type {default as UserRecommendationsModel} from "./UserRecommendationsModel";

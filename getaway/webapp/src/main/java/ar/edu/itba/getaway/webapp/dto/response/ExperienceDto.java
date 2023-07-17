@@ -20,24 +20,31 @@ public class ExperienceDto implements Serializable {
     private Long score;
     private Integer views;
     private String siteUrl;
+    private boolean isFav;
+    private boolean observable;
+    private boolean hasImage;
+    private Long reviewCount;
     private URI selfUrl;
     private URI imageUrl;
     private URI reviewsUrl;
-    private Long reviewCount;
+    private URI ordersUrl;
+    private URI countryURl;
+    private URI cityURL;
+    private URI userUrl;
+    private URI categoryUrl;
+    private URI bestExperiencesURL;
+    //TODO ver que onda estos DTOs
     private CountryDto country;
     private CityDto city;
     private UserInfoDto user;
     private CategoryDto category;
-    private boolean isFav;
-    private boolean observable;
-    private boolean hasImage;
 
     public static Collection<ExperienceDto> mapExperienceToDto(Collection<ExperienceModel> experiences, UriInfo uriInfo) {
         return experiences.stream().map(exp -> new ExperienceDto(exp, uriInfo)).collect(Collectors.toList());
     }
 
     public static UriBuilder getExperienceUriBuilder(ExperienceModel experience, UriInfo uriInfo) {
-        return uriInfo.getBaseUriBuilder().clone().path("experiences/experience").path(String.valueOf(experience.getExperienceId()));
+        return uriInfo.getBaseUriBuilder().clone().path("experiences").path(String.valueOf(experience.getExperienceId()));
     }
 
     public ExperienceDto() {
@@ -56,17 +63,23 @@ public class ExperienceDto implements Serializable {
         this.score = experience.getAverageScore();
         this.siteUrl = experience.getSiteUrl();
         this.views = experience.getViews();
+        this.isFav = experience.getIsFav();
+        this.observable = experience.getObservable();
+        this.hasImage = experience.getImage() != null;
+        this.reviewCount = experience.getReviewCount();
         this.selfUrl = uriBuilder.build();
         this.imageUrl = uriBuilder.clone().path("experienceImage").build();    // /experience/{id}/experienceImage
         this.reviewsUrl = uriBuilder.clone().path("reviews").build();    // /experience/{id}/reviews
-        this.reviewCount = experience.getReviewCount();
+        this.ordersUrl = uriInfo.getBaseUriBuilder().path("experiences").path("orders").build();
+        this.countryURl =  uriInfo.getBaseUriBuilder().path("location").path("countries").path(String.valueOf(country.getId())).build();
+        this.cityURL = uriInfo.getBaseUriBuilder().path("location").path("cities").path(String.valueOf(city.getId())).build();
+        this.userUrl = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).build();
+        this.categoryUrl = uriInfo.getBaseUriBuilder().path("categories").path(String.valueOf(category.getId())).build();
+        this.bestExperiencesURL = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(0)).path("recommendations").build();
         this.country = new CountryDto(experience.getCity().getCountry(), uriInfo);
         this.city = new CityDto(experience.getCity(), uriInfo);
         this.user = new UserInfoDto(experience.getUser(), uriInfo);
         this.category = new CategoryDto(experience.getCategory(), uriInfo);
-        this.isFav = experience.getIsFav();
-        this.observable = experience.getObservable();
-        this.hasImage = experience.getImage() != null;
     }
 
     public Long getId() {
@@ -134,6 +147,42 @@ public class ExperienceDto implements Serializable {
     }
     public void setReviewsUrl(URI reviewsUrl) {
         this.reviewsUrl = reviewsUrl;
+    }
+    public URI getOrdersUrl() {
+        return ordersUrl;
+    }
+    public void setOrdersUrl(URI ordersUrl) {
+        this.ordersUrl = ordersUrl;
+    }
+    public URI getCountryURl() {
+        return countryURl;
+    }
+    public void setCountryURl(URI countryURl) {
+        this.countryURl = countryURl;
+    }
+    public URI getCityURL() {
+        return cityURL;
+    }
+    public void setCityURL(URI cityURL) {
+        this.cityURL = cityURL;
+    }
+    public URI getUserUrl() {
+        return userUrl;
+    }
+    public void setUserUrl(URI userUrl) {
+        this.userUrl = userUrl;
+    }
+    public URI getCategoryUrl() {
+        return categoryUrl;
+    }
+    public void setCategoryUrl(URI categoryUrl) {
+        this.categoryUrl = categoryUrl;
+    }
+    public URI getBestExperiencesURL() {
+        return bestExperiencesURL;
+    }
+    public void setBestExperiencesURL(URI bestExperiencesURL) {
+        this.bestExperiencesURL = bestExperiencesURL;
     }
     public Long getReviewCount() {
         return reviewCount;

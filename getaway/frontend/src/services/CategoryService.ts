@@ -10,4 +10,10 @@ export class CategoryService {
             method: "GET",
         });
     }
+
+    public async getCategoryById(categoryId: number): Promise<Result<CategoryModel>> {
+        return resultFetch<CategoryModel>(this.basePath + `${categoryId}`, {
+            method: "GET",
+        });
+    }
 }

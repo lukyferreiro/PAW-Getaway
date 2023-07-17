@@ -86,10 +86,9 @@ public class AntMatcherVoter {
 
     public boolean userEditHimself(Authentication authentication, long userId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
-        //Usuario que quiero editar
-        final Optional<UserModel> userToEdit = userService.getUserById(userId);
 
-        final UserModel user = getUser(authentication);
+        final Optional<UserModel> userToEdit = userService.getUserById(userId); //Usuario que quiero editar
+        final UserModel user = getUser(authentication); //Usuario autenticado
 
         if (user.isVerified()) {
             if(userToEdit.isPresent()) {
@@ -101,9 +100,9 @@ public class AntMatcherVoter {
 
     public boolean accessUserInfo(Authentication authentication, long userId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
-        final Optional<UserModel> userToAccess = userService.getUserById(userId);
+        final Optional<UserModel> userToAccess = userService.getUserById(userId); //Usuario que quiero acceder
 
-        final UserModel user = getUser(authentication);
+        final UserModel user = getUser(authentication);   //Usuario autenticado
 
         return userToAccess.map(userModel -> userModel.equals(user)).orElse(false);
     }

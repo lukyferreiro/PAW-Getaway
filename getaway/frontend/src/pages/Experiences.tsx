@@ -118,7 +118,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
             ) {
                 setIsLoading(true)
                 serviceHandler(
-                    experienceService.getExperiencesByFilter(categoryProp[0], nameProp[0], order[0], price, Math.abs(rating), city, currentPage[0]===0 ? 1 : currentPage[0]),
+                    experienceService.getExperiences(categoryProp[0], nameProp[0], order[0], price, Math.abs(rating), city, currentPage[0]===0 ? 1 : currentPage[0]),
                     navigate, (experiences) => {
                         setExperiences(experiences.getContent())
                         setMaxPage(experiences ? experiences.getMaxPage() : 0)

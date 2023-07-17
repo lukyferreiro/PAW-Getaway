@@ -71,6 +71,7 @@ public class AuthTokenServiceImpl implements AuthTokenService {
         }
     }
 
+    // TODO agregar mas info al token
     private String createToken(AuthToken authToken) {
         return Jwts.builder()
                 .setId(authToken.getId())

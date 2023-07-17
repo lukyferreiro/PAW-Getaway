@@ -1,7 +1,9 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
 import ar.edu.itba.getaway.models.CountryModel;
+import ar.edu.itba.getaway.models.UserModel;
 
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.io.Serializable;
 import java.net.URI;
@@ -11,11 +13,15 @@ import java.util.stream.Collectors;
 public class CountryDto implements Serializable {
     private long id;
     private String name;
-    private String citiesUrl;
     private URI self;
+    private URI citiesUrl;
 
     public static Collection<CountryDto> mapCountryToDto(Collection<CountryModel> countries, UriInfo uriInfo) {
         return countries.stream().map(country -> new CountryDto(country, uriInfo)).collect(Collectors.toList());
+    }
+
+    public static UriBuilder getCountryUriBuilder(CountryModel country, UriInfo uriInfo) {
+        return uriInfo.getBaseUriBuilder().clone().path("location").path("countries").path(String.valueOf(country.getCountryId()));
     }
 
     public CountryDto() {
@@ -23,19 +29,11 @@ public class CountryDto implements Serializable {
     }
 
     public CountryDto(CountryModel country, UriInfo uriInfo) {
+        final UriBuilder uriBuilder = getCountryUriBuilder(country, uriInfo);
         this.id = country.getCountryId();
         this.name = country.getCountryName();
-        this.citiesUrl = uriInfo.getBaseUriBuilder()
-                .path("location")
-                .path("country")
-                .path(String.valueOf(country.getCountryId()))
-                .path("cities")
-                .build().toString();    // /location/country/{id}/cities
-        this.self = uriInfo.getBaseUriBuilder()
-                .path("location")
-                .path("country")
-                .path(String.valueOf(country.getCountryId()))
-                .build();       // /location/country/{id}
+        this.self =  uriBuilder.clone().build();
+        this.citiesUrl = uriBuilder.clone().path("cities").build();
     }
 
     public long getId() {
@@ -54,11 +52,11 @@ public class CountryDto implements Serializable {
         this.name = name;
     }
 
-    public String getCitiesUrl() {
+    public URI getCitiesUrl() {
         return citiesUrl;
     }
 
-    public void setCitiesUrl(String citiesUrl) {
+    public void setCitiesUrl(URI citiesUrl) {
         this.citiesUrl = citiesUrl;
     }
     public URI getSelf() {

@@ -6,13 +6,13 @@ import {
     PutResponse,
     Result,
     ReviewModel,
-    AnonymousLandingPageModel,
-    UserLandingPageModel,
-    MaxPriceModel, OrderByModel
+    MaxPriceModel,
+    OrderByModel
 } from "../types";
 import {resultFetch} from "../scripts/resultFetch";
 import {getPagedFetch} from "../scripts/getPagedFetch";
 import {authedFetch} from "../scripts/authedFetch";
+import AnonymousRecommendationsModel from "../types/AnonymousRecommendationsModel";
 
 export class  ExperienceService {
     private readonly basePath = paths.BASE_URL + paths.EXPERIENCES;
@@ -49,19 +49,7 @@ export class  ExperienceService {
         });
     }
 
-    public async getAnonymousLandingPage(): Promise<Result<AnonymousLandingPageModel>> {
-        return resultFetch<AnonymousLandingPageModel>(this.basePath + "/landingPage", {
-            method: "GET"
-        })
-    }
-
-    public async getUserLandingPage(): Promise<Result<UserLandingPageModel>> {
-        return resultFetch<UserLandingPageModel>(this.basePath + "/landingPage", {
-            method: "GET"
-        })
-    }
-
-    public async getExperiencesByFilter(
+    public async getExperiences(
         category?: string,
         name?: string,
         order?: string,
@@ -70,7 +58,7 @@ export class  ExperienceService {
         city?: number,
         page?: number
     ): Promise<Result<PagedContent<ExperienceModel[]>>> {
-        const url = new URL(this.basePath + "/filter");
+        const url = new URL(this.basePath);
         if (typeof category === "string") {
             url.searchParams.append("category", category);
         }
@@ -96,7 +84,7 @@ export class  ExperienceService {
         category?: string,
         name?: string,
     ): Promise<Result<MaxPriceModel>> {
-        const url = new URL(this.basePath + "/filter/maxPrice");
+        const url = new URL(this.basePath + "/maxPrice");
 
         if (typeof name === "string") {
             url.searchParams.append("name", name);
@@ -112,7 +100,7 @@ export class  ExperienceService {
 
     public async getUserOrderByModels(
     ): Promise<Result<OrderByModel[]>> {
-        const url = new URL(this.basePath + "/filter/orderByModels?user=true");
+        const url = new URL(this.basePath + "/orders?user=true");
 
         return resultFetch<OrderByModel[]>(url.toString(), {
             method: "GET",
@@ -121,18 +109,24 @@ export class  ExperienceService {
 
     public async getProviderOrderByModels(
     ): Promise<Result<OrderByModel[]>> {
-        const url = new URL(this.basePath + "/filter/orderByModels?provider=true");
+        const url = new URL(this.basePath + "/orders?provider=true");
 
         return resultFetch<OrderByModel[]>(url.toString(), {
             method: "GET",
         });
     }
 
+    public async getExperiencesRecommendations(): Promise<Result<AnonymousRecommendationsModel>> {
+        return resultFetch<AnonymousRecommendationsModel>(this.basePath + `/recommendations`, {
+            method: "GET"
+        })
+    }
+
     public async getExperienceById(
         experienceId: number,
         view?: boolean
     ): Promise<Result<ExperienceModel>> {
-        const url = new URL(this.basePath + `/experience/${experienceId}`);
+        const url = new URL(this.basePath + `/${experienceId}`);
         if (typeof view === "boolean") {
             url.searchParams.append("view", view.toString());
         }
@@ -143,7 +137,7 @@ export class  ExperienceService {
     }
 
     public async getExperienceNameById(experienceId: number): Promise<Result<ExperienceModel>> {
-        return resultFetch<ExperienceModel>(this.basePath + `/experience/${experienceId}/name`, {
+        return resultFetch<ExperienceModel>(this.basePath + `/${experienceId}/name`, {
             method: "GET",
         });
     }
@@ -171,7 +165,7 @@ export class  ExperienceService {
             url: url ? url : "",
             description: description ? description : ""
         });
-        return resultFetch(this.basePath + `/experience/${experienceId}`, {
+        return resultFetch(this.basePath + `/${experienceId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": APPLICATION_JSON_TYPE,
@@ -181,7 +175,7 @@ export class  ExperienceService {
     }
 
     public async deleteExperienceById(experienceId: number)  {
-        return authedFetch(this.basePath + `/experience/${experienceId}`, {
+        return authedFetch(this.basePath + `/${experienceId}`, {
             method: "DELETE",
         });
     }
@@ -192,7 +186,7 @@ export class  ExperienceService {
     ): Promise<Result<PutResponse>> {
         const formData = new FormData();
         formData.append("experienceImage", file, file.name);
-        return resultFetch<PutResponse>(this.basePath + `/experience/${experienceId}/experienceImage`, {
+        return resultFetch<PutResponse>(this.basePath + `/${experienceId}/experienceImage`, {
             method: "PUT",
             headers: {},
             body: formData,
@@ -203,34 +197,14 @@ export class  ExperienceService {
         experienceId: number,
         page?: number
     ): Promise<Result<PagedContent<ReviewModel[]>>> {
-        return getPagedFetch<ReviewModel[]>(this.basePath + `/experience/${experienceId}/reviews`, page);
-    }
-
-    public async postNewReview(
-        experienceId: number,
-        title: string,
-        description: string,
-        score: string
-    ): Promise<Result<PostResponse>> {
-        const reviewToUpdate = JSON.stringify({
-            title:title,
-            description:description,
-            score:score
-        });
-        return resultFetch<PostResponse>(this.basePath + `/experience/${experienceId}/reviews`, {
-            method: "POST",
-            headers: {
-                "Content-Type": APPLICATION_JSON_TYPE,
-            },
-            body: reviewToUpdate,
-        });
+        return getPagedFetch<ReviewModel[]>(this.basePath + `/${experienceId}/reviews`, page);
     }
 
     public async setExperienceFav(
         experienceId: number,
         set?: boolean
     ) {
-        const url = new URL(this.basePath + `/experience/${experienceId}/fav`);
+        const url = new URL(this.basePath + `/${experienceId}/fav`);
         if (typeof set === "boolean") {
             url.searchParams.append("set", set.toString());
         }
@@ -246,7 +220,7 @@ export class  ExperienceService {
         experienceId: number,
         set?: boolean
     ) {
-        const url = new URL(this.basePath + `/experience/${experienceId}/observable`);
+        const url = new URL(this.basePath + `/${experienceId}/observable`);
         if (typeof set === "boolean") {
             url.searchParams.append("set", set.toString());
         }

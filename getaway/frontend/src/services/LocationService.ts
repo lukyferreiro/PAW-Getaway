@@ -1,5 +1,5 @@
 import { paths } from "../common";
-import {CityModel, CountryModel, ErrorResponse, Result} from "../types";
+import {CityModel, CountryModel, Result} from "../types";
 import {resultFetch} from "../scripts/resultFetch";
 
 export class LocationService {
@@ -7,6 +7,12 @@ export class LocationService {
 
     public async getCountries(): Promise<Result<CountryModel[]>> {
         return resultFetch<CountryModel[]>(this.basePath + "/countries", {
+            method: "GET",
+        });
+    }
+
+    public async getCountryById(countryId: number): Promise<Result<CountryModel>> {
+        return resultFetch<CountryModel>(this.basePath + `/countries/${countryId}`, {
             method: "GET",
         });
     }

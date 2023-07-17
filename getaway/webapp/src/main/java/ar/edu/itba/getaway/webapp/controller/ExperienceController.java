@@ -7,7 +7,6 @@ import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
-import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.*;
 import ar.edu.itba.getaway.webapp.security.services.AuthContext;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -22,7 +21,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.time.LocalDate;
 import java.util.*;
 
 @Path("experiences")
@@ -57,32 +55,44 @@ public class ExperienceController {
         this.authContext = authContext;
     }
 
-    //TODO cambiar
-    @GET
-    @Path("/landingPage")
+    // Endpoint para crear una experiencia
+    @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getLandingPageExperiences(){
+    public Response registerExperience(
+            @Valid final NewExperienceDto experienceDto
+    ) throws DuplicateExperienceException {
+
+        LOGGER.info("Called /experiences/ POST");
+
+        if (experienceDto == null) {
+            throw new ContentExpectedException();
+        }
+
         final UserModel user = authContext.getCurrentUser();
+        final CityModel city = locationService.getCityById(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
+        final CategoryModel category = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
-        List<List<ExperienceModel>> landingPageList;
+        ExperienceModel experience;
+        try {
+            experience = experienceService.createExperience(
+                    experienceDto.getName(), experienceDto.getAddress(),
+                    experienceDto.getDescription(), experienceDto.getMail(),
+                    experienceDto.getUrl(), experienceDto.getPrice(),
+                    city, category, user);
+        } catch (DuplicateExperienceException e) {
+            LOGGER.warn("Error in experienceDto ExperienceForm, there is already an experience with this id");
+            throw new DuplicateExperienceException();
+        }
 
-        if (user != null ){
-            landingPageList = experienceService.userLandingPage(user);
-            return Response.ok(new GenericEntity<UserRecommendationsDto>(new UserRecommendationsDto(landingPageList, uriInfo)){}).build();
-        }
-        else {
-            landingPageList = experienceService.getExperiencesListByCategories(null);
-            return Response.ok(new GenericEntity<AnonymousRecommendationsDto>(new AnonymousRecommendationsDto(landingPageList, uriInfo)){}).build();
-        }
+        LOGGER.info("Created experience with id {}", experience.getExperienceId());
+        return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
     }
 
     // TODO habria que agregar el country como queryParam
-    //TODO cambiar
-    // Endpoint para obtener las experiencias de una categoria
+    // Endpoint para obtener las experiencias
     @GET
-    @Path("/filter")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getExperiencesFromCategory(
+    public Response getExperiences(
             @QueryParam("category") @DefaultValue("") String category,
             @QueryParam("name") @DefaultValue("") String name,
             @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
@@ -136,11 +146,11 @@ public class ExperienceController {
         }, uriBuilder);
     }
 
-    //TODO cambiar
+    //TODO ver si se puede fusionar este en el endpoint anterior
     @GET
-    @Path("/filter/maxPrice")
+    @Path("/maxPrice")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getCategoryMaxPrice(
+    public Response getExperiencesMaxPrice(
             @QueryParam("category") @DefaultValue("") final String category,
             @QueryParam("name") @DefaultValue("") String name
         ){
@@ -149,14 +159,14 @@ public class ExperienceController {
             categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
         }
         final Double maxPrice = experienceService.getMaxPriceByCategoryAndName(categoryModel, name).orElse(0.0);
-        return Response.ok(new MaxPriceDto(maxPrice)).build();
+        return Response.ok(new MaxPriceDto(maxPrice, uriInfo)).build();
     }
 
-    //TODO cambiar
+    //TODO chequear
     @GET
-    @Path("/filter/orderByModels")
+    @Path("/orders")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getOrderByModels(
+    public Response getExperiencesOrders(
             @QueryParam("user") @DefaultValue("false") boolean user,
             @QueryParam("provider") @DefaultValue("false") boolean owner
     ){
@@ -172,47 +182,24 @@ public class ExperienceController {
             orderByModels = OrderByModel.getUserOrderByModel();
         }
 
-        Collection<OrderByDto> orderByDtos = OrderByDto.mapOrderByToDto(Arrays.asList(orderByModels));
+        Collection<OrderByDto> orderByDtos = OrderByDto.mapOrderByToDto(Arrays.asList(orderByModels), uriInfo);
         return Response.ok(new GenericEntity<Collection<OrderByDto>>(orderByDtos) {}).build();
     }
 
-    // Endpoint para crear una experiencia
-    @POST
+    //Endpoint para obtener las recomendaciones para un usuario
+    @GET
+    @Path("/recommendations")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response registerExperience(
-            @Valid final NewExperienceDto experienceDto
-    ) throws DuplicateExperienceException {
+    public Response getExperiencesRecommendations() {
+        List<List<ExperienceModel>> recommendations= experienceService.getExperiencesListByCategories(null);
+        return Response.ok(new GenericEntity<AnonymousRecommendationsDto>(new AnonymousRecommendationsDto(recommendations, uriInfo)) {
+        }).build();
 
-        LOGGER.info("Called /experiences/ POST");
-
-        if (experienceDto == null) {
-            throw new ContentExpectedException();
-        }
-
-        final UserModel user = authContext.getCurrentUser();
-        final CityModel city = locationService.getCityById(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
-        final CategoryModel category = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
-
-        ExperienceModel experience;
-        try {
-            experience = experienceService.createExperience(
-                experienceDto.getName(), experienceDto.getAddress(),
-                experienceDto.getDescription(), experienceDto.getMail(),
-                experienceDto.getUrl(), experienceDto.getPrice(),
-                city, category, user);
-        } catch (DuplicateExperienceException e) {
-            LOGGER.warn("Error in experienceDto ExperienceForm, there is already an experience with this id");
-            throw new DuplicateExperienceException();
-        }
-
-        LOGGER.info("Created experience with id {}", experience.getExperienceId());
-        return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
     }
 
     // Endpoint para obtener una experiencia a partir de su ID
-    //TODO cambiar
     @GET
-    @Path("/experience/{experienceId}")
+    @Path("/{experienceId:[0-9]+}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperienceId(
             @PathParam("experienceId") final long id,
@@ -224,9 +211,9 @@ public class ExperienceController {
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
 
-        if(view) {
+        if (view) {
             favAndViewExperienceService.setViewed(user, experience);
-            if (user!=null && !experience.getUser().equals(user)) {
+            if (user != null && !experience.getUser().equals(user)) {
                 experienceService.increaseViews(experience);
             }
         }
@@ -235,27 +222,9 @@ public class ExperienceController {
         return Response.ok(experienceDto).build();
     }
 
-    // Endpoint para obtener una experiencia a partir de su ID
-    //TODO cambiar
-    @GET
-    @Path("/experience/{experienceId}/name")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getExperienceNameById(
-            @PathParam("experienceId") final long id
-    ) {
-        LOGGER.info("Called /experiences/{} GET", id);
-
-        final UserModel user = authContext.getCurrentUser();
-        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
-
-        final ExperienceNameDto experienceDto = new ExperienceNameDto(experience, uriInfo);
-        return Response.ok(experienceDto).build();
-    }
-
     // Endpoint para editar una experiencia
-    //TODO cambiar
     @PUT
-    @Path("/experience/{experienceId}")
+    @Path("/{experienceId:[0-9]+}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response updateExperience(
@@ -276,13 +245,6 @@ public class ExperienceController {
 
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
-
-        if (experience.getUser().getUserId() != (user.getUserId())) {
-            LOGGER.error("Error, user with id {} is trying to update the experience with id {} that belongs to user with id {}",
-                    user.getUserId(), id, experience.getUser().getUserId());
-            throw new IllegalOperationException();
-        }
-
         final CityModel cityModel = locationService.getCityById(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel categoryModel = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
@@ -295,31 +257,36 @@ public class ExperienceController {
     }
 
     // Endpoint para eliminar una experiencia
-    //TODO cambiar
     @DELETE
-    @Path("/experience/{experienceId}")
+    @Path("/{experienceId:[0-9]+}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response deleteExperience(
             @PathParam("experienceId") final long id
     ) {
-
-        final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
-
-        if (experienceModel.getUser().getUserId() != (user.getUserId())) {
-            LOGGER.error("Error, user with id {} is trying to update the experience with id {} that belongs to user with id {}",
-                    user.getUserId(), id, experienceModel.getUser().getUserId());
-            throw new IllegalOperationException();
-        }
-
         experienceService.deleteExperience(experienceModel);
         return Response.noContent().build();
     }
 
-    // Endpoint para obtener la imagen de una experiencia
-    //TODO cambiar
+    // Endpoint para obtener una experiencia a partir de su ID
     @GET
-    @Path("/experience/{experienceId}/experienceImage")
+    @Path("/{experienceId:[0-9]+}/name")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getExperienceNameById(
+            @PathParam("experienceId") final long id
+    ) {
+        LOGGER.info("Called /experiences/{} GET", id);
+
+        final UserModel user = authContext.getCurrentUser();
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
+
+        final ExperienceNameDto experienceDto = new ExperienceNameDto(experience, uriInfo);
+        return Response.ok(experienceDto).build();
+    }
+
+    // Endpoint para obtener la imagen de una experiencia
+    @GET
+    @Path("/{experienceId:[0-9]+}/experienceImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON})
     public Response getExperienceImage(
             @PathParam("experienceId") final long id,
@@ -337,9 +304,8 @@ public class ExperienceController {
         return CacheResponse.cacheResponse(image, request);
     }
 
-    //TODO cambiar
     @PUT
-    @Path("/experience/{experienceId}/experienceImage")
+    @Path("/{experienceId:[0-9]+}/experienceImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON})
     public Response updateExperienceImage(
             @PathParam("experienceId") final long id,
@@ -363,9 +329,8 @@ public class ExperienceController {
     }
 
     // Endpoint para obtener la reseñas de una experiencia
-    //TODO cambiar
     @GET
-    @Path("/experience/{experienceId}/reviews")
+    @Path("/{experienceId:[0-9]+}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperienceReviews(
             @PathParam("experienceId") final long id,
@@ -386,32 +351,9 @@ public class ExperienceController {
         }, uriBuilder);
     }
 
-    // Endpoint para crear una reseña en la experiencia
-    //TODO cambiar
-    @POST
-    @Path("/experience/{experienceId}/reviews")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createExperienceReview(
-            @PathParam("experienceId") final long id,
-            @Valid final NewReviewDto newReviewDto
-    ) {
-
-        if (newReviewDto == null) {
-            throw new ContentExpectedException();
-        }
-
-        LOGGER.info("Creating review with /experience/category/{}/create_review POST", id);
-
-        final UserModel user = authContext.getCurrentUser();
-        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
-
-        final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experience, LocalDate.now(), user);
-        return Response.created(ReviewDto.getReviewUriBuilder(reviewModel, uriInfo).build()).build();
-    }
-
-    //TODO cambiar
+    //TODO ver si se puede unificar en otro
     @PUT
-    @Path("/experience/{experienceId}/fav")
+    @Path("/{experienceId:[0-9]+}/fav")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response favExperience(
             @PathParam("experienceId") final long id,
@@ -427,9 +369,9 @@ public class ExperienceController {
         return Response.ok().build();
     }
 
-    //TODO cambiar
+    //TODO ver si se puede unificar en otro
     @PUT
-    @Path("/experience/{experienceId}/observable")
+    @Path("/{experienceId:[0-9]+}/observable")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response observable(
             @PathParam("experienceId") final long id,

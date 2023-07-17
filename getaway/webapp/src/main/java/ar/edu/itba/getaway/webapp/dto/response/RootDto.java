@@ -11,26 +11,30 @@ public class RootDto implements Serializable {
 
     private Collection<String> usersUrl;
     private Collection<String> experiencesUrl;
-    private String reviewsUrl;
+    private Collection<String> reviewsUrl;
     private Collection<String> locationUrl;
-    private String categoryUrl;
+    private Collection<String> categoryUrl;
 
     //TODO check estas urls de la api
 
     private static final Collection<String> userStrings =
-            Collections.unmodifiableCollection(Arrays.asList("users", "users/currentUser", "users/{userId}", "users/{userId}/profileImage",
+            Collections.unmodifiableCollection(Arrays.asList("users", "users/{userId}", "users/{userId}/profileImage",
                     "users/{userId}/experiences?{name,order,page}", "users/{userId}/reviews?{page}",
-                    "users/{userId}/favExperiences?{order,page}", "users/emailVerification", "users/passwordReset"));
+                    "users/{userId}/favExperiences?{order,page}", "users/{userId}/recommendations",
+                    "users/emailToken", "users/passwordToken"));
     private static final Collection<String> experienceStrings =
-            Collections.unmodifiableCollection(Arrays.asList("experiences", "experiences/experience/{experienceId}", "experiences/experience/{experienceId}/name",
-                    "experiences/experience/{experienceId}/experienceImage", "experiences/experience/{experienceId}/reviews?{page}",
-                    "experiences/experience/{experienceId}/fav?{set}", "experiences/experience/{experienceId}/observable?{set}",
-                    "experiences/landingPage", "experiences/filter?{category,name,order,price,score,city,page}",
-                    "experiences/filter/maxPrice?{category,name}", "experiences/filter/orderByModels?{category,name}"));
+            Collections.unmodifiableCollection(Arrays.asList("experiences", "experiences/{experienceId}", "experiences/{experienceId}/name",
+                    "experiences/{experienceId}/experienceImage", "experiences/{experienceId}/reviews?{page}",
+                    "experiences/{experienceId}/fav?{set}", "experiences/{experienceId}/observable?{set}",
+                    "experiences?{category,name,order,price,score,city,page}",
+                    "experiences/maxPrice?{category,name}", "experiences/orders?{category,name}"));
     private static final Collection<String> locationStrings =
-            Collections.unmodifiableCollection(Arrays.asList("location/country", "location/country/{id}/cities", "location/cities/{cityId}"));
-    private static final String reviewString = "reviews/{reviewId}";
-    private static final String categoryString = "categories";
+            Collections.unmodifiableCollection(Arrays.asList("location/country", "location/country/{countryId}",
+                    "location/country/{countryId}/cities", "location/cities/{cityId}"));
+    private static final Collection<String> reviewString =
+            Collections.unmodifiableCollection(Arrays.asList("reviews/","reviews/{reviewId}"));
+    private static final Collection<String> categoryString =
+            Collections.unmodifiableCollection(Arrays.asList("categories/","categories/{categoryId}"));
 
     public RootDto() {
         // Used by Jersey
@@ -40,9 +44,10 @@ public class RootDto implements Serializable {
         final String baseUrl = uriInfo.getBaseUriBuilder().build().toString();
         usersUrl = userStrings.stream().map(s -> baseUrl + s).collect(Collectors.toList());
         experiencesUrl = experienceStrings.stream().map(s -> baseUrl + s).collect(Collectors.toList());
-        reviewsUrl = baseUrl + reviewString;
+        reviewsUrl = reviewString.stream().map(s -> baseUrl + s).collect(Collectors.toList());
         locationUrl = locationStrings.stream().map(s -> baseUrl + s).collect(Collectors.toList());
-        categoryUrl = baseUrl + categoryString;
+        categoryUrl = categoryString.stream().map(s -> baseUrl + s).collect(Collectors.toList());
+
     }
 
     public Collection<String> getUsersUrl() {
@@ -61,11 +66,11 @@ public class RootDto implements Serializable {
         this.experiencesUrl = experiencesUrl;
     }
 
-    public String getReviewsUrl() {
+    public Collection<String> getReviewsUrl() {
         return reviewsUrl;
     }
 
-    public void setReviewsUrl(String reviewsUrl) {
+    public void setReviewsUrl(Collection<String> reviewsUrl) {
         this.reviewsUrl = reviewsUrl;
     }
 
@@ -77,11 +82,11 @@ public class RootDto implements Serializable {
         this.locationUrl = locationUrl;
     }
 
-    public String getCategoryUrl() {
+    public Collection<String> getCategoryUrl() {
         return categoryUrl;
     }
 
-    public void setCategoryUrl(String categoryUrl) {
+    public void setCategoryUrl(Collection<String> categoryUrl) {
         this.categoryUrl = categoryUrl;
     }
 }

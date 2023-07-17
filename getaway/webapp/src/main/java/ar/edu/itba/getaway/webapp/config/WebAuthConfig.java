@@ -126,13 +126,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, "/api/users").anonymous()
                     //permitAll, porque no se usa solo para usuarios logueados va para cualquiera
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/users/currentUser").permitAll()
+//                    .antMatchers(HttpMethod.GET, "/api/users/currentUser").permitAll()
                     //logueado y rol NOT VERIFIED
-                    .antMatchers(HttpMethod.PUT, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")
-                    .antMatchers(HttpMethod.POST, "/api/users/emailVerification").hasAuthority("NOT_VERIFIED")
+                    .antMatchers(HttpMethod.PUT, "/api/users/emailToken").hasAuthority("NOT_VERIFIED")
+                    .antMatchers(HttpMethod.POST, "/api/users/emailToken").hasAuthority("NOT_VERIFIED")
                     //¿Olvidaste tu contraseña?
-                    .antMatchers(HttpMethod.PUT, "/api/users/passwordReset").anonymous()
-                    .antMatchers(HttpMethod.POST, "/api/users/passwordReset").anonymous()
+                    .antMatchers(HttpMethod.PUT, "/api/users/passwordToken").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/users/passwordToken").anonymous()
                     //logueado y hay que revisar que el id sea el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{userId}").access("@antMatcherVoter.userEditHimself(authentication, #userId)")
                     //permitAll, igual que el get by id
@@ -145,31 +145,34 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}/reviews").access("hasAuthority('VERIFIED') and @antMatcherVoter.accessUserInfo(authentication, #userId)")
                     //logueado y tiene que tener rol USER nada más
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}/favExperiences").access("@antMatcherVoter.accessUserInfo(authentication, #userId)")
+                    //logueado y tiene que tener rol USER nada más
+                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/recommendations").access("@antMatcherVoter.accessUserInfo(authentication, #userId)")
                 //------------------- /experiences -------------------
-                    //permitAll para explorar
-                    .antMatchers(HttpMethod.GET, "/api/experiences/landingPage").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/experiences/filter").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/experiences/filter/maxPrice").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/experiences/filter/orderByModels").permitAll()
-                    //logueado y VERIFIED (rol PROVIDER) se asigna en el momento
+                    //logueado y VERIFIED (pues rol PROVIDER se asigna en el momento)
                     .antMatchers(HttpMethod.POST, "/api/experiences").hasAuthority("VERIFIED")
                     //permitAll para explorar
-                    .antMatchers(HttpMethod.GET, "/api/experiences/experience/{experienceId}").permitAll()
-                    //logueado, VERIFIED y PROVIDER, chequear que sea el mismo usuario
-                    .antMatchers(HttpMethod.PUT, "/api/experiences/experience/{experienceId}").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
-                    .antMatchers(HttpMethod.PUT, "/api/experiences/experience/{experienceId}/experienceImage").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
-                    .antMatchers(HttpMethod.DELETE, "/api/experiences/experience/{experienceId}").access("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
+                    .antMatchers(HttpMethod.GET, "/api/experiences").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/experiences/maxPrice").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/experiences/orders").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/experiences/name").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/experiences/recommendations").permitAll()
                     //permitAll para explorar
-                    .antMatchers(HttpMethod.GET, "/api/experiences/experience/{experienceId}/experienceImage").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/experiences/experience/{experienceId}/reviews").permitAll()
-                    //logueado y VERIFIED
-                    .antMatchers(HttpMethod.POST, "/api/experiences/experience/{experienceId}/reviews").hasAuthority("VERIFIED")
+                    .antMatchers(HttpMethod.GET, "/api/experiences/{experienceId}").permitAll()
+                    //logueado, VERIFIED y PROVIDER, chequear que sea el mismo usuario
+                    .antMatchers(HttpMethod.PUT, "/api/experiences/{experienceId}").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
+                    .antMatchers(HttpMethod.DELETE, "/api/experiences/{experienceId}").access("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
+                    .antMatchers(HttpMethod.PUT, "/api/experiences/{experienceId}/experienceImage").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
+                    //permitAll para explorar
+                    .antMatchers(HttpMethod.GET, "/api/experiences/{experienceId}/experienceImage").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/experiences/{experienceId}/reviews").permitAll()
                     .antMatchers(HttpMethod.PUT, "/experience/{experienceId}/observable").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
                     //logueado
                     .antMatchers(HttpMethod.PUT, "/experience/{experienceId}/fav").authenticated()
                 //------------------- /reviews -------------------
                     //logueado y VERIFIED, chequear que sea el mismo usuario
-                    .antMatchers(HttpMethod.GET, "/api/reviews/{reviewId}").hasAuthority("VERIFIED")
+                    //logueado y VERIFIED
+                    .antMatchers(HttpMethod.POST, "/api/reviews").hasAuthority("VERIFIED")
+                    .antMatchers(HttpMethod.GET, "/api/reviews/{reviewId}").permitAll()
                     .antMatchers(HttpMethod.PUT, "/api/reviews/{reviewId}").access("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")
                     .antMatchers(HttpMethod.DELETE, "/api/reviews/{reviewId}").access("@antMatcherVoter.canDeleteReviewById(authentication, #reviewId)")
                 //------------------- /location -------------------

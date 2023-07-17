@@ -53,7 +53,7 @@ public class LocationController {
 
     // Endpoint para obtener el listado completo de países
     @GET
-    @Path("/countries/{countryId}")
+    @Path("/countries/{countryId:[0-9]+}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCountries(
             @PathParam("countryId") final long id
@@ -67,7 +67,7 @@ public class LocationController {
 
     // Endpoint para obtener el listado completo de ciudades del país {id}
     @GET
-    @Path("/countries/{countryId}/cities")
+    @Path("/countries/{countryId:[0-9]+}/cities")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCountryCities(
             @PathParam("countryId") final long id
@@ -89,7 +89,7 @@ public class LocationController {
 
     // Endpoint para obtener información de la ciudad {id}
     @GET
-    @Path("/cities/{cityId}")
+    @Path("/cities/{cityId:[0-9]+}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCityById(
             @PathParam("cityId") final long id

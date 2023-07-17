@@ -18,16 +18,14 @@ public class UserDto implements Serializable {
     private boolean isVerified;
     private boolean isProvider;
     private boolean hasImage;
-    private URI selfUrl;
+    private URI self;
     private URI profileImageUrl;
     private URI experiencesUrl;
     private URI reviewsUrl;
     private URI favsUrl;
     private URI recommendationsUrl;
-
-    public static Collection<UserDto> mapUserToDto(Collection<UserModel> users, UriInfo uriInfo) {
-        return users.stream().map(u -> new UserDto(u, uriInfo)).collect(Collectors.toList());
-    }
+    private URI emailTokenUrl;
+    private URI passwordTokenUrl;
 
     public static UriBuilder getUserUriBuilder(UserModel user, UriInfo uriInfo) {
         return uriInfo.getBaseUriBuilder().clone().path("users").path(String.valueOf(user.getUserId()));
@@ -46,7 +44,7 @@ public class UserDto implements Serializable {
         this.isVerified = user.isVerified();
         this.isProvider = user.isProvider();
         this.hasImage = user.getImage() != null;
-        this.selfUrl = uriBuilder.clone().build();
+        this.self = uriBuilder.clone().build();
         if (user.getProfileImage() != null) {
             this.profileImageUrl = uriBuilder.clone().path("profileImage").build();  // /user/{id}/profileImage
         }
@@ -56,6 +54,8 @@ public class UserDto implements Serializable {
         this.reviewsUrl = uriBuilder.clone().path("reviews").build();    // /user/{id}/reviews
         this.favsUrl = uriBuilder.clone().path("favExperiences").build();    // /user/{id}/favExperiences
         this.recommendationsUrl = uriBuilder.clone().path("recommendations").build();    // /user/{id}/recommendations
+        this.emailTokenUrl =  uriBuilder.clone().path("emailToken").build();    // /user/{id}/emailToken
+        this.passwordTokenUrl =  uriBuilder.clone().path("passwordToken").build();  // /user/{id}/passwordToken
     }
 
     public long getId() {
@@ -100,11 +100,20 @@ public class UserDto implements Serializable {
     public void setHasImage(boolean hasImage) {
         this.hasImage = hasImage;
     }
-    public void setSelfUrl(URI selfUrl) {
-        this.selfUrl = selfUrl;
+    public URI getSelf() {
+        return self;
+    }
+    public void setSelf(URI self) {
+        this.self = self;
+    }
+    public URI getProfileImageUrl() {
+        return profileImageUrl;
     }
     public void setProfileImageUrl(URI profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+    public URI getExperiencesUrl() {
+        return experiencesUrl;
     }
     public void setExperiencesUrl(URI experiencesUrl) {
         this.experiencesUrl = experiencesUrl;
@@ -126,6 +135,18 @@ public class UserDto implements Serializable {
     }
     public void setRecommendationsUrl(URI recommendationsUrl) {
         this.recommendationsUrl = recommendationsUrl;
+    }
+    public URI getEmailTokenUrl() {
+        return emailTokenUrl;
+    }
+    public void setEmailTokenUrl(URI emailTokenUrl) {
+        this.emailTokenUrl = emailTokenUrl;
+    }
+    public URI getPasswordTokenUrl() {
+        return passwordTokenUrl;
+    }
+    public void setPasswordTokenUrl(URI passwordTokenUrl) {
+        this.passwordTokenUrl = passwordTokenUrl;
     }
 }
 

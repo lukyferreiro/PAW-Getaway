@@ -43,7 +43,7 @@ public class CategoryController {
     }
 
     @GET
-    @Path("/{categoryId}")
+    @Path("/{categoryId:[0-9]+}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCityById(
             @PathParam("categoryId") final long id
