@@ -3,15 +3,20 @@ package ar.edu.itba.getaway.webapp.security.services;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.webapp.security.exceptions.ExpiredAuthTokenException;
 import ar.edu.itba.getaway.webapp.security.exceptions.InvalidAuthTokenException;
-import ar.edu.itba.getaway.webapp.security.models.AuthToken;
-import io.jsonwebtoken.*;
+import ar.edu.itba.getaway.webapp.security.models.JwtTokenDetails;
+import ar.edu.itba.getaway.webapp.security.models.JwtTokenType;
+import ar.edu.itba.getaway.webapp.security.models.MyUserDetails;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.InvalidClaimException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
-import java.sql.Date;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,6 +24,8 @@ import java.util.stream.Collectors;
 public class AuthTokenServiceImpl implements AuthTokenService {
 
     private final Settings settings;
+    @Autowired
+    private URL appBaseUrl;
 
     @Autowired
     public AuthTokenServiceImpl(Settings settings) {
@@ -26,85 +33,73 @@ public class AuthTokenServiceImpl implements AuthTokenService {
     }
 
     @Override
-    public String issueToken(String email, Set<Roles> roles) {
-        final String id = UUID.randomUUID().toString();
-        final ZonedDateTime issuedDate = ZonedDateTime.now();
-        final ZonedDateTime expirationDate = issuedDate.plusSeconds(settings.getValidFor());
-        final AuthToken authToken = new AuthToken(id, email, roles, issuedDate, expirationDate);
-        return createToken(authToken);
+    public String createAccessToken(final MyUserDetails userDetails) {
+        return createToken(new Date(System.currentTimeMillis() + settings.getValidForAccess()), userDetails, JwtTokenType.ACCESS);
     }
 
     @Override
-    public String refreshToken(AuthToken currentAuthToken) {
-        final ZonedDateTime issuedDate = ZonedDateTime.now();
-        final ZonedDateTime expirationDate = issuedDate.plusSeconds(settings.getValidFor());
-        final AuthToken newTokenDetails = new AuthToken(
-                currentAuthToken.getId(), currentAuthToken.getEmail(),
-                currentAuthToken.getRoles(), issuedDate, expirationDate);
-        return createToken(newTokenDetails);
+    public String createRefreshToken(final MyUserDetails userDetails) {
+        return createToken(new Date(System.currentTimeMillis() + settings.getValidForRefresh()), userDetails, JwtTokenType.REFRESH);
+    }
+
+    private String createToken(final Date expiresAt, final MyUserDetails userDetails, final JwtTokenType tokenType) {
+        final JWTCreator.Builder token =  JWT.create()
+                .withJWTId(generateTokenIdentifier())
+                .withSubject(userDetails.getUsername())
+                .withIssuedAt(new Date())
+                .withExpiresAt(expiresAt)
+                .withIssuer(settings.getIssuer())
+                .withAudience(settings.getAudience())
+                .withClaim(settings.getAuthoritiesClaim(), mapToAuthority(userDetails.getAuthorities()))
+                .withClaim(settings.getTokenTypeClaim(), tokenType.getType())
+                .withClaim(settings.getIsVerifiedClaim(), userDetails.isVerified())
+                .withClaim(settings.getIsProviderClaim(), userDetails.isProvider())
+                .withClaim(settings.getUserIdClaim(), userDetails.getUserId())
+                .withClaim(settings.getNameClaim(), userDetails.getName())
+                .withClaim(settings.getSurnameClaim(), userDetails.getSurname())
+                .withClaim(settings.getHasImageClaim(), userDetails.hasImage());
+
+        if(userDetails.hasImage()){
+            token.withClaim(settings.getProfileImageUrlClaim(), appBaseUrl.toString() + "api/users/" + userDetails.getUserId() + "/profileImage");
+        }
+
+        return token.sign(Algorithm.HMAC256(settings.getSecret().getBytes()));
     }
 
     @Override
-    public AuthToken parseToken(String token) {
+    public JwtTokenDetails validateTokenAndGetDetails(String token) {
         try {
-            final Claims claims = Jwts.parser()
-                    .setSigningKey(settings.getSecret())
-                    .requireAudience(settings.getAudience())
-                    .setAllowedClockSkewSeconds(settings.getClockSkew())
-                    .parseClaimsJws(token)
-                    .getBody();
+            final DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(settings.getSecret().getBytes()))
+                    .withIssuer(settings.getIssuer())
+                    .withAudience(settings.getAudience())
+                    .build().verify(token);
 
-            return new AuthToken(extractTokenIdFromClaims(claims),
-                    extractUsernameFromClaims(claims),
-                    extractAuthoritiesFromClaims(claims),
-                    extractIssuedDateFromClaims(claims),
-                    extractExpirationDateFromClaims(claims));
+            return new JwtTokenDetails.Builder()
+                    .withId(decodedJWT.getId())
+                    .withEmail(decodedJWT.getSubject())
+                    .withAuthorities(decodedJWT.getClaim(settings.getAuthoritiesClaim()).asList(String.class))
+                    .withIssuedDate(decodedJWT.getIssuedAt())
+                    .withExpirationDate(decodedJWT.getExpiresAt())
+                    .withToken(token)
+                    .withTokenType(JwtTokenType.getByType(decodedJWT.getClaim(settings.getTokenTypeClaim()).asString()))
+                    .build();
 
-        } catch (UnsupportedJwtException | MalformedJwtException | IllegalArgumentException | SignatureException e) {
-            throw new InvalidAuthTokenException("Invalid token", e);
-        } catch (ExpiredJwtException e) {
+        } catch (TokenExpiredException e) {
             throw new ExpiredAuthTokenException("The access token expired", e);
         } catch (InvalidClaimException e) {
-            throw new InvalidAuthTokenException("Invalid value for claim \"" + e.getClaimName() + "\"", e);
+            throw new InvalidAuthTokenException("Invalid value for claim \"" + e.getMessage() + "\"", e);
         } catch (Exception e) {
             throw new InvalidAuthTokenException("Invalid token", e);
         }
     }
 
-    // TODO agregar mas info al token
-    private String createToken(AuthToken authToken) {
-        return Jwts.builder()
-                .setId(authToken.getId())
-                .setIssuer(settings.getIssuer())
-                .setAudience(settings.getAudience())
-                .setSubject(authToken.getEmail())
-                .setIssuedAt(Date.from(authToken.getIssuedDate().toInstant()))
-                .setExpiration(Date.from(authToken.getExpirationDate().toInstant()))
-                .claim(settings.getAuthoritiesClaimName(), authToken.getRoles())
-                .signWith(SignatureAlgorithm.HS512, settings.getSecret())
-                .compact();
+    private List<String> mapToAuthority(Collection<? extends GrantedAuthority> authorities) {
+        return authorities.stream().map(grantedAuthority -> Roles.valueOf(grantedAuthority.toString()).name())
+                .collect(Collectors.toList());
     }
 
-    private String extractTokenIdFromClaims(@NotNull Claims claims) {
-        return (String) claims.get(Claims.ID);
-    }
-
-
-    private String extractUsernameFromClaims(@NotNull Claims claims) {
-        return claims.getSubject();
-    }
-
-    private Set<Roles> extractAuthoritiesFromClaims(@NotNull Claims claims) {
-        List<String> rolesAsString = (List<String>) claims.getOrDefault(settings.getAuthoritiesClaimName(), new ArrayList<>());
-        return rolesAsString.stream().map(Roles::valueOf).collect(Collectors.toSet());
-    }
-
-    private ZonedDateTime extractIssuedDateFromClaims(@NotNull Claims claims) {
-        return ZonedDateTime.ofInstant(claims.getIssuedAt().toInstant(), ZoneId.systemDefault());
-    }
-
-    private ZonedDateTime extractExpirationDateFromClaims(@NotNull Claims claims) {
-        return ZonedDateTime.ofInstant(claims.getExpiration().toInstant(), ZoneId.systemDefault());
+    private String generateTokenIdentifier() {
+        return UUID.randomUUID().toString();
     }
 }
 

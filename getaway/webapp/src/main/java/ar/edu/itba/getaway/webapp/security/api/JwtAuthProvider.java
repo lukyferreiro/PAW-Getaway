@@ -1,6 +1,6 @@
 package ar.edu.itba.getaway.webapp.security.api;
 
-import ar.edu.itba.getaway.webapp.security.models.AuthToken;
+import ar.edu.itba.getaway.webapp.security.models.JwtTokenDetails;
 import ar.edu.itba.getaway.webapp.security.models.JwtAuthToken;
 import ar.edu.itba.getaway.webapp.security.services.AuthTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,9 @@ public class JwtAuthProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         final String token = (String) authentication.getCredentials();
-        final AuthToken authToken = authenticationTokenService.parseToken(token);
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authToken.getEmail());
-        return new JwtAuthToken(userDetails, authToken, userDetails.getAuthorities());
+        final JwtTokenDetails jwtTokenDetails = authenticationTokenService.validateTokenAndGetDetails(token);
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(jwtTokenDetails.getEmail());
+        return new JwtAuthToken(userDetails, jwtTokenDetails, userDetails.getAuthorities());
     }
 
     @Override

@@ -19,9 +19,8 @@ public class AuthFailureMapper {
     private AuthFailureMapper() {}
 
     public static void handleFailure(HttpServletRequest request, HttpServletResponse response,
-                                     AuthenticationException exception) throws IOException {
+                                     AuthenticationException exception, HttpStatus status) throws IOException {
         final ObjectMapper mapper = new ObjectMapper();
-        final HttpStatus status = HttpStatus.UNAUTHORIZED;
         final ApiErrorDto errorDetails = new ApiErrorDto();
 
         if (exception instanceof InvalidAuthTokenException || exception instanceof InsufficientAuthenticationException) {

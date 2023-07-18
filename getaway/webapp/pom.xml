@@ -61,6 +61,13 @@
             <artifactId>persistence</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!--Modulo Frontend-->
+        <dependency>
+            <groupId>ar.edu.itba.getaway</groupId>
+            <artifactId>frontend</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
         <!--JUnit-->
         <dependency>
             <groupId>junit</groupId>
@@ -174,9 +181,13 @@
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.moxy</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.jsonwebtoken</groupId>-->
+<!--            <artifactId>jjwt</artifactId>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>

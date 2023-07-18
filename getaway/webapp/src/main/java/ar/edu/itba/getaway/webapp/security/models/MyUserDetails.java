@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.webapp.security.models;
 
 import ar.edu.itba.getaway.models.ImageModel;
-import ar.edu.itba.getaway.models.UserModel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -74,6 +73,9 @@ public class MyUserDetails extends User {
 
     public void setProvider(boolean provider) {
         isProvider = provider;
+    }
+    public boolean hasImage(){
+        return this.image.getImage() != null;
     }
 
 }

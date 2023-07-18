@@ -4,8 +4,9 @@ import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.webapp.security.exceptions.InvalidUsernamePasswordException;
-import ar.edu.itba.getaway.webapp.security.models.AuthToken;
 import ar.edu.itba.getaway.webapp.security.models.BasicAuthToken;
+import ar.edu.itba.getaway.webapp.security.models.JwtTokenDetails;
+import ar.edu.itba.getaway.webapp.security.models.MyUserDetails;
 import ar.edu.itba.getaway.webapp.security.services.AuthTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -13,7 +14,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -55,9 +55,9 @@ public class BasicAuthProvider implements AuthenticationProvider {
         if (!passwordEncoder.matches(credentials[1], user.getPassword())) {
             throw new BadCredentialsException("Bad username/password combination");
         }
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(credentials[0]);
-        final String authToken = tokenService.issueToken(credentials[0], mapToAuthority(userDetails.getAuthorities()));
-        final AuthToken tokenDetails = tokenService.parseToken(authToken);
+        final MyUserDetails userDetails = (MyUserDetails) userDetailsService.loadUserByUsername(credentials[0]);
+        final String authToken = tokenService.createAccessToken(userDetails);
+        final JwtTokenDetails tokenDetails = tokenService.validateTokenAndGetDetails(authToken);
         final BasicAuthToken trustedAuth = new BasicAuthToken(credentials[0], credentials[1], userDetails.getAuthorities(), tokenDetails);
         trustedAuth.setToken(authToken);
         return trustedAuth;

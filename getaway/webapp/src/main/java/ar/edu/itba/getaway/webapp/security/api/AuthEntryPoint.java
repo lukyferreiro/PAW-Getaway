@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.webapp.security.api;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,6 @@ import java.io.IOException;
 public class AuthEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
-        AuthFailureMapper.handleFailure(request, response, exception);
+        AuthFailureMapper.handleFailure(request, response, exception, HttpStatus.FORBIDDEN);
     }
 }

@@ -31,8 +31,8 @@ public class AuthContextImpl implements AuthContext {
             final String username = (String) authentication.getPrincipal();
             return userService.getUserByEmail(username).orElseThrow(UserNotFoundException::new);
         }
-        else if (authentication instanceof JwtAuthToken) {
-            LOGGER.info("Instance of jwt token auth");
+        if (authentication instanceof JwtAuthToken) {
+            LOGGER.info("Instance of JWT token auth");
 
             return userService.getUserByEmail(((MyUserDetails)(authentication.getPrincipal())).getUsername()).orElseThrow(UserNotFoundException::new);
         }

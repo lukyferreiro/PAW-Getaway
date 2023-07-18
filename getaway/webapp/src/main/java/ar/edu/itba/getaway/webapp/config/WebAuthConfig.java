@@ -111,7 +111,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors()
                 .and()
-                .csrf().disable()
+                .csrf()
+                .disable()
                 .exceptionHandling()
                     .authenticationEntryPoint(authEntryPoint)
                     .accessDeniedHandler(accessDeniedHandler())
@@ -119,14 +120,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .headers().cacheControl().disable()
-//                .addHeaderWriter(notResourcesHeaderWriter)
                 .and().authorizeRequests()
                 //------------------- /users -------------------
                     //anonymous porque sino no se puede acceder a boton register
                     .antMatchers(HttpMethod.POST, "/api/users").anonymous()
                     //permitAll, porque no se usa solo para usuarios logueados va para cualquiera
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}").permitAll()
-//                    .antMatchers(HttpMethod.GET, "/api/users/currentUser").permitAll()
                     //logueado y rol NOT VERIFIED
                     .antMatchers(HttpMethod.PUT, "/api/users/emailToken").hasAuthority("NOT_VERIFIED")
                     .antMatchers(HttpMethod.POST, "/api/users/emailToken").hasAuthority("NOT_VERIFIED")
@@ -165,9 +164,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/{experienceId}/experienceImage").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/{experienceId}/reviews").permitAll()
-                    .antMatchers(HttpMethod.PUT, "/experience/{experienceId}/observable").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
+                    .antMatchers(HttpMethod.PUT, "/api/experience/{experienceId}/observable").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
                     //logueado
-                    .antMatchers(HttpMethod.PUT, "/experience/{experienceId}/fav").authenticated()
+                    .antMatchers(HttpMethod.PUT, "/api/experience/{experienceId}/fav").authenticated()
                 //------------------- /reviews -------------------
                     //logueado y VERIFIED, chequear que sea el mismo usuario
                     //logueado y VERIFIED

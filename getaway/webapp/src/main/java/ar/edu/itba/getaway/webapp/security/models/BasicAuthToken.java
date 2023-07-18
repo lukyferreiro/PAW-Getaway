@@ -8,10 +8,10 @@ import java.util.Collection;
 public class BasicAuthToken extends UsernamePasswordAuthenticationToken {
 
     private String token;
-    private AuthToken tokenDetails;
+    private JwtTokenDetails tokenDetails;
 
     public BasicAuthToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities,
-                          AuthToken tokenDetails) {
+                          JwtTokenDetails tokenDetails) {
         super(principal, credentials, authorities);
         this.tokenDetails = tokenDetails;
     }

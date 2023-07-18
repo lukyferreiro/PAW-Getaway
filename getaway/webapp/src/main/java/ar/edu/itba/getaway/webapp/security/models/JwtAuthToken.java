@@ -11,7 +11,7 @@ public class JwtAuthToken extends AbstractAuthenticationToken {
 
     private String token;
     private UserDetails userDetails;
-    private AuthToken tokenDetails;
+    private JwtTokenDetails tokenDetails;
 
     public JwtAuthToken(String token) {
         super(AuthorityUtils.NO_AUTHORITIES);
@@ -19,12 +19,13 @@ public class JwtAuthToken extends AbstractAuthenticationToken {
         this.setAuthenticated(false);
     }
 
-    public JwtAuthToken(UserDetails userDetails, AuthToken authToken,
+    public JwtAuthToken(UserDetails userDetails, JwtTokenDetails jwtTokenDetails,
                         Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.eraseCredentials();
         this.userDetails = userDetails;
-        this.tokenDetails = authToken;
+        this.tokenDetails = jwtTokenDetails;
+        this.token = tokenDetails.getToken();
         super.setAuthenticated(true);
     }
 
@@ -48,7 +49,7 @@ public class JwtAuthToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getPrincipal() {
-        return this.userDetails;
+        return userDetails;
     }
 
     @Override
