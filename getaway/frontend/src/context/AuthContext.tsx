@@ -24,7 +24,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
     const [user, setUser] = useState<UserModel | null>(null)
 
     const signIn = (callback: VoidFunction) => {
-        return internalAuthProvider.signIn(() => {
+        internalAuthProvider.signIn(() => {
             const token = localStorage.getItem('accessToken')
             console.log(`Sign in token: ${token}`)
             if(token) {
@@ -47,6 +47,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
             }
             callback()
         })
+        return user
     }
 
     const signOut = (callback: VoidFunction) => {
@@ -61,7 +62,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
     const getUser = () => {
         console.log(`GET USER ${user}`)
         if(user !== null)
-            return JSON.parse(user) as UserModel
+            return user
         return null
     }
 
