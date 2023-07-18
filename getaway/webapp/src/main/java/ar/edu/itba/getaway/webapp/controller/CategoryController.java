@@ -35,6 +35,8 @@ public class CategoryController {
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCategories(){
+        LOGGER.info("Called /categories GET");
+
         final List<CategoryModel> categories = categoryService.listAllCategories();
 
         final Collection<CategoryDto> categoriesDtos = CategoryDto.mapCategoriesToDto(categories, uriInfo);

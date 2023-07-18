@@ -38,7 +38,7 @@ public class LocationController {
     @Path("/countries")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getCountries() {
-        LOGGER.info("Called /locations/countries GET");
+        LOGGER.info("Called /location/countries GET");
 
         final Collection<CountryModel> countries = locationService.listAllCountries();
 
@@ -58,7 +58,7 @@ public class LocationController {
     public Response getCountries(
             @PathParam("countryId") final long id
     ) {
-        LOGGER.info("Called /locations/countries/{} GET", id);
+        LOGGER.info("Called /location/countries/{} GET", id);
 
         final CountryModel country = locationService.getCountryById(id).orElseThrow(CountryNotFoundException::new);
 
@@ -73,7 +73,7 @@ public class LocationController {
             @PathParam("countryId") final long id
     ) {
 
-        LOGGER.info("Called /locations/countries/{}/cities GET", id);
+        LOGGER.info("Called /location/countries/{}/cities GET", id);
 
         final CountryModel country = locationService.getCountryById(id).orElseThrow(CountryNotFoundException::new);
         final Collection<CityModel> cities = locationService.getCitiesByCountry(country);
@@ -95,7 +95,7 @@ public class LocationController {
             @PathParam("cityId") final long id
     ) {
 
-        LOGGER.info("Called /locations/cities/{} GET", id);
+        LOGGER.info("Called /location/cities/{} GET", id);
 
         final CityModel city = locationService.getCityById(id).orElseThrow(CityNotFoundException::new);
 

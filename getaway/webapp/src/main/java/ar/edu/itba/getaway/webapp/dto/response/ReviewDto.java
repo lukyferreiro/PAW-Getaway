@@ -43,8 +43,8 @@ public class ReviewDto implements Serializable {
         this.score = review.getScore();
         this.date = review.getReviewDate().toString();
         this.self = uriBuilder.clone().build();
-        this.userUrl = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).build();
-        this.experienceUrl = uriInfo.getBaseUriBuilder().path("experiences").path(String.valueOf(experience.getId())).build();;
+        this.userUrl = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(review.getUser().getUserId())).build();
+        this.experienceUrl = uriInfo.getBaseUriBuilder().path("experiences").path(String.valueOf(review.getExperience().getExperienceId())).build();;
         this.user = new UserInfoDto(review.getUser(), uriInfo);
         this.experience = new ExperienceNameDto(review.getExperience(), uriInfo);
     }

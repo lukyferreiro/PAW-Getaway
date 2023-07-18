@@ -71,10 +71,10 @@ public class ExperienceDto implements Serializable {
         this.imageUrl = uriBuilder.clone().path("experienceImage").build();    // /experience/{id}/experienceImage
         this.reviewsUrl = uriBuilder.clone().path("reviews").build();    // /experience/{id}/reviews
         this.ordersUrl = uriInfo.getBaseUriBuilder().path("experiences").path("orders").build();
-        this.countryURl =  uriInfo.getBaseUriBuilder().path("location").path("countries").path(String.valueOf(country.getId())).build();
-        this.cityURL = uriInfo.getBaseUriBuilder().path("location").path("cities").path(String.valueOf(city.getId())).build();
-        this.userUrl = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).build();
-        this.categoryUrl = uriInfo.getBaseUriBuilder().path("categories").path(String.valueOf(category.getId())).build();
+        this.countryURl =  uriInfo.getBaseUriBuilder().path("location").path("countries").path(String.valueOf(experience.getCity().getCountry().getCountryId())).build();
+        this.cityURL = uriInfo.getBaseUriBuilder().path("location").path("cities").path(String.valueOf(experience.getCity().getCityId())).build();
+        this.userUrl = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(experience.getUser().getUserId())).build();
+        this.categoryUrl = uriInfo.getBaseUriBuilder().path("categories").path(String.valueOf(experience.getCategory().getCategoryId())).build();
         this.bestExperiencesURL = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(0)).path("recommendations").build();
         this.country = new CountryDto(experience.getCity().getCountry(), uriInfo);
         this.city = new CityDto(experience.getCity(), uriInfo);

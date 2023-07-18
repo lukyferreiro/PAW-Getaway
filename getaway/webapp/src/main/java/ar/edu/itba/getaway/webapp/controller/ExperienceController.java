@@ -101,7 +101,7 @@ public class ExperienceController {
             @QueryParam("city") @DefaultValue("-1") Long cityId,
             @QueryParam("page") @DefaultValue("1") int page
     ) {
-        LOGGER.info("Called /experiences/{} GET", category);
+        LOGGER.info("Called /experiences GET");
 
         CategoryModel categoryModel = null;
         if (!category.equals("")){
@@ -154,6 +154,7 @@ public class ExperienceController {
             @QueryParam("category") @DefaultValue("") final String category,
             @QueryParam("name") @DefaultValue("") String name
         ){
+        LOGGER.info("Called /experiences/maxPrice GET");
         CategoryModel categoryModel = null;
         if (!category.equals("")){
             categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
@@ -170,6 +171,7 @@ public class ExperienceController {
             @QueryParam("user") @DefaultValue("false") boolean user,
             @QueryParam("provider") @DefaultValue("false") boolean owner
     ){
+        LOGGER.info("Called /experiences/orders GET");
         OrderByModel[] orderByModels = null;
 
         if ((owner && user) || (!owner && !user)) {
@@ -191,6 +193,7 @@ public class ExperienceController {
     @Path("/recommendations")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getExperiencesRecommendations() {
+        LOGGER.info("Called /experiences/recommendations GET");
         List<List<ExperienceModel>> recommendations= experienceService.getExperiencesListByCategories(null);
         return Response.ok(new GenericEntity<AnonymousRecommendationsDto>(new AnonymousRecommendationsDto(recommendations, uriInfo)) {
         }).build();
@@ -263,6 +266,7 @@ public class ExperienceController {
     public Response deleteExperience(
             @PathParam("experienceId") final long id
     ) {
+        LOGGER.info("Called /experiences/{} DELETE", id);
         final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
         experienceService.deleteExperience(experienceModel);
         return Response.noContent().build();
@@ -275,7 +279,7 @@ public class ExperienceController {
     public Response getExperienceNameById(
             @PathParam("experienceId") final long id
     ) {
-        LOGGER.info("Called /experiences/{} GET", id);
+        LOGGER.info("Called /experiences/{}/name GET", id);
 
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
@@ -292,6 +296,7 @@ public class ExperienceController {
             @PathParam("experienceId") final long id,
             @Context final Request request
     ) {
+        LOGGER.info("Called /experiences/{}/experienceImage GET", id);
 
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(UserNotFoundException::new);
 
@@ -312,6 +317,7 @@ public class ExperienceController {
             @FormDataParam("experienceImage") final FormDataBodyPart experienceImageBody,
             @Size(max = 1024 * 1024) @FormDataParam("experienceImage") byte[] experienceImageBytes
     ) {
+        LOGGER.info("Called /experiences/{}/experienceImage PUT", id);
 
         if (experienceImageBody == null) {
             throw new ContentExpectedException();
@@ -359,7 +365,7 @@ public class ExperienceController {
             @PathParam("experienceId") final long id,
             @QueryParam("set") final boolean set
     ) {
-        LOGGER.info("Called /experiences/{} GET", id);
+        LOGGER.info("Called /experiences/{}/fav PUT", id);
 
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
@@ -377,7 +383,7 @@ public class ExperienceController {
             @PathParam("experienceId") final long id,
             @QueryParam("set") final boolean set
     ) {
-        LOGGER.info("Called /experiences/{} GET", id);
+        LOGGER.info("Called /experiences/{}/observable PUT", id);
 
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);

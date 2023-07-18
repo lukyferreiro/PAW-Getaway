@@ -63,7 +63,7 @@ public class UserController {
             @Valid final RegisterDto registerDto
     ) throws DuplicateUserException {
 
-        LOGGER.info("Called /users/ POST");
+        LOGGER.info("Called /users POST");
         if (registerDto == null) {
             throw new ContentExpectedException();
         }
@@ -105,7 +105,7 @@ public class UserController {
             @PathParam("userId") final long id
     ) {
 
-        LOGGER.info("Called /users/ PUT");
+        LOGGER.info("Called /users/{} PUT", id);
 
         if (userInfoDto == null) {
             throw new ContentExpectedException();
@@ -225,6 +225,8 @@ public class UserController {
             @Size(max = 1024 * 1024) @FormDataParam("profileImage") byte[] profileImageBytes
     ) {
 
+        LOGGER.info("Called /users/{}/profileImage PUT", id);
+
         if (profileImageBody == null) {
             throw new ContentExpectedException();
         }
@@ -286,7 +288,7 @@ public class UserController {
             @QueryParam("page") @DefaultValue("1") final int page
     ) {
 
-        LOGGER.info("Called /users/{}/experiences GET", id);
+        LOGGER.info("Called /users/{}/reviews GET", id);
 
         final UserModel user = authContext.getCurrentUser();
 
@@ -350,6 +352,8 @@ public class UserController {
     public Response getUserRecommendations(
             @PathParam("userId") final long id
     ) {
+
+        LOGGER.info("Called /users/{}/recommendations GET", id);
 
         final UserModel user = authContext.getCurrentUser();
         List<List<ExperienceModel>> recommendations = experienceService.userLandingPage(user);

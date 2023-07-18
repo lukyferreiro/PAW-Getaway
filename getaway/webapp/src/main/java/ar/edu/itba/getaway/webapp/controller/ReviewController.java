@@ -52,7 +52,7 @@ public class ReviewController {
             throw new ContentExpectedException();
         }
 
-        LOGGER.info("Calleda /reviews/ POST");
+        LOGGER.info("Called /reviews POST");
 
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
