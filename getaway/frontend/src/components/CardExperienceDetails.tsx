@@ -27,7 +27,8 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const {experience, isEditing, nameProp, categoryProp} = props
     const {t} = useTranslation()
     const navigate = useNavigate()
-    const {user} = useAuth()
+    const {getUser} = useAuth()
+    const user = getUser()
 
     const [searchParams, setSearchParams] = useSearchParams();
 

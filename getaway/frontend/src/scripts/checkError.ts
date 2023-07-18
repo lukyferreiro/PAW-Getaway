@@ -1,6 +1,3 @@
-import {getCookie} from "./cookies";
-import {authedFetch} from "./authedFetch";
-
 function handleResponseStatus<RetType>(response: Response): Promise<RetType> {
     if (
         response.status >= 200 &&
@@ -18,19 +15,17 @@ function handleResponseStatus<RetType>(response: Response): Promise<RetType> {
 // que volvemos a guardar en local storage
 export function checkValidJWT<RetType>(response: Response): Promise<RetType> {
     if (response.status === 401) {
-        localStorage.removeItem("token");
-        // const basic = getCookie("basic-token");
-        // if (basic) {
-        //     authedFetch(response.url, {headers: {Authorization: `Basic ${basic}`},})
-        //         .then((newResponse) => {
-        //             response = newResponse;
-        //             const token = newResponse.headers.get("Authorization")?.toString().split(" ")[1];
-        //             if (token) {
-        //                 localStorage.setItem("token", token);
-        //             }
-                    return handleResponseStatus(response);
-                // });
-        // }
+        console.log(`Recibi un 401`)
+        localStorage.removeItem('accessToken')
+        return handleResponseStatus(response);
+    }
+    if (response) {
+        const accessHeader = response.headers.get('Authorization')
+        if (accessHeader) {
+            const accessToken = accessHeader.split(' ')[1]
+            localStorage.setItem('accessToken', accessToken)
+        }
+
     }
     return handleResponseStatus(response);
 }

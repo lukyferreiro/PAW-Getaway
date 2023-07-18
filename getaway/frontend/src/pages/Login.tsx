@@ -43,17 +43,19 @@ export default function Login() {
     const onSubmitLogin = handleSubmit((data: FormDataLogin) => {
             setInvalidCredendtials(false);
             loginService.login(data.email, data.password)
-                .then((user) => {
-                    if (!user.hasFailed()) {
-                        signIn(user.getData(), () => {
-                            navigate(from, {replace: true});
-                            showToast(t('Login.toast.success', {
-                                name: user.getData().name,
-                                surname: user.getData().surname
-                            }), 'success')
-                            if (!user.getData().verified) {
-                                showToast(t('Login.toast.verifySent'), 'success')
-                            }
+                .then((result) => {
+                    if (!result.hasFailed()) {
+                        //TODO ver como hacer lo toast
+                        signIn(() => {
+                            navigate(from, {replace: true})
+
+                            // showToast(t('Login.toast.success', {
+                            //     name: user.getData().name,
+                            //     surname: user.getData().surname
+                            // }), 'success')
+                            // if (!user.getData().verified) {
+                            //     showToast(t('Login.toast.verifySent'), 'success')
+                            // }
                         })
                     } else {
                         setInvalidCredendtials(true)

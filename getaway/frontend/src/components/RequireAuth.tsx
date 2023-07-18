@@ -7,7 +7,7 @@ export default function RequireAuth({children}: { children: JSX.Element }) {
 
     useEffect(() => {
         if (readUser) {
-            signIn(readUser, () => {})
+            signIn( () => {})
         } else {
             signOut(() => {})
         }

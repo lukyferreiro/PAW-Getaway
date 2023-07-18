@@ -91,7 +91,7 @@ export default function UserProfile() {
                         </div>
                         <div className="m-1 justify-self-center align-self-center">
                             <h3>
-                                {t('User.profile.email', {userEmail: user?.email})}
+                                {t('User.profile.email', {userEmail: user?.sub})}
                             </h3>
                         </div>
 
@@ -128,7 +128,7 @@ export default function UserProfile() {
                     </div>
                 </div>
             </DataLoader>
-            <AddPictureModal isOpen={isOpenImage} userId={user?.id}/>
+            <AddPictureModal isOpen={isOpenImage} userId={user?.userId}/>
         </>
     );
 

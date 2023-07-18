@@ -111,7 +111,7 @@ export class UserService {
         order?: string,
         page?: number
     ): Promise<Result<PagedContent<ExperienceModel[]>>> {
-        const url = new URL(this.basePath + `/${userId}/reviews`);
+        const url = new URL(this.basePath + `/${userId}/favExperiences`);
         if (typeof order === "string") {
             url.searchParams.append("order", order);
         }

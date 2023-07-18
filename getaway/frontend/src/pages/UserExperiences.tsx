@@ -90,7 +90,7 @@ export default function UserExperiences() {
             ) {
                 setIsLoading(true);
                 serviceHandler(
-                    userService.getUserExperiences(user ? user.id : -1, userName, order[0], currentPage[0]===0 ? 1 : currentPage[0]),
+                    userService.getUserExperiences(user ? user.userId : -1, userName, order[0], currentPage[0]===0 ? 1 : currentPage[0]),
                     navigate, (experiences) => {
                         setUserExperiences(experiences.getContent())
                         setMaxPage(experiences ? experiences.getMaxPage() : 0)

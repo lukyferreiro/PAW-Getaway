@@ -1,16 +1,14 @@
 import { paths } from "../common/";
 import { checkValidJWT } from "../scripts/checkError";
-import { ErrorResponse, Result, UserModel } from "../types";
-import { setCookie } from "../scripts/cookies";
+import {ErrorResponse, Result} from "../types";
 
 export class LoginService {
     public async login(
         email: string,
         password: string
-    ): Promise<Result<UserModel>> {
+    ): Promise<Result<any>> {
         const credentials = email + ":" + password;
         const hash = btoa(credentials);
-        // setCookie("basic-token", hash, 7);
         try {
             const response = await fetch(paths.BASE_URL + paths.CATEGORIES, {
                 method: "GET",
@@ -18,9 +16,8 @@ export class LoginService {
                     Authorization: "Basic " + hash,
                 },
             });
-            const parsedResponse = await checkValidJWT<UserModel>(response);
-            parsedResponse.token = response.headers.get("Authorization")?.toString().split(" ")[1];
-            return Result.ok(parsedResponse as UserModel);
+            const parsedResponse = await checkValidJWT<any>(response);
+            return Result.ok(parsedResponse);
         } catch (err: any) {
             return Result.failed(
                 new ErrorResponse(parseInt(err.message), err.title, err.message)

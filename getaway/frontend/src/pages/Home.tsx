@@ -25,7 +25,7 @@ export default function Home() {
         setIsLoading(true)
         if (isLogged()) {
             serviceHandler(
-                userService.getUserRecommendations(user?.id),
+                userService.getUserRecommendations(user?.userId),
                 navigate, (userRecommendations) => {
                     setUserRecommendations(userRecommendations)
                 },

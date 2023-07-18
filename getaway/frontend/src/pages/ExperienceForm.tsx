@@ -88,7 +88,7 @@ export default function ExperienceForm() {
             serviceHandler(
                 experienceService.getExperienceById(parseInt(currentId), false),
                 navigate, (fetchedExperience) => {
-                    if (fetchedExperience.user.id !== user?.id) {
+                    if (fetchedExperience.user.id !== user?.userId) {
                         navigate("/", {replace: true})
                         showToast(t('ExperienceForm.toast.forbidden.notAllowed'), 'error')
                     }

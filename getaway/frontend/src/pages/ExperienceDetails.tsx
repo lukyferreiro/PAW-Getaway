@@ -128,7 +128,7 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
                         </h1>
                     </div>
                     {experience !== undefined &&
-                        <CardExperienceDetails experience={experience} isEditing={experience.user.id === user?.id} nameProp={nameProp} categoryProp={categoryProp}/>
+                        <CardExperienceDetails experience={experience} isEditing={experience.user.id === user?.userId} nameProp={nameProp} categoryProp={categoryProp}/>
                     }
                 </div>
 

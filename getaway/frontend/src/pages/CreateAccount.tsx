@@ -52,15 +52,16 @@ export default function CreateAccount() {
                 .then((user) => {
                     if (!user.hasFailed())
                         loginService.login(data.email, data.password)
-                            .then((user) => {
-                                if (!user.hasFailed()) {
-                                    signIn(user.getData(), () => {
+                            .then((result) => {
+                                if (!result.hasFailed()) {
+                                    //TODO ver como hacer lo toast
+                                    signIn(() => {
                                         navigate(from, {replace: true});
                                     })
-                                    showToast(t('Login.toast.success', {
-                                        name: user.getData().name,
-                                        surname: user.getData().surname
-                                    }), 'success')
+                                    // showToast(t('Login.toast.success', {
+                                    //     name: user.getData().name,
+                                    //     surname: user.getData().surname
+                                    // }), 'success')
                                     showToast(t('User.toast.resendVerify.success'), 'success')
                                 }
                             })

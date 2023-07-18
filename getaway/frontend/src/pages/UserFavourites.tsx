@@ -62,7 +62,7 @@ export default function UserFavourites() {
         ) {
             setIsLoading(true)
             serviceHandler(
-                userService.getUserFavExperiences(user ? user.id : -1, order[0], currentPage[0]===0 ? 1 : currentPage[0]),
+                userService.getUserFavExperiences(user ? user.userId : -1, order[0], currentPage[0]===0 ? 1 : currentPage[0]),
                 navigate, (experiences) => {
                     setFavExperiences(experiences.getContent())
                     setMaxPage(experiences ? experiences.getMaxPage() : 0)

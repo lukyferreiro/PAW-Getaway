@@ -1,9 +1,10 @@
 function updateOptions(options: any) {
     let newOptions = {...options};
     newOptions.headers = {...options.headers};
-    const token = localStorage.getItem("token");
-    if (token) {
-        newOptions.headers["Authorization"] = `Bearer ${token}`;
+    const accessToken = localStorage.getItem("accessToken");
+    console.log(`AUTH FETCH ${accessToken}`)
+    if (accessToken) {
+        newOptions.headers["Authorization"] = `Bearer ${accessToken}`
     }
     return newOptions;
 }

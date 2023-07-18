@@ -47,7 +47,7 @@ export default function UserReviews() {
             ) {
                 setIsLoading(true)
                 serviceHandler(
-                    userService.getUserReviews(user ? user.id : -1, currentPage[0]===0 ? 1 : currentPage[0]),
+                    userService.getUserReviews(user ? user.userId : -1, currentPage[0]===0 ? 1 : currentPage[0]),
                     navigate, (reviews) => {
                         setReviews(reviews.getContent())
                         setMaxPage(reviews ? reviews.getMaxPage() : 0)

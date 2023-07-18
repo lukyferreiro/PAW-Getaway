@@ -33,7 +33,7 @@ export default function UserEditProfile() {
         = useForm<FormDataEditProfile>({criteriaMode: "all"})
 
     const onSubmitEdit = handleSubmit((data: FormDataEditProfile) => {
-        userService.updateUserInfoById(user?.id, data.name, data.surname)
+        userService.updateUserInfoById(user?.userId, data.name, data.surname)
             .then((result) => {
                 if(!result.hasFailed()) {
                     editUserInfo(data.name, data.surname, () => navigate("/user/profile",{replace: true}))
@@ -76,7 +76,7 @@ export default function UserEditProfile() {
                                                className="form-control mb-2"
                                                placeholder={t('Navbar.emailPlaceholder')}
                                                aria-describedby="email input"
-                                               defaultValue={user?.email}
+                                               defaultValue={user?.sub}
                                         />
                                     </div>
 

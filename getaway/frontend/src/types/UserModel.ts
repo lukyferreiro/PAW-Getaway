@@ -1,12 +1,12 @@
 export default interface UserModel {
-    id: number;
+    userId: number;
     name: string;
     surname: string;
-    email: string;
-    verified: boolean;
-    provider: boolean;
-    token?: string;
-    url?: string;
+    sub: string;   //sub is the email
+    isVerified: boolean;
+    isProvider: boolean;
+    // token?: string;
+    // url?: string;
     hasImage: boolean;
     profileImageUrl: string;
 }

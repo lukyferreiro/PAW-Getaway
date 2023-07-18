@@ -33,13 +33,14 @@ export const countryModel: CountryModel = {
 };
 
 export const userModel: UserModel = {
-    id: 1,
+    userId: 1,
     name: "Lucas",
     surname: "Ferreiro",
-    email: "lferreiro@itba.edu.ar",
-    verified: true,
-    provider: true,
-    hasImage: false
+    sub: "lferreiro@itba.edu.ar",
+    isVerified: true,
+    isProvider: true,
+    hasImage: false,
+    profileImageUrl: ""
 };
 
 export const orderByModel: OrderByModel = {
@@ -72,7 +73,8 @@ export const experienceModelNoFav: ExperienceModel = {
     score: 4,
     reviewCount: 8,
     fav: false,
-    hasImage: false
+    hasImage: false,
+    imageUrl: ""
 
 };
 
@@ -93,7 +95,9 @@ export const experienceModelFav: ExperienceModel = {
     score: 4,
     reviewCount: 8,
     fav: true,
-    hasImage: false
+    hasImage: false,
+    imageUrl: ""
+
 };
 
 export const experienceModelCategory: ExperienceModel = {
@@ -113,7 +117,8 @@ export const experienceModelCategory: ExperienceModel = {
     score: 4,
     reviewCount: 8,
     fav: true,
-    hasImage: false
+    hasImage: false,
+    imageUrl: ""
 };
 
 export const reviewModel1: ReviewModel = {

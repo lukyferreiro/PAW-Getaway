@@ -26,17 +26,15 @@ public class AuthContextImpl implements AuthContext {
     public UserModel getCurrentUser() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(authentication instanceof BasicAuthToken) {
+        if (authentication instanceof BasicAuthToken) {
             LOGGER.info("Instance of basic auth");
             final String username = (String) authentication.getPrincipal();
             return userService.getUserByEmail(username).orElseThrow(UserNotFoundException::new);
-        }
-        if (authentication instanceof JwtAuthToken) {
+        } else if (authentication instanceof JwtAuthToken) {
             LOGGER.info("Instance of JWT token auth");
 
-            return userService.getUserByEmail(((MyUserDetails)(authentication.getPrincipal())).getUsername()).orElseThrow(UserNotFoundException::new);
-        }
-        else /*Case: anonymous*/ {
+            return userService.getUserByEmail(((MyUserDetails) (authentication.getPrincipal())).getUsername()).orElseThrow(UserNotFoundException::new);
+        } else /*Case: anonymous*/ {
             LOGGER.info("Instance of anonymous user");
             return null;
         }

@@ -19,7 +19,8 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate()
 
-    const {user} = useAuth()
+    const {getUser} = useAuth()
+    const user = getUser()
 
     const [isLoadingImg, setIsLoadingImg] = useState(false)
     const [fav, setFav] = useState(experience.fav)
