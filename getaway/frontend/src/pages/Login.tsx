@@ -90,7 +90,7 @@ export default function Login() {
                                     <div className="col-12">  {/*  Email */}
                                         <label className="form-label d-flex align-items-center"
                                                htmlFor="email">
-                                            <img src={getResourcePath("./images/ic_user.svg")} alt="Imagen perfil"
+                                            <img src={getResourcePath("./images/ic_user_black.svg")} alt="Imagen perfil"
                                                  style={{marginRight: "5px"}}/>
                                             {t('Navbar.email')}
                                         </label>

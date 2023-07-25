@@ -99,7 +99,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                 <Link to="/" className="logo d-flex" onClick={() => {
                     clearNavBar()
                 }}>
-                    <img className="logo-img w-auto h-auto" src={getResourcePath('./images/getaway-icon.png')} alt="Logo"/>
+                    <img className="logo-img w-auto h-auto" src={getResourcePath('./images/ic_getaway.png')} alt="Logo"/>
                     <span className="logo-text align-self-center text-uppercase font-weight-bold">
                         {t('PageName')}
                     </span>
@@ -169,7 +169,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{left: "-50px"}}>
                                 <Link to="/user/profile" className="dropdown-item"
                                       onClick={() => clearNavBar()}>
-                                    <img src={getResourcePath('./images/ic_user.svg')} alt="Icono perfil"/>
+                                    <img src={getResourcePath('./images/ic_user_black.svg')} alt="Icono perfil"/>
                                     {t('Navbar.profile')}
                                 </Link>
 
@@ -213,7 +213,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                     pathname: "/experiences",
                                     search: `?category=${category.name}&name=${nameProp[0]}&order=OrderByAZ&page=1`
                                 }, {replace: true});
-                                window.location.reload();
+                                // window.location.reload();
                             }}
                     >
                         <img src={getResourcePath(`./images/${category.name}.svg`)} alt={`${category.name}`}/>

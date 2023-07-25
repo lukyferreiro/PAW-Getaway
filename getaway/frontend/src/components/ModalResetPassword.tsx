@@ -64,7 +64,7 @@ export default function ModalResetPassword(props: { isOpen: [boolean, Dispatch<S
                                       onSubmit={onSubmit} method="post">
                                     <label className="form-label d-flex align-items-center"
                                            htmlFor="email">
-                                        <img src={getResourcePath("./images/ic_user.svg")}
+                                        <img src={getResourcePath("./images/ic_user_black.svg")}
                                              alt="Imagen perfil"
                                              style={{marginRight: "5px"}}/>
                                         {t('Navbar.email')}
