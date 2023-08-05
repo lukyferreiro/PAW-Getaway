@@ -10,6 +10,7 @@ import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
+import ar.edu.itba.getaway.webapp.security.api.CustomMediaType;
 import ar.edu.itba.getaway.webapp.security.services.AuthContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +43,8 @@ public class ReviewController {
 
     // Endpoint para crear una reseña en la experiencia
     @POST
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response creatExperienceReview(
+    @Produces(value = {CustomMediaType.REVIEW_V1})
+    public Response createReview(
             @QueryParam("experienceId") final long experienceId,
             @Valid final NewReviewDto newReviewDto
     ) {
@@ -53,10 +54,9 @@ public class ReviewController {
         }
 
         LOGGER.info("Called /reviews POST");
-
         final UserModel user = authContext.getCurrentUser();
+        //TODO se podria sacar este get de aca
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-
         final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experience, LocalDate.now(), user);
         return Response.created(ReviewDto.getReviewUriBuilder(reviewModel, uriInfo).build()).build();
     }
@@ -64,25 +64,21 @@ public class ReviewController {
 
     @GET
     @Path("/{reviewId:[0-9]+}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getReview(
+    @Produces(value = {CustomMediaType.REVIEW_V1})
+    public Response getReviewById(
             @PathParam("reviewId") final Long id
     ) {
-
         LOGGER.info("Called /reviews/{} GET", id);
-
         final ReviewModel review = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
-
         return Response.ok(new ReviewDto(review, uriInfo)).build();
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{reviewId:[0-9]+}")
-    @Produces(value = {MediaType.APPLICATION_JSON,})
+    @Produces(value = {CustomMediaType.REVIEW_V1})
     public Response editReview(
             @PathParam("reviewId") final Long id,
-            @Context final HttpServletRequest request,
             @Valid final NewReviewDto reviewDto
     ) {
 
@@ -94,6 +90,7 @@ public class ReviewController {
 
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
 
+        //TODO se podrian sacar estos set de aca
         reviewModel.setDescription(reviewDto.getDescription());
         reviewModel.setScore(Long.parseLong(reviewDto.getScore()));
         reviewModel.setTitle(reviewDto.getTitle());
@@ -104,11 +101,15 @@ public class ReviewController {
 
     @DELETE
     @Path("/{reviewId:[0-9]+}")
-    @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response deleteReview(@PathParam("reviewId") final Long id) {
+    //TODO check
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response deleteReview(
+            @PathParam("reviewId") final Long id
+    ) {
         LOGGER.info("Called /reviews/{} DELETE", id);
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
         reviewService.deleteReview(reviewModel);
+        //TODO devolver un simple message
         return Response.noContent().build();
     }
 }

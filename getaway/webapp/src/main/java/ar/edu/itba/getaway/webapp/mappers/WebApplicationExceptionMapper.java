@@ -5,25 +5,24 @@ import ar.edu.itba.getaway.webapp.security.api.CustomMediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
 
-@Provider
 @Produces(value = { CustomMediaType.ERROR_V1 })
-public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundException> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(NotFoundExceptionMapper.class);
+public class WebApplicationExceptionMapper implements ExceptionMapper<WebApplicationException> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebApplicationExceptionMapper.class);
 
     @Context
     private UriInfo uriInfo;
 
     @Override
-    public Response toResponse(NotFoundException e) {
-        LOGGER.error("Not found exception mapper");
-        return ExceptionMapperUtil.toResponse(Response.Status.NOT_FOUND, e.getMessage(), uriInfo);
+    public Response toResponse(WebApplicationException e) {
+        LOGGER.error("Web application exception mapper");
+        return ExceptionMapperUtil.toResponse(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage(), uriInfo);
     }
 }

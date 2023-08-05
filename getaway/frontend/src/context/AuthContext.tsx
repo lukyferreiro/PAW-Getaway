@@ -47,7 +47,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
             }
             callback()
         })
-        return user
+        // return user
     }
 
     const signOut = (callback: VoidFunction) => {

@@ -34,13 +34,15 @@ public class CacheResponse {
         return response.build();
 
     }
+
     private static String getImageHash(byte[] image) {
         byte[] hash;
         try {
             hash = MessageDigest.getInstance("SHA-256").digest(image);
         } catch (NoSuchAlgorithmException e) {
             hash = null;
-        } StringBuilder stringBuilder = new StringBuilder();
+        }
+        StringBuilder stringBuilder = new StringBuilder();
         for (byte b : hash) {
             stringBuilder.append(String.format("%02x", b));
         }

@@ -12,6 +12,7 @@ import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.*;
 import ar.edu.itba.getaway.webapp.dto.request.UserInfoDto;
 import ar.edu.itba.getaway.webapp.dto.response.*;
+import ar.edu.itba.getaway.webapp.security.api.CustomMediaType;
 import ar.edu.itba.getaway.webapp.security.services.AuthContext;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -58,7 +59,7 @@ public class UserController {
 
     //Endpoint que crea un usuario nuevo
     @POST
-    @Produces(value = {MediaType.APPLICATION_JSON,})
+    @Produces(value = {CustomMediaType.USER_V1})
     public Response registerUser(
             @Valid final RegisterDto registerDto
     ) throws DuplicateUserException {
@@ -84,11 +85,10 @@ public class UserController {
     //TODO no se si chequear que userId coincida con el authContext.getCurrentUser()
     @GET
     @Path("/{userId:[0-9]+}")
-    @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response getUser(
+    @Produces(value = {CustomMediaType.USER_V1})
+    public Response getUserById(
             @PathParam("userId") final long id
     ) {
-
         LOGGER.info("Called /users/{} GET", id);
         final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
         LOGGER.info("Return user with id {}", id);
@@ -99,12 +99,11 @@ public class UserController {
     @PUT
     @Path("/{userId:[0-9]+}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(value = {MediaType.APPLICATION_JSON,})
+    @Produces(value = {CustomMediaType.USER_V1})
     public Response updateUser(
             @Valid final UserInfoDto userInfoDto,
             @PathParam("userId") final long id
     ) {
-
         LOGGER.info("Called /users/{} PUT", id);
 
         if (userInfoDto == null) {
@@ -112,9 +111,7 @@ public class UserController {
         }
 
         final UserModel user = authContext.getCurrentUser();
-
         userService.updateUserInfo(user, new UserInfo(userInfoDto.getName(), userInfoDto.getSurname()));
-
         return Response.ok().build();
     }
 
@@ -126,11 +123,8 @@ public class UserController {
     public Response verifyUser(
             @QueryParam("token") final String token
     ) {
-
         LOGGER.info("Called /users/emailToken PUT");
-
         userService.verifyAccount(token).orElseThrow(UserNotFoundException::new);
-
         return Response.ok().build();
     }
 
@@ -141,11 +135,8 @@ public class UserController {
     @Path("/emailToken")
     public Response resendUserVerification() {
         LOGGER.info("Called /users/emailToken POST");
-
         final UserModel user = authContext.getCurrentUser();
-
         userService.resendVerificationToken(user);
-
         return Response.ok().build();
     }
 
@@ -159,7 +150,6 @@ public class UserController {
             @QueryParam("token") final String token,
             @Valid final PasswordResetDto passwordResetDto
     ) {
-
         LOGGER.info("Called /users/passwordToken PUT");
 
         if (passwordResetDto == null) {
@@ -167,7 +157,6 @@ public class UserController {
         }
 
         userService.updatePassword(token, passwordResetDto.getPassword()).orElseThrow(UserNotFoundException::new);
-
         return Response.ok().build();
     }
 
@@ -180,7 +169,6 @@ public class UserController {
     public Response sendResetPasswordEmail(
             @Valid final PasswordResetEmailDto passwordResetEmailDto
     ) {
-
         LOGGER.info("Called /users/passwordToken POST");
 
         if (passwordResetEmailDto == null) {
@@ -189,19 +177,18 @@ public class UserController {
 
         UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
         userService.generateNewPassword(user);
-
         return Response.ok().build();
     }
 
     //Endpoint para obtener la imagen de perfil del usuario
     @GET
     @Path("/{userId:[0-9]+}/profileImage")
-    @Produces({"image/*", MediaType.APPLICATION_JSON})
+    // TODO check
+//    @Produces({"image/*", MediaType.APPLICATION_JSON})
     public Response getUserProfileImage(
             @PathParam("userId") final long id,
             @Context final Request request
     ) {
-
         LOGGER.info("Called /users/{}/profileImage GET", id);
 
         final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
@@ -211,20 +198,19 @@ public class UserController {
         }
 
         final ImageModel image = user.getProfileImage();
-
         return CacheResponse.cacheResponse(image, request);
     }
 
     //Endpoint para editar la imagen de perfil del usuario
     @PUT
-    @Produces(MediaType.APPLICATION_JSON)
+    //TODO check
+//    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{userId:[0-9]+}/profileImage")
     public Response updateUserProfileImage(
             @PathParam("userId") final long id,
             @FormDataParam("profileImage") final FormDataBodyPart profileImageBody,
             @Size(max = 1024 * 1024) @FormDataParam("profileImage") byte[] profileImageBytes
     ) {
-
         LOGGER.info("Called /users/{}/profileImage PUT", id);
 
         if (profileImageBody == null) {
@@ -236,13 +222,12 @@ public class UserController {
         }
 
         final UserModel user = authContext.getCurrentUser();
-
         imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
-
         return Response.ok().build();
     }
 
     //Endpoint para obtener las experiencias creadas por un usuario
+    //TODO check
     @GET
     @Path("/{userId:[0-9]+}/experiences")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -256,7 +241,6 @@ public class UserController {
         LOGGER.info("Called /users/{}/experiences GET", id);
 
         final UserModel user = authContext.getCurrentUser();
-
         final Page<ExperienceModel> experiences = experienceService.listExperiencesSearchByUser(name, user, Optional.of(order), page);
 
         if (experiences == null) {
@@ -280,6 +264,7 @@ public class UserController {
     }
 
     //Endpoint para obtener las reseñas creadas por un usuario
+    //TODO check
     @GET
     @Path("/{userId:[0-9]+}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -311,6 +296,7 @@ public class UserController {
         }, uriBuilder);
     }
 
+    //TODO check
     @GET
     @Path("/{userId:[0-9]+}/favExperiences")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -346,6 +332,7 @@ public class UserController {
     }
 
     //Endpoint para obtener las recomendaciones para un usuario
+    //TODO check
     @GET
     @Path("/{userId:[0-9]+}/recommendations")
     @Produces(value = {MediaType.APPLICATION_JSON})

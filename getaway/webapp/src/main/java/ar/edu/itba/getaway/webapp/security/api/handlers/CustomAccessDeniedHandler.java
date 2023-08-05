@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.webapp.security.api.handlers;
 
 import ar.edu.itba.getaway.webapp.dto.response.ApiErrorDto;
+import ar.edu.itba.getaway.webapp.security.api.CustomMediaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Produces;
 import java.io.IOException;
 
 //https://www.baeldung.com/spring-security-custom-access-denied-page
@@ -25,7 +27,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         errorDetails.setStatus(status.value());
         errorDetails.setPath(request.getRequestURI());
         response.setStatus(status.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType(CustomMediaType.ERROR_V1);
         response.getWriter().write(mapper.writeValueAsString(errorDetails));
     }
 }

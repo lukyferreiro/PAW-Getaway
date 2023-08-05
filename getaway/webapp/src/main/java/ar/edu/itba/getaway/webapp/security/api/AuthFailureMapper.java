@@ -35,7 +35,7 @@ public class AuthFailureMapper {
         errorDetails.setStatus(status.value());
         errorDetails.setPath(request.getRequestURI());
         response.setStatus(status.value());
-        response.setContentType(MediaType.APPLICATION_JSON);
+        response.setContentType(CustomMediaType.ERROR_V1);
         response.getWriter().write(mapper.writeValueAsString(errorDetails));
     }
 }

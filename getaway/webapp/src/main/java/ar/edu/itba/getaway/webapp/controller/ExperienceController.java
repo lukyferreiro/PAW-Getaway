@@ -8,6 +8,7 @@ import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
 import ar.edu.itba.getaway.webapp.dto.response.*;
+import ar.edu.itba.getaway.webapp.security.api.CustomMediaType;
 import ar.edu.itba.getaway.webapp.security.services.AuthContext;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -57,8 +58,8 @@ public class ExperienceController {
 
     // Endpoint para crear una experiencia
     @POST
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response registerExperience(
+    @Produces(value = {CustomMediaType.EXPERIENCE_V1})
+    public Response createExperience(
             @Valid final NewExperienceDto experienceDto
     ) throws DuplicateExperienceException {
 
@@ -69,6 +70,7 @@ public class ExperienceController {
         }
 
         final UserModel user = authContext.getCurrentUser();
+        //TODO sacar estos get y meterlos en createExperience del service
         final CityModel city = locationService.getCityById(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel category = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
@@ -88,10 +90,11 @@ public class ExperienceController {
         return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
     }
 
-    // TODO habria que agregar el country como queryParam
+    // TODO habria que agregar el country como queryParam ????
+    // TODO chequear todo esto para los filtros
     // Endpoint para obtener las experiencias
     @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {CustomMediaType.EXPERIENCE_LIST_V1})
     public Response getExperiences(
             @QueryParam("category") @DefaultValue("") String category,
             @QueryParam("name") @DefaultValue("") String name,
@@ -102,6 +105,8 @@ public class ExperienceController {
             @QueryParam("page") @DefaultValue("1") int page
     ) {
         LOGGER.info("Called /experiences GET");
+
+        //TODO chequear como manejar los filtros
 
         CategoryModel categoryModel = null;
         if (!category.equals("")){
@@ -147,6 +152,7 @@ public class ExperienceController {
     }
 
     //TODO ver si se puede fusionar este en el endpoint anterior
+    //TODO puede volar? no mg tener este endpoint
     @GET
     @Path("/maxPrice")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -156,9 +162,11 @@ public class ExperienceController {
         ){
         LOGGER.info("Called /experiences/maxPrice GET");
         CategoryModel categoryModel = null;
+
         if (!category.equals("")){
             categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
         }
+
         final Double maxPrice = experienceService.getMaxPriceByCategoryAndName(categoryModel, name).orElse(0.0);
         return Response.ok(new MaxPriceDto(maxPrice, uriInfo)).build();
     }
@@ -203,7 +211,7 @@ public class ExperienceController {
     // Endpoint para obtener una experiencia a partir de su ID
     @GET
     @Path("/{experienceId:[0-9]+}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {CustomMediaType.EXPERIENCE_V1})
     public Response getExperienceId(
             @PathParam("experienceId") final long id,
             @QueryParam("view") @DefaultValue("false") final boolean view
@@ -214,6 +222,7 @@ public class ExperienceController {
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
 
+        // TODO habria que sacar esta logica de aca
         if (view) {
             favAndViewExperienceService.setViewed(user, experience);
             if (user != null && !experience.getUser().equals(user)) {
@@ -229,7 +238,7 @@ public class ExperienceController {
     @PUT
     @Path("/{experienceId:[0-9]+}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {CustomMediaType.EXPERIENCE_V1})
     public Response updateExperience(
             @Context final HttpServletRequest request,
             @Valid final NewExperienceDto experienceDto,
@@ -247,6 +256,7 @@ public class ExperienceController {
         }
 
         final UserModel user = authContext.getCurrentUser();
+        //TODO sacar estos get
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
         final CityModel cityModel = locationService.getCityById(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel categoryModel = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
@@ -256,6 +266,7 @@ public class ExperienceController {
 
         experienceService.updateExperience(toUpdateExperience);
         LOGGER.info("The experience with id {} has been updated successfully", id);
+        //TODO devolver la experiencia actualizada ??
         return Response.ok().build();
     }
 
@@ -273,6 +284,7 @@ public class ExperienceController {
     }
 
     // Endpoint para obtener una experiencia a partir de su ID
+    // TODO este endpoint??? puede volar
     @GET
     @Path("/{experienceId:[0-9]+}/name")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -305,7 +317,6 @@ public class ExperienceController {
         }
 
         final ImageModel image = experience.getExperienceImage();
-
         return CacheResponse.cacheResponse(image, request);
     }
 
@@ -328,9 +339,7 @@ public class ExperienceController {
         }
 
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
-
         imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), experience.getExperienceImage());
-
         return Response.ok().build();
     }
 
@@ -369,9 +378,7 @@ public class ExperienceController {
 
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
-
         favAndViewExperienceService.setFav(user, set, experience);
-
         return Response.ok().build();
     }
 
@@ -387,9 +394,7 @@ public class ExperienceController {
 
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
-
         experienceService.changeVisibility(experience, set);
-
         return Response.ok().build();
     }
 }
