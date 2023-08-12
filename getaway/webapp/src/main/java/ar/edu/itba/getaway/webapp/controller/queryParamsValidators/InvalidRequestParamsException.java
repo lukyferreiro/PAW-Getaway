@@ -1,4 +1,4 @@
-package ar.edu.itba.getaway.webapp.security.exceptions;
+package ar.edu.itba.getaway.webapp.controller.queryParamsValidators;
 
 public class InvalidRequestParamsException extends RuntimeException {
 

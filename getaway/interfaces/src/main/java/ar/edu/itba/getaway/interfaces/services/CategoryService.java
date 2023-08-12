@@ -12,5 +12,4 @@ public interface CategoryService {
 
     Optional<CategoryModel> getCategoryByName(String categoryName);
 
-//    int getCategoriesCount();
 }

@@ -6,9 +6,7 @@ import ar.edu.itba.getaway.interfaces.exceptions.IllegalContentTypeException;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
-import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.*;
 import ar.edu.itba.getaway.webapp.dto.request.UserInfoDto;
 import ar.edu.itba.getaway.webapp.dto.response.*;
@@ -27,11 +25,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
 import java.net.URI;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 @Path("users")
 @Component
@@ -41,19 +34,14 @@ public class UserController {
     private UriInfo uriInfo;
     private final UserService userService;
     private final ImageService imageService;
-    private final ExperienceService experienceService;
-    private final ReviewService reviewService;
     private final AuthContext authContext;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private static final String ACCEPTED_MIME_TYPES = "image/";
 
     @Autowired
-    public UserController(UserService userService, ImageService imageService, ExperienceService experienceService, ReviewService reviewService,
-                          AuthContext authContext) {
+    public UserController(UserService userService, ImageService imageService, AuthContext authContext) {
         this.userService = userService;
         this.imageService = imageService;
-        this.experienceService = experienceService;
-        this.reviewService = reviewService;
         this.authContext = authContext;
     }
 
@@ -63,8 +51,8 @@ public class UserController {
     public Response registerUser(
             @Valid final RegisterDto registerDto
     ) throws DuplicateUserException {
-
         LOGGER.info("Called /users POST");
+
         if (registerDto == null) {
             throw new ContentExpectedException();
         }
@@ -73,7 +61,7 @@ public class UserController {
         try {
             user = userService.createUser(registerDto.getPassword(), registerDto.getName(), registerDto.getSurname(), registerDto.getEmail());
         } catch (DuplicateUserException e) {
-            LOGGER.warn("Error in registerDto RegisterForm, email is already in used");
+            LOGGER.warn("Error in registerDto, email is already in used");
             throw new DuplicateUserException();
         }
 
@@ -83,6 +71,7 @@ public class UserController {
 
     //Endpoint que devuelve informacion de un usuario segun el ID
     //TODO no se si chequear que userId coincida con el authContext.getCurrentUser()
+    //Si soy yo traigo todo sino traigo info acotada UserInfoDTO
     @GET
     @Path("/{userId:[0-9]+}")
     @Produces(value = {CustomMediaType.USER_V1})
@@ -91,13 +80,13 @@ public class UserController {
     ) {
         LOGGER.info("Called /users/{} GET", id);
         final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
-        LOGGER.info("Return user with id {}", id);
         return Response.ok(new UserDto(user, uriInfo)).build();
     }
 
     //Endpoint para editar la informacion del usuario
     @PUT
     @Path("/{userId:[0-9]+}")
+    //TODO check
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {CustomMediaType.USER_V1})
     public Response updateUser(
@@ -184,7 +173,7 @@ public class UserController {
     @GET
     @Path("/{userId:[0-9]+}/profileImage")
     // TODO check
-//    @Produces({"image/*", MediaType.APPLICATION_JSON})
+    @Produces({"image/*", MediaType.APPLICATION_JSON})
     public Response getUserProfileImage(
             @PathParam("userId") final long id,
             @Context final Request request
@@ -204,7 +193,7 @@ public class UserController {
     //Endpoint para editar la imagen de perfil del usuario
     @PUT
     //TODO check
-//    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{userId:[0-9]+}/profileImage")
     public Response updateUserProfileImage(
             @PathParam("userId") final long id,
@@ -224,129 +213,6 @@ public class UserController {
         final UserModel user = authContext.getCurrentUser();
         imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
         return Response.ok().build();
-    }
-
-    //Endpoint para obtener las experiencias creadas por un usuario
-    //TODO check
-    @GET
-    @Path("/{userId:[0-9]+}/experiences")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getUserExperiences(
-            @PathParam("userId") final long id,
-            @QueryParam("name") @DefaultValue("") final String name,
-            @QueryParam("order") @DefaultValue("OrderByAZ") final OrderByModel order,
-            @QueryParam("page") @DefaultValue("1") int page
-    ) {
-
-        LOGGER.info("Called /users/{}/experiences GET", id);
-
-        final UserModel user = authContext.getCurrentUser();
-        final Page<ExperienceModel> experiences = experienceService.listExperiencesSearchByUser(name, user, Optional.of(order), page);
-
-        if (experiences == null) {
-            return Response.status(BAD_REQUEST).build();
-        }
-
-        if(experiences.getContent().isEmpty()) {
-            return Response.noContent().build();
-        }
-
-        final Collection<ExperienceDto> experienceDtos = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);
-
-        final UriBuilder uriBuilder = uriInfo
-                .getAbsolutePathBuilder()
-                .queryParam("order", order)
-                .queryParam("page", page)
-                .queryParam("name", name);
-
-        return PaginationResponse.createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDtos) {
-        }, uriBuilder);
-    }
-
-    //Endpoint para obtener las reseñas creadas por un usuario
-    //TODO check
-//    @GET
-//    @Path("/{userId:[0-9]+}/reviews")
-//    @Produces(value = {MediaType.APPLICATION_JSON})
-//    public Response getUserReviews(
-//            @PathParam("userId") final long id,
-//            @QueryParam("page") @DefaultValue("1") final int page
-//    ) {
-//
-//        LOGGER.info("Called /users/{}/reviews GET", id);
-//
-//        final UserModel user = authContext.getCurrentUser();
-//
-//        final Page<ReviewModel> reviews = reviewService.getReviewsByUser(user, page);
-//
-//        if (reviews == null) {
-//            return Response.status(BAD_REQUEST).build();
-//        }
-//
-//        if(reviews.getContent().isEmpty()) {
-//            return Response.noContent().build();
-//        }
-//
-//        final Collection<ReviewDto> reviewDtos = ReviewDto.mapReviewToDto(reviews.getContent(), uriInfo);
-//
-//        final UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder()
-//                .queryParam("page", page);
-//
-//        return PaginationResponse.createPaginationResponse(reviews, new GenericEntity<Collection<ReviewDto>>(reviewDtos) {
-//        }, uriBuilder);
-//    }
-
-    //TODO check
-    @GET
-    @Path("/{userId:[0-9]+}/favExperiences")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getUserFavExperiences(
-            @PathParam("userId") final long id,
-            @QueryParam("order") @DefaultValue("OrderByAZ") final OrderByModel order,
-            @QueryParam("page") @DefaultValue("1") final int page
-    ) {
-
-        LOGGER.info("Called /users/{}/favExperiences GET", id);
-
-        final UserModel user = authContext.getCurrentUser();
-
-        final Page<ExperienceModel> favExperiences = experienceService.listExperiencesFavsByUser(user, Optional.of(order), page);
-
-        if (favExperiences == null) {
-            return Response.status(BAD_REQUEST).build();
-        }
-
-        if(favExperiences.getContent().isEmpty()) {
-            return Response.noContent().build();
-        }
-
-        final Collection<ExperienceDto> experienceDtos = ExperienceDto.mapExperienceToDto(favExperiences.getContent(), uriInfo);
-
-        final UriBuilder uriBuilder = uriInfo
-                .getAbsolutePathBuilder()
-                .queryParam("order", order)
-                .queryParam("page", page);
-
-        return PaginationResponse.createPaginationResponse(favExperiences, new GenericEntity<Collection<ExperienceDto>>(experienceDtos) {
-        }, uriBuilder);
-    }
-
-    //Endpoint para obtener las recomendaciones para un usuario
-    //TODO check
-    @GET
-    @Path("/{userId:[0-9]+}/recommendations")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getUserRecommendations(
-            @PathParam("userId") final long id
-    ) {
-
-        LOGGER.info("Called /users/{}/recommendations GET", id);
-
-        final UserModel user = authContext.getCurrentUser();
-        List<List<ExperienceModel>> recommendations = experienceService.userLandingPage(user);
-        return Response.ok(new GenericEntity<UserRecommendationsDto>(new UserRecommendationsDto(recommendations, user, uriInfo)) {
-        }).build();
-
     }
 
 }

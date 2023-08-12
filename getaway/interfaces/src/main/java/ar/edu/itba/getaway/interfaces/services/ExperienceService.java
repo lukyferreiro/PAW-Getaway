@@ -18,19 +18,19 @@ public interface ExperienceService {
 
     Optional<ExperienceModel> getVisibleExperienceById(long experienceId, UserModel user);
 
-    Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, String name, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, UserModel user);
+    Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, String name, Double max, Long score, CityModel city, OrderByModel order, int page, UserModel user);
 
     Optional<Double> getMaxPriceByCategoryAndName(CategoryModel category, String name);
 
-    List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, UserModel user);
+    Page<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, UserModel user);
 
-    Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page);
+    Page<ExperienceModel> listExperiencesFavsByUser(UserModel user, OrderByModel order, int page);
 
-    List<List<ExperienceModel>> getExperiencesListByCategories(UserModel user);
+//    List<List<ExperienceModel>> getExperiencesListByCategories(UserModel user);
 
     boolean experienceBelongsToUser(UserModel user, ExperienceModel experience);
 
-    Page<ExperienceModel> listExperiencesSearchByUser(String name, UserModel user, Optional<OrderByModel> order, int page);
+    Page<ExperienceModel> listExperiencesSearchByUser(String name, UserModel user, OrderByModel order, int page);
 
     void updateExperienceWithoutImg(ExperienceModel toUpdateExperience);
 
@@ -38,5 +38,9 @@ public interface ExperienceService {
 
     void changeVisibility(ExperienceModel experience, boolean obs);
 
-    List<List<ExperienceModel>> userLandingPage(UserModel user);
+//    List<List<ExperienceModel>> userLandingPage(UserModel user);
+    Page<ExperienceModel> getViewedExperiences(UserModel user);
+    Page<ExperienceModel> getRecommendedByFavs(UserModel user);
+    Page<ExperienceModel> getRecommendedByReviews(UserModel user);
+
 }

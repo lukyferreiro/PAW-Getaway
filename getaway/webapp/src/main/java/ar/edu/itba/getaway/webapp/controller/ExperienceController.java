@@ -4,6 +4,8 @@ import ar.edu.itba.getaway.interfaces.exceptions.*;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
+import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.GetExperiencesFilter;
+import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.GetExperiencesParams;
 import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
@@ -15,6 +17,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +38,6 @@ public class ExperienceController {
     private final CategoryService categoryService;
     private final LocationService locationService;
     private final ImageService imageService;
-    private final ReviewService reviewService;
     private final Integer maxRequestSize;
     private final AuthContext authContext;
 
@@ -43,15 +45,14 @@ public class ExperienceController {
     private static final String ACCEPTED_MIME_TYPES = "image/";
 
     @Autowired
-    public ExperienceController(ExperienceService experienceService, FavAndViewExperienceService favAndViewExperienceService, CategoryService categoryService,
-                                LocationService locationService, ImageService imageService, ReviewService reviewService,
+    public ExperienceController(ExperienceService experienceService, FavAndViewExperienceService favAndViewExperienceService,
+                                CategoryService categoryService, LocationService locationService, ImageService imageService,
                                 Integer maxRequestSize, AuthContext authContext) {
         this.experienceService = experienceService;
         this.favAndViewExperienceService = favAndViewExperienceService;
         this.categoryService = categoryService;
         this.locationService = locationService;
         this.imageService = imageService;
-        this.reviewService = reviewService;
         this.maxRequestSize = maxRequestSize;
         this.authContext = authContext;
     }
@@ -90,62 +91,33 @@ public class ExperienceController {
         return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
     }
 
-    // TODO habria que agregar el country como queryParam ????
-    // TODO chequear todo esto para los filtros
     // Endpoint para obtener las experiencias
     @GET
     @Produces(value = {CustomMediaType.EXPERIENCE_LIST_V1})
+    @PreAuthorize("@antMatcherVoter.checkGetExperiences(authentication, #userId)")
     public Response getExperiences(
             @QueryParam("category") @DefaultValue("") String category,
             @QueryParam("name") @DefaultValue("") String name,
-            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
+            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,  //TODO cambiar a string
             @QueryParam("price") @DefaultValue("-1") Double maxPrice,
             @QueryParam("score") @DefaultValue("0") Long maxScore,
             @QueryParam("city") @DefaultValue("-1") Long cityId,
-            @QueryParam("page") @DefaultValue("1") int page
+            @QueryParam("page") @DefaultValue("1") int page,
+            @QueryParam("userId") Long userId,
+            @QueryParam("filter") @DefaultValue("...") String filter
     ) {
         LOGGER.info("Called /experiences GET");
 
-        //TODO chequear como manejar los filtros
-
-        CategoryModel categoryModel = null;
-        if (!category.equals("")){
-            categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
-        }
-
-        if (maxPrice == -1) {
-            maxPrice = experienceService.getMaxPriceByCategoryAndName(categoryModel, name).orElse(0.0);
-        }
-        CityModel cityModel = null;
-        if (cityId != -1) {
-            cityModel = locationService.getCityById(cityId).orElseThrow(CityNotFoundException::new);
-        }
-
-        final UserModel user = authContext.getCurrentUser();
-        final Page<ExperienceModel> experiences = experienceService.listExperiencesByFilter(categoryModel, name, maxPrice, maxScore, cityModel, Optional.of(order), page, user);
-
-        if (experiences == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
+        final GetExperiencesFilter getExperiencesFilter = GetExperiencesFilter.fromString(filter);
+        final GetExperiencesParams params = getExperiencesFilter.validateParams(authContext, categoryService, experienceService, locationService, category, name, order, maxPrice, maxScore, cityId, userId);
+        final Page<ExperienceModel> experiences = getExperiencesFilter.getExperiences(experienceService, params, page);
+        final UriBuilder uriBuilder = getExperiencesFilter.getUriBuilder(uriInfo, category, name, order, maxPrice, maxScore, params.getCity(), userId, page);
 
         if (experiences.getContent().isEmpty()) {
             return Response.noContent().build();
         }
 
         final Collection<ExperienceDto> experienceDto = ExperienceDto.mapExperienceToDto(experiences.getContent(), uriInfo);
-
-        final UriBuilder uriBuilder = uriInfo
-                .getAbsolutePathBuilder()
-                .queryParam("category", category)
-                .queryParam("name", name)
-                .queryParam("order", order)
-                .queryParam("price", maxPrice)
-                .queryParam("score", maxScore)
-                .queryParam("page", page);
-
-        if (cityModel != null) {
-            uriBuilder.queryParam("city", cityId);
-        }
 
         return PaginationResponse.createPaginationResponse(experiences, new GenericEntity<Collection<ExperienceDto>>(experienceDto) {
         }, uriBuilder);
@@ -194,18 +166,6 @@ public class ExperienceController {
 
         Collection<OrderByDto> orderByDtos = OrderByDto.mapOrderByToDto(Arrays.asList(orderByModels), uriInfo);
         return Response.ok(new GenericEntity<Collection<OrderByDto>>(orderByDtos) {}).build();
-    }
-
-    //Endpoint para obtener las recomendaciones para un usuario
-    @GET
-    @Path("/recommendations")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getExperiencesRecommendations() {
-        LOGGER.info("Called /experiences/recommendations GET");
-        List<List<ExperienceModel>> recommendations= experienceService.getExperiencesListByCategories(null);
-        return Response.ok(new GenericEntity<AnonymousRecommendationsDto>(new AnonymousRecommendationsDto(recommendations, uriInfo)) {
-        }).build();
-
     }
 
     // Endpoint para obtener una experiencia a partir de su ID
@@ -324,6 +284,7 @@ public class ExperienceController {
 
     @PUT
     @Path("/{experienceId:[0-9]+}/experienceImage")
+    //TODO check
     @Produces({"image/*", MediaType.APPLICATION_JSON})
     public Response updateExperienceImage(
             @PathParam("experienceId") final long id,
@@ -345,29 +306,6 @@ public class ExperienceController {
         return Response.ok().build();
     }
 
-    // Endpoint para obtener la reseñas de una experiencia
-    //TODO check
-//    @GET
-//    @Path("/{experienceId:[0-9]+}/reviews")
-//    @Produces(value = {MediaType.APPLICATION_JSON})
-//    public Response getExperienceReviews(
-//            @PathParam("experienceId") final long id,
-//            @QueryParam("page") @DefaultValue("1") final int page
-//    ) {
-//
-//        LOGGER.info("Called /experiences/{}/reviews GET", id);
-//        final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
-//        Page<ReviewModel> reviewModelList = reviewService.getReviewsByExperience(experienceModel, page);
-//
-//        final Collection<ReviewDto> reviewDto = ReviewDto.mapReviewToDto(reviewModelList.getContent(), uriInfo);
-//
-//        final UriBuilder uriBuilder = uriInfo
-//                .getAbsolutePathBuilder()
-//                .queryParam("page", page);
-//
-//        return PaginationResponse.createPaginationResponse(reviewModelList, new GenericEntity<Collection<ReviewDto>>(reviewDto) {
-//        }, uriBuilder);
-//    }
 
     //TODO ver si se puede unificar en otro
     @PUT

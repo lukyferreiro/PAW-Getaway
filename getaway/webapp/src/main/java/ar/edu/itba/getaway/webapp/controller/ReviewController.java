@@ -27,8 +27,6 @@ import javax.ws.rs.core.*;
 import java.time.LocalDate;
 import java.util.Collection;
 
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-
 @Path("reviews")
 @Component
 public class ReviewController {

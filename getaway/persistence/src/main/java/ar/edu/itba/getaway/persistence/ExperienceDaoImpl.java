@@ -69,10 +69,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesByFilter(CategoryModel category, String name, Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, int pageSize) {
+    public List<ExperienceModel> listExperiencesByFilter(CategoryModel category, String name, Double max, Long score, CityModel city, OrderByModel order, int page, int pageSize) {
         LOGGER.debug("Getting experiences by current filter");
 
-        String orderQuery = getOrderQuery(order);
+        String orderQuery = order.getSqlQuery();
         if (name.equals("%") || name.equals("_")) {
             name = '/' + name;
         }
@@ -191,9 +191,9 @@ public class ExperienceDaoImpl implements ExperienceDao {
     }
 
     @Override
-    public List<ExperienceModel> listExperiencesSearchByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize) {
+    public List<ExperienceModel> listExperiencesSearchByUser(String name, UserModel user, OrderByModel order, int page, int pageSize) {
         LOGGER.debug("List experiences of user with id {}", user.getUserId());
-        String orderQuery = getOrderQuery(order);
+        String orderQuery = order.getSqlQuery();
 
         Query queryForIds = em.createNativeQuery(
                 "SELECT experienceId \n" +
@@ -237,17 +237,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
     }
 
-    private String getOrderQuery(Optional<OrderByModel> order) {
-        if (order.isPresent()) {
-            return order.get().getSqlQuery();
-        }
-        return OrderByModel.OrderByAZ.getSqlQuery();
-    }
-
     @Override
-    public List<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page, int pageSize) {
+    public List<ExperienceModel> listExperiencesFavsByUser(UserModel user, OrderByModel order, int page, int pageSize) {
         LOGGER.debug("List experiences of user with id {}", user.getUserId());
-        String orderQuery = getOrderQuery(order);
+        String orderQuery = order.getSqlQuery();
 
         Query queryForIds = em.createNativeQuery(
                 "SELECT favuserexperience.experienceid \n" +

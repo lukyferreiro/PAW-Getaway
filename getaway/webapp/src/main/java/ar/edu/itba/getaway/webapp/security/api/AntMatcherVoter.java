@@ -105,7 +105,14 @@ public class AntMatcherVoter {
 
     public boolean checkGetReviews(Authentication authentication, Long userId, Long experienceId) {
         if (userId != null && experienceId == null) {
-            accessUserInfo(authentication, userId);
+            return accessUserInfo(authentication, userId);
+        }
+        return true;
+    }
+
+    public boolean checkGetExperiences(Authentication authentication, Long userId) {
+        if (userId != null) {
+            return accessUserInfo(authentication, userId);
         }
         return true;
     }

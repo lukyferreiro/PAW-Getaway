@@ -19,17 +19,17 @@ public interface ExperienceDao {
 
     Optional<Double> getMaxPriceByCategoryAndName(CategoryModel category, String name);
 
-    List<ExperienceModel> listExperiencesByFilter(CategoryModel category, String name ,Double max, Long score, CityModel city, Optional<OrderByModel> order, int page, int pageSize);
+    List<ExperienceModel> listExperiencesByFilter(CategoryModel category, String name ,Double max, Long score, CityModel city, OrderByModel order, int page, int pageSize);
 
     long countListByFilter(CategoryModel categoryId, String name, Double max, Long score, CityModel city);
 
     List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, int size);
 
-    List<ExperienceModel> listExperiencesSearchByUser(String name, UserModel user, Optional<OrderByModel> order, int page, int pageSize);
+    List<ExperienceModel> listExperiencesSearchByUser(String name, UserModel user, OrderByModel order, int page, int pageSize);
 
     long getCountExperiencesByUser(String name, UserModel user);
 
-    List<ExperienceModel> listExperiencesFavsByUser(UserModel user, Optional<OrderByModel> order, int page, int pageSize);
+    List<ExperienceModel> listExperiencesFavsByUser(UserModel user, OrderByModel order, int page, int pageSize);
 
     long getCountListExperiencesFavsByUser(UserModel user);
 
