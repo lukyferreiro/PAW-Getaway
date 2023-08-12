@@ -33,6 +33,8 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    //Todo revisar si vale la pena dejarlo
+
     @GET
     @Produces(value = {CustomMediaType.CATEGORY_LIST_V1})
     public Response getCategories(){

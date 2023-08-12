@@ -62,7 +62,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewModel> getReviewAndUser(ExperienceModel experience, int page) {
+    public Page<ReviewModel> getReviewsByExperience(ExperienceModel experience, int page) {
         LOGGER.debug("Retrieving all reviews and user of experience with id {}", experience.getExperienceId());
         LOGGER.debug("Requested page {}", page);
 

@@ -261,8 +261,10 @@ public class ExperienceController {
         final CityModel cityModel = locationService.getCityById(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel categoryModel = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
-        final ExperienceModel toUpdateExperience = new ExperienceModel(id, experienceDto.getName(), experienceDto.getAddress(), experienceDto.getDescription(),
-        experienceDto.getMail(), experienceDto.getUrl(), experienceDto.getPrice(), cityModel, categoryModel, user, experience.getExperienceImage(), experience.getObservable(), experience.getViews());
+        final ExperienceModel toUpdateExperience = new ExperienceModel(
+                id, experienceDto.getName(), experienceDto.getAddress(), experienceDto.getDescription(),
+                experienceDto.getMail(), experienceDto.getUrl(), experienceDto.getPrice(), cityModel,
+                categoryModel, user, experience.getExperienceImage(), experience.getObservable(), experience.getViews());
 
         experienceService.updateExperience(toUpdateExperience);
         LOGGER.info("The experience with id {} has been updated successfully", id);
@@ -344,27 +346,28 @@ public class ExperienceController {
     }
 
     // Endpoint para obtener la reseñas de una experiencia
-    @GET
-    @Path("/{experienceId:[0-9]+}/reviews")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getExperienceReviews(
-            @PathParam("experienceId") final long id,
-            @QueryParam("page") @DefaultValue("1") final int page
-    ) {
-
-        LOGGER.info("Called /experiences/{}/reviews GET", id);
-        final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
-        Page<ReviewModel> reviewModelList = reviewService.getReviewAndUser(experienceModel, page);
-
-        final Collection<ReviewDto> reviewDto = ReviewDto.mapReviewToDto(reviewModelList.getContent(), uriInfo);
-
-        final UriBuilder uriBuilder = uriInfo
-                .getAbsolutePathBuilder()
-                .queryParam("page", page);
-
-        return PaginationResponse.createPaginationResponse(reviewModelList, new GenericEntity<Collection<ReviewDto>>(reviewDto) {
-        }, uriBuilder);
-    }
+    //TODO check
+//    @GET
+//    @Path("/{experienceId:[0-9]+}/reviews")
+//    @Produces(value = {MediaType.APPLICATION_JSON})
+//    public Response getExperienceReviews(
+//            @PathParam("experienceId") final long id,
+//            @QueryParam("page") @DefaultValue("1") final int page
+//    ) {
+//
+//        LOGGER.info("Called /experiences/{}/reviews GET", id);
+//        final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+//        Page<ReviewModel> reviewModelList = reviewService.getReviewsByExperience(experienceModel, page);
+//
+//        final Collection<ReviewDto> reviewDto = ReviewDto.mapReviewToDto(reviewModelList.getContent(), uriInfo);
+//
+//        final UriBuilder uriBuilder = uriInfo
+//                .getAbsolutePathBuilder()
+//                .queryParam("page", page);
+//
+//        return PaginationResponse.createPaginationResponse(reviewModelList, new GenericEntity<Collection<ReviewDto>>(reviewDto) {
+//        }, uriBuilder);
+//    }
 
     //TODO ver si se puede unificar en otro
     @PUT

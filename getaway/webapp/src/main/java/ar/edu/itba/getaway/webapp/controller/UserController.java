@@ -265,36 +265,36 @@ public class UserController {
 
     //Endpoint para obtener las reseñas creadas por un usuario
     //TODO check
-    @GET
-    @Path("/{userId:[0-9]+}/reviews")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getUserReviews(
-            @PathParam("userId") final long id,
-            @QueryParam("page") @DefaultValue("1") final int page
-    ) {
-
-        LOGGER.info("Called /users/{}/reviews GET", id);
-
-        final UserModel user = authContext.getCurrentUser();
-
-        final Page<ReviewModel> reviews = reviewService.getReviewsByUser(user, page);
-
-        if (reviews == null) {
-            return Response.status(BAD_REQUEST).build();
-        }
-
-        if(reviews.getContent().isEmpty()) {
-            return Response.noContent().build();
-        }
-
-        final Collection<ReviewDto> reviewDtos = ReviewDto.mapReviewToDto(reviews.getContent(), uriInfo);
-
-        final UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder()
-                .queryParam("page", page);
-
-        return PaginationResponse.createPaginationResponse(reviews, new GenericEntity<Collection<ReviewDto>>(reviewDtos) {
-        }, uriBuilder);
-    }
+//    @GET
+//    @Path("/{userId:[0-9]+}/reviews")
+//    @Produces(value = {MediaType.APPLICATION_JSON})
+//    public Response getUserReviews(
+//            @PathParam("userId") final long id,
+//            @QueryParam("page") @DefaultValue("1") final int page
+//    ) {
+//
+//        LOGGER.info("Called /users/{}/reviews GET", id);
+//
+//        final UserModel user = authContext.getCurrentUser();
+//
+//        final Page<ReviewModel> reviews = reviewService.getReviewsByUser(user, page);
+//
+//        if (reviews == null) {
+//            return Response.status(BAD_REQUEST).build();
+//        }
+//
+//        if(reviews.getContent().isEmpty()) {
+//            return Response.noContent().build();
+//        }
+//
+//        final Collection<ReviewDto> reviewDtos = ReviewDto.mapReviewToDto(reviews.getContent(), uriInfo);
+//
+//        final UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder()
+//                .queryParam("page", page);
+//
+//        return PaginationResponse.createPaginationResponse(reviews, new GenericEntity<Collection<ReviewDto>>(reviewDtos) {
+//        }, uriBuilder);
+//    }
 
     //TODO check
     @GET

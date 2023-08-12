@@ -29,6 +29,7 @@ public class ValidationViolationExceptionMapper implements ExceptionMapper<Const
                 .entity(new ExceptionRequestDto(
                         exception.getMessage(), exception.getConstraintViolations(),
                         status.getReasonPhrase(), status.getStatusCode(), messageSource))
+                .type(CustomMediaType.ERROR_V1)
                 .build();
     }
 }

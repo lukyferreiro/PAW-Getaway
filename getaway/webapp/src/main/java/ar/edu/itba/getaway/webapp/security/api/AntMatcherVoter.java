@@ -5,6 +5,7 @@ import ar.edu.itba.getaway.interfaces.exceptions.ReviewNotFoundException;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.UserModel;
+import ar.edu.itba.getaway.webapp.security.exceptions.InvalidRequestParamsException;
 import ar.edu.itba.getaway.webapp.security.models.BasicAuthToken;
 import ar.edu.itba.getaway.webapp.security.models.JwtAuthToken;
 import ar.edu.itba.getaway.webapp.security.models.MyUserDetails;
@@ -101,10 +102,18 @@ public class AntMatcherVoter {
     public boolean accessUserInfo(Authentication authentication, long userId) {
         if (authentication instanceof AnonymousAuthenticationToken) return false;
         final Optional<UserModel> userToAccess = userService.getUserById(userId); //Usuario que quiero acceder
-
         final UserModel user = getUser(authentication);   //Usuario autenticado
-
         return userToAccess.map(userModel -> userModel.equals(user)).orElse(false);
+    }
+
+    public boolean checkGetReviews(Authentication authentication, Long userId, Long experienceId){
+        if(userId != null && experienceId != null){
+            throw new InvalidRequestParamsException("errors.InvalidParam.getReviews");
+        }
+        if(userId != null && experienceId == null){
+            accessUserInfo(authentication,userId);
+        }
+        return true;
     }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,6 +34,7 @@ import java.util.Collections;
 @Configuration
 @EnableWebSecurity
 @ComponentScan("ar.edu.itba.getaway.webapp.security")
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @PropertySource(value= {"classpath:application.properties"})
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
@@ -141,7 +143,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //logueado y tiene que tener rol PROVIDER
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}/experiences").access("hasAuthority('PROVIDER') and @antMatcherVoter.accessUserInfo(authentication, #userId)")
                     //logueado y tiene que tener rol VERIFIED
-                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/reviews").access("hasAuthority('VERIFIED') and @antMatcherVoter.accessUserInfo(authentication, #userId)")
+//                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/reviews").access("hasAuthority('VERIFIED') and @antMatcherVoter.accessUserInfo(authentication, #userId)")
                     //logueado y tiene que tener rol USER nada más
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}/favExperiences").access("@antMatcherVoter.accessUserInfo(authentication, #userId)")
                     //logueado y tiene que tener rol USER nada más
@@ -169,7 +171,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.PUT, "/api/experience/{experienceId}/fav").authenticated()
                 //------------------- /reviews -------------------
                     //logueado y VERIFIED, chequear que sea el mismo usuario
-                    //logueado y VERIFIED
+                    .antMatchers(HttpMethod.GET, "/api/reviews").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/reviews").hasAuthority("VERIFIED")
                     .antMatchers(HttpMethod.GET, "/api/reviews/{reviewId}").permitAll()
                     .antMatchers(HttpMethod.PUT, "/api/reviews/{reviewId}").access("@antMatcherVoter.canEditReviewById(authentication, #reviewId)")

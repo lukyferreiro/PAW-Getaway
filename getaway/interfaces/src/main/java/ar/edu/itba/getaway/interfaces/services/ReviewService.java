@@ -14,7 +14,7 @@ public interface ReviewService {
 
     void deleteReview(ReviewModel review);
 
-    Page<ReviewModel> getReviewAndUser(ExperienceModel experience, int page);
+    Page<ReviewModel> getReviewsByExperience(ExperienceModel experience, int page);
 
     Optional<ReviewModel> getReviewById(long reviewId);
 

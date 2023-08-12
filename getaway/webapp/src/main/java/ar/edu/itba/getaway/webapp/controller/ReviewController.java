@@ -8,6 +8,9 @@ import ar.edu.itba.getaway.interfaces.services.ReviewService;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.UserModel;
+import ar.edu.itba.getaway.models.pagination.Page;
+import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.GetReviewsParams;
+import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
 import ar.edu.itba.getaway.webapp.security.api.CustomMediaType;
@@ -15,13 +18,16 @@ import ar.edu.itba.getaway.webapp.security.services.AuthContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.time.LocalDate;
+import java.util.Collection;
+
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 @Path("reviews")
 @Component
@@ -30,8 +36,9 @@ public class ReviewController {
     @Context
     private UriInfo uriInfo;
     private final ReviewService reviewService;
-    private final AuthContext authContext;
     private final ExperienceService experienceService;
+    private final AuthContext authContext;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
     @Autowired
@@ -39,6 +46,36 @@ public class ReviewController {
         this.reviewService = reviewService;
         this.experienceService = experienceService;
         this.authContext = authContext;
+    }
+
+    @GET
+    @Produces(value = {CustomMediaType.REVIEW_LIST_V1})
+    @PreAuthorize("@antMatcherVoter.checkGetReviews(authentication, #userId, #experienceId)")
+    public Response getReviews(
+            @QueryParam("userId") final Long userId,
+            @QueryParam("experienceId") final Long experienceId,
+            @QueryParam("page") @DefaultValue("1") final int page
+    ) {
+        LOGGER.info("Called /reviews");
+
+        Page<ReviewModel> reviews = GetReviewsParams.getReviewsByParams(userId, experienceId, page, reviewService, experienceService, authContext);
+
+        if (reviews == null) {
+            return Response.status(BAD_REQUEST).build();
+        }
+
+        if(reviews.getContent().isEmpty()) {
+            return Response.noContent().build();
+        }
+
+        final Collection<ReviewDto> reviewDtos = ReviewDto.mapReviewToDto(reviews.getContent(), uriInfo);
+
+        final UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder()
+                .queryParam("page", page);
+
+        return PaginationResponse.createPaginationResponse(reviews, new GenericEntity<Collection<ReviewDto>>(reviewDtos) {
+        }, uriBuilder);
+
     }
 
     // Endpoint para crear una reseña en la experiencia
@@ -74,8 +111,9 @@ public class ReviewController {
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{reviewId:[0-9]+}")
+    //TODO check
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {CustomMediaType.REVIEW_V1})
     public Response editReview(
             @PathParam("reviewId") final Long id,
@@ -90,11 +128,13 @@ public class ReviewController {
 
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
 
-        //TODO se podrian sacar estos set de aca
-        reviewModel.setDescription(reviewDto.getDescription());
-        reviewModel.setScore(Long.parseLong(reviewDto.getScore()));
-        reviewModel.setTitle(reviewDto.getTitle());
-        reviewService.updateReview(reviewModel);
+        final ReviewModel reviewModelToUpdate = new ReviewModel(
+                id, reviewDto.getTitle(), reviewDto.getDescription(),
+                Long.parseLong(reviewDto.getScore()), reviewModel.getExperience(),
+                reviewModel.getReviewDate(), reviewModel.getUser()
+        );
+
+        reviewService.updateReview(reviewModelToUpdate);
 
         return Response.ok().build();
     }
