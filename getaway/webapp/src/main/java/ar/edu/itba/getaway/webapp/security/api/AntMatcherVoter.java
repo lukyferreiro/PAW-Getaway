@@ -5,7 +5,6 @@ import ar.edu.itba.getaway.interfaces.exceptions.ReviewNotFoundException;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.getaway.webapp.security.exceptions.InvalidRequestParamsException;
 import ar.edu.itba.getaway.webapp.security.models.BasicAuthToken;
 import ar.edu.itba.getaway.webapp.security.models.JwtAuthToken;
 import ar.edu.itba.getaway.webapp.security.models.MyUserDetails;
@@ -22,14 +21,12 @@ public class AntMatcherVoter {
     private UserService userService;
 
     private UserModel getUser(Authentication authentication) {
-        if(authentication instanceof BasicAuthToken) {
+        if (authentication instanceof BasicAuthToken) {
             final String username = (String) authentication.getPrincipal();
             return userService.getUserByEmail(username).orElseThrow(UserNotFoundException::new);
-        }
-        else if (authentication instanceof JwtAuthToken) {
-            return userService.getUserByEmail(((MyUserDetails)(authentication.getPrincipal())).getUsername()).orElseThrow(UserNotFoundException::new);
-        }
-        else /*Case: anonymous*/ {
+        } else if (authentication instanceof JwtAuthToken) {
+            return userService.getUserByEmail(((MyUserDetails) (authentication.getPrincipal())).getUsername()).orElseThrow(UserNotFoundException::new);
+        } else /*Case: anonymous*/ {
             return null;
         }
     }
@@ -39,7 +36,7 @@ public class AntMatcherVoter {
         final Optional<UserModel> userModel = userService.getUserByExperienceId(experienceId);
         final UserModel user = getUser(authentication);
 
-        if(userModel.isPresent()) {
+        if (userModel.isPresent()) {
             return userModel.get().equals(user);
         }
 
@@ -52,7 +49,7 @@ public class AntMatcherVoter {
         final Optional<UserModel> userModel = userService.getUserByExperienceId(experienceId);
         final UserModel user = getUser(authentication);
 
-        if(userModel.isPresent()) {
+        if (userModel.isPresent()) {
             return userModel.get().equals(user);
         }
 
@@ -65,7 +62,7 @@ public class AntMatcherVoter {
         final Optional<UserModel> userModel = userService.getUserByReviewId(reviewId);
         final UserModel user = getUser(authentication);
 
-        if(userModel.isPresent()) {
+        if (userModel.isPresent()) {
             return userModel.get().equals(user);
         }
 
@@ -78,7 +75,7 @@ public class AntMatcherVoter {
         final Optional<UserModel> userModel = userService.getUserByReviewId(reviewId);
         final UserModel user = getUser(authentication);
 
-        if(userModel.isPresent()) {
+        if (userModel.isPresent()) {
             return userModel.get().equals(user);
         }
 
@@ -92,7 +89,7 @@ public class AntMatcherVoter {
         final UserModel user = getUser(authentication); //Usuario autenticado
 
         if (user.isVerified()) {
-            if(userToEdit.isPresent()) {
+            if (userToEdit.isPresent()) {
                 return userToEdit.get().equals(user);
             }
         }
@@ -106,12 +103,9 @@ public class AntMatcherVoter {
         return userToAccess.map(userModel -> userModel.equals(user)).orElse(false);
     }
 
-    public boolean checkGetReviews(Authentication authentication, Long userId, Long experienceId){
-        if(userId != null && experienceId != null){
-            throw new InvalidRequestParamsException("errors.InvalidParam.getReviews");
-        }
-        if(userId != null && experienceId == null){
-            accessUserInfo(authentication,userId);
+    public boolean checkGetReviews(Authentication authentication, Long userId, Long experienceId) {
+        if (userId != null && experienceId == null) {
+            accessUserInfo(authentication, userId);
         }
         return true;
     }

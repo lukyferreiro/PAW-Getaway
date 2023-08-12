@@ -60,10 +60,6 @@ public class ReviewController {
 
         Page<ReviewModel> reviews = GetReviewsParams.getReviewsByParams(userId, experienceId, page, reviewService, experienceService, authContext);
 
-        if (reviews == null) {
-            return Response.status(BAD_REQUEST).build();
-        }
-
         if(reviews.getContent().isEmpty()) {
             return Response.noContent().build();
         }
@@ -82,7 +78,7 @@ public class ReviewController {
     @POST
     @Produces(value = {CustomMediaType.REVIEW_V1})
     public Response createReview(
-            @QueryParam("experienceId") final long experienceId,
+            @QueryParam("experienceId") final Long experienceId,
             @Valid final NewReviewDto newReviewDto
     ) {
 
