@@ -46,7 +46,7 @@ public class PasswordResetToken {
     }
 
     public boolean isValid() {
-        return expirationDate.compareTo(LocalDateTime.now()) > 0;
+        return expirationDate.isAfter(LocalDateTime.now());
     }
 
     public String getValue() {
