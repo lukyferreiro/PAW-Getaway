@@ -75,59 +75,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         String orderQuery = order.getSqlQuery();
         Query queryForIds = checkQuery(category, name, max, score, city, em);
 
-        List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
-
-        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
-        final TypedQuery<ExperienceModel> queryForExperiences;
-        if (!idList.isEmpty()) {
-            LOGGER.debug("Selecting experiences contained in ");
-            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList) " + orderQuery, ExperienceModel.class);
-            queryForExperiences.setParameter("idList", idList);
-            queryForExperiences.setMaxResults(pageSize);
-            queryForExperiences.setFirstResult((page - 1) * pageSize);
-            return queryForExperiences.getResultList();
-        }
-
-        LOGGER.debug("No results available for these filters");
-        return Collections.emptyList();
-    }
-
-    private static Query checkQuery(CategoryModel category, String name, Double max, Long score, CityModel city, EntityManager em) {
-        if (name.equals("%") || name.equals("_")) {
-            name = '/' + name;
-        }
-
-        StringBuilder finalQuery = new StringBuilder();
-        StringBuilder baseQuery = new StringBuilder("SELECT experiences.experienceid \n" + "FROM (experiences NATURAL JOIN (cities NATURAL JOIN countries)) LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" + "WHERE (\n" + "(LOWER(experienceName) LIKE LOWER(CONCAT('%', :name ,'%')))\n" + "OR (LOWER(experiences.description) LIKE LOWER(CONCAT('%',  :name,'%')))\n" + "OR (LOWER(address) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" + "OR (LOWER(cityName) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" + "OR (LOWER(countryName) LIKE LOWER(CONCAT('%',  :name,'%')))\n" + ") \n" + "AND COALESCE(price,0) <= :max \n" + "AND observable = true \n");
-
-        String groupByClause = "GROUP BY experiences.experienceId HAVING AVG(COALESCE(score,0))>= :score\n";
-        String categorySearch = "AND categoryId = :categoryId ";
-        String citySearch = "AND cityid = :cityId ";
-
-        Query queryForIds = em.createNativeQuery(baseQuery + groupByClause);
-
-        if (city != null) {
-            if (category != null) {
-                finalQuery.append(baseQuery).append(citySearch).append(categorySearch).append(groupByClause);
-                queryForIds = em.createNativeQuery(finalQuery.toString());
-                queryForIds.setParameter("cityId", city.getCityId());
-                queryForIds.setParameter("categoryId", category.getCategoryId());
-            } else {
-                finalQuery.append(baseQuery).append(citySearch).append(groupByClause);
-                queryForIds = em.createNativeQuery(finalQuery.toString());
-                queryForIds.setParameter("cityId", city.getCityId());
-            }
-        } else if (category != null) {
-            finalQuery.append(baseQuery).append(categorySearch).append(groupByClause);
-            queryForIds = em.createNativeQuery(finalQuery.toString());
-            queryForIds.setParameter("categoryId", category.getCategoryId());
-        }
-
-        queryForIds.setParameter("max", max);
-        queryForIds.setParameter("score", score);
-        queryForIds.setParameter("name", name);
-
-        return queryForIds;
+        return getResults(orderQuery, queryForIds, em, page, pageSize);
     }
 
     @Override
@@ -177,22 +125,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         queryForIds.setParameter("name", name);
         queryForIds.setParameter("userId", user.getUserId());
 
-
-        List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
-
-        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
-        final TypedQuery<ExperienceModel> queryForExperiences;
-        if (!idList.isEmpty()) {
-            LOGGER.debug("Selecting experiences contained in ");
-            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList) " + orderQuery, ExperienceModel.class);
-            queryForExperiences.setParameter("idList", idList);
-            queryForExperiences.setMaxResults(pageSize);
-            queryForExperiences.setFirstResult((page - 1) * pageSize);
-            return queryForExperiences.getResultList();
-        }
-
-        LOGGER.debug("No results available for this name search for user with id{}", user.getUserId());
-        return Collections.emptyList();
+        return getResults(orderQuery, queryForIds, em, page, pageSize);
     }
 
     @Override
@@ -223,21 +156,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
         queryForIds.setParameter("userId", user.getUserId());
 
-        List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
-
-        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
-        final TypedQuery<ExperienceModel> queryForExperiences;
-        if (!idList.isEmpty()) {
-            LOGGER.debug("Selecting experiences contained in ");
-            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList) " + orderQuery, ExperienceModel.class);
-            queryForExperiences.setParameter("idList", idList);
-            queryForExperiences.setMaxResults(pageSize);
-            queryForExperiences.setFirstResult((page - 1) * pageSize);
-            return queryForExperiences.getResultList();
-        }
-
-        LOGGER.debug("User with id {} has no observable faved experiences", user.getUserId());
-        return Collections.emptyList();
+        return getResults(orderQuery, queryForIds, em, page, pageSize);
     }
 
     @Override
@@ -505,5 +424,60 @@ public class ExperienceDaoImpl implements ExperienceDao {
         return Collections.emptyList();
     }
 
+    private static Query checkQuery(CategoryModel category, String name, Double max, Long score, CityModel city, EntityManager em) {
+        if (name.equals("%") || name.equals("_")) {
+            name = '/' + name;
+        }
+
+        StringBuilder finalQuery = new StringBuilder();
+        StringBuilder baseQuery = new StringBuilder("SELECT experiences.experienceid \n" + "FROM (experiences NATURAL JOIN (cities NATURAL JOIN countries)) LEFT JOIN reviews ON experiences.experienceid = reviews.experienceid \n" + "WHERE (\n" + "(LOWER(experienceName) LIKE LOWER(CONCAT('%', :name ,'%')))\n" + "OR (LOWER(experiences.description) LIKE LOWER(CONCAT('%',  :name,'%')))\n" + "OR (LOWER(address) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" + "OR (LOWER(cityName) LIKE LOWER(CONCAT('%',  :name,'%')) )\n" + "OR (LOWER(countryName) LIKE LOWER(CONCAT('%',  :name,'%')))\n" + ") \n" + "AND COALESCE(price,0) <= :max \n" + "AND observable = true \n");
+
+        String groupByClause = "GROUP BY experiences.experienceId HAVING AVG(COALESCE(score,0))>= :score\n";
+        String categorySearch = "AND categoryId = :categoryId ";
+        String citySearch = "AND cityid = :cityId ";
+
+        Query queryForIds = em.createNativeQuery(baseQuery + groupByClause);
+
+        if (city != null) {
+            if (category != null) {
+                finalQuery.append(baseQuery).append(citySearch).append(categorySearch).append(groupByClause);
+                queryForIds = em.createNativeQuery(finalQuery.toString());
+                queryForIds.setParameter("cityId", city.getCityId());
+                queryForIds.setParameter("categoryId", category.getCategoryId());
+            } else {
+                finalQuery.append(baseQuery).append(citySearch).append(groupByClause);
+                queryForIds = em.createNativeQuery(finalQuery.toString());
+                queryForIds.setParameter("cityId", city.getCityId());
+            }
+        } else if (category != null) {
+            finalQuery.append(baseQuery).append(categorySearch).append(groupByClause);
+            queryForIds = em.createNativeQuery(finalQuery.toString());
+            queryForIds.setParameter("categoryId", category.getCategoryId());
+        }
+
+        queryForIds.setParameter("max", max);
+        queryForIds.setParameter("score", score);
+        queryForIds.setParameter("name", name);
+
+        return queryForIds;
+    }
+
+
+    private static List<ExperienceModel> getResults(String orderQuery, Query queryForIds, EntityManager em, int page, int pageSize) {
+        List<Number> resultingIds = (List<Number>) queryForIds.getResultList();
+
+        List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        final TypedQuery<ExperienceModel> queryForExperiences;
+        if (!idList.isEmpty()) {
+            LOGGER.debug("Selecting experiences contained in ");
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.experienceId IN (:idList) " + orderQuery, ExperienceModel.class);
+            queryForExperiences.setParameter("idList", idList);
+            queryForExperiences.setMaxResults(pageSize);
+            queryForExperiences.setFirstResult((page - 1) * pageSize);
+            return queryForExperiences.getResultList();
+        }
+        LOGGER.debug("No results available for these filters");
+        return Collections.emptyList();
+    }
 
 }
