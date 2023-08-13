@@ -141,7 +141,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //logueado y hay que revisar que el id sea el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{userId}/profileImage").access("@antMatcherVoter.userEditHimself(authentication, #userId)")
                     //logueado y tiene que tener rol PROVIDER
-                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/experiences").access("hasAuthority('PROVIDER') and @antMatcherVoter.accessUserInfo(authentication, #userId)")
+//                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/experiences").access("hasAuthority('PROVIDER') and @antMatcherVoter.accessUserInfo(authentication, #userId)")
                     //logueado y tiene que tener rol VERIFIED
 //                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/reviews").access("hasAuthority('VERIFIED') and @antMatcherVoter.accessUserInfo(authentication, #userId)")
                     //logueado y tiene que tener rol USER nada más
@@ -165,7 +165,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.PUT, "/api/experiences/{experienceId}/experienceImage").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/{experienceId}/experienceImage").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/experiences/{experienceId}/reviews").permitAll()
+//                    .antMatchers(HttpMethod.GET, "/api/experiences/{experienceId}/reviews").permitAll()
                     .antMatchers(HttpMethod.PUT, "/api/experience/{experienceId}/observable").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
                     //logueado
                     .antMatchers(HttpMethod.PUT, "/api/experience/{experienceId}/fav").authenticated()

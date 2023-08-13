@@ -10,6 +10,7 @@ import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.GetReviewsParams;
+import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.InvalidRequestParamsException;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.getaway.webapp.dto.response.ReviewDto;
@@ -85,6 +86,11 @@ public class ReviewController {
         }
 
         LOGGER.info("Called /reviews POST");
+
+        if(experienceId == null){
+            throw new InvalidRequestParamsException("errors.invalidParam.postReview");
+        }
+
         final UserModel user = authContext.getCurrentUser();
         //TODO se podria sacar este get de aca
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);

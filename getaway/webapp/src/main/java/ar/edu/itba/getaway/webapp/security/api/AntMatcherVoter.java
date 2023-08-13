@@ -105,14 +105,20 @@ public class AntMatcherVoter {
 
     public boolean checkGetReviews(Authentication authentication, Long userId, Long experienceId) {
         if (userId != null && experienceId == null) {
-            return accessUserInfo(authentication, userId);
+            if(getUser(authentication).isVerified()) {
+                return accessUserInfo(authentication, userId);
+            }
+            return false;
         }
         return true;
     }
 
     public boolean checkGetExperiences(Authentication authentication, Long userId) {
         if (userId != null) {
-            return accessUserInfo(authentication, userId);
+            if(getUser(authentication).isProvider()) {
+                return accessUserInfo(authentication, userId);
+            }
+            return false;
         }
         return true;
     }
