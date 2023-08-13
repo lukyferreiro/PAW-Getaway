@@ -17,6 +17,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -70,11 +71,11 @@ public class UserController {
     }
 
     //Endpoint que devuelve informacion de un usuario segun el ID
-    //TODO no se si chequear que userId coincida con el authContext.getCurrentUser()
-    //Si soy yo traigo todo sino traigo info acotada UserInfoDTO
     @GET
     @Path("/{userId:[0-9]+}")
     @Produces(value = {CustomMediaType.USER_V1})
+    //TODO no se si chequear que userId coincida con el authContext.getCurrentUser()
+    @PreAuthorize("@antMatcherVoter.accessUserInfo(authentication, #userId)")
     public Response getUserById(
             @PathParam("userId") final long id
     ) {

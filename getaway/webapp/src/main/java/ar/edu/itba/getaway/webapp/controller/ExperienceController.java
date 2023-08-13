@@ -64,7 +64,7 @@ public class ExperienceController {
             @Valid final NewExperienceDto experienceDto
     ) throws DuplicateExperienceException {
 
-        LOGGER.info("Called /experiences/ POST");
+        LOGGER.info("Called /experiences POST");
 
         if (experienceDto == null) {
             throw new ContentExpectedException();
@@ -247,20 +247,20 @@ public class ExperienceController {
 
     // Endpoint para obtener una experiencia a partir de su ID
     // TODO este endpoint??? puede volar
-    @GET
-    @Path("/{experienceId:[0-9]+}/name")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getExperienceNameById(
-            @PathParam("experienceId") final long id
-    ) {
-        LOGGER.info("Called /experiences/{}/name GET", id);
-
-        final UserModel user = authContext.getCurrentUser();
-        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
-
-        final ExperienceNameDto experienceDto = new ExperienceNameDto(experience, uriInfo);
-        return Response.ok(experienceDto).build();
-    }
+//    @GET
+//    @Path("/{experienceId:[0-9]+}/name")
+//    @Produces(value = {MediaType.APPLICATION_JSON})
+//    public Response getExperienceNameById(
+//            @PathParam("experienceId") final long id
+//    ) {
+//        LOGGER.info("Called /experiences/{}/name GET", id);
+//
+//        final UserModel user = authContext.getCurrentUser();
+//        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
+//
+//        final ExperienceNameDto experienceDto = new ExperienceNameDto(experience, uriInfo);
+//        return Response.ok(experienceDto).build();
+//    }
 
     // Endpoint para obtener la imagen de una experiencia
     @GET
@@ -307,7 +307,7 @@ public class ExperienceController {
     }
 
 
-    //TODO ver si se puede unificar en otro
+    //TODO ver si se puede unificar en el PUT de /id
     @PUT
     @Path("/{experienceId:[0-9]+}/fav")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -323,7 +323,7 @@ public class ExperienceController {
         return Response.ok().build();
     }
 
-    //TODO ver si se puede unificar en otro
+    //TODO ver si se puede unificar en el PUT de /id
     @PUT
     @Path("/{experienceId:[0-9]+}/observable")
     @Produces(value = {MediaType.APPLICATION_JSON})
