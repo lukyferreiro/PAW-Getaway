@@ -30,7 +30,7 @@ public class UserDaoImpl implements UserDao {
 
         final Collection<RoleModel> roleModels = new ArrayList<>();
         for (Roles role : roles) {
-            roleModels.add(getRoleByName(role).get());
+            getRoleByName(role).ifPresent(roleModels::add);
         }
 
         final UserModel userModel = new UserModel(password, name, surname, email, roleModels, image);

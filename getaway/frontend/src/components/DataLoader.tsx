@@ -11,7 +11,7 @@ const SpinnerRing = styled.div<{ sizeMultiplier: number }>`
   display: flex;
   justify-self: center;
   align-self: center;
-  align-content: center:
+  align-content: center;
   justify-content: center;
   width: ${({sizeMultiplier}) => `${80 * sizeMultiplier}px`};
   height: ${({sizeMultiplier}) => `${80 * sizeMultiplier}px`};
