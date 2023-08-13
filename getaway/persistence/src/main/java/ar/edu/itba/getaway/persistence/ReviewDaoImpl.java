@@ -63,7 +63,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
         final TypedQuery<ReviewModel> queryForReviews;
-        if (idList.size() > 0) {
+        if (!idList.isEmpty()) {
             LOGGER.debug("Selecting experiences contained in ");
             queryForReviews = em.createQuery("SELECT rev FROM ReviewModel rev WHERE rev.reviewId IN (:idList) ", ReviewModel.class);
             queryForReviews.setParameter("idList", idList);
@@ -108,7 +108,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
             List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
             final TypedQuery<ReviewModel> queryForReviews;
-            if (idList.size() > 0) {
+            if (!idList.isEmpty()) {
                 LOGGER.debug("Selecting reviews contained in ");
                 queryForReviews = em.createQuery("SELECT  rev FROM ReviewModel rev WHERE rev.reviewId IN (:idList) ", ReviewModel.class);
                 queryForReviews.setParameter("idList", idList);

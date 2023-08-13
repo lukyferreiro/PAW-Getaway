@@ -117,7 +117,7 @@ public class UserDaoImpl implements UserDao {
 
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
         final TypedQuery<UserModel> queryForUser;
-        if (idList.size() > 0) {
+        if (!idList.isEmpty()) {
             LOGGER.debug("Selecting experiences contained in ");
             queryForUser = em.createQuery("SELECT user FROM UserModel user WHERE user.userId IN (:idList) ", UserModel.class);
             queryForUser.setParameter("idList", idList);
@@ -141,7 +141,7 @@ public class UserDaoImpl implements UserDao {
 
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
         final TypedQuery<UserModel> queryForUser;
-        if (idList.size() > 0) {
+        if (!idList.isEmpty()) {
             LOGGER.debug("Selecting experiences contained in ");
             queryForUser = em.createQuery("SELECT user FROM UserModel user WHERE user.userId IN (:idList) ", UserModel.class);
             queryForUser.setParameter("idList", idList);
