@@ -55,12 +55,10 @@ public class ReviewDto implements Serializable {
         this.user.put("name", user.getName());
         this.user.put("surname", user.getSurname());
         this.user.put("hasImage", String.valueOf(user.getImage() != null));
-        this.user.put("profileImageUrl", uriInfo.getAbsolutePathBuilder().path("users").path(String.valueOf(user.getUserId())).path("profileImage").build().toString());
+        this.user.put("profileImageUrl", uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(user.getUserId())).path("profileImage").build().toString());
         final ExperienceModel experience = review.getExperience();
         this.user.put("id", String.valueOf(experience.getExperienceId()));
         this.user.put("name", experience.getExperienceName());
-//        this.user = new UserInfoDto(review.getUser(), uriInfo);
-//        this.experience = new ExperienceNameDto(review.getExperience(), uriInfo);
     }
 
     public long getId() {

@@ -13,9 +13,9 @@ export class ReviewService {
         score: string
     ): Promise<Result<PostResponse>> {
         const reviewToUpdate = JSON.stringify({
-            title:title,
-            description:description,
-            score:score
+            title: title,
+            description: description,
+            score: score
         });
 
         const url = new URL(this.basePath);
@@ -43,9 +43,9 @@ export class ReviewService {
         score: string
     ) :Promise<Result<PutResponse>> {
         const reviewToUpdate = JSON.stringify({
-            title:title,
-            description:description,
-            score:score
+            title: title,
+            description: description,
+            score: score
         });
         return resultFetch(this.basePath + `/${reviewId}`, {
             method: "PUT",

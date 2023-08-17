@@ -112,7 +112,7 @@ public class ReviewController {
 
     @PUT
     @Path("/{reviewId:[0-9]+}")
-    //@Consumes(MediaType.APPLICATION_JSON)    //TODO check
+    @Consumes(MediaType.APPLICATION_JSON)    //TODO check
     @Produces(value = {CustomMediaType.REVIEW_V1})
     public Response editReview(
             @PathParam("reviewId") final Long id,

@@ -12,10 +12,10 @@ import {
 import {resultFetch} from "../scripts/resultFetch";
 import {getPagedFetch} from "../scripts/getPagedFetch";
 import {authedFetch} from "../scripts/authedFetch";
-import AnonymousRecommendationsModel from "../types/AnonymousRecommendationsModel";
 
-export class  ExperienceService {
-    private readonly basePath = paths.BASE_URL + paths.EXPERIENCES;
+export class ExperienceService {
+    private readonly experienceBasePath = paths.BASE_URL + paths.EXPERIENCES;
+    private readonly reviewBasePath = paths.BASE_URL + paths.REVIEWS;
 
     public async createExperience(
         name: string,
@@ -40,7 +40,7 @@ export class  ExperienceService {
             description: description ? description : ""
         });
 
-        return resultFetch<PostResponse>(this.basePath, {
+        return resultFetch<PostResponse>(this.experienceBasePath, {
             method: "POST",
             headers: {
                 "Content-Type": APPLICATION_JSON_TYPE,
@@ -58,7 +58,7 @@ export class  ExperienceService {
         city?: number,
         page?: number
     ): Promise<Result<PagedContent<ExperienceModel[]>>> {
-        const url = new URL(this.basePath);
+        const url = new URL(this.experienceBasePath);
         if (typeof category === "string") {
             url.searchParams.append("category", category);
         }
@@ -84,7 +84,7 @@ export class  ExperienceService {
         category?: string,
         name?: string,
     ): Promise<Result<MaxPriceModel>> {
-        const url = new URL(this.basePath + "/maxPrice");
+        const url = new URL(this.experienceBasePath + "/maxPrice");
 
         if (typeof name === "string") {
             url.searchParams.append("name", name);
@@ -100,7 +100,7 @@ export class  ExperienceService {
 
     public async getUserOrderByModels(
     ): Promise<Result<OrderByModel[]>> {
-        const url = new URL(this.basePath + "/orders?user=true");
+        const url = new URL(this.experienceBasePath + "/orders");
 
         return resultFetch<OrderByModel[]>(url.toString(), {
             method: "GET",
@@ -109,24 +109,19 @@ export class  ExperienceService {
 
     public async getProviderOrderByModels(
     ): Promise<Result<OrderByModel[]>> {
-        const url = new URL(this.basePath + "/orders?provider=true");
+        const url = new URL(this.experienceBasePath + "/orders");
+        url.searchParams.append("provider", 'true');
 
         return resultFetch<OrderByModel[]>(url.toString(), {
             method: "GET",
         });
     }
 
-    public async getExperiencesRecommendations(): Promise<Result<AnonymousRecommendationsModel>> {
-        return resultFetch<AnonymousRecommendationsModel>(this.basePath + `/recommendations`, {
-            method: "GET"
-        })
-    }
-
     public async getExperienceById(
         experienceId: number,
         view?: boolean
     ): Promise<Result<ExperienceModel>> {
-        const url = new URL(this.basePath + `/${experienceId}`);
+        const url = new URL(this.experienceBasePath + `/${experienceId}`);
         if (typeof view === "boolean") {
             url.searchParams.append("view", view.toString());
         }
@@ -137,7 +132,7 @@ export class  ExperienceService {
     }
 
     public async getExperienceNameById(experienceId: number): Promise<Result<ExperienceModel>> {
-        return resultFetch<ExperienceModel>(this.basePath + `/${experienceId}/name`, {
+        return resultFetch<ExperienceModel>(this.experienceBasePath + `/${experienceId}/name`, {
             method: "GET",
         });
     }
@@ -165,7 +160,7 @@ export class  ExperienceService {
             url: url ? url : "",
             description: description ? description : ""
         });
-        return resultFetch(this.basePath + `/${experienceId}`, {
+        return resultFetch(this.experienceBasePath + `/${experienceId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": APPLICATION_JSON_TYPE,
@@ -175,7 +170,7 @@ export class  ExperienceService {
     }
 
     public async deleteExperienceById(experienceId: number)  {
-        return authedFetch(this.basePath + `/${experienceId}`, {
+        return authedFetch(this.experienceBasePath + `/${experienceId}`, {
             method: "DELETE",
         });
     }
@@ -186,7 +181,7 @@ export class  ExperienceService {
     ): Promise<Result<PutResponse>> {
         const formData = new FormData();
         formData.append("experienceImage", file, file.name);
-        return resultFetch<PutResponse>(this.basePath + `/${experienceId}/experienceImage`, {
+        return resultFetch<PutResponse>(this.experienceBasePath + `/${experienceId}/experienceImage`, {
             method: "PUT",
             headers: {},
             body: formData,
@@ -197,16 +192,18 @@ export class  ExperienceService {
         experienceId: number,
         page?: number
     ): Promise<Result<PagedContent<ReviewModel[]>>> {
-        return getPagedFetch<ReviewModel[]>(this.basePath + `/${experienceId}/reviews`, page);
+        const url = new URL(this.reviewBasePath);
+        url.searchParams.append("experienceId", experienceId.toString());
+        return getPagedFetch<ReviewModel[]>(url.toString(), page);
     }
 
     public async setExperienceFav(
         experienceId: number,
         set?: boolean
     ) {
-        const url = new URL(this.basePath + `/${experienceId}/fav`);
+        const url = new URL(this.experienceBasePath + `/${experienceId}/fav`);
         if (typeof set === "boolean") {
-            url.searchParams.append("set", set.toString());
+            url.searchParams.append("fav", set.toString());
         }
 
         return resultFetch(url.toString(), {
@@ -220,9 +217,9 @@ export class  ExperienceService {
         experienceId: number,
         set?: boolean
     ) {
-        const url = new URL(this.basePath + `/${experienceId}/observable`);
+        const url = new URL(this.experienceBasePath + `/${experienceId}/observable`);
         if (typeof set === "boolean") {
-            url.searchParams.append("set", set.toString());
+            url.searchParams.append("observable", set.toString());
         }
 
         return resultFetch(url.toString(), {
@@ -230,5 +227,14 @@ export class  ExperienceService {
             headers: {},
             body: {}
         });
+    }
+
+    public async getExperiencesBestCategory(category: string): Promise<Result<ExperienceModel[]>> {
+        const url = new URL(this.experienceBasePath);
+        url.searchParams.append("filter", 'BEST_CATEGORY');
+        url.searchParams.append("category", category);
+        return resultFetch<ExperienceModel[]>(this.experienceBasePath, {
+            method: "GET"
+        })
     }
 }

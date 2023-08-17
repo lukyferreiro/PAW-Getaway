@@ -7,10 +7,11 @@ import {
 } from "../types";
 import {getPagedFetch} from "../scripts/getPagedFetch";
 import {resultFetch} from "../scripts/resultFetch";
-import UserRecommendationsModel from "../types/UserRecommendationsModel";
 
 export class UserService {
-    private readonly basePath = paths.BASE_URL + paths.USERS;
+    private readonly userBasePath = paths.BASE_URL + paths.USERS;
+    private readonly experienceBasePath = paths.BASE_URL + paths.EXPERIENCES;
+    private readonly reviewsBasePath = paths.BASE_URL + paths.REVIEWS;
 
     public async createUser(
         name: string,
@@ -33,7 +34,7 @@ export class UserService {
             );
         }
 
-        return resultFetch<PostResponse>(this.basePath, {
+        return resultFetch<PostResponse>(this.userBasePath, {
             method: "POST",
             headers: {
                 "Content-Type": APPLICATION_JSON_TYPE,
@@ -44,7 +45,7 @@ export class UserService {
 
 
     public async getUserById(userId: number): Promise<Result<UserModel>> {
-        return resultFetch<UserModel>(this.basePath + `/${userId}`, {
+        return resultFetch<UserModel>(this.userBasePath + `/${userId}`, {
             method: "GET",
         });
     }
@@ -58,7 +59,7 @@ export class UserService {
             name: name,
             surname: surname
         });
-        return resultFetch<PutResponse> (this.basePath + `/${userId}`, {
+        return resultFetch<PutResponse> (this.userBasePath + `/${userId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": APPLICATION_JSON_TYPE,
@@ -73,7 +74,7 @@ export class UserService {
     ): Promise<Result<PutResponse>> {
         const formData = new FormData();
         formData.append("profileImage", file, file.name);
-        return resultFetch<PutResponse>(this.basePath + `/${userId}/profileImage`, {
+        return resultFetch<PutResponse>(this.userBasePath + `/${userId}/profileImage`, {
             method: "PUT",
             headers: {},
             body: formData,
@@ -86,7 +87,9 @@ export class UserService {
         order?: string,
         page?: number,
     ): Promise<Result<PagedContent<ExperienceModel[]>>> {
-        const url = new URL(this.basePath + `/${userId}/experiences`);
+        const url = new URL(this.experienceBasePath);
+        url.searchParams.append("filter", 'PROVIDER');
+        url.searchParams.append("userId", userId.toString());
         if (typeof name === "string") {
             url.searchParams.append("name", name);
         }
@@ -100,10 +103,9 @@ export class UserService {
         userId: number,
         page?: number
     ): Promise<Result<PagedContent<ReviewModel[]>>> {
-        return getPagedFetch<ReviewModel[]>(
-            this.basePath + `/${userId}/reviews`,
-            page
-        );
+        const url = new URL(this.reviewsBasePath);
+        url.searchParams.append("userId", userId.toString());
+        return getPagedFetch<ReviewModel[]>(url.toString(), page);
     }
 
     public async getUserFavExperiences(
@@ -111,15 +113,38 @@ export class UserService {
         order?: string,
         page?: number
     ): Promise<Result<PagedContent<ExperienceModel[]>>> {
-        const url = new URL(this.basePath + `/${userId}/favExperiences`);
+        const url = new URL(this.experienceBasePath);
+        url.searchParams.append("filter", 'FAVS');
+        url.searchParams.append("userId", userId.toString());
         if (typeof order === "string") {
             url.searchParams.append("order", order);
         }
         return getPagedFetch<ExperienceModel[]>(url.toString(), page);
     }
 
-    public async getUserRecommendations(userId: number | undefined): Promise<Result<UserRecommendationsModel>> {
-        return resultFetch<UserRecommendationsModel>(this.basePath + `/${userId}/recommendations`, {
+    public async getUserViewedExperiences(userId: number): Promise<Result<ExperienceModel[]>> {
+        const url = new URL(this.experienceBasePath);
+        url.searchParams.append("filter", 'VIEWED');
+        url.searchParams.append("userId", userId.toString());
+        return resultFetch<ExperienceModel[]>(this.experienceBasePath, {
+            method: "GET"
+        })
+    }
+
+    public async getUserRecommendationsByFavs(userId: number): Promise<Result<ExperienceModel[]>> {
+        const url = new URL(this.experienceBasePath);
+        url.searchParams.append("filter", 'RECOMMENDED_BY_FAVS');
+        url.searchParams.append("userId", userId.toString());
+        return resultFetch<ExperienceModel[]>(this.experienceBasePath, {
+            method: "GET"
+        })
+    }
+
+    public async getUserRecommendationsByReviews(userId: number): Promise<Result<ExperienceModel[]>> {
+        const url = new URL(this.experienceBasePath);
+        url.searchParams.append("filter", 'RECOMMENDED_BY_REVIEWS');
+        url.searchParams.append("userId", String(userId));
+        return resultFetch<ExperienceModel[]>(this.experienceBasePath, {
             method: "GET"
         })
     }
@@ -127,7 +152,7 @@ export class UserService {
     public async verifyUser(
         token?: string
     ) : Promise<Result<PutResponse>> {
-        const url = new URL(this.basePath + "/emailToken" );
+        const url = new URL(this.userBasePath + "/emailToken" );
         if (typeof token === "string") {
             url.searchParams.append("token", token);
         }
@@ -139,7 +164,7 @@ export class UserService {
     }
 
     public async sendNewVerifyUserEmail() : Promise<Result<PostResponse>> {
-        const url = new URL(this.basePath + "/emailToken" );
+        const url = new URL(this.userBasePath + "/emailToken" );
         return resultFetch<PostResponse>(url.toString(), {
             method: "POST",
             headers: {},
@@ -151,7 +176,7 @@ export class UserService {
         token?: string,
         password?: string
     ) : Promise<Result<PutResponse>> {
-        const url = new URL(this.basePath + "/passwordToken" );
+        const url = new URL(this.userBasePath + "/passwordToken" );
         const newPassword = JSON.stringify({
             password: password,
             token: token
@@ -171,7 +196,7 @@ export class UserService {
     public async sendPasswordResetEmail(
         email?: string
     ) : Promise<Result<PostResponse>> {
-        const url = new URL(this.basePath + "/passwordToken" );
+        const url = new URL(this.userBasePath + "/passwordToken" );
         const emailToSend = JSON.stringify({
             email: email
         });

@@ -48,6 +48,7 @@ public class UserController {
 
     //Endpoint que crea un usuario nuevo
     @POST
+    @Consumes(value = {MediaType.APPLICATION_JSON})     //TODO check
     @Produces(value = {CustomMediaType.USER_V1})
     public Response registerUser(
             @Valid final RegisterDto registerDto
@@ -66,7 +67,7 @@ public class UserController {
             throw new DuplicateUserException();
         }
 
-        final URI location = UserDto.getUserUriBuilder(user, uriInfo).build();
+        final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getUserId())).build();
         return Response.created(location).build();
     }
 
@@ -86,11 +87,11 @@ public class UserController {
     //Endpoint para editar la informacion del usuario
     @PUT
     @Path("/{userId:[0-9]+}")
-    //@Consumes(MediaType.APPLICATION_JSON)           //TODO check
+    @Consumes(MediaType.APPLICATION_JSON)           //TODO check
     @Produces(value = {CustomMediaType.USER_V1})
     public Response updateUser(
-            @Valid final UserInfoDto userInfoDto,
-            @PathParam("userId") final long id
+            @PathParam("userId") final long id,
+            @Valid final UserInfoDto userInfoDto
     ) {
         LOGGER.info("Called /users/{} PUT", id);
 
