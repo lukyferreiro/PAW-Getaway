@@ -1,9 +1,14 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
 import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.webapp.dto.adapters.CategoryAdapter;
+import ar.edu.itba.getaway.webapp.dto.adapters.CityAdapter;
+import ar.edu.itba.getaway.webapp.dto.adapters.CountryAdapter;
+import ar.edu.itba.getaway.webapp.dto.adapters.UserAdapter;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
@@ -31,9 +36,13 @@ public class ExperienceDto implements Serializable {
     private URI cityURL;
     private URI userUrl;
     private URI categoryUrl;
+    @XmlJavaTypeAdapter(CityAdapter.class)
     private HashMap<String, String> city = new HashMap<>();
+    @XmlJavaTypeAdapter(CountryAdapter.class)
     private HashMap<String, String> country = new HashMap<>();
+    @XmlJavaTypeAdapter(CategoryAdapter.class)
     private HashMap<String, String> category = new HashMap<>();
+    @XmlJavaTypeAdapter(UserAdapter.class)
     private HashMap<String, String> user = new HashMap<>();
 
     public static Collection<ExperienceDto> mapExperienceToDto(Collection<ExperienceModel> experiences, UriInfo uriInfo) {
@@ -72,7 +81,7 @@ public class ExperienceDto implements Serializable {
         this.categoryUrl = uriInfo.getBaseUriBuilder().path("experiences").path("categories").path(String.valueOf(experience.getCategory().getCategoryId())).build();
         this.city.put("id", String.valueOf(experience.getCity().getCityId()));
         this.city.put("name", experience.getCity().getCityName());
-        this.country.put("id", String.valueOf(experience.getCity().getCountry().getCountryName()));
+        this.country.put("id", String.valueOf(experience.getCity().getCountry().getCountryId()));
         this.country.put("name", experience.getCity().getCountry().getCountryName());
         this.category.put("id", String.valueOf(experience.getCategory().getCategoryId()));
         this.category.put("name", experience.getCategory().getCategoryName());
@@ -80,8 +89,6 @@ public class ExperienceDto implements Serializable {
         this.user.put("id", String.valueOf(user.getUserId()));
         this.user.put("name", user.getName());
         this.user.put("surname", user.getSurname());
-        this.user.put("hasImage", String.valueOf(user.getImage() != null));
-        this.user.put("profileImageUrl", uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(user.getUserId())).path("profileImage").build().toString());
     }
 
     public Long getId() {

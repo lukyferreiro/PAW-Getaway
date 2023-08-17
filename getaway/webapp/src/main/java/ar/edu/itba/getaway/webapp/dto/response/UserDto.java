@@ -27,8 +27,6 @@ public class UserDto implements Serializable {
     private URI viewedUrl;
     private URI recommendationsByFavsUrl;
     private URI recommendationsByReviewsUrl;
-//    private URI emailTokenUrl;  //TODO check
-//    private URI passwordTokenUrl;   //TODO check
 
     public UserDto() {
         // Used by Jersey
