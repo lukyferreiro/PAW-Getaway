@@ -112,8 +112,7 @@ public class ReviewController {
 
     @PUT
     @Path("/{reviewId:[0-9]+}")
-    //TODO check
-    @Consumes(MediaType.APPLICATION_JSON)
+    //@Consumes(MediaType.APPLICATION_JSON)    //TODO check
     @Produces(value = {CustomMediaType.REVIEW_V1})
     public Response editReview(
             @PathParam("reviewId") final Long id,
@@ -141,15 +140,13 @@ public class ReviewController {
 
     @DELETE
     @Path("/{reviewId:[0-9]+}")
-    //TODO check
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON})  //TODO check
     public Response deleteReview(
             @PathParam("reviewId") final Long id
     ) {
         LOGGER.info("Called /reviews/{} DELETE", id);
         final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
         reviewService.deleteReview(reviewModel);
-        //TODO devolver un simple message
         return Response.noContent().build();
     }
 }

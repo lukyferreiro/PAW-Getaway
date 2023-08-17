@@ -153,11 +153,12 @@ export class UserService {
     ) : Promise<Result<PutResponse>> {
         const url = new URL(this.basePath + "/passwordToken" );
         const newPassword = JSON.stringify({
-            password: password
+            password: password,
+            token: token
         });
-        if (typeof token === "string") {
-            url.searchParams.append("token", token);
-        }
+        // if (typeof token === "string") {
+        //     url.searchParams.append("token", token);
+        // }
         return resultFetch<PutResponse>(url.toString(), {
             method: "PUT",
             headers: {

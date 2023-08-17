@@ -81,7 +81,7 @@ public class ExperienceDaoTest {
 
     private final Long DEFAULT_SCORE = 0L;
     private final Double DEFAULT_MAX_PRICE = 100000D;
-    private final Optional<OrderByModel> NO_ORDER = Optional.empty();
+    private final OrderByModel NO_ORDER = null;
     private final String EMPTY_STRING = "";
     private final Integer PAGE_SIZE = 3;
 

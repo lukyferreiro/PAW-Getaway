@@ -174,7 +174,7 @@ public class ExperienceController {
     // Endpoint para editar una experiencia
     @PUT
     @Path("/{experienceId:[0-9]+}")
-    @Consumes(MediaType.APPLICATION_JSON)
+    //@Consumes(MediaType.APPLICATION_JSON)       //TODO check
     @Produces(value = {CustomMediaType.EXPERIENCE_V1})
     public Response updateExperience(
             @Context final HttpServletRequest request,
@@ -212,7 +212,7 @@ public class ExperienceController {
     // Endpoint para eliminar una experiencia
     @DELETE
     @Path("/{experienceId:[0-9]+}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON})     //TODO check
     public Response deleteExperience(
             @PathParam("experienceId") final long id
     ) {
@@ -242,7 +242,7 @@ public class ExperienceController {
     // Endpoint para obtener la imagen de una experiencia
     @GET
     @Path("/{experienceId:[0-9]+}/experienceImage")
-    @Produces({"image/*", MediaType.APPLICATION_JSON})
+    @Produces({"image/*", MediaType.APPLICATION_JSON})       //TODO check @Produces(MediaType.MULTIPART_FORM_DATA)
     public Response getExperienceImage(
             @PathParam("experienceId") final long id,
             @Context final Request request
@@ -261,8 +261,8 @@ public class ExperienceController {
 
     @PUT
     @Path("/{experienceId:[0-9]+}/experienceImage")
-    //TODO check
-    @Produces({"image/*", MediaType.APPLICATION_JSON})
+    @Produces({"image/*", MediaType.APPLICATION_JSON})       //TODO check
+    //@Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response updateExperienceImage(
             @PathParam("experienceId") final long id,
             @FormDataParam("experienceImage") final FormDataBodyPart experienceImageBody,
@@ -287,7 +287,7 @@ public class ExperienceController {
     //TODO ver si se puede unificar en el PUT de /id
     @PUT
     @Path("/{experienceId:[0-9]+}/fav")
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON})      //TODO check
     public Response favExperience(
             @PathParam("experienceId") final long id,
             @QueryParam("fav") final Boolean fav
@@ -307,7 +307,7 @@ public class ExperienceController {
     //TODO ver si se puede unificar en el PUT de /id
     @PUT
     @Path("/{experienceId:[0-9]+}/observable")
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON})     //TODO check
     public Response observable(
             @PathParam("experienceId") final long id,
             @QueryParam("observable") final Boolean observable
