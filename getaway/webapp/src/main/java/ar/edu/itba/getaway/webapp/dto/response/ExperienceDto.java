@@ -31,9 +31,9 @@ public class ExperienceDto implements Serializable {
     private URI cityURL;
     private URI userUrl;
     private URI categoryUrl;
-    private String cityName;
-    private String countryName;
-    private String categoryName;
+    private HashMap<String, String> city = new HashMap<>();
+    private HashMap<String, String> country = new HashMap<>();
+    private HashMap<String, String> category = new HashMap<>();
     private HashMap<String, String> user = new HashMap<>();
 
     public static Collection<ExperienceDto> mapExperienceToDto(Collection<ExperienceModel> experiences, UriInfo uriInfo) {
@@ -70,9 +70,12 @@ public class ExperienceDto implements Serializable {
         this.cityURL = uriInfo.getBaseUriBuilder().path("location").path("cities").path(String.valueOf(experience.getCity().getCityId())).build();
         this.userUrl = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(experience.getUser().getUserId())).build();
         this.categoryUrl = uriInfo.getBaseUriBuilder().path("experiences").path("categories").path(String.valueOf(experience.getCategory().getCategoryId())).build();
-        this.cityName = experience.getCity().getCityName();
-        this.countryName = experience.getCity().getCountry().getCountryName();
-        this.categoryName = experience.getCategory().getCategoryName();
+        this.city.put("id", String.valueOf(experience.getCity().getCityId()));
+        this.city.put("name", experience.getCity().getCityName());
+        this.country.put("id", String.valueOf(experience.getCity().getCountry().getCountryName()));
+        this.country.put("name", experience.getCity().getCountry().getCountryName());
+        this.category.put("id", String.valueOf(experience.getCategory().getCategoryId()));
+        this.category.put("name", experience.getCategory().getCategoryName());
         final UserModel user = experience.getUser();
         this.user.put("id", String.valueOf(user.getUserId()));
         this.user.put("name", user.getName());
@@ -195,23 +198,23 @@ public class ExperienceDto implements Serializable {
     public void setHasImage(boolean hasImage) {
         this.hasImage = hasImage;
     }
-    public String getCityName() {
-        return cityName;
+    public HashMap<String, String> getCity() {
+        return city;
     }
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void setCity(HashMap<String, String> city) {
+        this.city = city;
     }
-    public String getCountryName() {
-        return countryName;
+    public HashMap<String, String> getCountry() {
+        return country;
     }
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
+    public void setCountry(HashMap<String, String> country) {
+        this.country = country;
     }
-    public String getCategoryName() {
-        return categoryName;
+    public HashMap<String, String> getCategory() {
+        return category;
     }
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setCategory(HashMap<String, String> category) {
+        this.category = category;
     }
     public HashMap<String, String> getUser() {
         return user;

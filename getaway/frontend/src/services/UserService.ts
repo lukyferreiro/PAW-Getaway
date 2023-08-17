@@ -122,28 +122,31 @@ export class UserService {
         return getPagedFetch<ExperienceModel[]>(url.toString(), page);
     }
 
-    public async getUserViewedExperiences(userId: number): Promise<Result<ExperienceModel[]>> {
+    public async getUserViewedExperiences(userId: number | undefined): Promise<Result<ExperienceModel[]>> {
         const url = new URL(this.experienceBasePath);
         url.searchParams.append("filter", 'VIEWED');
+        // @ts-ignore
         url.searchParams.append("userId", userId.toString());
         return resultFetch<ExperienceModel[]>(this.experienceBasePath, {
             method: "GET"
         })
     }
 
-    public async getUserRecommendationsByFavs(userId: number): Promise<Result<ExperienceModel[]>> {
+    public async getUserRecommendationsByFavs(userId: number | undefined): Promise<Result<ExperienceModel[]>> {
         const url = new URL(this.experienceBasePath);
         url.searchParams.append("filter", 'RECOMMENDED_BY_FAVS');
+        // @ts-ignore
         url.searchParams.append("userId", userId.toString());
         return resultFetch<ExperienceModel[]>(this.experienceBasePath, {
             method: "GET"
         })
     }
 
-    public async getUserRecommendationsByReviews(userId: number): Promise<Result<ExperienceModel[]>> {
+    public async getUserRecommendationsByReviews(userId: number | undefined): Promise<Result<ExperienceModel[]>> {
         const url = new URL(this.experienceBasePath);
         url.searchParams.append("filter", 'RECOMMENDED_BY_REVIEWS');
-        url.searchParams.append("userId", String(userId));
+        // @ts-ignore
+        url.searchParams.append("userId", userId.toString());
         return resultFetch<ExperienceModel[]>(this.experienceBasePath, {
             method: "GET"
         })

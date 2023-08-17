@@ -20,10 +20,10 @@ public class OrdersDto implements Serializable {
         this.self = uriInfo.getBaseUriBuilder().path("experiences").path("orders").build();
     }
 
-    public String[] getOrder() {
+    public String[] getOrders() {
         return orders;
     }
-    public void setOrder(String[] orders) {
+    public void setOrders(String[] orders) {
         this.orders = orders;
     }
     public URI getSelf() {

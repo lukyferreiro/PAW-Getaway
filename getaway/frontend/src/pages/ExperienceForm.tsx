@@ -9,7 +9,6 @@ import {useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {showToast} from "../scripts/toast";
-import {Simulate} from "react-dom/test-utils";
 
 type FormDataExperience = {
     name: string,

@@ -1,4 +1,4 @@
-import {UserInfoModel} from "./index";
+import {CategoryModel, CityModel, CountryModel, UserInfoModel} from "./index";
 
 export default interface ExperienceModel {
     id: number;
@@ -20,8 +20,8 @@ export default interface ExperienceModel {
     cityUrl: string;
     userUrl: string;
     categoryUrl: string;
-    cityName: string;
-    countryName: string;
-    categoryName: string;
+    city: CityModel;
+    country: CountryModel;
+    category: CategoryModel;
     user: UserInfoModel;
 }

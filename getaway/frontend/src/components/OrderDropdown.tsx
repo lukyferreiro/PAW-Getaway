@@ -3,7 +3,7 @@ import "../common/i18n/index";
 import {OrderByModel} from "../types";
 import {Dispatch, SetStateAction} from "react";
 
-export default function OrderDropdown(props: { orders: OrderByModel[], order: [string, Dispatch<SetStateAction<string>>], currentPage: [number, Dispatch<SetStateAction<number>>] }) {
+export default function OrderDropdown(props: { orders: OrderByModel | undefined, order: [string, Dispatch<SetStateAction<string>>], currentPage: [number, Dispatch<SetStateAction<number>>] }) {
 
     const {t} = useTranslation()
     const {orders, order, currentPage} = props
@@ -25,10 +25,10 @@ export default function OrderDropdown(props: { orders: OrderByModel[], order: [s
                     </b>
                 </button>
                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    {orders.map((order) => (
-                        <p className="dropdown-item" key={order.order}
-                           onClick={() => changeOrder(order.order.toString())}>
-                            {t(`Order.${order.order.toString()}`)}
+                    {orders?.orders.map((order) => (
+                        <p className="dropdown-item" key={order}
+                           onClick={() => changeOrder(order.toString())}>
+                            {t(`Order.${order.toString()}`)}
                         </p>
                     ))}
                 </ul>

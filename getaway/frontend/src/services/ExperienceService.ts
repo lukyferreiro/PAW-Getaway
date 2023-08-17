@@ -99,20 +99,20 @@ export class ExperienceService {
     }
 
     public async getUserOrderByModels(
-    ): Promise<Result<OrderByModel[]>> {
+    ): Promise<Result<OrderByModel>> {
         const url = new URL(this.experienceBasePath + "/orders");
 
-        return resultFetch<OrderByModel[]>(url.toString(), {
+        return resultFetch<OrderByModel>(url.toString(), {
             method: "GET",
         });
     }
 
     public async getProviderOrderByModels(
-    ): Promise<Result<OrderByModel[]>> {
+    ): Promise<Result<OrderByModel>> {
         const url = new URL(this.experienceBasePath + "/orders");
         url.searchParams.append("provider", 'true');
 
-        return resultFetch<OrderByModel[]>(url.toString(), {
+        return resultFetch<OrderByModel>(url.toString(), {
             method: "GET",
         });
     }
