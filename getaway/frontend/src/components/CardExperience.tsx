@@ -23,7 +23,7 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
     const user = getUser()
 
     const [isLoadingImg, setIsLoadingImg] = useState(false)
-    const [fav, setFav] = useState(experience.isFav)
+    const [isFav, setIsFav] = useState(experience.isFav)
 
     function clearNavBar() {
         searchParams.delete("category")
@@ -75,12 +75,12 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
                 <div className="btn-fav">
                     {user ?
                         <div>
-                            {fav ?
-                                <IconButton onClick={() => setFavExperience(experience, false, setFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
+                            {isFav ?
+                                <IconButton onClick={() => setFavExperience(experience, false, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                     <Favorite className="fa-heart heart-color"/>
                                 </IconButton>
                                 :
-                                <IconButton onClick={() => setFavExperience(experience, true, setFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
+                                <IconButton onClick={() => setFavExperience(experience, true, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                     <FavoriteBorder className="fa-heart"/>
                                 </IconButton>
                             }

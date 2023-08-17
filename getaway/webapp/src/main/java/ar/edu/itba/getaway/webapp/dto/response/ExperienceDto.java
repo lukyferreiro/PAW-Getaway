@@ -181,11 +181,11 @@ public class ExperienceDto implements Serializable {
     public void setReviewCount(Long reviewCount) {
         this.reviewCount = reviewCount;
     }
-    public boolean isFav() {
+    public boolean getIsFav() {
         return isFav;
     }
-    public void setFav(boolean fav) {
-        isFav = fav;
+    public void setIsFav(boolean isFav) {
+        this.isFav = isFav;
     }
     public boolean isObservable() {
         return observable;
