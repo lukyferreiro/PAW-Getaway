@@ -78,7 +78,7 @@ public enum GetExperiencesFilter {
                 LocationService locationService, String category, String name, OrderByModel order, Double maxPrice,
                 Long maxScore, Long cityId, Long userId
         ) {
-            if(Objects.equals(category, "")){
+            if(category == null || Objects.equals(category, "")){
                 throw new InvalidRequestParamsException("errors.invalidParam.getExperiences.category");
             }
             CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
