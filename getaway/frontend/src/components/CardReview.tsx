@@ -62,8 +62,8 @@ export default function CardReview(props: {
 
             <div className="card-title m-2 d-flex justify-content-between">
                 <div className="d-flex">
-                    <img className="user-img" src={reviewModel.user.hasImage ? reviewModel.user.profileImageUrl : getResourcePath('./images/ic_user_no_image.png')}
-                         alt="Imagen" style={{marginRight: reviewModel.user.hasImage ? "8px" : ""}}/>
+                    <img className="user-img" src={reviewModel.userImage ? reviewModel.userImage : getResourcePath('./images/ic_user_no_image.png')}
+                         alt="Imagen" style={{marginRight: reviewModel.userImage ? "8px" : ""}}/>
 
                     <div className="d-flex flex-column justify-content-center align-content-center">
                         <h5 className="my-1">

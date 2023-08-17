@@ -10,6 +10,7 @@ export default interface ReviewModel {
     self: string;
     userUrl: string;
     experienceUrl: string;
+    userImage: string;
     user: UserInfoModel;
     experience: ExperienceNameModel;
 }

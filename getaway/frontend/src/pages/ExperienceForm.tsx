@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {CategoryModel, CityModel, CountryModel, ExperienceModel} from "../types";
-import {categoryService, experienceService, locationService} from "../services";
+import {experienceService, locationService} from "../services";
 import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {useForm} from "react-hook-form";
@@ -58,7 +58,7 @@ export default function ExperienceForm() {
             showToast(t('ExperienceForm.toast.forbidden.notVerified'), 'error')
         } else {
             serviceHandler(
-                categoryService.getCategories(),
+                experienceService.getCategories(),
                 navigate, (category) => {
                     setCategories(category)
                 },

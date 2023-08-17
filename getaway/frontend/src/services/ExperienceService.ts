@@ -7,7 +7,7 @@ import {
     Result,
     ReviewModel,
     MaxPriceModel,
-    OrderByModel
+    OrderByModel, CategoryModel
 } from "../types";
 import {resultFetch} from "../scripts/resultFetch";
 import {getPagedFetch} from "../scripts/getPagedFetch";
@@ -113,6 +113,18 @@ export class ExperienceService {
         url.searchParams.append("provider", 'true');
 
         return resultFetch<OrderByModel>(url.toString(), {
+            method: "GET",
+        });
+    }
+
+    public async getCategories(): Promise<Result<CategoryModel[]>> {
+        return resultFetch<CategoryModel[]>(this.experienceBasePath + '/categories', {
+            method: "GET",
+        });
+    }
+
+    public async getCategoryById(categoryId: number): Promise<Result<CategoryModel>> {
+        return resultFetch<CategoryModel>(this.experienceBasePath + `/categoires/${categoryId}`, {
             method: "GET",
         });
     }
@@ -233,7 +245,7 @@ export class ExperienceService {
         const url = new URL(this.experienceBasePath);
         url.searchParams.append("filter", 'BEST_CATEGORY');
         url.searchParams.append("category", category);
-        return resultFetch<ExperienceModel[]>(this.experienceBasePath, {
+        return resultFetch<ExperienceModel[]>(url.toString(), {
             method: "GET"
         })
     }

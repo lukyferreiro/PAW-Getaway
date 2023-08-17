@@ -7,7 +7,6 @@ export const paths = {
     LOCATION: '/location',
     REVIEWS: '/reviews',
     USERS: '/users',
-    CATEGORIES: '/categories'
 };
 
 export const APPLICATION_JSON_TYPE = 'application/json';

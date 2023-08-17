@@ -37,5 +37,6 @@
 // };
 
 export const getResourcePath = (path) => {
-    return path +'?v=20230716'
+    // return path +'?v={hash}'
+    return path
 }

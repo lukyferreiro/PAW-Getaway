@@ -127,7 +127,7 @@ export class UserService {
         url.searchParams.append("filter", 'VIEWED');
         // @ts-ignore
         url.searchParams.append("userId", userId.toString());
-        return resultFetch<ExperienceModel[]>(this.experienceBasePath, {
+        return resultFetch<ExperienceModel[]>(url.toString(), {
             method: "GET"
         })
     }
@@ -137,7 +137,7 @@ export class UserService {
         url.searchParams.append("filter", 'RECOMMENDED_BY_FAVS');
         // @ts-ignore
         url.searchParams.append("userId", userId.toString());
-        return resultFetch<ExperienceModel[]>(this.experienceBasePath, {
+        return resultFetch<ExperienceModel[]>(url.toString(), {
             method: "GET"
         })
     }
@@ -147,7 +147,7 @@ export class UserService {
         url.searchParams.append("filter", 'RECOMMENDED_BY_REVIEWS');
         // @ts-ignore
         url.searchParams.append("userId", userId.toString());
-        return resultFetch<ExperienceModel[]>(this.experienceBasePath, {
+        return resultFetch<ExperienceModel[]>(url.toString(), {
             method: "GET"
         })
     }

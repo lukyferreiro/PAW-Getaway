@@ -5,7 +5,7 @@ import {CategoryModel} from "../types";
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
-import {categoryService} from "../services";
+import {experienceService} from "../services";
 import {useForm} from "react-hook-form";
 import {Close} from "@mui/icons-material";
 import {IconButton} from "@mui/material";
@@ -40,7 +40,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
         nameProp[1](getQueryOrDefault(query, "name", ""))
         categoryProp[1](getQueryOrDefault(query, "category", ""))
         serviceHandler(
-            categoryService.getCategories(),
+            experienceService.getCategories(),
             navigate, (category) => {
                 setCategories(category)
             },

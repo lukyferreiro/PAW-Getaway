@@ -10,7 +10,7 @@ export class LoginService {
         const credentials = email + ":" + password;
         const hash = btoa(credentials);
         try {
-            const response = await fetch(paths.BASE_URL + paths.CATEGORIES, {
+            const response = await fetch(paths.BASE_URL + paths.EXPERIENCES + '/categories', {
                 method: "GET",
                 headers: {
                     Authorization: "Basic " + hash,

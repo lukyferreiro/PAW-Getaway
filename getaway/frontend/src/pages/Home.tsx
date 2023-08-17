@@ -66,19 +66,6 @@ export default function Home() {
                     setExperiencesAdventure(experiences)
                 },
                 () => {
-                    setIsLoading(false)
-                },
-                () => {
-                    setExperiencesAdventure(new Array(0))
-                }
-            )
-            serviceHandler(
-                experienceService.getExperiencesBestCategory("Aventura"),
-                navigate, (experiences) => {
-                    setExperiencesAdventure(experiences)
-                },
-                () => {
-                    setIsLoading(false)
                 },
                 () => {
                     setExperiencesAdventure(new Array(0))
@@ -90,7 +77,6 @@ export default function Home() {
                     setExperiencesGastronomy(experiences)
                 },
                 () => {
-                    setIsLoading(false)
                 },
                 () => {
                     setExperiencesGastronomy(new Array(0))
@@ -102,7 +88,6 @@ export default function Home() {
                     setExperiencesHotels(experiences)
                 },
                 () => {
-                    setIsLoading(false)
                 },
                 () => {
                     setExperiencesHotels(new Array(0))
@@ -114,7 +99,6 @@ export default function Home() {
                     setExperiencesRelax(experiences)
                 },
                 () => {
-                    setIsLoading(false)
                 },
                 () => {
                     setExperiencesRelax(new Array(0))
@@ -126,7 +110,6 @@ export default function Home() {
                     setExperiencesNight(experiences)
                 },
                 () => {
-                    setIsLoading(false)
                 },
                 () => {
                     setExperiencesNight(new Array(0))
@@ -138,12 +121,12 @@ export default function Home() {
                     setExperiencesHistoric(experiences)
                 },
                 () => {
-                    setIsLoading(false)
                 },
                 () => {
                     setExperiencesHistoric(new Array(0))
                 }
             )
+            setIsLoading(false)
         }
         document.title = `${t('PageName')}`
     }, [isLogged()])
