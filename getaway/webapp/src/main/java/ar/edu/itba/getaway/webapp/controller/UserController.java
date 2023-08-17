@@ -48,6 +48,7 @@ public class UserController {
 
     //Endpoint que crea un usuario nuevo
     @POST
+    @Consumes(value = {MediaType.APPLICATION_JSON})     //TODO check
     @Produces(value = {CustomMediaType.USER_V1})
     public Response registerUser(
             @Valid final RegisterDto registerDto
@@ -66,7 +67,7 @@ public class UserController {
             throw new DuplicateUserException();
         }
 
-        final URI location = UserDto.getUserUriBuilder(user, uriInfo).build();
+        final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getUserId())).build();
         return Response.created(location).build();
     }
 
@@ -74,7 +75,6 @@ public class UserController {
     @GET
     @Path("/{userId:[0-9]+}")
     @Produces(value = {CustomMediaType.USER_V1})
-    //TODO no se si chequear que userId coincida con el authContext.getCurrentUser()
     @PreAuthorize("@antMatcherVoter.accessUserInfo(authentication, #userId)")
     public Response getUserById(
             @PathParam("userId") final long id
@@ -87,12 +87,11 @@ public class UserController {
     //Endpoint para editar la informacion del usuario
     @PUT
     @Path("/{userId:[0-9]+}")
-    //TODO check
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)           //TODO check
     @Produces(value = {CustomMediaType.USER_V1})
     public Response updateUser(
-            @Valid final UserInfoDto userInfoDto,
-            @PathParam("userId") final long id
+            @PathParam("userId") final long id,
+            @Valid final UserInfoDto userInfoDto
     ) {
         LOGGER.info("Called /users/{} PUT", id);
 
@@ -130,23 +129,24 @@ public class UserController {
         return Response.ok().build();
     }
 
+
+    //https://stackoverflow.com/questions/3077229/restful-password-reset
     //Endpoint para resetear la contraseña, recibiendo el token y la contraseña nueva
     //TODO cambiar
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/passwordToken")
+    @Path("/password")
     public Response resetPassword(
-            @QueryParam("token") final String token,
             @Valid final PasswordResetDto passwordResetDto
     ) {
-        LOGGER.info("Called /users/passwordToken PUT");
+        LOGGER.info("Called /users/password PUT");
 
         if (passwordResetDto == null) {
             throw new ContentExpectedException();
         }
 
-        userService.updatePassword(token, passwordResetDto.getPassword()).orElseThrow(UserNotFoundException::new);
+        userService.updatePassword(passwordResetDto.getToken(), passwordResetDto.getPassword()).orElseThrow(UserNotFoundException::new);
         return Response.ok().build();
     }
 
@@ -155,11 +155,11 @@ public class UserController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/passwordToken")
+    @Path("/password")
     public Response sendResetPasswordEmail(
             @Valid final PasswordResetEmailDto passwordResetEmailDto
     ) {
-        LOGGER.info("Called /users/passwordToken POST");
+        LOGGER.info("Called /users/password POST");
 
         if (passwordResetEmailDto == null) {
             throw new ContentExpectedException();
@@ -173,8 +173,7 @@ public class UserController {
     //Endpoint para obtener la imagen de perfil del usuario
     @GET
     @Path("/{userId:[0-9]+}/profileImage")
-    // TODO check
-    @Produces({"image/*", MediaType.APPLICATION_JSON})
+    @Produces({"image/*", MediaType.APPLICATION_JSON})   //TODO check @Produces(MediaType.MULTIPART_FORM_DATA)
     public Response getUserProfileImage(
             @PathParam("userId") final long id,
             @Context final Request request
@@ -193,8 +192,8 @@ public class UserController {
 
     //Endpoint para editar la imagen de perfil del usuario
     @PUT
-    //TODO check
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)     //TODO check
+    //@Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("/{userId:[0-9]+}/profileImage")
     public Response updateUserProfileImage(
             @PathParam("userId") final long id,

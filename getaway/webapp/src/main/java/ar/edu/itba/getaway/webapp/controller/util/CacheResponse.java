@@ -12,7 +12,6 @@ import java.security.NoSuchAlgorithmException;
 
 public class CacheResponse {
 
-
     private CacheResponse() {
         // Avoid instantiation of util class
     }

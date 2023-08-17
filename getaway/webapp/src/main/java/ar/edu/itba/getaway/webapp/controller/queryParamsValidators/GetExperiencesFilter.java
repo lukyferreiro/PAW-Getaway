@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public enum GetExperiencesFilter {
 
-    FILTER() {
+    SEARCH() {
         @Override
         public GetExperiencesParams validateParams(
                 AuthContext authContext, CategoryService categoryService, ExperienceService experienceService,
@@ -79,8 +79,8 @@ public enum GetExperiencesFilter {
                 LocationService locationService, String category, String name, OrderByModel order, Double maxPrice,
                 Long maxScore, Long cityId, Long userId
         ) {
-            CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);;
-            final UserModel userModel = validateUserId(authContext, userId);
+            CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
+            final UserModel userModel = authContext.getCurrentUser();
             return new GetExperiencesParams(categoryModel, null, null, null, null, null, userModel);
         }
 

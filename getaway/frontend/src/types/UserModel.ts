@@ -1,12 +1,17 @@
-export default interface UserModel {
-    userId: number;
+export default interface CurrentUserModel {
+    id: number;
     name: string;
     surname: string;
-    sub: string;   //sub is the email
+    email: string;
     isVerified: boolean;
     isProvider: boolean;
-    // token?: string;
-    // url?: string;
     hasImage: boolean;
+    self: string;
     profileImageUrl: string;
+    experiencesUrl: string;
+    reviewsUrl: string;
+    favsUrl: string;
+    viewedUrl: string;
+    recommendationsByFavsUrl: string;
+    recommendationsByReviewsUrl: string;
 }

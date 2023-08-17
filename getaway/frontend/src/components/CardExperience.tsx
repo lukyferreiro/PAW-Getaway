@@ -23,7 +23,7 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
     const user = getUser()
 
     const [isLoadingImg, setIsLoadingImg] = useState(false)
-    const [fav, setFav] = useState(experience.fav)
+    const [fav, setFav] = useState(experience.isFav)
 
     function clearNavBar() {
         searchParams.delete("category")

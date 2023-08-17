@@ -39,23 +39,18 @@ public class CountryDto implements Serializable {
     public long getId() {
         return id;
     }
-
     public void setId(long id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public URI getCitiesUrl() {
         return citiesUrl;
     }
-
     public void setCitiesUrl(URI citiesUrl) {
         this.citiesUrl = citiesUrl;
     }
