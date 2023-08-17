@@ -43,7 +43,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     const [rating, setRating] = useState(parseInt(getQueryOrDefault(query, "rating", "0")))
     const [hover, setHover] = useState(-parseInt(getQueryOrDefault(query, "rating", "0")))
     //Order
-    const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
+    const [orders, setOrders] = useState<OrderByModel>()
     const order = useState<string>(getQueryOrDefault(query, "order", "OrderByAZ"))
     //Page
     const [maxPage, setMaxPage] = useState(0)
@@ -59,7 +59,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
             () => {
             },
             () => {
-                setOrders(new Array(0))
+                setOrders(undefined)
                 order[1]("OrderByAZ")
             }
         )

@@ -47,7 +47,7 @@ export default function UserExperiences() {
     const isOpenImage = useState(false)
     const [userName, setUserName] = useState("")
 
-    const [orders, setOrders] = useState<OrderByModel[]>(new Array(0))
+    const [orders, setOrders] = useState<OrderByModel>()
     const order = useState<string>(getQueryOrDefault(query, "order", "OrderByAZ"))
 
     const [maxPage, setMaxPage] = useState(0)
@@ -75,7 +75,7 @@ export default function UserExperiences() {
                 () => {
                 },
                 () => {
-                    setOrders(new Array(0))
+                    setOrders(undefined)
                 }
             );
             document.title = `${t('PageName')} - ${t('PageTitles.userExperiences')}`

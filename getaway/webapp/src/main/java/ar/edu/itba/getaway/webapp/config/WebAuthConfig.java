@@ -155,8 +155,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/experiences").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/maxPrice").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/orders").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/experiences/name").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/experiences/recommendations").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/experiences/categories").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/experiences/categories/{categoryId}").permitAll()
+//                    .antMatchers(HttpMethod.GET, "/api/experiences/name").permitAll()
+//                    .antMatchers(HttpMethod.GET, "/api/experiences/recommendations").permitAll()
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/{experienceId}").permitAll()
                     //logueado, VERIFIED y PROVIDER, chequear que sea el mismo usuario
@@ -184,8 +186,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/location/cities/{cityId}").permitAll()
                 //------------------- /categories --------------------
                     //permitAll para navbar
-                    .antMatchers(HttpMethod.GET, "/api/categories").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/categories/{categoryId}").permitAll()
+//                    .antMatchers(HttpMethod.GET, "/api/categories").permitAll()
+//                    .antMatchers(HttpMethod.GET, "/api/categories/{categoryId}").permitAll()
                 //------------------- Others --------------------
                     .antMatchers("/**").permitAll()
                 .and()

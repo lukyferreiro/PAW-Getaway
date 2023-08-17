@@ -1,12 +1,15 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
+import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
+import ar.edu.itba.getaway.models.UserModel;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class ReviewDto implements Serializable {
@@ -19,9 +22,11 @@ public class ReviewDto implements Serializable {
     private URI self;
     private URI userUrl;
     private URI experienceUrl;
+    private HashMap<String, String> user = new HashMap<>();
+    private HashMap<String, String> experience = new HashMap<>();
     //TODO ver que onda estos DTOs
-    private UserInfoDto user;
-    private ExperienceNameDto experience;
+//    private UserInfoDto user;
+//    private ExperienceNameDto experience;
 
     public static Collection<ReviewDto> mapReviewToDto(Collection<ReviewModel> reviews, UriInfo uriInfo) {
         return reviews.stream().map(r -> new ReviewDto(r, uriInfo)).collect(Collectors.toList());
@@ -45,8 +50,15 @@ public class ReviewDto implements Serializable {
         this.self = uriBuilder.clone().build();
         this.userUrl = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(review.getUser().getUserId())).build();
         this.experienceUrl = uriInfo.getBaseUriBuilder().path("experiences").path(String.valueOf(review.getExperience().getExperienceId())).build();;
-        this.user = new UserInfoDto(review.getUser(), uriInfo);
-        this.experience = new ExperienceNameDto(review.getExperience(), uriInfo);
+        final UserModel user = review.getUser();
+        this.user.put("id", String.valueOf(user.getUserId()));
+        this.user.put("name", user.getName());
+        this.user.put("surname", user.getSurname());
+        this.user.put("hasImage", String.valueOf(user.getImage() != null));
+        this.user.put("profileImageUrl", uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(user.getUserId())).path("profileImage").build().toString());
+        final ExperienceModel experience = review.getExperience();
+        this.user.put("id", String.valueOf(experience.getExperienceId()));
+        this.user.put("name", experience.getExperienceName());
     }
 
     public long getId() {
@@ -97,18 +109,16 @@ public class ReviewDto implements Serializable {
     public void setExperienceUrl(URI experienceUrl) {
         this.experienceUrl = experienceUrl;
     }
-    public UserInfoDto getUser() {
+    public HashMap<String, String> getUser() {
         return user;
     }
-    public void setUser(UserInfoDto user) {
+    public void setUser(HashMap<String, String> user) {
         this.user = user;
     }
-    public ExperienceNameDto getExperience() {
+    public HashMap<String, String> getExperience() {
         return experience;
     }
-    public void setExperience(ExperienceNameDto experience) {
+    public void setExperience(HashMap<String, String> experience) {
         this.experience = experience;
     }
-
-
 }

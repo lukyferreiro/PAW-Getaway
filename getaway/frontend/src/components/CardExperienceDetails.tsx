@@ -33,7 +33,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const [searchParams, setSearchParams] = useSearchParams();
 
     const isOpenImage = useState(false)
-    const [fav, setFav] = useState(experience.fav)
+    const [fav, setFav] = useState(experience.isFav)
     const [view, setView] = useState(experience.observable)
 
     function clearNavBar() {
