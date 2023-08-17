@@ -55,10 +55,10 @@ export default function Home() {
                     setExperiencesByReviews(experiencesByReviews)
                 },
                 () => {
+                    setIsLoading(false)
                 },
                 () => setExperiencesByReviews(new Array(0))
             )
-            setIsLoading(false)
         } else {
             serviceHandler(
                 experienceService.getExperiencesBestCategory("Aventura"),
@@ -121,12 +121,12 @@ export default function Home() {
                     setExperiencesHistoric(experiences)
                 },
                 () => {
+                    setIsLoading(false)
                 },
                 () => {
                     setExperiencesHistoric(new Array(0))
                 }
             )
-            setIsLoading(false)
         }
         document.title = `${t('PageName')}`
     }, [isLogged()])

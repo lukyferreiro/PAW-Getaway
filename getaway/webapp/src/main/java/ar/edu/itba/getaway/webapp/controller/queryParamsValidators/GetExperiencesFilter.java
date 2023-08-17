@@ -65,8 +65,7 @@ public enum GetExperiencesFilter {
             }
             return uriBuilder
                     .queryParam("order", order)
-                    .queryParam("page", page)
-                    .queryParam("filter", this.toString());
+                    .queryParam("page", page);
         }
 
     },
@@ -79,6 +78,9 @@ public enum GetExperiencesFilter {
                 LocationService locationService, String category, String name, OrderByModel order, Double maxPrice,
                 Long maxScore, Long cityId, Long userId
         ) {
+            if(Objects.equals(category, "")){
+                throw new InvalidRequestParamsException("errors.invalidParam.getExperiences.category");
+            }
             CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
             final UserModel userModel = authContext.getCurrentUser();
             return new GetExperiencesParams(categoryModel, null, null, null, null, null, userModel);
