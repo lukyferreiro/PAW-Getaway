@@ -81,7 +81,7 @@ public class ExperienceDaoTest {
 
     private final Long DEFAULT_SCORE = 0L;
     private final Double DEFAULT_MAX_PRICE = 100000D;
-    private final OrderByModel NO_ORDER = null;
+    private final OrderByModel DEFAULT_ORDER = OrderByModel.OrderByAZ;
     private final String EMPTY_STRING = "";
     private final Integer PAGE_SIZE = 3;
 
@@ -300,7 +300,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListExperiencesSearchByUser() {
-        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesSearchByUser("test", USER_1, NO_ORDER, 1, PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesSearchByUser("test", USER_1, DEFAULT_ORDER, 1, PAGE_SIZE);
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_GAS));
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
@@ -314,7 +314,7 @@ public class ExperienceDaoTest {
 
     @Test
     public void testListExperiencesFavsByUser() {
-        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesFavsByUser(USER_1, NO_ORDER,1,PAGE_SIZE);
+        List<ExperienceModel> experienceModelList = experienceDao.listExperiencesFavsByUser(USER_1, DEFAULT_ORDER,1,PAGE_SIZE);
         assertFalse(experienceModelList.isEmpty());
         assertTrue(experienceModelList.contains(DEFAULT_ADV));
         assertTrue(experienceModelList.contains(DEFAULT_GAS));
