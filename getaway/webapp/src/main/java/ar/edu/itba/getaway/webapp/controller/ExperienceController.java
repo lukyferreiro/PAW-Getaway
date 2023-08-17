@@ -332,8 +332,7 @@ public class ExperienceController {
     ){
         LOGGER.info("Called /experiences/orders GET");
         OrderByModel[] orderByModels = GetOrdersParams.getOrdersByParams(isProvider);
-        Collection<OrderByDto> orderByDtos = OrderByDto.mapOrderByToDto(Arrays.asList(orderByModels), uriInfo);
-        return Response.ok(new GenericEntity<Collection<OrderByDto>>(orderByDtos) {}).build();
+        return Response.ok(new OrdersDto(orderByModels, uriInfo)).build();
     }
 
     @GET

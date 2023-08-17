@@ -12,10 +12,9 @@ public class CityDto implements Serializable {
 
     private long id;
     private String name;
+    private String countryName;
     private URI self;
     private URI countryUrl;
-    //TODO ver que onda este DTO
-    private CountryDto countryDto;
 
 
     public static Collection<CityDto> mapCityToDto(Collection<CityModel> cities, UriInfo uriInfo) {
@@ -29,9 +28,9 @@ public class CityDto implements Serializable {
     public CityDto(CityModel city, UriInfo uriInfo) {
         this.id = city.getCityId();
         this.name = city.getCityName();
+        this.countryName = city.getCountry().getCountryName();
         this.self = uriInfo.getBaseUriBuilder().path("location").path("cities").path(String.valueOf(city.getCityId())).build();
         this.countryUrl = uriInfo.getBaseUriBuilder().path("location").path("countries").path(String.valueOf(city.getCountry().getCountryId())).build();
-        this.countryDto = new CountryDto(city.getCountry(), uriInfo);
     }
 
     public long getId() {
@@ -46,6 +45,12 @@ public class CityDto implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+    public String getCountryName() {
+        return countryName;
+    }
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
     public URI getSelf() {
         return self;
     }
@@ -57,11 +62,5 @@ public class CityDto implements Serializable {
     }
     public void setCountryUrl(URI countryUrl) {
         this.countryUrl = countryUrl;
-    }
-    public CountryDto getCountryDto() {
-        return countryDto;
-    }
-    public void setCountryDto(CountryDto countryDto) {
-        this.countryDto = countryDto;
     }
 }

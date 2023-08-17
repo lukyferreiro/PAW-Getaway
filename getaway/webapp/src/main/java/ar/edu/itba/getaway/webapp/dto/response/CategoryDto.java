@@ -24,7 +24,7 @@ public class CategoryDto implements Serializable {
     public CategoryDto(CategoryModel category, UriInfo uriInfo) {
         this.id = category.getCategoryId();
         this.name = category.getCategoryName();
-        this.self = uriInfo.getBaseUriBuilder().path("categories").path(String.valueOf(category.getCategoryId())).build();
+        this.self = uriInfo.getBaseUriBuilder().path("experiences").path("categories").path(String.valueOf(category.getCategoryId())).build();
     }
 
     public long getId() {

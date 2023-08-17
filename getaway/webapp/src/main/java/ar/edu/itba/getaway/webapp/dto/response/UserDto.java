@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
 import ar.edu.itba.getaway.models.UserModel;
+import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.GetExperiencesFilter;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -23,20 +24,17 @@ public class UserDto implements Serializable {
     private URI experiencesUrl;
     private URI reviewsUrl;
     private URI favsUrl;
-    private URI recommendationsUrl;
-    private URI emailTokenUrl;
-    private URI passwordTokenUrl;
-
-    public static UriBuilder getUserUriBuilder(UserModel user, UriInfo uriInfo) {
-        return uriInfo.getBaseUriBuilder().clone().path("users").path(String.valueOf(user.getUserId()));
-    }
+    private URI viewedUrl;
+    private URI recommendationsByFavsUrl;
+    private URI recommendationsByReviewsUrl;
+//    private URI emailTokenUrl;  //TODO check
+//    private URI passwordTokenUrl;   //TODO check
 
     public UserDto() {
         // Used by Jersey
     }
 
     public UserDto(UserModel user, UriInfo uriInfo) {
-        final UriBuilder uriBuilder = getUserUriBuilder(user, uriInfo);
         this.id = user.getUserId();
         this.name = user.getName();
         this.surname = user.getSurname();
@@ -44,18 +42,31 @@ public class UserDto implements Serializable {
         this.isVerified = user.isVerified();
         this.isProvider = user.isProvider();
         this.hasImage = user.getImage() != null;
-        this.self = uriBuilder.clone().build();
+        this.self = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(user.getUserId())).build();
         if (user.getProfileImage() != null) {
-            this.profileImageUrl = uriBuilder.clone().path("profileImage").build();  // /user/{id}/profileImage
+            this.profileImageUrl = uriInfo.getBaseUriBuilder().path("users")
+                    .path(String.valueOf(user.getUserId())).path("profileImage").build();
         }
         if(user.isProvider()) {
-            this.experiencesUrl = uriBuilder.clone().path("experiences").build();    // /user/{id}/experiences
+            this.experiencesUrl = uriInfo.getBaseUriBuilder().path("experiences")
+                    .queryParam("filter", GetExperiencesFilter.PROVIDER.toString())
+                    .queryParam("userId", user.getUserId()).build();
         }
-        this.reviewsUrl = uriBuilder.clone().path("reviews").build();    // /user/{id}/reviews
-        this.favsUrl = uriBuilder.clone().path("favExperiences").build();    // /user/{id}/favExperiences
-        this.recommendationsUrl = uriBuilder.clone().path("recommendations").build();    // /user/{id}/recommendations
-        this.emailTokenUrl =  uriBuilder.clone().path("emailToken").build();    // /user/{id}/emailToken
-        this.passwordTokenUrl =  uriBuilder.clone().path("passwordToken").build();  // /user/{id}/passwordToken
+        this.reviewsUrl = uriInfo.getBaseUriBuilder().path("reviews")
+                .queryParam("userId", user.getUserId()).build();
+        this.favsUrl = uriInfo.getBaseUriBuilder().path("experiences")
+                .queryParam("filter", GetExperiencesFilter.FAVS.toString())
+                .queryParam("userId", user.getUserId()).build();
+        this.viewedUrl = uriInfo.getBaseUriBuilder().path("experiences")
+                .queryParam("filter", GetExperiencesFilter.VIEWED.toString())
+                .queryParam("userId", user.getUserId()).build();
+        this.recommendationsByFavsUrl = uriInfo.getBaseUriBuilder().path("experiences")
+                .queryParam("filter", GetExperiencesFilter.RECOMMENDED_BY_FAVS.toString())
+                .queryParam("userId", user.getUserId()).build();
+        this.recommendationsByReviewsUrl = uriInfo.getBaseUriBuilder().path("experiences")
+                .queryParam("filter", GetExperiencesFilter.RECOMMENDED_BY_REVIEWS.toString())
+                .queryParam("userId", user.getUserId()).build();
+
     }
 
     public long getId() {
@@ -130,23 +141,23 @@ public class UserDto implements Serializable {
     public void setFavsUrl(URI favsUrl) {
         this.favsUrl = favsUrl;
     }
-    public URI getRecommendationsUrl() {
-        return recommendationsUrl;
+    public URI getViewedUrl() {
+        return viewedUrl;
     }
-    public void setRecommendationsUrl(URI recommendationsUrl) {
-        this.recommendationsUrl = recommendationsUrl;
+    public void setViewedUrl(URI viewedUrl) {
+        this.viewedUrl = viewedUrl;
     }
-    public URI getEmailTokenUrl() {
-        return emailTokenUrl;
+    public URI getRecommendationsByFavsUrl() {
+        return recommendationsByFavsUrl;
     }
-    public void setEmailTokenUrl(URI emailTokenUrl) {
-        this.emailTokenUrl = emailTokenUrl;
+    public void setRecommendationsByFavsUrl(URI recommendationsByFavsUrl) {
+        this.recommendationsByFavsUrl = recommendationsByFavsUrl;
     }
-    public URI getPasswordTokenUrl() {
-        return passwordTokenUrl;
+    public URI getRecommendationsByReviewsUrl() {
+        return recommendationsByReviewsUrl;
     }
-    public void setPasswordTokenUrl(URI passwordTokenUrl) {
-        this.passwordTokenUrl = passwordTokenUrl;
+    public void setRecommendationsByReviewsUrl(URI recommendationsByReviewsUrl) {
+        this.recommendationsByReviewsUrl = recommendationsByReviewsUrl;
     }
 }
 
