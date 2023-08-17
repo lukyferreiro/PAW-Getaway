@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public enum GetExperiencesFilter {
 
-    FILTER() {
+    SEARCH() {
         @Override
         public GetExperiencesParams validateParams(
                 AuthContext authContext, CategoryService categoryService, ExperienceService experienceService,

@@ -6,6 +6,8 @@ import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.GetExperiencesFilter;
 import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.GetExperiencesParams;
+import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.GetOrdersParams;
+import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.InvalidRequestParamsException;
 import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
@@ -104,7 +106,7 @@ public class ExperienceController {
             @QueryParam("city") @DefaultValue("-1") Long cityId,
             @QueryParam("page") @DefaultValue("1") int page,
             @QueryParam("userId") Long userId,
-            @QueryParam("filter") @DefaultValue("...") String filter
+            @QueryParam("filter") @DefaultValue("SEARCH") String filter
     ) {
         LOGGER.info("Called /experiences GET");
 
@@ -141,31 +143,6 @@ public class ExperienceController {
 
         final Double maxPrice = experienceService.getMaxPriceByCategoryAndName(categoryModel, name).orElse(0.0);
         return Response.ok(new MaxPriceDto(maxPrice, uriInfo)).build();
-    }
-
-    //TODO chequear
-    @GET
-    @Path("/orders")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getExperiencesOrders(
-            @QueryParam("user") @DefaultValue("false") boolean user,
-            @QueryParam("provider") @DefaultValue("false") boolean owner
-    ){
-        LOGGER.info("Called /experiences/orders GET");
-        OrderByModel[] orderByModels = null;
-
-        if ((owner && user) || (!owner && !user)) {
-            throw new BadRequestException();
-        }
-
-        if (owner) {
-            orderByModels = OrderByModel.getProviderOrderByModel();
-        } else if (user) {
-            orderByModels = OrderByModel.getUserOrderByModel();
-        }
-
-        Collection<OrderByDto> orderByDtos = OrderByDto.mapOrderByToDto(Arrays.asList(orderByModels), uriInfo);
-        return Response.ok(new GenericEntity<Collection<OrderByDto>>(orderByDtos) {}).build();
     }
 
     // Endpoint para obtener una experiencia a partir de su ID
@@ -245,8 +222,8 @@ public class ExperienceController {
         return Response.noContent().build();
     }
 
-    // Endpoint para obtener una experiencia a partir de su ID
     // TODO este endpoint??? puede volar
+    // Endpoint para obtener una experiencia a partir de su ID
 //    @GET
 //    @Path("/{experienceId:[0-9]+}/name")
 //    @Produces(value = {MediaType.APPLICATION_JSON})
@@ -313,13 +290,17 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response favExperience(
             @PathParam("experienceId") final long id,
-            @QueryParam("set") final boolean set
+            @QueryParam("fav") final Boolean fav
     ) {
         LOGGER.info("Called /experiences/{}/fav PUT", id);
 
+        if(fav == null){
+            throw new InvalidRequestParamsException("errors.invalidParam.fav");
+        }
+
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
-        favAndViewExperienceService.setFav(user, set, experience);
+        favAndViewExperienceService.setFav(user, fav, experience);
         return Response.ok().build();
     }
 
@@ -329,13 +310,50 @@ public class ExperienceController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response observable(
             @PathParam("experienceId") final long id,
-            @QueryParam("set") final boolean set
+            @QueryParam("observable") final Boolean observable
     ) {
         LOGGER.info("Called /experiences/{}/observable PUT", id);
 
+        if(observable == null){
+            throw new InvalidRequestParamsException("errors.invalidParam.observable");
+        }
+
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
-        experienceService.changeVisibility(experience, set);
+        experienceService.changeVisibility(experience, observable);
         return Response.ok().build();
+    }
+
+    @GET
+    @Path("/orders")
+    @Produces(value = {CustomMediaType.ORDER_LIST_V1})
+    public Response getExperiencesOrders(
+            @QueryParam("provider") @DefaultValue("false") Boolean isProvider
+    ){
+        LOGGER.info("Called /experiences/orders GET");
+        OrderByModel[] orderByModels = GetOrdersParams.getOrdersByParams(isProvider);
+        Collection<OrderByDto> orderByDtos = OrderByDto.mapOrderByToDto(Arrays.asList(orderByModels), uriInfo);
+        return Response.ok(new GenericEntity<Collection<OrderByDto>>(orderByDtos) {}).build();
+    }
+
+    @GET
+    @Path("/categories")
+    @Produces(value = {CustomMediaType.CATEGORY_LIST_V1})
+    public Response getCategories(){
+        LOGGER.info("Called /categories GET");
+        final List<CategoryModel> categories = categoryService.listAllCategories();
+        final Collection<CategoryDto> categoriesDtos = CategoryDto.mapCategoriesToDto(categories, uriInfo);
+        return Response.ok(new GenericEntity<Collection<CategoryDto>>(categoriesDtos) {}).build();
+    }
+
+    @GET
+    @Path("/categories/{categoryId:[0-9]+}")
+    @Produces(value = {CustomMediaType.CATEGORY_V1})
+    public Response getCategoryById(
+            @PathParam("categoryId") final long id
+    ) {
+        LOGGER.info("Called /categories/{} GET", id);
+        final CategoryModel category = categoryService.getCategoryById(id).orElseThrow(CategoryNotFoundException::new);
+        return Response.ok(new CategoryDto(category, uriInfo)).build();
     }
 }
