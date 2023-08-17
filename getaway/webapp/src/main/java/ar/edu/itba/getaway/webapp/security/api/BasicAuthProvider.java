@@ -57,7 +57,7 @@ public class BasicAuthProvider implements AuthenticationProvider {
         }
         final MyUserDetails userDetails = (MyUserDetails) userDetailsService.loadUserByUsername(credentials[0]);
         //TODO ver aca que token
-        final String authToken = tokenService.createAccessToken(userDetails);
+        final String authToken = tokenService.createRefreshToken(userDetails);
         final JwtTokenDetails tokenDetails = tokenService.validateTokenAndGetDetails(authToken);
         final BasicAuthToken trustedAuth = new BasicAuthToken(credentials[0], credentials[1], userDetails.getAuthorities(), tokenDetails);
         trustedAuth.setToken(authToken);
