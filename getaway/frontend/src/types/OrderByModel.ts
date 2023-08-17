@@ -1,3 +1,3 @@
 export default interface OrderByModel {
-    order: string;
+    order: string[];
 }

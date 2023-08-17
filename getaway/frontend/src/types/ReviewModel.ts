@@ -7,6 +7,9 @@ export default interface ReviewModel {
     description: string;
     score: number;
     date: string;
-    experience: ExperienceNameModel;
+    self: string;
+    userUrl: string;
+    experienceUrl: string;
     user: UserInfoModel;
+    experience: ExperienceNameModel;
 }

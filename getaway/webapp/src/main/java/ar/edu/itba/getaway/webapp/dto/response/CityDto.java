@@ -12,10 +12,8 @@ public class CityDto implements Serializable {
 
     private long id;
     private String name;
-    private String countryName;
     private URI self;
     private URI countryUrl;
-
 
     public static Collection<CityDto> mapCityToDto(Collection<CityModel> cities, UriInfo uriInfo) {
         return cities.stream().map(city -> new CityDto(city, uriInfo)).collect(Collectors.toList());
@@ -28,7 +26,6 @@ public class CityDto implements Serializable {
     public CityDto(CityModel city, UriInfo uriInfo) {
         this.id = city.getCityId();
         this.name = city.getCityName();
-        this.countryName = city.getCountry().getCountryName();
         this.self = uriInfo.getBaseUriBuilder().path("location").path("cities").path(String.valueOf(city.getCityId())).build();
         this.countryUrl = uriInfo.getBaseUriBuilder().path("location").path("countries").path(String.valueOf(city.getCountry().getCountryId())).build();
     }
@@ -44,12 +41,6 @@ public class CityDto implements Serializable {
     }
     public void setName(String name) {
         this.name = name;
-    }
-    public String getCountryName() {
-        return countryName;
-    }
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
     }
     public URI getSelf() {
         return self;

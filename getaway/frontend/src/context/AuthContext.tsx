@@ -1,10 +1,10 @@
 import React, {createContext, Dispatch, ReactNode, SetStateAction, useState} from "react"
 import {internalAuthProvider} from "../scripts/auth"
-import {UserModel} from "../types"
+import {CurrentUserModel} from "../types"
 
 interface AuthContextType {
-    user: UserModel | null
-    setUser: Dispatch<SetStateAction<UserModel | null>>
+    user: CurrentUserModel | null
+    setUser: Dispatch<SetStateAction<CurrentUserModel | null>>
     signIn: (callback: VoidFunction) => void
     signOut: (callback: VoidFunction) => void
     verifyUser: (callback: VoidFunction) => void
@@ -14,21 +14,21 @@ interface AuthContextType {
     isLogged: () => boolean
     isVerified: () => boolean
     isProvider: () => boolean
-    getUser: () => UserModel | null
+    getUser: () => CurrentUserModel | null
 }
 
 export const AuthContext = createContext<AuthContextType>(null!)
 
 export function AuthProvider({children}: { children: ReactNode }) {
 
-    const [user, setUser] = useState<UserModel | null>(null)
+    const [user, setUser] = useState<CurrentUserModel | null>(null)
 
     const signIn = (callback: VoidFunction) => {
         internalAuthProvider.signIn(() => {
             const token = localStorage.getItem('accessToken')
             console.log(`Sign in token: ${token}`)
             if(token) {
-                const loggedUser = JSON.parse(atob(token.split('.')[1])) as UserModel
+                const loggedUser = JSON.parse(atob(token.split('.')[1])) as CurrentUserModel
                 console.log(`Sign in LOGGED USER`)
                 console.log(loggedUser)
                 setUser({
