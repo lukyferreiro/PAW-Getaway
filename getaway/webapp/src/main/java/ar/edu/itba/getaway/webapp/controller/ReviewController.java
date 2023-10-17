@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.Collection;
 
@@ -75,7 +76,8 @@ public class ReviewController {
 
     // Endpoint para crear una reseña en la experiencia
     @POST
-    @Produces(value = {CustomMediaType.REVIEW_V1})
+    @Consumes(value = {CustomMediaType.REVIEW_V1})
+    //@Produces(value = {CustomMediaType.REVIEW_V1})      //TODO check
     public Response createReview(
             @QueryParam("experienceId") final Long experienceId,
             @Valid final NewReviewDto newReviewDto
@@ -95,7 +97,8 @@ public class ReviewController {
         //TODO se podria sacar este get de aca
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experience, LocalDate.now(), user);
-        return Response.created(ReviewDto.getReviewUriBuilder(reviewModel, uriInfo).build()).build();
+        final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(reviewModel.getReviewId())).build();
+        return Response.created(location).build();  //TODO ver si devovler algo en body
     }
 
 
@@ -112,8 +115,8 @@ public class ReviewController {
 
     @PUT
     @Path("/{reviewId:[0-9]+}")
-    @Consumes(MediaType.APPLICATION_JSON)    //TODO check
-    @Produces(value = {CustomMediaType.REVIEW_V1})
+    @Consumes(value = {CustomMediaType.REVIEW_V1})
+    //@Produces(value = {CustomMediaType.REVIEW_V1})  TODO check
     public Response editReview(
             @PathParam("reviewId") final Long id,
             @Valid final NewReviewDto reviewDto
@@ -135,12 +138,12 @@ public class ReviewController {
 
         reviewService.updateReview(reviewModelToUpdate);
 
-        return Response.ok().build();
+        return Response.ok().build();    //TODO ver si devovler algo en body
     }
 
     @DELETE
     @Path("/{reviewId:[0-9]+}")
-    @Produces(value = {MediaType.APPLICATION_JSON})  //TODO check
+    //@Produces(value = {MediaType.APPLICATION_JSON})  //TODO check
     public Response deleteReview(
             @PathParam("reviewId") final Long id
     ) {

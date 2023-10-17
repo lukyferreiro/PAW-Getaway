@@ -5,6 +5,7 @@ import ar.edu.itba.getaway.interfaces.exceptions.ReviewNotFoundException;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.UserModel;
+import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.GetExperiencesFilter;
 import ar.edu.itba.getaway.webapp.security.models.BasicAuthToken;
 import ar.edu.itba.getaway.webapp.security.models.JwtAuthToken;
 import ar.edu.itba.getaway.webapp.security.models.MyUserDetails;
@@ -105,7 +106,7 @@ public class AntMatcherVoter {
 
     public boolean checkGetReviews(Authentication authentication, Long userId, Long experienceId) {
         if (userId != null && experienceId == null) {
-            if(getUser(authentication).isVerified()) {
+            if (getUser(authentication).isVerified()) {
                 return accessUserInfo(authentication, userId);
             }
             return false;
@@ -113,12 +114,13 @@ public class AntMatcherVoter {
         return true;
     }
 
-    public boolean checkGetExperiences(Authentication authentication, Long userId) {
+    public boolean checkGetExperiences(Authentication authentication, Long userId, String filter) {
+        final GetExperiencesFilter getExperiencesFilter = GetExperiencesFilter.fromString(filter);
         if (userId != null) {
-            if(getUser(authentication).isProvider()) {
+            if (getExperiencesFilter.equals(GetExperiencesFilter.PROVIDER) && getUser(authentication).isProvider()) {
                 return accessUserInfo(authentication, userId);
             }
-            return false;
+            return accessUserInfo(authentication, userId);
         }
         return true;
     }

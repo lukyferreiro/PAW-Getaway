@@ -27,6 +27,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.*;
 
 @Path("experiences")
@@ -61,7 +62,8 @@ public class ExperienceController {
 
     // Endpoint para crear una experiencia
     @POST
-    @Produces(value = {CustomMediaType.EXPERIENCE_V1})
+    @Consumes(value = {CustomMediaType.EXPERIENCE_V1})
+    //@Produces(value = {CustomMediaType.EXPERIENCE_V1})    //TODO CHECK
     public Response createExperience(
             @Valid final NewExperienceDto experienceDto
     ) throws DuplicateExperienceException {
@@ -90,13 +92,14 @@ public class ExperienceController {
         }
 
         LOGGER.info("Created experience with id {}", experience.getExperienceId());
-        return Response.created(ExperienceDto.getExperienceUriBuilder(experience, uriInfo).build()).build();
+        final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(experience.getExperienceId())).build();
+        return Response.created(location).build();      //TODO ver si devovler algo en body
     }
 
     // Endpoint para obtener las experiencias
     @GET
     @Produces(value = {CustomMediaType.EXPERIENCE_LIST_V1})
-    @PreAuthorize("@antMatcherVoter.checkGetExperiences(authentication, #userId)")
+    @PreAuthorize("@antMatcherVoter.checkGetExperiences(authentication, #userId, #filter)")
     public Response getExperiences(
             @QueryParam("category") @DefaultValue("") String category,
             @QueryParam("name") @DefaultValue("") String name,
@@ -174,8 +177,8 @@ public class ExperienceController {
     // Endpoint para editar una experiencia
     @PUT
     @Path("/{experienceId:[0-9]+}")
-    //@Consumes(MediaType.APPLICATION_JSON)       //TODO check
-    @Produces(value = {CustomMediaType.EXPERIENCE_V1})
+    @Consumes(value = {CustomMediaType.EXPERIENCE_V1})
+    //@Produces(value = {CustomMediaType.EXPERIENCE_V1})     //TODO check
     public Response updateExperience(
             @Context final HttpServletRequest request,
             @Valid final NewExperienceDto experienceDto,
@@ -205,14 +208,12 @@ public class ExperienceController {
 
         experienceService.updateExperience(toUpdateExperience);
         LOGGER.info("The experience with id {} has been updated successfully", id);
-        //TODO devolver la experiencia actualizada ??
-        return Response.ok().build();
+        return Response.ok().build();   //TODO ver si devovler algo en body
     }
 
     // Endpoint para eliminar una experiencia
     @DELETE
     @Path("/{experienceId:[0-9]+}")
-    @Produces(value = {MediaType.APPLICATION_JSON})     //TODO check
     public Response deleteExperience(
             @PathParam("experienceId") final long id
     ) {
@@ -261,8 +262,8 @@ public class ExperienceController {
 
     @PUT
     @Path("/{experienceId:[0-9]+}/experienceImage")
-    @Produces({"image/*", MediaType.APPLICATION_JSON})       //TODO check
-    //@Consumes(MediaType.MULTIPART_FORM_DATA)
+    //@Produces(MediaType.APPLICATION_JSON)     //TODO check
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response updateExperienceImage(
             @PathParam("experienceId") final long id,
             @FormDataParam("experienceImage") final FormDataBodyPart experienceImageBody,

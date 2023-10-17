@@ -78,7 +78,7 @@ public enum GetExperiencesFilter {
                 LocationService locationService, String category, String name, OrderByModel order, Double maxPrice,
                 Long maxScore, Long cityId, Long userId
         ) {
-            if(category == null || Objects.equals(category, "")){
+            if (category == null || Objects.equals(category, "")) {
                 throw new InvalidRequestParamsException("errors.invalidParam.getExperiences.category");
             }
             CategoryModel categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
@@ -233,7 +233,7 @@ public enum GetExperiencesFilter {
     public abstract UriBuilder getUriBuilder(UriInfo uriInfo, String category, String name, OrderByModel order, Double maxPrice, Long maxScore, CityModel city, Long userId, int page);
 
     private static UserModel validateUserId(AuthContext authContext, Long userId) {
-        if(userId == null){
+        if (userId == null) {
             throw new InvalidRequestParamsException("errors.invalidParam.getExperiences.userIdNull");
         }
         return authContext.getCurrentUser();

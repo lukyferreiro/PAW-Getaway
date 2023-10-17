@@ -40,6 +40,7 @@
         <jwt.version>3.19.2</jwt.version>
         <jackson.version>2.13.1</jackson.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <javax.ws.rs.version>2.1</javax.ws.rs.version>
     </properties>
 
     <repositories>
@@ -353,6 +354,13 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>3.1.0</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
+            <!-- Version added for compatibility with @PATCH -->
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+                <version>${javax.ws.rs.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

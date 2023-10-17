@@ -48,8 +48,8 @@ public class UserController {
 
     //Endpoint que crea un usuario nuevo
     @POST
-    @Consumes(value = {MediaType.APPLICATION_JSON})     //TODO check
-    @Produces(value = {CustomMediaType.USER_V1})
+    @Consumes(value = {CustomMediaType.USER_V1})
+    //@Produces(value = {CustomMediaType.USER_V1})  //TODO check
     public Response registerUser(
             @Valid final RegisterDto registerDto
     ) throws DuplicateUserException {
@@ -68,7 +68,7 @@ public class UserController {
         }
 
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getUserId())).build();
-        return Response.created(location).build();
+        return Response.created(location).build();   //TODO ver si devovler algo en body
     }
 
     //Endpoint que devuelve informacion de un usuario segun el ID
@@ -85,7 +85,9 @@ public class UserController {
     }
 
     //Endpoint para editar la informacion del usuario
+    //TODO CHECK ALL
     @PUT
+//    @PATCH
     @Path("/{userId:[0-9]+}")
     @Consumes(MediaType.APPLICATION_JSON)           //TODO check
     @Produces(value = {CustomMediaType.USER_V1})
@@ -192,8 +194,8 @@ public class UserController {
 
     //Endpoint para editar la imagen de perfil del usuario
     @PUT
-    @Produces(MediaType.APPLICATION_JSON)     //TODO check
-    //@Consumes(MediaType.MULTIPART_FORM_DATA)
+    //@Produces(MediaType.APPLICATION_JSON)     //TODO check
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("/{userId:[0-9]+}/profileImage")
     public Response updateUserProfileImage(
             @PathParam("userId") final long id,
