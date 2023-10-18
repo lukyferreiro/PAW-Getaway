@@ -1,3 +1,5 @@
+import {CurrentUserModel} from "../types";
+
 function handleResponseStatus<RetType>(response: Response): Promise<RetType> {
     if (
         response.status >= 200 &&
@@ -16,14 +18,17 @@ function handleResponseStatus<RetType>(response: Response): Promise<RetType> {
 export function checkValidJWT<RetType>(response: Response): Promise<RetType> {
     if (response.status === 401) {
         console.log(`Recibi un 401`)
-        localStorage.removeItem('accessToken')
+        localStorage.removeItem('getawayToken')
+        localStorage.removeItem('getawayUser')
         return handleResponseStatus(response);
     }
     if (response) {
         const accessHeader = response.headers.get('Authorization')
         if (accessHeader) {
-            const accessToken = accessHeader.split(' ')[1]
-            localStorage.setItem('accessToken', accessToken)
+            const getawayToken = accessHeader.split(' ')[1]
+            const user = JSON.parse(atob(getawayToken.split('.')[1])) as CurrentUserModel
+            localStorage.setItem('getawayToken', getawayToken)
+            localStorage.setItem('getawayUser', JSON.stringify(user))
         }
 
     }

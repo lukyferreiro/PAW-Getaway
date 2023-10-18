@@ -1,4 +1,4 @@
-import React, {createContext, Dispatch, ReactNode, SetStateAction, useState} from "react"
+import React, {createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState} from "react"
 import {internalAuthProvider} from "../scripts/auth"
 import {CurrentUserModel} from "../types"
 
@@ -25,27 +25,23 @@ export function AuthProvider({children}: { children: ReactNode }) {
 
     //TODO agregar un useEffect pra solucionar que el resfrescar pierda la sesion ??
 
+    useEffect(() => {
+        const token = localStorage.getItem("getawayToken");
+        if (token) {
+            const loggedUser = JSON.parse(atob(token.split(".")[1])) as CurrentUserModel;
+            setUser(loggedUser);
+            localStorage.setItem('getawayUser', JSON.stringify(loggedUser))
+        }
+    }, []);
+
     const signIn = (callback: VoidFunction) => {
         internalAuthProvider.signIn(() => {
-            const token = localStorage.getItem('accessToken')
+            const token = localStorage.getItem('getawayToken')
             console.log(`Sign in token: ${token}`)
             if(token) {
                 const loggedUser = JSON.parse(atob(token.split('.')[1])) as CurrentUserModel
-                console.log(`Sign in LOGGED USER`)
-                console.log(loggedUser)
-                setUser({
-                    ...user,
-                    userId: loggedUser.userId,
-                    sub: loggedUser.sub,
-                    name: loggedUser.name,
-                    surname: loggedUser.surname,
-                    isVerified: loggedUser.isVerified,
-                    isProvider: loggedUser.isProvider,
-                    hasImage: loggedUser.hasImage,
-                    profileImageUrl: loggedUser.profileImageUrl,
-                })
-                console.log(`Use effect AUTH CONTEXT user`)
-                console.log(user)
+                setUser(loggedUser)
+                localStorage.setItem('getawayUser', JSON.stringify(loggedUser))
             }
             callback()
         })
@@ -55,79 +51,94 @@ export function AuthProvider({children}: { children: ReactNode }) {
     const signOut = (callback: VoidFunction) => {
         return internalAuthProvider.signOut(() => {
             console.log(`Hago un sign out`)
-            localStorage.removeItem('accessToken')
+            localStorage.removeItem('getawayToken')
+            localStorage.removeItem('getawayUser')
             setUser(null)
             callback()
         })
     }
 
     const getUser = () => {
-        console.log(`GET USER ${user}`)
-        if(user !== null)
-            return user
+        console.log('GET USER')
+        const userStorage = localStorage.getItem('getawayUser')
+        console.log(userStorage)
+        if(userStorage !== null)
+            return JSON.parse(userStorage)
         return null
     }
 
     const verifyUser = (callback: VoidFunction) => {
         console.log(`verifyUser user`)
-        console.log(user)
-        if (user !== null) {
-            user.isVerified = true
-            setUser(user)
+        const userStorage = localStorage.getItem('getawayUser')
+        if (userStorage !== null) {
+            const parsedUser = JSON.parse(userStorage)
+            parsedUser.isVerified = true
+            setUser(parsedUser)
+            console.log(parsedUser)
         }
         callback()
     }
 
     const makeProvider = (callback: VoidFunction) => {
         console.log(`makeProvider user`)
-        console.log(user)
-        if (user !== null) {
-            user.isProvider = true
-            setUser(user)
+        const userStorage = localStorage.getItem('getawayUser')
+        if (userStorage !== null) {
+            const parsedUser = JSON.parse(userStorage)
+            parsedUser.isProvider = true
+            setUser(parsedUser)
+            console.log(parsedUser)
         }
         callback()
     }
 
     const setHasImage = () => {
         console.log(`setHasImage user`)
-        console.log(user)
-        if (user !== null) {
-            user.hasImage = true
-            setUser(user)
+        const userStorage = localStorage.getItem('getawayUser')
+        if (userStorage !== null) {
+            const parsedUser = JSON.parse(userStorage)
+            parsedUser.hasImage = true
+            setUser(parsedUser)
+            console.log(parsedUser)
         }
     }
 
     const editUserInfo = (name: string, surname: string, callback: VoidFunction) => {
         console.log(`editUserInfo user`)
-        console.log(user)
-        if (user !== null) {
-            user.name = name
-            user.surname = surname
-            setUser(user)
+        const userStorage = localStorage.getItem('getawayUser')
+        if (userStorage !== null) {
+            const parsedUser = JSON.parse(userStorage)
+            parsedUser.name = name
+            parsedUser.surname = surname
+            setUser(parsedUser)
+            console.log(parsedUser)
         }
         callback()
     }
 
     const isLogged = () => {
         console.log(`isLogged user`)
-        console.log(user)
-        return !!user;
-
+        return localStorage.getItem("getawayUser") !== null
     }
 
     const isVerified = () => {
         console.log(`isVerified user`)
-        console.log(user)
-        if(user !== null)
-            return user.isVerified
+        const userStorage = localStorage.getItem('getawayUser')
+        if(userStorage !== null) {
+            const parsedUser = JSON.parse(userStorage)
+            console.log(parsedUser)
+            return parsedUser.isVerified
+        }
         return false
     }
 
     const isProvider = () => {
         console.log(`isProvider user`)
-        console.log(user)
-        if(user !== null)
-            return user.isProvider
+        const userStorage = localStorage.getItem('getawayUser')
+        if(userStorage !== null) {
+            const parsedUser = JSON.parse(userStorage)
+            console.log(parsedUser)
+            return parsedUser.isProvider
+        }
         return false
     }
 
