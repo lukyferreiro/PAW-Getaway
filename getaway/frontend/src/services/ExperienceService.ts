@@ -1,4 +1,4 @@
-import { paths, APPLICATION_JSON_TYPE } from "../common";
+import {paths, APPLICATION_JSON_TYPE, EXPERIENCE_V1} from "../common";
 import {
     ExperienceModel,
     PagedContent,
@@ -43,7 +43,7 @@ export class ExperienceService {
         return resultFetch<PostResponse>(this.experienceBasePath, {
             method: "POST",
             headers: {
-                "Content-Type": APPLICATION_JSON_TYPE,
+                "Content-Type": EXPERIENCE_V1,
             },
             body: newExperience,
         });
@@ -175,7 +175,7 @@ export class ExperienceService {
         return resultFetch(this.experienceBasePath + `/${experienceId}`, {
             method: "PUT",
             headers: {
-                "Content-Type": APPLICATION_JSON_TYPE,
+                "Content-Type": EXPERIENCE_V1,
             },
             body: experienceToUpdate,
         });

@@ -63,7 +63,6 @@ public class ExperienceController {
     // Endpoint para crear una experiencia
     @POST
     @Consumes(value = {CustomMediaType.EXPERIENCE_V1})
-    //@Produces(value = {CustomMediaType.EXPERIENCE_V1})    //TODO CHECK
     public Response createExperience(
             @Valid final NewExperienceDto experienceDto
     ) throws DuplicateExperienceException {
@@ -93,7 +92,7 @@ public class ExperienceController {
 
         LOGGER.info("Created experience with id {}", experience.getExperienceId());
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(experience.getExperienceId())).build();
-        return Response.created(location).build();      //TODO ver si devovler algo en body
+        return Response.created(location).build();
     }
 
     // Endpoint para obtener las experiencias
@@ -132,7 +131,7 @@ public class ExperienceController {
     //TODO puede volar? no mg tener este endpoint
     @GET
     @Path("/maxPrice")
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON})     // TODO CHECK
     public Response getExperiencesMaxPrice(
             @QueryParam("category") @DefaultValue("") final String category,
             @QueryParam("name") @DefaultValue("") String name
@@ -178,7 +177,6 @@ public class ExperienceController {
     @PUT
     @Path("/{experienceId:[0-9]+}")
     @Consumes(value = {CustomMediaType.EXPERIENCE_V1})
-    //@Produces(value = {CustomMediaType.EXPERIENCE_V1})     //TODO check
     public Response updateExperience(
             @Context final HttpServletRequest request,
             @Valid final NewExperienceDto experienceDto,
@@ -208,7 +206,7 @@ public class ExperienceController {
 
         experienceService.updateExperience(toUpdateExperience);
         LOGGER.info("The experience with id {} has been updated successfully", id);
-        return Response.ok().build();   //TODO ver si devovler algo en body
+        return Response.noContent().build();
     }
 
     // Endpoint para eliminar una experiencia
@@ -262,7 +260,6 @@ public class ExperienceController {
 
     @PUT
     @Path("/{experienceId:[0-9]+}/experienceImage")
-    //@Produces(MediaType.APPLICATION_JSON)     //TODO check
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response updateExperienceImage(
             @PathParam("experienceId") final long id,
@@ -281,14 +278,13 @@ public class ExperienceController {
 
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
         imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), experience.getExperienceImage());
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
 
     //TODO ver si se puede unificar en el PUT de /id
     @PUT
     @Path("/{experienceId:[0-9]+}/fav")
-    @Produces(value = {MediaType.APPLICATION_JSON})      //TODO check
     public Response favExperience(
             @PathParam("experienceId") final long id,
             @QueryParam("fav") final Boolean fav
@@ -302,13 +298,12 @@ public class ExperienceController {
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
         favAndViewExperienceService.setFav(user, fav, experience);
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     //TODO ver si se puede unificar en el PUT de /id
     @PUT
     @Path("/{experienceId:[0-9]+}/observable")
-    @Produces(value = {MediaType.APPLICATION_JSON})     //TODO check
     public Response observable(
             @PathParam("experienceId") final long id,
             @QueryParam("observable") final Boolean observable
@@ -322,7 +317,7 @@ public class ExperienceController {
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
         experienceService.changeVisibility(experience, observable);
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     @GET

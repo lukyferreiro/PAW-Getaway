@@ -49,7 +49,6 @@ public class UserController {
     //Endpoint que crea un usuario nuevo
     @POST
     @Consumes(value = {CustomMediaType.USER_V1})
-    //@Produces(value = {CustomMediaType.USER_V1})  //TODO check
     public Response registerUser(
             @Valid final RegisterDto registerDto
     ) throws DuplicateUserException {
@@ -68,7 +67,7 @@ public class UserController {
         }
 
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getUserId())).build();
-        return Response.created(location).build();   //TODO ver si devovler algo en body
+        return Response.created(location).build();
     }
 
     //Endpoint que devuelve informacion de un usuario segun el ID
@@ -85,12 +84,10 @@ public class UserController {
     }
 
     //Endpoint para editar la informacion del usuario
-    //TODO CHECK ALL
     @PUT
 //    @PATCH
     @Path("/{userId:[0-9]+}")
-    @Consumes(MediaType.APPLICATION_JSON)           //TODO check
-    @Produces(value = {CustomMediaType.USER_V1})
+    @Consumes(value = {CustomMediaType.USER_INFO_V1})
     public Response updateUser(
             @PathParam("userId") final long id,
             @Valid final UserInfoDto userInfoDto
@@ -103,7 +100,7 @@ public class UserController {
 
         final UserModel user = authContext.getCurrentUser();
         userService.updateUserInfo(user, new UserInfo(userInfoDto.getName(), userInfoDto.getSurname()));
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     //Endpoint para la verificar al usuario cuando recibo el token
@@ -121,15 +118,15 @@ public class UserController {
 
     //Endpoint para reenviar el mail de verificacion
     //TODO cambiar
-    @POST
-    @Produces(value = {MediaType.APPLICATION_JSON,})
-    @Path("/emailToken")
-    public Response resendUserVerification() {
-        LOGGER.info("Called /users/emailToken POST");
-        final UserModel user = authContext.getCurrentUser();
-        userService.resendVerificationToken(user);
-        return Response.ok().build();
-    }
+//    @POST
+//    @Produces(value = {MediaType.APPLICATION_JSON,})
+//    @Path("/emailToken")
+//    public Response resendUserVerification() {
+//        LOGGER.info("Called /users/emailToken POST");
+//        final UserModel user = authContext.getCurrentUser();
+//        userService.resendVerificationToken(user);
+//        return Response.ok().build();
+//    }
 
 
     //https://stackoverflow.com/questions/3077229/restful-password-reset
@@ -214,7 +211,7 @@ public class UserController {
 
         final UserModel user = authContext.getCurrentUser();
         imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
 }

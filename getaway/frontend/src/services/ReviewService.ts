@@ -1,4 +1,4 @@
-import {APPLICATION_JSON_TYPE, paths} from "../common";
+import {APPLICATION_JSON_TYPE, paths, REVIEW_V1} from "../common";
 import {PostResponse, PutResponse, Result, ReviewModel} from "../types";
 import {resultFetch} from "../scripts/resultFetch";
 import {authedFetch} from "../scripts/authedFetch";
@@ -24,7 +24,7 @@ export class ReviewService {
         return resultFetch<PostResponse>(url.toString(), {
             method: "POST",
             headers: {
-                "Content-Type": APPLICATION_JSON_TYPE,
+                "Content-Type": REVIEW_V1,
             },
             body: reviewToUpdate,
         });
@@ -50,7 +50,7 @@ export class ReviewService {
         return resultFetch(this.basePath + `/${reviewId}`, {
             method: "PUT",
             headers: {
-                "Content-Type": APPLICATION_JSON_TYPE,
+                "Content-Type": REVIEW_V1,
             },
             body: reviewToUpdate,
         });

@@ -22,6 +22,7 @@ export async function resultFetch<RetType>(
     }
 }
 
+//TODO CHEQUEAR AHORA Q ONDA CON LOS 204
 function postCheckError(response: Response): PostResponse {
     if (
         response.status >= 200 &&

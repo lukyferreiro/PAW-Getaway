@@ -1,4 +1,4 @@
-import {APPLICATION_JSON_TYPE, paths} from "../common";
+import {APPLICATION_JSON_TYPE, paths, USER_INFO_V1, USER_V1} from "../common";
 import {
     ErrorResponse, ExperienceModel,
     PagedContent, PostResponse,
@@ -37,7 +37,7 @@ export class UserService {
         return resultFetch<PostResponse>(this.userBasePath, {
             method: "POST",
             headers: {
-                "Content-Type": APPLICATION_JSON_TYPE,
+                "Content-Type": USER_V1,
             },
             body: newUser,
         });
@@ -62,7 +62,7 @@ export class UserService {
         return resultFetch<PutResponse> (this.userBasePath + `/${userId}`, {
             method: "PUT",
             headers: {
-                "Content-Type": APPLICATION_JSON_TYPE,
+                "Content-Type": USER_INFO_V1,
             },
             body: userToUpdate,
         });
