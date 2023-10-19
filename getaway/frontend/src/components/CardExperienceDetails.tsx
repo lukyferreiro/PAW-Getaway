@@ -19,7 +19,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {showToast} from "../scripts/toast";
-import { getResourcePath } from "../constants";
+import categoryImages, {CategoryName} from "../common";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel, isEditing: boolean, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }
 ) {
@@ -50,7 +50,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                 <div className="d-flex flex-column">
                     <div className="p-2" style={{width: "600px"}}>
                         <img className="container-fluid p-0" alt={`Imagen ${experience.category.name}`}
-                             src={experience.hasImage ? experience.imageUrl : getResourcePath(`./images/${experience.category.name}.svg`)}
+                             src={experience.hasImage ? experience.imageUrl : categoryImages[experience.category.name as CategoryName]}
                              style={{height: "fit-content", maxHeight: experience.hasImage ? "550px" : "450px"}}/>
 
                         {!experience.hasImage &&

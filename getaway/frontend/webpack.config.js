@@ -3,23 +3,31 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     output: {
-        path: path.resolve(__dirname, 'build'),
-        filename: 'static/js/[name].[contenthash].js',
         clean: true,
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'app.bundle.js'
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'Caching',
+            template: 'public/index.html',
         }),
     ],
     module: {
         rules: [
             {
-                test: /\.(png|jpe?g|gif|svg)$/i,
-                type: 'asset/resource',
-                generator: {
-                    filename: 'images/[name].[contenthash].[ext]',
+                "test": /\.(png|jpe?g|gif|svg)$/i,
+                "type": "asset/resource",
+            },
+            {
+                "test" : /\.js$/,
+                "exclude": /node_modules/,
+                "use": {
+                    "loader": "babel-loader",
                 },
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader'],
             },
         ],
     },

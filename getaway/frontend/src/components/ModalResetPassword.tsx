@@ -5,7 +5,7 @@ import React, {Dispatch, SetStateAction, useState} from "react";
 import {useForm} from "react-hook-form";
 import {userService} from "../services";
 import {showToast} from "../scripts/toast";
-import { getResourcePath } from "../constants";
+import ic_user_black from "../images/ic_user_black.svg";
 
 type FormDataPasswordResetEmail = {
     email: string;
@@ -64,7 +64,7 @@ export default function ModalResetPassword(props: { isOpen: [boolean, Dispatch<S
                                       onSubmit={onSubmit} method="post">
                                     <label className="form-label d-flex align-items-center"
                                            htmlFor="email">
-                                        <img src={getResourcePath("./images/ic_user_black.svg")}
+                                        <img src={ic_user_black}
                                              alt="Imagen perfil"
                                              style={{marginRight: "5px"}}/>
                                         {t('Navbar.email')}

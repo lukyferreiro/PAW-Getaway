@@ -1,3 +1,10 @@
+import Aventura from "../images/Aventura.svg";
+import Gastronomia from "../images/Gastronomia.svg";
+import Historico from "../images/Historico.svg";
+import Hoteleria from "../images/Hoteleria.svg";
+import Relax from "../images/Relax.svg";
+import Vida_nocturna from "../images/Vida_nocturna.svg";
+
 export const paths = {
     // LOCAL_BASE_URL : '/',
     // BASE_URL: 'http://localhost:8080/webapp_war/api',
@@ -25,3 +32,16 @@ export const CITY_LIST_V1 = "application/vnd.getaway.cityList.v1+json";
 export const CATEGORY_V1 = "application/vnd.getaway.category.v1+json";
 export const CATEGORY_LIST_V1 = "application/vnd.getaway.categoryList.v1+json";
 export const ORDER_LIST_V1 = "application/vnd.getaway.orderList.v1+json";
+
+export type CategoryName = "Aventura" | "Gastronomia" | "Historico" | "Hoteleria" | "Relax" | "Vida_nocturna";
+
+const categoryImages: Record<CategoryName, any> = {
+    Aventura,
+    Gastronomia,
+    Historico,
+    Hoteleria,
+    Relax,
+    Vida_nocturna
+};
+
+export default categoryImages;

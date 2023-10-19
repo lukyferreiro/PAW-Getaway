@@ -12,7 +12,8 @@ import {showToast} from "../scripts/toast"
 import VisibilityIcon from "@mui/icons-material/Visibility"
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
-import { getResourcePath } from "../constants"
+import ic_user_black from "../images/ic_user_black.svg";
+import ic_password from "../images/ic_password.svg";
 
 type FormDataLogin = {
     email: string;
@@ -90,7 +91,7 @@ export default function Login() {
                                     <div className="col-12">  {/*  Email */}
                                         <label className="form-label d-flex align-items-center"
                                                htmlFor="email">
-                                            <img src={getResourcePath("./images/ic_user_black.svg")} alt="Imagen perfil"
+                                            <img src={ic_user_black} alt="Imagen perfil"
                                                  style={{marginRight: "5px"}}/>
                                             {t('Navbar.email')}
                                         </label>
@@ -108,7 +109,7 @@ export default function Login() {
                                             <div className="col-6 px-0">
                                                 <label className="form-label d-flex align-items-center"
                                                        htmlFor="password">
-                                                    <img src={getResourcePath("./images/ic_password.svg")} alt="Imagen perfil"
+                                                    <img src={ic_password} alt="Imagen perfil"
                                                          style={{marginRight: "5px"}}/>
                                                     {t('Navbar.password')}
                                                 </label>

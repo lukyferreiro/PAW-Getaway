@@ -11,7 +11,15 @@ import {Close} from "@mui/icons-material";
 import {IconButton} from "@mui/material";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {showToast} from "../scripts/toast";
-import { getResourcePath } from "../constants";
+import ic_getaway from "../images/ic_getaway.png";
+import ic_lupa from "../images/ic_lupa.svg";
+import ic_user_white from "../images/ic_user_white.svg";
+import ic_user_black from "../images/ic_user_black.svg";
+import ic_experiences from "../images/ic_experiences.svg";
+import ic_fav from "../images/ic_fav.svg";
+import ic_review from "../images/ic_review.svg";
+import ic_logout from "../images/ic_logout.svg";
+import categoryImages, {CategoryName} from "../common";
 
 type FormDataSearch = {
     name: string
@@ -99,7 +107,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                 <Link to="/" className="logo d-flex" onClick={() => {
                     clearNavBar()
                 }}>
-                    <img className="logo-img w-auto h-auto" src={getResourcePath('./images/ic_getaway.png')} alt="Logo"/>
+                    <img className="logo-img w-auto h-auto" src={ic_getaway} alt="Logo"/>
                     <span className="logo-text align-self-center text-uppercase font-weight-bold">
                         {t('PageName')}
                     </span>
@@ -109,7 +117,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                          style={{marginRight: '40px'}}>
                         <button className="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm"
                                 aria-label={t("AriaLabel.search")} title={t("AriaLabel.search")}>
-                            <img className="w-auto h-auto" src={getResourcePath('./images/ic_lupa.svg')} alt="Lupa"/>
+                            <img className="w-auto h-auto" src={ic_lupa} alt="Lupa"/>
                         </button>
                         <form id="searchExperienceForm" acceptCharset="utf-8" className="my-auto" onSubmit={onSubmit}>
                             <input max="50" type="text" className="form-control" placeholder={t('Navbar.search')}
@@ -162,32 +170,32 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                             <button className="btn button-primary dropdown-toggle d-flex align-items-center" type="button"
                                     id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
                                     aria-label={t("AriaLabel.profileInfo")} title={t("AriaLabel.profileInfo")}>
-                                <img src={getResourcePath('./images/ic_user_white.svg')} alt="Icono usuario"
+                                <img src={ic_user_white} alt="Icono usuario"
                                      style={{width: "35px", height: "35px"}}/>
                             </button>
 
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{left: "-50px"}}>
                                 <Link to="/user/profile" className="dropdown-item"
                                       onClick={() => clearNavBar()}>
-                                    <img src={getResourcePath('./images/ic_user_black.svg')} alt="Icono perfil"/>
+                                    <img src={ic_user_black} alt="Icono perfil"/>
                                     {t('Navbar.profile')}
                                 </Link>
 
                                 {isProviderValue &&
                                     <Link to="/user/experiences" className="dropdown-item"
                                           onClick={() => clearNavBar()}>
-                                        <img src={getResourcePath('./images/ic_experiences.svg')} alt="Icono experiencias"/>
+                                        <img src={ic_experiences} alt="Icono experiencias"/>
                                         {t('Navbar.experiences')}
                                     </Link>}
                                 <Link to="/user/favourites" className="dropdown-item"
                                       onClick={() => clearNavBar()}>
-                                    <img src={getResourcePath('./images/ic_fav.svg')} alt="Icono favoritos"/>
+                                    <img src={ic_fav} alt="Icono favoritos"/>
                                     {t('Navbar.favourites')}
                                 </Link>
                                 {isVerifiedValue &&
                                     <Link to="/user/reviews" className="dropdown-item"
                                           onClick={() => clearNavBar()}>
-                                        <img src={getResourcePath('./images/ic_review.svg')} alt="Icono reseñas"/>
+                                        <img src={ic_review} alt="Icono reseñas"/>
                                         {t('Navbar.reviews')}
                                     </Link>}
                                 <button className="dropdown-item" aria-label={t("AriaLabel.signOut")} title={t("AriaLabel.signOut")}
@@ -195,7 +203,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                     clearNavBar()
                                     signOut(() => navigate("/",{replace: true}))
                                 }}>
-                                    <img src={getResourcePath('./images/ic_logout.svg')} alt="Icono cerrar sesion"/>
+                                    <img src={ic_logout} alt="Icono cerrar sesion"/>
                                     {t('Navbar.logout')}
                                 </button>
                             </ul>
@@ -216,7 +224,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                 // window.location.reload();
                             }}
                     >
-                        <img src={getResourcePath(`./images/${category.name}.svg`)} alt={`${category.name}`}/>
+                        <img src={categoryImages[category.name as CategoryName]} alt={`${category.name}`}/>
                         {t('Categories.' + category.name)}
                     </button>
                 ))}

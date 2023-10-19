@@ -21,8 +21,8 @@ import UserExperiencesTable from "../components/UserExperiencesTable";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // @ts-ignore
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { getResourcePath } from "../constants";
-
+import ic_lupa from "../images/ic_lupa.svg";
+import ic_no_search from "../images/ic_no_search.jpeg";
 
 type FormUserExperiencesSearch = {
     name: string
@@ -151,7 +151,7 @@ export default function UserExperiences() {
                                  style={{margin: "0 20px 0 auto", flex: "1"}}>
                                 <button className="btn btn-search-navbar p-0" type="submit"
                                         form="searchExperiencePrivateForm" aria-label={t("AriaLabel.search")} title={t("AriaLabel.search")}>
-                                    <img src={getResourcePath('./images/ic_lupa.svg')} alt="Icono lupa"/>
+                                    <img src={ic_lupa} alt="Icono lupa"/>
                                 </button>
                                 <form className="my-auto" id="searchExperiencePrivateForm" onSubmit={onSubmit}>
                                     <input type="text" className="form-control" placeholder={t('Navbar.search')}
@@ -185,7 +185,7 @@ export default function UserExperiences() {
                             {userExperiences.length === 0 ?
                                 <div className="my-auto mx-5 px-3 d-flex justify-content-center align-content-center">
                                     <div className="d-flex justify-content-center align-content-center">
-                                        <img src={getResourcePath('./images/ic_no_search.jpeg')} alt="Imagen lupa"
+                                        <img src={ic_no_search} alt="Imagen lupa"
                                              style={{
                                                  width: "150px",
                                                  height: "150px",

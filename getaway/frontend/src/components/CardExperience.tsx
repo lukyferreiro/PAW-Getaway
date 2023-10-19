@@ -11,7 +11,7 @@ import {setFavExperience} from "../scripts/experienceOperations";
 import Price from "./Price";
 import DataLoader from "./DataLoader";
 import {showToast} from "../scripts/toast";
-import { getResourcePath } from "../constants";
+import categoryImages, {CategoryName} from "../common";
 
 export default function CardExperience(props: { experience: ExperienceModel, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
     const {t} = useTranslation()
@@ -40,8 +40,9 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
             <div className="card-link h-100 d-flex flex-column">
                 <div>
                     <DataLoader spinnerMultiplier={2} isLoading={isLoadingImg}>
-                        <img className={`card-img-top container-fluid ${experience.hasImage ? "p-0" : "p-4"} mw-100`} alt={`Imagen ${experience.category.name}`}
-                             src={experience.hasImage ? experience.imageUrl : getResourcePath(`./images/${experience.category.name}.svg`)}/>
+                        <img className={`card-img-top container-fluid ${experience.hasImage ? "p-0" : "p-4"} mw-100`}
+                             alt={`Imagen ${experience.category.name}`}
+                            src={experience.hasImage ? experience.imageUrl : categoryImages[experience.category.name as CategoryName] }/>
                     </DataLoader>
 
                     <div className="card-body container-fluid p-2">
