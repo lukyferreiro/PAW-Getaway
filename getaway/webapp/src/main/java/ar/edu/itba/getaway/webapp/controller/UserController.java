@@ -105,16 +105,16 @@ public class UserController {
 
     //Endpoint para la verificar al usuario cuando recibo el token
     //TODO no se si meterlo en el endpoint anterior
-    @PUT
-    @Produces(value = {MediaType.APPLICATION_JSON,})
-    @Path("/emailToken")
-    public Response verifyUser(
-            @QueryParam("token") final String token
-    ) {
-        LOGGER.info("Called /users/emailToken PUT");
-        userService.verifyAccount(token).orElseThrow(UserNotFoundException::new);
-        return Response.ok().build();
-    }
+//    @PUT
+//    @Produces(value = {MediaType.APPLICATION_JSON,})
+//    @Path("/emailToken")
+//    public Response verifyUser(
+//            @QueryParam("token") final String token
+//    ) {
+//        LOGGER.info("Called /users/emailToken PUT");
+//        userService.verifyAccount(token).orElseThrow(UserNotFoundException::new);
+//        return Response.ok().build();
+//    }
 
     //Endpoint para reenviar el mail de verificacion
     //TODO cambiar
@@ -132,42 +132,42 @@ public class UserController {
     //https://stackoverflow.com/questions/3077229/restful-password-reset
     //Endpoint para resetear la contraseña, recibiendo el token y la contraseña nueva
     //TODO cambiar
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/password")
-    public Response resetPassword(
-            @Valid final PasswordResetDto passwordResetDto
-    ) {
-        LOGGER.info("Called /users/password PUT");
-
-        if (passwordResetDto == null) {
-            throw new ContentExpectedException();
-        }
-
-        userService.updatePassword(passwordResetDto.getToken(), passwordResetDto.getPassword()).orElseThrow(UserNotFoundException::new);
-        return Response.ok().build();
-    }
+//    @PUT
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Path("/password")
+//    public Response resetPassword(
+//            @Valid final PasswordResetDto passwordResetDto
+//    ) {
+//        LOGGER.info("Called /users/password PUT");
+//
+//        if (passwordResetDto == null) {
+//            throw new ContentExpectedException();
+//        }
+//
+//        userService.updatePassword(passwordResetDto.getToken(), passwordResetDto.getPassword()).orElseThrow(UserNotFoundException::new);
+//        return Response.ok().build();
+//    }
 
     //Endpoint para enviar el mail del email que quiere reiniciar la contraseña
     //TODO cambiar
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/password")
-    public Response sendResetPasswordEmail(
-            @Valid final PasswordResetEmailDto passwordResetEmailDto
-    ) {
-        LOGGER.info("Called /users/password POST");
-
-        if (passwordResetEmailDto == null) {
-            throw new ContentExpectedException();
-        }
-
-        UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
-        userService.generateNewPassword(user);
-        return Response.ok().build();
-    }
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Path("/password")
+//    public Response sendResetPasswordEmail(
+//            @Valid final PasswordResetEmailDto passwordResetEmailDto
+//    ) {
+//        LOGGER.info("Called /users/password POST");
+//
+//        if (passwordResetEmailDto == null) {
+//            throw new ContentExpectedException();
+//        }
+//
+//        UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
+//        userService.generateNewPassword(user);
+//        return Response.ok().build();
+//    }
 
     //Endpoint para obtener la imagen de perfil del usuario
     @GET
@@ -191,7 +191,6 @@ public class UserController {
 
     //Endpoint para editar la imagen de perfil del usuario
     @PUT
-    //@Produces(MediaType.APPLICATION_JSON)     //TODO check
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("/{userId:[0-9]+}/profileImage")
     public Response updateUserProfileImage(
