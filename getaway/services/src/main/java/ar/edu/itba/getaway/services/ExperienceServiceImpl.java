@@ -328,12 +328,18 @@ public class ExperienceServiceImpl implements ExperienceService {
     public Page<ExperienceModel> getViewedExperiences(UserModel user){
         List<ExperienceModel> auxList = new ArrayList<>();
         List<ExperienceModel> userViews = user.getViewedExperiences();
+
+        if (userViews.isEmpty()) {
+            return new Page<>(Collections.emptyList(), 1, 1, 0);
+        }
+
         for (ExperienceModel exp : userViews) {
             if (exp.getObservable()) {
                 exp.setIsFav(user.isFav(exp));
                 auxList.add(exp);
             }
         }
+
         int toIndex = auxList.size();
         int fromIndex = Math.max((toIndex - CAROUSEL_LENGTH), 0);
         return new Page<>(auxList.subList(fromIndex, toIndex), 1, 1, CAROUSEL_LENGTH) ;
