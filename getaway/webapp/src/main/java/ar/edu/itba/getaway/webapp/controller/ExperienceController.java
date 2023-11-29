@@ -161,13 +161,8 @@ public class ExperienceController {
         final UserModel user = authContext.getCurrentUser();
         final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
 
-        // TODO habria que sacar esta logica de aca
-        if (view) {
-            favAndViewExperienceService.setViewed(user, experience);
-            if (user != null && !experience.getUser().equals(user)) {
-                experienceService.increaseViews(experience);
-            }
-        }
+        experienceService.increaseViews(user, view, experience);
+        favAndViewExperienceService.setViewed(user, view, experience);
 
         final ExperienceDto experienceDto = new ExperienceDto(experience, uriInfo);
         return Response.ok(experienceDto).build();
@@ -221,23 +216,6 @@ public class ExperienceController {
         return Response.noContent().build();
     }
 
-    // TODO este endpoint??? puede volar
-    // Endpoint para obtener una experiencia a partir de su ID
-//    @GET
-//    @Path("/{experienceId:[0-9]+}/name")
-//    @Produces(value = {MediaType.APPLICATION_JSON})
-//    public Response getExperienceNameById(
-//            @PathParam("experienceId") final long id
-//    ) {
-//        LOGGER.info("Called /experiences/{}/name GET", id);
-//
-//        final UserModel user = authContext.getCurrentUser();
-//        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
-//
-//        final ExperienceNameDto experienceDto = new ExperienceNameDto(experience, uriInfo);
-//        return Response.ok(experienceDto).build();
-//    }
-
     // Endpoint para obtener la imagen de una experiencia
     @GET
     @Path("/{experienceId:[0-9]+}/experienceImage")
@@ -283,6 +261,7 @@ public class ExperienceController {
 
 
     //TODO ver si se puede unificar en el PUT de /id
+    //
     @PUT
     @Path("/{experienceId:[0-9]+}/fav")
     public Response favExperience(
@@ -302,6 +281,7 @@ public class ExperienceController {
     }
 
     //TODO ver si se puede unificar en el PUT de /id
+    //Se debería usar el mismo endpoint desde front agregando observable con true como default, sin cambiar ninguno de los otros campos
     @PUT
     @Path("/{experienceId:[0-9]+}/observable")
     public Response observable(

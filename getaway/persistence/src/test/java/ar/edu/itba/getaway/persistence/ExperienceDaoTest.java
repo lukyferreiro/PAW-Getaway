@@ -377,7 +377,7 @@ public class ExperienceDaoTest {
         reviewedIds.add(1L);
         reviewedIds.add(7L);
         reviewedIds.add(8L);
-        List<ExperienceModel> recommended = experienceDao.getRecommendedByReviewsCity(USER_1, PAGE_SIZE, new ArrayList<>(), reviewedIds);
+        List<ExperienceModel> recommended = experienceDao.getRecommendedByReviewsCity(USER_1, PAGE_SIZE, reviewedIds);
         assertNotNull(recommended);
         assertFalse(recommended.isEmpty());
         assertEquals(1, recommended.size());
@@ -390,7 +390,7 @@ public class ExperienceDaoTest {
         reviewedIds.add(1L);
         reviewedIds.add(7L);
         reviewedIds.add(8L);
-        List<ExperienceModel> recommended = experienceDao.getRecommendedByReviewsProvider(USER_1, PAGE_SIZE, new ArrayList<>(), reviewedIds);
+        List<ExperienceModel> recommended = experienceDao.getRecommendedByReviewsProvider(USER_1, PAGE_SIZE, reviewedIds);
         assertNotNull(recommended);
         assertFalse(recommended.isEmpty());
         assertEquals(3, recommended.size());
@@ -405,7 +405,7 @@ public class ExperienceDaoTest {
         reviewedIds.add(1L);
         reviewedIds.add(7L);
         reviewedIds.add(8L);
-        List<ExperienceModel> recommended = experienceDao.getRecommendedByReviewsCategory(USER_1, PAGE_SIZE, new ArrayList<>(), reviewedIds);
+        List<ExperienceModel> recommended = experienceDao.getRecommendedByReviewsCategory(USER_1, PAGE_SIZE, reviewedIds);
         assertNotNull(recommended);
         assertFalse(recommended.isEmpty());
         assertEquals(1, recommended.size());

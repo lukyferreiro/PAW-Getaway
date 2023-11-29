@@ -18,5 +18,5 @@ public interface FavAndViewExperienceService {
 
     boolean isViewed(UserModel user, ExperienceModel experience);
 
-    void setViewed(UserModel user, ExperienceModel experience);
+    void setViewed(UserModel user, boolean view, ExperienceModel experience);
 }

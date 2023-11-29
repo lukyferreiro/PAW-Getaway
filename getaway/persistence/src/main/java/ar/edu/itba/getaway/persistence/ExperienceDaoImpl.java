@@ -268,14 +268,19 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     @Override
     public List<Long> reviewedExperiencesId(UserModel user) {
-        final Query queryForReviewedExperiencesId = em.createNativeQuery("SELECT experienceid FROM reviews WHERE userid=:userid");
+        final Query queryForReviewedExperiencesId = em.createNativeQuery("SELECT DISTINCT(experienceid) FROM reviews WHERE userid=:userid");
         queryForReviewedExperiencesId.setParameter("userid", user.getUserId());
         List<Number> resultingIds = (List<Number>) queryForReviewedExperiencesId.getResultList();
+
+        if (!resultingIds.isEmpty()) {
+            return resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
+        }
+        resultingIds.add(-1L);
         return resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
     }
 
     @Override
-    public List<ExperienceModel> getRecommendedByReviewsCity(UserModel user, int maxResults, List<Long> alreadyAdded, List<Long> reviewedIds) {
+    public List<ExperienceModel> getRecommendedByReviewsCity(UserModel user, int maxResults, List<Long> alreadyAdded) {
         final Query queryForCityIds = em.createNativeQuery(
                 "SELECT cityid\n" +
                         "FROM (\n" +
@@ -306,16 +311,11 @@ public class ExperienceDaoImpl implements ExperienceDao {
         List<Number> resultingIds = (List<Number>) queryForCityIds.getResultList();
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
 
-        if (alreadyAdded.isEmpty()) {
-            alreadyAdded.add(-1L);
-        }
-
         final TypedQuery<ExperienceModel> queryForExperiences;
         if (!idList.isEmpty()) {
-            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.city.cityId IN (:idList) AND exp.experienceId NOT IN (:reviewedIds) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.user != :user " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.city.cityId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.user != :user " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
             queryForExperiences.setParameter("idList", idList);
             queryForExperiences.setParameter("user", user);
-            queryForExperiences.setParameter("reviewedIds", reviewedIds);
             queryForExperiences.setParameter("alreadyAdded", alreadyAdded);
             queryForExperiences.setMaxResults(maxResults);
             return queryForExperiences.getResultList();
@@ -324,7 +324,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
         return Collections.emptyList();
     }
 
-    public List<ExperienceModel> getRecommendedByReviewsProvider(UserModel user, int maxResults, List<Long> alreadyAdded, List<Long> reviewedIds) {
+    public List<ExperienceModel> getRecommendedByReviewsProvider(UserModel user, int maxResults, List<Long> alreadyAdded) {
         final Query queryForProviderIds = em.createNativeQuery(
                 "SELECT userid\n" +
                         "FROM (\n" +
@@ -357,15 +357,10 @@ public class ExperienceDaoImpl implements ExperienceDao {
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
         final TypedQuery<ExperienceModel> queryForExperiences;
 
-        if (alreadyAdded.isEmpty()) {
-            alreadyAdded.add(-1L);
-        }
-
         if (!idList.isEmpty()) {
-            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.user.userId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.experienceId NOT IN (:reviewedIds) AND exp.user != :user " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.user.userId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.user != :user " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
             queryForExperiences.setParameter("idList", idList);
             queryForExperiences.setParameter("user", user);
-            queryForExperiences.setParameter("reviewedIds", reviewedIds);
             queryForExperiences.setParameter("alreadyAdded", alreadyAdded);
             queryForExperiences.setMaxResults(maxResults);
             return queryForExperiences.getResultList();
@@ -375,7 +370,7 @@ public class ExperienceDaoImpl implements ExperienceDao {
 
     }
 
-    public List<ExperienceModel> getRecommendedByReviewsCategory(UserModel user, int maxResults, List<Long> alreadyAdded, List<Long> reviewedIds) {
+    public List<ExperienceModel> getRecommendedByReviewsCategory(UserModel user, int maxResults, List<Long> alreadyAdded) {
         final Query queryForCategoryIds = em.createNativeQuery(
                 "SELECT categoryid\n" +
                         "FROM (\n" +
@@ -405,17 +400,12 @@ public class ExperienceDaoImpl implements ExperienceDao {
         queryForCategoryIds.setParameter("userid", user.getUserId());
         List<Number> resultingIds = (List<Number>) queryForCategoryIds.getResultList();
 
-        if (alreadyAdded.isEmpty()) {
-            alreadyAdded.add(-1L);
-        }
-
         List<Long> idList = resultingIds.stream().map(Number::longValue).collect(Collectors.toList());
         final TypedQuery<ExperienceModel> queryForExperiences;
         if (!idList.isEmpty()) {
-            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.category.categoryId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.experienceId NOT IN (:reviewedIds) AND exp.user != :user " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
+            queryForExperiences = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE exp.observable=true AND exp.category.categoryId IN (:idList) AND exp.experienceId NOT IN (:alreadyAdded) AND exp.user != :user " + OrderByModel.OrderByRankDesc.getSqlQuery(), ExperienceModel.class);
             queryForExperiences.setParameter("idList", idList);
             queryForExperiences.setParameter("user", user);
-            queryForExperiences.setParameter("reviewedIds", reviewedIds);
             queryForExperiences.setParameter("alreadyAdded", alreadyAdded);
             queryForExperiences.setMaxResults(maxResults);
             return queryForExperiences.getResultList();

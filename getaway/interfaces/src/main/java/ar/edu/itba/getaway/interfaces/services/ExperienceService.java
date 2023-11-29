@@ -34,7 +34,7 @@ public interface ExperienceService {
 
     void updateExperienceWithoutImg(ExperienceModel toUpdateExperience);
 
-    void increaseViews(ExperienceModel experience);
+    void increaseViews(UserModel user, boolean view, ExperienceModel experience);
 
     void changeVisibility(ExperienceModel experience, boolean obs);
 

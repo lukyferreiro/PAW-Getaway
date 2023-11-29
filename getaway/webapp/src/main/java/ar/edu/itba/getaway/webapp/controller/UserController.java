@@ -103,6 +103,11 @@ public class UserController {
         return Response.noContent().build();
     }
 
+    //TODO:
+    //1. Para el verify token se podría hacer un endpoint donde loguearte y que te reenvíe en caso de que no estés logueado
+    //2. Para el password token, mandar en updateUser el campo password en null, o un queryparam que indique que estamos cambiando password, y en ese caso generar el token
+
+
     //Endpoint para la verificar al usuario cuando recibo el token
     //TODO no se si meterlo en el endpoint anterior
 //    @PUT

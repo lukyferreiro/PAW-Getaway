@@ -227,9 +227,11 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Transactional
     @Override
-    public void increaseViews(ExperienceModel experience) {
-        experience.increaseViews();
-        updateExperienceWithoutImg(experience);
+    public void increaseViews(UserModel user, boolean view, ExperienceModel experience) {
+        if (view && user != null && !experience.getUser().equals(user)) {
+            experience.increaseViews();
+            updateExperienceWithoutImg(experience);
+        }
     }
 
     @Transactional
@@ -323,7 +325,6 @@ public class ExperienceServiceImpl implements ExperienceService {
 //        return listExperiencesByCategory;
 //    }
 
-    //TODO CHEQUEAR ROMANNNN
     @Override
     public Page<ExperienceModel> getViewedExperiences(UserModel user){
         List<ExperienceModel> auxList = new ArrayList<>();
@@ -344,7 +345,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         int fromIndex = Math.max((toIndex - CAROUSEL_LENGTH), 0);
         return new Page<>(auxList.subList(fromIndex, toIndex), 1, 1, CAROUSEL_LENGTH) ;
     }
-    //TODO CHEQUEAR ROMANNNN
+
     @Override
     public Page<ExperienceModel> getRecommendedByFavs(UserModel user){
         List<ExperienceModel> recommendedByFavsFullList = experienceDao.getRecommendedByFavs(user, CAROUSEL_LENGTH);
@@ -384,17 +385,17 @@ public class ExperienceServiceImpl implements ExperienceService {
             List<ExperienceModel> recommendedByReviewsFullList;
             List<ExperienceModel> recommendedByReviewsProvider;
             List<ExperienceModel> recommendedByReviewsCategory;
-            recommendedByReviewsFullList = experienceDao.getRecommendedByReviewsCity(user, CAROUSEL_LENGTH, alreadyRecommended, null);
+            recommendedByReviewsFullList = experienceDao.getRecommendedByReviewsCity(user, CAROUSEL_LENGTH, alreadyRecommended);
             alreadyRecommended.addAll(recommendedByReviewsFullList.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
 
             if (recommendedByReviewsFullList.size() < CAROUSEL_LENGTH) {
-                recommendedByReviewsProvider = experienceDao.getRecommendedByReviewsProvider(user, CAROUSEL_LENGTH - recommendedByReviewsFullList.size(), alreadyRecommended, null);
+                recommendedByReviewsProvider = experienceDao.getRecommendedByReviewsProvider(user, CAROUSEL_LENGTH - recommendedByReviewsFullList.size(), alreadyRecommended);
                 recommendedByReviewsFullList.addAll(recommendedByReviewsProvider);
                 alreadyRecommended.addAll(recommendedByReviewsProvider.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
             }
 
             if (recommendedByReviewsFullList.size() < CAROUSEL_LENGTH) {
-                recommendedByReviewsCategory = experienceDao.getRecommendedByReviewsCategory(user, CAROUSEL_LENGTH - recommendedByReviewsFullList.size(), alreadyRecommended, null);
+                recommendedByReviewsCategory = experienceDao.getRecommendedByReviewsCategory(user, CAROUSEL_LENGTH - recommendedByReviewsFullList.size(), alreadyRecommended);
                 recommendedByReviewsFullList.addAll(recommendedByReviewsCategory);
             }
 
