@@ -464,9 +464,9 @@ export const TRANSLATIONS_EN = {
         verifyAccount: "Verify account",
         visibility: "Visibility",
         editExperience: "Edit experience",
-        deleteExperience: "Eliminar experience",
+        deleteExperience: "Delete experience",
         editReview: "Edit review",
-        deleteReview: "Eliminar review",
+        deleteReview: "Delete review",
         showPassword: "Show password",
     },
 };
