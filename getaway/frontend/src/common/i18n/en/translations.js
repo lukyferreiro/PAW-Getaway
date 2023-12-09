@@ -118,7 +118,7 @@ export const TRANSLATIONS_EN = {
         placeholder: "Write in order to search",
         reviews: "Reviews {{reviewCount}}",
         notVisible: "This experience is not currently visible",
-        imgTitle: "Select an image for the experinece",
+        imgTitle: "Select an image for the experience",
         toast: {
             imageSuccess: "Experience image updated successfully!",
             imageInvalidFormat: "Image format is invalid",
