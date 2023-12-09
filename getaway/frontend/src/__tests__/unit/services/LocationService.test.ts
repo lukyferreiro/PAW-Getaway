@@ -2,13 +2,14 @@
  * @jest-environment jsdom
  */
 
-import {locationService} from "../../services";
+import {locationService} from "../../../services";
 import {
     successfullyMockResponse,
     countryModel,
     cityModel,
-} from "../Mocks";
+} from "../../Mocks";
 
+//TODO check este
 test("Should get all countries", async () => {
     successfullyMockResponse(200, [countryModel]);
 
@@ -19,6 +20,7 @@ test("Should get all countries", async () => {
         });
 });
 
+//TODO check este
 test("Should get city with id 1", async () => {
     successfullyMockResponse(200, cityModel);
 
