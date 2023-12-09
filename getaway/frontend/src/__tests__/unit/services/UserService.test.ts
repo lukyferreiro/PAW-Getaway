@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import {experienceService, userService} from "../../services";
+import {userService} from "../../../services";
 import {
     successfullyMockResponse,
     userModel,
@@ -10,7 +10,7 @@ import {
     experienceModelFav,
     experienceModelCategory,
     reviewModel1, reviewModel2,
-} from "../Mocks";
+} from "../../Mocks";
 
 test("Should create a new user", async () => {
     successfullyMockResponse(204, []);
@@ -42,6 +42,7 @@ test("Should not create a new user due to password not match with confirm passwo
         });
 });
 
+//TODO check este
 test("Should get user with id 1", async () => {
     successfullyMockResponse(200, userModel);
 

@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import {experienceService, reviewService} from "../../services";
+import {experienceService, reviewService} from "../../../services";
 import {
     successfullyMockResponse,
     experienceModelFav,
@@ -14,7 +14,8 @@ import {
     reviewModel2,
     categoryModel1,
     categoryModel2,
-} from "../Mocks";
+} from "../../Mocks";
+
 
 test("Should create a new experience", async () => {
     successfullyMockResponse(204, []);
@@ -77,6 +78,7 @@ test("Should get experiences with name", async () => {
         });
 });
 
+//TODO check este
 test("Should get max price of all categories", async () => {
     successfullyMockResponse(200, maxPriceModel);
     return experienceService.getFilterMaxPrice()
@@ -86,15 +88,17 @@ test("Should get max price of all categories", async () => {
         });
 });
 
+//TODO check este
 test("Should get order by models", async () => {
     successfullyMockResponse(200, [orderByModel]);
     return experienceService.getUserOrderByModels()
         .then((response) => {
             expect(response.hasFailed()).toBeFalsy();
-            expect(response.getData()[0]).toBe(orderByModel);
+            expect(response.getData()).toBe(orderByModel);
         });
 });
 
+//TODO check este
 test("Should get experience with id 1", async () => {
     successfullyMockResponse(200, experienceModelFav);
 
@@ -105,6 +109,7 @@ test("Should get experience with id 1", async () => {
         });
 });
 
+//TODO check este
 test("Should get experience name with id 1", async () => {
     successfullyMockResponse(200, experienceModelFav);
 
@@ -153,6 +158,8 @@ test("Should create a new review in experience with id 1", async () => {
             expect(response.getError().getStatus()).toBe(204);
         });
 });
+
+//TODO check este
 test("Should get all categories", async () => {
     successfullyMockResponse(200, [categoryModel1, categoryModel2]);
     return experienceService.getCategories()

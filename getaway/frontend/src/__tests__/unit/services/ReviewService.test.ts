@@ -2,12 +2,13 @@
  * @jest-environment jsdom
  */
 
-import {reviewService} from "../../services";
+import {reviewService} from "../../../services";
 import {
     successfullyMockResponse,
     reviewModel1,
-} from "../Mocks";
+} from "../../Mocks";
 
+//TODO check este
 test("Should get review with id 1", async () => {
     successfullyMockResponse(200, reviewModel1);
 
