@@ -8,7 +8,6 @@ import {
     experienceModelFav,
     experienceModelNoFav,
     experienceModelCategory,
-    maxPriceModel,
     orderByModel,
     reviewModel1,
     reviewModel2,

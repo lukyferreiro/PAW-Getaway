@@ -6,7 +6,6 @@ import {
     PutResponse,
     Result,
     ReviewModel,
-    MaxPriceModel,
     OrderByModel, CategoryModel
 } from "../types";
 import {resultFetch} from "../scripts/resultFetch";
@@ -83,19 +82,16 @@ export class ExperienceService {
     public async getFilterMaxPrice(
         category?: string,
         name?: string,
-    ): Promise<Result<MaxPriceModel>> {
-        const url = new URL(this.experienceBasePath + "/maxPrice");
-
-        if (typeof name === "string") {
-            url.searchParams.append("name", name);
-        }
+    ): Promise<Result<PagedContent<ExperienceModel[]>>> {
+        const url = new URL(this.experienceBasePath );
         if (typeof category === "string") {
             url.searchParams.append("category", category);
         }
-
-        return resultFetch<MaxPriceModel>(url.toString(), {
-            method: "GET",
-        });
+        if (typeof name === "string") {
+            url.searchParams.append("name", name);
+        }
+        url.searchParams.append("order", "OrderByHighPrice");
+        return getPagedFetch<ExperienceModel[]>(url.toString(), 1);
     }
 
     public async getUserOrderByModels(

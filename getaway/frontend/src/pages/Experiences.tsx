@@ -96,15 +96,17 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
         if (nameProp[0] !== undefined && categoryProp[0] !== undefined) {
             serviceHandler(
                 experienceService.getFilterMaxPrice(categoryProp[0], nameProp[0]),
-                navigate, (priceModel) => {
-                    setMaxPrice(priceModel.maxPrice)
-                    if ((price !== priceModel.maxPrice && price === -1) || (price < -1 || price > priceModel.maxPrice)) {
-                        setPrice(priceModel.maxPrice)
+                navigate, (experiences) => {
+                    const maxPrice = experiences.getContent()[0].price ?? 0;
+                    setMaxPrice(maxPrice)
+                    if ((price !== maxPrice && price === -1) || (price < -1 || price > maxPrice)) {
+                        setPrice(maxPrice)
                     }
                 },
                 () => {
                 },
                 () => {
+                    setMaxPrice(0)
                 }
             )
         }

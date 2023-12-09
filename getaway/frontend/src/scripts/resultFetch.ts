@@ -16,7 +16,7 @@ export async function resultFetch<RetType>(
         } else {
             parsedResponse = await checkValidJWT<RetType>(response);
         }
-        return Result.ok(parsedResponse as RetType);
+        return Result.ok(parsedResponse as RetType, response.status);
     } catch (err: any) {
         return Result.failed(new ErrorResponse(parseInt(err.message), err.title, err.message));
     }
@@ -26,8 +26,7 @@ export async function resultFetch<RetType>(
 function postCheckError(response: Response): PostResponse {
     if (
         response.status >= 200 &&
-        response.status <= 299 &&
-        response.status !== 204
+        response.status <= 299
     ) {
         return {url: response.headers.get("Location")} as PostResponse;
     } else {
@@ -38,8 +37,7 @@ function postCheckError(response: Response): PostResponse {
 function putCheckError(response: Response): PutResponse {
     if (
         response.status >= 200 &&
-        response.status <= 299 &&
-        response.status !== 204
+        response.status <= 299
     ) {
         return {statusCode: response.status} as PutResponse;
     } else {

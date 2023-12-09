@@ -17,7 +17,7 @@ export class LoginService {
                 },
             });
             const parsedResponse = await checkValidJWT<any>(response);
-            return Result.ok(parsedResponse);
+            return Result.ok(parsedResponse, response.status);
         } catch (err: any) {
             return Result.failed(
                 new ErrorResponse(parseInt(err.message), err.title, err.message)

@@ -10,9 +10,7 @@ export function serviceHandler<T>(
 ): void {
     promise.then((response: Result<T>) => {
         if (response.hasFailed()) {
-            if (response.getError().getStatus() === 204) {
-                noContentFunction();
-            } else if (isNaN(response.getError().getStatus())) {
+            if (isNaN(response.getError().getStatus())) {
                 return;
             } else {
                 navigate('/error', {
@@ -24,7 +22,11 @@ export function serviceHandler<T>(
                 })
             }
         } else {
-            setterFunction(response.getData());
+            if (response.getData() === 204) {
+                noContentFunction();
+            } else {
+                setterFunction(response.getData());
+            }
         }
     })
         .catch(() => {

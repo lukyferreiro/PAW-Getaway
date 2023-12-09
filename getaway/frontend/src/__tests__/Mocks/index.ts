@@ -4,7 +4,6 @@ import {
  CountryModel,
  ExperienceModel,
  ExperienceNameModel,
- MaxPriceModel,
  OrderByModel,
  ReviewModel, UserInfoModel,
  UserModel,
@@ -65,11 +64,6 @@ export const userInfoModel: UserInfoModel = {
 export const orderByModel: OrderByModel = {
     orders: ["OrderByRankAsc", "OrderByRankDesc", "OrderByAZ", "OrderByZA", "OrderByLowPrice", "OrderByHighPrice"],
     self: "http://localhost:8080/api/experiences/orders"
-};
-
-//TODO check
-export const maxPriceModel: MaxPriceModel = {
-    maxPrice: 1000,
 };
 
 export const experienceNameModel: ExperienceNameModel = {

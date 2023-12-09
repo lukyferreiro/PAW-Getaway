@@ -23,7 +23,6 @@ export function AuthProvider({children}: { children: ReactNode }) {
 
     const [user, setUser] = useState<CurrentUserModel | null>(null)
 
-    //TODO agregar un useEffect pra solucionar que el resfrescar pierda la sesion ??
 
     useEffect(() => {
         const token = localStorage.getItem("getawayToken");

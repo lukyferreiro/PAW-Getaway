@@ -221,6 +221,36 @@ public enum GetExperiencesFilter {
                     .queryParam("page", page)
                     .queryParam("filter", this.toString());
         }
+    },
+    MOST_EXPENSIVE() {
+        @Override
+        public GetExperiencesParams validateParams(
+                AuthContext authContext, CategoryService categoryService, ExperienceService experienceService,
+                LocationService locationService, String category, String name, OrderByModel order, Double maxPrice,
+                Long maxScore, Long cityId, Long userId
+        ) {
+            CategoryModel categoryModel = null;
+            if (!category.equals("")){
+                categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
+            }
+            return new GetExperiencesParams(categoryModel, name, null, null, null, null, null);
+        }
+
+        @Override
+        public Page<ExperienceModel> getExperiences(ExperienceService experienceService, GetExperiencesParams params, int page) {
+            return experienceService.listExperiencesByFilter(
+                    params.getCategory(), params.getName(), params.getMaxPrice(), params.getMaxScore(),
+                    params.getCity(), params.getOrder(), page, params.getUser()
+            );
+        }
+
+
+        @Override
+        public UriBuilder getUriBuilder(UriInfo uriInfo, String category, String name, OrderByModel order, Double maxPrice, Long maxScore, CityModel city, Long userId, int page) {
+            return uriInfo.getAbsolutePathBuilder()
+                    .queryParam("page", page)
+                    .queryParam("filter", this.toString());
+        }
     };
 
     public abstract GetExperiencesParams validateParams(

@@ -20,7 +20,7 @@ public interface ExperienceService {
 
     Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, String name, Double max, Long score, CityModel city, OrderByModel order, int page, UserModel user);
 
-    Optional<Double> getMaxPriceByCategoryAndName(CategoryModel category, String name);
+//    ExperienceModel getMaxPriceByCategoryAndName(CategoryModel category, String name);
 
     Page<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, UserModel user);
 

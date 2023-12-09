@@ -56,7 +56,7 @@ public class BasicAuthProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Bad username/password combination");
         }
         final MyUserDetails userDetails = (MyUserDetails) userDetailsService.loadUserByUsername(credentials[0]);
-        //TODO ver aca que token
+        //TODO ver aca que token enviar
         final String authToken = tokenService.createRefreshToken(userDetails);
         final JwtTokenDetails tokenDetails = tokenService.validateTokenAndGetDetails(authToken);
         final BasicAuthToken trustedAuth = new BasicAuthToken(credentials[0], credentials[1], userDetails.getAuthorities(), tokenDetails);

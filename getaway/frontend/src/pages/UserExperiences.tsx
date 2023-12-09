@@ -108,7 +108,8 @@ export default function UserExperiences() {
                     },
                     () => {
                         setIsLoading(false);
-                    }, () => {
+                    },
+                    () => {
                         setUserExperiences(new Array(0))
                         setMaxPage(1)
                     }

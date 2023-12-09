@@ -19,7 +19,6 @@ public class ExceptionMapperUtil {
         errorDetails.setTitle(status.getReasonPhrase());
         errorDetails.setMessage(message);
         errorDetails.setPath(uriInfo.getAbsolutePath().getPath());
-        //TODO ver si hace falta el type
         return Response.status(status).entity(errorDetails).type(CustomMediaType.ERROR_V1).build();
     }
 

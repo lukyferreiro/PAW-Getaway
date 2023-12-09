@@ -74,7 +74,6 @@ public class ExperienceController {
         }
 
         final UserModel user = authContext.getCurrentUser();
-        //TODO sacar estos get y meterlos en createExperience del service
         final CityModel city = locationService.getCityById(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel category = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
@@ -127,26 +126,6 @@ public class ExperienceController {
         }, uriBuilder);
     }
 
-    //TODO ver si se puede fusionar este en el endpoint anterior
-    //TODO puede volar? no mg tener este endpoint
-    @GET
-    @Path("/maxPrice")
-    @Produces(value = {MediaType.APPLICATION_JSON})     // TODO CHECK
-    public Response getExperiencesMaxPrice(
-            @QueryParam("category") @DefaultValue("") final String category,
-            @QueryParam("name") @DefaultValue("") String name
-        ){
-        LOGGER.info("Called /experiences/maxPrice GET");
-        CategoryModel categoryModel = null;
-
-        if (!category.equals("")){
-            categoryModel = categoryService.getCategoryByName(category).orElseThrow(CategoryNotFoundException::new);
-        }
-
-        final Double maxPrice = experienceService.getMaxPriceByCategoryAndName(categoryModel, name).orElse(0.0);
-        return Response.ok(new MaxPriceDto(maxPrice, uriInfo)).build();
-    }
-
     // Endpoint para obtener una experiencia a partir de su ID
     @GET
     @Path("/{experienceId:[0-9]+}")
@@ -189,7 +168,6 @@ public class ExperienceController {
         }
 
         final UserModel user = authContext.getCurrentUser();
-        //TODO sacar estos get
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
         final CityModel cityModel = locationService.getCityById(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
         final CategoryModel categoryModel = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
