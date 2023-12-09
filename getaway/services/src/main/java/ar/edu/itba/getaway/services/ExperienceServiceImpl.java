@@ -126,10 +126,10 @@ public class ExperienceServiceImpl implements ExperienceService {
         return new Page<>(experienceModelList, page, totalPages, total);
     }
 
-//    @Override
-//    public Optional<Double> getMaxPriceByCategoryAndName(CategoryModel categoryModel, String name) {
-//        return experienceDao.getMaxPriceByCategoryAndName(categoryModel, name);
-//    }
+    @Override
+    public Optional<Double> getMaxPriceByCategoryAndName(CategoryModel categoryModel, String name) {
+        return experienceDao.getMaxPriceByCategoryAndName(categoryModel, name);
+    }
 
     @Override
     public Page<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, UserModel user) {

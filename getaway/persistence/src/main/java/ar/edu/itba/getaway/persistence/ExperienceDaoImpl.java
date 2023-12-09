@@ -91,20 +91,19 @@ public class ExperienceDaoImpl implements ExperienceDao {
         }
     }
 
-//    @Override
-//    public ExperienceModel getMaxPriceByCategoryAndName(CategoryModel category, String name) {
-//        LOGGER.debug("Get maxprice of name search {}", name);
-//        TypedQuery<Double> query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE (LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.cityName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.country.countryName) LIKE LOWER(CONCAT('%', :name,'%'))) AND exp.observable=true " + OrderByModel.OrderByHighPrice.getSqlQuery(), Double.class);
-//
-//        if (category != null) {
-//            query = em.createQuery("SELECT exp FROM ExperienceModel exp WHERE (LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.cityName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.country.countryName) LIKE LOWER(CONCAT('%', :name,'%'))) AND exp.category = :category AND exp.observable=true " + OrderByModel.OrderByHighPrice.getSqlQuery(), Double.class);
-//            query.setParameter("category", category);
-//        }
-//
-//        query.setParameter("name", name);
-//        query.setMaxResults(1);
-//        return query.getResultList().;
-//    }
+    @Override
+    public Optional<Double> getMaxPriceByCategoryAndName(CategoryModel category, String name) {
+        LOGGER.debug("Get maxprice of name search {}", name);
+        TypedQuery<Double> query = em.createQuery("SELECT Max(exp.price) FROM ExperienceModel exp WHERE (LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.cityName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.country.countryName) LIKE LOWER(CONCAT('%', :name,'%'))) AND exp.observable=true ", Double.class);
+
+        if (category != null) {
+            query = em.createQuery("SELECT Max(exp.price) FROM ExperienceModel exp WHERE (LOWER(exp.experienceName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.description) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.address) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.cityName) LIKE LOWER(CONCAT('%', :name,'%')) OR LOWER(exp.city.country.countryName) LIKE LOWER(CONCAT('%', :name,'%'))) AND exp.category = :category AND exp.observable=true", Double.class);
+            query.setParameter("category", category);
+        }
+
+        query.setParameter("name", name);
+        return Optional.ofNullable(query.getSingleResult());
+    }
 
     @Override
     public List<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, int size) {

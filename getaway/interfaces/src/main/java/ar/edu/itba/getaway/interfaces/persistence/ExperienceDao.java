@@ -17,7 +17,7 @@ public interface ExperienceDao {
 
     Optional<ExperienceModel> getVisibleExperienceById(long experienceId, UserModel user);
 
-//    ExperienceModel getMaxPriceByCategoryAndName(CategoryModel category, String name);
+    Optional<Double> getMaxPriceByCategoryAndName(CategoryModel category, String name);
 
     List<ExperienceModel> listExperiencesByFilter(CategoryModel category, String name ,Double max, Long score, CityModel city, OrderByModel order, int page, int pageSize);
 

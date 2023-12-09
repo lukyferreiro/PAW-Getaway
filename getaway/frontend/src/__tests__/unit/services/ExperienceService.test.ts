@@ -12,7 +12,7 @@ import {
     reviewModel1,
     reviewModel2,
     categoryModel1,
-    categoryModel2,
+    categoryModel2, experienceModelMaxPrice,
 } from "../../Mocks";
 
 
@@ -79,11 +79,14 @@ test("Should get experiences with name", async () => {
 
 //TODO check este
 test("Should get max price of all categories", async () => {
-    successfullyMockResponse(200, maxPriceModel);
+    successfullyMockResponse(200, [experienceModelMaxPrice, experienceModelFav, experienceModelCategory, experienceModelNoFav]);
     return experienceService.getFilterMaxPrice()
         .then((response) => {
             expect(response.hasFailed()).toBeFalsy();
-            expect(response.getData()).toBe(maxPriceModel);
+            expect(response.getData().getContent()[0]).toBe(experienceModelMaxPrice);
+            expect(response.getData().getContent()[1]).toBe(experienceModelFav);
+            expect(response.getData().getContent()[2]).toBe(experienceModelCategory);
+            expect(response.getData().getContent()[3]).toBe(experienceModelNoFav);
         });
 });
 

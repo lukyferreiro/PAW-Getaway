@@ -4,7 +4,6 @@ import ar.edu.itba.getaway.interfaces.exceptions.DuplicateExperienceException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ExperienceService {
@@ -20,7 +19,7 @@ public interface ExperienceService {
 
     Page<ExperienceModel> listExperiencesByFilter(CategoryModel category, String name, Double max, Long score, CityModel city, OrderByModel order, int page, UserModel user);
 
-//    ExperienceModel getMaxPriceByCategoryAndName(CategoryModel category, String name);
+    Optional<Double> getMaxPriceByCategoryAndName(CategoryModel category, String name);
 
     Page<ExperienceModel> listExperiencesByBestRanked(CategoryModel category, UserModel user);
 
