@@ -11,6 +11,7 @@ import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.InvalidReques
 import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
+import ar.edu.itba.getaway.webapp.dto.request.PatchVisibilityDto;
 import ar.edu.itba.getaway.webapp.dto.response.*;
 import ar.edu.itba.getaway.webapp.security.api.CustomMediaType;
 import ar.edu.itba.getaway.webapp.security.services.AuthContext;
@@ -182,6 +183,31 @@ public class ExperienceController {
         return Response.noContent().build();
     }
 
+    @PATCH
+    @Path("/{experienceId:[0-9]+}")
+    @Consumes(value = {CustomMediaType.EXPERIENCE_VISIBILITY_V1})
+    @PreAuthorize("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
+    public Response setVisibility(
+            @Context final HttpServletRequest request,
+            @Valid final PatchVisibilityDto patchVisibilityDto,
+            @PathParam("experienceId") final long experienceId
+    ) {
+        LOGGER.info("Called /experiences/{} PATCH", experienceId);
+
+        if (request.getContentLength() == -1 || request.getContentLength() > maxRequestSize) {
+            throw new MaxUploadSizeRequestException();
+        }
+
+        if (patchVisibilityDto == null) {
+            throw new ContentExpectedException();
+        }
+
+        final UserModel user = authContext.getCurrentUser();
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId, user).orElseThrow(ExperienceNotFoundException::new);
+        experienceService.changeVisibility(experience, patchVisibilityDto.getVisibility());
+        return Response.noContent().build();
+    }
+
     // Endpoint para eliminar una experiencia
     @DELETE
     @Path("/{experienceId:[0-9]+}")
@@ -238,8 +264,6 @@ public class ExperienceController {
     }
 
 
-    //TODO ver si se puede unificar en el PUT de /id
-    //
     @PUT
     @Path("/{experienceId:[0-9]+}/fav")
     public Response favExperience(
@@ -258,25 +282,6 @@ public class ExperienceController {
         return Response.noContent().build();
     }
 
-    //TODO ver si se puede unificar en el PUT de /id
-    //Se debería usar el mismo endpoint desde front agregando observable con true como default, sin cambiar ninguno de los otros campos
-    @PUT
-    @Path("/{experienceId:[0-9]+}/observable")
-    public Response observable(
-            @PathParam("experienceId") final long id,
-            @QueryParam("observable") final Boolean observable
-    ) {
-        LOGGER.info("Called /experiences/{}/observable PUT", id);
-
-        if(observable == null){
-            throw new InvalidRequestParamsException("errors.invalidParam.observable");
-        }
-
-        final UserModel user = authContext.getCurrentUser();
-        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
-        experienceService.changeVisibility(experience, observable);
-        return Response.noContent().build();
-    }
 
     @GET
     @Path("/orders")

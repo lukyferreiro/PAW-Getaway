@@ -1,4 +1,4 @@
-import {paths, APPLICATION_JSON_TYPE, EXPERIENCE_V1} from "../common";
+import {paths, EXPERIENCE_V1, EXPERIENCE_VISIBILITY_V1} from "../common";
 import {
     ExperienceModel,
     PagedContent,
@@ -225,15 +225,29 @@ export class ExperienceService {
         experienceId: number,
         set?: boolean
     ) {
-        const url = new URL(this.experienceBasePath + `/${experienceId}/observable`);
-        if (typeof set === "boolean") {
-            url.searchParams.append("observable", set.toString());
-        }
+        // const url = new URL(this.experienceBasePath + `/${experienceId}/observable`);
+        // if (typeof set === "boolean") {
+        //     url.searchParams.append("observable", set.toString());
+        // }
+        //
+        // return resultFetch(url.toString(), {
+        //     method: "PUT",
+        //     headers: {},
+        //     body: {}
+        // });
+
+        const url = new URL(this.experienceBasePath + `/${experienceId}`);
+
+        const body = JSON.stringify({
+            visibility: set,
+        });
 
         return resultFetch(url.toString(), {
-            method: "PUT",
-            headers: {},
-            body: {}
+            method: "PATCH",
+            headers: {
+                "Content-Type": EXPERIENCE_VISIBILITY_V1,
+            },
+            body: body,
         });
     }
 
