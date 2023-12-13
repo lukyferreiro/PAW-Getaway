@@ -15,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Constraint(validatedBy = {NotExistingCategoryValidator.class})
 public @interface NotExistingCategory {
-    String message() default "Category not exist";
+    String message() default "Category does not exist";
 
     Class<?>[] groups() default {};
 

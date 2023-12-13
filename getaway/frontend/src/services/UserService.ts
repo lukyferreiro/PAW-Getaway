@@ -1,4 +1,4 @@
-import {APPLICATION_JSON_TYPE, paths, USER_INFO_V1, USER_V1} from "../common";
+import {APPLICATION_JSON_TYPE, paths, USER_INFO_V1, USER_V1, USER_PASSWORD_V1} from "../common";
 import {
     ErrorResponse, ExperienceModel,
     PagedContent, PostResponse,
@@ -152,6 +152,7 @@ export class UserService {
         })
     }
 
+    //TODO: check verification
     public async verifyUser(
         token?: string
     ) : Promise<Result<PutResponse>> {
@@ -182,15 +183,16 @@ export class UserService {
         const url = new URL(this.userBasePath + "/passwordToken" );
         const newPassword = JSON.stringify({
             password: password,
-            token: token
+            token: token,
+            email: null
         });
         // if (typeof token === "string") {
         //     url.searchParams.append("token", token);
         // }
         return resultFetch<PutResponse>(url.toString(), {
-            method: "PUT",
+            method: "PATCH",
             headers: {
-                "Content-Type": APPLICATION_JSON_TYPE,
+                "Content-Type": USER_PASSWORD_V1,
             },
             body: newPassword,
         });
@@ -201,12 +203,14 @@ export class UserService {
     ) : Promise<Result<PostResponse>> {
         const url = new URL(this.userBasePath + "/passwordToken" );
         const emailToSend = JSON.stringify({
+            password: null,
+            token: null,
             email: email
         });
         return resultFetch<PostResponse>(url.toString(), {
-            method: "POST",
+            method: "PATCH",
             headers: {
-                "Content-Type": APPLICATION_JSON_TYPE,
+                "Content-Type": USER_PASSWORD_V1,
             },
             body: emailToSend,
         });
