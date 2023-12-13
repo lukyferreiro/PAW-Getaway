@@ -79,7 +79,10 @@ test("Should get experiences with name", async () => {
 
 //TODO check este
 test("Should get max price of all categories", async () => {
-    successfullyMockResponse(200, [experienceModelMaxPrice, experienceModelFav, experienceModelCategory, experienceModelNoFav]);
+    const headers = new window.Headers();
+    headers.set("X-Total-Pages", "1");
+
+    successfullyMockResponse(200, [experienceModelMaxPrice, experienceModelFav, experienceModelCategory, experienceModelNoFav], headers);
     return experienceService.getFilterMaxPrice()
         .then((response) => {
             expect(response.hasFailed()).toBeFalsy();
@@ -92,7 +95,7 @@ test("Should get max price of all categories", async () => {
 
 //TODO check este
 test("Should get order by models", async () => {
-    successfullyMockResponse(200, [orderByModel]);
+    successfullyMockResponse(200, orderByModel);
     return experienceService.getUserOrderByModels()
         .then((response) => {
             expect(response.hasFailed()).toBeFalsy();
@@ -113,12 +116,12 @@ test("Should get experience with id 1", async () => {
 
 //TODO check este
 test("Should get experience name with id 1", async () => {
-    successfullyMockResponse(200, experienceModelFav);
+    successfullyMockResponse(200, experienceModelNoFav);
 
     return experienceService.getExperienceNameById(1)
         .then((response) => {
             expect(response.hasFailed()).toBeFalsy();
-            expect(response.getData()).toBe(experienceModelFav);
+            expect(response.getData()).toBe(experienceModelNoFav);
         });
 });
 
