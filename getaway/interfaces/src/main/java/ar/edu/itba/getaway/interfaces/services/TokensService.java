@@ -12,4 +12,6 @@ public interface TokensService {
     void sendVerificationToken(UserModel userModel, VerificationToken token);
 
     void sendPasswordResetToken(UserModel userModel, PasswordResetToken token);
+    boolean validateVerificationToken(UserModel userModel, String token);
+    boolean validatePasswordResetToken(UserModel userModel, String token);
 }

@@ -54,11 +54,9 @@ export default function ChangePassword() {
 
     const onSubmit = handleSubmit((data: FormDataResetPassword) => {
             userService.resetPassword(passwordToken, data.password)
-                .then((user) => {
-                        if (!user.hasFailed()) {
-                            navigate("/login", {replace: true})
-                            showToast(t('ChangePassword.toast.success'), 'success')
-                        }
+                .then(() => {
+                        navigate("/login", {replace: true})
+                        showToast(t('ChangePassword.toast.success'), 'success')
                     }
                 )
                 .catch(() => {

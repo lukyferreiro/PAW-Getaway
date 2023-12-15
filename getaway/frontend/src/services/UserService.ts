@@ -1,4 +1,4 @@
-import {APPLICATION_JSON_TYPE, paths, USER_INFO_V1, USER_V1, USER_PASSWORD_V1} from "../common";
+import {APPLICATION_JSON_TYPE, paths, USER_INFO_V1, USER_V1, USER_PASSWORD_V1, USER_PASSWORD_EMAIL_V1} from "../common";
 import {
     ErrorResponse, ExperienceModel,
     PagedContent, PostResponse,
@@ -7,6 +7,7 @@ import {
 } from "../types";
 import {getPagedFetch} from "../scripts/getPagedFetch";
 import {resultFetch} from "../scripts/resultFetch";
+import {checkValidJWT} from "../scripts/checkError";
 
 export class UserService {
     private readonly userBasePath = paths.BASE_URL + paths.USERS;
@@ -152,44 +153,62 @@ export class UserService {
         })
     }
 
-    //TODO: check verification
     public async verifyUser(
+        email?: string,
         token?: string
     ) : Promise<Result<PutResponse>> {
-        const url = new URL(this.userBasePath + "/emailToken" );
-        if (typeof token === "string") {
-            url.searchParams.append("token", token);
+        const credentials = email + ":" + token;
+        const hash = btoa(credentials);
+        try {
+            const response = await fetch(paths.BASE_URL + paths.EXPERIENCES + '/categories', {
+                method: "GET",
+                headers: {
+                    Authorization: "Basic " + hash,
+                },
+            });
+            const parsedResponse = await checkValidJWT<any>(response);
+            return Result.ok(parsedResponse, response.status);
+        } catch (err: any) {
+            return Result.failed(
+                new ErrorResponse(parseInt(err.message), err.title, err.message)
+            );
         }
-        return resultFetch<PutResponse>(url.toString(), {
-            method: "PUT",
-            headers: {},
-            body: {},
-        });
+
+        // const url = new URL(this.userBasePath + "/emailToken" );
+        // if (typeof token === "string") {
+        //     url.searchParams.append("token", token);
+        // }
+        // return resultFetch<PutResponse>(url.toString(), {
+        //     method: "PUT",
+        //     headers: {},
+        //     body: {},
+        // });
     }
 
-    public async sendNewVerifyUserEmail() : Promise<Result<PostResponse>> {
-        const url = new URL(this.userBasePath + "/emailToken" );
-        return resultFetch<PostResponse>(url.toString(), {
-            method: "POST",
-            headers: {},
-            body: {},
-        });
-    }
+    // public async sendNewVerifyUserEmail() : Promise<Result<PostResponse>> {
+    //     const url = new URL(this.userBasePath + "/emailToken" );
+    //     return resultFetch<PostResponse>(url.toString(), {
+    //         method: "POST",
+    //         headers: {},
+    //         body: {},
+    //     });
+    // }
 
     public async resetPassword(
         token?: string,
         password?: string
-    ) : Promise<Result<PutResponse>> {
-        const url = new URL(this.userBasePath + "/passwordToken" );
+    ) {
+        const url = new URL(this.userBasePath);
+
         const newPassword = JSON.stringify({
             password: password,
-            token: token,
-            email: null
         });
-        // if (typeof token === "string") {
-        //     url.searchParams.append("token", token);
-        // }
-        return resultFetch<PutResponse>(url.toString(), {
+
+        if (typeof token === "string") {
+            url.searchParams.append("token", token);
+        }
+
+        return resultFetch(url.toString(), {
             method: "PATCH",
             headers: {
                 "Content-Type": USER_PASSWORD_V1,
@@ -201,16 +220,16 @@ export class UserService {
     public async sendPasswordResetEmail(
         email?: string
     ) : Promise<Result<PostResponse>> {
-        const url = new URL(this.userBasePath + "/passwordToken" );
+        const url = new URL(this.userBasePath);
+
         const emailToSend = JSON.stringify({
-            password: null,
-            token: null,
             email: email
         });
+
         return resultFetch<PostResponse>(url.toString(), {
-            method: "PATCH",
+            method: "POST",
             headers: {
-                "Content-Type": USER_PASSWORD_V1,
+                "Content-Type": USER_PASSWORD_EMAIL_V1,
             },
             body: emailToSend,
         });

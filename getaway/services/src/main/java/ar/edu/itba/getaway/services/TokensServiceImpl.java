@@ -75,5 +75,15 @@ public class TokensServiceImpl implements TokensService {
         }
     }
 
+    @Override
+    public boolean validateVerificationToken(UserModel userModel, String token) {
+        Optional<VerificationToken> maybeToken = verificationTokenDao.getTokenByUser(userModel);
+        return maybeToken.isPresent() && maybeToken.get().isValid() && maybeToken.get().getValue().equals(token);
+    }
+    @Override
+    public boolean validatePasswordResetToken(UserModel userModel, String token) {
+        Optional<PasswordResetToken> maybeToken = passwordResetTokenDao.getTokenByUser(userModel);
+        return maybeToken.isPresent() && maybeToken.get().isValid() && maybeToken.get().getValue().equals(token);
+    }
 
 }

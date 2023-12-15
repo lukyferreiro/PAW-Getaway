@@ -28,24 +28,24 @@ export default function UserProfile() {
     const [isLoadingImg, setIsLoadingImg] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams();
 
-    function sendVerifyEmail() {
-        userService.sendNewVerifyUserEmail()
-            .then((result) => {
-                if(!result.hasFailed()) {
-                    showToast(t('User.toast.resendVerify.success'), 'success')
-                }
-            })
-            .catch(() => {
-                showToast(t('User.toast.resendVerify.error'), 'error')
-            })
-    }
+    // function sendVerifyEmail() {
+    //     userService.sendNewVerifyUserEmail()
+    //         .then((result) => {
+    //             if(!result.hasFailed()) {
+    //                 showToast(t('User.toast.resendVerify.success'), 'success')
+    //             }
+    //         })
+    //         .catch(() => {
+    //             showToast(t('User.toast.resendVerify.error'), 'error')
+    //         })
+    // }
 
     useEffect(() => {
         if (verificationToken !== "" || verificationToken === undefined) {
             if (isVerifiedValue) {
                 showToast(t('User.toast.verify.alreadyVerified'), 'error')
             } else {
-                userService.verifyUser(verificationToken)
+                userService.verifyUser(user?.sub, verificationToken)
                     .then((result) => {
                         if (!result.hasFailed()) {
                             verifyUser(() => navigate("/user/profile",{replace: true}))
@@ -119,10 +119,11 @@ export default function UserProfile() {
                                     </div>
                                 </>
                                 :
-                                <button onClick={() => sendVerifyEmail()} type="button" className="btn btn-error"
-                                        aria-label={t("AriaLabel.verifyAccount")} title={t("AriaLabel.verifyAccount")}>
-                                    {t('User.profile.verifyAccountBtn')}
-                                </button>
+                                <> </>
+                                // <button onClick={() => sendVerifyEmail()} type="button" className="btn btn-error"
+                                //         aria-label={t("AriaLabel.verifyAccount")} title={t("AriaLabel.verifyAccount")}>
+                                //     {t('User.profile.verifyAccountBtn')}
+                                // </button>
                             }
                         </div>
                     </div>

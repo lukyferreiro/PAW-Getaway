@@ -20,7 +20,7 @@ public class RootDto implements Serializable {
     private static final Collection<String> experienceStrings =
             Collections.unmodifiableCollection(Arrays.asList("experiences?{category,name,order,price,score,city,page,userId,filter}",
                     "experiences/{experienceId}?{view}", "experiences/{experienceId}/experienceImage",
-                    "experiences/{experienceId}/fav?{fav}", "experiences/{experienceId}/observable?{observable}",  //TODO ver estos dos
+                    "experiences/{experienceId}/fav?{fav}",  //TODO ver estos dos
                     "experiences/orders?{provider}", "experiences/categories", "experiences/categories/{categoryId}"));
     private static final Collection<String> locationStrings =
             Collections.unmodifiableCollection(Arrays.asList("location/countries", "location/countries/{countryId}",

@@ -93,7 +93,6 @@ public class ReviewController {
         }
 
         final UserModel user = authContext.getCurrentUser();
-        //TODO se podria sacar este get de aca
         final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
         final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experience, LocalDate.now(), user);
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(reviewModel.getReviewId())).build();

@@ -1,5 +1,7 @@
 package ar.edu.itba.getaway.webapp.security.api;
 
+import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.interfaces.services.TokensService;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.Roles;
 import ar.edu.itba.getaway.models.UserModel;
@@ -29,14 +31,16 @@ public class BasicAuthProvider implements AuthenticationProvider {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
-    private final AuthTokenService tokenService;
+    private final AuthTokenService authTokenService;
+    private final TokensService tokensService;
 
     @Autowired
-    public BasicAuthProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, UserService userService, AuthTokenService tokenService) {
+    public BasicAuthProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, UserService userService, AuthTokenService authTokenService, TokensService tokensService) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
-        this.tokenService = tokenService;
+        this.authTokenService = authTokenService;
+        this.tokensService = tokensService;
     }
 
     @Override
@@ -52,13 +56,18 @@ public class BasicAuthProvider implements AuthenticationProvider {
             throw new InvalidUsernamePasswordException("Invalid username/password");
         }
         final UserModel user = userService.getUserByEmail(credentials[0]).orElseThrow(() -> new BadCredentialsException("Bad credentials"));
-        if (!passwordEncoder.matches(credentials[1], user.getPassword())) {
+
+        //Si me autentico con Basic email:verifyToken, verifico
+        if (!tokensService.validateVerificationToken(user, credentials[1])) {
+            userService.verifyAccount(credentials[1]).orElseThrow(UserNotFoundException::new);
+        } else if (!passwordEncoder.matches(credentials[1], user.getPassword())) {
             throw new BadCredentialsException("Bad username/password combination");
         }
+
         final MyUserDetails userDetails = (MyUserDetails) userDetailsService.loadUserByUsername(credentials[0]);
         //TODO ver aca que token enviar
-        final String authToken = tokenService.createRefreshToken(userDetails);
-        final JwtTokenDetails tokenDetails = tokenService.validateTokenAndGetDetails(authToken);
+        final String authToken = authTokenService.createRefreshToken(userDetails);
+        final JwtTokenDetails tokenDetails = authTokenService.validateTokenAndGetDetails(authToken);
         final BasicAuthToken trustedAuth = new BasicAuthToken(credentials[0], credentials[1], userDetails.getAuthorities(), tokenDetails);
         trustedAuth.setToken(authToken);
         return trustedAuth;

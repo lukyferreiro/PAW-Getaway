@@ -27,8 +27,6 @@ jest.mock('../../../scripts/toast', () => ({
     showToast: jest.fn(),
 }));
 
-//TODO check
-
 describe('CardExperienceDetails Component', () => {
 
     test('renders experience details correctly', () => {

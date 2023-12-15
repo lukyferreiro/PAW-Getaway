@@ -103,30 +103,9 @@ public class UserController {
         return Response.noContent().build();
     }
 
-    @PATCH
-    @Path("/{userId:[0-9]+}")
-    @Consumes(value = {CustomMediaType.USER_PASSWORD_V1})
-    public Response updatePassword(
-            @PathParam("userId") final long id,
-            @Valid final PatchPasswordDto patchPasswordDto
-    ) {
-
-        if (patchPasswordDto.getToken() != null) {
-            UserModel user = userService.getUserByEmail(patchPasswordDto.getEmail()).orElseThrow(UserNotFoundException::new);
-            userService.generateNewPassword(user);
-        }
-        else {
-            userService.updatePassword(patchPasswordDto.getToken(), patchPasswordDto.getPassword()).orElseThrow(UserNotFoundException::new);
-        }
-
-        return Response.ok().build();
-    }
-
     //Endpoint para la verificar al usuario cuando recibo el token
-    //TODO no se si meterlo en el endpoint anterior
 //    @PUT
-//    @Produces(value = {MediaType.APPLICATION_JSON,})
-//    @Path("/emailToken")
+//    @Consumes(CustomMediaType.USER_VERIFY_V1)
 //    public Response verifyUser(
 //            @QueryParam("token") final String token
 //    ) {
@@ -136,7 +115,6 @@ public class UserController {
 //    }
 
     //Endpoint para reenviar el mail de verificacion
-    //TODO cambiar
 //    @POST
 //    @Produces(value = {MediaType.APPLICATION_JSON,})
 //    @Path("/emailToken")
@@ -149,44 +127,39 @@ public class UserController {
 
 
     //https://stackoverflow.com/questions/3077229/restful-password-reset
-    //Endpoint para resetear la contraseña, recibiendo el token y la contraseña nueva
-    //TODO cambiar
-//    @PUT
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/password")
-//    public Response resetPassword(
-//            @Valid final PasswordResetDto passwordResetDto
-//    ) {
-//        LOGGER.info("Called /users/password PUT");
-//
-//        if (passwordResetDto == null) {
-//            throw new ContentExpectedException();
-//        }
-//
-//        userService.updatePassword(passwordResetDto.getToken(), passwordResetDto.getPassword()).orElseThrow(UserNotFoundException::new);
-//        return Response.ok().build();
-//    }
+    //Endpoint para cambiar la contraseña, recibiendo el token y la contraseña nueva
+    @PATCH
+    @Consumes(CustomMediaType.USER_PASSWORD_V1)
+    public Response patchModifyPassword(
+            @Valid final PatchPasswordDto patchPasswordDto,
+            @QueryParam("token") @DefaultValue("") String token
+    ) {
+        LOGGER.info("Called /users PATCH");
 
-    //Endpoint para enviar el mail del email que quiere reiniciar la contraseña
-    //TODO cambiar
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/password")
-//    public Response sendResetPasswordEmail(
-//            @Valid final PasswordResetEmailDto passwordResetEmailDto
-//    ) {
-//        LOGGER.info("Called /users/password POST");
-//
-//        if (passwordResetEmailDto == null) {
-//            throw new ContentExpectedException();
-//        }
-//
-//        UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
-//        userService.generateNewPassword(user);
-//        return Response.ok().build();
-//    }
+        if (patchPasswordDto == null) {
+            throw new ContentExpectedException();
+        }
+
+        userService.updatePassword(token, patchPasswordDto.getPassword()).orElseThrow(UserNotFoundException::new);
+        return Response.noContent().build();
+    }
+
+    //Endpoint para blanquear la contraseña y enviar el mail de recupero
+    @POST
+    @Consumes(CustomMediaType.USER_PASSWORD_EMAIL_V1)
+    public Response sendResetPasswordEmail(
+            @Valid final PasswordResetEmailDto passwordResetEmailDto
+    ) {
+        LOGGER.info("Called /users POST");
+
+        if (passwordResetEmailDto == null) {
+            throw new ContentExpectedException();
+        }
+
+        UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
+        userService.generateNewPassword(user);
+        return Response.noContent().build();
+    }
 
     //Endpoint para obtener la imagen de perfil del usuario
     @GET
