@@ -392,13 +392,13 @@ public class ExperienceServiceImpl implements ExperienceService {
             alreadyRecommended.addAll(recommendedByReviewsCity.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
 
             if (toReturnList.size() < CAROUSEL_LENGTH) {
-                recommendedByReviewsProvider = experienceDao.getRecommendedByReviewsProvider(user, CAROUSEL_LENGTH - recommendedByReviewsFullList.size(), alreadyRecommended);
+                recommendedByReviewsProvider = experienceDao.getRecommendedByReviewsProvider(user, CAROUSEL_LENGTH - toReturnList.size(), alreadyRecommended);
                 toReturnList.addAll(recommendedByReviewsProvider);
                 alreadyRecommended.addAll(recommendedByReviewsProvider.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
             }
 
             if (toReturnList.size() < CAROUSEL_LENGTH) {
-                recommendedByReviewsCategory = experienceDao.getRecommendedByReviewsCategory(user, CAROUSEL_LENGTH - recommendedByReviewsFullList.size(), alreadyRecommended);
+                recommendedByReviewsCategory = experienceDao.getRecommendedByReviewsCategory(user, CAROUSEL_LENGTH - toReturnList.size(), alreadyRecommended);
                 toReturnList.addAll(recommendedByReviewsCategory);
             }
 
