@@ -8,13 +8,14 @@ import {
     reviewModel1,
 } from "../../Mocks";
 
-//TODO check este
-test("Should get review with id 1", async () => {
-    successfullyMockResponse(200, reviewModel1);
+describe('Review Service Test', () => {
+    test("Should get review with id 1", async () => {
+        successfullyMockResponse(200, reviewModel1);
 
-    return reviewService.getReviewById(1)
-        .then((response) => {
-            expect(response.hasFailed()).toBeFalsy();
-            expect(response.getData()).toBe(reviewModel1);
-        });
+        return reviewService.getReviewById(1)
+            .then((response) => {
+                expect(response.hasFailed()).toBeFalsy();
+                expect(response.getData()).toBe(reviewModel1);
+            });
+    });
 });

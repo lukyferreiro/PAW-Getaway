@@ -1,11 +1,9 @@
 import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, render, waitFor } from '@testing-library/react';
-import Navbar from '../../../path-to-your-component/Navbar';
+import Navbar from '../../../components/Navbar';
 import { act } from 'react-dom/test-utils';
+import {BrowserRouter} from "react-router-dom";
 
-jest.mock('react-i18next', () => ({
-    useTranslation: () => ({ t: jest.fn() }),
-}));
 
 jest.mock('../../../hooks/useAuth', () => ({
     useAuth: () => ({
@@ -31,7 +29,7 @@ jest.mock('../../../hooks/useQuery', () => ({
 describe('Navbar Component', () => {
     const renderComponent = (nameProp = ['', jest.fn()], categoryProp = ['', jest.fn()]) => {
         // @ts-ignore
-        return render(<Navbar nameProp={nameProp} categoryProp={categoryProp} />);
+        return render(<BrowserRouter><Navbar nameProp={nameProp} categoryProp={categoryProp} /></BrowserRouter>);
     };
 
     test('renders Navbar component', () => {

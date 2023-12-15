@@ -3,8 +3,7 @@ import {CurrentUserModel} from "../types";
 function handleResponseStatus<RetType>(response: Response): Promise<RetType> {
     if (
         response.status >= 200 &&
-        response.status <= 299 &&
-        response.status !== 204
+        response.status <= 299
     ) {
         return response.json() as Promise<RetType>;
     } else {
@@ -23,7 +22,7 @@ export function checkValidJWT<RetType>(response: Response): Promise<RetType> {
         return handleResponseStatus(response);
     }
     if (response) {
-        const accessHeader = response.headers.get('Authorization')
+        const accessHeader = response.headers ? response.headers.get('Authorization') : null
         if (accessHeader) {
             const getawayToken = accessHeader.split(' ')[1]
             const user = JSON.parse(atob(getawayToken.split('.')[1])) as CurrentUserModel

@@ -1,21 +1,8 @@
 import '@testing-library/jest-dom/extend-expect';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import ConfirmDialogModal, { confirmDialogModal } from '../../../path-to-your-component/ConfirmDialogModal';
+import ConfirmDialogModal, { confirmDialogModal } from '../../../components/ConfirmDialogModal';
 
 describe('ConfirmDialogModal Component', () => {
-    test('renders ConfirmDialogModal component with correct elements', async () => {
-        render(<ConfirmDialogModal />);
-
-        const dialogTitle = screen.getByText(''); // Update with your default title
-        const dialogContent = screen.getByText('');
-        const cancelButton = screen.getByText('Cancel');
-        const confirmButton = screen.getByText('Confirm');
-
-        expect(dialogTitle).toBeInTheDocument();
-        expect(dialogContent).toBeInTheDocument();
-        expect(cancelButton).toBeInTheDocument();
-        expect(confirmButton).toBeInTheDocument();
-    });
 
     test('opens ConfirmDialogModal using confirmDialogModal function', async () => {
         confirmDialogModal('Test Title', 'Test Message', jest.fn());
@@ -23,8 +10,8 @@ describe('ConfirmDialogModal Component', () => {
 
         const dialogTitle = screen.getByText('Test Title');
         const dialogContent = screen.getByText('Test Message');
-        const cancelButton = screen.getByText('Cancel');
-        const confirmButton = screen.getByText('Confirm');
+        const cancelButton = await screen.findByText(/cancel/i);
+        const confirmButton = await screen.findByText(/confirm/i);
 
         expect(dialogTitle).toBeInTheDocument();
         expect(dialogContent).toBeInTheDocument();
@@ -37,7 +24,7 @@ describe('ConfirmDialogModal Component', () => {
         confirmDialogModal('Test Title', 'Test Message', onSubmitMock);
         render(<ConfirmDialogModal />);
 
-        const confirmButton = screen.getByText('Confirm');
+        const confirmButton = await screen.findByText(/confirm/i);
         fireEvent.click(confirmButton);
 
         await waitFor(() => {
@@ -50,7 +37,7 @@ describe('ConfirmDialogModal Component', () => {
         confirmDialogModal('Test Title', 'Test Message', onSubmitMock);
         render(<ConfirmDialogModal />);
 
-        const cancelButton = screen.getByText('Cancel');
+        const cancelButton = await screen.findByText(/cancel/i);
         fireEvent.click(cancelButton);
 
         await waitFor(() => {

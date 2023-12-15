@@ -3,22 +3,19 @@ import { fireEvent, render } from '@testing-library/react';
 import CardExperienceDetails from '../../../components/CardExperienceDetails';
 import { experienceModelNoFav } from '../../Mocks';
 import {setFavExperience, setVisibility} from "../../../scripts/experienceOperations";
+import {BrowserRouter} from "react-router-dom";
 
-// Mocking react-router-dom useNavigate and useSearchParams hooks
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useNavigate: () => jest.fn(),
-    useSearchParams: () => [new URLSearchParams(), jest.fn()],
 }));
 
-// Mocking useAuth hook
 jest.mock('../../../hooks/useAuth', () => ({
     useAuth: () => ({
         getUser: jest.fn(() => ({ /* Mocked user object */ })),
     }),
 }));
 
-// Mocking scripts/experienceOperations functions
 jest.mock('../../../scripts/experienceOperations', () => ({
     setFavExperience: jest.fn(),
     setVisibility: jest.fn(),
@@ -26,16 +23,20 @@ jest.mock('../../../scripts/experienceOperations', () => ({
     deleteExperience: jest.fn(),
 }));
 
-// Mocking scripts/toast function
 jest.mock('../../../scripts/toast', () => ({
     showToast: jest.fn(),
 }));
+
+//TODO check
 
 describe('CardExperienceDetails Component', () => {
 
     test('renders experience details correctly', () => {
         const { getByText } = render(
-            <CardExperienceDetails experience={experienceModelNoFav} isEditing={false} nameProp={['', jest.fn()]} categoryProp={['', jest.fn()]} />
+            <BrowserRouter>
+                <CardExperienceDetails experience={experienceModelNoFav} isEditing={false}
+                                       nameProp={['', jest.fn()]} categoryProp={['', jest.fn()]} />
+            </BrowserRouter>
         );
 
         // @ts-ignore
@@ -45,7 +46,10 @@ describe('CardExperienceDetails Component', () => {
 
     test('calls setFavExperience when clicking favorite button', () => {
         const { getByLabelText } = render(
-            <CardExperienceDetails experience={experienceModelNoFav} isEditing={false} nameProp={['', jest.fn()]} categoryProp={['', jest.fn()]} />
+            <BrowserRouter>
+                <CardExperienceDetails experience={experienceModelNoFav} isEditing={false}
+                                       nameProp={['', jest.fn()]} categoryProp={['', jest.fn()]} />
+            </BrowserRouter>
         );
 
         const favoriteButton = getByLabelText('Save in favourites');
@@ -56,7 +60,10 @@ describe('CardExperienceDetails Component', () => {
 
     test('calls setVisibility when clicking visibility button', () => {
         const { getByLabelText } = render(
-            <CardExperienceDetails experience={experienceModelNoFav} isEditing={true} nameProp={['', jest.fn()]} categoryProp={['', jest.fn()]} />
+            <BrowserRouter>
+                <CardExperienceDetails experience={experienceModelNoFav} isEditing={true}
+                                       nameProp={['', jest.fn()]} categoryProp={['', jest.fn()]} />
+            </BrowserRouter>
         );
 
         const visibilityButton = getByLabelText('Visibility');

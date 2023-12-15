@@ -1,7 +1,7 @@
 import {Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,} from "@mui/material";
 import {create} from 'zustand';
 import React from "react";
-import {t} from "i18next";
+import {useTranslation} from "react-i18next";
 
 
 type ConfirmDialogStore = {
@@ -35,6 +35,7 @@ export const confirmDialogModal = (title: string, message: string, onSubmit: () 
 const ConfirmDialogModal: React.FC = () => {
 
     const {title, message, onSubmit, close} = UseConfirmDialogStore()
+    const {t} = useTranslation()
 
     return (
         <Dialog open={Boolean(onSubmit)} onClose={close} maxWidth="sm" fullWidth>

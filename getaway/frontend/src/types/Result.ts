@@ -32,4 +32,8 @@ export default class Result<T> {
     public hasFailed(): boolean {
         return this.failed;
     }
+
+    public getStatusCode(): number {
+        return this.statusCode;
+    }
 }

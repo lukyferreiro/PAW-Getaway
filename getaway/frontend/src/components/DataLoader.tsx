@@ -51,7 +51,7 @@ export default function DataLoader({spinnerMultiplier = 1, isLoading, children,}
     return (
         <>
             {isLoading ?
-                <SpinnerRing sizeMultiplier={spinnerMultiplier}>
+                <SpinnerRing sizeMultiplier={spinnerMultiplier} data-testid="spinner">
                     <div></div>
                     <div></div>
                     <div></div>

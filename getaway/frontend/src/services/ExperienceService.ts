@@ -140,8 +140,9 @@ export class ExperienceService {
     }
 
     public async getExperienceNameById(experienceId: number): Promise<Result<ExperienceModel>> {
-        return resultFetch<ExperienceModel>(this.experienceBasePath + `/${experienceId}/name`, {
-            method: "GET",
+        const url = new URL(this.experienceBasePath + `/${experienceId}`);
+        return resultFetch(url.toString(), {
+            method: "GET"
         });
     }
 

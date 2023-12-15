@@ -1,16 +1,16 @@
 import '@testing-library/jest-dom/extend-expect';
 import { render, screen } from '@testing-library/react';
-import DataLoader from '../../../path-to-your-component/DataLoader';
+import DataLoader from '../../../components/DataLoader';
 
 describe('DataLoader Component', () => {
-    test('renders DataLoader component with spinner when loading', () => {
-        render(<DataLoader isLoading={true} />);
+    test('renders DataLoader component with spinner when loading', async() => {
+        render(<DataLoader isLoading={true} children={<p></p>}/>);
         const spinner = screen.getByTestId('spinner');
         expect(spinner).toBeInTheDocument();
     });
 
     test('renders DataLoader component without spinner when not loading', () => {
-        render(<DataLoader isLoading={false} />);
+        render(<DataLoader isLoading={false} children={<p></p>}/>);
         const spinner = screen.queryByTestId('spinner');
         expect(spinner).not.toBeInTheDocument();
     });
