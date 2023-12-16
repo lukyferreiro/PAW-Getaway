@@ -104,6 +104,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/", "*.css", "/*.js", "/favicon.ico", "/manifest.json");
     }
 
+    //TODO: check all changed endpoints
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
@@ -127,13 +128,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //anonymous porque sino no se puede acceder a boton register
                     .antMatchers(HttpMethod.POST, "/api/users").anonymous()
                     //permitAll, porque no se usa solo para usuarios logueados va para cualquiera
-                    .antMatchers(HttpMethod.GET, "/api/users/{userId}").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/users/{userId}").access("@antMatcherVoter.accessUserInfo(authentication, #userId)")
                     //logueado y rol NOT VERIFIED
                     .antMatchers(HttpMethod.PUT, "/api/users/emailToken").hasAuthority("NOT_VERIFIED")
                     .antMatchers(HttpMethod.POST, "/api/users/emailToken").hasAuthority("NOT_VERIFIED")
                     //¿Olvidaste tu contraseña?
-                    .antMatchers(HttpMethod.PUT, "/api/users/passwordToken").anonymous()
-                    .antMatchers(HttpMethod.POST, "/api/users/passwordToken").anonymous()
+//                    .antMatchers(HttpMethod.PUT, "/api/users/passwordToken").anonymous()
+//                    .antMatchers(HttpMethod.POST, "/api/users/passwordToken").anonymous()
                     //logueado y hay que revisar que el id sea el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{userId}").access("@antMatcherVoter.userEditHimself(authentication, #userId)")
                     //permitAll, igual que el get by id

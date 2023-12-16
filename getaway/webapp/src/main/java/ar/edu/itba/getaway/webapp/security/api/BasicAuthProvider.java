@@ -58,7 +58,7 @@ public class BasicAuthProvider implements AuthenticationProvider {
         final UserModel user = userService.getUserByEmail(credentials[0]).orElseThrow(() -> new BadCredentialsException("Bad credentials"));
 
         //Si me autentico con Basic email:verifyToken, verifico
-        if (!tokensService.validateVerificationToken(user, credentials[1])) {
+        if (tokensService.validateVerificationToken(user, credentials[1])) {
             userService.verifyAccount(credentials[1]).orElseThrow(UserNotFoundException::new);
         } else if (!passwordEncoder.matches(credentials[1], user.getPassword())) {
             throw new BadCredentialsException("Bad username/password combination");
