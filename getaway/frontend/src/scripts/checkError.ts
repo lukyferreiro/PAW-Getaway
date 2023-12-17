@@ -16,7 +16,6 @@ function handleResponseStatus<RetType>(response: Response): Promise<RetType> {
 // que volvemos a guardar en local storage
 export function checkValidJWT<RetType>(response: Response): Promise<RetType> {
     if (response.status === 401) {
-        console.log(`Recibi un 401`)
         localStorage.removeItem('getawayToken')
         localStorage.removeItem('getawayUser')
         return handleResponseStatus(response);

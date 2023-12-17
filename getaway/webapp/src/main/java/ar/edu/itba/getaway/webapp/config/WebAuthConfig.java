@@ -104,7 +104,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/", "*.css", "/*.js", "/favicon.ico", "/manifest.json");
     }
 
-    //TODO: check all changed endpoints
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
@@ -127,49 +126,34 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //------------------- /users -------------------
                     //anonymous porque sino no se puede acceder a boton register
                     .antMatchers(HttpMethod.POST, "/api/users").anonymous()
-                    //permitAll, porque no se usa solo para usuarios logueados va para cualquiera
+                    //se usa solo para usuarios logueados para su propia info
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}").access("@antMatcherVoter.accessUserInfo(authentication, #userId)")
-                    //logueado y rol NOT VERIFIED
-                    .antMatchers(HttpMethod.PUT, "/api/users/emailToken").hasAuthority("NOT_VERIFIED")
-                    .antMatchers(HttpMethod.POST, "/api/users/emailToken").hasAuthority("NOT_VERIFIED")
                     //¿Olvidaste tu contraseña?
-//                    .antMatchers(HttpMethod.PUT, "/api/users/passwordToken").anonymous()
-//                    .antMatchers(HttpMethod.POST, "/api/users/passwordToken").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/users").anonymous()
+                    .antMatchers(HttpMethod.PATCH, "/api/users/{userId}").anonymous()
                     //logueado y hay que revisar que el id sea el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{userId}").access("@antMatcherVoter.userEditHimself(authentication, #userId)")
                     //permitAll, igual que el get by id
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}/profileImage").permitAll()
                     //logueado y hay que revisar que el id sea el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{userId}/profileImage").access("@antMatcherVoter.userEditHimself(authentication, #userId)")
-                    //logueado y tiene que tener rol PROVIDER
-//                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/experiences").access("hasAuthority('PROVIDER') and @antMatcherVoter.accessUserInfo(authentication, #userId)")
-                    //logueado y tiene que tener rol VERIFIED
-//                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/reviews").access("hasAuthority('VERIFIED') and @antMatcherVoter.accessUserInfo(authentication, #userId)")
-                    //logueado y tiene que tener rol USER nada más
-                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/favExperiences").access("@antMatcherVoter.accessUserInfo(authentication, #userId)")
-                    //logueado y tiene que tener rol USER nada más
-                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/recommendations").access("@antMatcherVoter.accessUserInfo(authentication, #userId)")
                 //------------------- /experiences -------------------
                     //logueado y VERIFIED (pues rol PROVIDER se asigna en el momento)
                     .antMatchers(HttpMethod.POST, "/api/experiences").hasAuthority("VERIFIED")
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/experiences/maxPrice").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/orders").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/categories").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/experiences/categories/{categoryId}").permitAll()
-//                    .antMatchers(HttpMethod.GET, "/api/experiences/name").permitAll()
-//                    .antMatchers(HttpMethod.GET, "/api/experiences/recommendations").permitAll()
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/{experienceId}").permitAll()
                     //logueado, VERIFIED y PROVIDER, chequear que sea el mismo usuario
                     .antMatchers(HttpMethod.PUT, "/api/experiences/{experienceId}").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
+                    .antMatchers(HttpMethod.PATCH, "/api/experiences/{experienceId}").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
                     .antMatchers(HttpMethod.DELETE, "/api/experiences/{experienceId}").access("@antMatcherVoter.canDeleteExperienceById(authentication, #experienceId)")
                     .antMatchers(HttpMethod.PUT, "/api/experiences/{experienceId}/experienceImage").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/{experienceId}/experienceImage").permitAll()
-//                    .antMatchers(HttpMethod.GET, "/api/experiences/{experienceId}/reviews").permitAll()
-                    .antMatchers(HttpMethod.PUT, "/api/experience/{experienceId}/observable").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
                     //logueado
                     .antMatchers(HttpMethod.PUT, "/api/experience/{experienceId}/fav").authenticated()
                 //------------------- /reviews -------------------
@@ -185,10 +169,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/location/countries/{countryId}").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/location/countries/{countryId}/cities").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/location/cities/{cityId}").permitAll()
-                //------------------- /categories --------------------
-                    //permitAll para navbar
-//                    .antMatchers(HttpMethod.GET, "/api/categories").permitAll()
-//                    .antMatchers(HttpMethod.GET, "/api/categories/{categoryId}").permitAll()
                 //------------------- Others --------------------
                     .antMatchers("/**").permitAll()
                 .and()

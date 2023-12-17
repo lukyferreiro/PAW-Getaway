@@ -53,9 +53,6 @@ export default function UserFavourites() {
 
 
     useEffect(() => {
-        console.log(`pageToShow: ${pageToShow}`)
-        console.log(`MaxPage: ${maxPage}`)
-        console.log(`CurrentPage: ${currentPage[0]}`)
         if ((maxPage === 0 && (pageToShow[0] <= 1 || pageToShow[0] > maxPage))
             ||
             ((pageToShow[0] >= 1 && pageToShow[0] <= maxPage) && (currentPage[0] >= 0 && currentPage[0] <= maxPage))

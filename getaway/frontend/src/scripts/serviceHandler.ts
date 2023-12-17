@@ -22,7 +22,7 @@ export function serviceHandler<T>(
                 })
             }
         } else {
-            if (response.getData() === 204) {
+            if (response.getStatusCode() === 204) {
                 noContentFunction();
             } else {
                 setterFunction(response.getData());
