@@ -77,6 +77,7 @@ describe('User Service Test', () => {
                 expect(response.getData().getContent()[0]).toBe(experienceModelNoFav);
                 expect(response.getData().getContent()[1]).toBe(experienceModelFav);
                 expect(response.getData().getContent()[2]).toBe(experienceModelCategory);
+                expect(response.getData().getContent().length).toBe(3);
             });
     });
 
@@ -91,6 +92,7 @@ describe('User Service Test', () => {
                 expect(response.hasFailed()).toBeFalsy();
                 expect(response.getData().getContent()[0]).toBe(experienceModelFav);
                 expect(response.getData().getContent()[1]).toBe(experienceModelCategory);
+                expect(response.getData().getContent().length).toBe(2);
             });
     });
 
@@ -105,6 +107,7 @@ describe('User Service Test', () => {
                 expect(response.hasFailed()).toBeFalsy();
                 expect(response.getData().getContent()[0]).toBe(reviewModel1);
                 expect(response.getData().getContent()[1]).toBe(reviewModel2);
+                expect(response.getData().getContent().length).toBe(2);
             });
     });
 });

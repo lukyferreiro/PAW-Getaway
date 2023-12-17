@@ -52,6 +52,7 @@ describe('Experience Service Test', () => {
                 expect(response.getData().getContent()[0]).toBe(experienceModelFav);
                 expect(response.getData().getContent()[1]).toBe(experienceModelNoFav);
                 expect(response.getData().getContent()[2]).toBe(experienceModelCategory);
+                expect(response.getData().getContent().length).toBe(3);
             });
     });
 
@@ -65,6 +66,7 @@ describe('Experience Service Test', () => {
             .then((response) => {
                 expect(response.hasFailed()).toBeFalsy();
                 expect(response.getData().getContent()[0]).toBe(experienceModelCategory);
+                expect(response.getData().getContent().length).toBe(1);
             });
     });
 
@@ -78,6 +80,7 @@ describe('Experience Service Test', () => {
             .then((response) => {
                 expect(response.hasFailed()).toBeFalsy();
                 expect(response.getData().getContent()[0]).toBe(experienceModelNoFav);
+                expect(response.getData().getContent().length).toBe(1);
             });
     });
 
@@ -93,6 +96,7 @@ describe('Experience Service Test', () => {
                 expect(response.getData().getContent()[1]).toBe(experienceModelFav);
                 expect(response.getData().getContent()[2]).toBe(experienceModelCategory);
                 expect(response.getData().getContent()[3]).toBe(experienceModelNoFav);
+                expect(response.getData().getContent().length).toBe(4);
             });
     });
 
@@ -142,10 +146,11 @@ describe('Experience Service Test', () => {
         successfullyMockResponse(200, [reviewModel1, reviewModel2], headers);
 
         return experienceService.getExperienceReviews(1)
-            .then((ans) => {
-                expect(ans.hasFailed()).toBeFalsy();
-                expect(ans.getData().getContent()[0]).toBe(reviewModel1);
-                expect(ans.getData().getContent()[1]).toBe(reviewModel2);
+            .then((response) => {
+                expect(response.hasFailed()).toBeFalsy();
+                expect(response.getData().getContent()[0]).toBe(reviewModel1);
+                expect(response.getData().getContent()[1]).toBe(reviewModel2);
+                expect(response.getData().getContent().length).toBe(2);
             });
     });
 
@@ -174,6 +179,7 @@ describe('Experience Service Test', () => {
                 expect(response.hasFailed()).toBeFalsy();
                 expect(response.getData()[0]).toBe(categoryModel1);
                 expect(response.getData()[1]).toBe(categoryModel2);
+                expect(response.getData().length).toBe(2);
             });
     });
 });

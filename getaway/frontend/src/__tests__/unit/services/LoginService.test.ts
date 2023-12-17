@@ -7,7 +7,7 @@ import {successfullyMockResponse, userModel} from "../../Mocks";
 
 describe('Login Service Test', () => {
 
-    test("Should return a valid token", async () => {
+    test("Should login with user", async () => {
         const headers = new window.Headers();
         headers.set("Authorization", "Bearer token");
         successfullyMockResponse(200, userModel);
