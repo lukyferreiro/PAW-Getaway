@@ -46,17 +46,15 @@ export default function Login() {
             loginService.login(data.email, data.password)
                 .then((result) => {
                     if (!result.hasFailed()) {
-                        //TODO ver como hacer lo toast
-                        signIn(() => {
+                        const user = signIn(() => {
                             navigate(from, {replace: true})
-
-                            // showToast(t('Login.toast.success', {
-                            //     name: user.getData().name,
-                            //     surname: user.getData().surname
-                            // }), 'success')
-                            // if (!user.getData().verified) {
-                            //     showToast(t('Login.toast.verifySent'), 'success')
-                            // }
+                            showToast(t('Login.toast.success', {
+                                name: user.name,
+                                surname: user.surname
+                            }), 'success')
+                            if (!user.isVerified) {
+                                showToast(t('Login.toast.verifySent'), 'success')
+                            }
                         })
                     } else {
                         setInvalidCredendtials(true)

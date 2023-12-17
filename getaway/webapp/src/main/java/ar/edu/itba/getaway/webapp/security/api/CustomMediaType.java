@@ -2,7 +2,6 @@ package ar.edu.itba.getaway.webapp.security.api;
 
 public class CustomMediaType {
 
-    //TODO revisar customMediaType
     public static final String ERROR_V1 = "application/vnd.getaway.error.v1+json";
     public static final String USER_V1 = "application/vnd.getaway.user.v1+json";
     public static final String USER_INFO_V1 = "application/vnd.getaway.userInfo.v1+json";

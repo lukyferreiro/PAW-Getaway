@@ -22,7 +22,7 @@ public class RootDto implements Serializable {
                     "experiences?{category,name,order,price,score,city,page,userId,filter}",
                     "experiences/{experienceId}?{view}",
                     "experiences/{experienceId}/experienceImage",
-                    "experiences/{experienceId}/fav?{fav}",  //TODO ver estos dos
+                    "experiences/{experienceId}/fav?{fav}",
                     "experiences/orders?{provider}", "experiences/categories", "experiences/categories/{categoryId}"));
     private static final Collection<String> locationStrings =
             Collections.unmodifiableCollection(Arrays.asList("location/countries", "location/countries/{countryId}",

@@ -5,7 +5,7 @@ import {CurrentUserModel} from "../types"
 interface AuthContextType {
     user: CurrentUserModel | null
     setUser: Dispatch<SetStateAction<CurrentUserModel | null>>
-    signIn: (callback: VoidFunction) => void
+    signIn: (callback: VoidFunction) => CurrentUserModel
     signOut: (callback: VoidFunction) => void
     verifyUser: (callback: VoidFunction) => void
     makeProvider: (callback: VoidFunction) => void
@@ -43,7 +43,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
             }
             callback()
         })
-        // return user
+        return getUser()
     }
 
     const signOut = (callback: VoidFunction) => {

@@ -54,14 +54,13 @@ export default function CreateAccount() {
                         loginService.login(data.email, data.password)
                             .then((result) => {
                                 if (!result.hasFailed()) {
-                                    //TODO ver como hacer lo toast
-                                    signIn(() => {
+                                    const user = signIn(() => {
                                         navigate(from, {replace: true});
                                     })
-                                    // showToast(t('Login.toast.success', {
-                                    //     name: user.getData().name,
-                                    //     surname: user.getData().surname
-                                    // }), 'success')
+                                    showToast(t('Login.toast.success', {
+                                        name: user.name,
+                                        surname: user.surname
+                                    }), 'success')
                                     showToast(t('User.toast.resendVerify.success'), 'success')
                                 }
                             })
