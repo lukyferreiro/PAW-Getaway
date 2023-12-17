@@ -1,6 +1,9 @@
 import {CurrentUserModel} from "../types";
 
-function handleResponseStatus<RetType>(response: Response): Promise<RetType> {
+function handleResponseStatus<RetType>(response: Response): Promise<RetType> | null {
+    if (response.status === 204) {
+        return null;
+    }
     if (
         response.status >= 200 &&
         response.status <= 299
@@ -14,7 +17,7 @@ function handleResponseStatus<RetType>(response: Response): Promise<RetType> {
 // Si obtenemos un 401 quiere decir que vencio el token, entonces nos volvemos a autenticar
 // con Basic (el cual lo teniamos encodeado en una cookie) y obtenemos el nuevo token
 // que volvemos a guardar en local storage
-export function checkValidJWT<RetType>(response: Response): Promise<RetType> {
+export function checkValidJWT<RetType>(response: Response): Promise<RetType> | null {
     if (response.status === 401) {
         localStorage.removeItem('getawayToken')
         localStorage.removeItem('getawayUser')
