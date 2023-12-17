@@ -85,7 +85,6 @@ public class UserController {
 
     //Endpoint para editar la informacion del usuario
     @PUT
-//    @PATCH
     @Path("/{userId:[0-9]+}")
     @Consumes(value = {CustomMediaType.USER_INFO_V1})
     public Response updateUser(
@@ -103,30 +102,6 @@ public class UserController {
         return Response.noContent().build();
     }
 
-    //Endpoint para la verificar al usuario cuando recibo el token
-//    @PUT
-//    @Consumes(CustomMediaType.USER_VERIFY_V1)
-//    public Response verifyUser(
-//            @QueryParam("token") final String token
-//    ) {
-//        LOGGER.info("Called /users/emailToken PUT");
-//        userService.verifyAccount(token).orElseThrow(UserNotFoundException::new);
-//        return Response.ok().build();
-//    }
-
-    //Endpoint para reenviar el mail de verificacion
-//    @POST
-//    @Produces(value = {MediaType.APPLICATION_JSON,})
-//    @Path("/emailToken")
-//    public Response resendUserVerification() {
-//        LOGGER.info("Called /users/emailToken POST");
-//        final UserModel user = authContext.getCurrentUser();
-//        userService.resendVerificationToken(user);
-//        return Response.ok().build();
-//    }
-
-
-    //https://stackoverflow.com/questions/3077229/restful-password-reset
     //Endpoint para cambiar la contraseña, recibiendo el token y la contraseña nueva
     @PATCH
     @Consumes(CustomMediaType.USER_PASSWORD_V1)
