@@ -39,7 +39,11 @@ export default function ExperienceDetails(props: { nameProp: [string | undefined
     const user = getUser()
 
     const [maxPage, setMaxPage] = useState(0)
-    const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
+    const currentPage = useState<number>(
+        !isNaN(parseInt(getQueryOrDefault(query, "page", "1"))) ?
+            parseInt(getQueryOrDefault(query, "page", "1")) :
+            1
+    )
     const pageToShow = useState<number>(1)
 
     useEffect(() => {

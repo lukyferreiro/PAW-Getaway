@@ -71,7 +71,6 @@ public class UserController {
     }
 
     //Endpoint que devuelve informacion de un usuario segun el ID
-    //TODO: check usage and antmatcher
     @GET
     @Path("/{userId:[0-9]+}")
     @Produces(value = {CustomMediaType.USER_V1})

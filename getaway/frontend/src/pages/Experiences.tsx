@@ -47,7 +47,11 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     const order = useState<string>(getQueryOrDefault(query, "order", "OrderByAZ"))
     //Page
     const [maxPage, setMaxPage] = useState(0)
-    const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
+    const currentPage = useState<number>(
+        !isNaN(parseInt(getQueryOrDefault(query, "page", "1"))) ?
+            parseInt(getQueryOrDefault(query, "page", "1")) :
+            1
+    )
     const pageToShow = useState<number>(1)
 
     useEffect(() => {

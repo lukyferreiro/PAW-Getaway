@@ -23,7 +23,6 @@ export function AuthProvider({children}: { children: ReactNode }) {
 
     const [user, setUser] = useState<CurrentUserModel | null>(null)
 
-
     useEffect(() => {
         const token = localStorage.getItem("getawayToken");
         if (token) {

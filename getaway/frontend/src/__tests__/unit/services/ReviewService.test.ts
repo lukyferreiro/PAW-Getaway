@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import {experienceService, reviewService} from "../../../services";
+import {reviewService} from "../../../services";
 import {
     successfullyMockResponse,
     reviewModel1,

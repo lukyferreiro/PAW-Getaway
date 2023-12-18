@@ -27,7 +27,11 @@ export default function UserReviews() {
     const [isLoading, setIsLoading] = useState(false)
 
     const [maxPage, setMaxPage] = useState(0)
-    const currentPage = useState<number>(parseInt(getQueryOrDefault(query, "page", "1")))
+    const currentPage = useState<number>(
+        !isNaN(parseInt(getQueryOrDefault(query, "page", "1"))) ?
+            parseInt(getQueryOrDefault(query, "page", "1")) :
+            1
+    )
     const pageToShow = useState<number>(1)
 
     const onEdit = useState(false)

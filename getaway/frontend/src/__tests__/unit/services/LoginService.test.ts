@@ -1,9 +1,9 @@
 /**
  * @jest-environment jsdom
  */
+
 import {loginService} from "../../../services";
 import {successfullyMockResponse, userModel} from "../../Mocks";
-
 
 describe('Login Service Test', () => {
 

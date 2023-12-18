@@ -131,7 +131,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //logueado y hay que revisar que el id sea el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{userId}").access("@antMatcherVoter.userEditHimself(authentication, #userId)")
                     //¿Olvidaste tu contraseña?
-                    .antMatchers(HttpMethod.PATCH, "/api/users").anonymous() //TODO check este
+                    .antMatchers(HttpMethod.PATCH, "/api/users").anonymous()
                     // .antMatchers(HttpMethod.POST, "/api/users").anonymous()
                     //permitAll
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}/profileImage").permitAll()

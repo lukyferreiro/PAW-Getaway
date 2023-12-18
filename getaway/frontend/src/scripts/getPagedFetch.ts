@@ -16,10 +16,9 @@ export async function getPagedFetch<RetType>(
         });
         const parsedResponse = await checkValidJWT<RetType>(response);
         const maxPage = response.headers.get("X-Total-Pages");
-        if (parsedResponse === null){
+        if (parsedResponse === null) {
             return Result.ok(new PagedContent([] as RetType, 1), 204)
-        }
-        else {
+        } else {
             return Result.ok(
                 new PagedContent(parsedResponse, maxPage ? parseInt(maxPage) : 1), response.status
             );

@@ -14,9 +14,7 @@ function handleResponseStatus<RetType>(response: Response): Promise<RetType> | n
     }
 }
 
-// Si obtenemos un 401 quiere decir que vencio el token, entonces nos volvemos a autenticar
-// con Basic (el cual lo teniamos encodeado en una cookie) y obtenemos el nuevo token
-// que volvemos a guardar en local storage
+// Si obtenemos un 401 quiere decir que vencio el token
 export function checkValidJWT<RetType>(response: Response): Promise<RetType> | null {
     if (response.status === 401) {
         localStorage.removeItem('getawayToken')
