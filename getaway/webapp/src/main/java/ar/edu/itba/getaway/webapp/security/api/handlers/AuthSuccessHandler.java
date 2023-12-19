@@ -4,7 +4,6 @@ import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.webapp.security.models.*;
-import ar.edu.itba.getaway.webapp.security.services.AuthTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
@@ -15,9 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
-
-//    @Autowired
-//    private AuthTokenService authTokenService;
 
     @Autowired
     private UserService userService;
@@ -34,10 +30,5 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
                 userService.resendVerificationToken(user);
             }
         }
-//        else if ((!(authentication instanceof JwtAuthToken)) || ((JwtTokenDetails) authentication.getDetails()).getTokenType().equals(JwtTokenType.REFRESH)) {
-//            MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-//            response.addHeader("access-token", "Bearer " + authTokenService.createAccessToken(userDetails));
-//            response.addHeader("refresh-token", "Bearer " + authTokenService.createRefreshToken(userDetails));
-//        }
     }
 }
