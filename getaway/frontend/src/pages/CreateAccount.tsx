@@ -61,7 +61,7 @@ export default function CreateAccount() {
                                         name: user.name,
                                         surname: user.surname
                                     }), 'success')
-                                    showToast(t('User.toast.resendVerify.success'), 'success')
+                                    showToast(t('User.toast.sendVerify'), 'success')
                                 }
                             })
                             .catch(() => {

@@ -461,7 +461,7 @@ export const TRANSLATIONS_EN = {
         cleanFilter: "Clean filters",
         editImage: "Edit image",
         editProfile: "Edit profile",
-        verifyAccount: "Verify account",
+        verifyAccount: "Verify your account in order to edit your profile and create experiences and reviews",
         visibility: "Visibility",
         editExperience: "Edit experience",
         deleteExperience: "Delete experience",
