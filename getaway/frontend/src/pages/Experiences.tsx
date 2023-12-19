@@ -32,12 +32,24 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     //------------FILTERS----------
     //Location
     const [countries, setCountries] = useState<CountryModel[]>(new Array(1))
-    const [country, setCountry] = useState(parseInt(getQueryOrDefault(query, "country", "-1")))
+    const [country, setCountry] = useState<number>(
+    !isNaN(parseInt(getQueryOrDefault(query, "country", "-1"))) ?
+            parseInt(getQueryOrDefault(query, "country", "-1")) :
+            -1
+    )
     const [cities, setCities] = useState<CityModel[]>(new Array(0))
-    const [city, setCity] = useState(parseInt(getQueryOrDefault(query, "city", "-1")))
+    const [city, setCity] = useState<number>(
+    !isNaN(parseInt(getQueryOrDefault(query, "city", "-1"))) ?
+            parseInt(getQueryOrDefault(query, "city", "-1")) :
+            -1
+    )
     //Price
     const [maxPrice, setMaxPrice] = useState<number>(0)
-    const [price, setPrice] = useState<number>(parseInt(getQueryOrDefault(query, "price", "-1")))
+    const [price, setPrice] = useState<number>(
+    !isNaN(parseInt(getQueryOrDefault(query, "price", "-1"))) ?
+            parseInt(getQueryOrDefault(query, "price", "-1")) :
+            -1
+    )
     const [onPriceChange, setOnPriceChange] = useState<boolean>(false)
     //Score
     const [rating, setRating] = useState(parseInt(getQueryOrDefault(query, "rating", "0")))
