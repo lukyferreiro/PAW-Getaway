@@ -12,7 +12,7 @@ public interface FavAndViewExperienceService {
 
     boolean isFav(UserModel user, ExperienceModel experience);
 
-    void setFav(UserModel user, boolean set, ExperienceModel experience);
+    void setFav(UserModel user, boolean set, Long id);
 
     void addViewed(UserModel user, ExperienceModel experience);
 

@@ -75,8 +75,6 @@ public class ExperienceController {
         }
 
         final UserModel user = authContext.getCurrentUser();
-        final CityModel city = locationService.getCityById(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
-        final CategoryModel category = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
         ExperienceModel experience;
         try {
@@ -84,7 +82,7 @@ public class ExperienceController {
                     experienceDto.getName(), experienceDto.getAddress(),
                     experienceDto.getDescription(), experienceDto.getMail(),
                     experienceDto.getUrl(), experienceDto.getPrice(),
-                    city, category, user);
+                    experienceDto.getCity(), experienceDto.getCategory(), user);
         } catch (DuplicateExperienceException e) {
             LOGGER.warn("Error in experienceDto ExperienceForm, there is already an experience with this id");
             throw new DuplicateExperienceException();
@@ -139,9 +137,8 @@ public class ExperienceController {
         LOGGER.info("Called /experiences/{} GET", id);
 
         final UserModel user = authContext.getCurrentUser();
-        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
 
-        experienceService.increaseViews(user, view, experience);
+        final ExperienceModel experience = experienceService.increaseViews(user, view, id);
         favAndViewExperienceService.setViewed(user, view, experience);
 
         final ExperienceDto experienceDto = new ExperienceDto(experience, uriInfo);
@@ -169,16 +166,10 @@ public class ExperienceController {
         }
 
         final UserModel user = authContext.getCurrentUser();
-        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
-        final CityModel cityModel = locationService.getCityById(experienceDto.getCity()).orElseThrow(CityNotFoundException::new);
-        final CategoryModel categoryModel = categoryService.getCategoryById(experienceDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
 
-        final ExperienceModel toUpdateExperience = new ExperienceModel(
-                id, experienceDto.getName(), experienceDto.getAddress(), experienceDto.getDescription(),
-                experienceDto.getMail(), experienceDto.getUrl(), experienceDto.getPrice(), cityModel,
-                categoryModel, user, experience.getExperienceImage(), experience.getObservable(), experience.getViews());
-
-        experienceService.updateExperience(toUpdateExperience);
+        experienceService.updateExperience(id, experienceDto.getName(), experienceDto.getAddress(), experienceDto.getDescription(),
+                experienceDto.getMail(), experienceDto.getUrl(), experienceDto.getPrice(), experienceDto.getCity(),
+                experienceDto.getCategory(), user);
         LOGGER.info("The experience with id {} has been updated successfully", id);
         return Response.noContent().build();
     }
@@ -203,8 +194,7 @@ public class ExperienceController {
         }
 
         final UserModel user = authContext.getCurrentUser();
-        final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId, user).orElseThrow(ExperienceNotFoundException::new);
-        experienceService.changeVisibility(experience, patchVisibilityDto.getVisibility());
+        experienceService.changeVisibility(experienceId, user, patchVisibilityDto.getVisibility());
         return Response.noContent().build();
     }
 
@@ -215,8 +205,7 @@ public class ExperienceController {
             @PathParam("experienceId") final long id
     ) {
         LOGGER.info("Called /experiences/{} DELETE", id);
-        final ExperienceModel experienceModel = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
-        experienceService.deleteExperience(experienceModel);
+        experienceService.deleteExperience(id);
         return Response.noContent().build();
     }
 
@@ -258,8 +247,7 @@ public class ExperienceController {
             throw new IllegalContentTypeException();
         }
 
-        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
-        imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), experience.getExperienceImage());
+        imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), id);
         return Response.noContent().build();
     }
 
@@ -277,8 +265,7 @@ public class ExperienceController {
         }
 
         final UserModel user = authContext.getCurrentUser();
-        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
-        favAndViewExperienceService.setFav(user, fav, experience);
+        favAndViewExperienceService.setFav(user, fav, id);
         return Response.noContent().build();
     }
 

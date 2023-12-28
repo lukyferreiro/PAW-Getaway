@@ -23,7 +23,7 @@ public interface UserService {
 
     boolean validatePasswordReset(String token);
 
-    void generateNewPassword(UserModel userModel);
+    void generateNewPassword(String mail);
 
     boolean updateUser(long userId, UserModel user);
 
@@ -34,4 +34,5 @@ public interface UserService {
     void addRole(UserModel user, Roles newRole);
 
     Collection<Roles> getRolesByUser(UserModel user);
+
 }

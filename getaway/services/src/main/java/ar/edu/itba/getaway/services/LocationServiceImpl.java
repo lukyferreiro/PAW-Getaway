@@ -1,5 +1,6 @@
 package ar.edu.itba.getaway.services;
 
+import ar.edu.itba.getaway.interfaces.exceptions.CountryNotFoundException;
 import ar.edu.itba.getaway.models.CityModel;
 import ar.edu.itba.getaway.models.CountryModel;
 import ar.edu.itba.getaway.interfaces.persistence.LocationDao;
@@ -17,6 +18,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Autowired
     private LocationDao locationDao;
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LocationServiceImpl.class);
     private final String ARGENTINA = "Argentina";
@@ -52,7 +54,9 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<CityModel> getCitiesByCountry(CountryModel country) {
+    public List<CityModel> getCitiesByCountry(Long id) {
+        final CountryModel country = getCountryById(id).orElseThrow(CountryNotFoundException::new);
+
         LOGGER.debug("Retrieving cities from country with name {}", country);
         return locationDao.getCitiesByCountry(country);
     }

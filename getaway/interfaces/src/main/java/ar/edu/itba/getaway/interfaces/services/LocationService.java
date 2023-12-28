@@ -17,5 +17,5 @@ public interface LocationService {
 
     Optional<CountryModel> getCountryByName();
 
-    List<CityModel> getCitiesByCountry(CountryModel country);
+    List<CityModel> getCitiesByCountry(Long id);
 }

@@ -129,9 +129,7 @@ public class UserController {
         if (passwordResetEmailDto == null) {
             throw new ContentExpectedException();
         }
-
-        UserModel user = userService.getUserByEmail(passwordResetEmailDto.getEmail()).orElseThrow(UserNotFoundException::new);
-        userService.generateNewPassword(user);
+        userService.generateNewPassword(passwordResetEmailDto.getEmail());
         return Response.noContent().build();
     }
 
@@ -175,7 +173,7 @@ public class UserController {
         }
 
         final UserModel user = authContext.getCurrentUser();
-        imageService.updateImg(profileImageBytes, profileImageBody.getMediaType().toString(), user.getProfileImage());
+        imageService.updateUserImg(profileImageBytes, profileImageBody.getMediaType().toString(), user);
         return Response.noContent().build();
     }
 

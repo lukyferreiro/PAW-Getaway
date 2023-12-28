@@ -1,13 +1,13 @@
 package ar.edu.itba.getaway.services;
 
+import ar.edu.itba.getaway.interfaces.exceptions.CategoryNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.getaway.interfaces.exceptions.DuplicateExperienceException;
-import ar.edu.itba.getaway.interfaces.services.CategoryService;
+import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
-import ar.edu.itba.getaway.interfaces.services.ExperienceService;
-import ar.edu.itba.getaway.interfaces.services.ImageService;
-import ar.edu.itba.getaway.interfaces.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +32,8 @@ public class ExperienceServiceImpl implements ExperienceService {
     private UserService userService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private LocationService locationService;
 
     private static final int PAGE_SIZE = 6;
     private static final int RESULT_PAGE_SIZE = 9;
@@ -42,9 +44,11 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     @Transactional
-    public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user) throws DuplicateExperienceException {
+    public ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, long cityLong, long categoryLong, UserModel user) throws DuplicateExperienceException {
         LOGGER.debug("Creating experience with name {}", name);
         final ImageModel experienceImage = imageService.createImg(null, null);
+        final CityModel city = locationService.getCityById(cityLong).orElseThrow(CityNotFoundException::new);
+        final CategoryModel category = categoryService.getCategoryById(categoryLong).orElseThrow(CategoryNotFoundException::new);
         final ExperienceModel experienceModel = experienceDao.createExperience(name, address, description, email, url, price, city, category, user, experienceImage);
         if (!user.hasRole(Roles.PROVIDER.name())) {
             LOGGER.debug("User gains role provider when they create an experience for first time");
@@ -55,10 +59,20 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Transactional
     @Override
-    public void updateExperience(ExperienceModel experienceModel) {
-        LOGGER.debug("Updating experience with id {}", experienceModel.getExperienceId());
-        experienceDao.updateExperience(experienceModel);
-        LOGGER.debug("Experience {} updated", experienceModel.getExperienceId());
+    public void updateExperience(Long id, String name, String address, String description, String mail, String url, Double price, long cityLong, long categoryLong, UserModel user) {
+        LOGGER.debug("Updating experience with id {}", id);
+
+        final ExperienceModel experience = getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+        final CityModel cityModel = locationService.getCityById(cityLong).orElseThrow(CityNotFoundException::new);
+        final CategoryModel categoryModel = categoryService.getCategoryById(categoryLong).orElseThrow(CategoryNotFoundException::new);
+
+        final ExperienceModel toUpdateExperience = new ExperienceModel(
+                id, name, address, description,
+                mail, url, price, cityModel,
+                categoryModel, user, experience.getExperienceImage(), experience.getObservable(), experience.getViews());
+
+        experienceDao.updateExperience(toUpdateExperience);
+        LOGGER.debug("Experience {} updated", id);
     }
 
     @Transactional
@@ -71,8 +85,10 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Transactional
     @Override
-    public void deleteExperience(ExperienceModel experienceModel) {
-        LOGGER.debug("Deleting experience with id {}", experienceModel.getExperienceId());
+    public void deleteExperience(Long id) {
+        LOGGER.debug("Deleting experience with id {}", id);
+        final ExperienceModel experienceModel = getExperienceById(id).orElseThrow(ExperienceNotFoundException::new);
+
         final ImageModel toDeleteImg = experienceModel.getExperienceImage();
         experienceDao.deleteExperience(experienceModel);
         imageService.deleteImg(toDeleteImg);
@@ -227,16 +243,21 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Transactional
     @Override
-    public void increaseViews(UserModel user, boolean view, ExperienceModel experience) {
+    public ExperienceModel increaseViews(UserModel user, boolean view, long id) {
+        final ExperienceModel experience = getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
+
         if (view && user != null && !experience.getUser().equals(user)) {
             experience.increaseViews();
             updateExperienceWithoutImg(experience);
         }
+
+        return experience;
     }
 
     @Transactional
     @Override
-    public void changeVisibility(ExperienceModel experience, boolean obs) {
+    public void changeVisibility(Long experienceId, UserModel user, boolean obs) {
+        final ExperienceModel experience = getVisibleExperienceById(experienceId, user).orElseThrow(ExperienceNotFoundException::new);
         experience.setObservable(obs);
         updateExperienceWithoutImg(experience);
     }

@@ -7,11 +7,11 @@ import ar.edu.itba.getaway.models.pagination.Page;
 import java.util.Optional;
 
 public interface ExperienceService {
-    ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, CityModel city, CategoryModel category, UserModel user) throws DuplicateExperienceException;
+    ExperienceModel createExperience(String name, String address, String description, String email, String url, Double price, long cityLong, long categoryLong, UserModel user) throws DuplicateExperienceException;
 
-    void updateExperience(ExperienceModel experienceModel);
+    void updateExperience(Long id, String name, String address, String description, String mail, String url, Double price, long cityLong, long categoryLong, UserModel user);
 
-    void deleteExperience(ExperienceModel experienceModel);
+    void deleteExperience(Long id);
 
     Optional<ExperienceModel> getExperienceById(long experienceId);
 
@@ -33,9 +33,9 @@ public interface ExperienceService {
 
     void updateExperienceWithoutImg(ExperienceModel toUpdateExperience);
 
-    void increaseViews(UserModel user, boolean view, ExperienceModel experience);
+    ExperienceModel increaseViews(UserModel user, boolean view, long id);
 
-    void changeVisibility(ExperienceModel experience, boolean obs);
+    void changeVisibility(Long experienceId, UserModel user, boolean obs);
 
 //    List<List<ExperienceModel>> userLandingPage(UserModel user);
     Page<ExperienceModel> getViewedExperiences(UserModel user);

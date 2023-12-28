@@ -70,8 +70,7 @@ public class LocationController {
             @PathParam("countryId") final long id
     ) {
         LOGGER.info("Called /location/countries/{}/cities GET", id);
-        final CountryModel country = locationService.getCountryById(id).orElseThrow(CountryNotFoundException::new);
-        final Collection<CityModel> cities = locationService.getCitiesByCountry(country);
+        final Collection<CityModel> cities = locationService.getCitiesByCountry(id);
 
         if(cities.isEmpty()) {
             return Response.noContent().build();

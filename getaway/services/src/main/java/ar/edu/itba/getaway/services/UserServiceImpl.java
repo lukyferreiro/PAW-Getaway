@@ -1,6 +1,7 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
+import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.interfaces.persistence.PasswordResetTokenDao;
 import ar.edu.itba.getaway.interfaces.persistence.UserDao;
@@ -119,7 +120,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void generateNewPassword(UserModel userModel) {
+    public void generateNewPassword(String mail) {
+        UserModel userModel = getUserByEmail(mail).orElseThrow(UserNotFoundException::new);
+
         LOGGER.debug("Removing password reset token for user {}", userModel.getUserId());
         final Optional<PasswordResetToken> passwordResetTokenOptional = passwordResetTokenDao.getTokenByUser(userModel);
         passwordResetTokenOptional.ifPresent(passwordResetToken -> passwordResetTokenDao.removeToken(passwordResetToken));

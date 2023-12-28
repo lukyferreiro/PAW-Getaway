@@ -66,8 +66,7 @@ public class ReviewController {
 
         final Collection<ReviewDto> reviewDtos = ReviewDto.mapReviewToDto(reviews.getContent(), uriInfo);
 
-        final UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder()
-                .queryParam("page", page);
+        final UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder().queryParam("page", page);
 
         return PaginationResponse.createPaginationResponse(reviews, new GenericEntity<Collection<ReviewDto>>(reviewDtos) {
         }, uriBuilder);
@@ -93,9 +92,10 @@ public class ReviewController {
         }
 
         final UserModel user = authContext.getCurrentUser();
-        final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
-        final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experience, LocalDate.now(), user);
+
+        final ReviewModel reviewModel = reviewService.createReview(newReviewDto.getTitle(), newReviewDto.getDescription(), newReviewDto.getLongScore(), experienceId, LocalDate.now(), user);
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(reviewModel.getReviewId())).build();
+
         return Response.created(location).build();
     }
 
@@ -125,15 +125,8 @@ public class ReviewController {
             throw new ContentExpectedException();
         }
 
-        final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
-
-        final ReviewModel reviewModelToUpdate = new ReviewModel(
-                id, reviewDto.getTitle(), reviewDto.getDescription(),
-                Long.parseLong(reviewDto.getScore()), reviewModel.getExperience(),
-                reviewModel.getReviewDate(), reviewModel.getUser()
-        );
-
-        reviewService.updateReview(reviewModelToUpdate);
+        reviewService.updateReview(id, reviewDto.getTitle(), reviewDto.getDescription(),
+                reviewDto.getScore());
 
         return Response.noContent().build();
     }
@@ -144,8 +137,7 @@ public class ReviewController {
             @PathParam("reviewId") final Long id
     ) {
         LOGGER.info("Called /reviews/{} DELETE", id);
-        final ReviewModel reviewModel = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
-        reviewService.deleteReview(reviewModel);
+        reviewService.deleteReview(id);
         return Response.noContent().build();
     }
 }

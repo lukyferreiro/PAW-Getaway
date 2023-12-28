@@ -1,5 +1,7 @@
 package ar.edu.itba.getaway.services;
 
+import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.interfaces.services.ExperienceService;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.interfaces.persistence.FavAndViewExperienceDao;
 import ar.edu.itba.getaway.interfaces.services.FavAndViewExperienceService;
@@ -17,6 +19,9 @@ public class FavAndViewExperienceServiceImpl implements FavAndViewExperienceServ
 
     @Autowired
     private FavAndViewExperienceDao favAndViewExperienceDao;
+
+    @Autowired
+    private ExperienceService experienceService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FavAndViewExperienceServiceImpl.class);
 
@@ -41,7 +46,9 @@ public class FavAndViewExperienceServiceImpl implements FavAndViewExperienceServ
 
     @Transactional
     @Override
-    public void setFav(UserModel user, boolean set, ExperienceModel experience) {
+    public void setFav(UserModel user, boolean set, Long id) {
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
+
         if (set) {
             if (!isFav(user, experience)) {
                 addFav(user, experience);

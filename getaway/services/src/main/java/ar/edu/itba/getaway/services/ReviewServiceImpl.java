@@ -1,6 +1,9 @@
 package ar.edu.itba.getaway.services;
 
+import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.ReviewNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.EmailService;
+import ar.edu.itba.getaway.interfaces.services.ExperienceService;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.interfaces.persistence.ReviewDao;
@@ -31,6 +34,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private MessageSource messageSource;
     @Autowired
+    private ExperienceService experienceService;
+    @Autowired
     private URL appBaseUrl;
 
     private final Locale locale = LocaleContextHolder.getLocale();
@@ -40,8 +45,10 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public ReviewModel createReview(String title, String description, long score, ExperienceModel experienceModel, LocalDate reviewDate, UserModel userModel) {
+    public ReviewModel createReview(String title, String description, long score, Long experienceId, LocalDate reviewDate, UserModel userModel) {
         LOGGER.debug("Creating review with title {}", title);
+        final ExperienceModel experienceModel = experienceService.getExperienceById(experienceId).orElseThrow(ExperienceNotFoundException::new);
+
         final ReviewModel reviewModel = reviewDao.createReview(title, description, score, experienceModel, reviewDate, userModel);
         sendNewReviewEmail(reviewModel);
         return reviewModel;
@@ -49,16 +56,26 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public void updateReview(ReviewModel reviewModel) {
-        LOGGER.debug("Updating review with id {}", reviewModel.getReviewId());
-        reviewDao.updateReview(reviewModel);
+    public void updateReview(Long id, String title, String description, String score) {
+        LOGGER.debug("Updating review with id {}", id);
+
+        final ReviewModel reviewModel = getReviewById(id).orElseThrow(ReviewNotFoundException::new);
+
+        final ReviewModel reviewModelToUpdate = new ReviewModel(
+                id, title, description,
+                Long.parseLong(score), reviewModel.getExperience(),
+                reviewModel.getReviewDate(), reviewModel.getUser()
+        );
+
+        reviewDao.updateReview(reviewModelToUpdate);
     }
 
     @Transactional
     @Override
-    public void deleteReview(ReviewModel review) {
-        LOGGER.debug("Deleting review with id {}", review.getReviewId());
-        reviewDao.deleteReview(review);
+    public void deleteReview(Long id) {
+        LOGGER.debug("Deleting review with id {}",id);
+        final ReviewModel reviewModel = getReviewById(id).orElseThrow(ReviewNotFoundException::new);
+        reviewDao.deleteReview(reviewModel);
     }
 
     @Override
