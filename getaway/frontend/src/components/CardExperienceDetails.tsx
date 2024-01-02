@@ -6,7 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {CategoryModel, CityModel, CountryModel, ExperienceModel, UserModel} from "../types";
+import {CategoryModel, CityModel, CountryModel, ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import ConfirmDialogModal, {confirmDialogModal} from "../components/ConfirmDialogModal";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";

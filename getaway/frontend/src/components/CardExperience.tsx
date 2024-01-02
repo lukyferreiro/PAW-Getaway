@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index"
 import {Link, useNavigate, useSearchParams} from 'react-router-dom'
-import {CategoryModel, CityModel, CountryModel, ExperienceModel, UserModel} from "../types";
+import {CategoryModel, CityModel, CountryModel, ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {IconButton} from "@mui/material";
@@ -13,7 +13,7 @@ import DataLoader from "./DataLoader";
 import {showToast} from "../scripts/toast";
 import categoryImages, {CategoryName} from "../common";
 import {serviceHandler} from "../scripts/serviceHandler";
-import {experienceService, userService} from "../services";
+import {experienceService} from "../services";
 import {authedFetch} from "../scripts/authedFetch";
 
 export default function CardExperience(props: { experience: ExperienceModel, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
@@ -45,25 +45,13 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
             }
         )
 
-        console.log("ACAA")
-
         const getCityAndCountry = async () => {
             try {
-                console.log("ACAA 2")
-                console.log(experience.cityUrl)
                 const city = await authedFetch(experience.cityUrl, {method: "GET"})
-                console.log("ACAA 3")
-                console.log(city)
                 const parsedCity = await city.json() as CityModel;
-                console.log(parsedCity)
-                console.log("ACAA 4")
                 setCity(parsedCity);
-                console.log(parsedCity.countryUrl)
                 const country =  await authedFetch(parsedCity.countryUrl, {method: "GET"})
-                console.log("ACAA 5")
-                console.log(country)
                 const parsedCountry = await country.json() as CountryModel;
-                console.log("ACAA 6")
                 setCountry(parsedCountry)
             } catch (error) {
                 navigate('/error', {state: {code: 500, message: 'Server error',}, replace: true,})

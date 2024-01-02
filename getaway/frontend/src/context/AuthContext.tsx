@@ -30,14 +30,8 @@ export function AuthProvider({children}: { children: ReactNode }) {
             setUser(loggedUser);
             localStorage.setItem('getawayUser', JSON.stringify(loggedUser))
         }
-        // else {
-        //     localStorage.removeItem('getawayAccessToken')
-        // }
 
         const refreshToken = localStorage.getItem("getawayRefreshToken");
-        // if (refreshToken) {
-        //
-        // }
     }, []);
 
     const signIn = (callback: VoidFunction) => {
@@ -65,7 +59,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
 
     const getUser = () => {
         const userStorage = localStorage.getItem('getawayUser')
-        if(userStorage !== null)
+        if (userStorage !== null)
             return JSON.parse(userStorage)
         return null
     }

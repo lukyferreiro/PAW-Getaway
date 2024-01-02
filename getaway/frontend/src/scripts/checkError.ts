@@ -4,10 +4,7 @@ function handleResponseStatus<RetType>(response: Response): Promise<RetType> | n
     if (response.status === 204) {
         return null;
     }
-    if (
-        response.status >= 200 &&
-        response.status <= 299
-    ) {
+    if (response.status >= 200 && response.status <= 299) {
         return response.json() as Promise<RetType>;
     } else {
         throw Error(response.status.toString());

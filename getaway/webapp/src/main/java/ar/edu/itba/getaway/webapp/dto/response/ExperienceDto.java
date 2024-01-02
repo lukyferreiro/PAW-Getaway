@@ -33,17 +33,9 @@ public class ExperienceDto implements Serializable {
     private URI self;
     private URI imageUrl;
     private URI reviewsUrl;
-    private URI cityURL;
+    private URI cityUrl;
     private URI userUrl;
     private URI categoryUrl;
-//    @XmlJavaTypeAdapter(CityAdapter.class)
-//    private HashMap<String, String> city = new HashMap<>();
-//    @XmlJavaTypeAdapter(CountryAdapter.class)
-//    private HashMap<String, String> country = new HashMap<>();
-//    @XmlJavaTypeAdapter(CategoryAdapter.class)
-//    private HashMap<String, String> category = new HashMap<>();
-//    @XmlJavaTypeAdapter(UserAdapter.class)
-//    private HashMap<String, String> user = new HashMap<>();
 
     public static Collection<ExperienceDto> mapExperienceToDto(Collection<ExperienceModel> experiences, UriInfo uriInfo) {
         return experiences.stream().map(exp -> new ExperienceDto(exp, uriInfo)).collect(Collectors.toList());
@@ -76,19 +68,9 @@ public class ExperienceDto implements Serializable {
         this.self = uriBuilder.build();
         this.imageUrl = uriBuilder.clone().path("experienceImage").build();
         this.reviewsUrl = uriBuilder.clone().path("reviews").build();
-        this.cityURL = uriInfo.getBaseUriBuilder().path("location").path("cities").path(String.valueOf(experience.getCity().getCityId())).build();
+        this.cityUrl = uriInfo.getBaseUriBuilder().path("location").path("cities").path(String.valueOf(experience.getCity().getCityId())).build();
         this.userUrl = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(experience.getUser().getUserId())).build();
         this.categoryUrl = uriInfo.getBaseUriBuilder().path("experiences").path("categories").path(String.valueOf(experience.getCategory().getCategoryId())).build();
-//        this.city.put("id", String.valueOf(experience.getCity().getCityId()));
-//        this.city.put("name", experience.getCity().getCityName());
-//        this.country.put("id", String.valueOf(experience.getCity().getCountry().getCountryId()));
-//        this.country.put("name", experience.getCity().getCountry().getCountryName());
-//        this.category.put("id", String.valueOf(experience.getCategory().getCategoryId()));
-//        this.category.put("name", experience.getCategory().getCategoryName());
-//        final UserModel user = experience.getUser();
-//        this.user.put("id", String.valueOf(user.getUserId()));
-//        this.user.put("name", user.getName());
-//        this.user.put("surname", user.getSurname());
     }
 
     public Long getId() {
@@ -157,11 +139,11 @@ public class ExperienceDto implements Serializable {
     public void setReviewsUrl(URI reviewsUrl) {
         this.reviewsUrl = reviewsUrl;
     }
-    public URI getCityURL() {
-        return cityURL;
+    public URI getCityUrl() {
+        return cityUrl;
     }
-    public void setCityURL(URI cityURL) {
-        this.cityURL = cityURL;
+    public void setCityUrl(URI cityUrl) {
+        this.cityUrl = cityUrl;
     }
     public URI getUserUrl() {
         return userUrl;
@@ -205,28 +187,4 @@ public class ExperienceDto implements Serializable {
     public void setHasImage(boolean hasImage) {
         this.hasImage = hasImage;
     }
-//    public HashMap<String, String> getCity() {
-//        return city;
-//    }
-//    public void setCity(HashMap<String, String> city) {
-//        this.city = city;
-//    }
-//    public HashMap<String, String> getCountry() {
-//        return country;
-//    }
-//    public void setCountry(HashMap<String, String> country) {
-//        this.country = country;
-//    }
-//    public HashMap<String, String> getCategory() {
-//        return category;
-//    }
-//    public void setCategory(HashMap<String, String> category) {
-//        this.category = category;
-//    }
-//    public HashMap<String, String> getUser() {
-//        return user;
-//    }
-//    public void setUser(HashMap<String, String> user) {
-//        this.user = user;
-//    }
 }

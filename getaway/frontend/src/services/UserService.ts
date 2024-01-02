@@ -1,4 +1,4 @@
-import {APPLICATION_JSON_TYPE, paths, USER_INFO_V1, USER_V1, USER_PASSWORD_V1, USER_PASSWORD_EMAIL_V1} from "../common";
+import {paths, USER_INFO_V1, USER_V1, USER_PASSWORD_V1, USER_PASSWORD_EMAIL_V1} from "../common";
 import {
     ErrorResponse, ExperienceModel,
     PagedContent, PostResponse,
