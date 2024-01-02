@@ -42,7 +42,7 @@ public class LocationController {
         LOGGER.info("Called /location/countries GET");
         final Collection<CountryModel> countries = locationService.listAllCountries();
 
-        if(countries.isEmpty()) {
+        if (countries.isEmpty()) {
             return Response.noContent().build();
         }
 
@@ -72,7 +72,7 @@ public class LocationController {
         LOGGER.info("Called /location/countries/{}/cities GET", id);
         final Collection<CityModel> cities = locationService.getCitiesByCountry(id);
 
-        if(cities.isEmpty()) {
+        if (cities.isEmpty()) {
             return Response.noContent().build();
         }
 

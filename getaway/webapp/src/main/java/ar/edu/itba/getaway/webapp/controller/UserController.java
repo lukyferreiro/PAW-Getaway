@@ -17,7 +17,6 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -58,13 +57,7 @@ public class UserController {
             throw new ContentExpectedException();
         }
 
-        UserModel user;
-        try {
-            user = userService.createUser(registerDto.getPassword(), registerDto.getName(), registerDto.getSurname(), registerDto.getEmail());
-        } catch (DuplicateUserException e) {
-            LOGGER.warn("Error in registerDto, email is already in used");
-            throw new DuplicateUserException();
-        }
+        final UserModel user = userService.createUser(registerDto.getPassword(), registerDto.getName(), registerDto.getSurname(), registerDto.getEmail());
 
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getUserId())).build();
         return Response.created(location).build();
@@ -145,7 +138,7 @@ public class UserController {
 
         final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
 
-        if(user.getImage() == null) {
+        if (user.getImage() == null) {
             return Response.noContent().build();
         }
 

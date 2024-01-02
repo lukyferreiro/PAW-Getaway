@@ -65,7 +65,17 @@ public class UserServiceImpl implements UserService {
     public UserModel createUser(String password, String name, String surname, String email) throws DuplicateUserException {
         final ImageModel imageModel = imageService.createImg(null, null);
         LOGGER.debug("Creating user with email {}", email);
-        final UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES, imageModel);
+
+//        final UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES, imageModel);
+
+        UserModel userModel;
+        try {
+            userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES, imageModel);
+        } catch (DuplicateUserException e) {
+            LOGGER.error("Error in createUser, email is already in used");
+            throw new DuplicateUserException();
+        }
+
         LOGGER.debug("Creating verification token to user with id {}", userModel.getUserId());
 //        final VerificationToken token = tokensService.generateVerificationToken(userModel);
 //        tokensService.sendVerificationToken(userModel, token);

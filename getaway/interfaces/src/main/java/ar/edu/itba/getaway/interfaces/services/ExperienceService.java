@@ -33,7 +33,7 @@ public interface ExperienceService {
 
     void updateExperienceWithoutImg(ExperienceModel toUpdateExperience);
 
-    ExperienceModel increaseViews(UserModel user, boolean view, long id);
+    ExperienceModel getExperienceAndIncreaseViews(UserModel user, boolean view, long id);
 
     void changeVisibility(Long experienceId, UserModel user, boolean obs);
 

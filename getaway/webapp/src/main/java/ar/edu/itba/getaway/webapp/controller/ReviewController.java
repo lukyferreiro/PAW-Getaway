@@ -1,11 +1,9 @@
 package ar.edu.itba.getaway.webapp.controller;
 
 import ar.edu.itba.getaway.interfaces.exceptions.ContentExpectedException;
-import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
 import ar.edu.itba.getaway.interfaces.exceptions.ReviewNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.ExperienceService;
 import ar.edu.itba.getaway.interfaces.services.ReviewService;
-import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.pagination.Page;
@@ -56,11 +54,11 @@ public class ReviewController {
             @QueryParam("experienceId") final Long experienceId,
             @QueryParam("page") @DefaultValue("1") final int page
     ) {
-        LOGGER.info("Called /reviews");
+        LOGGER.info("Called /reviews GET");
 
         Page<ReviewModel> reviews = GetReviewsParams.getReviewsByParams(userId, experienceId, page, reviewService, experienceService, authContext);
 
-        if(reviews.getContent().isEmpty()) {
+        if (reviews.getContent().isEmpty()) {
             return Response.noContent().build();
         }
 
@@ -125,8 +123,7 @@ public class ReviewController {
             throw new ContentExpectedException();
         }
 
-        reviewService.updateReview(id, reviewDto.getTitle(), reviewDto.getDescription(),
-                reviewDto.getScore());
+        reviewService.updateReview(id, reviewDto.getTitle(), reviewDto.getDescription(), reviewDto.getScore());
 
         return Response.noContent().build();
     }

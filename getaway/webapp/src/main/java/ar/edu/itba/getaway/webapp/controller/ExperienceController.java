@@ -76,19 +76,12 @@ public class ExperienceController {
 
         final UserModel user = authContext.getCurrentUser();
 
-        ExperienceModel experience;
-        try {
-            experience = experienceService.createExperience(
+        final ExperienceModel experience = experienceService.createExperience(
                     experienceDto.getName(), experienceDto.getAddress(),
                     experienceDto.getDescription(), experienceDto.getMail(),
                     experienceDto.getUrl(), experienceDto.getPrice(),
                     experienceDto.getCity(), experienceDto.getCategory(), user);
-        } catch (DuplicateExperienceException e) {
-            LOGGER.warn("Error in experienceDto ExperienceForm, there is already an experience with this id");
-            throw new DuplicateExperienceException();
-        }
 
-        LOGGER.info("Created experience with id {}", experience.getExperienceId());
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(experience.getExperienceId())).build();
         return Response.created(location).build();
     }
@@ -138,11 +131,9 @@ public class ExperienceController {
 
         final UserModel user = authContext.getCurrentUser();
 
-        final ExperienceModel experience = experienceService.increaseViews(user, view, id);
-        favAndViewExperienceService.setViewed(user, view, experience);
+        final ExperienceModel experience = experienceService.getExperienceAndIncreaseViews(user, view, id);
 
-        final ExperienceDto experienceDto = new ExperienceDto(experience, uriInfo);
-        return Response.ok(experienceDto).build();
+        return Response.ok(new ExperienceDto(experience, uriInfo)).build();
     }
 
     // Endpoint para editar una experiencia
@@ -252,6 +243,7 @@ public class ExperienceController {
     }
 
 
+    //TODO change
     @PUT
     @Path("/{experienceId:[0-9]+}/fav")
     public Response favExperience(

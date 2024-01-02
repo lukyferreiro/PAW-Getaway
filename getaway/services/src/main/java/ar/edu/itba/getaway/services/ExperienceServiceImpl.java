@@ -34,6 +34,8 @@ public class ExperienceServiceImpl implements ExperienceService {
     private CategoryService categoryService;
     @Autowired
     private LocationService locationService;
+    @Autowired
+    private FavAndViewExperienceService favAndViewExperienceService;
 
     private static final int PAGE_SIZE = 6;
     private static final int RESULT_PAGE_SIZE = 9;
@@ -49,7 +51,17 @@ public class ExperienceServiceImpl implements ExperienceService {
         final ImageModel experienceImage = imageService.createImg(null, null);
         final CityModel city = locationService.getCityById(cityLong).orElseThrow(CityNotFoundException::new);
         final CategoryModel category = categoryService.getCategoryById(categoryLong).orElseThrow(CategoryNotFoundException::new);
-        final ExperienceModel experienceModel = experienceDao.createExperience(name, address, description, email, url, price, city, category, user, experienceImage);
+
+//        final ExperienceModel experienceModel = experienceDao.createExperience(name, address, description, email, url, price, city, category, user, experienceImage);
+
+        ExperienceModel experienceModel;
+        try {
+            experienceModel = experienceDao.createExperience(name, address, description, email, url, price, city, category, user, experienceImage);
+        } catch (DuplicateExperienceException e) {
+            LOGGER.error("Error in createExperience, there is already an experience with this name, address and city");
+            throw new DuplicateExperienceException();
+        }
+
         if (!user.hasRole(Roles.PROVIDER.name())) {
             LOGGER.debug("User gains role provider when they create an experience for first time");
             userService.addRole(user, Roles.PROVIDER);
@@ -243,13 +255,15 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Transactional
     @Override
-    public ExperienceModel increaseViews(UserModel user, boolean view, long id) {
+    public ExperienceModel getExperienceAndIncreaseViews(UserModel user, boolean view, long id) {
         final ExperienceModel experience = getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
 
         if (view && user != null && !experience.getUser().equals(user)) {
             experience.increaseViews();
             updateExperienceWithoutImg(experience);
         }
+
+        favAndViewExperienceService.setViewed(user, view, experience);
 
         return experience;
     }
