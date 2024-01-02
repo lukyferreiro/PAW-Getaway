@@ -1,7 +1,7 @@
 function updateOptions(options: any) {
     let newOptions = {...options};
     newOptions.headers = {...options.headers};
-    const getawayToken = localStorage.getItem("getawayToken");
+    const getawayToken = localStorage.getItem("getawayAccessToken");
     if (getawayToken) {
         newOptions.headers["Authorization"] = `Bearer ${getawayToken}`
     }

@@ -8,6 +8,7 @@ import java.util.Collection;
 public class BasicAuthToken extends UsernamePasswordAuthenticationToken {
 
     private String token;
+    private String refreshToken;
     private JwtTokenDetails tokenDetails;
 
     public BasicAuthToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities,
@@ -20,6 +21,7 @@ public class BasicAuthToken extends UsernamePasswordAuthenticationToken {
     public BasicAuthToken(String token) {
         super(null, null);
         this.token = token;
+        this.refreshToken = null;
     }
 
     public String getToken() {
@@ -28,6 +30,14 @@ public class BasicAuthToken extends UsernamePasswordAuthenticationToken {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     @Override

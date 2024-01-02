@@ -47,14 +47,17 @@ public class BasicAuthProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         final BasicAuthToken auth = (BasicAuthToken) authentication;
         final String[] credentials;
+
         try {
             credentials = new String(Base64.getDecoder().decode(auth.getToken())).split(":");
         } catch (IllegalArgumentException iae) {
             throw new BadCredentialsException("Invalid basic header");
         }
+
         if (credentials.length != 2) {
             throw new InvalidUsernamePasswordException("Invalid username/password");
         }
+
         final UserModel user = userService.getUserByEmail(credentials[0]).orElseThrow(() -> new BadCredentialsException("Bad credentials"));
 
         //Si me autentico con Basic email:verifyToken, verifico
@@ -65,11 +68,12 @@ public class BasicAuthProvider implements AuthenticationProvider {
         }
 
         final MyUserDetails userDetails = (MyUserDetails) userDetailsService.loadUserByUsername(credentials[0]);
-        //TODO ver aca que token enviar
-        final String authToken = authTokenService.createRefreshToken(userDetails);
+        final String authToken = authTokenService.createAccessToken(userDetails);
+        final String refreshToken = authTokenService.createRefreshToken(userDetails);
         final JwtTokenDetails tokenDetails = authTokenService.validateTokenAndGetDetails(authToken);
         final BasicAuthToken trustedAuth = new BasicAuthToken(credentials[0], credentials[1], userDetails.getAuthorities(), tokenDetails);
         trustedAuth.setToken(authToken);
+        trustedAuth.setRefreshToken(refreshToken);
         return trustedAuth;
     }
 

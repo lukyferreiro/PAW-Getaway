@@ -17,16 +17,20 @@ function handleResponseStatus<RetType>(response: Response): Promise<RetType> | n
 // Si obtenemos un 401 quiere decir que vencio el token
 export function checkValidJWT<RetType>(response: Response): Promise<RetType> | null {
     if (response.status === 401) {
-        localStorage.removeItem('getawayToken')
+        localStorage.removeItem('getawayAccessToken')
         localStorage.removeItem('getawayUser')
+        //TODO ver si se hace algo con refresh
         return handleResponseStatus(response);
     }
     if (response) {
-        const accessHeader = response.headers ? response.headers.get('Authorization') : null
-        if (accessHeader) {
-            const getawayToken = accessHeader.split(' ')[1]
-            const user = JSON.parse(atob(getawayToken.split('.')[1])) as CurrentUserModel
-            localStorage.setItem('getawayToken', getawayToken)
+        const accessJWTHeader = response.headers ? response.headers.get('Getaway-Access-JWT') : null
+        const refreshJWTHeader = response.headers ? response.headers.get('Getaway-Refresh-JWT') : null
+        if (accessJWTHeader && refreshJWTHeader) {
+            const getawayAccessToken = accessJWTHeader.split(' ')[1]
+            const getawayRefreshToken = refreshJWTHeader.split(' ')[1]
+            const user = JSON.parse(atob(getawayAccessToken.split('.')[1])) as CurrentUserModel
+            localStorage.setItem('getawayAccessToken', getawayAccessToken)
+            localStorage.setItem('getawayRefreshToken', getawayRefreshToken)
             localStorage.setItem('getawayUser', JSON.stringify(user))
         }
 

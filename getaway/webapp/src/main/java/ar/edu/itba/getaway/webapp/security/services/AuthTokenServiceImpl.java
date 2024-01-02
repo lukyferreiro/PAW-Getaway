@@ -59,7 +59,7 @@ public class AuthTokenServiceImpl implements AuthTokenService {
                 .withClaim(settings.getSurnameClaim(), userDetails.getSurname())
                 .withClaim(settings.getHasImageClaim(), userDetails.hasImage());
 
-        if(userDetails.hasImage()){
+        if (userDetails.hasImage()) {
             token.withClaim(settings.getProfileImageUrlClaim(), appBaseUrl.toString() + "api/users/" + userDetails.getUserId() + "/profileImage");
         }
 
