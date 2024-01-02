@@ -1,6 +1,3 @@
-import ExperienceNameModel from "./ExperienceNameModel";
-import {UserInfoModel} from "./index";
-
 export default interface ReviewModel {
     id: number;
     title: string;
@@ -10,7 +7,4 @@ export default interface ReviewModel {
     self: string;
     userUrl: string;
     experienceUrl: string;
-    userImage: string;
-    user: UserInfoModel;
-    experience: ExperienceNameModel;
 }

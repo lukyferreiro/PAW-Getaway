@@ -1,9 +1,9 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index"
 import {Link, useNavigate, useSearchParams} from 'react-router-dom'
-import {ExperienceModel} from "../types";
+import {CategoryModel, CityModel, CountryModel, ExperienceModel, UserModel} from "../types";
 import StarRating from "./StarRating";
-import React, {Dispatch, SetStateAction, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {IconButton} from "@mui/material";
 import {useAuth} from "../hooks/useAuth";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
@@ -12,6 +12,9 @@ import Price from "./Price";
 import DataLoader from "./DataLoader";
 import {showToast} from "../scripts/toast";
 import categoryImages, {CategoryName} from "../common";
+import {serviceHandler} from "../scripts/serviceHandler";
+import {experienceService, userService} from "../services";
+import {authedFetch} from "../scripts/authedFetch";
 
 export default function CardExperience(props: { experience: ExperienceModel, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
     const {t} = useTranslation()
@@ -24,6 +27,52 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
 
     const [isLoadingImg, setIsLoadingImg] = useState(false)
     const [isFav, setIsFav] = useState(experience.isFav)
+
+    const [category, setCategory] = useState<CategoryModel | undefined>(undefined)
+    const [city, setCity] = useState<CityModel | undefined>(undefined)
+    const [country, setCountry] = useState<CountryModel | undefined>(undefined)
+
+    useEffect(() => {
+
+        serviceHandler(
+            experienceService.getCategoryByLink(experience.categoryUrl),
+            navigate, (category) => {
+                setCategory(category)
+            },
+            () => {
+            },
+            () => {
+            }
+        )
+
+        console.log("ACAA")
+
+        const getCityAndCountry = async () => {
+            try {
+                console.log("ACAA 2")
+                console.log(experience.cityUrl)
+                const city = await authedFetch(experience.cityUrl, {method: "GET"})
+                console.log("ACAA 3")
+                console.log(city)
+                const parsedCity = await city.json() as CityModel;
+                console.log(parsedCity)
+                console.log("ACAA 4")
+                setCity(parsedCity);
+                console.log(parsedCity.countryUrl)
+                const country =  await authedFetch(parsedCity.countryUrl, {method: "GET"})
+                console.log("ACAA 5")
+                console.log(country)
+                const parsedCountry = await country.json() as CountryModel;
+                console.log("ACAA 6")
+                setCountry(parsedCountry)
+            } catch (error) {
+                navigate('/error', {state: {code: 500, message: 'Server error',}, replace: true,})
+            }
+        };
+
+        getCityAndCountry();
+
+    }, [])
 
     function clearNavBar() {
         searchParams.delete("category")
@@ -41,8 +90,8 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
                 <div>
                     <DataLoader spinnerMultiplier={2} isLoading={isLoadingImg}>
                         <img className={`card-img-top container-fluid ${experience.hasImage ? "p-0" : "p-4"} mw-100`}
-                             alt={`Imagen ${experience.category.name}`}
-                            src={experience.hasImage ? experience.imageUrl : categoryImages[experience.category.name as CategoryName] }/>
+                             alt={`Imagen ${category?.name}`}
+                            src={experience.hasImage ? experience.imageUrl : categoryImages[category?.name as CategoryName] }/>
                     </DataLoader>
 
                     <div className="card-body container-fluid p-2">
@@ -59,7 +108,7 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
                                 {experience.description}
                             </p>
                             <h5 className="text-truncate">
-                                {experience.address}, {experience.city.name}, {experience.country.name}
+                                {experience.address}, {city?.name}, {country?.name}
                             </h5>
                             <Price price={experience.price}/>
                         </div>

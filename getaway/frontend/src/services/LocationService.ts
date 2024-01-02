@@ -17,6 +17,12 @@ export class LocationService {
         });
     }
 
+    public async getCountryByLink(url: string): Promise<Result<CountryModel>> {
+        return resultFetch<CountryModel>(url, {
+            method: "GET",
+        });
+    }
+
     public async getCitiesByCountry(countryId: number): Promise<Result<CityModel[]>> {
         return resultFetch<CityModel[]>(this.basePath + `/countries/${countryId}/cities`, {
             method: "GET",
@@ -25,6 +31,12 @@ export class LocationService {
 
     public async getCityById(cityId: number): Promise<Result<CityModel>> {
         return resultFetch<CityModel>(this.basePath + `/cities/${cityId}`, {
+            method: "GET",
+        });
+    }
+
+    public async getCityByLink(url: string): Promise<Result<CityModel>> {
+        return resultFetch<CityModel>(url, {
             method: "GET",
         });
     }

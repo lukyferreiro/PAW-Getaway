@@ -12,4 +12,3 @@ export type {default as ReviewModel} from "./ReviewModel";
 export type {default as OrderByModel} from "./OrderByModel";
 export type {default as UserModel} from "./UserModel";
 export type {default as CurrentUserModel} from "./CurrentUserModel";
-export type {default as UserInfoModel} from "./UserInfoModel";

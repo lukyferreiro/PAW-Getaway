@@ -87,7 +87,7 @@ export default function UserExperiences() {
     }, [])
 
     useEffect(() => {
-        if(isProviderValue) {
+        if (isProviderValue) {
             if ((maxPage === 0 && (pageToShow[0] <= 1 || pageToShow[0] > maxPage))
                 ||
                 ((pageToShow[0] >= 1 && pageToShow[0] <= maxPage) && (currentPage[0] >= 0 && currentPage[0] <= maxPage))

@@ -1,9 +1,17 @@
+function isTokenExpired (token: string): boolean  {
+    const payload = JSON.parse(atob(token))
+    return payload.exp * 1000 >= Date.now()
+}
+
 function updateOptions(options: any) {
     let newOptions = {...options};
     newOptions.headers = {...options.headers};
-    const getawayToken = localStorage.getItem("getawayAccessToken");
-    if (getawayToken) {
-        newOptions.headers["Authorization"] = `Bearer ${getawayToken}`
+    const getawayAccessToken = localStorage.getItem("getawayAccessToken");
+    const getawayRefreshToken = localStorage.getItem("getawayRefreshToken");
+    if (getawayAccessToken && !isTokenExpired(getawayAccessToken)) {
+        newOptions.headers["Authorization"] = `Bearer ${getawayAccessToken}`
+    } else if (getawayRefreshToken) {
+        newOptions.headers["Authorization"] = `Bearer ${getawayRefreshToken}`
     }
     return newOptions;
 }

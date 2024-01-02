@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
 import {CategoryModel, CityModel, CountryModel, ExperienceModel} from "../types";
-import {experienceService, locationService} from "../services";
+import {experienceService, locationService, userService} from "../services";
 import React, {useEffect, useState} from "react";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {useForm} from "react-hook-form";
@@ -9,6 +9,8 @@ import {useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery";
 import {showToast} from "../scripts/toast";
+import {authedFetch} from "../scripts/authedFetch";
+import {paths} from "../common";
 
 type FormDataExperience = {
     name: string,
@@ -49,6 +51,10 @@ export default function ExperienceForm() {
     const {register, handleSubmit, reset, setValue, formState: {errors},}
         = useForm<FormDataExperience>({criteriaMode: "all"})
 
+    const [categoryModel, setCategoryModel] = useState<CategoryModel | undefined>(undefined)
+    const [cityModel, setCityModel] = useState<CityModel | undefined>(undefined)
+    const [countryModel, setCountryModel] = useState<CountryModel | undefined>(undefined)
+
     useEffect(() => {
         if (!isLoggedValue) {
             navigate("/login", {replace: true})
@@ -84,34 +90,77 @@ export default function ExperienceForm() {
 
     useEffect(() => {
         if (parseInt(currentId) !== -1) {
-            serviceHandler(
-                experienceService.getExperienceById(parseInt(currentId), false),
-                navigate, (fetchedExperience) => {
-                    if (fetchedExperience.user.id !== user?.userId) {
-                        navigate("/", {replace: true})
-                        showToast(t('ExperienceForm.toast.forbidden.notAllowed'), 'error')
-                    }
-                    setExperience(fetchedExperience)
-                    loadCities(fetchedExperience.country.id)
 
-                    setValue('name', fetchedExperience.name)
-                    setValue('category', fetchedExperience.category.id)
-                    setValue('country', fetchedExperience.country.id)
-                    setCountry(fetchedExperience.country.id)
-                    setValue('city', fetchedExperience.city.id)
-                    setCity(fetchedExperience.city.id)
-                    setValue('address', fetchedExperience.address)
-                    setValue('mail', fetchedExperience.email)
-                    setValue('price', fetchedExperience.price)
-                    setValue('url', fetchedExperience.siteUrl)
-                    setValue('description', fetchedExperience.description)
-                },
-                () => {
-                },
-                () => {
-                    setExperience(undefined)
+            const getExperienceInfo = async () => {
+                try {
+                    const experience = await authedFetch(paths.BASE_URL + paths.EXPERIENCES + `/${currentId}`, {method: "GET"})
+                    if (experience.status == 200) {
+                        const parsedExperience = await experience.json();
+                        setCity(parsedExperience);
+                        const city = await authedFetch(parsedExperience.cityUrl, {method: "GET"})
+                        const parsedCity = await city.json();
+                        setCityModel(parsedCity);
+                        const country =  await authedFetch(parsedExperience.countryUrl, {method: "GET"})
+                        const parsedCountry = await country.json();
+                        setCountryModel(parsedCountry)
+                        const categoryModel =  await authedFetch(parsedExperience.categoryUrl, {method: "GET"})
+                        const parsedCategoryModel = await categoryModel.json();
+                        setCountryModel(parsedCategoryModel)
+
+                        if (parsedExperience.user.id !== user?.userId) {
+                            navigate("/", {replace: true})
+                            showToast(t('ExperienceForm.toast.forbidden.notAllowed'), 'error')
+                        }
+
+                        setExperience(parsedExperience)
+                        loadCities(parsedExperience.country.id)
+                        setValue('name', parsedExperience.name)
+                        setValue('category', parsedExperience.category.id)
+                        setValue('country', parsedExperience.country.id)
+                        setCountry(parsedExperience.country.id)
+                        setValue('city', parsedExperience.city.id)
+                        setCity(parsedExperience.city.id)
+                        setValue('address', parsedExperience.address)
+                        setValue('mail', parsedExperience.email)
+                        setValue('price', parsedExperience.price)
+                        setValue('url', parsedExperience.siteUrl)
+                        setValue('description', parsedExperience.description)
+                    }
+                } catch (error) {
+                    navigate('/error', {state: {code: 500, message: 'Server error',}, replace: true,})
                 }
-            )
+            };
+
+            getExperienceInfo().then(r => {});
+
+            // serviceHandler(
+            //     experienceService.getExperienceById(parseInt(currentId), false),
+            //     navigate, (fetchedExperience) => {
+            //         if (fetchedExperience.user.id !== user?.userId) {
+            //             navigate("/", {replace: true})
+            //             showToast(t('ExperienceForm.toast.forbidden.notAllowed'), 'error')
+            //         }
+            //         setExperience(fetchedExperience)
+            //         loadCities(fetchedExperience.country.id)
+            //         setValue('name', fetchedExperience.name)
+            //         setValue('category', fetchedExperience.category.id)
+            //         setValue('country', fetchedExperience.country.id)
+            //         setCountry(fetchedExperience.country.id)
+            //         setValue('city', fetchedExperience.city.id)
+            //         setCity(fetchedExperience.city.id)
+            //         setValue('address', fetchedExperience.address)
+            //         setValue('mail', fetchedExperience.email)
+            //         setValue('price', fetchedExperience.price)
+            //         setValue('url', fetchedExperience.siteUrl)
+            //         setValue('description', fetchedExperience.description)
+            //     },
+            //     () => {
+            //     },
+            //     () => {
+            //         setExperience(undefined)
+            //     }
+            // )
+
             document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.edit')}`
         } else {
             document.title = `${t('PageName')} - ${t('PageTitles.experienceForm.create')}`
@@ -264,7 +313,7 @@ export default function ExperienceForm() {
                                 }
 
                                 {categories.map((category) => (
-                                    <option defaultValue={experience ? experience.category.id : ""} key={category.id} value={category.id}>
+                                    <option defaultValue={experience ? categoryModel?.id : ""} key={category.id} value={category.id}>
                                         {t('Categories.' + category.name)}
                                     </option>
                                 ))}

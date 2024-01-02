@@ -32,7 +32,7 @@ describe('CardExperienceDetails Component', () => {
     test('renders experience details correctly', () => {
         const { getByText } = render(
             <BrowserRouter>
-                <CardExperienceDetails experience={experienceModelNoFav} isEditing={false}
+                <CardExperienceDetails experience={experienceModelNoFav}
                                        nameProp={['', jest.fn()]} categoryProp={['', jest.fn()]} />
             </BrowserRouter>
         );
@@ -45,7 +45,7 @@ describe('CardExperienceDetails Component', () => {
     test('calls setFavExperience when clicking favorite button', () => {
         const { getByLabelText } = render(
             <BrowserRouter>
-                <CardExperienceDetails experience={experienceModelNoFav} isEditing={false}
+                <CardExperienceDetails experience={experienceModelNoFav}
                                        nameProp={['', jest.fn()]} categoryProp={['', jest.fn()]} />
             </BrowserRouter>
         );
@@ -54,20 +54,6 @@ describe('CardExperienceDetails Component', () => {
         fireEvent.click(favoriteButton);
 
         expect(setFavExperience).toHaveBeenCalledWith(experienceModelNoFav, true, expect.any(Function), expect.any(Function));
-    });
-
-    test('calls setVisibility when clicking visibility button', () => {
-        const { getByLabelText } = render(
-            <BrowserRouter>
-                <CardExperienceDetails experience={experienceModelNoFav} isEditing={true}
-                                       nameProp={['', jest.fn()]} categoryProp={['', jest.fn()]} />
-            </BrowserRouter>
-        );
-
-        const visibilityButton = getByLabelText('Visibility');
-        fireEvent.click(visibilityButton);
-
-        expect(setVisibility).toHaveBeenCalledWith(experienceModelNoFav, false, expect.any(Function), expect.any(Function));
     });
 
 });

@@ -5,8 +5,8 @@ import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import React, {Dispatch, SetStateAction, useState} from "react";
-import {ExperienceModel} from "../types";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {CategoryModel, CityModel, CountryModel, ExperienceModel, UserModel} from "../types";
 import StarRating from "./StarRating";
 import ConfirmDialogModal, {confirmDialogModal} from "../components/ConfirmDialogModal";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
@@ -20,11 +20,14 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {showToast} from "../scripts/toast";
 import categoryImages, {CategoryName} from "../common";
+import {serviceHandler} from "../scripts/serviceHandler";
+import {experienceService, userService} from "../services";
+import {authedFetch} from "../scripts/authedFetch";
 
-export default function CardExperienceDetails(props: { experience: ExperienceModel, isEditing: boolean, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }
+export default function CardExperienceDetails(props: { experience: ExperienceModel, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }
 ) {
 
-    const {experience, isEditing, nameProp, categoryProp} = props
+    const {experience, nameProp, categoryProp} = props
     const {t} = useTranslation()
     const navigate = useNavigate()
     const {getUser} = useAuth()
@@ -35,6 +38,52 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const isOpenImage = useState(false)
     const [fav, setFav] = useState(experience.isFav)
     const [view, setView] = useState(experience.observable)
+
+    const [isEditing, setIsEditing] = useState<boolean | undefined>(undefined)
+    const [category, setCategory] = useState<CategoryModel | undefined>(undefined)
+    const [city, setCity] = useState<CityModel | undefined>(undefined)
+    const [country, setCountry] = useState<CountryModel | undefined>(undefined)
+
+    useEffect(() => {
+
+        serviceHandler(
+            userService.getUserByLink(experience.userUrl),
+            navigate, (experienceUser) => {
+                setIsEditing(experienceUser.id === user?.userId)
+            },
+            () => {
+            },
+            () => {
+            }
+        )
+
+        serviceHandler(
+            experienceService.getCategoryByLink(experience.categoryUrl),
+            navigate, (category) => {
+                setCategory(category)
+            },
+            () => {
+            },
+            () => {
+            }
+        )
+
+        const getCityAndCountry = async () => {
+            try {
+                const city = await authedFetch(experience.cityUrl, {method: "GET"})
+                const parsedCity = await city.json();
+                setCity(parsedCity);
+                const country =  await authedFetch(parsedCity.countryUrl, {method: "GET"})
+                const parsedCountry = await country.json();
+                setCountry(parsedCountry)
+            } catch (error) {
+                navigate('/error', {state: {code: 500, message: 'Server error',}, replace: true,})
+            }
+        };
+
+        getCityAndCountry();
+
+    }, [])
 
     function clearNavBar() {
         searchParams.delete("category")
@@ -49,8 +98,8 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
             <div className="d-flex flex-wrap justify-content-center align-content-center">
                 <div className="d-flex flex-column">
                     <div className="p-2" style={{width: "600px"}}>
-                        <img className="container-fluid p-0" alt={`Imagen ${experience.category.name}`}
-                             src={experience.hasImage ? experience.imageUrl : categoryImages[experience.category.name as CategoryName]}
+                        <img className="container-fluid p-0" alt={`Imagen ${category?.name}`}
+                             src={experience.hasImage ? experience.imageUrl : categoryImages[category?.name as CategoryName]}
                              style={{height: "fit-content", maxHeight: experience.hasImage ? "550px" : "450px"}}/>
 
                         {!experience.hasImage &&
@@ -68,7 +117,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
                                     {t('Experience.address')}
                                 </h5>
                                 <p className="information-text">
-                                    {experience.address}, {experience.city.name}, {experience.country.name}
+                                    {experience.address}, {city?.name}, {country?.name}
                                 </p>
                             </div>
 

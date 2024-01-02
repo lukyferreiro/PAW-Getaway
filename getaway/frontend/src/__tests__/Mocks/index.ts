@@ -5,7 +5,7 @@ import {
  ExperienceModel,
  ExperienceNameModel,
  OrderByModel,
- ReviewModel, UserInfoModel,
+ ReviewModel,
  UserModel,
 } from "../../types"
 
@@ -55,12 +55,6 @@ export const userModel: UserModel = {
     recommendationsByReviewsUrl: "http://localhost:8080/api/experiences?userId=1&filter=RECOMMENDED_BY_REVIEWS",
 };
 
-export const userInfoModel: UserInfoModel = {
-    id: 1,
-    name: "Lucas",
-    surname: "Ferreiro",
-}
-
 export const orderByModel: OrderByModel = {
     orders: ["OrderByRankAsc", "OrderByRankDesc", "OrderByAZ", "OrderByZA", "OrderByLowPrice", "OrderByHighPrice"],
     self: "http://localhost:8080/api/experiences/orders"
@@ -91,10 +85,6 @@ export const experienceModelNoFav: ExperienceModel = {
     cityUrl: "http://localhost:8080/api/location/cities/1",
     userUrl: "http://localhost:8080/api/users/1",
     categoryUrl: "http://localhost:8080/api/experiences/categories/1",
-    city: cityModel,
-    country: countryModel,
-    category: categoryModel1,
-    user: userModel,
 };
 
 export const experienceModelFav: ExperienceModel = {
@@ -117,10 +107,6 @@ export const experienceModelFav: ExperienceModel = {
     cityUrl: "http://localhost:8080/api/location/cities/1",
     userUrl: "http://localhost:8080/api/users/1",
     categoryUrl: "http://localhost:8080/api/experiences/categories/1",
-    city: cityModel,
-    country: countryModel,
-    category: categoryModel1,
-    user: userModel,
 };
 
 export const experienceModelCategory: ExperienceModel = {
@@ -143,10 +129,6 @@ export const experienceModelCategory: ExperienceModel = {
     cityUrl: "http://localhost:8080/api/location/cities/1",
     userUrl: "http://localhost:8080/api/users/1",
     categoryUrl: "http://localhost:8080/api/experiences/categories/1",
-    city: cityModel,
-    country: countryModel,
-    category: categoryModel2,
-    user: userModel,
 };
 
 export const experienceModelMaxPrice: ExperienceModel = {
@@ -169,10 +151,6 @@ export const experienceModelMaxPrice: ExperienceModel = {
     cityUrl: "http://localhost:8080/api/location/cities/1",
     userUrl: "http://localhost:8080/api/users/1",
     categoryUrl: "http://localhost:8080/api/experiences/categories/1",
-    city: cityModel,
-    country: countryModel,
-    category: categoryModel2,
-    user: userModel,
 };
 
 export const reviewModel1: ReviewModel = {
@@ -184,9 +162,6 @@ export const reviewModel1: ReviewModel = {
     self: "http://localhost:8080/api/reviews/1",
     userUrl: "http://localhost:8080/api/users/1",
     experienceUrl: "http://localhost:8080/api/experiences/1",
-    userImage: "http://localhost:8080/api/users/1/profileImage",
-    user: userInfoModel,
-    experience: experienceNameModel,
 };
 
 export const reviewModel2: ReviewModel = {
@@ -198,9 +173,6 @@ export const reviewModel2: ReviewModel = {
     self: "http://localhost:8080/api/reviews/1",
     userUrl: "http://localhost:8080/api/users/1",
     experienceUrl: "http://localhost:8080/api/experiences/1",
-    userImage: "http://localhost:8080/api/users/1/profileImage",
-    user: userInfoModel,
-    experience: experienceNameModel,
 };
 
 

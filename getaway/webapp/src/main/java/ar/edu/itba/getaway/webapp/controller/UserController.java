@@ -58,7 +58,6 @@ public class UserController {
         }
 
         final UserModel user = userService.createUser(registerDto.getPassword(), registerDto.getName(), registerDto.getSurname(), registerDto.getEmail());
-
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getUserId())).build();
         return Response.created(location).build();
     }
@@ -72,7 +71,11 @@ public class UserController {
     ) {
         LOGGER.info("Called /users/{} GET", id);
         final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
-        return Response.ok(new UserDto(user, uriInfo)).build();
+        if (user.equals(authContext.getCurrentUser())) {
+            return Response.ok(new UserDto(user, uriInfo)).build();
+        } else {
+            return Response.ok(new PublicUserDto(user, uriInfo)).build();
+        }
     }
 
     //Endpoint para editar la informacion del usuario

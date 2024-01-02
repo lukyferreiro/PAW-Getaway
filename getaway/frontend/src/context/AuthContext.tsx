@@ -24,18 +24,26 @@ export function AuthProvider({children}: { children: ReactNode }) {
     const [user, setUser] = useState<CurrentUserModel | null>(null)
 
     useEffect(() => {
-        const token = localStorage.getItem("getawayAccessToken");
-        if (token) {
-            const loggedUser = JSON.parse(atob(token.split(".")[1])) as CurrentUserModel;
+        const accessToken = localStorage.getItem("getawayAccessToken");
+        if (accessToken) {
+            const loggedUser = JSON.parse(atob(accessToken.split(".")[1])) as CurrentUserModel;
             setUser(loggedUser);
             localStorage.setItem('getawayUser', JSON.stringify(loggedUser))
         }
+        // else {
+        //     localStorage.removeItem('getawayAccessToken')
+        // }
+
+        const refreshToken = localStorage.getItem("getawayRefreshToken");
+        // if (refreshToken) {
+        //
+        // }
     }, []);
 
     const signIn = (callback: VoidFunction) => {
         internalAuthProvider.signIn(() => {
             const token = localStorage.getItem('getawayAccessToken')
-            if(token) {
+            if (token) {
                 const loggedUser = JSON.parse(atob(token.split('.')[1])) as CurrentUserModel
                 setUser(loggedUser)
                 localStorage.setItem('getawayUser', JSON.stringify(loggedUser))
@@ -48,6 +56,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
     const signOut = (callback: VoidFunction) => {
         return internalAuthProvider.signOut(() => {
             localStorage.removeItem('getawayAccessToken')
+            localStorage.removeItem('getawayRefreshToken')
             localStorage.removeItem('getawayUser')
             setUser(null)
             callback()

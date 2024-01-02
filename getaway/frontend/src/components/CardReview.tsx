@@ -1,16 +1,17 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index";
-import {ReviewModel} from "../types";
+import {ExperienceModel, ReviewModel, UserModel} from "../types";
 import {Link, useNavigate} from 'react-router-dom'
 import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import React, {Dispatch, SetStateAction} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StarRating from "./StarRating";
-import {reviewService} from "../services";
+import {experienceService, reviewService, userService} from "../services";
 import {showToast} from "../scripts/toast";
 import {confirmDialogModal} from "./ConfirmDialogModal";
 import ic_user_no_image from "../images/ic_user_no_image.png";
+import {serviceHandler} from "../scripts/serviceHandler";
 
 export default function CardReview(props: {
     reviewModel: ReviewModel,
@@ -22,9 +23,38 @@ export default function CardReview(props: {
     const navigate = useNavigate()
     const {reviewModel, isEditing, onEdit} = props
 
+    const [experience, setExperience] = useState<ExperienceModel | undefined>(undefined)
+    const [user, setUser] = useState<UserModel | undefined>(undefined)
+
+    useEffect(() => {
+
+        serviceHandler(
+            experienceService.getExperienceByLink(reviewModel.experienceUrl),
+            navigate, (experience) => {
+                setExperience(experience)
+            },
+            () => {
+            },
+            () => {
+            }
+        )
+
+        serviceHandler(
+            userService.getUserByLink(reviewModel.userUrl),
+            navigate, (user) => {
+                setUser(user)
+            },
+            () => {
+            },
+            () => {
+            }
+        )
+
+    }, [])
+
     function editReview(reviewId: number) {
         navigate({
-            pathname: `/experiences/${reviewModel.experience.id}/reviewForm`,
+            pathname: `/experiences/${experience?.id}/reviewForm`,
             search: `?id=${reviewId}`
         }, {replace: true})
     }
@@ -46,7 +76,7 @@ export default function CardReview(props: {
         <div className="card m-2" style={{height: isEditing ? "310px" : ""}}>
             {isEditing &&
                 <div className="card-title m-2 d-flex justify-content-center align-content-center">
-                    <Link to={"/experiences/" + reviewModel.experience.id}>
+                    <Link to={"/experiences/" + experience?.id}>
                         <h4 className="text-center"
                             style={{
                                 fontWeight: "bold",
@@ -54,7 +84,7 @@ export default function CardReview(props: {
                                 wordBreak: "break-all",
                                 color: "black"
                             }}>
-                            {reviewModel.experience.name}
+                            {experience?.name}
                         </h4>
                     </Link>
                 </div>
@@ -62,12 +92,12 @@ export default function CardReview(props: {
 
             <div className="card-title m-2 d-flex justify-content-between">
                 <div className="d-flex">
-                    <img className="user-img" src={reviewModel.userImage ? reviewModel.userImage : ic_user_no_image}
-                         alt="Imagen" style={{marginRight: reviewModel.userImage ? "8px" : ""}}/>
+                    <img className="user-img" src={user?.profileImageUrl ? user?.profileImageUrl : ic_user_no_image}
+                         alt="Imagen" style={{marginRight: user?.profileImageUrl ? "8px" : ""}}/>
 
                     <div className="d-flex flex-column justify-content-center align-content-center">
                         <h5 className="my-1">
-                            {reviewModel.user.name} {reviewModel.user.surname}
+                            {user?.name} {user?.surname}
                         </h5>
                         <h6 className="my-1" style={{fontSize: "small"}}>
                             {reviewModel.date}

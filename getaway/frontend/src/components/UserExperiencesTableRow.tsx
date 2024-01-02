@@ -1,5 +1,5 @@
-import {ExperienceModel} from "../types";
-import React, {Dispatch, SetStateAction, useState} from "react";
+import {CategoryModel, CityModel, CountryModel, ExperienceModel} from "../types";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import StarRating from "./StarRating";
 import {IconButton} from "@mui/material";
@@ -12,6 +12,9 @@ import {confirmDialogModal} from "./ConfirmDialogModal";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {useTranslation} from "react-i18next";
 import Price from "./Price";
+import {serviceHandler} from "../scripts/serviceHandler";
+import {experienceService} from "../services";
+import {authedFetch} from "../scripts/authedFetch";
 
 export default function UserExperiencesTableRow(props: {
     experience: ExperienceModel,
@@ -24,6 +27,21 @@ export default function UserExperiencesTableRow(props: {
     const navigate = useNavigate()
     const {experience, onEdit, setExperienceId, isOpenImage} = props
     const [view, setView] = useState(experience.observable)
+
+    const [category, setCategory] = useState<CategoryModel | undefined>(undefined)
+
+    useEffect(() => {
+        serviceHandler(
+            experienceService.getCategoryByLink(experience.categoryUrl),
+            navigate, (category) => {
+                setCategory(category)
+            },
+            () => {
+            },
+            () => {
+            }
+        )
+    }, [])
 
     return (
         <>
@@ -41,7 +59,7 @@ export default function UserExperiencesTableRow(props: {
                 <td>
                     <div className="container-fluid d-flex p-2 mb-1 align-items-end">
                         <h4 className="container-fluid p-0">
-                            {t('Categories.' + experience.category.name)}
+                            {t('Categories.' + category?.name)}
                         </h4>
                     </div>
                 </td>

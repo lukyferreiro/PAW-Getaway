@@ -60,10 +60,11 @@ export default function ReviewForm() {
                 serviceHandler(
                     reviewService.getReviewById(parseInt(currentId)),
                     navigate, (review) => {
-                        if (review.user.id !== user?.userId) {
-                            navigate("/", {replace: true})
-                            showToast(t('ReviewForm.toast.forbidden.notAllowed'), 'error')
-                        }
+                        //TODO
+                        // if (review.user.id !== user?.userId) {
+                        //     navigate("/", {replace: true})
+                        //     showToast(t('ReviewForm.toast.forbidden.notAllowed'), 'error')
+                        // }
                         setReview(review)
                         setRating(-review.score)
                         setHover(-review.score)

@@ -125,6 +125,12 @@ export class ExperienceService {
         });
     }
 
+    public async getCategoryByLink(url: string): Promise<Result<CategoryModel>> {
+        return resultFetch<CategoryModel>(url, {
+            method: "GET",
+        });
+    }
+
     public async getExperienceById(
         experienceId: number,
         view?: boolean
@@ -135,6 +141,12 @@ export class ExperienceService {
         }
 
         return resultFetch(url.toString(), {
+            method: "GET"
+        });
+    }
+
+    public async getExperienceByLink(url: string): Promise<Result<ExperienceModel>> {
+        return resultFetch(url, {
             method: "GET"
         });
     }

@@ -51,6 +51,12 @@ export class UserService {
         });
     }
 
+    public async getUserByLink(url: string): Promise<Result<UserModel>> {
+        return resultFetch<UserModel>(url, {
+            method: "GET",
+        });
+    }
+
     public async updateUserInfoById(
         userId?: number,
         name?: string,

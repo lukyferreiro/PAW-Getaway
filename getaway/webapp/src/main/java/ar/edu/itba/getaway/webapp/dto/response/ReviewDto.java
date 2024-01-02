@@ -26,10 +26,6 @@ public class ReviewDto implements Serializable {
     private URI userUrl;
     private URI experienceUrl;
     private URI userImage;
-    @XmlJavaTypeAdapter(UserAdapter.class)
-    private HashMap<String, String> user = new HashMap<>();
-    @XmlJavaTypeAdapter(ExperienceAdapter.class)
-    private HashMap<String, String> experience = new HashMap<>();
 
     public static Collection<ReviewDto> mapReviewToDto(Collection<ReviewModel> reviews, UriInfo uriInfo) {
         return reviews.stream().map(r -> new ReviewDto(r, uriInfo)).collect(Collectors.toList());
@@ -54,15 +50,6 @@ public class ReviewDto implements Serializable {
         this.userUrl = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(review.getUser().getUserId())).build();
         this.experienceUrl = uriInfo.getBaseUriBuilder().path("experiences").path(String.valueOf(review.getExperience().getExperienceId())).build();;
         final UserModel user = review.getUser();
-        if(user.getImage() != null){
-            this.userImage = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(user.getUserId())).path("profileImage").build();
-        }
-        this.user.put("id", String.valueOf(user.getUserId()));
-        this.user.put("name", user.getName());
-        this.user.put("surname", user.getSurname());
-        final ExperienceModel experience = review.getExperience();
-        this.experience.put("id", String.valueOf(experience.getExperienceId()));
-        this.experience.put("name", experience.getExperienceName());
     }
 
     public long getId() {
@@ -118,17 +105,5 @@ public class ReviewDto implements Serializable {
     }
     public void setUserImage(URI userImage) {
         this.userImage = userImage;
-    }
-    public HashMap<String, String> getUser() {
-        return user;
-    }
-    public void setUser(HashMap<String, String> user) {
-        this.user = user;
-    }
-    public HashMap<String, String> getExperience() {
-        return experience;
-    }
-    public void setExperience(HashMap<String, String> experience) {
-        this.experience = experience;
     }
 }

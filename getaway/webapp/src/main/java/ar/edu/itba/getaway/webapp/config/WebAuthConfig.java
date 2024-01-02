@@ -130,7 +130,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //anonymous para crear un usuario
                     .antMatchers(HttpMethod.POST, "/api/users").anonymous()
                     //se usa solo para usuarios logueados para su propia info
-                    .antMatchers(HttpMethod.GET, "/api/users/{userId}").access("@antMatcherVoter.accessUserInfo(authentication, #userId)")
+                    .antMatchers(HttpMethod.GET, "/api/users/{userId}").permitAll()
                     //logueado y hay que revisar que el id sea el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{userId}").access("@antMatcherVoter.userEditHimself(authentication, #userId)")
                     //¿Olvidaste tu contraseña?
