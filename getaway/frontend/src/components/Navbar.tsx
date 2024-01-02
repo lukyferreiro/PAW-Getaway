@@ -68,7 +68,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
         nameProp[1](data.name)
         navigate({
             pathname: "/experiences",
-            search: `?category=${categoryProp[0]}&name=${nameProp[0]}&order=OrderByAZ&page=1`
+            search: `?category=${categoryProp[0]}&name=${data.name}&order=OrderByAZ&page=1`
         }, {replace: true})
     })
 
@@ -221,7 +221,6 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                     pathname: "/experiences",
                                     search: `?category=${category.name}&name=${nameProp[0]}&order=OrderByAZ&page=1`
                                 }, {replace: true});
-                                // window.location.reload();
                             }}
                     >
                         <img src={categoryImages[category.name as CategoryName]} alt={`${category.name}`}/>
