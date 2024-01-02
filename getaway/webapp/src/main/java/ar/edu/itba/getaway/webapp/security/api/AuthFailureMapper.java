@@ -27,7 +27,7 @@ public class AuthFailureMapper {
             response.addHeader("WWW-Authenticate", "Basic realm=\"myRealm\"");
             response.addHeader("WWW-Authenticate", "Bearer token");
         } else if (exception instanceof ExpiredAuthTokenException) {
-            response.addHeader("WWW-Authenticate", "Bearer error=\"invalid_token\"");
+            response.addHeader("WWW-Authenticate", "Bearer error=\"expired_token\"");
         }
 
         errorDetails.setTitle(status.getReasonPhrase());

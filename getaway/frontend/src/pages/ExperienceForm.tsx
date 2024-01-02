@@ -100,7 +100,7 @@ export default function ExperienceForm() {
                         const city = await authedFetch(parsedExperience.cityUrl, {method: "GET"})
                         const parsedCity = await city.json();
                         setCityModel(parsedCity);
-                        const country =  await authedFetch(parsedExperience.countryUrl, {method: "GET"})
+                        const country =  await authedFetch(parsedCity.countryUrl, {method: "GET"})
                         const parsedCountry = await country.json();
                         setCountryModel(parsedCountry)
                         const categoryModel =  await authedFetch(parsedExperience.categoryUrl, {method: "GET"})
