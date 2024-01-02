@@ -61,3 +61,4 @@ webapp/target
 #Another files
 *.ini
 
+package-lock.json
