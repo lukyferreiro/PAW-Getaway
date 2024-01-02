@@ -6,6 +6,7 @@ import ar.edu.itba.getaway.interfaces.exceptions.IllegalContentTypeException;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
+import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.InvalidRequestParamsException;
 import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
 import ar.edu.itba.getaway.webapp.dto.request.*;
 import ar.edu.itba.getaway.webapp.dto.request.UserInfoDto;
@@ -17,6 +18,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -34,14 +36,16 @@ public class UserController {
     private UriInfo uriInfo;
     private final UserService userService;
     private final ImageService imageService;
+    private final FavAndViewExperienceService favAndViewExperienceService;
     private final AuthContext authContext;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private static final String ACCEPTED_MIME_TYPES = "image/";
 
     @Autowired
-    public UserController(UserService userService, ImageService imageService, AuthContext authContext) {
+    public UserController(UserService userService, ImageService imageService, FavAndViewExperienceService favAndViewExperienceService, AuthContext authContext) {
         this.userService = userService;
         this.imageService = imageService;
+        this.favAndViewExperienceService = favAndViewExperienceService;
         this.authContext = authContext;
     }
 
@@ -168,6 +172,35 @@ public class UserController {
         final UserModel user = authContext.getCurrentUser();
         imageService.updateUserImg(profileImageBytes, profileImageBody.getMediaType().toString(), user);
         return Response.noContent().build();
+    }
+
+
+    //TODO: implement frontend calls
+    @PUT
+    @Path("/{userId:[0-9]+}/favourites/{experienceId:[0-9]+}")
+    @PreAuthorize("@antMatcherVoter.accessUserInfo(authentication, #userId)")
+    public Response favExperience(
+            @PathParam("userId") final long userId,
+            @PathParam("experienceId") final long experienceId,
+            @QueryParam("fav") @DefaultValue("false") final Boolean fav
+    ) {
+        LOGGER.info("Called /{}/favourites/{} PUT", userId, experienceId);
+
+        final UserModel user = authContext.getCurrentUser();
+        favAndViewExperienceService.setFav(user, fav, userId);
+        return Response.noContent().build();
+    }
+
+    //TODO: check return value
+    @GET
+    @Path("/{userId:[0-9]+}/favourites/{experienceId:[0-9]+}")
+    @PreAuthorize("@antMatcherVoter.accessUserInfo(authentication, #userId)")
+    public Response isFavExperience(
+            @PathParam("userId") final long userId,
+            @PathParam("experienceId") final long experienceId
+    ) {
+
+        return Response.ok().build();
     }
 
 }
