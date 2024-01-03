@@ -115,9 +115,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public Optional<ExperienceModel> getVisibleExperienceById(long experienceId, UserModel user) {
         LOGGER.debug("Retrieving experience with id {}", experienceId);
-        final Optional<ExperienceModel> maybeExperience = experienceDao.getVisibleExperienceById(experienceId, user);
-        maybeExperience.ifPresent(experienceModel -> experienceModel.setIsFav(user != null && user.isFav(experienceModel)));
-        return maybeExperience;
+        return experienceDao.getVisibleExperienceById(experienceId, user);
     }
 
     @Override
@@ -146,10 +144,6 @@ public class ExperienceServiceImpl implements ExperienceService {
             totalPages = 1;
         }
 
-        for (ExperienceModel experience : experienceModelList) {
-            experience.setIsFav(user != null && user.isFav(experience));
-        }
-
         LOGGER.debug("Max page value service: {}", totalPages);
         return new Page<>(experienceModelList, page, totalPages, total);
     }
@@ -164,10 +158,6 @@ public class ExperienceServiceImpl implements ExperienceService {
         LOGGER.debug("Retrieving all experiences by best ranked of category with id {}", category.getCategoryId());
 
         final List<ExperienceModel> experienceModelList = experienceDao.listExperiencesByBestRanked(category, CAROUSEL_LENGTH);
-
-        for (ExperienceModel experience : experienceModelList) {
-            experience.setIsFav(user != null && user.isFav(experience));
-        }
 
         return new Page<>(experienceModelList, 1, 1, CAROUSEL_LENGTH);
     }
@@ -194,10 +184,6 @@ public class ExperienceServiceImpl implements ExperienceService {
             experienceModelList = experienceDao.listExperiencesFavsByUser(user, order, page, RESULT_PAGE_SIZE);
         } else {
             totalPages = 1;
-        }
-
-        for (ExperienceModel experience : experienceModelList) {
-            experience.setIsFav(true);
         }
 
         LOGGER.debug("Max page value service: {}", totalPages);
@@ -371,7 +357,6 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         for (ExperienceModel exp : userViews) {
             if (exp.getObservable()) {
-                exp.setIsFav(user.isFav(exp));
                 auxList.add(exp);
             }
         }
@@ -398,11 +383,6 @@ public class ExperienceServiceImpl implements ExperienceService {
             bestRanked = experienceDao.getRecommendedBestRanked(CAROUSEL_LENGTH - recommendedByFavsFullList.size(), recommendedByFavsFullList.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
             alreadyRecommended.addAll(bestRanked.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
             toReturnList.addAll(bestRanked);
-        }
-
-        //Adding recommendedByFavs to general list
-        for (ExperienceModel experience : toReturnList) {
-            experience.setIsFav(user.isFav(experience));
         }
 
         return new Page<>(toReturnList, 1, 1, CAROUSEL_LENGTH);
@@ -437,9 +417,6 @@ public class ExperienceServiceImpl implements ExperienceService {
                 toReturnList.addAll(recommendedByReviewsCategory);
             }
 
-            for (ExperienceModel experience : toReturnList) {
-                experience.setIsFav(user.isFav(experience));
-            }
             return new Page<>(toReturnList, 1, 1, CAROUSEL_LENGTH);
         }
         return new Page<>(Collections.emptyList(), 1, 1, 0);

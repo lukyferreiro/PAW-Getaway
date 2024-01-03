@@ -187,7 +187,7 @@ public class UserController {
         LOGGER.info("Called /{}/favourites/{} PUT", userId, experienceId);
 
         final UserModel user = authContext.getCurrentUser();
-        favAndViewExperienceService.setFav(user, fav, userId);
+        favAndViewExperienceService.setFav(user, fav, experienceId);
         return Response.noContent().build();
     }
 
@@ -200,7 +200,10 @@ public class UserController {
             @PathParam("experienceId") final long experienceId
     ) {
 
-        return Response.ok().build();
+        final UserModel user = authContext.getCurrentUser();
+        boolean isFav = favAndViewExperienceService.isFav(user, experienceId);
+
+        return Response.ok(isFav).build();
     }
 
 }

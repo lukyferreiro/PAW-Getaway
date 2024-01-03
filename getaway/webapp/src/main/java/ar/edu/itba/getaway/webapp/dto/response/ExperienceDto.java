@@ -69,7 +69,6 @@ public class ExperienceDto implements Serializable {
         this.score = experience.getAverageScore();
         this.siteUrl = experience.getSiteUrl();
         this.views = experience.getViews();
-        this.isFav = experience.getIsFav();
         this.observable = experience.getObservable();
         this.hasImage = experience.getImage() != null;
         this.reviewCount = experience.getReviewCount();

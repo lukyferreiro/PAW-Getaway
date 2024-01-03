@@ -10,9 +10,9 @@ public interface FavAndViewExperienceService {
 
     void deleteFav(UserModel user, ExperienceModel experience);
 
-    boolean isFav(UserModel user, ExperienceModel experience);
+    boolean isFav(UserModel user,  long experienceId);
 
-    void setFav(UserModel user, boolean set, Long id);
+    void setFav(UserModel user, boolean set, long experienceId);
 
     void addViewed(UserModel user, ExperienceModel experience);
 
