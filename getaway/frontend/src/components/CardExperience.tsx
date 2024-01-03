@@ -3,7 +3,7 @@ import "../common/i18n/index"
 import {Link, useNavigate, useSearchParams} from 'react-router-dom'
 import {ExperienceModel} from "../types";
 import StarRating from "./StarRating";
-import React, {Dispatch, SetStateAction, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {IconButton} from "@mui/material";
 import {useAuth} from "../hooks/useAuth";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
@@ -12,6 +12,8 @@ import Price from "./Price";
 import DataLoader from "./DataLoader";
 import {showToast} from "../scripts/toast";
 import categoryImages, {CategoryName} from "../common";
+import {serviceHandler} from "../scripts/serviceHandler";
+import {userService} from "../services";
 
 export default function CardExperience(props: { experience: ExperienceModel, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
     const {t} = useTranslation()
@@ -23,8 +25,23 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
     const user = getUser()
 
     const [isLoadingImg, setIsLoadingImg] = useState(false)
-    const [isFav, setIsFav] = useState(experience.isFav)
+    const [isFav, setIsFav] = useState(false)
 
+    useEffect(() => {
+        if (user !== null) {
+            serviceHandler(
+                userService.isExperienceFav(user.userId, experience.id),
+                navigate, (isFavResponse) => {
+                    setIsFav(isFavResponse)
+                },
+                () => {
+                },
+                () => {
+                    setIsFav(false)
+                }
+            )
+        }
+    }, []);
     function clearNavBar() {
         searchParams.delete("category")
         searchParams.delete("name")
@@ -77,11 +94,11 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
                     {user ?
                         <div>
                             {isFav ?
-                                <IconButton onClick={() => setFavExperience(experience, false, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
+                                <IconButton onClick={() => setFavExperience(user.userId, experience, false, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                     <Favorite className="fa-heart heart-color"/>
                                 </IconButton>
                                 :
-                                <IconButton onClick={() => setFavExperience(experience, true, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
+                                <IconButton onClick={() => setFavExperience(user.userId, experience, true, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                     <FavoriteBorder className="fa-heart"/>
                                 </IconButton>
                             }

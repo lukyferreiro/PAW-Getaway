@@ -1,5 +1,5 @@
 import {ExperienceModel} from "../types";
-import {experienceService} from "../services";
+import {userService, experienceService} from "../services";
 import {showToast} from "./toast";
 import {NavigateFunction} from "react-router-dom";
 import {Dispatch, SetStateAction} from "react";
@@ -27,12 +27,13 @@ export function setVisibility(
 }
 
 export function setFavExperience(
+    userId: number,
     experience: ExperienceModel,
     fav: boolean,
     setFav:  Dispatch<SetStateAction<boolean>>,
     t: TFunction
 ) {
-    experienceService.setExperienceFav(experience.id, fav)
+    userService.setExperienceFav(userId, experience.id, fav)
         .then(() => {
             if (fav) {
                 showToast(t('Experience.toast.favSuccess', {experienceName: experience.name}), "success")
@@ -49,6 +50,7 @@ export function setFavExperience(
             }
         });
 }
+
 
 export function deleteExperience(
     experience: ExperienceModel,

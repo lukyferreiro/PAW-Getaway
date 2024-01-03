@@ -194,6 +194,37 @@ export class UserService {
     //     });
     // }
 
+    public async setExperienceFav(
+        userId: number,
+        experienceId: number,
+        set?: boolean
+    ) {
+        const url = new URL(this.userBasePath + `/${userId}/favourites/${experienceId}`);
+        if (typeof set === "boolean") {
+            url.searchParams.append("fav", set.toString());
+        }
+
+        return resultFetch(url.toString(), {
+            method: "PUT",
+            headers: {},
+            body: {}
+        });
+    }
+
+    //TODO: check request not sent
+    public async isExperienceFav(
+        userId: number,
+        experienceId: number,
+    ) : Promise<Result<boolean>>   {
+        const url = new URL(this.userBasePath + `/${userId}/favourites/${experienceId}`);
+
+        return resultFetch<boolean>(url.toString(), {
+            method: "GET",
+            headers: {},
+            body: {}
+        });
+    }
+
     public async resetPassword(
         token?: string,
         password?: string

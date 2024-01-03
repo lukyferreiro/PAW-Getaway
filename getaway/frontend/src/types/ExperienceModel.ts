@@ -10,7 +10,6 @@ export default interface ExperienceModel {
     score: number;
     views: number;
     siteUrl?: string;
-    isFav: boolean;
     observable: boolean;
     hasImage: boolean;
     reviewCount: number;

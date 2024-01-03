@@ -5,7 +5,7 @@ import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import React, {Dispatch, SetStateAction, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import ConfirmDialogModal, {confirmDialogModal} from "../components/ConfirmDialogModal";
@@ -20,6 +20,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {showToast} from "../scripts/toast";
 import categoryImages, {CategoryName} from "../common";
+import {serviceHandler} from "../scripts/serviceHandler";
+import {experienceService, userService} from "../services";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel, isEditing: boolean, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }
 ) {
@@ -33,8 +35,25 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const [searchParams, setSearchParams] = useSearchParams();
 
     const isOpenImage = useState(false)
-    const [fav, setFav] = useState(experience.isFav)
+    const [isFav, setIsFav] = useState(false)
     const [view, setView] = useState(experience.observable)
+
+    //TODO: CHECK request never done, even if entering if
+    useEffect(() => {
+        if (user !== null) {
+            serviceHandler(
+                userService.isExperienceFav(user.userId, experience.id),
+                navigate, (isFavResponse) => {
+                    setIsFav(isFavResponse)
+                },
+                () => {
+                },
+                () => {
+                    setIsFav(false)
+                }
+            )
+        }
+    }, []);
 
     function clearNavBar() {
         searchParams.delete("category")
@@ -147,12 +166,12 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
             <div className="btn-fav">
                 {user ?
                     <div>
-                        {fav ?
-                            <IconButton onClick={() => setFavExperience(experience, false, setFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
+                        {isFav ?
+                            <IconButton onClick={() => setFavExperience(user.userId, experience, false, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                 <Favorite className="fa-heart heart-color"/>
                             </IconButton>
                             :
-                            <IconButton onClick={() => setFavExperience(experience, true, setFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
+                            <IconButton onClick={() => setFavExperience(user.userId, experience, true, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                 <FavoriteBorder className="fa-heart"/>
                             </IconButton>
                         }

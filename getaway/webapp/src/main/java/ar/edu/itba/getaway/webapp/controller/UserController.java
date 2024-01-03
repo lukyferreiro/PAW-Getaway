@@ -175,14 +175,13 @@ public class UserController {
     }
 
 
-    //TODO: implement frontend calls
+    //TODO: check if default value is necessary
     @PUT
     @Path("/{userId:[0-9]+}/favourites/{experienceId:[0-9]+}")
-    @PreAuthorize("@antMatcherVoter.accessUserInfo(authentication, #userId)")
     public Response favExperience(
             @PathParam("userId") final long userId,
             @PathParam("experienceId") final long experienceId,
-            @QueryParam("fav") @DefaultValue("false") final Boolean fav
+            @QueryParam("fav") final Boolean fav
     ) {
         LOGGER.info("Called /{}/favourites/{} PUT", userId, experienceId);
 
@@ -194,11 +193,11 @@ public class UserController {
     //TODO: check return value
     @GET
     @Path("/{userId:[0-9]+}/favourites/{experienceId:[0-9]+}")
-    @PreAuthorize("@antMatcherVoter.accessUserInfo(authentication, #userId)")
     public Response isFavExperience(
             @PathParam("userId") final long userId,
             @PathParam("experienceId") final long experienceId
     ) {
+        LOGGER.info("Called /{}/favourites/{} GET", userId, experienceId);
 
         final UserModel user = authContext.getCurrentUser();
         boolean isFav = favAndViewExperienceService.isFav(user, experienceId);
