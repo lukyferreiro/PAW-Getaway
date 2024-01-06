@@ -38,7 +38,6 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const [isFav, setIsFav] = useState(false)
     const [view, setView] = useState(experience.observable)
 
-    //TODO: CHECK request never done, even if entering if
     useEffect(() => {
         if (user !== null) {
             serviceHandler(

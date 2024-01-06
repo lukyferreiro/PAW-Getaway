@@ -211,7 +211,6 @@ export class UserService {
         });
     }
 
-    //TODO: check request not sent
     public async isExperienceFav(
         userId: number,
         experienceId: number,
@@ -219,9 +218,7 @@ export class UserService {
         const url = new URL(this.userBasePath + `/${userId}/favourites/${experienceId}`);
 
         return resultFetch<boolean>(url.toString(), {
-            method: "GET",
-            headers: {},
-            body: {}
+            method: "GET"
         });
     }
 
