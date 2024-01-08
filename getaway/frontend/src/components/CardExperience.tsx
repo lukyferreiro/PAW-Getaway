@@ -13,7 +13,7 @@ import DataLoader from "./DataLoader";
 import {showToast} from "../scripts/toast";
 import categoryImages, {CategoryName} from "../common";
 import {serviceHandler} from "../scripts/serviceHandler";
-import {experienceService} from "../services";
+import {experienceService, userService} from "../services";
 import {authedFetch} from "../scripts/authedFetch";
 
 export default function CardExperience(props: { experience: ExperienceModel, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }) {
@@ -26,7 +26,7 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
     const user = getUser()
 
     const [isLoadingImg, setIsLoadingImg] = useState(false)
-    const [isFav, setIsFav] = useState(experience.isFav)
+    const [isFav, setIsFav] = useState(false)
 
     const [category, setCategory] = useState<CategoryModel | undefined>(undefined)
     const [city, setCity] = useState<CityModel | undefined>(undefined)
@@ -59,6 +59,20 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
         };
 
         getCityAndCountry();
+
+        if (user !== null) {
+            serviceHandler(
+                userService.isExperienceFav(user.userId, experience.id),
+                navigate, (isFavResponse) => {
+                    setIsFav(isFavResponse)
+                },
+                () => {
+                },
+                () => {
+                    setIsFav(false)
+                }
+            )
+        }
 
     }, [])
 
@@ -114,11 +128,11 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
                     {user ?
                         <div>
                             {isFav ?
-                                <IconButton onClick={() => setFavExperience(experience, false, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
+                                <IconButton onClick={() => setFavExperience(user.userId, experience, false, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                     <Favorite className="fa-heart heart-color"/>
                                 </IconButton>
                                 :
-                                <IconButton onClick={() => setFavExperience(experience, true, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
+                                <IconButton onClick={() => setFavExperience(user.userId, experience, true, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                     <FavoriteBorder className="fa-heart"/>
                                 </IconButton>
                             }

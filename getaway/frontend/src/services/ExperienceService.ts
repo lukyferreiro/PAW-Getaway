@@ -218,22 +218,6 @@ export class ExperienceService {
         return getPagedFetch<ReviewModel[]>(url.toString(), page);
     }
 
-    public async setExperienceFav(
-        experienceId: number,
-        set?: boolean
-    ) {
-        const url = new URL(this.experienceBasePath + `/${experienceId}/fav`);
-        if (typeof set === "boolean") {
-            url.searchParams.append("fav", set.toString());
-        }
-
-        return resultFetch(url.toString(), {
-            method: "PUT",
-            headers: {},
-            body: {}
-        });
-    }
-
     public async setExperienceObservable(
         experienceId: number,
         set?: boolean

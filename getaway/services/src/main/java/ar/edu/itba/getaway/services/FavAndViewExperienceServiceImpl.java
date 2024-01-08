@@ -40,14 +40,19 @@ public class FavAndViewExperienceServiceImpl implements FavAndViewExperienceServ
     }
 
     @Override
-    public boolean isFav(UserModel user, ExperienceModel experience) {
+    public boolean isFav(UserModel user, long experienceId) {
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId, user).orElseThrow(ExperienceNotFoundException::new);
+        return isFav(user, experience);
+    }
+
+    private boolean isFav(UserModel user, ExperienceModel experience) {
         return user.isFav(experience);
     }
 
     @Transactional
     @Override
-    public void setFav(UserModel user, boolean set, Long id) {
-        final ExperienceModel experience = experienceService.getVisibleExperienceById(id, user).orElseThrow(ExperienceNotFoundException::new);
+    public void setFav(UserModel user, boolean set,  long experienceId) {
+        final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId, user).orElseThrow(ExperienceNotFoundException::new);
 
         if (set) {
             if (!isFav(user, experience)) {

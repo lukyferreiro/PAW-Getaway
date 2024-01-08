@@ -242,26 +242,6 @@ public class ExperienceController {
         return Response.noContent().build();
     }
 
-
-    //TODO change
-    @PUT
-    @Path("/{experienceId:[0-9]+}/fav")
-    public Response favExperience(
-            @PathParam("experienceId") final long id,
-            @QueryParam("fav") final Boolean fav
-    ) {
-        LOGGER.info("Called /experiences/{}/fav PUT", id);
-
-        if(fav == null){
-            throw new InvalidRequestParamsException("errors.invalidParam.fav");
-        }
-
-        final UserModel user = authContext.getCurrentUser();
-        favAndViewExperienceService.setFav(user, fav, id);
-        return Response.noContent().build();
-    }
-
-
     @GET
     @Path("/orders")
     @Produces(value = {CustomMediaType.ORDER_LIST_V1})

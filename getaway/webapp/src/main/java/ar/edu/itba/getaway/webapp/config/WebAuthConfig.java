@@ -140,6 +140,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/users/{userId}/profileImage").permitAll()
                     //logueado y hay que revisar que el id sea el mismo del logueado
                     .antMatchers(HttpMethod.PUT, "/api/users/{userId}/profileImage").access("@antMatcherVoter.userEditHimself(authentication, #userId)")
+                    .antMatchers(HttpMethod.GET, "/api/users/{userId}/favourites/{experienceId}").access("@antMatcherVoter.accessUserInfo(authentication, #userId)")
+                    .antMatchers(HttpMethod.PUT, "/api/users/{userId}/favourites/{experienceId}").access("@antMatcherVoter.accessUserInfo(authentication, #userId)")
+
                 //------------------- /experiences -------------------
                     //logueado y VERIFIED (pues rol PROVIDER se asigna en el momento)
                     .antMatchers(HttpMethod.POST, "/api/experiences").hasAuthority("VERIFIED")

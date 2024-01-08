@@ -55,9 +55,6 @@ public class ExperienceModel {
     @Formula(value = "(select count(*) from reviews where reviews.experienceId = experienceId)")
     private long reviewCount;
 
-    @Transient
-    private boolean isFav;
-
     /* default */
     protected ExperienceModel() {
         // Just for Hibernate
@@ -219,15 +216,6 @@ public class ExperienceModel {
 
     public String getLocationName() {
         return address + ", " + city.getCityName() + ", " + city.getCountry().getCountryName();
-    }
-
-    @Transient
-    public boolean getIsFav() {
-        return isFav;
-    }
-
-    public void setIsFav(boolean isFav) {
-        this.isFav = isFav;
     }
 
     @Override

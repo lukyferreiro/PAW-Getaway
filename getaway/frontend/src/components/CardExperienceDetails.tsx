@@ -36,7 +36,7 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const [searchParams, setSearchParams] = useSearchParams();
 
     const isOpenImage = useState(false)
-    const [fav, setFav] = useState(experience.isFav)
+    const [isFav, setIsFav] = useState(false)
     const [view, setView] = useState(experience.observable)
 
     const [isEditing, setIsEditing] = useState<boolean | undefined>(undefined)
@@ -82,7 +82,19 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
         };
 
         getCityAndCountry();
-
+        if (user !== null) {
+            serviceHandler(
+                userService.isExperienceFav(user.userId, experience.id),
+                navigate, (isFavResponse) => {
+                    setIsFav(isFavResponse)
+                },
+                () => {
+                },
+                () => {
+                    setIsFav(false)
+                }
+            )
+        }
     }, [])
 
     function clearNavBar() {
@@ -196,12 +208,12 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
             <div className="btn-fav">
                 {user ?
                     <div>
-                        {fav ?
-                            <IconButton onClick={() => setFavExperience(experience, false, setFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
+                        {isFav ?
+                            <IconButton onClick={() => setFavExperience(user.userId, experience, false, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                 <Favorite className="fa-heart heart-color"/>
                             </IconButton>
                             :
-                            <IconButton onClick={() => setFavExperience(experience, true, setFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
+                            <IconButton onClick={() => setFavExperience(user.userId, experience, true, setIsFav, t)} aria-label={t("AriaLabel.fav")} title={t("AriaLabel.fav")}>
                                 <FavoriteBorder className="fa-heart"/>
                             </IconButton>
                         }
