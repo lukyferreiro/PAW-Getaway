@@ -5,7 +5,6 @@ import {NavigateFunction} from "react-router-dom";
 import {Dispatch, SetStateAction} from "react";
 import {TFunction} from "react-i18next";
 
-
 export function setVisibility(
     experience: ExperienceModel,
     visibility: boolean,

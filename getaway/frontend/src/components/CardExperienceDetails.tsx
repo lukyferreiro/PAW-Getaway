@@ -44,6 +44,19 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const [city, setCity] = useState<CityModel | undefined>(undefined)
     const [country, setCountry] = useState<CountryModel | undefined>(undefined)
 
+    const getCityAndCountry = async () => {
+        try {
+            const city = await authedFetch(experience.cityUrl, {method: "GET"})
+            const parsedCity = await city.json();
+            setCity(parsedCity);
+            const country =  await authedFetch(parsedCity.countryUrl, {method: "GET"})
+            const parsedCountry = await country.json();
+            setCountry(parsedCountry)
+        } catch (error) {
+            navigate('/error', {state: {code: 500, message: 'Server error',}, replace: true,})
+        }
+    };
+
     useEffect(() => {
 
         serviceHandler(
@@ -68,20 +81,8 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
             }
         )
 
-        const getCityAndCountry = async () => {
-            try {
-                const city = await authedFetch(experience.cityUrl, {method: "GET"})
-                const parsedCity = await city.json();
-                setCity(parsedCity);
-                const country =  await authedFetch(parsedCity.countryUrl, {method: "GET"})
-                const parsedCountry = await country.json();
-                setCountry(parsedCountry)
-            } catch (error) {
-                navigate('/error', {state: {code: 500, message: 'Server error',}, replace: true,})
-            }
-        };
-
         getCityAndCountry();
+
         if (user !== null) {
             serviceHandler(
                 userService.isExperienceFav(user.userId, experience.id),

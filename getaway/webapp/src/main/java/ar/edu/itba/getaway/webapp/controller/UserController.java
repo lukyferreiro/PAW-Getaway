@@ -6,7 +6,6 @@ import ar.edu.itba.getaway.interfaces.exceptions.IllegalContentTypeException;
 import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.InvalidRequestParamsException;
 import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
 import ar.edu.itba.getaway.webapp.dto.request.*;
 import ar.edu.itba.getaway.webapp.dto.request.UserInfoDto;
@@ -18,7 +17,6 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -179,6 +177,7 @@ public class UserController {
 
 
     //TODO: check if default value is necessary
+    //Endpoint para agregar/quitar de favoritos
     @PUT
     @Path("/{userId:[0-9]+}/favourites/{experienceId:[0-9]+}")
     public Response favExperience(
@@ -194,8 +193,10 @@ public class UserController {
     }
 
     //TODO: check return value
+    //Endpoint para verificar si una experiencia es favorita de un usuario
     @GET
     @Path("/{userId:[0-9]+}/favourites/{experienceId:[0-9]+}")
+//    @Produces(value = {CustomMediaType.})
     public Response isFavExperience(
             @PathParam("userId") final long userId,
             @PathParam("experienceId") final long experienceId
@@ -203,7 +204,7 @@ public class UserController {
         LOGGER.info("Called /{}/favourites/{} GET", userId, experienceId);
 
         final UserModel user = authContext.getCurrentUser();
-        boolean isFav = favAndViewExperienceService.isFav(user, experienceId);
+        final boolean isFav = favAndViewExperienceService.isFav(user, experienceId);
 
         return Response.ok(isFav).build();
     }

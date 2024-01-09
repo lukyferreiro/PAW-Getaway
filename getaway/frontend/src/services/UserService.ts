@@ -179,26 +179,7 @@ export class UserService {
                 new ErrorResponse(parseInt(err.message), err.title, err.message)
             );
         }
-
-        // const url = new URL(this.userBasePath + "/emailToken" );
-        // if (typeof token === "string") {
-        //     url.searchParams.append("token", token);
-        // }
-        // return resultFetch<PutResponse>(url.toString(), {
-        //     method: "PUT",
-        //     headers: {},
-        //     body: {},
-        // });
     }
-
-    // public async sendNewVerifyUserEmail() : Promise<Result<PostResponse>> {
-    //     const url = new URL(this.userBasePath + "/emailToken" );
-    //     return resultFetch<PostResponse>(url.toString(), {
-    //         method: "POST",
-    //         headers: {},
-    //         body: {},
-    //     });
-    // }
 
     public async setExperienceFav(
         userId: number,

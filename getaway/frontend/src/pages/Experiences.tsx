@@ -421,7 +421,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                         <div>
                             <div className="d-flex flex-wrap justify-content-center">
                                 {experiences.map((experience) => (
-                                    <CardExperience experience={experience} nameProp={nameProp} categoryProp={categoryProp} key={experience.id}/>
+                                    <CardExperience experience={experience} nameProp={nameProp} categoryProp={categoryProp} key={experience.id} fav={false}/>
                                 ))}
                             </div>
                         </div>

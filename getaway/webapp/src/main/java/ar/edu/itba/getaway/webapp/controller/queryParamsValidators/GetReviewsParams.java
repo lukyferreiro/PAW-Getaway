@@ -9,6 +9,9 @@ import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.security.services.AuthContext;
 
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+
 public class GetReviewsParams {
 
     public static Page<ReviewModel> getReviewsByParams(
@@ -35,5 +38,17 @@ public class GetReviewsParams {
         }
 
         return reviews;
+    }
+
+    public static UriBuilder getUriBuilder(Long userId, Long experienceId, int page, UriInfo uriInfo){
+        UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder().queryParam("page", page);
+
+        if (userId == null) {
+            uriBuilder = uriBuilder.queryParam("experienceId", experienceId);
+        } else {
+            uriBuilder = uriBuilder.queryParam("userId", userId);
+        }
+
+        return uriBuilder;
     }
 }

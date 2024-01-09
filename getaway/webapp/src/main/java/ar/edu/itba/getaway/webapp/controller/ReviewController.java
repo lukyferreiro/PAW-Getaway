@@ -57,14 +57,13 @@ public class ReviewController {
         LOGGER.info("Called /reviews GET");
 
         Page<ReviewModel> reviews = GetReviewsParams.getReviewsByParams(userId, experienceId, page, reviewService, experienceService, authContext);
+        final UriBuilder uriBuilder = GetReviewsParams.getUriBuilder(userId, experienceId, page, uriInfo);
 
         if (reviews.getContent().isEmpty()) {
             return Response.noContent().build();
         }
 
         final Collection<ReviewDto> reviewDtos = ReviewDto.mapReviewToDto(reviews.getContent(), uriInfo);
-
-        final UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder().queryParam("page", page);
 
         return PaginationResponse.createPaginationResponse(reviews, new GenericEntity<Collection<ReviewDto>>(reviewDtos) {
         }, uriBuilder);

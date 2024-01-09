@@ -116,7 +116,7 @@ export default function UserFavourites() {
 
                         <div className="container-fluid my-3 d-flex flex-wrap justify-content-center">
                             {favExperiences.map((experience) => (
-                                <CardExperience experience={experience} key={experience.id} categoryProp={dummyCategoryProp} nameProp={dummyNameProp}/>
+                                <CardExperience experience={experience} key={experience.id} categoryProp={dummyCategoryProp} nameProp={dummyNameProp} fav={true}/>
                             ))}
                         </div>
 

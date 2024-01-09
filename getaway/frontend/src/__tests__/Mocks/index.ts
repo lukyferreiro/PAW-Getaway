@@ -60,11 +60,6 @@ export const orderByModel: OrderByModel = {
     self: "http://localhost:8080/api/experiences/orders"
 };
 
-export const experienceNameModel: ExperienceNameModel = {
-    id: 1,
-    name: "Experiencia comun",
-};
-
 export const experienceModelNoFav: ExperienceModel = {
     id: 1,
     name: "Experiencia comun",
@@ -75,7 +70,6 @@ export const experienceModelNoFav: ExperienceModel = {
     score: 4,
     views: 100,
     siteUrl: "https://google.com",
-    isFav: false,
     observable: true,
     hasImage: false,
     reviewCount: 8,
@@ -97,7 +91,6 @@ export const experienceModelFav: ExperienceModel = {
     score: 4,
     views: 100,
     siteUrl: "https://google.com",
-    isFav: true,
     observable: true,
     hasImage: false,
     reviewCount: 8,
@@ -119,7 +112,6 @@ export const experienceModelCategory: ExperienceModel = {
     score: 4,
     views: 100,
     siteUrl: "https://google.com",
-    isFav: true,
     observable: true,
     hasImage: false,
     reviewCount: 8,
@@ -141,7 +133,6 @@ export const experienceModelMaxPrice: ExperienceModel = {
     score: 3,
     views: 100,
     siteUrl: "https://google.com",
-    isFav: true,
     observable: true,
     hasImage: false,
     reviewCount: 8,

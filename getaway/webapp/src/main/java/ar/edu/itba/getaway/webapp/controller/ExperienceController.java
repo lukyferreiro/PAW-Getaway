@@ -7,7 +7,6 @@ import ar.edu.itba.getaway.models.pagination.Page;
 import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.GetExperiencesFilter;
 import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.GetExperiencesParams;
 import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.GetOrdersParams;
-import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.InvalidRequestParamsException;
 import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
 import ar.edu.itba.getaway.webapp.controller.util.PaginationResponse;
 import ar.edu.itba.getaway.webapp.dto.request.NewExperienceDto;
@@ -38,7 +37,6 @@ public class ExperienceController {
     @Context
     private UriInfo uriInfo;
     private final ExperienceService experienceService;
-    private final FavAndViewExperienceService favAndViewExperienceService;
     private final CategoryService categoryService;
     private final LocationService locationService;
     private final ImageService imageService;
@@ -49,11 +47,10 @@ public class ExperienceController {
     private static final String ACCEPTED_MIME_TYPES = "image/";
 
     @Autowired
-    public ExperienceController(ExperienceService experienceService, FavAndViewExperienceService favAndViewExperienceService,
-                                CategoryService categoryService, LocationService locationService, ImageService imageService,
+    public ExperienceController(ExperienceService experienceService, CategoryService categoryService,
+                                LocationService locationService, ImageService imageService,
                                 Integer maxRequestSize, AuthContext authContext) {
         this.experienceService = experienceService;
-        this.favAndViewExperienceService = favAndViewExperienceService;
         this.categoryService = categoryService;
         this.locationService = locationService;
         this.imageService = imageService;
@@ -158,9 +155,9 @@ public class ExperienceController {
 
         final UserModel user = authContext.getCurrentUser();
 
-        experienceService.updateExperience(id, experienceDto.getName(), experienceDto.getAddress(), experienceDto.getDescription(),
-                experienceDto.getMail(), experienceDto.getUrl(), experienceDto.getPrice(), experienceDto.getCity(),
-                experienceDto.getCategory(), user);
+        experienceService.updateExperience(id, experienceDto.getName(), experienceDto.getAddress(),
+                experienceDto.getDescription(), experienceDto.getMail(), experienceDto.getUrl(),
+                experienceDto.getPrice(), experienceDto.getCity(), experienceDto.getCategory(), user);
         LOGGER.info("The experience with id {} has been updated successfully", id);
         return Response.noContent().build();
     }
@@ -212,7 +209,7 @@ public class ExperienceController {
 
         final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(UserNotFoundException::new);
 
-        if(experience.getImage() == null) {
+        if (experience.getImage() == null) {
             return Response.noContent().build();
         }
 
@@ -249,7 +246,7 @@ public class ExperienceController {
             @QueryParam("provider") @DefaultValue("false") Boolean isProvider
     ){
         LOGGER.info("Called /experiences/orders GET");
-        OrderByModel[] orderByModels = GetOrdersParams.getOrdersByParams(isProvider);
+        final OrderByModel[] orderByModels = GetOrdersParams.getOrdersByParams(isProvider);
         return Response.ok(new OrdersDto(orderByModels, uriInfo)).build();
     }
 
