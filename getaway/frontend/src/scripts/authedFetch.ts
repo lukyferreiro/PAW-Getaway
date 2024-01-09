@@ -2,7 +2,7 @@
 
 function isTokenExpired(token: string): boolean {
     console.log("Is token expired")
-    // const payload: any = jwt.verify(token, 'paw2022b-1-super-secret-key');
+    // const payload: any = jwt.verify(token.split(".")[1], 'paw2022b-1-super-secret-key');
     const payload: any = JSON.parse(atob(token.split(".")[1]))
     return payload.exp * 1000 < new Date().getTime()
 }
