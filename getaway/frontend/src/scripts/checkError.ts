@@ -14,9 +14,9 @@ function handleResponseStatus<RetType>(response: Response): Promise<RetType> | n
 // Si obtenemos un 401 quiere decir que vencio el token
 export function checkValidJWT<RetType>(response: Response): Promise<RetType> | null {
     if (response.status === 401) {
+        localStorage.removeItem('getawayRefreshToken')
         localStorage.removeItem('getawayAccessToken')
         localStorage.removeItem('getawayUser')
-        //TODO ver si se hace algo con refresh
         return handleResponseStatus(response);
     }
     if (response) {
