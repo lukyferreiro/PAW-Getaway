@@ -97,7 +97,6 @@ public class JwtTokenDetails {
             return this;
         }
 
-
         public JwtTokenDetails build() {
             return new JwtTokenDetails(id, email, roles, issuedDate, expirationDate, token, tokenType);
         }

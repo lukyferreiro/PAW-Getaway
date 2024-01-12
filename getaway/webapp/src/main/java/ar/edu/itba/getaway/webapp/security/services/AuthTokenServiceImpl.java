@@ -43,7 +43,7 @@ public class AuthTokenServiceImpl implements AuthTokenService {
     }
 
     private String createToken(final Date expiresAt, final MyUserDetails userDetails, final JwtTokenType tokenType) {
-        final JWTCreator.Builder token =  JWT.create()
+        final JWTCreator.Builder token = JWT.create()
                 .withJWTId(generateTokenIdentifier())
                 .withSubject(userDetails.getUsername())
                 .withIssuedAt(new Date())

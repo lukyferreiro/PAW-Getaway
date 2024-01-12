@@ -19,11 +19,11 @@ public class GetReviewsParams {
             ExperienceService experienceService, AuthContext authContext
     ) {
 
-        if(userId == null && experienceId == null){
+        if (userId == null && experienceId == null) {
             throw new InvalidRequestParamsException("errors.invalidParam.getReviews.bothNull");
         }
 
-        if(userId != null && experienceId != null){
+        if (userId != null && experienceId != null) {
             throw new InvalidRequestParamsException("errors.invalidParam.getReviews.bothNotNull");
         }
 

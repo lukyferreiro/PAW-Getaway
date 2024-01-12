@@ -4,7 +4,6 @@ import ar.edu.itba.getaway.webapp.dto.response.ApiErrorDto;
 import ar.edu.itba.getaway.webapp.security.api.CustomMediaType;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Locale;

@@ -26,19 +26,17 @@ export function AuthProvider({children}: { children: ReactNode }) {
     useEffect(() => {
         const accessToken = localStorage.getItem("getawayAccessToken");
         if (accessToken) {
-            const loggedUser = JSON.parse(atob(accessToken.split(".")[1])) as CurrentUserModel;
+            const loggedUser: CurrentUserModel = JSON.parse(atob(accessToken.split(".")[1])) as CurrentUserModel;
             setUser(loggedUser);
             localStorage.setItem('getawayUser', JSON.stringify(loggedUser))
         }
-
-        const refreshToken = localStorage.getItem("getawayRefreshToken");
     }, []);
 
     const signIn = (callback: VoidFunction) => {
         internalAuthProvider.signIn(() => {
             const token = localStorage.getItem('getawayAccessToken')
             if (token) {
-                const loggedUser = JSON.parse(atob(token.split('.')[1])) as CurrentUserModel
+                const loggedUser: CurrentUserModel = JSON.parse(atob(token.split('.')[1])) as CurrentUserModel
                 setUser(loggedUser)
                 localStorage.setItem('getawayUser', JSON.stringify(loggedUser))
             }

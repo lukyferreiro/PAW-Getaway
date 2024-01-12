@@ -44,9 +44,9 @@ public class MyUserDetailsService implements UserDetailsService {
         final UserModel userModel = userService.getUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(message + email));
         final Collection<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("USER"));
-        if(userModel.isVerified()){
+        if (userModel.isVerified()) {
             authorities.add(new SimpleGrantedAuthority("VERIFIED"));
-            if(userModel.isProvider()){
+            if (userModel.isProvider()) {
                 authorities.add(new SimpleGrantedAuthority("PROVIDER"));
             }
         } else {
@@ -54,7 +54,7 @@ public class MyUserDetailsService implements UserDetailsService {
         }
         LOGGER.debug("Logged user with email {} and authorities {}", email, authorities);
         final String password;
-        if(userModel.getPassword() == null || !BCRYPT_HASH_PATTERN.matcher(userModel.getPassword()).matches()) {
+        if (userModel.getPassword() == null || !BCRYPT_HASH_PATTERN.matcher(userModel.getPassword()).matches()) {
             password = encoder.encode(userModel.getPassword());
             userModel.setPassword(password);
             userService.updateUser(userModel.getUserId(), userModel);

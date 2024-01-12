@@ -14,7 +14,7 @@ public class CustomMediaType {
     public static final String REVIEW_LIST_V1 = "application/vnd.getaway.reviewList.v1+json";
     public static final String COUNTRY_V1 = "application/vnd.getaway.country.v1+json";
     public static final String COUNTRY_LIST_V1 = "application/vnd.getaway.countryList.v1+json";
-    public static final String CITY_V1 = "application/vnd.getaway.citY.v1+json";
+    public static final String CITY_V1 = "application/vnd.getaway.city.v1+json";
     public static final String CITY_LIST_V1 = "application/vnd.getaway.cityList.v1+json";
     public static final String CATEGORY_V1 = "application/vnd.getaway.category.v1+json";
     public static final String CATEGORY_LIST_V1 = "application/vnd.getaway.categoryList.v1+json";

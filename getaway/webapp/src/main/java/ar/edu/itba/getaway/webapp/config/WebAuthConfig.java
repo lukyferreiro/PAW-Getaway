@@ -160,8 +160,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.PUT, "/api/experiences/{experienceId}/experienceImage").access("@antMatcherVoter.canEditExperienceById(authentication, #experienceId)")
                     //permitAll para explorar
                     .antMatchers(HttpMethod.GET, "/api/experiences/{experienceId}/experienceImage").permitAll()
-                    //logueado
-                    .antMatchers(HttpMethod.PUT, "/api/experience/{experienceId}/fav").authenticated()
                 //------------------- /reviews -------------------
                     //logueado y VERIFIED, chequear que sea el mismo usuario
                     .antMatchers(HttpMethod.GET, "/api/reviews").permitAll()

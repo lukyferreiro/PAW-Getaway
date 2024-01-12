@@ -16,17 +16,18 @@ public class RootDto implements Serializable {
 
     //TODO check estas urls de la api
     private static final Collection<String> userStrings =
-            Collections.unmodifiableCollection(Arrays.asList("users", "users/{userId}", "users/{userId}/profileImage"));
+            Collections.unmodifiableCollection(Arrays.asList("users", "users/{userId}",
+                    "users/{userId}/profileImage", "users/{userId}/favourites/{experienceId}?{fav}"));
     private static final Collection<String> experienceStrings =
             Collections.unmodifiableCollection(Arrays.asList(
                     "experiences?{category,name,order,price,score,city,page,userId,filter}",
                     "experiences/{experienceId}?{view}",
                     "experiences/{experienceId}/experienceImage",
-                    "experiences/{experienceId}/fav?{fav}",
-                    "experiences/orders?{provider}", "experiences/categories", "experiences/categories/{categoryId}"));
+                    "experiences/orders?{provider}", "experiences/categories",
+                    "experiences/categories/{categoryId}"));
     private static final Collection<String> locationStrings =
             Collections.unmodifiableCollection(Arrays.asList("location/countries", "location/countries/{countryId}",
-                    "location/countries/{countryId}/cities", "location/cities/{cityId}"));
+                    "location/countries/{countryId}/cities", "location/cities/{cityId}"));  //TODO check este
     private static final Collection<String> reviewString =
             Collections.unmodifiableCollection(Arrays.asList("reviews?{userId,experienceId,page}","reviews/{reviewId}"));
 

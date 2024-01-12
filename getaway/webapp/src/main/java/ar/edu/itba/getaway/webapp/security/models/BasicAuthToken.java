@@ -11,12 +11,10 @@ public class BasicAuthToken extends UsernamePasswordAuthenticationToken {
     private String refreshToken;
     private JwtTokenDetails tokenDetails;
 
-    public BasicAuthToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities,
-                          JwtTokenDetails tokenDetails) {
+    public BasicAuthToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities, JwtTokenDetails tokenDetails) {
         super(principal, credentials, authorities);
         this.tokenDetails = tokenDetails;
     }
-
 
     public BasicAuthToken(String token) {
         super(null, null);

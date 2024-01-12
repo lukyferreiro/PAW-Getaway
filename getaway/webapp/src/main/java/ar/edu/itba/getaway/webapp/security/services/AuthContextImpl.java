@@ -32,7 +32,6 @@ public class AuthContextImpl implements AuthContext {
             return userService.getUserByEmail(username).orElseThrow(UserNotFoundException::new);
         } else if (authentication instanceof JwtAuthToken) {
             LOGGER.info("Instance of JWT token auth");
-
             return userService.getUserByEmail(((MyUserDetails) (authentication.getPrincipal())).getUsername()).orElseThrow(UserNotFoundException::new);
         } else /*Case: anonymous*/ {
             LOGGER.info("Instance of anonymous user");
@@ -54,6 +53,5 @@ public class AuthContextImpl implements AuthContext {
     public boolean isProviderUser() {
         return getCurrentUser().isProvider();
     }
-
 
 }
