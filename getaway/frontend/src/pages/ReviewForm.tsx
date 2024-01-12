@@ -3,13 +3,14 @@ import "../common/i18n/index"
 import {useNavigate, useParams} from "react-router-dom"
 import React, {useEffect, useState} from "react"
 import {serviceHandler} from "../scripts/serviceHandler"
-import {experienceService, reviewService} from "../services"
+import {experienceService, reviewService, userService} from "../services"
 import {useForm} from "react-hook-form"
 import {useAuth} from "../hooks/useAuth"
-import {ExperienceNameModel, ReviewModel} from "../types"
+import {CityModel, CountryModel, ExperienceNameModel, ReviewModel} from "../types"
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery"
 import {showToast} from "../scripts/toast"
 import StarRoundedIcon from "@mui/icons-material/StarRounded"
+import {authedFetch} from "../scripts/authedFetch";
 
 
 type FormDataReview = {
@@ -60,11 +61,13 @@ export default function ReviewForm() {
                 serviceHandler(
                     reviewService.getReviewById(parseInt(currentId)),
                     navigate, (review) => {
-                        //TODO
-                        // if (review.user.id !== user?.userId) {
-                        //     navigate("/", {replace: true})
-                        //     showToast(t('ReviewForm.toast.forbidden.notAllowed'), 'error')
-                        // }
+                        // @ts-ignore
+                        const userId = parseInt(review.userUrl.match(/(\d+)$/)[0], 10);
+
+                        if (userId !== user?.userId) {
+                            navigate("/", {replace: true})
+                            showToast(t('ReviewForm.toast.forbidden.notAllowed'), 'error')
+                        }
                         setReview(review)
                         setRating(-review.score)
                         setHover(-review.score)
