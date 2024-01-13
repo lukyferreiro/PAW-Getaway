@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.webapp.constraints;
 
 import ar.edu.itba.getaway.interfaces.services.LocationService;
-import ar.edu.itba.getaway.models.CityModel;
 import ar.edu.itba.getaway.models.CountryModel;
 import org.springframework.beans.factory.annotation.Autowired;
 

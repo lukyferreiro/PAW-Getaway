@@ -26,8 +26,8 @@ public class RootDto implements Serializable {
                     "experiences/orders?{provider}", "experiences/categories",
                     "experiences/categories/{categoryId}"));
     private static final Collection<String> locationStrings =
-            Collections.unmodifiableCollection(Arrays.asList("location/countries", "location/countries/{countryId}",
-                    "location/countries/{countryId}/cities", "location/cities/{cityId}"));  //TODO check este
+            Collections.unmodifiableCollection(Arrays.asList("countries", "countries/{countryId}",
+                    "countries/{countryId}/cities", "countries/{countryId}/cities/{cityId}"));
     private static final Collection<String> reviewString =
             Collections.unmodifiableCollection(Arrays.asList("reviews?{userId,experienceId,page}","reviews/{reviewId}"));
 

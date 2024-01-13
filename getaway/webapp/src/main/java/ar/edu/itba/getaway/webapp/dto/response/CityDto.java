@@ -26,8 +26,8 @@ public class CityDto implements Serializable {
     public CityDto(CityModel city, UriInfo uriInfo) {
         this.id = city.getCityId();
         this.name = city.getCityName();
-        this.self = uriInfo.getBaseUriBuilder().path("location").path("cities").path(String.valueOf(city.getCityId())).build();
-        this.countryUrl = uriInfo.getBaseUriBuilder().path("location").path("countries").path(String.valueOf(city.getCountry().getCountryId())).build();
+        this.self = uriInfo.getBaseUriBuilder().path("countries").path(String.valueOf(city.getCountry().getCountryId())).path("cities").path(String.valueOf(city.getCityId())).build();
+        this.countryUrl = uriInfo.getBaseUriBuilder().path("countries").path(String.valueOf(city.getCountry().getCountryId())).build();
     }
 
     public long getId() {

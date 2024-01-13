@@ -56,7 +56,7 @@ public class ReviewController {
     ) {
         LOGGER.info("Called /reviews GET");
 
-        Page<ReviewModel> reviews = GetReviewsParams.getReviewsByParams(userId, experienceId, page, reviewService, experienceService, authContext);
+        final Page<ReviewModel> reviews = GetReviewsParams.getReviewsByParams(userId, experienceId, page, reviewService, experienceService, authContext);
         final UriBuilder uriBuilder = GetReviewsParams.getUriBuilder(userId, experienceId, page, uriInfo);
 
         if (reviews.getContent().isEmpty()) {
@@ -84,7 +84,7 @@ public class ReviewController {
 
         LOGGER.info("Called /reviews POST");
 
-        if(experienceId == null){
+        if (experienceId == null) {
             throw new InvalidRequestParamsException("errors.invalidParam.postReview");
         }
 

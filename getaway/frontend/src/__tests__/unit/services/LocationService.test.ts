@@ -26,7 +26,7 @@ describe('Location Service Test', () => {
     test("Should get city with id 1", async () => {
         successfullyMockResponse(200, cityModel);
 
-        return locationService.getCityById(1)
+        return locationService.getCityById(14,1)
             .then((response) => {
                 expect(response.hasFailed()).toBeFalsy();
                 expect(response.getData()).toBe(cityModel);

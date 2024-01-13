@@ -21,7 +21,7 @@ public class CountryDto implements Serializable {
     }
 
     public static UriBuilder getCountryUriBuilder(CountryModel country, UriInfo uriInfo) {
-        return uriInfo.getBaseUriBuilder().clone().path("location").path("countries").path(String.valueOf(country.getCountryId()));
+        return uriInfo.getBaseUriBuilder().clone().path("countries").path(String.valueOf(country.getCountryId()));
     }
 
     public CountryDto() {
