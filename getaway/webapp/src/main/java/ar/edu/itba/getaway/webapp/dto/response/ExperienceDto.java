@@ -67,7 +67,7 @@ public class ExperienceDto implements Serializable {
         this.self = uriBuilder.build();
         this.imageUrl = uriBuilder.clone().path("experienceImage").build();
         this.reviewsUrl = uriBuilder.clone().path("reviews").build();
-        this.cityUrl = uriInfo.getBaseUriBuilder().path("location").path("cities").path(String.valueOf(experience.getCity().getCityId())).build();
+        this.cityUrl = uriInfo.getBaseUriBuilder().path("countries").path(String.valueOf(experience.getCity().getCountry().getCountryId())).path("cities").path(String.valueOf(experience.getCity().getCityId())).build();
         this.userUrl = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(experience.getUser().getUserId())).build();
         this.categoryUrl = uriInfo.getBaseUriBuilder().path("experiences").path("categories").path(String.valueOf(experience.getCategory().getCategoryId())).build();
     }
