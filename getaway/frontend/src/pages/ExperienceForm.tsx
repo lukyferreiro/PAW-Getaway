@@ -52,22 +52,19 @@ export default function ExperienceForm() {
         = useForm<FormDataExperience>({criteriaMode: "all"})
 
     const [categoryModel, setCategoryModel] = useState<CategoryModel | undefined>(undefined)
-    const [cityModel, setCityModel] = useState<CityModel | undefined>(undefined)
-    const [countryModel, setCountryModel] = useState<CountryModel | undefined>(undefined)
 
     const getExperienceInfo = async () => {
         try {
             const experience = await authedFetch(paths.BASE_URL + paths.EXPERIENCES + `/${parseInt(currentId)}`, {method: "GET"})
+
             if (experience.status == 200) {
                 const parsedExperience = await experience.json();
 
                 const city = await authedFetch(parsedExperience.cityUrl, {method: "GET"})
                 const parsedCity = await city.json();
-                setCityModel(parsedCity);
 
                 const country =  await authedFetch(parsedCity.countryUrl, {method: "GET"})
                 const parsedCountry = await country.json();
-                setCountryModel(parsedCountry)
 
                 const categoryModel =  await authedFetch(parsedExperience.categoryUrl, {method: "GET"})
                 const parsedCategoryModel = await categoryModel.json();
@@ -81,13 +78,13 @@ export default function ExperienceForm() {
                 }
 
                 setExperience(parsedExperience)
-                loadCities(parsedExperience.country.id)
+                loadCities(parsedCountry? parsedCountry.id : -1)
                 setValue('name', parsedExperience.name)
-                setValue('category', parsedExperience.category.id)
-                setValue('country', parsedExperience.country.id)
-                setCountry(parsedExperience.country.id)
-                setValue('city', parsedExperience.city.id)
-                setCity(parsedExperience.city.id)
+                setValue('category',parsedCategoryModel.id)
+                setValue('country', parsedCountry.id)
+                setCountry(parsedCountry? parsedCountry.id : -1)
+                setValue('city', parsedCity.id)
+                setCity(parsedCity? parsedCity.id : -1)
                 setValue('address', parsedExperience.address)
                 setValue('mail', parsedExperience.email)
                 setValue('price', parsedExperience.price)
@@ -149,7 +146,7 @@ export default function ExperienceForm() {
 
     function loadCities(countryId: number) {
         serviceHandler(
-            locationService.getCitiesByCountry(countryId),
+            locationService.getCitiesByCountry(countryId ? countryId : -1),
             navigate, (city) => {
                 setCities(city)
             },
