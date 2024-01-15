@@ -68,6 +68,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
             const parsedUser = JSON.parse(userStorage)
             parsedUser.isVerified = true
             setUser(parsedUser)
+            localStorage.setItem('getawayUser', JSON.stringify(parsedUser))
         }
         callback()
     }
@@ -78,6 +79,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
             const parsedUser = JSON.parse(userStorage)
             parsedUser.isProvider = true
             setUser(parsedUser)
+            localStorage.setItem('getawayUser', JSON.stringify(parsedUser))
         }
         callback()
     }
@@ -88,16 +90,19 @@ export function AuthProvider({children}: { children: ReactNode }) {
             const parsedUser = JSON.parse(userStorage)
             parsedUser.hasImage = true
             setUser(parsedUser)
+            localStorage.setItem('getawayUser', JSON.stringify(parsedUser))
         }
     }
 
     const editUserInfo = (name: string, surname: string, callback: VoidFunction) => {
         const userStorage = localStorage.getItem('getawayUser')
         if (userStorage !== null) {
+            console.log("Editando")
             const parsedUser = JSON.parse(userStorage)
             parsedUser.name = name
             parsedUser.surname = surname
             setUser(parsedUser)
+            localStorage.setItem('getawayUser', JSON.stringify(parsedUser))
         }
         callback()
     }
