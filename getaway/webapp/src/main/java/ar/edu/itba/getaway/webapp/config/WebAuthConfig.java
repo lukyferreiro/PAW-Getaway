@@ -169,10 +169,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.DELETE, "/api/reviews/{reviewId}").access("@antMatcherVoter.canDeleteReviewById(authentication, #reviewId)")
                 //------------------- /location -------------------
                     //permitAll para explorar
-                    .antMatchers(HttpMethod.GET, "/api/location/countries").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/location/countries/{countryId}").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/location/countries/{countryId}/cities").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/location/cities/{cityId}").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/countries").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/countries/{countryId}").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/countries/{countryId}/cities").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/countries/{countryId}/cities/{cityId}").permitAll()
                 //------------------- Others --------------------
                     .antMatchers("/**").permitAll()
                 .and()

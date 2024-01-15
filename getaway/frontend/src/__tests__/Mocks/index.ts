@@ -26,15 +26,15 @@ export const categoryModel2: CategoryModel = {
 export const cityModel: CityModel = {
     id: 1,
     name: "Buenos Aires",
-    self: "http://localhost:8080/api/location/cities/1",
-    countryUrl: "http://plocalhost:8080/api/location/countries/14"
+    self: "http://localhost:8080/api/countries/14/cities/1",
+    countryUrl: "http://plocalhost:8080/api/countries/14"
 };
 
 export const countryModel: CountryModel = {
     id: 14,
     name: "Argentina",
-    self: "http://localhost:8080/api/location/countries/14",
-    citiesUrl: "http://localhost:8080/api/location/countries/14/cities"
+    self: "http://localhost:8080/api/countries/14",
+    citiesUrl: "http://localhost:8080/api/countries/14/cities"
 };
 
 export const userModel: UserModel = {
@@ -76,7 +76,7 @@ export const experienceModelNoFav: ExperienceModel = {
     self: "http://localhost:8080/api/experiences/1",
     imageUrl: "http://localhost:8080/api/experiences/1/experienceImage",
     reviewsUrl: "http://localhost:8080/api/reviews?experienceId=1",
-    cityUrl: "http://localhost:8080/api/location/cities/1",
+    cityUrl: "http://localhost:8080/api/countries/14/cities/1",
     userUrl: "http://localhost:8080/api/users/1",
     categoryUrl: "http://localhost:8080/api/experiences/categories/1",
 };
@@ -97,7 +97,7 @@ export const experienceModelFav: ExperienceModel = {
     self: "http://localhost:8080/api/experiences/2",
     imageUrl: "http://localhost:8080/api/experiences/2/experienceImage",
     reviewsUrl: "http://localhost:8080/api/reviews?experienceId=2",
-    cityUrl: "http://localhost:8080/api/location/cities/1",
+    cityUrl: "http://localhost:8080/api/countries/14/cities/1",
     userUrl: "http://localhost:8080/api/users/1",
     categoryUrl: "http://localhost:8080/api/experiences/categories/1",
 };
@@ -118,7 +118,7 @@ export const experienceModelCategory: ExperienceModel = {
     self: "http://localhost:8080/api/experiences/3",
     imageUrl: "http://localhost:8080/api/experiences/3/experienceImage",
     reviewsUrl: "http://localhost:8080/api/reviews?experienceId=3",
-    cityUrl: "http://localhost:8080/api/location/cities/1",
+    cityUrl: "http://localhost:8080/api/countries/14/cities/1",
     userUrl: "http://localhost:8080/api/users/1",
     categoryUrl: "http://localhost:8080/api/experiences/categories/1",
 };
@@ -139,7 +139,7 @@ export const experienceModelMaxPrice: ExperienceModel = {
     self: "http://localhost:8080/api/experiences/4",
     imageUrl: "http://localhost:8080/api/experiences/4/experienceImage",
     reviewsUrl: "http://localhost:8080/api/reviews?experienceId=4",
-    cityUrl: "http://localhost:8080/api/location/cities/1",
+    cityUrl: "http://localhost:8080/api/countries/14/cities/1",
     userUrl: "http://localhost:8080/api/users/1",
     categoryUrl: "http://localhost:8080/api/experiences/categories/1",
 };

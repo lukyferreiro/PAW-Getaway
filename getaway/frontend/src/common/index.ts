@@ -11,7 +11,7 @@ export const paths = {
     LOCAL_BASE_URL : '/paw-2022b-1/',
     BASE_URL: 'http://pawserver.it.itba.edu.ar/paw-2022b-1/api',
     EXPERIENCES: '/experiences',
-    LOCATION: '/location',
+    LOCATION: '/countries',
     REVIEWS: '/reviews',
     USERS: '/users',
 };

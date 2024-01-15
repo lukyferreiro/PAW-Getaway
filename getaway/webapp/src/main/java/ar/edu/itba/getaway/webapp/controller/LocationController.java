@@ -20,7 +20,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.*;
 import java.util.Collection;
 
-@Path("location")
+@Path("countries")
 @Component
 public class LocationController {
 
@@ -36,10 +36,9 @@ public class LocationController {
 
     // Endpoint para obtener el listado completo de países
     @GET
-    @Path("/countries")
     @Produces(value = {CustomMediaType.COUNTRY_LIST_V1})
     public Response getCountries() {
-        LOGGER.info("Called /location/countries GET");
+        LOGGER.info("Called /countries GET");
         final Collection<CountryModel> countries = locationService.listAllCountries();
 
         if (countries.isEmpty()) {
@@ -52,25 +51,25 @@ public class LocationController {
 
     // Endpoint para obtener el listado completo de países
     @GET
-    @Path("/countries/{countryId:[0-9]+}")
+    @Path("/{countryId:[0-9]+}")
     @Produces(value = {CustomMediaType.COUNTRY_V1})
     public Response getCountryById(
-            @PathParam("countryId") final long id
+            @PathParam("countryId") final long countryId
     ) {
-        LOGGER.info("Called /location/countries/{} GET", id);
-        final CountryModel country = locationService.getCountryById(id).orElseThrow(CountryNotFoundException::new);
+        LOGGER.info("Called /countries/{} GET", countryId);
+        final CountryModel country = locationService.getCountryById(countryId).orElseThrow(CountryNotFoundException::new);
         return Response.ok(new CountryDto(country, uriInfo)).build();
     }
 
     // Endpoint para obtener el listado completo de ciudades del país {id}
     @GET
-    @Path("/countries/{countryId:[0-9]+}/cities")
+    @Path("/{countryId:[0-9]+}/cities")
     @Produces(value = {CustomMediaType.CITY_LIST_V1})
     public Response getCitiesByCountryId(
-            @PathParam("countryId") final long id
+            @PathParam("countryId") final long countryId
     ) {
-        LOGGER.info("Called /location/countries/{}/cities GET", id);
-        final Collection<CityModel> cities = locationService.getCitiesByCountry(id);
+        LOGGER.info("Called /countries/{}/cities GET", countryId);
+        final Collection<CityModel> cities = locationService.getCitiesByCountry(countryId);
 
         if (cities.isEmpty()) {
             return Response.noContent().build();
@@ -82,13 +81,14 @@ public class LocationController {
 
     // Endpoint para obtener información de la ciudad {id}
     @GET
-    @Path("/cities/{cityId:[0-9]+}")
+    @Path("/{countryId:[0-9]+}/cities/{cityId:[0-9]+}")
     @Produces(value = {CustomMediaType.CITY_V1})
     public Response getCityById(
-            @PathParam("cityId") final long id
+            @PathParam("countryId") final long countryId,
+            @PathParam("cityId") final long cityId
     ) {
-        LOGGER.info("Called /location/cities/{} GET", id);
-        final CityModel city = locationService.getCityById(id).orElseThrow(CityNotFoundException::new);
+        LOGGER.info("Called /countries/{}/cities/{} GET", countryId, cityId);
+        final CityModel city = locationService.getCityById(cityId).orElseThrow(CityNotFoundException::new);
         return Response.ok(new CityDto(city, uriInfo)).build();
     }
 }
