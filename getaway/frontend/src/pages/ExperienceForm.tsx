@@ -60,6 +60,12 @@ export default function ExperienceForm() {
             if (experience.status == 200) {
                 const parsedExperience = await experience.json();
 
+                const userId = parseInt(parsedExperience.userUrl.match(/(\d+)$/)[0], 10);
+                if (userId !== user?.userId) {
+                    navigate("/", {replace: true})
+                    showToast(t('ExperienceForm.toast.forbidden.notAllowed'), 'error')
+                }
+
                 const city = await authedFetch(parsedExperience.cityUrl, {method: "GET"})
                 const parsedCity = await city.json();
 
@@ -69,13 +75,6 @@ export default function ExperienceForm() {
                 const categoryModel =  await authedFetch(parsedExperience.categoryUrl, {method: "GET"})
                 const parsedCategoryModel = await categoryModel.json();
                 setCategoryModel(parsedCategoryModel)
-
-                const userId = parseInt(parsedExperience.userUrl.match(/(\d+)$/)[0], 10);
-
-                if (userId !== user?.userId) {
-                    navigate("/", {replace: true})
-                    showToast(t('ExperienceForm.toast.forbidden.notAllowed'), 'error')
-                }
 
                 setExperience(parsedExperience)
                 loadCities(parsedCountry? parsedCountry.id : -1)

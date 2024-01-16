@@ -15,6 +15,7 @@ import categoryImages, {CategoryName} from "../common";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, userService} from "../services";
 import {authedFetch} from "../scripts/authedFetch";
+import {useCommon} from "../hooks/useCommon";
 
 export default function CardExperience(props: { experience: ExperienceModel, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], fav: boolean }) {
     const {t} = useTranslation()
@@ -28,18 +29,21 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
     const [isLoadingImg, setIsLoadingImg] = useState(false)
     const [isFav, setIsFav] = useState(false)
 
+    const {getCountry} = useCommon()
+
     const [category, setCategory] = useState<CategoryModel | undefined>(undefined)
     const [city, setCity] = useState<CityModel | undefined>(undefined)
-    const [country, setCountry] = useState<CountryModel | undefined>(undefined)
+    // const [country, setCountry] = useState<CountryModel | undefined>(undefined)
+    const country = getCountry()
 
     const getCityAndCountry = async () => {
         try {
             const city = await authedFetch(experience.cityUrl, {method: "GET"})
             const parsedCity = await city.json() as CityModel;
             setCity(parsedCity);
-            const country =  await authedFetch(parsedCity.countryUrl, {method: "GET"})
-            const parsedCountry = await country.json() as CountryModel;
-            setCountry(parsedCountry)
+            // const country =  await authedFetch(parsedCity.countryUrl, {method: "GET"})
+            // const parsedCountry = await country.json() as CountryModel;
+            // setCountry(parsedCountry)
         } catch (error) {
             navigate('/error', {state: {code: 500, message: 'Server error',}, replace: true,})
         }

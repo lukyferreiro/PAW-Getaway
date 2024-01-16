@@ -14,6 +14,7 @@ import Error from "./pages/Error";
 import Custom404 from "./pages/Custom404";
 import Home from "./pages/Home";
 import {AuthProvider} from "./context/AuthContext";
+import {CommonProvider} from "./context/CommonContext";
 import Login from "./pages/Login";
 import CreateAccount from "./pages/CreateAccount";
 import ChangePassword from "./pages/ChangePassword";
@@ -32,47 +33,41 @@ function App() {
 
     return (
         <AuthProvider>
-            <BrowserRouter basename={paths.LOCAL_BASE_URL}>
+            <CommonProvider>
+                <BrowserRouter basename={paths.LOCAL_BASE_URL}>
 
-                <Navbar categoryProp={categoryProp} nameProp={nameProp}/>
-                <hr className="separator"/>
+                    <Navbar categoryProp={categoryProp} nameProp={nameProp}/>
+                    <hr className="separator"/>
 
-                <Routes>
-                    <Route path='/' element={<Landing/>}>
-                        <Route index element={<RequireAuth><Home/></RequireAuth>}/>
-                    </Route>
-                    <Route path='/user' element={<RequireAuth><UserPage/></RequireAuth>}>
-                        <Route path='profile' element={<UserProfile/>}/>
-                        <Route path='editProfile' element={<UserEditProfile/>}/>
-                        <Route path='experiences' element={<UserExperiences/>}/>
-                        <Route path='favourites' element={<UserFavourites/>}/>
-                        <Route path='reviews' element={<UserReviews/>}/>
-                    </Route>
-                    <Route path='/experiences' element={<RequireAuth><Experiences categoryProp={categoryProp} nameProp={nameProp}/></RequireAuth>}/>
-                    <Route path='/experiences/:experienceId' element={<RequireAuth><ExperienceDetails categoryProp={categoryProp} nameProp={nameProp}/></RequireAuth>}/>
-                    <Route path='/experiences/:experienceId/reviewForm' element={<RequireAuth><ReviewForm/></RequireAuth>} />
-                    <Route path='/experienceForm' element={<RequireAuth><ExperienceForm/></RequireAuth>}/>
-                    <Route path='error' element={<Error/>}/>
-                    <Route path='*' element={<Custom404/>}/>
-                    <Route path='/login' element={<RequireNoAuth><Login/></RequireNoAuth>}/>
-                    <Route path='/createAccount' element={<RequireNoAuth><CreateAccount/></RequireNoAuth>}/>
-                    <Route path='/changePassword' element={<RequireNoAuth><ChangePassword/></RequireNoAuth>}/>
-                </Routes>
+                    <Routes>
+                        <Route path='/' element={<Landing/>}>
+                            <Route index element={<RequireAuth><Home/></RequireAuth>}/>
+                        </Route>
+                        <Route path='/user' element={<RequireAuth><UserPage/></RequireAuth>}>
+                            <Route path='profile' element={<UserProfile/>}/>
+                            <Route path='editProfile' element={<UserEditProfile/>}/>
+                            <Route path='experiences' element={<UserExperiences/>}/>
+                            <Route path='favourites' element={<UserFavourites/>}/>
+                            <Route path='reviews' element={<UserReviews/>}/>
+                        </Route>
+                        <Route path='/experiences' element={<RequireAuth><Experiences categoryProp={categoryProp} nameProp={nameProp}/></RequireAuth>}/>
+                        <Route path='/experiences/:experienceId' element={<RequireAuth><ExperienceDetails categoryProp={categoryProp} nameProp={nameProp}/></RequireAuth>}/>
+                        <Route path='/experiences/:experienceId/reviewForm' element={<RequireAuth><ReviewForm/></RequireAuth>} />
+                        <Route path='/experienceForm' element={<RequireAuth><ExperienceForm/></RequireAuth>}/>
+                        <Route path='error' element={<Error/>}/>
+                        <Route path='*' element={<Custom404/>}/>
+                        <Route path='/login' element={<RequireNoAuth><Login/></RequireNoAuth>}/>
+                        <Route path='/createAccount' element={<RequireNoAuth><CreateAccount/></RequireNoAuth>}/>
+                        <Route path='/changePassword' element={<RequireNoAuth><ChangePassword/></RequireNoAuth>}/>
+                    </Routes>
 
-                <ToastContainer
-                    position='top-left'
-                    autoClose={5000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                />
+                    <ToastContainer position='top-left' autoClose={5000} hideProgressBar={false}
+                                    newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable />
 
-                <Footer/>
+                    <Footer/>
 
-            </BrowserRouter>
+                </BrowserRouter>
+            </CommonProvider>
         </AuthProvider>
     )
 }

@@ -68,6 +68,7 @@ export default function ReviewForm() {
                             navigate("/", {replace: true})
                             showToast(t('ReviewForm.toast.forbidden.notAllowed'), 'error')
                         }
+
                         setReview(review)
                         setRating(-review.score)
                         setHover(-review.score)

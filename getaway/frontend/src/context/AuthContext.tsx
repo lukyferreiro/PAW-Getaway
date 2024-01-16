@@ -97,7 +97,6 @@ export function AuthProvider({children}: { children: ReactNode }) {
     const editUserInfo = (name: string, surname: string, callback: VoidFunction) => {
         const userStorage = localStorage.getItem('getawayUser')
         if (userStorage !== null) {
-            console.log("Editando")
             const parsedUser = JSON.parse(userStorage)
             parsedUser.name = name
             parsedUser.surname = surname
