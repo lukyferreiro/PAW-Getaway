@@ -222,17 +222,6 @@ export class ExperienceService {
         experienceId: number,
         set?: boolean
     ) {
-        // const url = new URL(this.experienceBasePath + `/${experienceId}/observable`);
-        // if (typeof set === "boolean") {
-        //     url.searchParams.append("observable", set.toString());
-        // }
-        //
-        // return resultFetch(url.toString(), {
-        //     method: "PUT",
-        //     headers: {},
-        //     body: {}
-        // });
-
         const url = new URL(this.experienceBasePath + `/${experienceId}`);
 
         const body = JSON.stringify({

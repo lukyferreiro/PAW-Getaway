@@ -473,8 +473,6 @@ export default function ExperienceForm() {
                                 }
 
                                 {countries.map((country) => (
-                                    //TODO check
-                                    // <option defaultValue={experience ? countryModel?.id : ""} key={country.id} value={country.id}>
                                     <option key={country.id} value={country.id}>
                                         {country.name}
                                     </option>
@@ -502,7 +500,6 @@ export default function ExperienceForm() {
                                 }
 
                                 {cities.map((city) => (
-                                    // <option defaultValue={experience ? cityModel?.id : ""} key={city.id} value={city.id}>
                                     <option key={city.id} value={city.id}>
                                         {city.name}
                                     </option>

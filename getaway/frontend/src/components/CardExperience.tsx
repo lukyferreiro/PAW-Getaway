@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index"
 import {Link, useNavigate, useSearchParams} from 'react-router-dom'
-import {CategoryModel, CityModel, CountryModel, ExperienceModel} from "../types";
+import {CategoryModel, CityModel, ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {IconButton} from "@mui/material";
@@ -13,7 +13,7 @@ import DataLoader from "./DataLoader";
 import {showToast} from "../scripts/toast";
 import categoryImages, {CategoryName} from "../common";
 import {serviceHandler} from "../scripts/serviceHandler";
-import {experienceService, userService} from "../services";
+import {userService} from "../services";
 import {authedFetch} from "../scripts/authedFetch";
 import {useCommon} from "../hooks/useCommon";
 
@@ -33,7 +33,6 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
 
     const [category, setCategory] = useState<CategoryModel | undefined>(undefined)
     const [city, setCity] = useState<CityModel | undefined>(undefined)
-    // const [country, setCountry] = useState<CountryModel | undefined>(undefined)
     const country = getCountry()
 
     const getCityAndCountry = async () => {
@@ -41,9 +40,6 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
             const city = await authedFetch(experience.cityUrl, {method: "GET"})
             const parsedCity = await city.json() as CityModel;
             setCity(parsedCity);
-            // const country =  await authedFetch(parsedCity.countryUrl, {method: "GET"})
-            // const parsedCountry = await country.json() as CountryModel;
-            // setCountry(parsedCountry)
         } catch (error) {
             navigate('/error', {state: {code: 500, message: 'Server error',}, replace: true,})
         }
@@ -55,17 +51,6 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
         const categoryId = parseInt(experience.categoryUrl.match(/(\d+)$/)[0], 10);
         // @ts-ignore
         setCategory(getCategory(categoryId))
-
-        // serviceHandler(
-        //     experienceService.getCategoryByLink(experience.categoryUrl),
-        //     navigate, (category) => {
-        //         setCategory(category)
-        //     },
-        //     () => {
-        //     },
-        //     () => {
-        //     }
-        // )
 
         getCityAndCountry();
 

@@ -6,7 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {CategoryModel, CityModel, CountryModel, ExperienceModel} from "../types";
+import {CategoryModel, CityModel, ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import ConfirmDialogModal, {confirmDialogModal} from "../components/ConfirmDialogModal";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
@@ -21,7 +21,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {showToast} from "../scripts/toast";
 import categoryImages, {CategoryName} from "../common";
 import {serviceHandler} from "../scripts/serviceHandler";
-import {experienceService, userService} from "../services";
+import {userService} from "../services";
 import {authedFetch} from "../scripts/authedFetch";
 import {useCommon} from "../hooks/useCommon";
 
@@ -45,7 +45,6 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const [isEditing, setIsEditing] = useState<boolean | undefined>(undefined)
     const [category, setCategory] = useState<CategoryModel | undefined>(undefined)
     const [city, setCity] = useState<CityModel | undefined>(undefined)
-    // const [country, setCountry] = useState<CountryModel | undefined>(undefined)
     const country = getCountry()
 
     const getCityAndCountry = async () => {
@@ -53,9 +52,6 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
             const city = await authedFetch(experience.cityUrl, {method: "GET"})
             const parsedCity = await city.json();
             setCity(parsedCity);
-            // const country =  await authedFetch(parsedCity.countryUrl, {method: "GET"})
-            // const parsedCountry = await country.json();
-            // setCountry(parsedCountry)
         } catch (error) {
             navigate('/error', {state: {code: 500, message: 'Server error',}, replace: true,})
         }
@@ -78,17 +74,6 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
         const categoryId = parseInt(experience.categoryUrl.match(/(\d+)$/)[0], 10);
         // @ts-ignore
         setCategory(getCategory(categoryId))
-
-        // serviceHandler(
-        //     experienceService.getCategoryByLink(experience.categoryUrl),
-        //     navigate, (category) => {
-        //         setCategory(category)
-        //     },
-        //     () => {
-        //     },
-        //     () => {
-        //     }
-        // )
 
         getCityAndCountry();
 
