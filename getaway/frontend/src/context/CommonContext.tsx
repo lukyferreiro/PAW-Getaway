@@ -15,18 +15,18 @@ export const CommonContext = createContext<CommonContextType>(null!)
 
 export function CommonProvider({children}: { children: ReactNode }) {
 
-    const navigate = useNavigate()
-
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
     const [country, setCountry] = useState<CountryModel | undefined>(undefined)
 
     const getCountry14 = async () => {
         try {
+            console.log("ACA")
             const country =  await authedFetch(paths.BASE_URL + paths.LOCATION + '/14', {method: "GET"})
+            console.log(paths.BASE_URL + paths.LOCATION + '/14')
             const parsedCountry: CountryModel = await country.json() as CountryModel;
+            console.log(parsedCountry)
             setCountry(parsedCountry)
         } catch (error) {
-            navigate('/error', {state: {code: 500, message: 'Server error',}, replace: true,})
         }
     };
 
@@ -34,27 +34,33 @@ export function CommonProvider({children}: { children: ReactNode }) {
         try {
             const categories =  await authedFetch(paths.BASE_URL + paths.EXPERIENCES + '/categories', {method: "GET"})
             const parsedCategories: CategoryModel[] = await categories.json() as CategoryModel[];
+            console.log(parsedCategories)
             setCategories(parsedCategories)
         } catch (error) {
-            navigate('/error', {state: {code: 500, message: 'Server error',}, replace: true,})
         }
     };
 
     useEffect(() => {
-        if (country !== undefined) {
+        console.log("UseEffect common context")
+        if (country === undefined) {
+            console.log("LLAMADA COUNTRY COMMON")
             getCountry14()
         }
         if (categories.length === 0) {
+            console.log("LLAMADA CATEGORY COMMON")
             getAllCategories()
         }
     }, []);
 
 
     const getCategory = (categoryId: number) => {
+        console.log(categories)
         return categories.find(category => category.id === categoryId) || null;
     }
 
     const getCountry = () => {
+        console.log("GET COUNTRY COMMON")
+        console.log(country)
         return country || null;
     }
 

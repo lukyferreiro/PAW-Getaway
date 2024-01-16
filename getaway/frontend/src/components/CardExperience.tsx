@@ -29,7 +29,7 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
     const [isLoadingImg, setIsLoadingImg] = useState(false)
     const [isFav, setIsFav] = useState(false)
 
-    const {getCountry} = useCommon()
+    const {getCountry, getCategory} = useCommon()
 
     const [category, setCategory] = useState<CategoryModel | undefined>(undefined)
     const [city, setCity] = useState<CityModel | undefined>(undefined)
@@ -51,16 +51,21 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
 
     useEffect(() => {
 
-        serviceHandler(
-            experienceService.getCategoryByLink(experience.categoryUrl),
-            navigate, (category) => {
-                setCategory(category)
-            },
-            () => {
-            },
-            () => {
-            }
-        )
+        // @ts-ignore
+        const categoryId = parseInt(experience.categoryUrl.match(/(\d+)$/)[0], 10);
+        // @ts-ignore
+        setCategory(getCategory(categoryId))
+
+        // serviceHandler(
+        //     experienceService.getCategoryByLink(experience.categoryUrl),
+        //     navigate, (category) => {
+        //         setCategory(category)
+        //     },
+        //     () => {
+        //     },
+        //     () => {
+        //     }
+        // )
 
         getCityAndCountry();
 

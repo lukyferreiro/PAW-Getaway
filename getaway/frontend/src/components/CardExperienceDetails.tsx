@@ -23,6 +23,7 @@ import categoryImages, {CategoryName} from "../common";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {experienceService, userService} from "../services";
 import {authedFetch} from "../scripts/authedFetch";
+import {useCommon} from "../hooks/useCommon";
 
 export default function CardExperienceDetails(props: { experience: ExperienceModel, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>] }
 ) {
@@ -39,19 +40,22 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const [isFav, setIsFav] = useState(false)
     const [view, setView] = useState(experience.observable)
 
+    const {getCountry, getCategory} = useCommon()
+
     const [isEditing, setIsEditing] = useState<boolean | undefined>(undefined)
     const [category, setCategory] = useState<CategoryModel | undefined>(undefined)
     const [city, setCity] = useState<CityModel | undefined>(undefined)
-    const [country, setCountry] = useState<CountryModel | undefined>(undefined)
+    // const [country, setCountry] = useState<CountryModel | undefined>(undefined)
+    const country = getCountry()
 
     const getCityAndCountry = async () => {
         try {
             const city = await authedFetch(experience.cityUrl, {method: "GET"})
             const parsedCity = await city.json();
             setCity(parsedCity);
-            const country =  await authedFetch(parsedCity.countryUrl, {method: "GET"})
-            const parsedCountry = await country.json();
-            setCountry(parsedCountry)
+            // const country =  await authedFetch(parsedCity.countryUrl, {method: "GET"})
+            // const parsedCountry = await country.json();
+            // setCountry(parsedCountry)
         } catch (error) {
             navigate('/error', {state: {code: 500, message: 'Server error',}, replace: true,})
         }
@@ -70,16 +74,21 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
             }
         )
 
-        serviceHandler(
-            experienceService.getCategoryByLink(experience.categoryUrl),
-            navigate, (category) => {
-                setCategory(category)
-            },
-            () => {
-            },
-            () => {
-            }
-        )
+        // @ts-ignore
+        const categoryId = parseInt(experience.categoryUrl.match(/(\d+)$/)[0], 10);
+        // @ts-ignore
+        setCategory(getCategory(categoryId))
+
+        // serviceHandler(
+        //     experienceService.getCategoryByLink(experience.categoryUrl),
+        //     navigate, (category) => {
+        //         setCategory(category)
+        //     },
+        //     () => {
+        //     },
+        //     () => {
+        //     }
+        // )
 
         getCityAndCountry();
 
