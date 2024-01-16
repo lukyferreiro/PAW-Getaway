@@ -11,7 +11,6 @@ import ar.edu.itba.getaway.interfaces.persistence.ExperienceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,8 +50,6 @@ public class ExperienceServiceImpl implements ExperienceService {
         final ImageModel experienceImage = imageService.createImg(null, null);
         final CityModel city = locationService.getCityById(cityLong).orElseThrow(CityNotFoundException::new);
         final CategoryModel category = categoryService.getCategoryById(categoryLong).orElseThrow(CategoryNotFoundException::new);
-
-//        final ExperienceModel experienceModel = experienceDao.createExperience(name, address, description, email, url, price, city, category, user, experienceImage);
 
         ExperienceModel experienceModel;
         try {
@@ -190,20 +187,6 @@ public class ExperienceServiceImpl implements ExperienceService {
         return new Page<>(experienceModelList, page, totalPages, total);
     }
 
-
-
-//    @Override
-//    public List<List<ExperienceModel>> getExperiencesListByCategories(UserModel user) {
-//        final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
-//        LOGGER.debug("Retrieving all experiences listed by categories");
-//        final List<CategoryModel> categories = categoryService.listAllCategories();
-//
-//        for (CategoryModel category : categories) {
-//            listExperiencesByCategory.add(listExperiencesByBestRanked(category, user));
-//        }
-//        return listExperiencesByCategory;
-//    }
-
     @Override
     public boolean experienceBelongsToUser(UserModel user, ExperienceModel experience) {
         return experience.getUser().equals(user);
@@ -262,92 +245,8 @@ public class ExperienceServiceImpl implements ExperienceService {
         updateExperienceWithoutImg(experience);
     }
 
-//    private List<ExperienceModel> getViewedExperiences(UserModel user) {
-//        List<ExperienceModel> auxList = new ArrayList<>();
-//        List<ExperienceModel> userViews = user.getViewedExperiences();
-//        for (ExperienceModel exp : userViews) {
-//            if (exp.getObservable()) {
-//                auxList.add(exp);
-//            }
-//        }
-//        int toIndex = auxList.size();
-//        int fromIndex = Math.max((toIndex - CAROUSEL_LENGTH), 0);
-//        return auxList.subList(fromIndex, toIndex);
-//    }
-
-//    @Override
-//    public List<List<ExperienceModel>> userLandingPage(UserModel user) {
-//        final List<List<ExperienceModel>> listExperiencesByCategory = new ArrayList<>();
-//        List<ExperienceModel> viewedExperiences = getViewedExperiences(user);
-//
-//        //Adding viewed experiences to user
-//        for (ExperienceModel experience : viewedExperiences) {
-//            experience.setIsFav(user.isFav(experience));
-//        }
-//        listExperiencesByCategory.add(viewedExperiences);
-//
-//        //Getting recommendedByFavs
-//        //If we dont have enough recommendations we switch to recommended by views, and then plainly by the best ranked in general
-//        //If an experience was already added we skip it to avoid duplicates
-//        List<ExperienceModel> recommendedByFavsFullList = experienceDao.getRecommendedByFavs(user, CAROUSEL_LENGTH);
-//        List<Long> alreadyRecommended = recommendedByFavsFullList.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList());
-//        List<ExperienceModel> recommendedByViews;
-//        List<ExperienceModel> bestRanked;
-//        if (recommendedByFavsFullList.size() < CAROUSEL_LENGTH) {
-//            recommendedByViews = experienceDao.getRecommendedByViews(user, CAROUSEL_LENGTH - recommendedByFavsFullList.size(), alreadyRecommended);
-//            alreadyRecommended.addAll(recommendedByViews.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
-//            recommendedByFavsFullList.addAll(recommendedByViews);
-//        }
-//        if (recommendedByFavsFullList.size() < CAROUSEL_LENGTH) {
-//            bestRanked = experienceDao.getRecommendedBestRanked(CAROUSEL_LENGTH - recommendedByFavsFullList.size(), recommendedByFavsFullList.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
-//            alreadyRecommended.addAll(bestRanked.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
-//            recommendedByFavsFullList.addAll(bestRanked);
-//        }
-//
-//        //Adding recommendedByFavs to general list
-//        for (ExperienceModel experience : recommendedByFavsFullList) {
-//            experience.setIsFav(user.isFav(experience));
-//        }
-//        listExperiencesByCategory.add(recommendedByFavsFullList);
-//
-//        //Check if user hasReviews to get recommendations
-//        if (user.hasReviews()) {
-//            //Getting recommendedByReviews
-//            //Firstly, we look at the city where the user has made the most reviews
-//            //Secondly, we look at the provider to whom the user has made the most reviews
-//            //Lastly, we look at the category which the user has made the most reviews
-//            //If an experience was already added we skip it to avoid duplicates
-//            List<Long> userReviewedIds = experienceDao.reviewedExperiencesId(user);
-//            List<ExperienceModel> recommendedByReviewsFullList;
-//            List<ExperienceModel> recommendedByReviewsProvider;
-//            List<ExperienceModel> recommendedByReviewsCategory;
-//            recommendedByReviewsFullList = experienceDao.getRecommendedByReviewsCity(user, CAROUSEL_LENGTH, alreadyRecommended, userReviewedIds);
-//            alreadyRecommended.addAll(recommendedByReviewsFullList.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
-//
-//            if (recommendedByReviewsFullList.size() < CAROUSEL_LENGTH) {
-//                recommendedByReviewsProvider = experienceDao.getRecommendedByReviewsProvider(user, CAROUSEL_LENGTH - recommendedByReviewsFullList.size(), alreadyRecommended, userReviewedIds);
-//                recommendedByReviewsFullList.addAll(recommendedByReviewsProvider);
-//                alreadyRecommended.addAll(recommendedByReviewsProvider.stream().map(ExperienceModel::getExperienceId).collect(Collectors.toList()));
-//            }
-//
-//            if (recommendedByReviewsFullList.size() < CAROUSEL_LENGTH) {
-//                recommendedByReviewsCategory = experienceDao.getRecommendedByReviewsCategory(user, CAROUSEL_LENGTH - recommendedByReviewsFullList.size(), alreadyRecommended, userReviewedIds);
-//                recommendedByReviewsFullList.addAll(recommendedByReviewsCategory);
-//            }
-//
-//            for (ExperienceModel experience : recommendedByReviewsFullList) {
-//                experience.setIsFav(user.isFav(experience));
-//            }
-//            listExperiencesByCategory.add(recommendedByReviewsFullList);
-//            return listExperiencesByCategory;
-//        }
-//
-//        listExperiencesByCategory.add(Collections.emptyList());
-//        return listExperiencesByCategory;
-//    }
-
     @Override
-    public Page<ExperienceModel> getViewedExperiences(UserModel user){
+    public Page<ExperienceModel> getViewedExperiences(UserModel user) {
         List<ExperienceModel> auxList = new ArrayList<>();
         List<ExperienceModel> userViews = user.getViewedExperiences();
 
@@ -363,11 +262,11 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         int toIndex = auxList.size();
         int fromIndex = Math.max((toIndex - CAROUSEL_LENGTH), 0);
-        return new Page<>(auxList.subList(fromIndex, toIndex), 1, 1, CAROUSEL_LENGTH) ;
+        return new Page<>(auxList.subList(fromIndex, toIndex), 1, 1, CAROUSEL_LENGTH);
     }
 
     @Override
-    public Page<ExperienceModel> getRecommendedByFavs(UserModel user){
+    public Page<ExperienceModel> getRecommendedByFavs(UserModel user) {
         List<ExperienceModel> recommendedByFavsFullList = experienceDao.getRecommendedByFavs(user, CAROUSEL_LENGTH);
         List<ExperienceModel> toReturnList = new ArrayList<>(recommendedByFavsFullList);
 
@@ -389,7 +288,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
 
-    public Page<ExperienceModel> getRecommendedByReviews(UserModel user){
+    public Page<ExperienceModel> getRecommendedByReviews(UserModel user) {
         if (user.hasReviews()) {
             //Getting recommendedByReviews
             //Firstly, we look at the city where the user has made the most reviews

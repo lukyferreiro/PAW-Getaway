@@ -3,16 +3,14 @@ package ar.edu.itba.getaway.interfaces.services;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.UserModel;
 
-import java.util.Optional;
-
 public interface FavAndViewExperienceService {
     void addFav(UserModel user, ExperienceModel experience);
 
     void deleteFav(UserModel user, ExperienceModel experience);
 
-    boolean isFav(UserModel user,  long experienceId);
+    boolean isFav(long userId,  long experienceId);
 
-    void setFav(UserModel user, boolean set, long experienceId);
+    void setFav(long userId, boolean set, long experienceId);
 
     void addViewed(UserModel user, ExperienceModel experience);
 

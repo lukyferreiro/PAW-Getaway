@@ -1,18 +1,13 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
-import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ReviewModel;
 import ar.edu.itba.getaway.models.UserModel;
-import ar.edu.itba.getaway.webapp.dto.adapters.ExperienceAdapter;
-import ar.edu.itba.getaway.webapp.dto.adapters.UserAdapter;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class ReviewDto implements Serializable {

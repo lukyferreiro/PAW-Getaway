@@ -1,18 +1,12 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
 import ar.edu.itba.getaway.models.*;
-import ar.edu.itba.getaway.webapp.dto.adapters.CategoryAdapter;
-import ar.edu.itba.getaway.webapp.dto.adapters.CityAdapter;
-import ar.edu.itba.getaway.webapp.dto.adapters.CountryAdapter;
-import ar.edu.itba.getaway.webapp.dto.adapters.UserAdapter;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class ExperienceDto implements Serializable {
@@ -26,7 +20,6 @@ public class ExperienceDto implements Serializable {
     private Long score;
     private Integer views;
     private String siteUrl;
-    private boolean isFav;
     private boolean observable;
     private boolean hasImage;
     private Long reviewCount;
@@ -161,12 +154,6 @@ public class ExperienceDto implements Serializable {
     }
     public void setReviewCount(Long reviewCount) {
         this.reviewCount = reviewCount;
-    }
-    public boolean getIsFav() {
-        return isFav;
-    }
-    public void setIsFav(boolean isFav) {
-        this.isFav = isFav;
     }
     public boolean isObservable() {
         return observable;

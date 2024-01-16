@@ -66,8 +66,6 @@ public class UserServiceImpl implements UserService {
         final ImageModel imageModel = imageService.createImg(null, null);
         LOGGER.debug("Creating user with email {}", email);
 
-//        final UserModel userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES, imageModel);
-
         UserModel userModel;
         try {
             userModel = userDao.createUser(passwordEncoder.encode(password), name, surname, email, DEFAULT_ROLES, imageModel);
@@ -77,8 +75,6 @@ public class UserServiceImpl implements UserService {
         }
 
         LOGGER.debug("Creating verification token to user with id {}", userModel.getUserId());
-//        final VerificationToken token = tokensService.generateVerificationToken(userModel);
-//        tokensService.sendVerificationToken(userModel, token);
         return userModel;
     }
 
@@ -171,8 +167,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateUserInfo(UserModel user, UserInfo userInfo) {
-        LOGGER.debug("Updating user info for user {}", user.getUserId());
+    public void updateUserInfo(long userId, UserInfo userInfo) {
+        LOGGER.debug("Updating user info for user {}", userId);
+        final UserModel user = getUserById(userId).orElseThrow(UserNotFoundException::new);
         userDao.updateUserInfo(user, userInfo);
     }
 

@@ -1,7 +1,9 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.ExperienceService;
+import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.interfaces.persistence.FavAndViewExperienceDao;
 import ar.edu.itba.getaway.interfaces.services.FavAndViewExperienceService;
@@ -12,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 public class FavAndViewExperienceServiceImpl implements FavAndViewExperienceService {
 
@@ -22,6 +22,9 @@ public class FavAndViewExperienceServiceImpl implements FavAndViewExperienceServ
 
     @Autowired
     private ExperienceService experienceService;
+
+    @Autowired
+    private UserService userService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FavAndViewExperienceServiceImpl.class);
 
@@ -40,7 +43,8 @@ public class FavAndViewExperienceServiceImpl implements FavAndViewExperienceServ
     }
 
     @Override
-    public boolean isFav(UserModel user, long experienceId) {
+    public boolean isFav(long userId, long experienceId) {
+        final UserModel user = userService.getUserById(userId).orElseThrow(UserNotFoundException::new);
         final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId, user).orElseThrow(ExperienceNotFoundException::new);
         return isFav(user, experience);
     }
@@ -51,7 +55,8 @@ public class FavAndViewExperienceServiceImpl implements FavAndViewExperienceServ
 
     @Transactional
     @Override
-    public void setFav(UserModel user, boolean set,  long experienceId) {
+    public void setFav(long userId, boolean set,  long experienceId) {
+        final UserModel user = userService.getUserById(userId).orElseThrow(UserNotFoundException::new);
         final ExperienceModel experience = experienceService.getVisibleExperienceById(experienceId, user).orElseThrow(ExperienceNotFoundException::new);
 
         if (set) {

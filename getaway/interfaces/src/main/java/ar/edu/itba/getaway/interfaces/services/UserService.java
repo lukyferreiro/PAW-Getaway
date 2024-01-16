@@ -29,7 +29,7 @@ public interface UserService {
 
     Optional<UserModel> updatePassword(String token, String password);
 
-    void updateUserInfo(UserModel userModel, UserInfo userInfo);
+    void updateUserInfo(long userId, UserInfo userInfo);
 
     void addRole(UserModel user, Roles newRole);
 

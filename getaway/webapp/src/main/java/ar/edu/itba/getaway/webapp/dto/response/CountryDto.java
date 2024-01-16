@@ -1,7 +1,6 @@
 package ar.edu.itba.getaway.webapp.dto.response;
 
 import ar.edu.itba.getaway.models.CountryModel;
-import ar.edu.itba.getaway.models.UserModel;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;

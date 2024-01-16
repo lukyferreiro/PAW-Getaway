@@ -77,12 +77,11 @@ public class ReviewController {
             @QueryParam("experienceId") final Long experienceId,
             @Valid final NewReviewDto newReviewDto
     ) {
+        LOGGER.info("Called /reviews POST");
 
         if (newReviewDto == null) {
             throw new ContentExpectedException();
         }
-
-        LOGGER.info("Called /reviews POST");
 
         if (experienceId == null) {
             throw new InvalidRequestParamsException("errors.invalidParam.postReview");
@@ -101,10 +100,10 @@ public class ReviewController {
     @Path("/{reviewId:[0-9]+}")
     @Produces(value = {CustomMediaType.REVIEW_V1})
     public Response getReviewById(
-            @PathParam("reviewId") final Long id
+            @PathParam("reviewId") final Long reviewId
     ) {
-        LOGGER.info("Called /reviews/{} GET", id);
-        final ReviewModel review = reviewService.getReviewById(id).orElseThrow(ReviewNotFoundException::new);
+        LOGGER.info("Called /reviews/{} GET", reviewId);
+        final ReviewModel review = reviewService.getReviewById(reviewId).orElseThrow(ReviewNotFoundException::new);
         return Response.ok(new ReviewDto(review, uriInfo)).build();
     }
 
@@ -112,28 +111,26 @@ public class ReviewController {
     @Path("/{reviewId:[0-9]+}")
     @Consumes(value = {CustomMediaType.REVIEW_V1})
     public Response editReview(
-            @PathParam("reviewId") final Long id,
+            @PathParam("reviewId") final Long reviewId,
             @Valid final NewReviewDto reviewDto
     ) {
-
-        LOGGER.info("Called /reviews/{} PUT", id);
+        LOGGER.info("Called /reviews/{} PUT", reviewId);
 
         if (reviewDto == null) {
             throw new ContentExpectedException();
         }
 
-        reviewService.updateReview(id, reviewDto.getTitle(), reviewDto.getDescription(), reviewDto.getScore());
-
+        reviewService.updateReview(reviewId, reviewDto.getTitle(), reviewDto.getDescription(), reviewDto.getScore());
         return Response.noContent().build();
     }
 
     @DELETE
     @Path("/{reviewId:[0-9]+}")
     public Response deleteReview(
-            @PathParam("reviewId") final Long id
+            @PathParam("reviewId") final Long reviewId
     ) {
-        LOGGER.info("Called /reviews/{} DELETE", id);
-        reviewService.deleteReview(id);
+        LOGGER.info("Called /reviews/{} DELETE", reviewId);
+        reviewService.deleteReview(reviewId);
         return Response.noContent().build();
     }
 }

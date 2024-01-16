@@ -1,8 +1,9 @@
 package ar.edu.itba.getaway.services;
 
 import ar.edu.itba.getaway.interfaces.exceptions.ExperienceNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.getaway.interfaces.services.ExperienceService;
-import ar.edu.itba.getaway.interfaces.services.LocationService;
+import ar.edu.itba.getaway.interfaces.services.UserService;
 import ar.edu.itba.getaway.models.ExperienceModel;
 import ar.edu.itba.getaway.models.ImageModel;
 import ar.edu.itba.getaway.interfaces.persistence.ImageDao;
@@ -25,6 +26,9 @@ public class ImageServiceImpl implements ImageService {
     @Autowired
     private ExperienceService experienceService;
 
+    @Autowired
+    private UserService userService;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageServiceImpl.class);
 
     @Override
@@ -46,8 +50,9 @@ public class ImageServiceImpl implements ImageService {
 
     @Transactional
     @Override
-    public void updateUserImg(byte[] image, String mimeType, UserModel userModel) {
-        ImageModel imageModel = userModel.getProfileImage();
+    public void updateUserImg(byte[] image, String mimeType, long userId) {
+        final UserModel userModel = userService.getUserById(userId).orElseThrow(UserNotFoundException::new);
+        final ImageModel imageModel = userModel.getProfileImage();
 
         LOGGER.debug("Updating image with id {}", imageModel.getImageId());
         imageDao.updateImg(image, mimeType, imageModel);

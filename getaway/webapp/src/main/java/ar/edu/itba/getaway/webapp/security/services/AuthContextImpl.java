@@ -21,7 +21,6 @@ public class AuthContextImpl implements AuthContext {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthContextImpl.class);
 
-
     @Override
     public UserModel getCurrentUser() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

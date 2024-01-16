@@ -69,10 +69,10 @@ public class UserController {
     @Path("/{userId:[0-9]+}")
     @Produces(value = {CustomMediaType.USER_V1})
     public Response getUserById(
-            @PathParam("userId") final long id
+            @PathParam("userId") final long userId
     ) {
-        LOGGER.info("Called /users/{} GET", id);
-        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
+        LOGGER.info("Called /users/{} GET", userId);
+        final UserModel user = userService.getUserById(userId).orElseThrow(UserNotFoundException::new);
         if (user.equals(authContext.getCurrentUser())) {
             return Response.ok(new UserDto(user, uriInfo)).build();
         } else {
@@ -85,17 +85,16 @@ public class UserController {
     @Path("/{userId:[0-9]+}")
     @Consumes(value = {CustomMediaType.USER_INFO_V1})
     public Response updateUser(
-            @PathParam("userId") final long id,
+            @PathParam("userId") final long userId,
             @Valid final UserInfoDto userInfoDto
     ) {
-        LOGGER.info("Called /users/{} PUT", id);
+        LOGGER.info("Called /users/{} PUT", userId);
 
         if (userInfoDto == null) {
             throw new ContentExpectedException();
         }
 
-        final UserModel user = authContext.getCurrentUser();
-        userService.updateUserInfo(user, new UserInfo(userInfoDto.getName(), userInfoDto.getSurname()));
+        userService.updateUserInfo(userId, new UserInfo(userInfoDto.getName(), userInfoDto.getSurname()));
         return Response.noContent().build();
     }
 
@@ -136,12 +135,12 @@ public class UserController {
     @Path("/{userId:[0-9]+}/profileImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON})   //TODO check @Produces(MediaType.MULTIPART_FORM_DATA)
     public Response getUserProfileImage(
-            @PathParam("userId") final long id,
+            @PathParam("userId") final long userId,
             @Context final Request request
     ) {
-        LOGGER.info("Called /users/{}/profileImage GET", id);
+        LOGGER.info("Called /users/{}/profileImage GET", userId);
 
-        final UserModel user = userService.getUserById(id).orElseThrow(UserNotFoundException::new);
+        final UserModel user = userService.getUserById(userId).orElseThrow(UserNotFoundException::new);
 
         if (user.getImage() == null) {
             return Response.noContent().build();
@@ -156,11 +155,11 @@ public class UserController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("/{userId:[0-9]+}/profileImage")
     public Response updateUserProfileImage(
-            @PathParam("userId") final long id,
+            @PathParam("userId") final long userId,
             @FormDataParam("profileImage") final FormDataBodyPart profileImageBody,
             @Size(max = 1024 * 1024) @FormDataParam("profileImage") byte[] profileImageBytes
     ) {
-        LOGGER.info("Called /users/{}/profileImage PUT", id);
+        LOGGER.info("Called /users/{}/profileImage PUT", userId);
 
         if (profileImageBody == null) {
             throw new ContentExpectedException();
@@ -170,13 +169,10 @@ public class UserController {
             throw new IllegalContentTypeException();
         }
 
-        final UserModel user = authContext.getCurrentUser();
-        imageService.updateUserImg(profileImageBytes, profileImageBody.getMediaType().toString(), user);
+        imageService.updateUserImg(profileImageBytes, profileImageBody.getMediaType().toString(), userId);
         return Response.noContent().build();
     }
 
-
-    //TODO: check if default value is necessary
     //Endpoint para agregar/quitar de favoritos
     @PUT
     @Path("/{userId:[0-9]+}/favourites/{experienceId:[0-9]+}")
@@ -185,27 +181,22 @@ public class UserController {
             @PathParam("experienceId") final long experienceId,
             @QueryParam("fav") final Boolean fav
     ) {
-        LOGGER.info("Called /{}/favourites/{} PUT", userId, experienceId);
-
-        final UserModel user = authContext.getCurrentUser();
-        favAndViewExperienceService.setFav(user, fav, experienceId);
+        LOGGER.info("Called /users/{}/favourites/{} PUT", userId, experienceId);
+        favAndViewExperienceService.setFav(userId, fav, experienceId);
         return Response.noContent().build();
     }
 
-    //TODO: check return value
+
     //Endpoint para verificar si una experiencia es favorita de un usuario
     @GET
     @Path("/{userId:[0-9]+}/favourites/{experienceId:[0-9]+}")
-//    @Produces(value = {CustomMediaType.})
+//    @Produces(value = {CustomMediaType.})     //TODO: check return value
     public Response isFavExperience(
             @PathParam("userId") final long userId,
             @PathParam("experienceId") final long experienceId
     ) {
-        LOGGER.info("Called /{}/favourites/{} GET", userId, experienceId);
-
-        final UserModel user = authContext.getCurrentUser();
-        final boolean isFav = favAndViewExperienceService.isFav(user, experienceId);
-
+        LOGGER.info("Called /users/{}/favourites/{} GET", userId, experienceId);
+        final boolean isFav = favAndViewExperienceService.isFav(userId, experienceId);
         return Response.ok(isFav).build();
     }
 

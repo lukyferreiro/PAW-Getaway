@@ -120,15 +120,15 @@ public class ExperienceController {
     @Path("/{experienceId:[0-9]+}")
     @Produces(value = {CustomMediaType.EXPERIENCE_V1})
     public Response getExperienceId(
-            @PathParam("experienceId") final long id,
+            @PathParam("experienceId") final long experienceId,
             @QueryParam("view") @DefaultValue("false") final boolean view
     ) {
 
-        LOGGER.info("Called /experiences/{} GET", id);
+        LOGGER.info("Called /experiences/{} GET", experienceId);
 
         final UserModel user = authContext.getCurrentUser();
 
-        final ExperienceModel experience = experienceService.getExperienceAndIncreaseViews(user, view, id);
+        final ExperienceModel experience = experienceService.getExperienceAndIncreaseViews(user, view, experienceId);
 
         return Response.ok(new ExperienceDto(experience, uriInfo)).build();
     }
@@ -140,10 +140,10 @@ public class ExperienceController {
     public Response updateExperience(
             @Context final HttpServletRequest request,
             @Valid final NewExperienceDto experienceDto,
-            @PathParam("experienceId") final long id
+            @PathParam("experienceId") final long experienceId
     ) {
 
-        LOGGER.info("Called /experiences/{} PUT", id);
+        LOGGER.info("Called /experiences/{} PUT", experienceId);
 
         if (request.getContentLength() == -1 || request.getContentLength() > maxRequestSize) {
             throw new MaxUploadSizeRequestException();
@@ -155,10 +155,10 @@ public class ExperienceController {
 
         final UserModel user = authContext.getCurrentUser();
 
-        experienceService.updateExperience(id, experienceDto.getName(), experienceDto.getAddress(),
+        experienceService.updateExperience(experienceId, experienceDto.getName(), experienceDto.getAddress(),
                 experienceDto.getDescription(), experienceDto.getMail(), experienceDto.getUrl(),
                 experienceDto.getPrice(), experienceDto.getCity(), experienceDto.getCategory(), user);
-        LOGGER.info("The experience with id {} has been updated successfully", id);
+
         return Response.noContent().build();
     }
 
@@ -190,10 +190,10 @@ public class ExperienceController {
     @DELETE
     @Path("/{experienceId:[0-9]+}")
     public Response deleteExperience(
-            @PathParam("experienceId") final long id
+            @PathParam("experienceId") final long experienceId
     ) {
-        LOGGER.info("Called /experiences/{} DELETE", id);
-        experienceService.deleteExperience(id);
+        LOGGER.info("Called /experiences/{} DELETE", experienceId);
+        experienceService.deleteExperience(experienceId);
         return Response.noContent().build();
     }
 
@@ -202,12 +202,12 @@ public class ExperienceController {
     @Path("/{experienceId:[0-9]+}/experienceImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON})       //TODO check @Produces(MediaType.MULTIPART_FORM_DATA)
     public Response getExperienceImage(
-            @PathParam("experienceId") final long id,
+            @PathParam("experienceId") final long experienceId,
             @Context final Request request
     ) {
-        LOGGER.info("Called /experiences/{}/experienceImage GET", id);
+        LOGGER.info("Called /experiences/{}/experienceImage GET", experienceId);
 
-        final ExperienceModel experience = experienceService.getExperienceById(id).orElseThrow(UserNotFoundException::new);
+        final ExperienceModel experience = experienceService.getExperienceById(experienceId).orElseThrow(UserNotFoundException::new);
 
         if (experience.getImage() == null) {
             return Response.noContent().build();
@@ -221,11 +221,11 @@ public class ExperienceController {
     @Path("/{experienceId:[0-9]+}/experienceImage")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response updateExperienceImage(
-            @PathParam("experienceId") final long id,
+            @PathParam("experienceId") final long experienceId,
             @FormDataParam("experienceImage") final FormDataBodyPart experienceImageBody,
             @Size(max = 1024 * 1024) @FormDataParam("experienceImage") byte[] experienceImageBytes
     ) {
-        LOGGER.info("Called /experiences/{}/experienceImage PUT", id);
+        LOGGER.info("Called /experiences/{}/experienceImage PUT", experienceId);
 
         if (experienceImageBody == null) {
             throw new ContentExpectedException();
@@ -235,7 +235,7 @@ public class ExperienceController {
             throw new IllegalContentTypeException();
         }
 
-        imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), id);
+        imageService.updateImg(experienceImageBytes, experienceImageBody.getMediaType().toString(), experienceId);
         return Response.noContent().build();
     }
 
@@ -254,7 +254,7 @@ public class ExperienceController {
     @Path("/categories")
     @Produces(value = {CustomMediaType.CATEGORY_LIST_V1})
     public Response getCategories(){
-        LOGGER.info("Called /categories GET");
+        LOGGER.info("Called /experiences/categories GET");
         final List<CategoryModel> categories = categoryService.listAllCategories();
         final Collection<CategoryDto> categoriesDtos = CategoryDto.mapCategoriesToDto(categories, uriInfo);
         return Response.ok(new GenericEntity<Collection<CategoryDto>>(categoriesDtos) {}).build();
@@ -264,10 +264,10 @@ public class ExperienceController {
     @Path("/categories/{categoryId:[0-9]+}")
     @Produces(value = {CustomMediaType.CATEGORY_V1})
     public Response getCategoryById(
-            @PathParam("categoryId") final long id
+            @PathParam("categoryId") final long categoryId
     ) {
-        LOGGER.info("Called /categories/{} GET", id);
-        final CategoryModel category = categoryService.getCategoryById(id).orElseThrow(CategoryNotFoundException::new);
+        LOGGER.info("Called /experiences/categories/{} GET", categoryId);
+        final CategoryModel category = categoryService.getCategoryById(categoryId).orElseThrow(CategoryNotFoundException::new);
         return Response.ok(new CategoryDto(category, uriInfo)).build();
     }
 }

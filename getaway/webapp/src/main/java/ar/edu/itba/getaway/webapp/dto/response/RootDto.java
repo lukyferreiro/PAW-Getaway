@@ -14,7 +14,6 @@ public class RootDto implements Serializable {
     private Collection<String> reviewsUrl;
     private Collection<String> locationUrl;
 
-    //TODO check estas urls de la api
     private static final Collection<String> userStrings =
             Collections.unmodifiableCollection(Arrays.asList("users", "users/{userId}",
                     "users/{userId}/profileImage", "users/{userId}/favourites/{experienceId}?{fav}"));

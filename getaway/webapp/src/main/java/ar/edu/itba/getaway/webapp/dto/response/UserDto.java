@@ -3,12 +3,9 @@ package ar.edu.itba.getaway.webapp.dto.response;
 import ar.edu.itba.getaway.models.UserModel;
 import ar.edu.itba.getaway.webapp.controller.queryParamsValidators.GetExperiencesFilter;
 
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.io.Serializable;
 import java.net.URI;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class UserDto implements Serializable {
 
