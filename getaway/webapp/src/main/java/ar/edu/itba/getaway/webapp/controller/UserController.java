@@ -1,9 +1,6 @@
 package ar.edu.itba.getaway.webapp.controller;
 
-import ar.edu.itba.getaway.interfaces.exceptions.ContentExpectedException;
-import ar.edu.itba.getaway.interfaces.exceptions.DuplicateUserException;
-import ar.edu.itba.getaway.interfaces.exceptions.IllegalContentTypeException;
-import ar.edu.itba.getaway.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.getaway.interfaces.exceptions.*;
 import ar.edu.itba.getaway.interfaces.services.*;
 import ar.edu.itba.getaway.models.*;
 import ar.edu.itba.getaway.webapp.controller.util.CacheResponse;
@@ -19,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import javax.ws.rs.*;
@@ -36,15 +34,17 @@ public class UserController {
     private final ImageService imageService;
     private final FavAndViewExperienceService favAndViewExperienceService;
     private final AuthContext authContext;
+    private final Integer maxRequestSize;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private static final String ACCEPTED_MIME_TYPES = "image/";
 
     @Autowired
-    public UserController(UserService userService, ImageService imageService, FavAndViewExperienceService favAndViewExperienceService, AuthContext authContext) {
+    public UserController(UserService userService, ImageService imageService, FavAndViewExperienceService favAndViewExperienceService, AuthContext authContext, Integer maxRequestSize) {
         this.userService = userService;
         this.imageService = imageService;
         this.favAndViewExperienceService = favAndViewExperienceService;
         this.authContext = authContext;
+        this.maxRequestSize = maxRequestSize;
     }
 
     //Endpoint que crea un usuario nuevo
@@ -176,13 +176,20 @@ public class UserController {
     //Endpoint para agregar/quitar de favoritos
     @PUT
     @Path("/{userId:[0-9]+}/favourites/{experienceId:[0-9]+}")
+    @Consumes(value = {CustomMediaType.USER_FAVOURITE_V1})
     public Response favExperience(
+            @Context final HttpServletRequest request,
             @PathParam("userId") final long userId,
             @PathParam("experienceId") final long experienceId,
-            @QueryParam("fav") final Boolean fav
+            @Valid final PutFavouriteDto putFavouriteDto
     ) {
         LOGGER.info("Called /users/{}/favourites/{} PUT", userId, experienceId);
-        favAndViewExperienceService.setFav(userId, fav, experienceId);
+
+        if (putFavouriteDto == null) {
+            throw new ContentExpectedException();
+        }
+
+        favAndViewExperienceService.setFav(userId, putFavouriteDto.getFavourite(), experienceId);
         return Response.noContent().build();
     }
 

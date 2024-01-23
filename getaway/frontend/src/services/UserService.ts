@@ -1,4 +1,4 @@
-import {paths, USER_INFO_V1, USER_V1, USER_PASSWORD_V1, USER_PASSWORD_EMAIL_V1} from "../common";
+import {paths, USER_INFO_V1, USER_V1, USER_PASSWORD_V1, USER_PASSWORD_EMAIL_V1, USER_FAVOURITE_V1} from "../common";
 import {
     ErrorResponse, ExperienceModel, FavouriteModel,
     PagedContent, PostResponse,
@@ -187,15 +187,18 @@ export class UserService {
         set?: boolean
     ) {
         const url = new URL(this.userBasePath + `/${userId}/favourites/${experienceId}`);
-        if (typeof set === "boolean") {
-            url.searchParams.append("fav", set.toString());
-        }
+        const favouriteBody = JSON.stringify({
+            favourite: set
+        });
 
         return resultFetch(url.toString(), {
             method: "PUT",
-            headers: {},
-            body: {}
+            headers: {
+                "Content-Type": USER_FAVOURITE_V1,
+            },
+            body: favouriteBody,
         });
+
     }
 
     public async isExperienceFav(
