@@ -7,6 +7,7 @@ public class CustomMediaType {
     public static final String USER_INFO_V1 = "application/vnd.getaway.userInfo.v1+json";
     public static final String USER_PASSWORD_V1 = "application/vnd.getaway.patch.password.v1+json";
     public static final String USER_PASSWORD_EMAIL_V1 = "application/vnd.getaway.passwordEmail.v1+json";
+    public static final String USER_FAVOURITE_V1 = "application/vnd.getaway.user.favourite.v1+json";
     public static final String EXPERIENCE_V1 = "application/vnd.getaway.experience.v1+json";
     public static final String EXPERIENCE_VISIBILITY_V1 = "application/vnd.getaway.experience.patch.visibility.v1+json";
     public static final String EXPERIENCE_LIST_V1 = "application/vnd.getaway.experienceList.v1+json";

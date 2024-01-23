@@ -43,7 +43,8 @@ export default function UserExperiencesTable(props: {
                     <UserExperiencesTableRow experience={experience}
                                              onEdit={onEdit}
                                              setExperienceId={setExperienceId}
-                                             isOpenImage={isOpenImage}/>
+                                             isOpenImage={isOpenImage}
+                                             key={experience.id}/>
                 ))}
                 </tbody>
             </table>

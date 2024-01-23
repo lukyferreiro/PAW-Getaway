@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
-import { fireEvent, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import OrderDropdown from '../../../components/OrderDropdown';
 import { orderByModel } from '../../Mocks';
 

@@ -9,6 +9,7 @@ import {
 } from "../../Mocks";
 
 describe('Review Service Test', () => {
+
     test("Should get review with id 1", async () => {
         successfullyMockResponse(200, reviewModel1);
 
@@ -36,4 +37,5 @@ describe('Review Service Test', () => {
                 expect(response.getStatusCode()).toBe(201);
             });
     });
+
 });

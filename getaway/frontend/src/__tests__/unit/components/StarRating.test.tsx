@@ -16,5 +16,4 @@ describe('StarRating Component', () => {
 
         expect(emptyStars).toHaveLength(5);
     });
-
 });

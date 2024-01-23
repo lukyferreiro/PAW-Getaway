@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, render } from '@testing-library/react';
 import CardExperienceDetails from '../../../components/CardExperienceDetails';
 import { experienceModelNoFav } from '../../Mocks';
-import {setFavExperience, setVisibility} from "../../../scripts/experienceOperations";
+import {setFavExperience} from "../../../scripts/experienceOperations";
 import {BrowserRouter} from "react-router-dom";
 
 jest.mock('react-router-dom', () => ({
@@ -12,7 +12,7 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('../../../hooks/useAuth', () => ({
     useAuth: () => ({
-        getUser: jest.fn(() => ({ /* Mocked user object */ })),
+        getUser: jest.fn(() => ({})),
     }),
 }));
 
@@ -53,7 +53,7 @@ describe('CardExperienceDetails Component', () => {
         const favoriteButton = getByLabelText('Save in favourites');
         fireEvent.click(favoriteButton);
 
-        expect(setFavExperience).toHaveBeenCalledWith(experienceModelNoFav, true, expect.any(Function), expect.any(Function));
+        expect(setFavExperience).toHaveBeenCalledWith(undefined, experienceModelNoFav, true, expect.any(Function), expect.any(Function));
     });
 
 });

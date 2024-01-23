@@ -190,14 +190,14 @@ public class UserController {
     //Endpoint para verificar si una experiencia es favorita de un usuario
     @GET
     @Path("/{userId:[0-9]+}/favourites/{experienceId:[0-9]+}")
-//    @Produces(value = {CustomMediaType.})     //TODO: check return value
+    @Produces(value = {CustomMediaType.USER_FAVOURITE_V1})
     public Response isFavExperience(
             @PathParam("userId") final long userId,
             @PathParam("experienceId") final long experienceId
     ) {
         LOGGER.info("Called /users/{}/favourites/{} GET", userId, experienceId);
-        final boolean isFav = favAndViewExperienceService.isFav(userId, experienceId);
-        return Response.ok(isFav).build();
+        final boolean isFavourite = favAndViewExperienceService.isFav(userId, experienceId);
+        return Response.ok(new FavouriteDto(isFavourite, userId, experienceId, uriInfo)).build();
     }
 
 }

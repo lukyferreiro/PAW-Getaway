@@ -1,4 +1,4 @@
-import {CategoryModel, CityModel, CountryModel, ExperienceModel} from "../types";
+import {CategoryModel, ExperienceModel} from "../types";
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import StarRating from "./StarRating";
@@ -12,9 +12,7 @@ import {confirmDialogModal} from "./ConfirmDialogModal";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {useTranslation} from "react-i18next";
 import Price from "./Price";
-import {serviceHandler} from "../scripts/serviceHandler";
-import {experienceService} from "../services";
-import {authedFetch} from "../scripts/authedFetch";
+import {useCommon} from "../hooks/useCommon";
 
 export default function UserExperiencesTableRow(props: {
     experience: ExperienceModel,
@@ -28,19 +26,14 @@ export default function UserExperiencesTableRow(props: {
     const {experience, onEdit, setExperienceId, isOpenImage} = props
     const [view, setView] = useState(experience.observable)
 
+    const common = useCommon() || {};
+    const getCategory = common.getCategory || (() => {});
+
     const [category, setCategory] = useState<CategoryModel | undefined>(undefined)
 
     useEffect(() => {
-        serviceHandler(
-            experienceService.getCategoryByLink(experience.categoryUrl),
-            navigate, (category) => {
-                setCategory(category)
-            },
-            () => {
-            },
-            () => {
-            }
-        )
+        const categoryId = parseInt(experience.categoryUrl?.match(/(\d+)$/)?.[0] ?? '0', 10);
+        setCategory(getCategory(categoryId) || undefined)
     }, [])
 
     return (

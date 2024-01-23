@@ -1,6 +1,6 @@
 import {paths, USER_INFO_V1, USER_V1, USER_PASSWORD_V1, USER_PASSWORD_EMAIL_V1} from "../common";
 import {
-    ErrorResponse, ExperienceModel,
+    ErrorResponse, ExperienceModel, FavouriteModel,
     PagedContent, PostResponse,
     PutResponse, Result,
     ReviewModel, UserModel,
@@ -201,10 +201,10 @@ export class UserService {
     public async isExperienceFav(
         userId: number,
         experienceId: number,
-    ) : Promise<Result<boolean>>   {
+    ) : Promise<Result<FavouriteModel>>   {
         const url = new URL(this.userBasePath + `/${userId}/favourites/${experienceId}`);
 
-        return resultFetch<boolean>(url.toString(), {
+        return resultFetch<FavouriteModel>(url.toString(), {
             method: "GET"
         });
     }

@@ -14,7 +14,6 @@ import {showToast} from "../scripts/toast";
 import categoryImages, {CategoryName} from "../common";
 import {serviceHandler} from "../scripts/serviceHandler";
 import {userService} from "../services";
-import {authedFetch} from "../scripts/authedFetch";
 import {useCommon} from "../hooks/useCommon";
 
 export default function CardExperience(props: { experience: ExperienceModel, nameProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], categoryProp: [string | undefined, Dispatch<SetStateAction<string | undefined>>], fav: boolean }) {
@@ -29,17 +28,19 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
     const [isLoadingImg, setIsLoadingImg] = useState(false)
     const [isFav, setIsFav] = useState(false)
 
-    const {getCountry, getCategory} = useCommon()
+    const common = useCommon() || {};
+    const getCountry = common.getCountry || (() => {});
+    const getCategory = common.getCategory || (() => {});
+    const getCity = common.getCity || (() => {});
 
     const [category, setCategory] = useState<CategoryModel | undefined>(undefined)
     const [city, setCity] = useState<CityModel | undefined>(undefined)
     const country = getCountry()
 
-    const getCityAndCountry = async () => {
+    const getCityFromCommonContext = async () => {
         try {
-            const city = await authedFetch(experience.cityUrl, {method: "GET"})
-            const parsedCity = await city.json() as CityModel;
-            setCity(parsedCity);
+            const cityId = parseInt(experience.cityUrl?.match(/(\d+)$/)?.[0] ?? '0', 10);
+            setCity(await getCity(cityId) || undefined);
         } catch (error) {
             navigate('/error', {state: {code: 500, message: 'Server error',}, replace: true,})
         }
@@ -47,12 +48,10 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
 
     useEffect(() => {
 
-        // @ts-ignore
-        const categoryId = parseInt(experience.categoryUrl.match(/(\d+)$/)[0], 10);
-        // @ts-ignore
-        setCategory(getCategory(categoryId))
+        const categoryId = parseInt(experience.categoryUrl?.match(/(\d+)$/)?.[0] ?? '0', 10);
+        setCategory(getCategory(categoryId) || undefined)
 
-        getCityAndCountry();
+        getCityFromCommonContext();
 
         if (user !== null) {
             if (fav) {
@@ -61,7 +60,7 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
                 serviceHandler(
                     userService.isExperienceFav(user.userId, experience.id),
                     navigate, (isFavResponse) => {
-                        setIsFav(isFavResponse)
+                        setIsFav(isFavResponse.isFavourite)
                     },
                     () => {
                     },

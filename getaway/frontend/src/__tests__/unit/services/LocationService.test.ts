@@ -19,7 +19,6 @@ describe('Location Service Test', () => {
                 expect(response.hasFailed()).toBeFalsy();
                 expect(response.getData()[0]).toBe(countryModel);
                 expect(response.getData().length).toBe(1);
-
             });
     });
 

@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
-import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {fireEvent, render, waitFor} from '@testing-library/react';
 import Navbar from '../../../components/Navbar';
 import { act } from 'react-dom/test-utils';
 import {BrowserRouter} from "react-router-dom";

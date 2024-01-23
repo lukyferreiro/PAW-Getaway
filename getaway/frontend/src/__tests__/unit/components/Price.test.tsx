@@ -23,5 +23,4 @@ describe('Price Component', () => {
 
         expect(priceMessage).toBeInTheDocument();
     });
-
 });

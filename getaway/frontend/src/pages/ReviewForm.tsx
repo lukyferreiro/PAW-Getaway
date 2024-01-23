@@ -3,14 +3,13 @@ import "../common/i18n/index"
 import {useNavigate, useParams} from "react-router-dom"
 import React, {useEffect, useState} from "react"
 import {serviceHandler} from "../scripts/serviceHandler"
-import {experienceService, reviewService, userService} from "../services"
+import {experienceService, reviewService} from "../services"
 import {useForm} from "react-hook-form"
 import {useAuth} from "../hooks/useAuth"
-import {CityModel, CountryModel, ExperienceNameModel, ReviewModel} from "../types"
+import {ExperienceModel, ReviewModel} from "../types"
 import {getQueryOrDefault, useQuery} from "../hooks/useQuery"
 import {showToast} from "../scripts/toast"
 import StarRoundedIcon from "@mui/icons-material/StarRounded"
-import {authedFetch} from "../scripts/authedFetch";
 
 
 type FormDataReview = {
@@ -35,7 +34,7 @@ export default function ReviewForm() {
         parsedExperienceId = parseInt(experienceId, 10);
     }
 
-    const [experience, setExperience] = useState<ExperienceNameModel | undefined>(undefined)
+    const [experience, setExperience] = useState<ExperienceModel | undefined>(undefined)
     const [review, setReview] = useState<ReviewModel | undefined>(undefined)
 
     const [rating, setRating] = useState(1)
