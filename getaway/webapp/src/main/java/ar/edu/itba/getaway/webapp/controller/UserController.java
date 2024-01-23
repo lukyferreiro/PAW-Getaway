@@ -34,17 +34,15 @@ public class UserController {
     private final ImageService imageService;
     private final FavAndViewExperienceService favAndViewExperienceService;
     private final AuthContext authContext;
-    private final Integer maxRequestSize;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private static final String ACCEPTED_MIME_TYPES = "image/";
 
     @Autowired
-    public UserController(UserService userService, ImageService imageService, FavAndViewExperienceService favAndViewExperienceService, AuthContext authContext, Integer maxRequestSize) {
+    public UserController(UserService userService, ImageService imageService, FavAndViewExperienceService favAndViewExperienceService, AuthContext authContext) {
         this.userService = userService;
         this.imageService = imageService;
         this.favAndViewExperienceService = favAndViewExperienceService;
         this.authContext = authContext;
-        this.maxRequestSize = maxRequestSize;
     }
 
     //Endpoint que crea un usuario nuevo
