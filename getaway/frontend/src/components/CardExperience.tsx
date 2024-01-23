@@ -60,7 +60,7 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
                 serviceHandler(
                     userService.isExperienceFav(user.userId, experience.id),
                     navigate, (isFavResponse) => {
-                        setIsFav(isFavResponse.isFavourite)
+                        setIsFav(isFavResponse.favourite)
                     },
                     () => {
                     },

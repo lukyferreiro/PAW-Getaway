@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.net.URI;
 
 public class FavouriteDto implements Serializable {
-    private boolean isFavourite;
+    private boolean favourite;
     private URI self;
 
 
@@ -13,16 +13,16 @@ public class FavouriteDto implements Serializable {
         // Used by Jersey
     }
 
-    public FavouriteDto(boolean isFavourite, long userId, long experienceId, UriInfo uriInfo) {
-        this.isFavourite = isFavourite;
+    public FavouriteDto(boolean favourite, long userId, long experienceId, UriInfo uriInfo) {
+        this.favourite = favourite;
         this.self = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(userId)).path("favourites").path(String.valueOf(experienceId)).build();;
     }
 
-    public boolean isFavourite() {
-        return isFavourite;
+    public boolean getFavourite() {
+        return favourite;
     }
-    public void setIsFavourite(boolean isFavourite) {
-        this.isFavourite = isFavourite;
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
     }
     public URI getSelf() {
         return self;

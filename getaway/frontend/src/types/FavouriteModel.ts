@@ -1,4 +1,4 @@
 export default interface FavouriteModel {
-    isFavourite: boolean;
+    favourite: boolean;
     self: string;
 }
