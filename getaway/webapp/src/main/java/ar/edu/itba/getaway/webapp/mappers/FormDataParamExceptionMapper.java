@@ -24,6 +24,6 @@ public class FormDataParamExceptionMapper implements ExceptionMapper<FormDataPar
     @Override
     public Response toResponse(FormDataParamException e) {
         LOGGER.error("Form data param exception mapper");
-        return ExceptionMapperUtil.toResponse(Response.Status.BAD_REQUEST, "Malformed form data param", uriInfo);
+        return ExceptionMapperUtil.toResponse(Response.Status.BAD_REQUEST, e.getMessage(), uriInfo);
     }
 }

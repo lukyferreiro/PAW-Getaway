@@ -30,6 +30,6 @@ public class BadRequestExceptionMapper implements ExceptionMapper<BadRequestExce
     public Response toResponse(BadRequestException e) {
         LOGGER.error("Bad request exception mapper");
         String message = ExceptionMapperUtil.getLocalizedMessage("errors.BadRequest", messageSource);
-        return ExceptionMapperUtil.toResponse(Response.Status.BAD_REQUEST, e.getMessage(), uriInfo);
+        return ExceptionMapperUtil.toResponse(Response.Status.BAD_REQUEST, message, uriInfo);
     }
 }
