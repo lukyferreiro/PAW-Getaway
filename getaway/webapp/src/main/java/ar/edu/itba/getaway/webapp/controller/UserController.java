@@ -131,7 +131,7 @@ public class UserController {
     //Endpoint para obtener la imagen de perfil del usuario
     @GET
     @Path("/{userId:[0-9]+}/profileImage")
-    @Produces({"image/*", MediaType.APPLICATION_JSON})   //TODO check @Produces(MediaType.MULTIPART_FORM_DATA)
+    @Produces({"image/*", MediaType.APPLICATION_JSON})
     public Response getUserProfileImage(
             @PathParam("userId") final long userId,
             @Context final Request request

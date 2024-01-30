@@ -90,7 +90,7 @@ public class ExperienceController {
     public Response getExperiences(
             @QueryParam("category") @DefaultValue("") String category,
             @QueryParam("name") @DefaultValue("") String name,
-            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,  //TODO cambiar a string
+            @QueryParam("order") @DefaultValue("OrderByAZ") OrderByModel order,
             @QueryParam("price") @DefaultValue("-1") Double maxPrice,
             @QueryParam("score") @DefaultValue("0") Long maxScore,
             @QueryParam("city") @DefaultValue("-1") Long cityId,
@@ -200,7 +200,7 @@ public class ExperienceController {
     // Endpoint para obtener la imagen de una experiencia
     @GET
     @Path("/{experienceId:[0-9]+}/experienceImage")
-    @Produces({"image/*", MediaType.APPLICATION_JSON})       //TODO check @Produces(MediaType.MULTIPART_FORM_DATA)
+    @Produces({"image/*", MediaType.APPLICATION_JSON})
     public Response getExperienceImage(
             @PathParam("experienceId") final long experienceId,
             @Context final Request request

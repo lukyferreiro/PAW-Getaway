@@ -16,7 +16,7 @@ public class RootDto implements Serializable {
 
     private static final Collection<String> userStrings =
             Collections.unmodifiableCollection(Arrays.asList("users", "users/{userId}",
-                    "users/{userId}/profileImage", "users/{userId}/favourites/{experienceId}?{fav}"));
+                    "users/{userId}/profileImage", "users/{userId}/favourites/{experienceId}"));
     private static final Collection<String> experienceStrings =
             Collections.unmodifiableCollection(Arrays.asList(
                     "experiences?{category,name,order,price,score,city,page,userId,filter}",
