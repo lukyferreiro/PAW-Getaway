@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import "../common/i18n/index"
 import {Link, useNavigate, useSearchParams} from 'react-router-dom'
-import {CategoryModel, CityModel, ExperienceModel} from "../types";
+import {CategoryModel, CityModel, CountryModel, ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {IconButton} from "@mui/material";
@@ -33,9 +33,10 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
     const getCategory = common.getCategory || (() => {});
     const getCity = common.getCity || (() => {});
 
-    const [category, setCategory] = useState<CategoryModel | undefined>(undefined)
+    const categoryId: number = parseInt(experience.categoryUrl?.match(/(\d+)$/)?.[0] ?? '0', 10);
+    const category: CategoryModel | null = getCategory(categoryId)
+    const country: CountryModel | null = getCountry()
     const [city, setCity] = useState<CityModel | undefined>(undefined)
-    const country = getCountry()
 
     const getCityFromCommonContext = async () => {
         try {
@@ -47,9 +48,6 @@ export default function CardExperience(props: { experience: ExperienceModel, nam
     };
 
     useEffect(() => {
-
-        const categoryId = parseInt(experience.categoryUrl?.match(/(\d+)$/)?.[0] ?? '0', 10);
-        setCategory(getCategory(categoryId) || undefined)
 
         getCityFromCommonContext();
 

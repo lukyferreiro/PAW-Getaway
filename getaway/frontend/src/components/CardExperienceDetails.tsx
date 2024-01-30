@@ -6,7 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {CategoryModel, CityModel, ExperienceModel} from "../types";
+import {CategoryModel, CityModel, CountryModel, ExperienceModel} from "../types";
 import StarRating from "./StarRating";
 import ConfirmDialogModal, {confirmDialogModal} from "../components/ConfirmDialogModal";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
@@ -39,15 +39,17 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
     const [isFav, setIsFav] = useState(false)
     const [view, setView] = useState(experience.observable)
 
+    const [isEditing, setIsEditing] = useState<boolean | undefined>(undefined)
+
     const common = useCommon() || {};
     const getCountry = common.getCountry || (() => {});
     const getCategory = common.getCategory || (() => {});
     const getCity = common.getCity || (() => {});
 
-    const [isEditing, setIsEditing] = useState<boolean | undefined>(undefined)
-    const [category, setCategory] = useState<CategoryModel | undefined>(undefined)
+    const categoryId: number = parseInt(experience.categoryUrl?.match(/(\d+)$/)?.[0] ?? '0', 10);
+    const category: CategoryModel | null = getCategory(categoryId)
+    const country: CountryModel | null = getCountry()
     const [city, setCity] = useState<CityModel | undefined>(undefined)
-    const country = getCountry()
 
     const getCityFromCommonContext  = async () => {
         try {
@@ -70,9 +72,6 @@ export default function CardExperienceDetails(props: { experience: ExperienceMod
             () => {
             }
         )
-
-        const categoryId = parseInt(experience.categoryUrl?.match(/(\d+)$/)?.[0] ?? '0', 10);
-        setCategory(getCategory(categoryId) || undefined)
 
         getCityFromCommonContext();
 
