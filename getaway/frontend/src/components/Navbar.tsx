@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next"
 import "../common/i18n/index"
 import {Link, useNavigate, useSearchParams} from 'react-router-dom'
-import {CategoryModel} from "../types";
+import {CategoryModel, CityModel} from "../types";
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {useAuth} from "../hooks/useAuth";
 import {serviceHandler} from "../scripts/serviceHandler";
@@ -41,6 +41,26 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
 
     const [categories, setCategories] = useState<CategoryModel[]>(new Array(0))
 
+    const country = !isNaN(parseInt(getQueryOrDefault(query, "country", "-1"))) ?
+        parseInt(getQueryOrDefault(query, "country", "-1")) : -1
+    const city = !isNaN(parseInt(getQueryOrDefault(query, "city", "-1"))) ?
+        parseInt(getQueryOrDefault(query, "city", "-1")) : -1
+    const price = !isNaN(parseInt(getQueryOrDefault(query, "price", "-1"))) ?
+        parseInt(getQueryOrDefault(query, "price", "-1")) : -1
+    const rating = parseInt(getQueryOrDefault(query, "rating", "0"))
+
+    function checkUrlFilters(): string {
+        const filtersArray: string[] = [];
+
+        if (country !== -1) filtersArray.push(`country=${country}`);
+        if (city !== -1) filtersArray.push(`city=${city}`);
+        if (price !== -1) filtersArray.push(`price=${price}`);
+        if (rating !== 0) filtersArray.push(`rating=${rating}`);
+
+        return filtersArray.length > 0 ? '&' + filtersArray.join('&') : '';
+    }
+
+
     const {register, handleSubmit, formState: {errors}, reset, setValue}
         = useForm<FormDataSearch>({criteriaMode: "all"})
 
@@ -68,7 +88,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
         nameProp[1](data.name)
         navigate({
             pathname: "/experiences",
-            search: `?category=${categoryProp[0]}&name=${data.name}&order=OrderByAZ&page=1`
+            search: `?${categoryProp[0] ? `category=${categoryProp[0]}`: ''}&name=${data.name}&order=OrderByAZ&page=1${checkUrlFilters()}`
         }, {replace: true})
     })
 
@@ -219,7 +239,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                 categoryProp[1](category.name);
                                 navigate({
                                     pathname: "/experiences",
-                                    search: `?category=${category.name}&name=${nameProp[0]}&order=OrderByAZ&page=1`
+                                    search: `?category=${category.name}${nameProp[0] ? `&name=${nameProp[0]}`: ''}&order=OrderByAZ&page=1${checkUrlFilters()}`
                                 }, {replace: true});
                             }}
                     >
