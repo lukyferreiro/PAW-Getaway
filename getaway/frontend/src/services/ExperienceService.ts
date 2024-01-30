@@ -58,22 +58,22 @@ export class ExperienceService {
         page?: number
     ): Promise<Result<PagedContent<ExperienceModel[]>>> {
         const url = new URL(this.experienceBasePath);
-        if (typeof category === "string") {
+        if (typeof category === "string" && category !== "") {
             url.searchParams.append("category", category);
         }
-        if (typeof name === "string") {
+        if (typeof name === "string" && name !== "") {
             url.searchParams.append("name", name);
         }
         if (typeof order === "string") {
             url.searchParams.append("order", order);
         }
-        if (price || price === 0) {
+        if ((price || price === 0) && price !== -1) {
             url.searchParams.append("price", price.toString());
         }
-        if (score) {
+        if (score && score !== 0) {
             url.searchParams.append("score", score.toString());
         }
-        if (city) {
+        if (city && city !== -1) {
             url.searchParams.append("city", city.toString());
         }
         return getPagedFetch<ExperienceModel[]>(url.toString(), page);
@@ -84,10 +84,10 @@ export class ExperienceService {
         name?: string,
     ): Promise<Result<PagedContent<ExperienceModel[]>>> {
         const url = new URL(this.experienceBasePath );
-        if (typeof category === "string") {
+        if (typeof category === "string" && category !== "") {
             url.searchParams.append("category", category);
         }
-        if (typeof name === "string") {
+        if (typeof name === "string" && name !== "") {
             url.searchParams.append("name", name);
         }
         url.searchParams.append("order", "OrderByHighPrice");
