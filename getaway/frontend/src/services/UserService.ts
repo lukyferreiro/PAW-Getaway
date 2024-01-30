@@ -97,7 +97,7 @@ export class UserService {
         const url = new URL(this.experienceBasePath);
         url.searchParams.append("filter", 'PROVIDER');
         url.searchParams.append("userId", userId.toString());
-        if (typeof name === "string") {
+        if (typeof name === "string" && name !== "") {
             url.searchParams.append("name", name);
         }
         if (typeof order === "string") {
