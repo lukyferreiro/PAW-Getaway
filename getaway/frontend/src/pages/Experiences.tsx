@@ -131,6 +131,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 },
                 () => {
                     setMaxPrice(0)
+                    setPrice(0)
                 }
             )
         }
@@ -169,6 +170,8 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                     () => {
                         setExperiences(new Array(0))
                         setMaxPage(0)
+                        setPrice(0)
+                        setMaxPrice(0)
                         setIsLoading(false)
                     }
                 )
