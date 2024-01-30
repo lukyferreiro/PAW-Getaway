@@ -52,8 +52,16 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     )
     const [onPriceChange, setOnPriceChange] = useState<boolean>(false)
     //Score
-    const [rating, setRating] = useState(parseInt(getQueryOrDefault(query, "rating", "0")))
-    const [hover, setHover] = useState(-parseInt(getQueryOrDefault(query, "rating", "0")))
+    const [rating, setRating] = useState(
+        !isNaN(parseInt(getQueryOrDefault(query, "rating", "0"))) ?
+            parseInt(getQueryOrDefault(query, "rating", "0")) :
+            0
+    )
+    const [hover, setHover] = useState(
+        !isNaN(-parseInt(getQueryOrDefault(query, "rating", "0"))) ?
+            -parseInt(getQueryOrDefault(query, "rating", "0")) :
+            0
+    )
     //Order
     const [orders, setOrders] = useState<OrderByModel>()
     const order = useState<string>(getQueryOrDefault(query, "order", "OrderByAZ"))

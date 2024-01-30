@@ -47,7 +47,8 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
         parseInt(getQueryOrDefault(query, "city", "-1")) : -1
     const price = !isNaN(parseInt(getQueryOrDefault(query, "price", "-1"))) ?
         parseInt(getQueryOrDefault(query, "price", "-1")) : -1
-    const rating = parseInt(getQueryOrDefault(query, "rating", "0"))
+    const rating = !isNaN(parseInt(getQueryOrDefault(query, "rating", "0"))) ?
+        parseInt(getQueryOrDefault(query, "rating", "0")) : 0
 
     function checkUrlFilters(): string {
         const filtersArray: string[] = [];
