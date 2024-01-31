@@ -87,9 +87,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
     }, [])
 
     const onSubmit = handleSubmit((data: FormDataSearch) => {
-        if (nameProp[0]) {
-            nameProp[1](data.name)
-        }
+        nameProp[1](data.name)
         navigate({
             pathname: "/experiences",
             search: `?order=OrderByAZ&page=1${checkUrlFilters(categoryProp[0], data.name)}`
