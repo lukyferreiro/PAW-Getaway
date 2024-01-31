@@ -170,6 +170,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                     () => {
                         setExperiences(new Array(0))
                         setMaxPage(0)
+                        setPrice(-1)
                         setIsLoading(false)
                     }
                 )
@@ -311,7 +312,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
 
                     <div className="container-slider-price">
                         <Typography id="non-linear-slider" gutterBottom className="form-label">
-                            {t('Filters.price.title')}: {price}
+                            {t('Filters.price.title')}: {price === -1 ? '0' : price}
                         </Typography>
 
                         <div className="slider-price">
