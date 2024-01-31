@@ -27,18 +27,6 @@ export default function CardReview(props: {
     const [user, setUser] = useState<UserModel | undefined>(undefined)
 
     useEffect(() => {
-
-        serviceHandler(
-            experienceService.getExperienceByLink(reviewModel.experienceUrl),
-            navigate, (experience) => {
-                setExperience(experience)
-            },
-            () => {
-            },
-            () => {
-            }
-        )
-
         serviceHandler(
             userService.getUserByLink(reviewModel.userUrl),
             navigate, (user) => {
@@ -49,7 +37,18 @@ export default function CardReview(props: {
             () => {
             }
         )
-
+        if (isEditing) {
+            serviceHandler(
+                experienceService.getExperienceByLink(reviewModel.experienceUrl),
+                navigate, (experience) => {
+                    setExperience(experience)
+                },
+                () => {
+                },
+                () => {
+                }
+            )
+        }
     }, [])
 
     function editReview(reviewId: number) {
@@ -92,8 +91,12 @@ export default function CardReview(props: {
 
             <div className="card-title m-2 d-flex justify-content-between">
                 <div className="d-flex">
-                    <img className="user-img" src={user?.profileImageUrl ? user?.profileImageUrl : ic_user_no_image}
-                         alt="Imagen" style={{marginRight: user?.profileImageUrl ? "8px" : ""}}/>
+                    { user && user.hasImage ?
+                        <img className="user-img" src={user.profileImageUrl} alt="Imagen" style={{marginRight: "8px"}}/>
+                        :
+                        <img className="user-img" src={ic_user_no_image} alt="Imagen"/>
+                    }
+
 
                     <div className="d-flex flex-column justify-content-center align-content-center">
                         <h5 className="my-1">
