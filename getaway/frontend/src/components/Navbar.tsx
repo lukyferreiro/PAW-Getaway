@@ -95,7 +95,6 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
     })
 
     function clearNavBar() {
-        console.log("clear NAVBAR")
         searchParams.delete("category")
         searchParams.delete("name")
         setSearchParams(searchParams)
@@ -105,7 +104,6 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
     }
 
     function resetForm() {
-        console.log("reset form NAVBAR")
         nameProp[1]("")
         searchParams.delete("name")
         setSearchParams(searchParams)
@@ -139,11 +137,12 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                 <div className="container-navbar-buttons d-flex justify-content-between align-items-center">
                     <div className="d-flex justify-items-center align-items-center"
                          style={{marginRight: '40px'}}>
-                        <button className="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm"
-                                aria-label={t("AriaLabel.search")} title={t("AriaLabel.search")}>
-                            <img className="w-auto h-auto" src={ic_lupa} alt="Lupa"/>
-                        </button>
-                        <form id="searchExperienceForm" acceptCharset="utf-8" className="my-auto" onSubmit={onSubmit}>
+                        <form id="searchExperienceForm" acceptCharset="utf-8"
+                              className="d-flex justify-items-center align-items-center my-auto" onSubmit={onSubmit}>
+                            <button className="btn btn-search-navbar p-0" type="submit" form="searchExperienceForm"
+                                    aria-label={t("AriaLabel.search")} title={t("AriaLabel.search")}>
+                                <img className="w-auto h-auto" src={ic_lupa} alt="Lupa"/>
+                            </button>
                             <input max="50" type="text" className="form-control" placeholder={t('Navbar.search')}
                                    {...register("name", {
                                        validate: {

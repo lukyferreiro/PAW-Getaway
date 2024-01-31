@@ -131,7 +131,6 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                 },
                 () => {
                     setMaxPrice(0)
-                    setPrice(0)
                 }
             )
         }
@@ -162,6 +161,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                             searchParams.set("page", currentPage[0].toString())
                         }
                         searchParams.set("order", order[0])
+                        if (nameProp[0]) searchParams.set("name", nameProp[0])
                         setSearchParams(searchParams)
                     },
                     () => {
@@ -170,8 +170,6 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                     () => {
                         setExperiences(new Array(0))
                         setMaxPage(0)
-                        setPrice(0)
-                        setMaxPrice(0)
                         setIsLoading(false)
                     }
                 )
@@ -245,7 +243,6 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     }
 
     function cleanQueryForName() {
-        console.log("clean query for name EXPERIENCES")
         nameProp[1]("")
         searchParams.delete("name")
         searchParams.set("page", "1")

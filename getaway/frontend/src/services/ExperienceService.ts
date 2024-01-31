@@ -67,7 +67,7 @@ export class ExperienceService {
         if (typeof order === "string") {
             url.searchParams.append("order", order);
         }
-        if ((price || price === 0) && price !== -1) {
+        if (price || price === 0) {
             url.searchParams.append("price", price.toString());
         }
         if (score && score !== 0) {
