@@ -245,6 +245,7 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
     }
 
     function cleanQueryForName() {
+        console.log("clean query for name EXPERIENCES")
         nameProp[1]("")
         searchParams.delete("name")
         searchParams.set("page", "1")

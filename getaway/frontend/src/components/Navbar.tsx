@@ -50,20 +50,25 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
     const rating = !isNaN(parseInt(getQueryOrDefault(query, "rating", "0"))) ?
         parseInt(getQueryOrDefault(query, "rating", "0")) : 0
 
-    function checkUrlFilters(): string {
-        const filtersArray: string[] = [];
+    function checkUrlFilters(category: string | undefined, name: string | undefined): string {
+        const filtersArray: string[] = []
 
-        if (country !== -1) filtersArray.push(`country=${country}`);
-        if (city !== -1) filtersArray.push(`city=${city}`);
-        if (price !== -1) filtersArray.push(`price=${price}`);
-        if (rating !== 0) filtersArray.push(`rating=${rating}`);
+        if (category) filtersArray.push(`category=${category}`)
+        if (name) filtersArray.push(`name=${name}`)
+        if (country !== -1) filtersArray.push(`country=${country}`)
+        if (city !== -1) filtersArray.push(`city=${city}`)
+        if (price !== -1) filtersArray.push(`price=${price}`)
+        if (rating !== 0) filtersArray.push(`rating=${rating}`)
 
-        return filtersArray.length > 0 ? '&' + filtersArray.join('&') : '';
+        return filtersArray.length > 0 ? '&' + filtersArray.join('&') : ''
     }
-
 
     const {register, handleSubmit, formState: {errors}, reset, setValue}
         = useForm<FormDataSearch>({criteriaMode: "all"})
+
+    useEffect(() => {
+        setValue("name", nameProp[0] ? nameProp[0] : "")
+    }, [nameProp[0]])
 
     useEffect(() => {
         nameProp[1](getQueryOrDefault(query, "name", ""))
@@ -81,19 +86,18 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
         )
     }, [])
 
-    useEffect(() => {
-        setValue("name", nameProp[0] ? nameProp[0] : "")
-    }, [nameProp[0]])
-
     const onSubmit = handleSubmit((data: FormDataSearch) => {
-        nameProp[1](data.name)
+        if (nameProp[0]) {
+            nameProp[1](data.name)
+        }
         navigate({
             pathname: "/experiences",
-            search: `?${categoryProp[0] ? `category=${categoryProp[0]}`: ''}&name=${data.name}&order=OrderByAZ&page=1${checkUrlFilters()}`
+            search: `?order=OrderByAZ&page=1${checkUrlFilters(categoryProp[0], data.name)}`
         }, {replace: true})
     })
 
     function clearNavBar() {
+        console.log("clear NAVBAR")
         searchParams.delete("category")
         searchParams.delete("name")
         setSearchParams(searchParams)
@@ -103,9 +107,10 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
     }
 
     function resetForm() {
+        console.log("reset form NAVBAR")
+        nameProp[1]("")
         searchParams.delete("name")
         setSearchParams(searchParams)
-        nameProp[1]("")
         reset()
     }
 
@@ -240,7 +245,7 @@ export default function Navbar(props: { nameProp: [string | undefined, Dispatch<
                                 categoryProp[1](category.name);
                                 navigate({
                                     pathname: "/experiences",
-                                    search: `?category=${category.name}${nameProp[0] ? `&name=${nameProp[0]}`: ''}&order=OrderByAZ&page=1${checkUrlFilters()}`
+                                    search:`?order=OrderByAZ&page=1${checkUrlFilters(category.name, nameProp[0])}`
                                 }, {replace: true});
                             }}
                     >
