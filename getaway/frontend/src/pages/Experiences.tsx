@@ -3,7 +3,7 @@ import "../common/i18n/index"
 import OrderDropdown from "../components/OrderDropdown"
 import CardExperience from "../components/CardExperience"
 import {IconButton, Slider, Typography} from '@mui/material'
-import React, {Dispatch, SetStateAction, SyntheticEvent, useEffect, useState} from "react"
+import React, {Dispatch, SetStateAction, SyntheticEvent, useEffect, useRef, useState} from "react"
 import {ExperienceModel, OrderByModel} from "../types"
 import {useNavigate, useSearchParams} from "react-router-dom"
 import {CityModel, CountryModel} from "../types"
@@ -125,6 +125,11 @@ export default function Experiences(props: { nameProp: [string | undefined, Disp
                     setMaxPrice(maxPrice)
                     if ((price !== maxPrice && price === -1) || (price < -1 || price > maxPrice)) {
                         setPrice(maxPrice)
+                        const priceUrl = parseInt(getQueryOrDefault(query, "price", "-1"))
+                        if (!isNaN(priceUrl) && priceUrl !== -1) {
+                            searchParams.set("price", String(maxPrice))
+                            setSearchParams(searchParams)
+                        }
                     }
                 },
                 () => {
