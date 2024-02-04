@@ -1,6 +1,5 @@
 package ar.edu.itba.getaway.webapp.dto.request;
 
-import ar.edu.itba.getaway.webapp.constraints.EmailNotUsed;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -26,7 +25,6 @@ public class RegisterDto {
     @NotBlank(message = "NotBlank")
     @Length(max = 255, message = "Size.registerForm.email")
     @Pattern(regexp = "^([a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+)*$", message = "Pattern.registerForm.email")
-    @EmailNotUsed
     private String email;
 
     //https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a

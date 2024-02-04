@@ -1,14 +1,10 @@
 package ar.edu.itba.getaway.webapp.dto.request;
 
-import ar.edu.itba.getaway.webapp.constraints.NotExistingCategory;
-import ar.edu.itba.getaway.webapp.constraints.NotExistingCity;
-import ar.edu.itba.getaway.webapp.constraints.NotExistingCountry;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 
 public class NewExperienceDto {
@@ -20,15 +16,12 @@ public class NewExperienceDto {
     private String name;
 
     @NotNull(message = "NotNull")
-//    @NotExistingCategory
     private Long category;
 
     @NotNull(message = "NotNull")
-//    @NotExistingCountry
     private Long country;
 
     @NotNull(message = "NotNull")
-//    @NotExistingCity
     private Long city;
 
     @NotNull(message = "NotNull")
