@@ -50,3 +50,8 @@ Para crear el app.war que debe ser deployado en el servidor de la catedra se deb
 ```
 mvn clean package
 ```
+
+## Correciones
+
+- Si bien los endpoints de creación y lectura de entidades declaran usar el mismo mime type, en la práctica usan entidades distintas, con mapeos distintos (ie: al crear una experiencia category es un long, al leerlo es una url a la category correspondiente). Lo correcto sería de mínima declarar mime types distintos, o idealmente, realmente que sean el mismo objeto. Esto es un error conceptual grave.
+- La SPA no maneja los errores 401, dejando que salte el modal nativo sin reintentar automáticamente el request con el refresh token. En lugar de esto, buscan validar “a priori” el token antes de enviarlo o mandar el de refresh en su defecto. Esto sin embargo es incorrecto, ya que asume que la hora del cliente está perfectamente sincronizada con la del servidor, y que los requests son instantáneos. Cualquier desfasaje por diferencia horaria o latencia indefectiblemente podría terminar en estos errores en forma natural. Esto es un error grave.
